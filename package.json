@@ -1,0 +1,30 @@
+{
+  "name": "codelife",
+  "version": "1.0.0",
+  "description": "web-based platform to teach Brazilian high school students to code",
+  "main": "index.js",
+  "scripts": {
+    "dev": "canon-dev",
+    "build": "canon-build",
+    "start": "canon-start",
+    "locales": "canon-locales"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Datawheel/codelife.git"
+  },
+  "keywords": [
+    "education",
+    "node",
+    "react"
+  ],
+  "author": "Datawheel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Datawheel/codelife/issues"
+  },
+  "homepage": "https://github.com/Datawheel/codelife#readme",
+  "dependencies": {
+    "datawheel-canon": "^0.5.7"
+  }
+}

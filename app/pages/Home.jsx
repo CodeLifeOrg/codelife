@@ -10,7 +10,11 @@ class Home extends Component {
     return (
       <div>
         <h1>Codelife</h1>
-        <span>{ t("Translated Content") }</span>
+        <ul>
+        	<li>{ t("Lessons") }</li>
+        	<li>{ t("Glossary") }</li>
+        	<li>{ t("Profile") }</li>
+        </ul>
       </div>
     );
   }

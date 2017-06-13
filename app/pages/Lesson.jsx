@@ -10,7 +10,8 @@ class Lesson extends Component {
 
     //todo - have lessonArray come from json-in-the-sky
     const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
-    const lessonItems = lessonArray.map((lesson) => <li>{lesson}</li>);
+    const lessonItems = lessonArray.map((lesson) => 
+      <li><Link className="link" to={`/lesson/${lesson}`}>{lesson}</Link></li>);
 
     return (
       <div>

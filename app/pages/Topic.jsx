@@ -8,13 +8,15 @@ class Topic extends Component {
     
     const {t} = this.props;
 
-    //todo - have topicArray come from json-in-the-sky
+    const {id} = this.props.params
+
+    //todo - have topicArray come from json-in-the-sky, using id to cherrypick
     const topicArray = ["topic-1", "topic-2", "topic-3", "topic-4"];
-    const topicItems = topicArray.map((lesson) => <li>{topic}</li>);
+    const topicItems = topicArray.map((topic) => <li>{topic}</li>);
 
     return (
       <div>
-        <h1>Topics</h1>
+        <h1>{id}: Topics</h1>
         <ul>{topicItems}</ul>
       </div>
     );

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {translate, Interpolate} from "react-i18next";
+import { Link } from 'react-router';
 
 class Home extends Component {
 
@@ -11,9 +12,9 @@ class Home extends Component {
       <div>
         <h1>Codelife</h1>
         <ul>
-        	<li>{ t("Lessons") }</li>
-        	<li>{ t("Glossary") }</li>
-        	<li>{ t("Profile") }</li>
+        	<li><Link className="link" to="/lesson">{ t("Lessons") }</Link></li>
+        	<li><Link className="link" to="/glossary">{ t("Glossary") }</Link></li>
+        	<li><Link className="link" to="/profile">{ t("Profile") }</Link></li>
         </ul>
       </div>
     );

@@ -16,7 +16,7 @@ export default function RouteCreate() {
       <IndexRoute component={Home} />
       <Route path="lesson" component={Lesson} />
       <Route path="lesson/:lid" component={Topic} />
-      <Route path="lesson/:lid/topic/:tid" component={Slide} />
+      <Route path="lesson/:lid/:tid/:sid" component={Slide} />
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />
     </Route>

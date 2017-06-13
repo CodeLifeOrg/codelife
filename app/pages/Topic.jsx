@@ -13,7 +13,7 @@ class Topic extends Component {
     //todo - have topicArray come from json-in-the-sky, using id to cherrypick
     const topicArray = ["topic-1", "topic-2", "topic-3", "topic-4"];
     const topicItems = topicArray.map((topic) => 
-      <li><Link className="link" to={`/lesson/${lid}/topic/${topic}`}>{topic}</Link></li>);
+      <li><Link className="link" to={`/lesson/${lid}/${topic}/slide-1`}>{topic}</Link></li>);
 
     return (
       <div>

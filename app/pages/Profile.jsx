@@ -10,7 +10,7 @@ class Profile extends Component {
 
     return (
       <div>
-        <h1>{ t("Profile") }</h1>
+        <h1>{t("Profile")}</h1>
         <p>I'm a user</p>
         <Nav />
       </div>

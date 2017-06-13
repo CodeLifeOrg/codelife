@@ -13147,9 +13147,9 @@ function RouteCreate() {
     __WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */],
     { path: "/", history: __WEBPACK_IMPORTED_MODULE_1_react_router__["e" /* browserHistory */], component: __WEBPACK_IMPORTED_MODULE_2_components_App__["a" /* default */] },
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["f" /* IndexRoute */], { component: __WEBPACK_IMPORTED_MODULE_3_pages_Home__["a" /* default */] }),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "lesson", component: __WEBPACK_IMPORTED_MODULE_4_pages_Lesson__["a" /* default */] }),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "lesson/:lid", component: __WEBPACK_IMPORTED_MODULE_5_pages_Topic__["a" /* default */] }),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "lesson/:lid/:tid/:sid", component: __WEBPACK_IMPORTED_MODULE_6_pages_Slide__["a" /* default */] }),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "topic", component: __WEBPACK_IMPORTED_MODULE_5_pages_Topic__["a" /* default */] }),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "topic/:tid", component: __WEBPACK_IMPORTED_MODULE_4_pages_Lesson__["a" /* default */] }),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "topic/:tid/:lid/:sid", component: __WEBPACK_IMPORTED_MODULE_6_pages_Slide__["a" /* default */] }),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "glossary", component: __WEBPACK_IMPORTED_MODULE_7_pages_Glossary__["a" /* default */] }),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router__["d" /* Route */], { path: "profile", component: __WEBPACK_IMPORTED_MODULE_8_pages_Profile__["a" /* default */] })
   );
@@ -13194,7 +13194,6 @@ function RouteCreate() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_thunk__ = __webpack_require__(301);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_redux_thunk__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_reducers__ = __webpack_require__(142);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_reducers___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_reducers__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_redux_logger__ = __webpack_require__(300);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_redux_logger___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_redux_logger__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__middlewares_promiseMiddleware__ = __webpack_require__(143);
@@ -13227,7 +13226,7 @@ function storeConfig(initialState, history) {
     data: __WEBPACK_IMPORTED_MODULE_6__reducers_fetchData__["a" /* default */],
     loading: __WEBPACK_IMPORTED_MODULE_7__reducers_loading__["a" /* default */],
     routing: __WEBPACK_IMPORTED_MODULE_1_react_router_redux__["routerReducer"]
-  }, __WEBPACK_IMPORTED_MODULE_3_reducers__["default"]));
+  }, __WEBPACK_IMPORTED_MODULE_3_reducers__["a" /* default */]));
 
   if (false) {
     middleware.push(createLogger());
@@ -14105,8 +14104,8 @@ var Home = function (_Component) {
             null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-              { className: "link", to: "/lesson" },
-              t("Lessons")
+              { className: "link", to: "/topic" },
+              t("Topics")
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -14174,6 +14173,7 @@ var Lesson = function (_Component) {
     key: "render",
     value: function render() {
       var t = this.props.t;
+      var tid = this.props.params.tid;
 
       // todo - have lessonArray come from json-in-the-sky
 
@@ -14184,7 +14184,7 @@ var Lesson = function (_Component) {
           null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-            { className: "link", to: "/lesson/" + lesson },
+            { className: "link", to: "/topic/" + tid + "/" + lesson + "/slide-1" },
             lesson
           )
         );
@@ -14196,6 +14196,8 @@ var Lesson = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
+          tid,
+          " ",
           t("Lessons")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -14311,8 +14313,8 @@ var Slide = function (_Component) {
     value: function render() {
       var t = this.props.t;
       var _props$params = this.props.params,
-          lid = _props$params.lid,
           tid = _props$params.tid,
+          lid = _props$params.lid,
           sid = _props$params.sid;
 
       // todo - have slideArray come from json-in-the-sky, using id to cherrypick
@@ -14346,9 +14348,9 @@ var Slide = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          lid,
-          ": ",
           tid,
+          ": ",
+          lid,
           ": ",
           t(currentSlide.title)
         ),
@@ -14359,7 +14361,7 @@ var Slide = function (_Component) {
         ),
         currentSid > 1 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-          { className: "link", to: "/lesson/" + lid + "/" + tid + "/" + prevSlideSlug },
+          { className: "link", to: "/topic/" + tid + "/" + lid + "/" + prevSlideSlug },
           "previous"
         ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "span",
@@ -14369,7 +14371,7 @@ var Slide = function (_Component) {
         "\xA0\xA0\xA0",
         currentSid < slideArray.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-          { className: "link", to: "/lesson/" + lid + "/" + tid + "/" + nextSlideSlug },
+          { className: "link", to: "/topic/" + tid + "/" + lid + "/" + nextSlideSlug },
           "next"
         ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "span",
@@ -14380,10 +14382,12 @@ var Slide = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-          { classname: "link", to: "/lesson/" + lid },
+          { className: "link", to: "/topic/" + tid },
           "return to ",
-          lid
+          tid
         ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_components_Nav__["a" /* default */], null)
       );
     }
@@ -14431,7 +14435,6 @@ var Topic = function (_Component) {
     key: "render",
     value: function render() {
       var t = this.props.t;
-      var lid = this.props.params.lid;
 
       // todo - have topicArray come from json-in-the-sky, using id to cherrypick
 
@@ -14442,7 +14445,7 @@ var Topic = function (_Component) {
           null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-            { className: "link", to: "/lesson/" + lid + "/" + topic + "/slide-1" },
+            { className: "link", to: "/topic/" + topic },
             topic
           )
         );
@@ -14454,8 +14457,6 @@ var Topic = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          lid,
-          ": ",
           t("Topics")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -14475,9 +14476,16 @@ var Topic = function (_Component) {
 
 /***/ }),
 /* 142 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token (2:25)\n\n\u001b[0m \u001b[90m 1 | \u001b[39m\u001b[36mexport\u001b[39m \u001b[36mdefault\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 2 | \u001b[39m  attrs\u001b[33m:\u001b[39m (state \u001b[33m=\u001b[39m {}) \u001b[33m=>\u001b[39m \u001b[36mreturn\u001b[39m state\u001b[33m;\u001b[39m\n \u001b[90m   | \u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 3 | \u001b[39m}\u001b[33m;\u001b[39m\n \u001b[90m 4 | \u001b[39m\u001b[0m\n");
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  attrs: function attrs() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    return state;
+  }
+});
 
 /***/ }),
 /* 143 */

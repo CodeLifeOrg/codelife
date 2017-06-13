@@ -9,16 +9,14 @@ class Topic extends Component {
     
     const {t} = this.props;
 
-    const {lid} = this.props.params;
-
     // todo - have topicArray come from json-in-the-sky, using id to cherrypick
     const topicArray = ["topic-1", "topic-2", "topic-3", "topic-4"];
     const topicItems = topicArray.map(topic => 
-      <li><Link className="link" to={`/lesson/${lid}/${topic}/slide-1`}>{topic}</Link></li>);
+      <li><Link className="link" to={`/topic/${topic}`}>{topic}</Link></li>);
 
     return (
       <div>
-        <h1>{lid}: {t("Topics")}</h1>
+        <h1>{t("Topics")}</h1>
         <ul>{topicItems}</ul>
         <Nav />
       </div>

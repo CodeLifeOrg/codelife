@@ -12,7 +12,7 @@ class Home extends Component {
       <div>
         <h1>Codelife</h1>
         <ul>
-          <li><Link className="link" to="/lesson">{ t("Lessons") }</Link></li>
+          <li><Link className="link" to="/topic">{ t("Topics") }</Link></li>
           <li><Link className="link" to="/glossary">{ t("Glossary") }</Link></li>
           <li><Link className="link" to="/profile">{ t("Profile") }</Link></li>
         </ul>

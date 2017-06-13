@@ -1,9 +1,12 @@
 const codelifeSyllabus = {
-  lessons: [
+  topics: [
     {
       lid: 1,
       title: "Lesson 1",
-      content: "I am a lesson"
+      description: "I am a topic, and I have many lessons",
+      lessons: [
+
+      ]
     }
   ]
 };

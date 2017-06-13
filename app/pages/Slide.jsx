@@ -9,7 +9,7 @@ class Slide extends Component {
     
     const {t} = this.props;
 
-    const {lid, tid, sid} = this.props.params;
+    const {tid, lid, sid} = this.props.params;
 
     // todo - have slideArray come from json-in-the-sky, using id to cherrypick
     const slideArray = [
@@ -42,13 +42,14 @@ class Slide extends Component {
 
     return (
       <div>
-        <h1>{lid}: {tid}: { t(currentSlide.title) }</h1>
+        <h1>{tid}: {lid}: { t(currentSlide.title) }</h1>
         <p>{currentSlide.content}</p>
-        { currentSid > 1 ? <Link className="link" to={`/lesson/${lid}/${tid}/${prevSlideSlug}`}>previous</Link> : <span>previous</span> }
+        { currentSid > 1 ? <Link className="link" to={`/topic/${tid}/${lid}/${prevSlideSlug}`}>previous</Link> : <span>previous</span> }
         &nbsp;&nbsp;&nbsp;
-        { currentSid < slideArray.length ? <Link className="link" to={`/lesson/${lid}/${tid}/${nextSlideSlug}`}>next</Link> : <span>next</span> } 
+        { currentSid < slideArray.length ? <Link className="link" to={`/topic/${tid}/${lid}/${nextSlideSlug}`}>next</Link> : <span>next</span> } 
         <br/><br/>
-        <Link classname="link" to={`/lesson/${lid}`}>return to {lid}</Link>
+        <Link className="link" to={`/topic/${tid}`}>return to {tid}</Link>
+        <br/><br/>
         <Nav />
       </div>
     );

@@ -14,9 +14,9 @@ export default function RouteCreate() {
   return (
     <Route path="/" history={browserHistory} component={App}>
       <IndexRoute component={Home} />
-      <Route path="lesson" component={Lesson} />
-      <Route path="lesson/:lid" component={Topic} />
-      <Route path="lesson/:lid/:tid/:sid" component={Slide} />
+      <Route path="topic" component={Topic} />
+      <Route path="topic/:tid" component={Lesson} />
+      <Route path="topic/:tid/:lid/:sid" component={Slide} />
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />
     </Route>

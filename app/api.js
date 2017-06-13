@@ -345,4 +345,14 @@ const codelifeSyllabus = {
   ]
 };
 
-console.log(codelifeSyllabus);
+export function listTracks() {
+  let tracks = [];
+  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    tracks[t] = {
+      trid: codelifeSyllabus.tracks[t].trid,
+      title: codelifeSyllabus.tracks[t].title,
+      description: codelifeSyllabus.tracks[t].description
+    };
+  }
+  return tracks;
+}

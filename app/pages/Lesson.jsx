@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {translate, Interpolate} from "react-i18next";
 import { Link } from 'react-router';
+import Nav from 'components/Nav';
 
 class Lesson extends Component {
 
@@ -17,6 +18,7 @@ class Lesson extends Component {
       <div>
         <h1>Lessons</h1>
         <ul>{lessonItems}</ul>
+        <Nav />
       </div>
     );
   }

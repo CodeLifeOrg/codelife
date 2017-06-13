@@ -14252,8 +14252,8 @@ var Slide = function (_Component) {
 
       var currentSid = parseInt(sid.split('-')[1]);
       var currentSlide = slideArray[currentSid - 1];
-      var prevSlideSlug = "slide-".concat((currentSid - 1).toString());
-      var nextSlideSlug = "slide-".concat((currentSid + 1).toString());
+      var prevSlideSlug = "slide-" + (currentSid - 1);
+      var nextSlideSlug = "slide-" + (currentSid + 1);
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -14276,13 +14276,29 @@ var Slide = function (_Component) {
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
           { className: "link", to: "/lesson/" + lid + "/" + tid + "/" + prevSlideSlug },
           "previous"
-        ) : null,
-        "\xA0",
+        ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "span",
+          null,
+          "previous"
+        ),
+        "\xA0\xA0\xA0",
         currentSid < slideArray.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
           { className: "link", to: "/lesson/" + lid + "/" + tid + "/" + nextSlideSlug },
           "next"
-        ) : null
+        ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "span",
+          null,
+          "next"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
+          { classname: "link", to: "/lesson/" + lid },
+          "return to ",
+          lid
+        )
       );
     }
   }]);

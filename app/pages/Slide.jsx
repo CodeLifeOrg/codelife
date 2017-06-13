@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {translate, Interpolate} from "react-i18next";
 import { Link } from 'react-router';
+import Nav from 'components/Nav';
 
 class Slide extends Component {
 
@@ -36,8 +37,8 @@ class Slide extends Component {
     
     const currentSid = parseInt(sid.split('-')[1]);
     const currentSlide = slideArray[currentSid - 1];
-    const prevSlideSlug = "slide-".concat((currentSid - 1).toString());
-    const nextSlideSlug = "slide-".concat((currentSid + 1).toString());
+    const prevSlideSlug = `slide-${currentSid-1}`
+    const nextSlideSlug = `slide-${currentSid+1}`
 
     return (
       <div>
@@ -48,6 +49,7 @@ class Slide extends Component {
         { currentSid < slideArray.length ? <Link className="link" to={`/lesson/${lid}/${tid}/${nextSlideSlug}`}>next</Link> : <span>next</span> } 
         <br/><br/>
         <Link classname="link" to={`/lesson/${lid}`}>return to {lid}</Link>
+        <Nav />
       </div>
     );
   }

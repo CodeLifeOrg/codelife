@@ -9,16 +9,16 @@ class Lesson extends Component {
     
     const {t} = this.props;
 
-    const {tid} = this.props.params;
+    const {trid, tid} = this.props.params;
 
     // todo - have lessonArray come from json-in-the-sky
     const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
     const lessonItems = lessonArray.map(lesson => 
-      <li><Link className="link" to={`/topic/${tid}/${lesson}/slide-1`}>{lesson}</Link></li>);
+      <li><Link className="link" to={`/track/${trid}/${tid}/${lesson}/slide-1`}>{lesson}</Link></li>);
 
     return (
       <div>
-        <h1>{tid} {t("Lessons")}</h1>
+        <h1>{trid} {tid} {t("Lessons")}</h1>
         <ul>{lessonItems}</ul>
         <Nav />
       </div>

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {translate, Interpolate} from "react-i18next";
-import Nav from 'components/Nav';
+import {translate} from "react-i18next";
+import Nav from "components/Nav";
 
 class Profile extends Component {
 
@@ -10,7 +10,7 @@ class Profile extends Component {
 
     return (
       <div>
-        <h1>Profile</h1>
+        <h1>{ t("Profile") }</h1>
         <p>I'm a user</p>
         <Nav />
       </div>

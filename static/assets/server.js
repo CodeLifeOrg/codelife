@@ -13194,6 +13194,7 @@ function RouteCreate() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_thunk__ = __webpack_require__(301);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_redux_thunk__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_reducers__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_reducers___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_reducers__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_redux_logger__ = __webpack_require__(300);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_redux_logger___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_redux_logger__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__middlewares_promiseMiddleware__ = __webpack_require__(143);
@@ -13226,7 +13227,7 @@ function storeConfig(initialState, history) {
     data: __WEBPACK_IMPORTED_MODULE_6__reducers_fetchData__["a" /* default */],
     loading: __WEBPACK_IMPORTED_MODULE_7__reducers_loading__["a" /* default */],
     routing: __WEBPACK_IMPORTED_MODULE_1_react_router_redux__["routerReducer"]
-  }, __WEBPACK_IMPORTED_MODULE_3_reducers__["a" /* default */]));
+  }, __WEBPACK_IMPORTED_MODULE_3_reducers__["default"]));
 
   if (false) {
     middleware.push(createLogger());
@@ -14009,7 +14010,7 @@ var Glossary = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          "Glossary"
+          t("Glossary")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h3",
@@ -14174,7 +14175,7 @@ var Lesson = function (_Component) {
     value: function render() {
       var t = this.props.t;
 
-      //todo - have lessonArray come from json-in-the-sky
+      // todo - have lessonArray come from json-in-the-sky
 
       var lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
       var lessonItems = lessonArray.map(function (lesson) {
@@ -14195,7 +14196,7 @@ var Lesson = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          "Lessons"
+          t("Lessons")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "ul",
@@ -14255,7 +14256,7 @@ var Profile = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          "Profile"
+          t("Profile")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
@@ -14314,27 +14315,27 @@ var Slide = function (_Component) {
           tid = _props$params.tid,
           sid = _props$params.sid;
 
-      //todo - have slideArray come from json-in-the-sky, using id to cherrypick
+      // todo - have slideArray come from json-in-the-sky, using id to cherrypick
 
       var slideArray = [{
-        "sid": "slide-1",
-        "title": "slide 1",
-        "content": "i am the content of slide 1"
+        sid: "slide-1",
+        title: "slide 1",
+        content: "i am the content of slide 1"
       }, {
-        "sid": "slide-2",
-        "title": "slide 2",
-        "content": "i am the content of slide 2"
+        sid: "slide-2",
+        title: "slide 2",
+        content: "i am the content of slide 2"
       }, {
-        "sid": "slide-3",
-        "title": "slide 3",
-        "content": "i am the content of slide 3"
+        sid: "slide-3",
+        title: "slide 3",
+        content: "i am the content of slide 3"
       }, {
-        "sid": "slide-4",
-        "title": "slide 4",
-        "content": "i am the content of slide 4"
+        sid: "slide-4",
+        title: "slide 4",
+        content: "i am the content of slide 4"
       }];
 
-      var currentSid = parseInt(sid.split('-')[1]);
+      var currentSid = parseInt(sid.split("-")[1], 10);
       var currentSlide = slideArray[currentSid - 1];
       var prevSlideSlug = "slide-" + (currentSid - 1);
       var nextSlideSlug = "slide-" + (currentSid + 1);
@@ -14349,7 +14350,7 @@ var Slide = function (_Component) {
           ": ",
           tid,
           ": ",
-          currentSlide.title
+          t(currentSlide.title)
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
@@ -14432,7 +14433,7 @@ var Topic = function (_Component) {
       var t = this.props.t;
       var lid = this.props.params.lid;
 
-      //todo - have topicArray come from json-in-the-sky, using id to cherrypick
+      // todo - have topicArray come from json-in-the-sky, using id to cherrypick
 
       var topicArray = ["topic-1", "topic-2", "topic-3", "topic-4"];
       var topicItems = topicArray.map(function (topic) {
@@ -14454,7 +14455,8 @@ var Topic = function (_Component) {
           "h1",
           null,
           lid,
-          ": Topics"
+          ": ",
+          t("Topics")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "ul",
@@ -14473,16 +14475,9 @@ var Topic = function (_Component) {
 
 /***/ }),
 /* 142 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-  attrs: function attrs() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    return state;
-  }
-});
+throw new Error("Module build failed: SyntaxError: Unexpected token (2:25)\n\n\u001b[0m \u001b[90m 1 | \u001b[39m\u001b[36mexport\u001b[39m \u001b[36mdefault\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 2 | \u001b[39m  attrs\u001b[33m:\u001b[39m (state \u001b[33m=\u001b[39m {}) \u001b[33m=>\u001b[39m \u001b[36mreturn\u001b[39m state\u001b[33m;\u001b[39m\n \u001b[90m   | \u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 3 | \u001b[39m}\u001b[33m;\u001b[39m\n \u001b[90m 4 | \u001b[39m\u001b[0m\n");
 
 /***/ }),
 /* 143 */

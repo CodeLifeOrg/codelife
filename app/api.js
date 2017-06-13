@@ -1,13 +1,10 @@
-codelife_syllabus = {
-	"lessons": [
-		{
-			"lid": 1
-			"title": "Lesson 1"
-			"topics" [
-				{
-					
-				}
-			]
-		}
-	]
-}
+const codelifeSyllabus = {
+  lessons: [
+    {
+      lid: 1,
+      title: "Lesson 1",
+      content: "I am a lesson"
+    }
+  ]
+};
+console.log(codelifeSyllabus);

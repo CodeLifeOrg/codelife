@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {translate, Interpolate} from "react-i18next";
-import { Link } from 'react-router';
-import Nav from 'components/Nav';
+import {translate} from "react-i18next";
+import {Link} from "react-router";
+import Nav from "components/Nav";
 
 class Lesson extends Component {
 
@@ -9,14 +9,14 @@ class Lesson extends Component {
     
     const {t} = this.props;
 
-    //todo - have lessonArray come from json-in-the-sky
+    // todo - have lessonArray come from json-in-the-sky
     const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
-    const lessonItems = lessonArray.map((lesson) => 
+    const lessonItems = lessonArray.map(lesson => 
       <li><Link className="link" to={`/lesson/${lesson}`}>{lesson}</Link></li>);
 
     return (
       <div>
-        <h1>Lessons</h1>
+        <h1>{ t("Lessons") }</h1>
         <ul>{lessonItems}</ul>
         <Nav />
       </div>

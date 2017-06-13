@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {translate, Interpolate} from "react-i18next";
-import { Link } from 'react-router';
+import {translate} from "react-i18next";
+import {Link} from "react-router";
 
 class Nav extends Component {
 
@@ -10,7 +10,7 @@ class Nav extends Component {
 
     return (
       <div>
-        <Link classname="link" to={`/`}>{ t("Home") }</Link>&nbsp;&nbsp;&nbsp;
+        <Link classname="link" to={"/"}>{ t("Home") }</Link>&nbsp;&nbsp;&nbsp;
         <Link className="link" to="/lesson">{ t("Lessons") }</Link>&nbsp;&nbsp;&nbsp;
         <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;&nbsp;&nbsp;
         <Link className="link" to="/profile">{ t("Profile") }</Link>&nbsp;&nbsp;&nbsp;

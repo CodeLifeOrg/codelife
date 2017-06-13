@@ -5,6 +5,7 @@ import App from "components/App";
 import Home from "pages/Home";
 import Lesson from "pages/Lesson";
 import Topic from "pages/Topic";
+import Slide from "pages/Slide";
 import Glossary from "pages/Glossary";
 import Profile from "pages/Profile";
 
@@ -14,7 +15,8 @@ export default function RouteCreate() {
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
       <Route path="lesson" component={Lesson} />
-      <Route path="lesson/:id" component={Topic} />
+      <Route path="lesson/:lid" component={Topic} />
+      <Route path="lesson/:lid/topic/:tid" component={Slide} />
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />
     </Route>

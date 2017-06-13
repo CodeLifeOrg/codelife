@@ -9,7 +9,7 @@ class Lesson extends Component {
     const {t} = this.props;
 
     //todo - have lessonArray come from json-in-the-sky
-    const lessonArray = ["lesson-1", "lesson-2", "lesson-3"];
+    const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
     const lessonItems = lessonArray.map((lesson) => <li>{lesson}</li>);
 
     return (

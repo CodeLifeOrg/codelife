@@ -13922,9 +13922,23 @@ var Home = function (_Component) {
           "Codelife"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "span",
+          "ul",
           null,
-          t("Translated Content")
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "li",
+            null,
+            t("Lessons")
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "li",
+            null,
+            t("Glossary")
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "li",
+            null,
+            t("Profile")
+          )
         )
       );
     }

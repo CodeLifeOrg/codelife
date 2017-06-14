@@ -49,8 +49,9 @@ const codelifeSyllabus = {
                 {
                   title: "Slide 2",
                   sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
+                  type: "textWithImage",
+                  content: "I am an example of an image slide",
+                  img: "for.png"
                 },
                 {
                   title: "Slide 3",
@@ -425,7 +426,8 @@ export function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
       sid: theLesson.slides[s].sid,
       title: theLesson.slides[s].title,
       type: theLesson.slides[s].type,
-      content: theLesson.slides[s].content
+      content: theLesson.slides[s].content,
+      img: theLesson.slides[s].img
     };
   }
   return slides;

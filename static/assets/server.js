@@ -4253,8 +4253,9 @@ var codelifeSyllabus = {
         }, {
           title: "Slide 2",
           sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
+          type: "textWithImage",
+          content: "I am an example of an image slide",
+          img: "for.png"
         }, {
           title: "Slide 3",
           sid: "slide-3",
@@ -4566,7 +4567,8 @@ function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
       sid: theLesson.slides[s].sid,
       title: theLesson.slides[s].title,
       type: theLesson.slides[s].type,
-      content: theLesson.slides[s].content
+      content: theLesson.slides[s].content,
+      img: theLesson.slides[s].img
     };
   }
   return slides;
@@ -14466,7 +14468,8 @@ var Home = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          "Codelife"
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { className: "image", width: "40", height: "40", src: "icon.svg" }),
+          "\xA0Codelife"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "ul",
@@ -14708,14 +14711,17 @@ var Slide = function (_Component) {
       var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
 
       var SLIDE_TYPES = {
-        TEST: "test",
-        QUIZ: "quiz"
+        TEXT: "test",
+        QUIZ: "quiz",
+        TEXTWITHIMAGE: "textWithImage"
       };
 
       var currentSid = parseInt(sid.split("-")[1], 10);
       var currentSlide = slideArray[currentSid - 1];
       var prevSlideSlug = "slide-" + (currentSid - 1);
       var nextSlideSlug = "slide-" + (currentSid + 1);
+
+      var img = currentSlide.img;
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -14745,6 +14751,11 @@ var Slide = function (_Component) {
             "Answer: ",
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", name: "answer" })
           ) : null
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "p",
+          null,
+          currentSlide.type === SLIDE_TYPES.TEXTWITHIMAGE ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { className: "image", src: "/" + img }) : null
         ),
         currentSid > 1 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],

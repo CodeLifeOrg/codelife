@@ -14,7 +14,7 @@ class Track extends Component {
     //const trackArray = ["track-1", "track-2", "track-3", "track-4"];
     const trackArray = listTracks();
     const trackItems = trackArray.map(track => 
-      <li><Link className="link" to={`/track/${track.title}`}>{track.title}</Link></li>);
+      <li><Link className="link" to={`/track/${track.trid}`}>{track.title}</Link></li>);
 
     return (
       <div>

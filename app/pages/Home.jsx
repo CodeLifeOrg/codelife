@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
+import Nav from "components/Nav";
 
 class Home extends Component {
 
@@ -11,11 +11,7 @@ class Home extends Component {
     return (
       <div>
         <h1><img className="image" width="40" height="40" src="icon.svg" />&nbsp;Codelife</h1>
-        <ul>
-          <li><Link className="link" to="/track">{ t("Tracks") }</Link></li>
-          <li><Link className="link" to="/glossary">{ t("Glossary") }</Link></li>
-          <li><Link className="link" to="/profile">{ t("Profile") }</Link></li>
-        </ul>
+        <Nav />
       </div>
     );
   }

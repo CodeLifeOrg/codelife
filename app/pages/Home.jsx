@@ -13,7 +13,7 @@ class Home extends Component {
 
     return (
       <div>
-        <h1><img className="image" width="40" height="40" src="icon.svg" />&nbsp;Codelife</h1>
+        <h1><img className="image" width="40" height="40" src="icon.svg" />&nbsp;{ t("Codelife") }</h1>
         <Nav />
       </div>
     );

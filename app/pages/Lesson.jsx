@@ -20,7 +20,7 @@ class Lesson extends Component {
 
     const lessonArray = listLessonsByTrackAndTopic(trid, tid);
     const lessonItems = lessonArray.map(lesson => 
-      <li><Link className="link" to={`/track/${trid}/${tid}/${lesson.lid}/slide-1`}>{lesson.title}</Link></li>);
+      <li><Link className="link" to={`/track/${trid}/${tid}/${lesson.lid}/slide-1`}>{ t(lesson.title) }</Link></li>);
 
     return (
       <div>

@@ -46,7 +46,7 @@ class Slide extends Component {
     return (
       <div>
         <h1>{trid}: {tid}: {lid}: { t(currentSlide.title) }</h1>
-        <p>{currentSlide.content}</p>
+        <p>{ t(currentSlide.content) }</p>
         { /*
           As mentioned earlier, slides have types.  The dumb logic below justs asks
           what type this slide is, and inserts content based on that type.

@@ -19,7 +19,7 @@ class Topic extends Component {
 
     const topicArray = listTopicsByTrack(trid);
     const topicItems = topicArray.map(topic => 
-      <li><Link className="link" to={`/track/${trid}/${topic.tid}`}>{topic.title}</Link></li>);
+      <li><Link className="link" to={`/track/${trid}/${topic.tid}`}>{ t(topic.title) }</Link></li>);
 
     return (
       <div>

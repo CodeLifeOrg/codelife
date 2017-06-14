@@ -13927,9 +13927,349 @@ module.exports = function serialize(obj, options) {
 
 /***/ }),
 /* 135 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token, expected , (352:13)\n\n\u001b[0m \u001b[90m 350 | \u001b[39m  \u001b[36mfor\u001b[39m (let t \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m t \u001b[33m<\u001b[39m codelifeSyllabus\u001b[33m.\u001b[39mtracks\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m t\u001b[33m++\u001b[39m) {\n \u001b[90m 351 | \u001b[39m    tracks[t] \u001b[33m=\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 352 | \u001b[39m      console\u001b[33m.\u001b[39mlog(codelifeSyllabus\u001b[33m.\u001b[39mtracks[t])\u001b[33m;\u001b[39m\n \u001b[90m     | \u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 353 | \u001b[39m      \u001b[90m//trid: codelifeSyllabus.tracks[t].trid,\u001b[39m\n \u001b[90m 354 | \u001b[39m      \u001b[90m//title: codelifeSyllabus.tracks[t].title,\u001b[39m\n \u001b[90m 355 | \u001b[39m      \u001b[90m//description: codelifeSyllabus.tracks[t].description\u001b[39m\u001b[0m\n");
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = listTracks;
+var codelifeSyllabus = {
+  tracks: [{
+    trid: 1,
+    title: "Track 1",
+    pageid: "track-1",
+    description: "I am Track 1, and I have many Topics",
+    topics: [{
+      tid: 1,
+      title: "Topic 1",
+      pageid: "topic-1",
+      description: "I am Topic 1, and I have many Lessons",
+      lessons: [{
+        lid: 1,
+        title: "Lesson 1",
+        pageid: "lesson-1",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 2,
+        title: "Lesson 2",
+        pageid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 3,
+        title: "Lesson 3",
+        pageid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }, {
+      tid: 2,
+      title: "Topic 2",
+      pageid: "topic-2",
+      description: "I am Topic 2, and I have many Lessons",
+      lessons: [{
+        lid: 1,
+        title: "Lesson 1",
+        pageid: "lesson-1",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 2,
+        title: "Lesson 2",
+        pageid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 3,
+        title: "Lesson 3",
+        pageid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }]
+  }, {
+    trid: 2,
+    title: "Track 2",
+    pageid: "track-2",
+    description: "I am Track 2, and I have many Topics",
+    topics: [{
+      tid: 1,
+      title: "Topic 1",
+      pageid: "topic-1",
+      description: "I am Topic 1, and I have many Lessons",
+      lessons: [{
+        lid: 1,
+        title: "Lesson 1",
+        pageid: "lesson-1",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 2,
+        title: "Lesson 2",
+        pageid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 3,
+        title: "Lesson 3",
+        pageid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }, {
+      tid: 2,
+      title: "Topic 2",
+      pageid: "topic-2",
+      description: "I am Topic 2, and I have many Lessons",
+      lessons: [{
+        lid: 1,
+        title: "Lesson 1",
+        pageid: "lesson-2",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 2,
+        title: "Lesson 2",
+        pageid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        lid: 3,
+        title: "Lesson 3",
+        pageid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          sid: 1,
+          title: "Slide 1",
+          pageid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 2,
+          title: "Slide 2",
+          pageid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          sid: 3,
+          title: "Slide 3",
+          pageid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }]
+  }]
+};
+
+function listTracks() {
+  var tracks = [];
+  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    tracks[t] = {
+      trid: codelifeSyllabus.tracks[t].trid,
+      title: codelifeSyllabus.tracks[t].title,
+      description: codelifeSyllabus.tracks[t].description
+    };
+  }
+  return tracks;
+}
 
 /***/ }),
 /* 136 */
@@ -14512,7 +14852,6 @@ var Topic = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Nav__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_api__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14542,17 +14881,17 @@ var Track = function (_Component) {
       var t = this.props.t;
 
       // todo - have trackArray come from json-in-the-sky, using id to cherrypick
+      //const trackArray = ["track-1", "track-2", "track-3", "track-4"];
 
-      var trackArray = ["track-1", "track-2", "track-3", "track-4"];
-      console.log(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["listTracks"])());
+      var trackArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listTracks */])();
       var trackItems = trackArray.map(function (track) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
           null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-            { className: "link", to: "/track/" + track },
-            track
+            { className: "link", to: "/track/" + track.title },
+            track.title
           )
         );
       });

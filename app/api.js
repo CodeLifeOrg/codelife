@@ -357,12 +357,12 @@ export function listTracks() {
   return tracks;
 }
 
-export function listTopicsByTrack(trackid) {
+export function listTopicsByTrack(trid) {
   let topics = [];
   let theTrack = null;
   // find the Track in the list
   for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trackid) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
       theTrack = codelifeSyllabus.tracks[t];
     }
   }
@@ -374,4 +374,28 @@ export function listTopicsByTrack(trackid) {
     };
   }
   return topics;
+}
+
+export function listLessonsByTrackAndTopic(trid, tid) {
+  let lessons = [];
+  let theTrack = null;
+  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
+      theTrack = codelifeSyllabus.tracks[t];
+    }
+  }
+  let theTopic = null;
+  for (let top = 0; top < theTrack.topics.length; top++) {
+    if (theTrack.topics[top].tid === tid) {
+      theTopic = theTrack.topics[top];
+    }
+  }
+  for (let l = 0; l < theTopic.lessons.length; l++) {
+    lessons[l] = {
+      lid: theTopic.lessons[l].lid,
+      title: theTopic.lessons[l].title,
+      description: theTopic.lessons[l].description
+    };
+  }
+  return lessons;
 }

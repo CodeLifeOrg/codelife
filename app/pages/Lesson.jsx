@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import Nav from "components/Nav";
+import {listLessonsByTrackAndTopic} from "api";
 
 class Lesson extends Component {
 
@@ -12,9 +13,10 @@ class Lesson extends Component {
     const {trid, tid} = this.props.params;
 
     // todo - have lessonArray come from json-in-the-sky
-    const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
+    // const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
+    const lessonArray = listLessonsByTrackAndTopic(trid, tid);
     const lessonItems = lessonArray.map(lesson => 
-      <li><Link className="link" to={`/track/${trid}/${tid}/${lesson}/slide-1`}>{lesson}</Link></li>);
+      <li><Link className="link" to={`/track/${trid}/${tid}/${lesson.lid}/slide-1`}>{lesson.title}</Link></li>);
 
     return (
       <div>

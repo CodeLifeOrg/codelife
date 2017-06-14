@@ -14688,6 +14688,13 @@ var Slide = function (_Component) {
   }
 
   _createClass(Slide, [{
+    key: "onKeyPress",
+    value: function onKeyPress(event) {
+      if (event.which === 13 /* Enter */) {
+          event.preventDefault();
+        }
+    }
+  }, {
     key: "render",
     value: function render() {
       var t = this.props.t;
@@ -14699,6 +14706,11 @@ var Slide = function (_Component) {
 
 
       var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
+
+      var SLIDE_TYPES = {
+        TEST: "test",
+        QUIZ: "quiz"
+      };
 
       var currentSid = parseInt(sid.split("-")[1], 10);
       var currentSlide = slideArray[currentSid - 1];
@@ -14723,6 +14735,16 @@ var Slide = function (_Component) {
           "p",
           null,
           currentSlide.content
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "p",
+          null,
+          currentSlide.type === SLIDE_TYPES.QUIZ ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "form",
+            { onKeyPress: this.onKeyPress },
+            "Answer: ",
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", name: "answer" })
+          ) : null
         ),
         currentSid > 1 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],

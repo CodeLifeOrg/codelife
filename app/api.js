@@ -1,3 +1,16 @@
+/*
+
+This dummy set of data is used to feed a fake API at the bottom of this page.
+Right now this is very heirarchical, and will need to be broken out so that 
+lessons can be members of multiple tracks, etc.  
+
+It contains single examples of a "quiz" slide and a "textWithImage" slide. However
+as mentioned in various other places in this project, the idea of a slide with a single
+type will be going away, and will be replaced with a list of Components that can be
+arranged as desired (text, images, quizzes, radio buttons, etc).
+
+*/
+
 const codelifeSyllabus = {
   tracks: [
     {

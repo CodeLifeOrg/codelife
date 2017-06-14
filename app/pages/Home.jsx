@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
 
+// Home Page
+// Currently Contains only the Nav element, for navigation.
+
 class Home extends Component {
 
   render() {

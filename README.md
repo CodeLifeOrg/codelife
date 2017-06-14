@@ -10,4 +10,4 @@ There is no CSS or styling - this proof of concept is meant to:
 
 - Establish `datawheel-canon`'s viability as a framework
 - Create an MVP of showing slides that one can scroll through
-- Teaching Jimmy React.js.
+- Teaching Jimmy `React.js`.

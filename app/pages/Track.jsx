@@ -4,14 +4,16 @@ import {Link} from "react-router";
 import Nav from "components/Nav";
 import {listTracks} from "api";
 
+// Track Page
+// Lists available Tracks.  A track id, or "trid", is stored in the database.
+// The trid is also used as the navigational slug in the URL of the page.
+
 class Track extends Component {
 
   render() {
     
     const {t} = this.props;
 
-    // todo - have trackArray come from json-in-the-sky, using id to cherrypick
-    //const trackArray = ["track-1", "track-2", "track-3", "track-4"];
     const trackArray = listTracks();
     const trackItems = trackArray.map(track => 
       <li><Link className="link" to={`/track/${track.trid}`}>{track.title}</Link></li>);

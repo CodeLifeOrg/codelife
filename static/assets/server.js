@@ -2103,6 +2103,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Nav Component
+// Contains a list of links in Footer format, inserted at the bottom of each page
+
 var Nav = function (_Component) {
   _inherits(Nav, _Component);
 
@@ -4212,6 +4215,19 @@ var routes = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_prop_types__["one
 /* harmony export (immutable) */ __webpack_exports__["c"] = listTopicsByTrack;
 /* harmony export (immutable) */ __webpack_exports__["b"] = listLessonsByTrackAndTopic;
 /* harmony export (immutable) */ __webpack_exports__["a"] = listSlidesByTrackAndTopicAndLesson;
+/*
+
+This dummy set of data is used to feed a fake API at the bottom of this page.
+Right now this is very heirarchical, and will need to be broken out so that 
+lessons can be members of multiple tracks, etc.  
+
+It contains single examples of a "quiz" slide and a "textWithImage" slide. However
+as mentioned in various other places in this project, the idea of a slide with a single
+type will be going away, and will be replaced with a list of Components that can be
+arranged as desired (text, images, quizzes, radio buttons, etc).
+
+*/
+
 var codelifeSyllabus = {
   tracks: [{
     title: "Track 1",
@@ -14362,6 +14378,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Glossary Page
+// Currently a placeholder for what will be a glossary of CS terms
+
 var Glossary = function (_Component) {
   _inherits(Glossary, _Component);
 
@@ -14447,6 +14466,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Home Page
+// Currently Contains only the Nav element, for navigation.
+
 var Home = function (_Component) {
   _inherits(Home, _Component);
 
@@ -14507,6 +14529,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Lesson Page
+// Lists available lessons.  A lesson id, or "lid", is stored in the database.
+// The lid is also used as the navigational slug in the URL of the page.
+
 var Lesson = function (_Component) {
   _inherits(Lesson, _Component);
 
@@ -14520,6 +14546,10 @@ var Lesson = function (_Component) {
     key: "render",
     value: function render() {
       var t = this.props.t;
+
+      // get the track and topic id from the URL. 
+      // We'll need these ids to look up the lessons for this Track/Topic
+
       var _props$params = this.props.params,
           trid = _props$params.trid,
           tid = _props$params.tid;
@@ -14587,6 +14617,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Profile Page
+// Currently a placeholder for what will be a dashboard of completed tracks/courses.
+
 var Profile = function (_Component) {
   _inherits(Profile, _Component);
 
@@ -14651,6 +14684,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Slide Page
+// Shows slides, always starting with `slide-1`. Slide ids are stored as sid in the database.
+
 var Slide = function (_Component) {
   _inherits(Slide, _Component);
 
@@ -14662,6 +14698,9 @@ var Slide = function (_Component) {
 
   _createClass(Slide, [{
     key: "onKeyPress",
+
+
+    // For quiz slides, override the enter key so we don't submit.
     value: function onKeyPress(event) {
       if (event.which === 13 /* Enter */) {
           event.preventDefault();
@@ -14671,6 +14710,10 @@ var Slide = function (_Component) {
     key: "render",
     value: function render() {
       var t = this.props.t;
+
+      // Get all the ids from our URL, to give a clear picture of where we are.
+      // We'll need these ids to look up the slides for this Track/Topic/Lesson combo.
+
       var _props$params = this.props.params,
           trid = _props$params.trid,
           tid = _props$params.tid,
@@ -14680,12 +14723,16 @@ var Slide = function (_Component) {
 
       var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
 
+      // Right now, slides have types, encoded in the database as "type"
+      // TODO: Break these out into components that can be included on a slide
+      // as opposed to having a single "type" for an entire slide.
       var SLIDE_TYPES = {
         TEXT: "test",
         QUIZ: "quiz",
         TEXTWITHIMAGE: "textWithImage"
       };
 
+      // Some string cutting/manip is necessary to increment "slide-2" to "slide-3" etc.
       var currentSid = parseInt(sid.split("-")[1], 10);
       var currentSlide = slideArray[currentSid - 1];
       var prevSlideSlug = "slide-" + (currentSid - 1);
@@ -14799,6 +14846,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Topic Page
+// Lists available topics.  A topic id, or "tid", is stored in the database.
+// The tid is also used as the navigational slug in the URL of the page.
+
 var Topic = function (_Component) {
   _inherits(Topic, _Component);
 
@@ -14812,10 +14863,11 @@ var Topic = function (_Component) {
     key: "render",
     value: function render() {
       var t = this.props.t;
+
+      // get the track id from the URL, because we'll need this to look up this Track's Topics
+
       var trid = this.props.params.trid;
 
-      // todo - have topicArray come from json-in-the-sky, using id to cherrypick
-      // const topicArray = ["topic-1", "topic-2", "topic-3", "topic-4"];
 
       var topicArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["c" /* listTopicsByTrack */])(trid);
       var topicItems = topicArray.map(function (topic) {
@@ -14881,6 +14933,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+// Track Page
+// Lists available Tracks.  A track id, or "trid", is stored in the database.
+// The trid is also used as the navigational slug in the URL of the page.
+
 var Track = function (_Component) {
   _inherits(Track, _Component);
 
@@ -14895,8 +14951,6 @@ var Track = function (_Component) {
     value: function render() {
       var t = this.props.t;
 
-      // todo - have trackArray come from json-in-the-sky, using id to cherrypick
-      //const trackArray = ["track-1", "track-2", "track-3", "track-4"];
 
       var trackArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["d" /* listTracks */])();
       var trackItems = trackArray.map(function (track) {

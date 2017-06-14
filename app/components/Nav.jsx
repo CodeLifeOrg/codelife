@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 
+// Nav Component
+// Contains a list of links in Footer format, inserted at the bottom of each page
+
 class Nav extends Component {
 
   render() {

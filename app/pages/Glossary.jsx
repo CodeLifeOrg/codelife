@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
 
+// Glossary Page
+// Currently a placeholder for what will be a glossary of CS terms
+
 class Glossary extends Component {
 
   render() {

@@ -24,8 +24,8 @@ const codelifeSyllabus = {
                 {
                   title: "Slide 2",
                   sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
+                  type: "quiz",
+                  content: "I am an example of a quiz slide. Are you a robot?"
                 },
                 {
                   title: "Slide 3",

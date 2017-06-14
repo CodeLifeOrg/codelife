@@ -12,8 +12,6 @@ class Lesson extends Component {
 
     const {trid, tid} = this.props.params;
 
-    // todo - have lessonArray come from json-in-the-sky
-    // const lessonArray = ["lesson-1", "lesson-2", "lesson-3", "lesson-4"];
     const lessonArray = listLessonsByTrackAndTopic(trid, tid);
     const lessonItems = lessonArray.map(lesson => 
       <li><Link className="link" to={`/track/${trid}/${tid}/${lesson.lid}/slide-1`}>{lesson.title}</Link></li>);

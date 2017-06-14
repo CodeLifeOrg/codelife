@@ -4770,6 +4770,7 @@ module.exports = __webpack_require__(206);
 /* harmony export (immutable) */ __webpack_exports__["c"] = listTracks;
 /* harmony export (immutable) */ __webpack_exports__["b"] = listTopicsByTrack;
 /* harmony export (immutable) */ __webpack_exports__["a"] = listLessonsByTrackAndTopic;
+/* unused harmony export listSlidesByTrackAndTopicAndLesson */
 var codelifeSyllabus = {
   tracks: [{
     title: "Track 1",
@@ -5097,6 +5098,37 @@ function listLessonsByTrackAndTopic(trid, tid) {
     };
   }
   return lessons;
+}
+
+function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
+  var slides = [];
+  var theTrack = null;
+  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
+      theTrack = codelifeSyllabus.tracks[t];
+    }
+  }
+  var theTopic = null;
+  for (var top = 0; top < theTrack.topics.length; top++) {
+    if (theTrack.topics[top].tid === tid) {
+      theTopic = theTrack.topics[top];
+    }
+  }
+  var theLesson = null;
+  for (var l = 0; l < theTopic.lessons.length; l++) {
+    if (theTopic.lessons[l].lid === lid) {
+      theLesson = theTopic.lessons[l];
+    }
+  }
+  for (var s = 0; s < theLesson.slides.length; s++) {
+    slides[s] = {
+      sid: theLesson.slides[s].sid,
+      title: theLesson.slides[s].title,
+      type: theLesson.slides[s].type,
+      content: theLesson.slides[s].content
+    };
+  }
+  return slides;
 }
 
 /***/ }),

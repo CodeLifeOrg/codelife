@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import Nav from "components/Nav";
+import {listSlidesByTrackAndTopicAndLesson} from "api";
 
 class Slide extends Component {
 
@@ -11,29 +12,7 @@ class Slide extends Component {
 
     const {trid, tid, lid, sid} = this.props.params;
 
-    // todo - have slideArray come from json-in-the-sky, using id to cherrypick
-    const slideArray = [
-      {
-        sid: "slide-1",
-        title: "slide 1",
-        content: "i am the content of slide 1"
-      },
-      {
-        sid: "slide-2",
-        title: "slide 2",
-        content: "i am the content of slide 2"
-      },
-      {
-        sid: "slide-3",
-        title: "slide 3",
-        content: "i am the content of slide 3"
-      },
-      {
-        sid: "slide-4",
-        title: "slide 4",
-        content: "i am the content of slide 4"
-      }
-    ];
+    const slideArray = listSlidesByTrackAndTopicAndLesson(trid, tid, lid);
     
     const currentSid = parseInt(sid.split("-")[1], 10);
     const currentSlide = slideArray[currentSid - 1];

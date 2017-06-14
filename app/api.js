@@ -399,3 +399,34 @@ export function listLessonsByTrackAndTopic(trid, tid) {
   }
   return lessons;
 }
+
+export function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
+  let slides = [];
+  let theTrack = null;
+  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
+      theTrack = codelifeSyllabus.tracks[t];
+    }
+  }
+  let theTopic = null;
+  for (let top = 0; top < theTrack.topics.length; top++) {
+    if (theTrack.topics[top].tid === tid) {
+      theTopic = theTrack.topics[top];
+    }
+  }
+  let theLesson = null;
+  for (let l = 0; l < theTopic.lessons.length; l++) {
+    if (theTopic.lessons[l].lid === lid) {
+      theLesson = theTopic.lessons[l];
+    }
+  }
+  for (let s = 0; s < theLesson.slides.length; s++) {
+    slides[s] = {
+      sid: theLesson.slides[s].sid,
+      title: theLesson.slides[s].title,
+      type: theLesson.slides[s].type,
+      content: theLesson.slides[s].content
+    };
+  }
+  return slides;
+}

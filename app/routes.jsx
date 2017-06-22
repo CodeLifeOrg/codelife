@@ -9,6 +9,7 @@ import Topic from "pages/Topic";
 import Slide from "pages/Slide";
 import Glossary from "pages/Glossary";
 import Profile from "pages/Profile";
+import Studio from "pages/Studio";
 
 export default function RouteCreate() {
 
@@ -21,6 +22,7 @@ export default function RouteCreate() {
       <Route path="track/:trid/:tid/:lid/:sid" component={Slide} />
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />
+      <Route path="studio" component={Studio} />
     </Route>
   );
 }

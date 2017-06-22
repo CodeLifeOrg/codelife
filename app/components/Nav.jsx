@@ -17,6 +17,7 @@ class Nav extends Component {
         <Link className="link" to="/track">{ t("Tracks") }</Link>&nbsp;&nbsp;&nbsp;
         <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;&nbsp;&nbsp;
         <Link className="link" to="/profile">{ t("Profile") }</Link>&nbsp;&nbsp;&nbsp;
+        <Link className="link" to="/studio">{ t("Studio") }</Link>&nbsp;&nbsp;&nbsp;
       </div>
     );
   }

@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Datawheel/codelife#readme",
   "dependencies": {
-    "datawheel-canon": "^0.5.7"
+    "datawheel-canon": "^0.5.7",
+    "react-ace": "^5.0.1"
   }
 }

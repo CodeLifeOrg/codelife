@@ -35875,7 +35875,7 @@ var Studio = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Studio.__proto__ || Object.getPrototypeOf(Studio)).call.apply(_ref, [this].concat(args))), _this), _this.state = { mounted: false, output: null }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Studio.__proto__ || Object.getPrototypeOf(Studio)).call.apply(_ref, [this].concat(args))), _this), _this.state = { mounted: false, output: "", editor: Editor }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Studio, [{
@@ -35889,10 +35889,15 @@ var Studio = function (_Component) {
       this.setState({ output: theText });
     }
   }, {
+    key: "onClick",
+    value: function onClick(e) {}
+  }, {
     key: "render",
     value: function render() {
       var t = this.props.t;
 
+
+      var Comp = this.state.editor;
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -35902,9 +35907,28 @@ var Studio = function (_Component) {
           null,
           t("Studio")
         ),
-        this.state.mounted ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Editor, { mode: "html", theme: "monokai", onChange: this.onChange, value: this.state.output }) : null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { border: "solid 1px black", padding: "10px", width: "400px", height: "400px" }, dangerouslySetInnerHTML: { __html: this.state.output } }),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_Nav__["a" /* default */], null)
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "button",
+          { onClick: this.onClick.bind(this) },
+          "Inject"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { style: { width: "1200px" } },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { style: { float: "left", width: "450px" } },
+            this.state.mounted ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Comp, { mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { float: "right", border: "solid 1px black", width: "650px", height: "400px" }, dangerouslySetInnerHTML: { __html: this.state.output } })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { style: { clear: "both" } },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_Nav__["a" /* default */], null)
+        )
       );
     }
   }]);

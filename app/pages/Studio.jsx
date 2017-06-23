@@ -9,16 +9,18 @@ import Nav from "components/Nav";
 // Studio Page
 // Test zone for inline code editing
 
-const Editor = (props) => {
-  console.log(window);
-  if (typeof window !== 'undefined') {
-    const Ace = require('react-ace').default;
-    require('brace/mode/html');
-    require('brace/theme/monokai');
+class Editor extends Component {
 
-    return <Ace {...props}/>
+  render() {
+    if (typeof window !== 'undefined') {
+      const Ace = require('react-ace').default;
+      require('brace/mode/html');
+      require('brace/theme/monokai');
+
+      return <Ace ref={editor => this.editor = editor} {...this.props}/>
+    }
+    return null;
   }
-  return null;
 }
 
 class Studio extends Component {
@@ -32,6 +34,11 @@ class Studio extends Component {
   onChange(theText) {
     this.setState({output: theText});
   }
+
+  onClick(e) {
+    const reactAceComponent = this.editor.editor;
+    reactAceComponent.editor.insert("balls");
+  }
   
   render() {
     
@@ -40,13 +47,15 @@ class Studio extends Component {
     return (
       <div>
         <h1>{ t("Studio") }</h1>
+        <button onClick={this.onClick.bind(this)}>Inject</button><br/><br/>       
         <div style={{width:"1200px"}}>
           <div style={{float:"left", width:"450px"}}>
-          { this.state.mounted ? <Editor mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output}/> : null }
+          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output}/> : null }
           </div>
           <div style={{float:"right", border:"solid 1px black", width: "650px", height: "400px"}} dangerouslySetInnerHTML={ {__html: this.state.output } } />
         </div>
         <div style={{clear:"both"}}>
+        
         <Nav />
         </div>
       </div>

@@ -4,12 +4,35 @@ import Nav from "components/Nav";
 //import AceEditor from "react-ace";
 
 //import "brace/mode/html";
+//import "brace/theme/monokai"
 
 // Studio Page
 // Test zone for inline code editing
 
+const Editor = (props) => {
+  console.log(window);
+  if (typeof window !== 'undefined') {
+    const Ace = require('react-ace').default;
+    require('brace/mode/html');
+    require('brace/theme/monokai');
+
+    return <Ace {...props}/>
+  }
+  return null;
+}
+
 class Studio extends Component {
 
+  state = {mounted: false, output: ""};
+
+  componentDidMount() {
+    this.setState({mounted: true});
+  }
+
+  onChange(theText) {
+    this.setState({output: theText});
+  }
+  
   render() {
     
     const {t} = this.props;
@@ -17,32 +40,17 @@ class Studio extends Component {
     return (
       <div>
         <h1>{ t("Studio") }</h1>
-        { /*
-        <AceEditor
-        mode="html"
-        theme="monokai"
-        name="blah2"
-        onLoad={this.onLoad}
-        onChange={this.onChange}
-        fontSize={14}
-        height="100%"
-        showPrintMargin={true}
-        showGutter={true}
-        highlightActiveLine={true}
-        value={`function onLoad(editor) {
-        console.log("i've loaded");
-        }`}
-        setOptions={{
-        enableBasicAutocompletion: false,
-        enableLiveAutocompletion: false,
-        enableSnippets: false,
-        showLineNumbers: true,
-        tabSize: 2,
-        }}/>
-      */ } 
-
+        <div style={{width:"1200px"}}>
+          <div style={{float:"left", width:"450px"}}>
+          { this.state.mounted ? <Editor mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output}/> : null }
+          </div>
+          <div style={{float:"right", border:"solid 1px black", width: "650px", height: "400px"}} dangerouslySetInnerHTML={ {__html: this.state.output } } />
+        </div>
+        <div style={{clear:"both"}}>
         <Nav />
+        </div>
       </div>
+
     );
   }
 }

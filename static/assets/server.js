@@ -1763,7 +1763,7 @@ var Nav = function (_Component) {
         "\xA0\xA0\xA0",
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
-          { className: "link", to: "/profile" },
+          { className: "link", to: "/studio" },
           t("Studio")
         ),
         "\xA0\xA0\xA0"
@@ -14851,6 +14851,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+//import AceEditor from "react-ace";
+
+//import "brace/mode/html";
 
 // Studio Page
 // Test zone for inline code editing
@@ -14877,17 +14880,6 @@ var Studio = function (_Component) {
           "h1",
           null,
           t("Studio")
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "form",
-          null,
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "textarea",
-            { name: "ide", rows: "10", cols: "30" },
-            "write your code here"
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "submit" })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_Nav__["a" /* default */], null)
       );

@@ -37,7 +37,7 @@ class Studio extends Component {
 
   onClick(e) {
     const reactAceComponent = this.editor.editor;
-    reactAceComponent.editor.insert("balls");
+    reactAceComponent.editor.insert("test");
   }
   
   render() {

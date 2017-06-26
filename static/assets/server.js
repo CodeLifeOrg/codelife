@@ -35830,6 +35830,8 @@ var Slide = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_i18next__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_components_Nav__ = __webpack_require__(16);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35849,25 +35851,43 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // Studio Page
 // Test zone for inline code editing
 
-var Editor = function Editor(props) {
-  console.log(window);
-  if (typeof window !== 'undefined') {
-    var Ace = __webpack_require__(200).default;
-    __webpack_require__(156);
-    __webpack_require__(157);
+var Editor = function (_Component) {
+  _inherits(Editor, _Component);
 
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Ace, props);
+  function Editor() {
+    _classCallCheck(this, Editor);
+
+    return _possibleConstructorReturn(this, (Editor.__proto__ || Object.getPrototypeOf(Editor)).apply(this, arguments));
   }
-  return null;
-};
 
-var Studio = function (_Component) {
-  _inherits(Studio, _Component);
+  _createClass(Editor, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      if (typeof window !== 'undefined') {
+        var Ace = __webpack_require__(200).default;
+        __webpack_require__(156);
+        __webpack_require__(157);
+
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Ace, _extends({ ref: function ref(editor) {
+            return _this2.editor = editor;
+          } }, this.props));
+      }
+      return null;
+    }
+  }]);
+
+  return Editor;
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
+
+var Studio = function (_Component2) {
+  _inherits(Studio, _Component2);
 
   function Studio() {
     var _ref;
 
-    var _temp, _this, _ret;
+    var _temp, _this3, _ret;
 
     _classCallCheck(this, Studio);
 
@@ -35875,7 +35895,7 @@ var Studio = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Studio.__proto__ || Object.getPrototypeOf(Studio)).call.apply(_ref, [this].concat(args))), _this), _this.state = { mounted: false, output: "", editor: Editor }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = Studio.__proto__ || Object.getPrototypeOf(Studio)).call.apply(_ref, [this].concat(args))), _this3), _this3.state = { mounted: false, output: "" }, _temp), _possibleConstructorReturn(_this3, _ret);
   }
 
   _createClass(Studio, [{
@@ -35890,14 +35910,17 @@ var Studio = function (_Component) {
     }
   }, {
     key: "onClick",
-    value: function onClick(e) {}
+    value: function onClick(e) {
+      var reactAceComponent = this.editor.editor;
+      reactAceComponent.editor.insert("balls");
+    }
   }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
       var t = this.props.t;
 
-
-      var Comp = this.state.editor;
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -35920,7 +35943,9 @@ var Studio = function (_Component) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
             { style: { float: "left", width: "450px" } },
-            this.state.mounted ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Comp, { mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null
+            this.state.mounted ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Editor, { ref: function ref(comp) {
+                return _this4.editor = comp;
+              }, mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { float: "right", border: "solid 1px black", width: "650px", height: "400px" }, dangerouslySetInnerHTML: { __html: this.state.output } })
         ),

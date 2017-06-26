@@ -31,13 +31,17 @@ class Studio extends Component {
     this.setState({mounted: true});
   }
 
+  insertTextAtCursor(theText) {
+    const reactAceComponent = this.editor.editor;
+    reactAceComponent.editor.insert(theText);
+  }
+
   onChange(theText) {
     this.setState({output: theText});
   }
 
   onClick(e) {
-    const reactAceComponent = this.editor.editor;
-    reactAceComponent.editor.insert("test");
+    this.insertTextAtCursor("test");
   }
   
   render() {

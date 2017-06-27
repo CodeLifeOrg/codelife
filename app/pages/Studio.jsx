@@ -56,7 +56,7 @@ class Studio extends Component {
 
   validateHTML() {
     const annotations = this.getEditor().getSession().getAnnotations();
-    let validationText = {};
+    const validationText = {};
     validationText.info = "WARNINGS: \n\n";
     validationText.error = "ERRORS: \n\n";
     for (const a of annotations) {
@@ -89,14 +89,19 @@ class Studio extends Component {
         <div style={{width: "1100px"}}>
           <div style={{float: "left", width: "450px"}}>
           { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output}/> : null }
-          <button style={{marginTop: "10px", fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>&nbsp;&nbsp;&nbsp;
-          <button style={{marginTop: "10px", fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>&nbsp;&nbsp;&nbsp;
-          <button style={{marginTop: "10px", fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
+          <button style={{margin: "10px", fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
+          <button style={{margin: "10px", fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>
+          <button style={{margin: "10px", fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
           <div style={{float: "right", border: "solid 1px black", width: "550px", height: "498px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
         </div>
         <div style={{clear: "both"}}>
-          <br/><br/>
+          <div style={{width: "1100px", display: "block", border: "1px solid black", padding: "5px"}}>
+            { this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"}
+          </div>
+        </div>
+        <div>
+        <br/><br/>
           <Nav />
           <br/><br/>
           { showDnD ? <Dragger /> : null }

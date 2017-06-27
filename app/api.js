@@ -11,6 +11,21 @@ arranged as desired (text, images, quizzes, radio buttons, etc).
 
 */
 
+const snippetArray = [
+  {
+    name: "Title Snippet",
+    htmlcontent: "<h1>jimmy's page</h1>"
+  },
+  {
+    name: "List Snippet",
+    htmlcontent: "<ul><li>top</li><li>five</li><li>bands</li></ul>"
+  },
+  {
+    name: "Image Snippet",
+    htmlcontent: "<img src='http://i.imgur.com/ZMU4mhG.png' />"
+  }
+];
+
 const codelifeSyllabus = {
   tracks: [
     {
@@ -358,6 +373,10 @@ const codelifeSyllabus = {
     }
   ]
 };
+
+export function listSnippets() {
+  return snippetArray;
+}
 
 export function listTracks() {
   let tracks = [];

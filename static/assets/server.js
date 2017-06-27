@@ -466,7 +466,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 var _prodInvariant = __webpack_require__(3);
 
-var DOMProperty = __webpack_require__(38);
+var DOMProperty = __webpack_require__(39);
 var ReactDOMComponentFlags = __webpack_require__(147);
 
 var invariant = __webpack_require__(0);
@@ -1270,7 +1270,7 @@ var _prodInvariant = __webpack_require__(3),
 var CallbackQueue = __webpack_require__(145);
 var PooledClass = __webpack_require__(24);
 var ReactFeatureFlags = __webpack_require__(398);
-var ReactReconciler = __webpack_require__(41);
+var ReactReconciler = __webpack_require__(42);
 var Transaction = __webpack_require__(58);
 
 var invariant = __webpack_require__(0);
@@ -2201,7 +2201,7 @@ module.exports = isArray;
 
 var baseGetTag = __webpack_require__(50),
     getPrototype = __webpack_require__(297),
-    isObjectLike = __webpack_require__(36);
+    isObjectLike = __webpack_require__(37);
 
 /** `Object#toString` result references. */
 var objectTag = '[object Object]';
@@ -3364,6 +3364,406 @@ module.exports = React;
 
 /***/ }),
 /* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = listSnippets;
+/* harmony export (immutable) */ __webpack_exports__["e"] = listTracks;
+/* harmony export (immutable) */ __webpack_exports__["d"] = listTopicsByTrack;
+/* harmony export (immutable) */ __webpack_exports__["c"] = listLessonsByTrackAndTopic;
+/* harmony export (immutable) */ __webpack_exports__["b"] = listSlidesByTrackAndTopicAndLesson;
+/*
+
+This dummy set of data is used to feed a fake API at the bottom of this page.
+Right now this is very heirarchical, and will need to be broken out so that 
+lessons can be members of multiple tracks, etc.  
+
+It contains single examples of a "quiz" slide and a "textWithImage" slide. However
+as mentioned in various other places in this project, the idea of a slide with a single
+type will be going away, and will be replaced with a list of Components that can be
+arranged as desired (text, images, quizzes, radio buttons, etc).
+
+*/
+
+var snippetArray = [{
+  name: "Title Snippet",
+  htmlcontent: "<h1>jimmy's page</h1>"
+}, {
+  name: "List Snippet",
+  htmlcontent: "<ul><li>top</li><li>five</li><li>bands</li></ul>"
+}, {
+  name: "Image Snippet",
+  htmlcontent: "<img src='http://i.imgur.com/ZMU4mhG.png' />"
+}];
+
+var codelifeSyllabus = {
+  tracks: [{
+    title: "Track 1",
+    trid: "track-1",
+    description: "I am Track 1, and I have many Topics",
+    topics: [{
+      title: "Topic 1",
+      tid: "topic-1",
+      description: "I am Topic 1, and I have many Lessons",
+      lessons: [{
+        title: "Lesson 1",
+        lid: "lesson-1",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "quiz",
+          content: "I am an example of a quiz slide. Are you a robot?"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 2",
+        lid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "textWithImage",
+          content: "I am an example of an image slide",
+          img: "for.png"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 3",
+        lid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }, {
+      title: "Topic 2",
+      tid: "topic-2",
+      description: "I am Topic 2, and I have many Lessons",
+      lessons: [{
+        title: "Lesson 1",
+        lid: "lesson-1",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 2",
+        lid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 3",
+        lid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }]
+  }, {
+    title: "Track 2",
+    trid: "track-2",
+    description: "I am Track 2, and I have many Topics",
+    topics: [{
+      title: "Topic 1",
+      tid: "topic-1",
+      description: "I am Topic 1, and I have many Lessons",
+      lessons: [{
+        title: "Lesson 1",
+        lid: "lesson-1",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 2",
+        lid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 3",
+        lid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }, {
+      title: "Topic 2",
+      tid: "topic-2",
+      description: "I am Topic 2, and I have many Lessons",
+      lessons: [{
+        title: "Lesson 1",
+        lid: "lesson-2",
+        description: "I am Lesson 1, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 2",
+        lid: "lesson-2",
+        description: "I am Lesson 2, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }, {
+        title: "Lesson 3",
+        lid: "lesson-3",
+        description: "I am Lesson 3, and I have many Slides",
+        slides: [{
+          title: "Slide 1",
+          sid: "slide-1",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 2",
+          sid: "slide-2",
+          type: "text",
+          content: "I am an example of a text slide"
+        }, {
+          title: "Slide 3",
+          sid: "slide-3",
+          type: "text",
+          content: "I am an example of a text slide"
+        }]
+      }]
+    }]
+  }]
+};
+
+function listSnippets() {
+  return snippetArray;
+}
+
+function listTracks() {
+  var tracks = [];
+  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    tracks[t] = {
+      trid: codelifeSyllabus.tracks[t].trid,
+      title: codelifeSyllabus.tracks[t].title,
+      description: codelifeSyllabus.tracks[t].description
+    };
+  }
+  return tracks;
+}
+
+function listTopicsByTrack(trid) {
+  var topics = [];
+  var theTrack = null;
+  // find the Track in the list
+  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
+      theTrack = codelifeSyllabus.tracks[t];
+    }
+  }
+  for (var top = 0; top < theTrack.topics.length; top++) {
+    topics[top] = {
+      tid: theTrack.topics[top].tid,
+      title: theTrack.topics[top].title,
+      description: theTrack.topics[top].description
+    };
+  }
+  return topics;
+}
+
+function listLessonsByTrackAndTopic(trid, tid) {
+  var lessons = [];
+  var theTrack = null;
+  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
+      theTrack = codelifeSyllabus.tracks[t];
+    }
+  }
+  var theTopic = null;
+  for (var top = 0; top < theTrack.topics.length; top++) {
+    if (theTrack.topics[top].tid === tid) {
+      theTopic = theTrack.topics[top];
+    }
+  }
+  for (var l = 0; l < theTopic.lessons.length; l++) {
+    lessons[l] = {
+      lid: theTopic.lessons[l].lid,
+      title: theTopic.lessons[l].title,
+      description: theTopic.lessons[l].description
+    };
+  }
+  return lessons;
+}
+
+function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
+  var slides = [];
+  var theTrack = null;
+  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
+    if (codelifeSyllabus.tracks[t].trid === trid) {
+      theTrack = codelifeSyllabus.tracks[t];
+    }
+  }
+  var theTopic = null;
+  for (var top = 0; top < theTrack.topics.length; top++) {
+    if (theTrack.topics[top].tid === tid) {
+      theTopic = theTrack.topics[top];
+    }
+  }
+  var theLesson = null;
+  for (var l = 0; l < theTopic.lessons.length; l++) {
+    if (theTopic.lessons[l].lid === lid) {
+      theLesson = theTopic.lessons[l];
+    }
+  }
+  for (var s = 0; s < theLesson.slides.length; s++) {
+    slides[s] = {
+      sid: theLesson.slides[s].sid,
+      title: theLesson.slides[s].title,
+      type: theLesson.slides[s].type,
+      content: theLesson.slides[s].content,
+      img: theLesson.slides[s].img
+    };
+  }
+  return slides;
+}
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var freeGlobal = __webpack_require__(125);
@@ -3378,7 +3778,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /**
@@ -3415,7 +3815,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
@@ -3450,7 +3850,7 @@ module.exports = isObjectLike;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3573,7 +3973,7 @@ DOMLazyTree.queueText = queueText;
 module.exports = DOMLazyTree;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3788,7 +4188,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4071,7 +4471,7 @@ var EventPluginHub = {
 module.exports = EventPluginHub;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4087,7 +4487,7 @@ module.exports = EventPluginHub;
 
 
 
-var EventPluginHub = __webpack_require__(39);
+var EventPluginHub = __webpack_require__(40);
 var EventPluginUtils = __webpack_require__(85);
 
 var accumulateInto = __webpack_require__(157);
@@ -4210,7 +4610,7 @@ var EventPropagators = {
 module.exports = EventPropagators;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4383,7 +4783,7 @@ var ReactReconciler = {
 module.exports = ReactReconciler;
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4447,7 +4847,7 @@ SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 module.exports = SyntheticUIEvent;
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4480,390 +4880,6 @@ var route = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_prop_types__["oneO
 var routes = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_prop_types__["oneOfType"])([route, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_prop_types__["arrayOf"])(route)]);
 
 /***/ }),
-/* 44 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["d"] = listTracks;
-/* harmony export (immutable) */ __webpack_exports__["c"] = listTopicsByTrack;
-/* harmony export (immutable) */ __webpack_exports__["b"] = listLessonsByTrackAndTopic;
-/* harmony export (immutable) */ __webpack_exports__["a"] = listSlidesByTrackAndTopicAndLesson;
-/*
-
-This dummy set of data is used to feed a fake API at the bottom of this page.
-Right now this is very heirarchical, and will need to be broken out so that 
-lessons can be members of multiple tracks, etc.  
-
-It contains single examples of a "quiz" slide and a "textWithImage" slide. However
-as mentioned in various other places in this project, the idea of a slide with a single
-type will be going away, and will be replaced with a list of Components that can be
-arranged as desired (text, images, quizzes, radio buttons, etc).
-
-*/
-
-var codelifeSyllabus = {
-  tracks: [{
-    title: "Track 1",
-    trid: "track-1",
-    description: "I am Track 1, and I have many Topics",
-    topics: [{
-      title: "Topic 1",
-      tid: "topic-1",
-      description: "I am Topic 1, and I have many Lessons",
-      lessons: [{
-        title: "Lesson 1",
-        lid: "lesson-1",
-        description: "I am Lesson 1, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "quiz",
-          content: "I am an example of a quiz slide. Are you a robot?"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 2",
-        lid: "lesson-2",
-        description: "I am Lesson 2, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "textWithImage",
-          content: "I am an example of an image slide",
-          img: "for.png"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 3",
-        lid: "lesson-3",
-        description: "I am Lesson 3, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }]
-    }, {
-      title: "Topic 2",
-      tid: "topic-2",
-      description: "I am Topic 2, and I have many Lessons",
-      lessons: [{
-        title: "Lesson 1",
-        lid: "lesson-1",
-        description: "I am Lesson 1, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 2",
-        lid: "lesson-2",
-        description: "I am Lesson 2, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 3",
-        lid: "lesson-3",
-        description: "I am Lesson 3, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }]
-    }]
-  }, {
-    title: "Track 2",
-    trid: "track-2",
-    description: "I am Track 2, and I have many Topics",
-    topics: [{
-      title: "Topic 1",
-      tid: "topic-1",
-      description: "I am Topic 1, and I have many Lessons",
-      lessons: [{
-        title: "Lesson 1",
-        lid: "lesson-1",
-        description: "I am Lesson 1, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 2",
-        lid: "lesson-2",
-        description: "I am Lesson 2, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 3",
-        lid: "lesson-3",
-        description: "I am Lesson 3, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }]
-    }, {
-      title: "Topic 2",
-      tid: "topic-2",
-      description: "I am Topic 2, and I have many Lessons",
-      lessons: [{
-        title: "Lesson 1",
-        lid: "lesson-2",
-        description: "I am Lesson 1, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 2",
-        lid: "lesson-2",
-        description: "I am Lesson 2, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }, {
-        title: "Lesson 3",
-        lid: "lesson-3",
-        description: "I am Lesson 3, and I have many Slides",
-        slides: [{
-          title: "Slide 1",
-          sid: "slide-1",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 2",
-          sid: "slide-2",
-          type: "text",
-          content: "I am an example of a text slide"
-        }, {
-          title: "Slide 3",
-          sid: "slide-3",
-          type: "text",
-          content: "I am an example of a text slide"
-        }]
-      }]
-    }]
-  }]
-};
-
-function listTracks() {
-  var tracks = [];
-  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    tracks[t] = {
-      trid: codelifeSyllabus.tracks[t].trid,
-      title: codelifeSyllabus.tracks[t].title,
-      description: codelifeSyllabus.tracks[t].description
-    };
-  }
-  return tracks;
-}
-
-function listTopicsByTrack(trid) {
-  var topics = [];
-  var theTrack = null;
-  // find the Track in the list
-  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trid) {
-      theTrack = codelifeSyllabus.tracks[t];
-    }
-  }
-  for (var top = 0; top < theTrack.topics.length; top++) {
-    topics[top] = {
-      tid: theTrack.topics[top].tid,
-      title: theTrack.topics[top].title,
-      description: theTrack.topics[top].description
-    };
-  }
-  return topics;
-}
-
-function listLessonsByTrackAndTopic(trid, tid) {
-  var lessons = [];
-  var theTrack = null;
-  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trid) {
-      theTrack = codelifeSyllabus.tracks[t];
-    }
-  }
-  var theTopic = null;
-  for (var top = 0; top < theTrack.topics.length; top++) {
-    if (theTrack.topics[top].tid === tid) {
-      theTopic = theTrack.topics[top];
-    }
-  }
-  for (var l = 0; l < theTopic.lessons.length; l++) {
-    lessons[l] = {
-      lid: theTopic.lessons[l].lid,
-      title: theTopic.lessons[l].title,
-      description: theTopic.lessons[l].description
-    };
-  }
-  return lessons;
-}
-
-function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
-  var slides = [];
-  var theTrack = null;
-  for (var t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trid) {
-      theTrack = codelifeSyllabus.tracks[t];
-    }
-  }
-  var theTopic = null;
-  for (var top = 0; top < theTrack.topics.length; top++) {
-    if (theTrack.topics[top].tid === tid) {
-      theTopic = theTrack.topics[top];
-    }
-  }
-  var theLesson = null;
-  for (var l = 0; l < theTopic.lessons.length; l++) {
-    if (theTopic.lessons[l].lid === lid) {
-      theLesson = theTopic.lessons[l];
-    }
-  }
-  for (var s = 0; s < theLesson.slides.length; s++) {
-    slides[s] = {
-      sid: theLesson.slides[s].sid,
-      title: theLesson.slides[s].title,
-      type: theLesson.slides[s].type,
-      content: theLesson.slides[s].content,
-      img: theLesson.slides[s].img
-    };
-  }
-  return slides;
-}
-
-/***/ }),
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4891,7 +4907,7 @@ var _isArray = __webpack_require__(22);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
-var _isObject = __webpack_require__(35);
+var _isObject = __webpack_require__(36);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
@@ -5357,7 +5373,7 @@ module.exports = eq;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArrayLike = __webpack_require__(77),
-    isObjectLike = __webpack_require__(36);
+    isObjectLike = __webpack_require__(37);
 
 /**
  * This method is like `_.isArrayLike` except that it also checks if `value`
@@ -5432,7 +5448,7 @@ function checkDecoratorArguments(functionName, signature) {
 
 
 
-var SyntheticUIEvent = __webpack_require__(42);
+var SyntheticUIEvent = __webpack_require__(43);
 var ViewportMetrics = __webpack_require__(156);
 
 var getEventModifierState = __webpack_require__(94);
@@ -6443,7 +6459,7 @@ module.exports = SetCache;
 /* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(34);
+var root = __webpack_require__(35);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -6758,7 +6774,7 @@ function shallowEqual(objA, objB) {
 
 
 
-var DOMLazyTree = __webpack_require__(37);
+var DOMLazyTree = __webpack_require__(38);
 var Danger = __webpack_require__(374);
 var ReactDOMComponentTree = __webpack_require__(7);
 var ReactInstrumentation = __webpack_require__(11);
@@ -31630,7 +31646,7 @@ module.exports = identity;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsArguments = __webpack_require__(283),
-    isObjectLike = __webpack_require__(36);
+    isObjectLike = __webpack_require__(37);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -31672,7 +31688,7 @@ module.exports = isArguments;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(50),
-    isObject = __webpack_require__(35);
+    isObject = __webpack_require__(36);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -33216,7 +33232,7 @@ module.exports = PooledClass.addPoolingTo(CallbackQueue);
 
 
 
-var DOMProperty = __webpack_require__(38);
+var DOMProperty = __webpack_require__(39);
 var ReactDOMComponentTree = __webpack_require__(7);
 var ReactInstrumentation = __webpack_require__(11);
 
@@ -35641,7 +35657,7 @@ function isPromise(obj) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RouteUtils__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__PatternUtils__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(44);
 
 
 
@@ -38327,7 +38343,7 @@ var Home = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_i18next__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Nav__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(34);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38368,7 +38384,7 @@ var Lesson = function (_Component) {
           tid = _props$params.tid;
 
 
-      var lessonArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["b" /* listLessonsByTrackAndTopic */])(trid, tid);
+      var lessonArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["c" /* listLessonsByTrackAndTopic */])(trid, tid);
       var lessonItems = lessonArray.map(function (lesson) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
@@ -38482,7 +38498,7 @@ var Profile = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_i18next__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Nav__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(34);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38534,7 +38550,7 @@ var Slide = function (_Component) {
           sid = _props$params.sid;
 
 
-      var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
+      var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["b" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
 
       // Right now, slides have types, encoded in the database as "type"
       // TODO: Break these out into components that can be included on a slide
@@ -38644,6 +38660,7 @@ var Slide = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_i18next__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_components_Nav__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Dragger__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(34);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -38659,10 +38676,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-//import AceEditor from "react-ace";
-
-//import "brace/mode/html";
-//import "brace/theme/monokai"
 
 // Studio Page
 // Test zone for inline code editing
@@ -38681,7 +38694,7 @@ var Editor = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         var Ace = __webpack_require__(346).default;
         __webpack_require__(216);
         __webpack_require__(217);
@@ -38700,18 +38713,13 @@ var Editor = function (_Component) {
 var Studio = function (_Component2) {
   _inherits(Studio, _Component2);
 
-  function Studio() {
-    var _ref;
-
-    var _temp, _this3, _ret;
-
+  function Studio(props) {
     _classCallCheck(this, Studio);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this3 = _possibleConstructorReturn(this, (Studio.__proto__ || Object.getPrototypeOf(Studio)).call(this, props));
 
-    return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = Studio.__proto__ || Object.getPrototypeOf(Studio)).call.apply(_ref, [this].concat(args))), _this3), _this3.state = { mounted: false, output: "" }, _temp), _possibleConstructorReturn(_this3, _ret);
+    _this3.state = { mounted: false, output: "" };
+    return _this3;
   }
 
   _createClass(Studio, [{
@@ -38720,10 +38728,14 @@ var Studio = function (_Component2) {
       this.setState({ mounted: true });
     }
   }, {
+    key: "getEditor",
+    value: function getEditor() {
+      return this.editor.editor.editor;
+    }
+  }, {
     key: "insertTextAtCursor",
     value: function insertTextAtCursor(theText) {
-      var reactAceComponent = this.editor.editor;
-      reactAceComponent.editor.insert(theText);
+      this.getEditor().insert("\n " + theText + " \n");
     }
   }, {
     key: "onChange",
@@ -38731,9 +38743,15 @@ var Studio = function (_Component2) {
       this.setState({ output: theText });
     }
   }, {
-    key: "onClick",
-    value: function onClick(e) {
-      this.insertTextAtCursor("test");
+    key: "onClickItem",
+    value: function onClickItem(snippet) {
+      this.insertTextAtCursor(snippet.htmlcontent);
+    }
+  }, {
+    key: "saveCodeToDB",
+    value: function saveCodeToDB() {
+      console.log("Save This to DB:");
+      console.log(this.getEditor().getValue());
     }
   }, {
     key: "render",
@@ -38744,6 +38762,15 @@ var Studio = function (_Component2) {
 
       var showDnD = false;
 
+      var snippetArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listSnippets */])();
+      var snippetItems = snippetArray.map(function (snippet) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "li",
+          { style: { display: "block", cursor: "pointer", width: "100px" }, onClick: _this4.onClickItem.bind(_this4, snippet) },
+          snippet.name
+        );
+      });
+
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         null,
@@ -38753,12 +38780,10 @@ var Studio = function (_Component2) {
           t("Studio")
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "button",
-          { onClick: this.onClick.bind(this) },
-          "Inject"
+          "ul",
+          null,
+          snippetItems
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
           { style: { width: "1200px" } },
@@ -38767,7 +38792,12 @@ var Studio = function (_Component2) {
             { style: { float: "left", width: "450px" } },
             this.state.mounted ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Editor, { ref: function ref(comp) {
                 return _this4.editor = comp;
-              }, mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null
+              }, mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null,
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "button",
+              { style: { fontSize: "40px" }, onClick: this.saveCodeToDB.bind(this) },
+              "SAVE"
+            )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { float: "right", border: "solid 1px black", width: "650px", height: "400px" }, dangerouslySetInnerHTML: { __html: this.state.output } })
         ),
@@ -38801,7 +38831,7 @@ var Studio = function (_Component2) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_i18next__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Nav__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(34);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38839,7 +38869,7 @@ var Topic = function (_Component) {
       var trid = this.props.params.trid;
 
 
-      var topicArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["c" /* listTopicsByTrack */])(trid);
+      var topicArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["d" /* listTopicsByTrack */])(trid);
       var topicItems = topicArray.map(function (topic) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
@@ -38888,7 +38918,7 @@ var Topic = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_i18next___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_i18next__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Nav__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_api__ = __webpack_require__(34);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38922,7 +38952,7 @@ var Track = function (_Component) {
       var t = this.props.t;
 
 
-      var trackArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["d" /* listTracks */])();
+      var trackArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["e" /* listTracks */])();
       var trackItems = trackArray.map(function (track) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
@@ -47216,7 +47246,7 @@ module.exports = ListCache;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(52),
-    root = __webpack_require__(34);
+    root = __webpack_require__(35);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -47229,7 +47259,7 @@ module.exports = Map;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(52),
-    root = __webpack_require__(34);
+    root = __webpack_require__(35);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -47524,7 +47554,7 @@ module.exports = baseIntersection;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(50),
-    isObjectLike = __webpack_require__(36);
+    isObjectLike = __webpack_require__(37);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -47567,7 +47597,7 @@ module.exports = baseIsNaN;
 
 var isFunction = __webpack_require__(130),
     isMasked = __webpack_require__(308),
-    isObject = __webpack_require__(35),
+    isObject = __webpack_require__(36),
     toSource = __webpack_require__(330);
 
 /**
@@ -47620,7 +47650,7 @@ module.exports = baseIsNative;
 
 var baseGetTag = __webpack_require__(50),
     isLength = __webpack_require__(131),
-    isObjectLike = __webpack_require__(36);
+    isObjectLike = __webpack_require__(37);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -47684,7 +47714,7 @@ module.exports = baseIsTypedArray;
 /* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(35),
+var isObject = __webpack_require__(36),
     isPrototype = __webpack_require__(309),
     nativeKeysIn = __webpack_require__(320);
 
@@ -47885,7 +47915,7 @@ module.exports = copyObject;
 /* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(34);
+var root = __webpack_require__(35);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -48250,7 +48280,7 @@ module.exports = isFlattenable;
 var eq = __webpack_require__(54),
     isArrayLike = __webpack_require__(77),
     isIndex = __webpack_require__(126),
-    isObject = __webpack_require__(35);
+    isObject = __webpack_require__(36);
 
 /**
  * Checks if the given arguments are from an iteratee call.
@@ -49081,7 +49111,7 @@ module.exports = intersection;
 /* 335 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(34),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(35),
     stubFalse = __webpack_require__(339);
 
 /** Detect free variable `exports`. */
@@ -53047,7 +53077,7 @@ module.exports = AutoFocusUtils;
 
 
 
-var EventPropagators = __webpack_require__(40);
+var EventPropagators = __webpack_require__(41);
 var ExecutionEnvironment = __webpack_require__(8);
 var FallbackCompositionState = __webpack_require__(377);
 var SyntheticCompositionEvent = __webpack_require__(418);
@@ -53651,8 +53681,8 @@ module.exports = CSSPropertyOperations;
 
 
 
-var EventPluginHub = __webpack_require__(39);
-var EventPropagators = __webpack_require__(40);
+var EventPluginHub = __webpack_require__(40);
+var EventPropagators = __webpack_require__(41);
 var ExecutionEnvironment = __webpack_require__(8);
 var ReactDOMComponentTree = __webpack_require__(7);
 var ReactUpdates = __webpack_require__(15);
@@ -54004,7 +54034,7 @@ module.exports = ChangeEventPlugin;
 
 var _prodInvariant = __webpack_require__(3);
 
-var DOMLazyTree = __webpack_require__(37);
+var DOMLazyTree = __webpack_require__(38);
 var ExecutionEnvironment = __webpack_require__(8);
 
 var createNodesFromMarkup = __webpack_require__(247);
@@ -54086,7 +54116,7 @@ module.exports = DefaultEventPluginOrder;
 
 
 
-var EventPropagators = __webpack_require__(40);
+var EventPropagators = __webpack_require__(41);
 var ReactDOMComponentTree = __webpack_require__(7);
 var SyntheticMouseEvent = __webpack_require__(57);
 
@@ -54291,7 +54321,7 @@ module.exports = FallbackCompositionState;
 
 
 
-var DOMProperty = __webpack_require__(38);
+var DOMProperty = __webpack_require__(39);
 
 var MUST_USE_PROPERTY = DOMProperty.injection.MUST_USE_PROPERTY;
 var HAS_BOOLEAN_VALUE = DOMProperty.injection.HAS_BOOLEAN_VALUE;
@@ -54532,7 +54562,7 @@ module.exports = HTMLDOMPropertyConfig;
 
 
 
-var ReactReconciler = __webpack_require__(41);
+var ReactReconciler = __webpack_require__(42);
 
 var instantiateReactComponent = __webpack_require__(160);
 var KeyEscapeUtils = __webpack_require__(86);
@@ -54736,7 +54766,7 @@ var ReactErrorUtils = __webpack_require__(90);
 var ReactInstanceMap = __webpack_require__(91);
 var ReactInstrumentation = __webpack_require__(11);
 var ReactNodeTypes = __webpack_require__(404);
-var ReactReconciler = __webpack_require__(41);
+var ReactReconciler = __webpack_require__(42);
 
 if (process.env.NODE_ENV !== 'production') {
   var checkReactTypeSpec = __webpack_require__(427);
@@ -55640,11 +55670,11 @@ var _prodInvariant = __webpack_require__(3),
 
 var AutoFocusUtils = __webpack_require__(370);
 var CSSPropertyOperations = __webpack_require__(372);
-var DOMLazyTree = __webpack_require__(37);
+var DOMLazyTree = __webpack_require__(38);
 var DOMNamespaces = __webpack_require__(83);
-var DOMProperty = __webpack_require__(38);
+var DOMProperty = __webpack_require__(39);
 var DOMPropertyOperations = __webpack_require__(146);
-var EventPluginHub = __webpack_require__(39);
+var EventPluginHub = __webpack_require__(40);
 var EventPluginRegistry = __webpack_require__(84);
 var ReactBrowserEventEmitter = __webpack_require__(88);
 var ReactDOMComponentFlags = __webpack_require__(147);
@@ -56679,7 +56709,7 @@ module.exports = ReactDOMContainerInfo;
 
 var _assign = __webpack_require__(5);
 
-var DOMLazyTree = __webpack_require__(37);
+var DOMLazyTree = __webpack_require__(38);
 var ReactDOMComponentTree = __webpack_require__(7);
 
 var ReactDOMEmptyComponent = function (instantiate) {
@@ -57451,7 +57481,7 @@ var _prodInvariant = __webpack_require__(3),
     _assign = __webpack_require__(5);
 
 var DOMChildrenOperations = __webpack_require__(82);
-var DOMLazyTree = __webpack_require__(37);
+var DOMLazyTree = __webpack_require__(38);
 var ReactDOMComponentTree = __webpack_require__(7);
 
 var escapeTextContentForBrowser = __webpack_require__(59);
@@ -58402,7 +58432,7 @@ module.exports = REACT_ELEMENT_TYPE;
 
 
 
-var EventPluginHub = __webpack_require__(39);
+var EventPluginHub = __webpack_require__(40);
 
 function runEventQueueInBatch(events) {
   EventPluginHub.enqueueEvents(events);
@@ -58666,8 +58696,8 @@ module.exports = ReactHostOperationHistoryHook;
 
 
 
-var DOMProperty = __webpack_require__(38);
-var EventPluginHub = __webpack_require__(39);
+var DOMProperty = __webpack_require__(39);
+var EventPluginHub = __webpack_require__(40);
 var EventPluginUtils = __webpack_require__(85);
 var ReactComponentEnvironment = __webpack_require__(89);
 var ReactEmptyComponent = __webpack_require__(150);
@@ -58809,7 +58839,7 @@ var ReactInstanceMap = __webpack_require__(91);
 var ReactInstrumentation = __webpack_require__(11);
 
 var ReactCurrentOwner = __webpack_require__(19);
-var ReactReconciler = __webpack_require__(41);
+var ReactReconciler = __webpack_require__(42);
 var ReactChildReconciler = __webpack_require__(379);
 
 var emptyFunction = __webpack_require__(9);
@@ -59741,7 +59771,7 @@ var ReactDOMContainerInfo = __webpack_require__(383);
 var ReactDefaultBatchingStrategy = __webpack_require__(149);
 var ReactInstrumentation = __webpack_require__(11);
 var ReactMarkupChecksum = __webpack_require__(402);
-var ReactReconciler = __webpack_require__(41);
+var ReactReconciler = __webpack_require__(42);
 var ReactServerBatchingStrategy = __webpack_require__(409);
 var ReactServerRenderingTransaction = __webpack_require__(154);
 var ReactUpdates = __webpack_require__(15);
@@ -60300,7 +60330,7 @@ module.exports = SVGDOMPropertyConfig;
 
 
 
-var EventPropagators = __webpack_require__(40);
+var EventPropagators = __webpack_require__(41);
 var ExecutionEnvironment = __webpack_require__(8);
 var ReactDOMComponentTree = __webpack_require__(7);
 var ReactInputSelection = __webpack_require__(152);
@@ -60500,7 +60530,7 @@ module.exports = SelectEventPlugin;
 var _prodInvariant = __webpack_require__(3);
 
 var EventListener = __webpack_require__(110);
-var EventPropagators = __webpack_require__(40);
+var EventPropagators = __webpack_require__(41);
 var ReactDOMComponentTree = __webpack_require__(7);
 var SyntheticAnimationEvent = __webpack_require__(416);
 var SyntheticClipboardEvent = __webpack_require__(417);
@@ -60511,7 +60541,7 @@ var SyntheticMouseEvent = __webpack_require__(57);
 var SyntheticDragEvent = __webpack_require__(419);
 var SyntheticTouchEvent = __webpack_require__(423);
 var SyntheticTransitionEvent = __webpack_require__(424);
-var SyntheticUIEvent = __webpack_require__(42);
+var SyntheticUIEvent = __webpack_require__(43);
 var SyntheticWheelEvent = __webpack_require__(425);
 
 var emptyFunction = __webpack_require__(9);
@@ -60898,7 +60928,7 @@ module.exports = SyntheticDragEvent;
 
 
 
-var SyntheticUIEvent = __webpack_require__(42);
+var SyntheticUIEvent = __webpack_require__(43);
 
 /**
  * @interface FocusEvent
@@ -60981,7 +61011,7 @@ module.exports = SyntheticInputEvent;
 
 
 
-var SyntheticUIEvent = __webpack_require__(42);
+var SyntheticUIEvent = __webpack_require__(43);
 
 var getEventCharCode = __webpack_require__(93);
 var getEventKey = __webpack_require__(430);
@@ -61070,7 +61100,7 @@ module.exports = SyntheticKeyboardEvent;
 
 
 
-var SyntheticUIEvent = __webpack_require__(42);
+var SyntheticUIEvent = __webpack_require__(43);
 
 var getEventModifierState = __webpack_require__(94);
 
@@ -63296,7 +63326,7 @@ var IndexLink = __WEBPACK_IMPORTED_MODULE_1_create_react_class___default()({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Redirect__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(44);
 
 
 
@@ -63351,7 +63381,7 @@ var IndexRedirect = __WEBPACK_IMPORTED_MODULE_0_create_react_class___default()({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__RouteUtils__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(44);
 
 
 
@@ -63406,7 +63436,7 @@ var IndexRoute = __WEBPACK_IMPORTED_MODULE_0_create_react_class___default()({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RouteUtils__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__InternalPropTypes__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__InternalPropTypes__ = __webpack_require__(44);
 
 
 
@@ -63461,7 +63491,7 @@ var Route = __WEBPACK_IMPORTED_MODULE_0_create_react_class___default()({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__InternalPropTypes__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__RouterContext__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__RouteUtils__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__RouterUtils__ = __webpack_require__(174);

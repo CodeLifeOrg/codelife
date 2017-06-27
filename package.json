@@ -26,6 +26,7 @@
   "homepage": "https://github.com/Datawheel/codelife#readme",
   "dependencies": {
     "datawheel-canon": "^0.5.7",
+    "himalaya": "^0.2.10",
     "react-ace": "^5.0.1",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1"

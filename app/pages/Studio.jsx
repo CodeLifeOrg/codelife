@@ -55,7 +55,7 @@ class Studio extends Component {
 
   validateHTML() {
     const errors = this.getEditor().getSession().getAnnotations();
-    for (let e of errors) {
+    for (const e of errors) {
       console.log(e.text);
     } 
   }

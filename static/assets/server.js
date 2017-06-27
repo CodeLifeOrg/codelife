@@ -38754,6 +38754,38 @@ var Studio = function (_Component2) {
       console.log(this.getEditor().getValue());
     }
   }, {
+    key: "validateHTML",
+    value: function validateHTML() {
+      var errors = this.getEditor().getSession().getAnnotations();
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = errors[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var e = _step.value;
+
+          console.log(e.text);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+  }, {
+    key: "submitAnswer",
+    value: function submitAnswer() {}
+  }, {
     key: "render",
     value: function render() {
       var _this4 = this;
@@ -38795,8 +38827,19 @@ var Studio = function (_Component2) {
               }, mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "button",
-              { style: { fontSize: "40px" }, onClick: this.saveCodeToDB.bind(this) },
+              { style: { fontSize: "30px" }, onClick: this.saveCodeToDB.bind(this) },
               "SAVE"
+            ),
+            "\xA0\xA0\xA0",
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "button",
+              { style: { fontSize: "30px" }, onClick: this.validateHTML.bind(this) },
+              "VALIDATE"
+            ),
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              "button",
+              { style: { fontSize: "30px" }, onClick: this.submitAnswer.bind(this) },
+              "SUBMIT"
             )
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { float: "right", border: "solid 1px black", width: "650px", height: "400px" }, dangerouslySetInnerHTML: { __html: this.state.output } })

@@ -52,6 +52,17 @@ class Studio extends Component {
     console.log("Save This to DB:");
     console.log(this.getEditor().getValue());
   }
+
+  validateHTML() {
+    const errors = this.getEditor().getSession().getAnnotations();
+    for (let e of errors) {
+      console.log(e.text);
+    } 
+  }
+
+  submitAnswer() {
+
+  }
   
   render() {
     
@@ -70,7 +81,9 @@ class Studio extends Component {
         <div style={{width: "1200px"}}>
           <div style={{float: "left", width: "450px"}}>
           { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output}/> : null }
-          <button style={{fontSize: "40px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
+          <button style={{fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>&nbsp;&nbsp;&nbsp;
+          <button style={{fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>&nbsp;&nbsp;&nbsp;
+          <button style={{fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
           <div style={{float: "right", border: "solid 1px black", width: "650px", height: "400px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
         </div>

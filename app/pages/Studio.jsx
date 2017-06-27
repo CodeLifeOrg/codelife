@@ -26,7 +26,7 @@ class Studio extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {mounted: false, output: ""};
+    this.state = {mounted: false, output: "", checker: ""};
   }
 
   componentDidMount() {
@@ -55,15 +55,19 @@ class Studio extends Component {
   }
 
   validateHTML() {
-    const errors = this.getEditor().getSession().getAnnotations();
-    for (const e of errors) {
-      console.log(e.text);
-    } 
+    const annotations = this.getEditor().getSession().getAnnotations();
+    let validationText = {};
+    validationText.info = "WARNINGS: \n\n";
+    validationText.error = "ERRORS: \n\n";
+    for (const a of annotations) {
+      validationText[a.type] += `${a.text} \n\n`;
+    }
+    alert(`${validationText.info} ${validationText.error}`);
   }
 
   submitAnswer() {
-    const json = himalaya.parse(this.getEditor().getValue());
-    for (const j of json) {
+    const jsonArray = himalaya.parse(this.getEditor().getValue());
+    for (const j of jsonArray) {
       console.log(j);
     }
   }
@@ -82,14 +86,14 @@ class Studio extends Component {
       <div>
         <h1>{ t("Studio") }</h1>
         <ul>{snippetItems}</ul>
-        <div style={{width: "1200px"}}>
+        <div style={{width: "1100px"}}>
           <div style={{float: "left", width: "450px"}}>
           { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output}/> : null }
-          <button style={{fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>&nbsp;&nbsp;&nbsp;
-          <button style={{fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>&nbsp;&nbsp;&nbsp;
-          <button style={{fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
+          <button style={{marginTop: "10px", fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>&nbsp;&nbsp;&nbsp;
+          <button style={{marginTop: "10px", fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>&nbsp;&nbsp;&nbsp;
+          <button style={{marginTop: "10px", fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
-          <div style={{float: "right", border: "solid 1px black", width: "650px", height: "400px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
+          <div style={{float: "right", border: "solid 1px black", width: "550px", height: "498px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
         </div>
         <div style={{clear: "both"}}>
           <br/><br/>

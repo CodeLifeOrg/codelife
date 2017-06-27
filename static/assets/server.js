@@ -38451,7 +38451,7 @@ var Lesson = function (_Component) {
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_2_react_router__["g" /* Link */],
             { className: "link", to: "/track/" + trid + "/" + tid + "/" + lesson.lid + "/slide-1" },
-            t(lesson.title)
+            lesson.title
           )
         );
       });
@@ -38780,7 +38780,7 @@ var Studio = function (_Component2) {
 
     var _this3 = _possibleConstructorReturn(this, (Studio.__proto__ || Object.getPrototypeOf(Studio)).call(this, props));
 
-    _this3.state = { mounted: false, output: "" };
+    _this3.state = { mounted: false, output: "", checker: "" };
     return _this3;
   }
 
@@ -38818,16 +38818,19 @@ var Studio = function (_Component2) {
   }, {
     key: "validateHTML",
     value: function validateHTML() {
-      var errors = this.getEditor().getSession().getAnnotations();
+      var annotations = this.getEditor().getSession().getAnnotations();
+      var validationText = {};
+      validationText.info = "WARNINGS: \n\n";
+      validationText.error = "ERRORS: \n\n";
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = errors[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var e = _step.value;
+        for (var _iterator = annotations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var a = _step.value;
 
-          console.log(e.text);
+          validationText[a.type] += a.text + " \n\n";
         }
       } catch (err) {
         _didIteratorError = true;
@@ -38843,20 +38846,47 @@ var Studio = function (_Component2) {
           }
         }
       }
+
+      alert(validationText.info + " " + validationText.error);
     }
   }, {
     key: "submitAnswer",
     value: function submitAnswer() {
-      var json = __WEBPACK_IMPORTED_MODULE_5_himalaya___default.a.parse(this.getEditor().getValue());
+      var rules = [{
+        type: "CONTAINS",
+        needle: "ul",
+        error_msg: "Your code needs to contain a <ul>"
+      }, {
+        type: "NESTS",
+        outer: "ul",
+        inner: "li",
+        error_msg: "Your <li> tag is not within a <ul> tag"
+      }, {
+        type: "CONTAINS",
+        needle: "img",
+        error_msg: "Your code needs to contain an <img> tag"
+      }, {
+        type: "CONTAINS",
+        needle: "h1",
+        error_msg: "Your code needs to contain an <h1> tag"
+      }];
+
+      var jsonArray = __WEBPACK_IMPORTED_MODULE_5_himalaya___default.a.parse(this.getEditor().getValue());
+      var checkerText = "";
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
       var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator2 = json[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var j = _step2.value;
+        for (var _iterator2 = rules[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var r = _step2.value;
 
-          console.log(j);
+          if (r.type === "CONTAINS") {
+            console.log("CALLING SEARCH ON " + r.needle);
+            if (!this.ruleContains(r.needle, jsonArray)) {
+              checkerText += r.error_msg + " \n\n";
+            }
+          }
         }
       } catch (err) {
         _didIteratorError2 = true;
@@ -38872,6 +38902,50 @@ var Studio = function (_Component2) {
           }
         }
       }
+
+      this.setState({ checker: checkerText });
+    }
+  }, {
+    key: "ruleContains",
+    value: function ruleContains(needle, haystack) {
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = haystack[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var h = _step3.value;
+
+          console.log("Starting to Review ");
+          console.log(h);
+          if (h.type === "Element") {
+            console.log("It was an element");
+            if (h.tagName === needle) {
+              console.log("and it was correct, returning true for " + needle);
+              return true;
+            }if (h.children !== null) {
+              console.log("this thing has children, trying to find " + needle + " in ");
+              console.log(h.children);
+              return this.ruleContains(needle, h.children);
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      return false;
     }
   }, {
     key: "render",
@@ -38906,7 +38980,7 @@ var Studio = function (_Component2) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
-          { style: { width: "1200px" } },
+          { style: { width: "1100px" } },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
             { style: { float: "left", width: "450px" } },
@@ -38915,27 +38989,34 @@ var Studio = function (_Component2) {
               }, mode: "html", theme: "monokai", onChange: this.onChange.bind(this), value: this.state.output }) : null,
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "button",
-              { style: { fontSize: "30px" }, onClick: this.saveCodeToDB.bind(this) },
+              { style: { margin: "10px", fontSize: "30px" }, onClick: this.saveCodeToDB.bind(this) },
               "SAVE"
             ),
-            "\xA0\xA0\xA0",
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "button",
-              { style: { fontSize: "30px" }, onClick: this.validateHTML.bind(this) },
+              { style: { margin: "10px", fontSize: "30px" }, onClick: this.validateHTML.bind(this) },
               "VALIDATE"
             ),
-            "\xA0\xA0\xA0",
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "button",
-              { style: { fontSize: "30px" }, onClick: this.submitAnswer.bind(this) },
+              { style: { margin: "10px", fontSize: "30px" }, onClick: this.submitAnswer.bind(this) },
               "SUBMIT"
             )
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { float: "right", border: "solid 1px black", width: "650px", height: "400px" }, dangerouslySetInnerHTML: { __html: this.state.output } })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { style: { float: "right", border: "solid 1px black", width: "550px", height: "498px" }, dangerouslySetInnerHTML: { __html: this.state.output } })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
           { style: { clear: "both" } },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { style: { width: "1100px", display: "block", border: "1px solid black", padding: "5px" } },
+            this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          null,
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_Nav__["a" /* default */], null),

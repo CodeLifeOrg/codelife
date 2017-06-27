@@ -66,11 +66,58 @@ class Studio extends Component {
   }
 
   submitAnswer() {
+    const rules = [
+      {
+        type: "CONTAINS",
+        needle: "ul",
+        error_msg: "Your code needs to contain a <ul>"
+      },
+      {
+        type: "NESTS",
+        outer: "ul",
+        inner: "li",
+        error_msg: "Your <li> tag is not within a <ul> tag"
+      },
+      {
+        type: "CONTAINS",
+        needle: "img",
+        error_msg: "Your code needs to contain an <img> tag"
+      },
+      {
+        type: "CONTAINS",
+        needle: "h1",
+        error_msg: "Your code needs to contain an <h1> tag"
+      }
+
+    ];
+
     const jsonArray = himalaya.parse(this.getEditor().getValue());
-    for (const j of jsonArray) {
-      console.log(j);
+    let checkerText = "";
+    for (const r of rules) {
+      if (r.type === "CONTAINS") {
+        if (!this.ruleContains(r.needle, jsonArray)) {
+          checkerText += `${r.error_msg}`;
+        }
+      }
     }
+    this.setState({checker: checkerText});
   }
+
+  ruleContains(needle, haystack) {
+    let count = 0;
+    for (const h of haystack) {
+      if (h.type === "Element") {
+        if (h.tagName === needle) {
+          return 1;
+        } if (h.children !== null) {
+          count += this.ruleContains(needle, h.children);
+        }
+      }
+    }
+    return count > 0;
+  }
+
+
   
   render() {
     
@@ -96,7 +143,7 @@ class Studio extends Component {
           <div style={{float: "right", border: "solid 1px black", width: "550px", height: "498px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
         </div>
         <div style={{clear: "both"}}>
-          <div style={{width: "1100px", display: "block", border: "1px solid black", padding: "5px"}}>
+          <div style={{width: "1100px", border: "1px solid black", padding: "5px"}}>
             { this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"}
           </div>
         </div>

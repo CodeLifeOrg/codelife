@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import Nav from "components/Nav";
 import Dragger from "components/Dragger";
 import {listSnippets} from "api";
+import himalaya from "himalaya";
 
 // Studio Page
 // Test zone for inline code editing
@@ -61,7 +62,10 @@ class Studio extends Component {
   }
 
   submitAnswer() {
-
+    const json = himalaya.parse(this.getEditor().getValue());
+    for (const j of json) {
+      console.log(j);
+    }
   }
   
   render() {

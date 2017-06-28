@@ -95,7 +95,7 @@ class Studio extends Component {
     let checkerText = "";
     for (const r of rules) {
       if (r.type === "CONTAINS") {
-        if (!this.ruleContains(r.needle, jsonArray)) {
+        if (this.containsTag(r.needle, jsonArray) === 0) {
           checkerText += `${r.error_msg}`;
         }
       }
@@ -103,18 +103,22 @@ class Studio extends Component {
     this.setState({checker: checkerText});
   }
 
-  ruleContains(needle, haystack) {
+  containsTag(needle, haystack) {
+    return this.tagCount(needle, haystack) > 0;
+  }
+
+  tagCount(needle, haystack) {
     let count = 0;
     for (const h of haystack) {
       if (h.type === "Element") {
         if (h.tagName === needle) {
-          return 1;
+          count++;
         } if (h.children !== null) {
-          count += this.ruleContains(needle, h.children);
+          count += this.tagCount(needle, h.children);
         }
       }
     }
-    return count > 0;
+    return count;
   }
 
 

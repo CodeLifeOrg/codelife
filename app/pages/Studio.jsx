@@ -69,10 +69,8 @@ class Studio extends Component {
     // todo - should this rules-fetch live someplace higher so it
     // doesn't need to make a db call every time we submit?
     const rules = listRules();
-    console.log(rules);
-
+    
     const jsonArray = himalaya.parse(this.getEditor().getValue());
-    console.log(jsonArray);
     let checkerText = "";
     for (const r of rules) {
       if (r.type === "CONTAINS") {
@@ -117,6 +115,8 @@ class Studio extends Component {
         <ul>{snippetItems}</ul>
         <div style={{width: "1100px"}}>
           <div style={{float: "left", width: "450px"}}>
+          {/* todo - the value prop of Editor is where we put code loaded from the database */}
+          {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
           { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output} setOptions={{behavioursEnabled: false}}/> : null }
           <button style={{margin: "10px", fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button style={{margin: "10px", fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>

@@ -1,6 +1,12 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import {isAuthenticated} from "datawheel-canon";
 
-export default class App extends Component {
+class App extends Component {
+
+  componentWillMount() {
+    this.props.isAuthenticated();
+  }
 
   render() {
 
@@ -12,3 +18,11 @@ export default class App extends Component {
 
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  isAuthenticated: () => {
+    dispatch(isAuthenticated());
+  }
+});
+
+export default connect(() => ({}), mapDispatchToProps)(App);

@@ -10,12 +10,15 @@ import Slide from "pages/Slide";
 import Glossary from "pages/Glossary";
 import Profile from "pages/Profile";
 import Studio from "pages/Studio";
+import {Login, SignUp} from "datawheel-canon";
 
 export default function RouteCreate() {
 
   return (
     <Route path="/" history={browserHistory} component={App}>
       <IndexRoute component={Home} />
+      <Route path="signup" component={SignUp} />
+      <Route path="login" component={Login} />
       <Route path="track" component={Track} />
       <Route path="track/:trid" component={Topic} />
       <Route path="track/:trid/:tid" component={Lesson} />

@@ -38892,7 +38892,7 @@ var Studio = function (_Component2) {
           var r = _step2.value;
 
           if (r.type === "CONTAINS") {
-            if (this.containsTag(r.needle, jsonArray) === 0) {
+            if (!this.containsTag(r.needle, jsonArray)) {
               checkerText += "" + r.error_msg;
             }
           }

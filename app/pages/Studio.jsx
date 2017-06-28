@@ -42,8 +42,6 @@ class Studio extends Component {
   }
 
   onChange(theText) {
-    // todo - don't set this on change, do it after init (when is that?)
-    this.getEditor().setBehavioursEnabled(false);
     this.setState({output: theText});
   }
 
@@ -119,7 +117,7 @@ class Studio extends Component {
         <ul>{snippetItems}</ul>
         <div style={{width: "1100px"}}>
           <div style={{float: "left", width: "450px"}}>
-          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output} setOptions={{enableBasicAutocompletion: false, enableLiveAutocompletion: false}}/> : null }
+          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output} setOptions={{behavioursEnabled: false}}/> : null }
           <button style={{margin: "10px", fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button style={{margin: "10px", fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <button style={{margin: "10px", fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>

@@ -3367,11 +3367,12 @@ module.exports = React;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = listSnippets;
-/* harmony export (immutable) */ __webpack_exports__["e"] = listTracks;
-/* harmony export (immutable) */ __webpack_exports__["d"] = listTopicsByTrack;
-/* harmony export (immutable) */ __webpack_exports__["c"] = listLessonsByTrackAndTopic;
-/* harmony export (immutable) */ __webpack_exports__["b"] = listSlidesByTrackAndTopicAndLesson;
+/* harmony export (immutable) */ __webpack_exports__["b"] = listSnippets;
+/* harmony export (immutable) */ __webpack_exports__["a"] = listRules;
+/* harmony export (immutable) */ __webpack_exports__["f"] = listTracks;
+/* harmony export (immutable) */ __webpack_exports__["e"] = listTopicsByTrack;
+/* harmony export (immutable) */ __webpack_exports__["d"] = listLessonsByTrackAndTopic;
+/* harmony export (immutable) */ __webpack_exports__["c"] = listSlidesByTrackAndTopicAndLesson;
 /*
 
 This dummy set of data is used to feed a fake API at the bottom of this page.
@@ -3384,6 +3385,25 @@ type will be going away, and will be replaced with a list of Components that can
 arranged as desired (text, images, quizzes, radio buttons, etc).
 
 */
+
+var rules = [{
+  type: "CONTAINS",
+  needle: "ul",
+  error_msg: "Your code needs to contain a <ul>"
+}, {
+  type: "CONTAINS",
+  needle: "img",
+  error_msg: "Your code needs to contain an <img> tag"
+}, {
+  type: "CONTAINS",
+  needle: "h1",
+  error_msg: "Your code needs to contain an <h1> tag"
+}, {
+  type: "NESTS",
+  outer: "ul",
+  inner: "li",
+  error_msg: "Your <li> tag is not within a <ul> tag"
+}];
 
 var snippetArray = [{
   name: "Title Snippet",
@@ -3673,6 +3693,10 @@ var codelifeSyllabus = {
 
 function listSnippets() {
   return snippetArray;
+}
+
+function listRules() {
+  return rules;
 }
 
 function listTracks() {
@@ -38443,7 +38467,7 @@ var Lesson = function (_Component) {
           tid = _props$params.tid;
 
 
-      var lessonArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["c" /* listLessonsByTrackAndTopic */])(trid, tid);
+      var lessonArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["d" /* listLessonsByTrackAndTopic */])(trid, tid);
       var lessonItems = lessonArray.map(function (lesson) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
@@ -38609,7 +38633,7 @@ var Slide = function (_Component) {
           sid = _props$params.sid;
 
 
-      var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["b" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
+      var slideArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["c" /* listSlidesByTrackAndTopicAndLesson */])(trid, tid, lid);
 
       // Right now, slides have types, encoded in the database as "type"
       // TODO: Break these out into components that can be included on a slide
@@ -38852,24 +38876,10 @@ var Studio = function (_Component2) {
   }, {
     key: "submitAnswer",
     value: function submitAnswer() {
-      var rules = [{
-        type: "CONTAINS",
-        needle: "ul",
-        error_msg: "Your code needs to contain a <ul>"
-      }, {
-        type: "NESTS",
-        outer: "ul",
-        inner: "li",
-        error_msg: "Your <li> tag is not within a <ul> tag"
-      }, {
-        type: "CONTAINS",
-        needle: "img",
-        error_msg: "Your code needs to contain an <img> tag"
-      }, {
-        type: "CONTAINS",
-        needle: "h1",
-        error_msg: "Your code needs to contain an <h1> tag"
-      }];
+      // todo - should this rules-fetch live someplace higher so it
+      // doesn't need to make a db call every time we submit?
+      var rules = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listRules */])();
+      console.log(rules);
 
       var jsonArray = __WEBPACK_IMPORTED_MODULE_5_himalaya___default.a.parse(this.getEditor().getValue());
       var checkerText = "";
@@ -38882,9 +38892,8 @@ var Studio = function (_Component2) {
           var r = _step2.value;
 
           if (r.type === "CONTAINS") {
-            console.log("CALLING SEARCH ON " + r.needle);
-            if (!this.ruleContains(r.needle, jsonArray)) {
-              checkerText += r.error_msg + " \n\n";
+            if (this.containsTag(r.needle, jsonArray) === 0) {
+              checkerText += "" + r.error_msg;
             }
           }
         }
@@ -38906,8 +38915,14 @@ var Studio = function (_Component2) {
       this.setState({ checker: checkerText });
     }
   }, {
-    key: "ruleContains",
-    value: function ruleContains(needle, haystack) {
+    key: "containsTag",
+    value: function containsTag(needle, haystack) {
+      return this.tagCount(needle, haystack) > 0;
+    }
+  }, {
+    key: "tagCount",
+    value: function tagCount(needle, haystack) {
+      var count = 0;
       var _iteratorNormalCompletion3 = true;
       var _didIteratorError3 = false;
       var _iteratorError3 = undefined;
@@ -38916,17 +38931,11 @@ var Studio = function (_Component2) {
         for (var _iterator3 = haystack[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
           var h = _step3.value;
 
-          console.log("Starting to Review ");
-          console.log(h);
           if (h.type === "Element") {
-            console.log("It was an element");
             if (h.tagName === needle) {
-              console.log("and it was correct, returning true for " + needle);
-              return true;
+              count++;
             }if (h.children !== null) {
-              console.log("this thing has children, trying to find " + needle + " in ");
-              console.log(h.children);
-              return this.ruleContains(needle, h.children);
+              count += this.tagCount(needle, h.children);
             }
           }
         }
@@ -38945,7 +38954,7 @@ var Studio = function (_Component2) {
         }
       }
 
-      return false;
+      return count;
     }
   }, {
     key: "render",
@@ -38956,7 +38965,7 @@ var Studio = function (_Component2) {
 
       var showDnD = false;
 
-      var snippetArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["a" /* listSnippets */])();
+      var snippetArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["b" /* listSnippets */])();
       var snippetItems = snippetArray.map(function (snippet) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
@@ -39010,7 +39019,7 @@ var Studio = function (_Component2) {
           { style: { clear: "both" } },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
-            { style: { width: "1100px", display: "block", border: "1px solid black", padding: "5px" } },
+            { style: { width: "1100px", border: "1px solid black", padding: "5px" } },
             this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"
           )
         ),
@@ -39082,7 +39091,7 @@ var Topic = function (_Component) {
       var trid = this.props.params.trid;
 
 
-      var topicArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["d" /* listTopicsByTrack */])(trid);
+      var topicArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["e" /* listTopicsByTrack */])(trid);
       var topicItems = topicArray.map(function (topic) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",
@@ -39165,7 +39174,7 @@ var Track = function (_Component) {
       var t = this.props.t;
 
 
-      var trackArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["e" /* listTracks */])();
+      var trackArray = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_api__["f" /* listTracks */])();
       var trackItems = trackArray.map(function (track) {
         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "li",

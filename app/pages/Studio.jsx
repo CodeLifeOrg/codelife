@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
 import Dragger from "components/Dragger";
-import {listSnippets} from "api";
+import {listSnippets, listRules} from "api";
 import himalaya from "himalaya";
 
 // Studio Page
@@ -66,36 +66,16 @@ class Studio extends Component {
   }
 
   submitAnswer() {
-    const rules = [
-      {
-        type: "CONTAINS",
-        needle: "ul",
-        error_msg: "Your code needs to contain a <ul>"
-      },
-      {
-        type: "NESTS",
-        outer: "ul",
-        inner: "li",
-        error_msg: "Your <li> tag is not within a <ul> tag"
-      },
-      {
-        type: "CONTAINS",
-        needle: "img",
-        error_msg: "Your code needs to contain an <img> tag"
-      },
-      {
-        type: "CONTAINS",
-        needle: "h1",
-        error_msg: "Your code needs to contain an <h1> tag"
-      }
-
-    ];
+    // todo - should this rules-fetch live someplace higher so it
+    // doesn't need to make a db call every time we submit?
+    const rules = listRules();
+    console.log(rules);
 
     const jsonArray = himalaya.parse(this.getEditor().getValue());
     let checkerText = "";
     for (const r of rules) {
       if (r.type === "CONTAINS") {
-        if (this.containsTag(r.needle, jsonArray) === 0) {
+        if (!this.containsTag(r.needle, jsonArray)) {
           checkerText += `${r.error_msg}`;
         }
       }
@@ -121,8 +101,6 @@ class Studio extends Component {
     return count;
   }
 
-
-  
   render() {
     
     const {t} = this.props;
@@ -131,7 +109,6 @@ class Studio extends Component {
     const snippetArray = listSnippets();
     const snippetItems = snippetArray.map(snippet =>
       <li style={{display: "block", cursor: "pointer", width: "100px"}} onClick={this.onClickItem.bind(this, snippet)}>{snippet.name}</li>);
-
 
     return (  
       <div>

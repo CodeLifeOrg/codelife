@@ -11,30 +11,6 @@ arranged as desired (text, images, quizzes, radio buttons, etc).
 
 */
 
-const rules = [
-  {
-    type: "CONTAINS",
-    needle: "ul",
-    error_msg: "Your code needs to contain a <ul>"
-  },
-  {
-    type: "CONTAINS",
-    needle: "img",
-    error_msg: "Your code needs to contain an <img> tag"
-  },
-  {
-    type: "CONTAINS",
-    needle: "h1",
-    error_msg: "Your code needs to contain an <h1> tag"
-  },
-  {
-    type: "NESTS",
-    outer: "ul",
-    inner: "li",
-    error_msg: "Your <li> tag is not within a <ul> tag"
-  }
-];
-
 const snippetArray = [
   {
     name: "Title Snippet",
@@ -400,10 +376,6 @@ const codelifeSyllabus = {
 
 export function listSnippets() {
   return snippetArray;
-}
-
-export function listRules() {
-  return rules;
 }
 
 export function listTracks() {

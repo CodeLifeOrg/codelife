@@ -2,8 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
 import Dragger from "components/Dragger";
-import {listSnippets, listRules} from "api";
+import {listSnippets} from "api";
 import himalaya from "himalaya";
+import axios from "axios";
 
 // Studio Page
 // Test zone for inline code editing
@@ -26,11 +27,22 @@ class Studio extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {mounted: false, output: "", checker: ""};
+    this.state = {mounted: false, output: "", checker: "", rules: []};
+  }
+
+  getRules() { 
+    axios.get("api/rules"); 
+  }
+
+  getSnippets() {
+    axios.get("api/snippets");
   }
 
   componentDidMount() {
-    this.setState({mounted: true});
+    axios.get("api/rules").then(resp => {
+      this.setState({mounted: true, rules: resp.data});
+    });
+    
   }
 
   getEditor() {
@@ -66,13 +78,9 @@ class Studio extends Component {
   }
 
   submitAnswer() {
-    // todo - should this rules-fetch live someplace higher so it
-    // doesn't need to make a db call every time we submit?
-    const rules = listRules();
-    
     const jsonArray = himalaya.parse(this.getEditor().getValue());
     let checkerText = "";
-    for (const r of rules) {
+    for (const r of this.state.rules) {
       if (r.type === "CONTAINS") {
         if (!this.containsTag(r.needle, jsonArray)) {
           checkerText += `${r.error_msg}`;

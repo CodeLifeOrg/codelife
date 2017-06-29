@@ -107,27 +107,25 @@ class Studio extends Component {
   render() {
     
     const {t} = this.props;
-    const showDnD = true;
+    const showDnD = false;
 
     return (  
       <div>
         <h1>{ t("Studio") }</h1>
         <Snippets onChoose={this.onClickItem.bind(this)}/>
-        <div style={{width: "1100px"}}>
-          <div style={{float: "left", width: "450px"}}>
+        <div id="container">
+          <div id="acecontainer">
           {/* todo - the value prop of Editor is where we put code loaded from the database */}
           {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
           { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output} setOptions={{behavioursEnabled: false}}/> : null }
-          <button onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
-          <button onClick={this.validateHTML.bind(this)}>VALIDATE</button>
-          <button onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
+          <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
+          <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
+          <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
-          <div style={{float: "right", border: "solid 1px black", width: "550px", height: "498px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
+          <div id="rendercontainer" dangerouslySetInnerHTML={{__html: this.state.output}} />
         </div>
-        <div style={{clear: "both"}}>
-          <div style={{width: "1100px", border: "1px solid black", padding: "5px"}}>
-            { this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"}
-          </div>
+        <div id="checker">
+          { this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"}
         </div>
         <div>
         <br/><br/>

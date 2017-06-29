@@ -2,9 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
 import Dragger from "components/Dragger";
-import {listSnippets} from "api";
 import himalaya from "himalaya";
 import axios from "axios";
+import Snippets from "components/Snippets";
 
 // Studio Page
 // Test zone for inline code editing
@@ -32,10 +32,6 @@ class Studio extends Component {
 
   getRules() { 
     axios.get("api/rules"); 
-  }
-
-  getSnippets() {
-    axios.get("api/snippets");
   }
 
   componentDidMount() {
@@ -113,14 +109,10 @@ class Studio extends Component {
     const {t} = this.props;
     const showDnD = false;
 
-    const snippetArray = listSnippets();
-    const snippetItems = snippetArray.map(snippet =>
-      <li style={{display: "block", cursor: "pointer", width: "100px"}} onClick={this.onClickItem.bind(this, snippet)}>{snippet.name}</li>);
-
     return (  
       <div>
         <h1>{ t("Studio") }</h1>
-        <ul>{snippetItems}</ul>
+        <Snippets onChoose={this.onClickItem.bind(this)}/>
         <div style={{width: "1100px"}}>
           <div style={{float: "left", width: "450px"}}>
           {/* todo - the value prop of Editor is where we put code loaded from the database */}

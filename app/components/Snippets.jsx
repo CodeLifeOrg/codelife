@@ -1,21 +1,33 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {listSnippets} from "api";
+import axios from "axios";
+import "./Snippets.css";
 
 class Snippets extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {snippets:[]};
+  }
+
+  componentDidMount() {
+    axios.get("api/snippets").then(resp => {
+      this.setState({snippets: resp.data});
+    });
+  }
+
   render() {
     
-    const {t} = this.props;
+    const {t, onChoose} = this.props;
 
-    const snippetArray = listSnippets();
+    const snippetArray = this.state.snippets;
     const snippetItems = snippetArray.map(snippet =>
-    <li style={{display: "block", cursor: "pointer", width: "100px"}} onClick={this.onClickItem.bind(this, snippet)}>{snippet.name}</li>);
+    <li key={snippet.id} onClick={() => onChoose(snippet)}>{snippet.name}</li>);
 
     return (
       <div>
-        <h1>snippets</h1>
-        <Nav />
+        <ul>{snippetItems}</ul>
       </div>
     );
   }

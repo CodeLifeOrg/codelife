@@ -6,6 +6,7 @@ import himalaya from "himalaya";
 import axios from "axios";
 import Snippets from "components/Snippets";
 import "./Studio.css";
+import {connect} from "react-redux";
 
 // Studio Page
 // Test zone for inline code editing
@@ -17,7 +18,6 @@ class Editor extends Component {
       const Ace = require("react-ace").default;
       require("brace/mode/html");
       require("brace/theme/monokai");
-
       return <Ace ref={editor => this.editor = editor} {...this.props}/>;
     }
     return null;
@@ -35,10 +35,32 @@ class Studio extends Component {
     axios.get("api/rules"); 
   }
 
+  componentDidUpdate() {
+
+  }
+
   componentDidMount() {
+    
     axios.get("api/rules").then(resp => {
       this.setState({mounted: true, rules: resp.data});
-    });  
+    });
+
+    /*
+    console.log("HI");
+    console.log(this.props.user);
+    const promiseArray = [axios.get("/api/rules"), axios.get(`api/projects?user_id=${this.props.user.id}`)];
+    axios.all(promiseArray)
+      .then(axios.spread(
+        (r, p) => {
+          console.log("YO");
+          console.log(this.props.user);
+          console.log(r.data);
+          console.log(p.data);
+          this.setState({mounted: true, rules: r.data});
+        }
+      )
+    );
+    */
   }
 
   getEditor() {
@@ -106,7 +128,7 @@ class Studio extends Component {
 
   render() {
     
-    const {t} = this.props;
+    const {t, user} = this.props;
     const showDnD = false;
 
     return (  
@@ -138,4 +160,8 @@ class Studio extends Component {
   }
 }
 
-export default translate()(Studio);
+Studio = connect(state => ({
+  user: state.auth.user
+}))(Studio);
+Studio = translate()(Studio);
+export default Studio;

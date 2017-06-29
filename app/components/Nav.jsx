@@ -12,7 +12,6 @@ class Nav extends Component {
   render() {
     
     const {t, user} = this.props;
-    console.log(user);
 
     return (
       <div>

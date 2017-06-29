@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {listSnippets} from "api";
 import axios from "axios";
 import "./Snippets.css";
 
@@ -8,7 +7,7 @@ class Snippets extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {snippets:[]};
+    this.state = {snippets: []};
   }
 
   componentDidMount() {

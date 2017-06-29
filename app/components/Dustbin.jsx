@@ -58,4 +58,4 @@ Dustbin.propTypes = {
 };
 
 
-export default DropTarget("snippet", boxTarget, collect)(Dustbin);
+export default DropTarget("box", boxTarget, collect)(Dustbin);

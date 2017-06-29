@@ -5,6 +5,7 @@ import Dragger from "components/Dragger";
 import himalaya from "himalaya";
 import axios from "axios";
 import Snippets from "components/Snippets";
+import "./Studio.css";
 
 // Studio Page
 // Test zone for inline code editing
@@ -37,8 +38,7 @@ class Studio extends Component {
   componentDidMount() {
     axios.get("api/rules").then(resp => {
       this.setState({mounted: true, rules: resp.data});
-    });
-    
+    });  
   }
 
   getEditor() {
@@ -107,7 +107,7 @@ class Studio extends Component {
   render() {
     
     const {t} = this.props;
-    const showDnD = false;
+    const showDnD = true;
 
     return (  
       <div>
@@ -118,9 +118,9 @@ class Studio extends Component {
           {/* todo - the value prop of Editor is where we put code loaded from the database */}
           {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
           { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output} setOptions={{behavioursEnabled: false}}/> : null }
-          <button style={{margin: "10px", fontSize: "30px"}} onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
-          <button style={{margin: "10px", fontSize: "30px"}} onClick={this.validateHTML.bind(this)}>VALIDATE</button>
-          <button style={{margin: "10px", fontSize: "30px"}} onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
+          <button onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
+          <button onClick={this.validateHTML.bind(this)}>VALIDATE</button>
+          <button onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
           <div style={{float: "right", border: "solid 1px black", width: "550px", height: "498px"}} dangerouslySetInnerHTML={{__html: this.state.output}} />
         </div>

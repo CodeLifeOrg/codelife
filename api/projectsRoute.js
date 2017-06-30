@@ -8,4 +8,11 @@ module.exports = function(app) {
 
   });
 
+  app.post("/api/projects/save", (req, res) => {
+
+    db.testprojects.update({htmlcontent: req.body.htmlcontent}, {where: {user_id: req.body.user_id}})
+      .then(u => res.json(u).end());
+
+  });
+
 };

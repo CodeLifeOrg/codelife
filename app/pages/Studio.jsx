@@ -28,7 +28,7 @@ class Studio extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {mounted: false, output: "", checker: "", rules: []};
+    this.state = {mounted: false, fromdb: false, output: "", checker: "", rules: []};
   }
 
   getRules() { 
@@ -36,31 +36,19 @@ class Studio extends Component {
   }
 
   componentDidUpdate() {
-
+    if (this.props.user && !this.state.fromdb) {
+      this.setState({fromdb: true});
+      axios.get(`api/projects/?user_id=${this.props.user.id}`).then(resp => {
+        console.log(resp.data);
+        this.setState({output: resp.data[0].htmlcontent});
+      });
+    }
   }
 
   componentDidMount() {
-    
     axios.get("api/rules").then(resp => {
       this.setState({mounted: true, rules: resp.data});
     });
-
-    /*
-    console.log("HI");
-    console.log(this.props.user);
-    const promiseArray = [axios.get("/api/rules"), axios.get(`api/projects?user_id=${this.props.user.id}`)];
-    axios.all(promiseArray)
-      .then(axios.spread(
-        (r, p) => {
-          console.log("YO");
-          console.log(this.props.user);
-          console.log(r.data);
-          console.log(p.data);
-          this.setState({mounted: true, rules: r.data});
-        }
-      )
-    );
-    */
   }
 
   getEditor() {
@@ -80,8 +68,11 @@ class Studio extends Component {
   }
 
   saveCodeToDB() {
-    console.log("Save This to DB:");
-    console.log(this.getEditor().getValue());
+    axios.post("api/projects/save", {user_id: this.props.user.id, htmlcontent: this.state.output}).then (resp => {
+      if (resp.status === 200) {
+        alert("Saved to DB");
+      }
+    });
   }
 
   validateHTML() {
@@ -128,7 +119,7 @@ class Studio extends Component {
 
   render() {
     
-    const {t, user} = this.props;
+    const {t} = this.props;
     const showDnD = false;
 
     return (  

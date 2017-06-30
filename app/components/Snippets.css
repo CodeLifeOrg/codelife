@@ -3,3 +3,7 @@ li.snippet {
   cursor: pointer; 
   width: 120px;
 }
+
+input.snippetName {
+  margin: 10px;
+}

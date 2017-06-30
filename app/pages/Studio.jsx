@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import Nav from "components/Nav";
+import {connect} from "react-redux";
 import Dragger from "components/Dragger";
+import Nav from "components/Nav";
+import Snippets from "components/Snippets";
 import himalaya from "himalaya";
 import axios from "axios";
-import Snippets from "components/Snippets";
 import "./Studio.css";
-import {connect} from "react-redux";
 
 // Studio Page
 // Test zone for inline code editing
@@ -60,11 +60,15 @@ class Studio extends Component {
     return this.editor.editor.editor;
   }
 
+  grabContents() {
+    return this.state.currentText;
+  }
+
   insertTextAtCursor(theText) {
     this.getEditor().insert(`\n ${theText} \n`);
   }
 
-  onChange(theText) {
+  onChangeText(theText) {
     this.setState({currentText: theText});
   }
 
@@ -133,12 +137,12 @@ class Studio extends Component {
     return (  
       <div>
         <h1>{ t("Studio") }</h1>
-        <Snippets onChoose={this.onClickItem.bind(this)}/>
+        <Snippets onCreateSnippet={this.grabContents.bind(this)} onChoose={this.onClickItem.bind(this)}/>
         <div id="container">
           <div id="acecontainer">
           {/* todo - the value prop of Editor is where we put code loaded from the database */}
           {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
-          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>

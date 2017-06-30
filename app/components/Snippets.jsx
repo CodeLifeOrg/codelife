@@ -22,7 +22,7 @@ class Snippets extends Component {
 
     const snippetArray = this.state.snippets;
     const snippetItems = snippetArray.map(snippet =>
-    <li key={snippet.id} onClick={() => onChoose(snippet)}>{snippet.name}</li>);
+    <li className="snippet" key={snippet.id} onClick={() => onChoose(snippet)}>{snippet.name}</li>);
 
     return (
       <div>

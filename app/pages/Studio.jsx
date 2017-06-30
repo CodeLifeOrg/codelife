@@ -28,7 +28,13 @@ class Studio extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {mounted: false, fromdb: false, output: "", checker: "", rules: []};
+    this.state = { 
+      mounted: false, 
+      gotUserFromDB: false, 
+      currentText: "", 
+      checkerResult: "", 
+      rules: []
+    };
   }
 
   getRules() { 
@@ -36,11 +42,10 @@ class Studio extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.user && !this.state.fromdb) {
-      this.setState({fromdb: true});
+    if (this.props.user && !this.state.gotUserFromDB) {
+      this.setState({gotUserFromDB: true});
       axios.get(`api/projects/?user_id=${this.props.user.id}`).then(resp => {
-        console.log(resp.data);
-        this.setState({output: resp.data[0].htmlcontent});
+        this.setState({currentText: resp.data[0].htmlcontent});
       });
     }
   }
@@ -60,7 +65,7 @@ class Studio extends Component {
   }
 
   onChange(theText) {
-    this.setState({output: theText});
+    this.setState({currentText: theText});
   }
 
   onClickItem(snippet) {
@@ -68,9 +73,12 @@ class Studio extends Component {
   }
 
   saveCodeToDB() {
-    axios.post("api/projects/save", {user_id: this.props.user.id, htmlcontent: this.state.output}).then (resp => {
+    axios.post("api/projects/save", {user_id: this.props.user.id, htmlcontent: this.state.currentText}).then (resp => {
       if (resp.status === 200) {
         alert("Saved to DB");
+      } 
+      else {
+        alert("Error");
       }
     });
   }
@@ -96,7 +104,7 @@ class Studio extends Component {
         }
       }
     }
-    this.setState({checker: checkerText});
+    this.setState({checkerResult: checkerText});
   }
 
   containsTag(needle, haystack) {
@@ -130,15 +138,15 @@ class Studio extends Component {
           <div id="acecontainer">
           {/* todo - the value prop of Editor is where we put code loaded from the database */}
           {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
-          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.output} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChange.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
-          <div id="rendercontainer" dangerouslySetInnerHTML={{__html: this.state.output}} />
+          <div id="rendercontainer" dangerouslySetInnerHTML={{__html: this.state.currentText}} />
         </div>
         <div id="checker">
-          { this.state.checker !== "" ? this.state.checker : "Press Submit to check your answer"}
+          { this.state.checkerResult !== "" ? this.state.checkerResult : "Press Submit to check your answer"}
         </div>
         <div>
         <br/><br/>

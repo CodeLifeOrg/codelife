@@ -16,7 +16,7 @@ Anything with a ? means I'm considering whether it's better to:
 
 **userprofiles** - *holds user profiles and progress*
 
-| id | bio | picblob | currentlesson | *completedlist (?)* | user_id *(users.id)* |
+| id | bio | picblob | currentlesson | *completed_list (?)* | user_id *(users.id)* |
 | --- | --- | --- | --- | --- | --- |
 | PK | | |  | JSON object (?) | FK |
 

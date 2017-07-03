@@ -1,5 +1,7 @@
 # codelife db models
 
+![schema](/db/schema.png?raw=true "Schema")
+
 ## main tables
 
 Anything with a ? means I'm considering whether it's better to:

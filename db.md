@@ -14,7 +14,7 @@ Anything with a ? means I'm considering whether it's better to:
 
 ---
 
-**userprofile** - *holds user profiles and progress*
+**userprofiles** - *holds user profiles and progress*
 
 | id | bio | picblob | currentlesson | *completedlist (?)* | user_id *(users.id)* |
 | --- | --- | --- | --- | --- | --- |

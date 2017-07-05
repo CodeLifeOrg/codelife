@@ -28,4 +28,9 @@ module.exports = function(app) {
 
   });
 
+  app.delete("/api/snippets/delete", (req, res) => {
+    console.log(req.query);
+    db.testsnippets.destroy({where: {id: req.query.id}}).then(u => res.json(u).end());
+  });
+
 };

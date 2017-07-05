@@ -43,21 +43,41 @@ class Snippets extends Component {
     this.setState({snippetName: e.target.value});
   }
 
+  deleteSnippet(snippet) {
+    axios.delete("api/snippets/delete", {params: {id: snippet.id}}).then(resp => {
+      if (resp.status === 200) {
+        // todo fix this, this is not a good way to cause a refresh
+        this.setState({gotUserFromDB: false});
+      } 
+      else {
+        alert("Error");
+      }
+    });
+  }
+
   render() {
     
     const {t, onChoose} = this.props;
 
     const snippetArray = this.state.snippets;
     const snippetItems = snippetArray.map(snippet =>
-    <li className="snippet" key={snippet.name} onClick={() => onChoose(snippet)}>{snippet.name}</li>);
+    <li className="snippet" key={snippet.id} onClick={() => onChoose(snippet)}>{snippet.name}</li>);
+
+    const snippetXs = snippetArray.map(snippet =>
+    <li className="x" key={snippet.id} onClick={() => this.deleteSnippet(snippet)}>[x]</li>);
 
     return (
       <div>
-        <ul>{snippetItems}</ul>
+        <div style={{width: "250px"}}>
+          <ul style={{float: "left", listStyleType: "none"}}>{snippetXs}</ul>
+          <ul style={{float: "right"}}>{snippetItems}</ul>   
+        </div>
+        <div style={{clear: "both"}}>
         <form>
           <input className="snippetName" type="text" value={this.state.snippetName} onChange={this.handleChange.bind(this)} /> 
           <input type="button" value="Create New Snippet From Contents" onClick={this.createNewSnippet.bind(this)} />
         </form>
+        </div>
       </div>
     );
   }

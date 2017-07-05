@@ -1,6 +1,6 @@
 # codelife db models
 
-![schema](/db/schema.png?raw=true "Schema")
+![schema](/static/schema.png?raw=true "Schema")
 
 ## main tables
 

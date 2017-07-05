@@ -1,7 +1,5 @@
 # codelife db models
 
-![schema](/static/schema.png?raw=true "Schema")
-
 ## main tables
 
 Anything with a ? means I'm considering whether it's better to:
@@ -18,9 +16,9 @@ Anything with a ? means I'm considering whether it's better to:
 
 **userprofiles** - *holds user profiles and progress*
 
-| id | bio | picblob | currentlesson | *completed_list (?)* | user_id *(users.id)* |
-| --- | --- | --- | --- | --- | --- |
-| PK | | |  | JSON object (?) | FK |
+| id | bio | picblob | currentlesson | currentstreak | *lesson_scores (?)* | coins | user_id *(users.id)* |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| PK | | | | | JSON object (?) | | FK |
 
 ---
 
@@ -36,9 +34,9 @@ Anything with a ? means I'm considering whether it's better to:
 
 **snippets** - *user-created snippets. one per lesson/island per user*
 
-| id | name | htmlcontent | previewblob | lesson_id *(lessons.id)* | user_id *(users.id)* |
-| --- | --- | --- | --- | --- | --- |
-| PK | | | rendered on save | FK | FK |
+| id | name | initialcontent | studentcontent | likes | previewblob  | lesson_id *(lessons.id)* | user_id *(users.id)* |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| PK | | | | | rendered on save | FK | FK |
 
 ---
 
@@ -66,9 +64,9 @@ Anything with a ? means I'm considering whether it's better to:
 
 ---
 
-**projects** - *final projects, one per user*
+**projects** - *final projects, one per user (or more than one ?)*
 
-| id | name | htmlcontent | previewblob | user_id *(users.id)* |
+| id | name | studentcontent | previewblob | user_id *(users.id)* |
 | --- | --- | --- | --- | --- |
 | PK | | | generated on save | FK |
 

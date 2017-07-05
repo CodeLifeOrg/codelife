@@ -27,7 +27,6 @@ class Snippets extends Component {
   createNewSnippet() {
     const snippetName = this.state.snippetName;
     const windowContents = this.props.onCreateSnippet();
-    console.log("Create");
     axios.post("api/snippets/save", {name: snippetName, user_id: this.props.user.id, htmlcontent: windowContents}).then (resp => {
       if (resp.status === 200) {
         // todo fix this, this is not a good way to cause a refresh

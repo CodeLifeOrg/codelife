@@ -46,6 +46,7 @@ class Studio extends Component {
       this.setState({gotUserFromDB: true});
       axios.get(`api/projects/?user_id=${this.props.user.id}`).then(resp => {
         this.setState({currentText: resp.data[0].htmlcontent});
+        this.renderText();
       });
     }
   }
@@ -66,10 +67,20 @@ class Studio extends Component {
 
   insertTextAtCursor(theText) {
     this.getEditor().insert(`\n ${theText} \n`);
+    this.setState({currentText: this.getEditor().getValue()});
+    this.renderText();
+  }
+
+  renderText() {
+    const doc = this.refs.rc.contentWindow.document;
+    doc.open();
+    doc.write(this.getEditor().getValue());
+    doc.close();
   }
 
   onChangeText(theText) {
     this.setState({currentText: theText});
+    this.renderText();
   }
 
   onClickItem(snippet) {
@@ -147,7 +158,10 @@ class Studio extends Component {
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
+          { /*
           <div id="rendercontainer" dangerouslySetInnerHTML={{__html: this.state.currentText}} />
+          */ }
+          <iframe id="rendercontainer" ref="rc" />
         </div>
         <div id="checker">
           { this.state.checkerResult !== "" ? this.state.checkerResult : "Press Submit to check your answer"}

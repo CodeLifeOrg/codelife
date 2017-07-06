@@ -13,7 +13,7 @@ class Lesson extends Component {
     const lessonArray = listLessons();
 
     const lessonItems = lessonArray.map(lesson => 
-      <li><Link className="link" key={lesson.id} to={`/lesson/${lesson.id}`}>{ lesson.title }</Link></li>);
+      <li key={lesson.id}><Link className="link" to={`/lesson/${lesson.id}`}>{ lesson.title }</Link></li>);
 
     return (
       <div>

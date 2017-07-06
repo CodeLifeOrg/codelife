@@ -18,7 +18,7 @@ class Minilesson extends Component {
     const minilessonArray = listMinilessonsByLessonID(parseInt(lid, 10));
 
     const minilessonItems = minilessonArray.map(minilesson => 
-      <li><Link className="link" key={minilesson.id} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.title }</Link></li>);
+      <li key={minilesson.id}><Link className="link" to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.title }</Link></li>);
 
     return (
       <div>

@@ -16,9 +16,9 @@ Anything with a ? means I'm considering whether it's better to:
 
 **userprofiles** - *holds user profiles and progress*
 
-| id | bio | picblob | currentlesson | currentstreak | *lesson_scores (?)* | coins | user_id *(users.id)* |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| PK | | | | | JSON object (?) | | FK |
+| id | bio | picblob | currentlesson | currentstreak | lastlogin | *lesson_scores (?)* | coins | user_id *(users.id)* |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PK | | | | | JSON object (?) | | | FK |
 
 ---
 
@@ -42,25 +42,25 @@ Anything with a ? means I'm considering whether it's better to:
 
 **lessons** - *also known as islands. each lesson has several mini-lessons*
 
-| id | name | description | *minilesson_list (?) * |
-| --- | --- | --- | --- |
-| PK | | |  JSON object (?) |
+| id | name | description |
+| --- | --- | --- |
+| PK | | |
 
 ---
 
 **minilessons** - *also known as moons. each minilesson has several slides*
 
-| id | name | description | *slide_list (?)*
-| --- | --- | --- |  --- |
-| PK | | | JSON object (?) |
+| id | name | description | ordering | *lid (lessons.id)* |
+| --- | --- | --- | --- | --- |
+| PK | | | | FK |
 
 ---
 
 **slides** - *minilessons have slides, which can be text, mult choice, quiz, etc*
 
-| id | type | title | htmlcontent | imgblob | quizjson | rulejson |
-| --- | --- | --- | --- | --- | --- | --- |
-| PK |  | | | | JSON object | JSON object |
+| id | type | ordering | title | htmlcontent | imgblob | quizjson | rulejson | *mlid (minilessons.id)* |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PK | | | | | | JSON object | JSON object | FK |
 
 ---
 

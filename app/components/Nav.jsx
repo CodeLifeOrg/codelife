@@ -20,7 +20,7 @@ class Nav extends Component {
         ? <a className="link" href="/auth/logout">{ t("Logout") }</a> 
         : <span><Link className="link" to="/login">{ t("Login") }</Link> <Link className="link" to="/signup">{ t("Sign up") }</Link> </span>
         }
-        <Link className="link" to="/track">{ t("Tracks") }</Link>
+        <Link className="link" to="/lesson">{ t("Islands") }</Link>
         <Link className="link" to="/glossary">{ t("Glossary") }</Link>
         <Link className="link" to="/profile">{ t("Profile") }</Link>
         <Link className="link" to="/studio">{ t("Studio") }</Link>

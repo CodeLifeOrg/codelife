@@ -3,9 +3,8 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 
 import App from "components/App";
 import Home from "pages/Home";
-import Track from "pages/Track";
 import Lesson from "pages/Lesson";
-import Topic from "pages/Topic";
+import Minilesson from "pages/Minilesson";
 import Slide from "pages/Slide";
 import Glossary from "pages/Glossary";
 import Profile from "pages/Profile";
@@ -19,10 +18,11 @@ export default function RouteCreate() {
       <IndexRoute component={Home} />
       <Route path="signup" component={SignUp} />
       <Route path="login" component={Login} />
-      <Route path="track" component={Track} />
-      <Route path="track/:trid" component={Topic} />
-      <Route path="track/:trid/:tid" component={Lesson} />
-      <Route path="track/:trid/:tid/:lid/:sid" component={Slide} />
+      
+      <Route path="lesson" component={Lesson} />
+      <Route path="lesson/:lid" component={Minilesson} />
+      <Route path="lesson/:lid/:mlid(/:sid)" component={Slide} />
+
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />
       <Route path="studio" component={Studio} />

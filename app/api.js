@@ -1,466 +1,201 @@
-/*
-
-This dummy set of data is used to feed a fake API at the bottom of this page.
-Right now this is very heirarchical, and will need to be broken out so that 
-lessons can be members of multiple tracks, etc.  
-
-It contains single examples of a "quiz" slide and a "textWithImage" slide. However
-as mentioned in various other places in this project, the idea of a slide with a single
-type will be going away, and will be replaced with a list of Components that can be
-arranged as desired (text, images, quizzes, radio buttons, etc).
-
-*/
-
-const snippetArray = [
+const Lessons = [
   {
-    name: "Title Snippet",
-    htmlcontent: "<h1>jimmy's page</h1>"
+    id: 1,
+    title: "Lesson 1",
+    description: "I'm Lesson 1"
   },
   {
-    name: "List Snippet",
-    htmlcontent: "<ul><li>top</li><li>five</li><li>bands</li></ul>"
-  },
-  {
-    name: "Image Snippet",
-    htmlcontent: "<img src='http://i.imgur.com/ZMU4mhG.png' />"
+    id: 2,
+    title: "Lesson 2",
+    description: "I'm Lesson 2"
   }
 ];
 
-const codelifeSyllabus = {
-  tracks: [
-    {
-      title: "Track 1",
-      trid: "track-1",
-      description: "I am Track 1, and I have many Topics",
-      topics: [
-        {
-          title: "Topic 1",
-          tid: "topic-1",
-          description: "I am Topic 1, and I have many Lessons",
-          lessons: [
-            {
-              title: "Lesson 1",
-              lid: "lesson-1",
-              description: "I am Lesson 1, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "quiz",
-                  content: "I am an example of a quiz slide. Are you a robot?"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 2",
-              lid: "lesson-2",
-              description: "I am Lesson 2, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "textWithImage",
-                  content: "I am an example of an image slide",
-                  img: "for.png"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 3",
-              lid: "lesson-3",
-              description: "I am Lesson 3, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: "Topic 2",
-          tid: "topic-2",
-          description: "I am Topic 2, and I have many Lessons",
-          lessons: [
-            {
-              title: "Lesson 1",
-              lid: "lesson-1",
-              description: "I am Lesson 1, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 2",
-              lid: "lesson-2",
-              description: "I am Lesson 2, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 3",
-              lid: "lesson-3",
-              description: "I am Lesson 3, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1", 
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      title: "Track 2",
-      trid: "track-2",
-      description: "I am Track 2, and I have many Topics",
-      topics: [
-        {
-          title: "Topic 1",
-          tid: "topic-1",
-          description: "I am Topic 1, and I have many Lessons",
-          lessons: [
-            {
-              title: "Lesson 1",
-              lid: "lesson-1",
-              description: "I am Lesson 1, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 2",
-              lid: "lesson-2",
-              description: "I am Lesson 2, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 3",
-              lid: "lesson-3",
-              description: "I am Lesson 3, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: "Topic 2",
-          tid: "topic-2",
-          description: "I am Topic 2, and I have many Lessons",
-          lessons: [
-            {
-              title: "Lesson 1",
-              lid: "lesson-2",
-              description: "I am Lesson 1, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 2",
-              lid: "lesson-2",
-              description: "I am Lesson 2, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            },
-            {
-              title: "Lesson 3",
-              lid: "lesson-3",
-              description: "I am Lesson 3, and I have many Slides",
-              slides: [
-                {
-                  title: "Slide 1",
-                  sid: "slide-1",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 2",
-                  sid: "slide-2",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                },
-                {
-                  title: "Slide 3",
-                  sid: "slide-3",
-                  type: "text",
-                  content: "I am an example of a text slide"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-};
+const Minilessons = [
+  {
+    id: 1,
+    title: "Minilesson 1",
+    description: "I'm MiniLesson 1",
+    lid: 1
+  },
+  {
+    id: 2,
+    title: "Minilesson 2",
+    description: "I'm Minilesson 2",
+    lid: 1
+  },
+  {
+    id: 3,
+    title: "Minilesson 3",
+    description: "I'm Minilesson 3",
+    lid: 2
+  },
+  {
+    id: 4,
+    title: "Minilesson 4",
+    description: "I'm Minilesson 4",
+    lid: 2
+  }
+];
 
-export function listSnippets() {
-  return snippetArray;
+const Slides = [
+  {
+    id: 1,
+    title: "Slide 1",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 1,
+    mlid: 1
+  },
+  {
+    id: 2,
+    title: "Slide 2",
+    type: "quiz",
+    content: "I am an example of a quiz slide. Are you a robot?",
+    ordering: 2,
+    mlid: 1
+  },
+  {
+    id: 3,
+    title: "Slide 3",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 3,
+    mlid: 1
+  },
+  {
+    id: 4, 
+    title: "Slide 4",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 1,
+    mlid: 2
+  },
+  {
+    id: 5,
+    title: "Slide 5",
+    type: "textWithImage",
+    content: "I am an example of an image slide",
+    img: "for.png",
+    ordering: 2,
+    mlid: 2
+  },
+  {
+    id: 6, 
+    title: "Slide 6",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 3,
+    mlid: 2
+  },
+  {
+    id: 7, 
+    title: "Slide 7",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 1,
+    mlid: 3
+  },
+  {
+    id: 8, 
+    title: "Slide 8",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 2,
+    mlid: 3
+  },
+  {
+    id: 9, 
+    title: "Slide 9",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 3,
+    mlid: 3
+  },
+  {
+    id: 10, 
+    title: "Slide 10",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 1,
+    mlid: 4
+  },
+  {
+    id: 11, 
+    title: "Slide 11",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 2,
+    mlid: 4
+  },
+  {
+    id: 12, 
+    title: "Slide 12",
+    type: "text",
+    content: "I am an example of a text slide",
+    ordering: 3,
+    mlid: 4
+  }
+];
+          
+
+export function listLessons() {
+  return Lessons;
 }
 
-export function listTracks() {
-  let tracks = [];
-  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    tracks[t] = {
-      trid: codelifeSyllabus.tracks[t].trid,
-      title: codelifeSyllabus.tracks[t].title,
-      description: codelifeSyllabus.tracks[t].description
-    };
+export function listMinilessonsByLessonID(lid) {
+  const ml = [];
+  for (const m of Minilessons) {
+    if (m.lid === lid) {
+      ml.push(m);
+    }
   }
-  return tracks;
+  return ml;
 }
 
-export function listTopicsByTrack(trid) {
-  let topics = [];
-  let theTrack = null;
-  // find the Track in the list
-  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trid) {
-      theTrack = codelifeSyllabus.tracks[t];
+export function listSlidesByMinilessonID(mlid) {
+  const sl = [];
+  for (const s of Slides) {
+    if (s.mlid === mlid) {
+      sl.push(s);
     }
   }
-  for (let top = 0; top < theTrack.topics.length; top++) {
-    topics[top] = {
-      tid: theTrack.topics[top].tid,
-      title: theTrack.topics[top].title,
-      description: theTrack.topics[top].description
-    };
-  }
-  return topics;
+  return sl;
 }
 
-export function listLessonsByTrackAndTopic(trid, tid) {
-  let lessons = [];
-  let theTrack = null;
-  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trid) {
-      theTrack = codelifeSyllabus.tracks[t];
+export function getFirstSlideByMinilessonID(mlid) {
+  for (const s of Slides) {
+    if (s.mlid === mlid) {
+      return s;
     }
   }
-  let theTopic = null;
-  for (let top = 0; top < theTrack.topics.length; top++) {
-    if (theTrack.topics[top].tid === tid) {
-      theTopic = theTrack.topics[top];
-    }
-  }
-  for (let l = 0; l < theTopic.lessons.length; l++) {
-    lessons[l] = {
-      lid: theTopic.lessons[l].lid,
-      title: theTopic.lessons[l].title,
-      description: theTopic.lessons[l].description
-    };
-  }
-  return lessons;
+  return null;
 }
 
-export function listSlidesByTrackAndTopicAndLesson(trid, tid, lid) {
-  let slides = [];
-  let theTrack = null;
-  for (let t = 0; t < codelifeSyllabus.tracks.length; t++) {
-    if (codelifeSyllabus.tracks[t].trid === trid) {
-      theTrack = codelifeSyllabus.tracks[t];
+export function getSlideByID(sid) {
+  for (const s of Slides) {
+    if (s.id === sid) {
+      return s;
     }
   }
-  let theTopic = null;
-  for (let top = 0; top < theTrack.topics.length; top++) {
-    if (theTrack.topics[top].tid === tid) {
-      theTopic = theTrack.topics[top];
-    }
-  }
-  let theLesson = null;
-  for (let l = 0; l < theTopic.lessons.length; l++) {
-    if (theTopic.lessons[l].lid === lid) {
-      theLesson = theTopic.lessons[l];
-    }
-  }
-  for (let s = 0; s < theLesson.slides.length; s++) {
-    slides[s] = {
-      sid: theLesson.slides[s].sid,
-      title: theLesson.slides[s].title,
-      type: theLesson.slides[s].type,
-      content: theLesson.slides[s].content,
-      img: theLesson.slides[s].img
-    };
-  }
-  return slides;
+  return null;
 }
+
+export function getNeighborSlides(sid) {
+  const obj = {prevSlug: null, nextSlug: null};
+  const s = getSlideByID(sid);
+  const ml = listSlidesByMinilessonID(+s.mlid);
+  const arr = [];
+  for (const slide of ml) {
+    arr[slide.ordering] = slide;
+  }
+  for (let i = 1; i <= arr.length; i++) {
+    if (arr[i] && arr[i].id === sid) {
+      if (i > 1) obj.prevSlug = arr[i - 1].id;
+      if (i < arr.length - 1) obj.nextSlug = arr[i + 1].id;
+    }
+  }
+  return obj;
+}
+
+

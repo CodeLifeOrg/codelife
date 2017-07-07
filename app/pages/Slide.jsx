@@ -10,9 +10,7 @@ class Slide extends Component {
     super(props);
     this.state = {
       slides: [],
-      currentSlide: null,
-      nextSlug: null,
-      prevSlug: null
+      currentSlide: null
     };
   }
 
@@ -24,27 +22,38 @@ class Slide extends Component {
   }
 
   componentDidUpdate() {
+    const {sid} = this.props.params;
+    const {currentSlide, slides} = this.state;
+    if (currentSlide.id !== +sid) {
+      const cs = slides.find(slide => slide.id === +sid);
+      this.setState({currentSlide: cs});
+    }
+  }
+
+  componentDidMount() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
-    const s = listSlidesByMinilessonID(+mlid);
+
+    const slideList = listSlidesByMinilessonID(+mlid);
+    slideList.sort((a, b) => a.ordering - b.ordering);
     if (sid === undefined) {
-      sid = s[0].id;
+      sid = slideList[0].id;
       browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
-    }  
-    if (!this.state.currentSlide || this.state.currentSlide.id !== +sid) {  
-      console.log("Changed");
-      const cs = getSlideByID(+sid);
-      const neighbors = getNeighborSlides(+sid);   
-      this.setState({slides: s, currentSlide: cs, prevSlug: neighbors.prevSlug, nextSlug: neighbors.nextSlug});
     }
+    const cs = slideList.find(slide => slide.id === +sid);
+    this.setState({currentSlide: cs, slides: slideList});
   }
 
   render() {
     
     const {t} = this.props;
-    const {lid, mlid, sid} = this.props.params;
-    const {currentSlide, nextSlug, prevSlug} = this.state;
+    const {lid, mlid} = this.props.params;
+    const {currentSlide, slides} = this.state;
 
+    const i = slides.indexOf(currentSlide);
+    const prevSlug = i > 0 ? slides[i - 1].id : null;
+    const nextSlug = i < slides.length - 1 ? slides[i + 1].id : null;
+    
     // Right now, slides have types, encoded in the database as "type"
     // TODO: Break these out into components that can be included on a slide
     // as opposed to having a single "type" for an entire slide.

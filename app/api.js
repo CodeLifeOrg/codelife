@@ -44,7 +44,7 @@ const Slides = [
     title: "Slide 1",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 1,
+    ordering: 0,
     mlid: 1
   },
   {
@@ -52,7 +52,7 @@ const Slides = [
     title: "Slide 2",
     type: "quiz",
     content: "I am an example of a quiz slide. Are you a robot?",
-    ordering: 2,
+    ordering: 1,
     mlid: 1
   },
   {
@@ -60,7 +60,7 @@ const Slides = [
     title: "Slide 3",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 3,
+    ordering: 2,
     mlid: 1
   },
   {
@@ -68,7 +68,7 @@ const Slides = [
     title: "Slide 4",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 1,
+    ordering: 0,
     mlid: 2
   },
   {
@@ -77,7 +77,7 @@ const Slides = [
     type: "textWithImage",
     content: "I am an example of an image slide",
     img: "for.png",
-    ordering: 2,
+    ordering: 1,
     mlid: 2
   },
   {
@@ -85,7 +85,7 @@ const Slides = [
     title: "Slide 6",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 3,
+    ordering: 2,
     mlid: 2
   },
   {
@@ -93,7 +93,7 @@ const Slides = [
     title: "Slide 7",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 1,
+    ordering: 0,
     mlid: 3
   },
   {
@@ -101,7 +101,7 @@ const Slides = [
     title: "Slide 8",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 2,
+    ordering: 1,
     mlid: 3
   },
   {
@@ -109,31 +109,31 @@ const Slides = [
     title: "Slide 9",
     type: "text",
     content: "I am an example of a text slide",
-    ordering: 3,
+    ordering: 2,
     mlid: 3
   },
   {
     id: 10, 
     title: "Slide 10",
     type: "text",
-    content: "I am an example of a text slide",
-    ordering: 1,
+    content: "I am an example of a 3 slide",
+    ordering: 2,
     mlid: 4
   },
   {
     id: 11, 
     title: "Slide 11",
     type: "text",
-    content: "I am an example of a text slide",
-    ordering: 2,
+    content: "I am an example of a 2 slide",
+    ordering: 1,
     mlid: 4
   },
   {
     id: 12, 
     title: "Slide 12",
     type: "text",
-    content: "I am an example of a text slide",
-    ordering: 3,
+    content: "I am an example of a 1 slide",
+    ordering: 0,
     mlid: 4
   }
 ];

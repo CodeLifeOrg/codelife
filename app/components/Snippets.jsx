@@ -27,15 +27,17 @@ class Snippets extends Component {
   createNewSnippet() {
     const snippetName = this.state.snippetName;
     const windowContents = this.props.onCreateSnippet();
-    axios.post("api/snippets/save", {name: snippetName, user_id: this.props.user.id, htmlcontent: windowContents}).then (resp => {
-      if (resp.status === 200) {
-        // todo fix this, this is not a good way to cause a refresh
-        this.setState({gotUserFromDB: false, snippetName: ""});
-      } 
-      else {
-        alert("Error");
-      }
-    });     
+    if (snippetName !== "") {
+      axios.post("api/snippets/save", {name: snippetName, user_id: this.props.user.id, htmlcontent: windowContents}).then (resp => {
+        if (resp.status === 200) {
+          // todo fix this, this is not a good way to cause a refresh
+          this.setState({gotUserFromDB: false, snippetName: ""});
+        } 
+        else {
+          alert("Error");
+        }
+      }); 
+    }    
   }
 
   handleChange(e) {

@@ -4,10 +4,6 @@ import {Link} from "react-router";
 import Nav from "components/Nav";
 import axios from "axios";
 
-// Minilesson Page
-// Lists available lessons.  A lesson id, or "lid", is stored in the database.
-// The lid is also used as the navigational slug in the URL of the page.
-
 class Minilesson extends Component {
 
   constructor(props) {
@@ -19,7 +15,6 @@ class Minilesson extends Component {
 
   componentDidMount() {
     axios.get(`/api/minilessons?lid=${this.props.params.lid}`).then(resp => {
-      console.log(resp);
       this.setState({minilessons: resp.data});
     });
   }
@@ -28,7 +23,6 @@ class Minilesson extends Component {
     
     const {t} = this.props;
     const {lid} = this.props.params;
-
     const {minilessons} = this.state;
 
     if (minilessons === []) return <h1>Loading...</h1>;

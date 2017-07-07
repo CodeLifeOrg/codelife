@@ -163,39 +163,3 @@ export function listSlidesByMinilessonID(mlid) {
   return sl;
 }
 
-export function getFirstSlideByMinilessonID(mlid) {
-  for (const s of Slides) {
-    if (s.mlid === mlid) {
-      return s;
-    }
-  }
-  return null;
-}
-
-export function getSlideByID(sid) {
-  for (const s of Slides) {
-    if (s.id === sid) {
-      return s;
-    }
-  }
-  return null;
-}
-
-export function getNeighborSlides(sid) {
-  const obj = {prevSlug: null, nextSlug: null};
-  const s = getSlideByID(sid);
-  const ml = listSlidesByMinilessonID(+s.mlid);
-  const arr = [];
-  for (const slide of ml) {
-    arr[slide.ordering] = slide;
-  }
-  for (let i = 1; i <= arr.length; i++) {
-    if (arr[i] && arr[i].id === sid) {
-      if (i > 1) obj.prevSlug = arr[i - 1].id;
-      if (i < arr.length - 1) obj.nextSlug = arr[i + 1].id;
-    }
-  }
-  return obj;
-}
-
-

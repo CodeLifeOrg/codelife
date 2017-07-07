@@ -2,18 +2,32 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import Nav from "components/Nav";
-import {listLessons} from "api";
+import axios from "axios";
 
 class Lesson extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { 
+      lessons: []
+    };
+  }
+
+  componentDidMount() {
+    axios.get("/api/lessons/").then(resp => {
+      this.setState({lessons: resp.data});
+    });
+  }
 
   render() {
     
     const {t} = this.props;
+    const {lessons} = this.state;
 
-    const lessonArray = listLessons();
+    if (lessons === []) return <h1>Loading...</h1>;
 
-    const lessonItems = lessonArray.map(lesson => 
-      <li key={lesson.id}><Link className="link" to={`/lesson/${lesson.id}`}>{ lesson.title }</Link></li>);
+    const lessonItems = lessons.map(lesson => 
+      <li key={lesson.id}><Link className="link" to={`/lesson/${lesson.id}`}>{ lesson.name }</Link></li>);
 
     return (
       <div>

@@ -9,7 +9,7 @@ module.exports = function(sequelize, db) {
       type: db.TEXT,
       title: db.TEXT,
       htmlcontent: db.TEXT,
-      imgblob: db.BLOB,
+      imgblob: db.TEXT,
       quizjson: db.JSON,
       rulejson: db.JSON,
       mlid: {

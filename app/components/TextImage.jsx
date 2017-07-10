@@ -6,11 +6,12 @@ export default class TextImage extends Component {
 
   render() {
     
-    const {t, htmlcontent} = this.props;
+    const {t, htmlcontent, imgblob} = this.props;
 
     return (
       <div>
         <p>{htmlcontent}</p>
+        <img src={`data:image/png;base64, ${imgblob}`} />
       </div>
     );
   }

@@ -2,8 +2,11 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link, browserHistory} from "react-router";
 import Nav from "components/Nav";
+import TextImage from "components/TextImage";
 import axios from "axios";
 import "./Slide.css";
+
+const compLookup = {TextImage};
 
 class Slide extends Component {
 
@@ -13,13 +16,6 @@ class Slide extends Component {
       slides: [],
       currentSlide: null
     };
-  }
-
-  // For quiz slides, override the enter key so we don't submit.
-  onKeyPress(event) {
-    if (event.which === 13) {
-      event.preventDefault();
-    }
   }
 
   componentDidUpdate() {
@@ -56,21 +52,18 @@ class Slide extends Component {
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;
     const nextSlug = i < slides.length - 1 ? slides[i + 1].id : null;
-    
-    const SLIDE_TYPES = {
-      TEXT: "test",
-      QUIZ: "quiz",
-      TEXTWITHIMAGE: "textWithImage"
-    };
+
+    let SlideComponent = null;
 
     if (!currentSlide) return <h1>Loading...</h1>;
+    
+    SlideComponent = compLookup[currentSlide.type];
     
     return (
       <div> 
         <h1>{currentSlide.title}</h1>
-        <p dangerouslySetInnerHTML={{__html: currentSlide.htmlcontent}}></p>
-        <p>{currentSlide.type === SLIDE_TYPES.QUIZ ? <form onKeyPress={this.onKeyPress}>Answer: <input type="text" name="answer" /></form> : null }</p>
-        <p>{currentSlide.type === SLIDE_TYPES.TEXTWITHIMAGE ? <img className="image" src={`/${currentSlide.img}`} /> : null }</p>      
+
+        <SlideComponent {...currentSlide} />
 
         { prevSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>previous</Link> : <span className="deadlink">previous</span> }
         { nextSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  

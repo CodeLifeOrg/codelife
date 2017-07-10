@@ -6,15 +6,12 @@ export default class TextText extends Component {
 
   render() {
     
-    const {t, id, htmlcontent} = this.props;
-
-    const parsedLeft = htmlcontent.split("xxxxxxxxxx")[0];
-    const parsedRight = htmlcontent.split("xxxxxxxxxx")[1];
+    const {t, htmlcontent1, htmlcontent2} = this.props;
 
     return (
       <div className="tt_container">
-        <div className="tt_textcontainerleft" dangerouslySetInnerHTML={{__html: parsedLeft}} />
-        <div className="tt_textcontainerright" dangerouslySetInnerHTML={{__html: parsedRight}} />
+        <div className="tt_textcontainerleft" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        <div className="tt_textcontainerright" dangerouslySetInnerHTML={{__html: htmlcontent2}} />
         
         <div className="clear" />
       </div>

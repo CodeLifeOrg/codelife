@@ -1,15 +1,15 @@
-div.container {
+div.ti_container {
   border: 1px solid black;
   padding: 10px;
 }
 
-div.textcontainer {
+div.ti_textcontainer {
   padding: 10px;
   width: 300px;
   float: left;
 }
 
-div.imgcontainer {
+div.ti_imgcontainer {
   border: 1px solid black;
   padding: 10px;
   width: 500px;

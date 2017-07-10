@@ -2,11 +2,13 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link, browserHistory} from "react-router";
 import Nav from "components/Nav";
-import TextImage from "components/TextImage";
+import TextImage from "components/slidetypes/TextImage";
+import TextText from "components/slidetypes/TextText";
+import ImageText from "components/slidetypes/ImageText";
 import axios from "axios";
 import "./Slide.css";
 
-const compLookup = {TextImage};
+const compLookup = {TextImage, ImageText, TextText};
 
 class Slide extends Component {
 

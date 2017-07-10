@@ -9,9 +9,9 @@ export default class TextImage extends Component {
     const {t, id, htmlcontent} = this.props;
 
     return (
-      <div className="container">
-        <div className="textcontainer" dangerouslySetInnerHTML={{__html: htmlcontent}} />
-        <div className="imgcontainer"><img src={`/slide_images/${id}.jpg`} /></div>
+      <div className="ti_container">
+        <div className="ti_textcontainer" dangerouslySetInnerHTML={{__html: htmlcontent}} />
+        <div className="ti_imgcontainer"><img src={`/slide_images/${id}.jpg`} /></div>
         <div className="clear" />
       </div>
     );

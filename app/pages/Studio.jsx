@@ -119,6 +119,7 @@ class Studio extends Component {
         }
       }
     }
+    if (checkerText === "") checkerText = "You got it right!";
     this.setState({checkerResult: checkerText});
   }
 

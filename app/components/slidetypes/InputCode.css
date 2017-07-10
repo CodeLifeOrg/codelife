@@ -20,6 +20,12 @@ div.ic_rendercontainer {
   float: right;
 }
 
+div.ic_errorcontainer {
+  border: 1px solid black;
+  padding: 10px;
+  white-space: pre;
+}
+
 iframe#renderframe {
   width: 490px;
   height: 490px;

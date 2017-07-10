@@ -6,12 +6,13 @@ export default class TextImage extends Component {
 
   render() {
     
-    const {t, htmlcontent, imgblob} = this.props;
+    const {t, id, htmlcontent} = this.props;
 
     return (
-      <div>
-        <p>{htmlcontent}</p>
-        <img src={`data:image/png;base64, ${imgblob}`} />
+      <div className="container">
+        <div className="textcontainer" dangerouslySetInnerHTML={{__html: htmlcontent}} />
+        <div className="imgcontainer"><img src={`/slide_images/${id}.jpg`} /></div>
+        <div className="clear" />
       </div>
     );
   }

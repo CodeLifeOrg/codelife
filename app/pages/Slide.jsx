@@ -65,12 +65,13 @@ class Slide extends Component {
 
         <SlideComponent {...currentSlide} />
 
-        { prevSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>previous</Link> : <span className="deadlink">previous</span> }
-        { nextSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
-
-        <br/><br/>
-        <Link className="link" to={`/lesson/${lid}`}>return to lesson {lid}</Link>
-        <br/><br/>
+        <div id="slugcontainer"> 
+          { prevSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>previous</Link> : <span className="deadlink">previous</span> }
+          { nextSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
+        </div>
+        <div id="returncontainer">
+          <Link className="link" to={`/lesson/${lid}`}>return to lesson {lid}</Link>
+        </div>
         <Nav />
       </div>
     );

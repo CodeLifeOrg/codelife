@@ -87,14 +87,14 @@ export default class InputCode extends Component {
     const {t, htmlcontent1, htmlcontent2} = this.props;
 
     return (
-      <div className="ic_container">
-        <div className="ic_instructions">{htmlcontent1}</div>
-        <div className="ic_codecontainer">{ this.state.mounted ? <Editor ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" theme="monokai" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }</div>
-        <div className="ic_rendercontainer"><iframe id="renderframe" ref="rf" /></div>
+      <div id="ic_container">
+        <div id="ic_instructions">{htmlcontent1}</div>
+        <div id="ic_code-container">{ this.state.mounted ? <Editor ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" theme="monokai" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }</div>
+        <div id="ic_render-container"><iframe id="render-frame" ref="rf" /></div>
         <div className="clear" />
-        <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
-        <button className="button" onClick={this.resetAnswer.bind(this)}>RESET</button>
-        <div className="ic_errorcontainer">{this.state.checkerResult}</div>
+        <button className="ic_button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
+        <button className="ic_button" onClick={this.resetAnswer.bind(this)}>RESET</button>
+        <div id="ic_errorcontainer">{this.state.checkerResult}</div>
       </div>
     );
   }

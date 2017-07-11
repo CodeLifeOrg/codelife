@@ -9,9 +9,9 @@ export default class TextText extends Component {
     const {t, htmlcontent1, htmlcontent2} = this.props;
 
     return (
-      <div className="tt_container">
-        <div className="tt_textcontainerleft" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-        <div className="tt_textcontainerright" dangerouslySetInnerHTML={{__html: htmlcontent2}} />
+      <div id="tt_container">
+        <div id="tt_text-container-left" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        <div id="tt_text-container-right" dangerouslySetInnerHTML={{__html: htmlcontent2}} />
         
         <div className="clear" />
       </div>

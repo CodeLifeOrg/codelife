@@ -1,20 +1,16 @@
-div.tt_container {
+div#tt_container {
   border: 1px solid black;
   padding: 10px;
 }
 
-div.tt_textcontainerleft {
+div#tt_text-container-left {
   padding: 10px;
   width: 300px;
   float: left;
 }
 
-div.tt_textcontainerright {
+div#tt_text-container-right {
   padding: 10px;
   width: 300px;
   float: right;
-}
-
-div.clear {
-  clear: both;
 }

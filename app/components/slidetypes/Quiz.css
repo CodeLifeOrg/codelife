@@ -3,6 +3,10 @@ div#q_container {
   padding: 10px;
 }
 
+ul#q_choices li:hover{
+  background-color: lightblue;
+}
+
 li.question {
   cursor: pointer;
   margin: 10px;
@@ -10,6 +14,3 @@ li.question {
   padding: 5px;
 }
 
-ul#q_choices li:hover{
-  background-color: lightblue;
-}

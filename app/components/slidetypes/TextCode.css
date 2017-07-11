@@ -1,15 +1,15 @@
-div.tc_container {
+div#tc_container {
   border: 1px solid black;
   padding: 10px;
 }
 
-div.tc_textcontainer {
+div#tc_text-container {
   padding: 10px;
   width: 300px;
   float: left;
 }
 
-div.tc_codecontainer {
+div#tc_code-container {
   padding: 10px;
   width: 500px;
   text-align: center;

@@ -1,36 +1,37 @@
-div.ic_container {
+div#ic_container {
   border: 1px solid black;
   padding: 10px;
 }
 
-div.ic_instructions {
+div#ic_instructions {
   margin-bottom: 20px;
 }
 
-div.ic_codecontainer {
+div#ic_code-container {
   padding: 10px;
   width: 300px;
   float: left;
 }
 
-div.ic_rendercontainer {
+div#ic_render-container {
   padding: 10px;
   width: 500px;
   height: 500px;
   float: right;
 }
 
-div.ic_errorcontainer {
+div#ic_error-container {
   border: 1px solid black;
   padding: 10px;
   white-space: pre;
 }
 
-iframe#renderframe {
+iframe#render-frame {
   width: 490px;
   height: 490px;
 }
 
-div.clear {
-  clear: both;
+button.ic_button {
+  margin: 10px; 
+  font-size: 30px;
 }

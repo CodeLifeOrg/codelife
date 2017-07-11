@@ -13,3 +13,7 @@ div#slugcontainer {
 div#returncontainer {
   margin-top: 15px;
 }
+
+div.clear {
+  clear: both;
+}

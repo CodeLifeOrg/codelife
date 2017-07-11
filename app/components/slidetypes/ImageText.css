@@ -1,22 +1,18 @@
-div.it_container {
+div#it_container {
   border: 1px solid black;
   padding: 10px;
 }
 
-div.it_textcontainer {
+div#it_text-container {
   padding: 10px;
   width: 300px;
   float: right;
 }
 
-div.it_imgcontainer {
+div#it_img-container {
   border: 1px solid black;
   padding: 10px;
   width: 500px;
   text-align: center;
   float: left;
-}
-
-div.clear {
-  clear: both;
 }

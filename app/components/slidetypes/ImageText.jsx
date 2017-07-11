@@ -9,9 +9,9 @@ export default class ImageText extends Component {
     const {t, id, htmlcontent1} = this.props;
 
     return (
-      <div className="it_container">
-        <div className="it_imgcontainer"><img src={`/slide_images/${id}.jpg`} /></div>
-        <div className="it_textcontainer" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+      <div id="it_container">
+        <div id="it_img-container"><img src={`/slide_images/${id}.jpg`} /></div>
+        <div id="it_text-container" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
         
         <div className="clear" />
       </div>

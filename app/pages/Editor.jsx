@@ -69,20 +69,21 @@ class Editor extends Component {
   }
 
   saveCodeToDB() {
-    console.log("would save");
-    
-    /*
-    axios.post("api/projects/save", {user_id: this.props.user.id, htmlcontent: this.state.currentText}).then (resp => {
+    const {id: uid} = this.props.user;
+    const {currentText: studentcontent} = this.state;
+    const {lid} = this.props.params;
+
+    axios.post("/api/snippets/save", {uid, lid, studentcontent}).then(resp => {
       if (resp.status === 200) {
+        // todo fix this, this is not a good way to cause a refresh
+        this.setState({gotUserFromDB: false});
         alert("Saved to DB");
       } 
       else {
         alert("Error");
       }
-    });
-    */
-
-  }
+    }); 
+  }    
 
   validateHTML() {
     
@@ -104,11 +105,11 @@ class Editor extends Component {
     const {t} = this.props;
     const {lid} = this.props.params;
 
-    if (!this.state.mounted) return (<h1>Loading...</h1>);
+    if (!this.state.mounted) return <h1>Loading...</h1>;
 
     return (  
       <div>
-        <h1>{ t("Editor") }</h1>
+        <h1>{ "Editor" }</h1>
         <div id="container">
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }

@@ -82,6 +82,8 @@ class Slide extends Component {
           { nextSlug && !this.state.blocked ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
         </div>
         <div id="returncontainer">
+          { !nextSlug ? <Link className="editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> : null }
+          <br/><br/>
           <Link className="link" to={`/lesson/${lid}`}>return to lesson {lid}</Link>
         </div>
         <Nav />

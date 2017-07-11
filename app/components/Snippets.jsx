@@ -18,7 +18,7 @@ class Snippets extends Component {
   componentDidUpdate() {
     if (this.props.user && !this.state.gotUserFromDB) {
       this.setState({gotUserFromDB: true});
-      axios.get(`/api/snippets/?user_id=${this.props.user.id}`).then(resp => {
+      axios.get(`/api/testsnippets/?user_id=${this.props.user.id}`).then(resp => {
         this.setState({snippets: resp.data});
       });
     }
@@ -28,7 +28,7 @@ class Snippets extends Component {
     const snippetName = this.state.snippetName;
     const windowContents = this.props.onCreateSnippet();
     if (snippetName !== "") {
-      axios.post("/api/snippets/save", {name: snippetName, user_id: this.props.user.id, htmlcontent: windowContents}).then (resp => {
+      axios.post("/api/testsnippets/save", {name: snippetName, user_id: this.props.user.id, htmlcontent: windowContents}).then (resp => {
         if (resp.status === 200) {
           // todo fix this, this is not a good way to cause a refresh
           this.setState({gotUserFromDB: false, snippetName: ""});
@@ -45,7 +45,7 @@ class Snippets extends Component {
   }
 
   deleteSnippet(snippet) {
-    axios.delete("/api/snippets/delete", {params: {id: snippet.id}}).then(resp => {
+    axios.delete("/api/testsnippets/delete", {params: {id: snippet.id}}).then(resp => {
       if (resp.status === 200) {
         // todo fix this, this is not a good way to cause a refresh
         this.setState({gotUserFromDB: false});

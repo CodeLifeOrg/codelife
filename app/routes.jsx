@@ -2,6 +2,7 @@ import React from "react";
 import {Route, IndexRoute, browserHistory} from "react-router";
 
 import App from "components/App";
+import Editor from "pages/Editor";
 import Home from "pages/Home";
 import Lesson from "pages/Lesson";
 import Minilesson from "pages/Minilesson";
@@ -22,6 +23,8 @@ export default function RouteCreate() {
       <Route path="lesson" component={Lesson} />
       <Route path="lesson/:lid" component={Minilesson} />
       <Route path="lesson/:lid/:mlid(/:sid)" component={Slide} />
+
+      <Route path="editor/:lid" component={Editor} />
 
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />

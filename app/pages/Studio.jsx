@@ -11,7 +11,7 @@ import "./Studio.css";
 // Studio Page
 // Test zone for inline code editing
 
-class Editor extends Component {
+class AceWrapper extends Component {
 
   render() {
     if (typeof window !== "undefined") {
@@ -154,7 +154,7 @@ class Studio extends Component {
           <div id="acecontainer">
           {/* todo - the value prop of Editor is where we put code loaded from the database */}
           {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
-          { this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>

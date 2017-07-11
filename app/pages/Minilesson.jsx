@@ -34,6 +34,7 @@ class Minilesson extends Component {
       <div>
         <h1>{t("Minilessons")}</h1>
         <ul>{minilessonItems}</ul>
+        <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor</Link>
         <Nav />
       </div>
     );

@@ -19,8 +19,13 @@ class Slide extends Component {
     super(props);
     this.state = {
       slides: [],
-      currentSlide: null
+      currentSlide: null,
+      blocked: true
     };
+  }
+
+  unblock() {
+    this.setState({blocked: false});
   }
 
   componentDidUpdate() {
@@ -28,7 +33,8 @@ class Slide extends Component {
     const {currentSlide, slides} = this.state;
     if (currentSlide && currentSlide.id !== +sid) {
       const cs = slides.find(slide => slide.id === +sid);
-      this.setState({currentSlide: cs});
+      const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      this.setState({currentSlide: cs, blocked});
     }
   }
 
@@ -44,7 +50,8 @@ class Slide extends Component {
         browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
       }
       const cs = slideList.find(slide => slide.id === +sid);
-      this.setState({currentSlide: cs, slides: slideList});
+      const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      this.setState({currentSlide: cs, slides: slideList, blocked});
     });  
   }
 
@@ -68,11 +75,11 @@ class Slide extends Component {
       <div> 
         <h1>{currentSlide.title}</h1>
 
-        <SlideComponent {...currentSlide} />
+        <SlideComponent unblock={this.unblock.bind(this)} {...currentSlide} />
 
         <div id="slugcontainer"> 
           { prevSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>previous</Link> : <span className="deadlink">previous</span> }
-          { nextSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
+          { nextSlug && !this.state.blocked ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
         </div>
         <div id="returncontainer">
           <Link className="link" to={`/lesson/${lid}`}>return to lesson {lid}</Link>

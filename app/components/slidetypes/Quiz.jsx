@@ -7,6 +7,7 @@ export default class Quiz extends Component {
   onChooseAnswer(question) {
     if (question.isCorrect) {
       alert("That's correct!");
+      this.props.unblock();
     } 
     else {
       alert("Incorrect, please try again!");

@@ -69,11 +69,11 @@ class Snippets extends Component {
 
     return (
       <div>
-        <div style={{width: "250px"}}>
-          <ul style={{float: "left", listStyleType: "none"}}>{snippetXs}</ul>
-          <ul style={{float: "right"}}>{snippetItems}</ul>   
+        <div id="snippet-container">
+          <ul id="x-list">{snippetXs}</ul>
+          <ul id="snippet-list">{snippetItems}</ul>   
         </div>
-        <div style={{clear: "both"}}>
+        <div className="clear">
         <form>
           <input className="snippetName" type="text" value={this.state.snippetName} onChange={this.handleChange.bind(this)} /> 
           <input type="button" value="Create New Snippet From Contents" onClick={this.createNewSnippet.bind(this)} />

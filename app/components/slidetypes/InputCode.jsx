@@ -41,7 +41,11 @@ export default class InputCode extends Component {
         }
       }
     }
-    if (checkerText === "") checkerText = "You got it right!";
+    // todo make this more resilient lol
+    if (checkerText === "") {
+      checkerText = "You got it right!";
+      this.props.unblock();
+    }
     this.setState({checkerResult: checkerText});
   }
 

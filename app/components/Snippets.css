@@ -11,3 +11,20 @@ input.snippetName {
 li.x {
   cursor: pointer;
 }
+
+ul#x-list {
+  float: left;
+  list-style-type: none;
+}
+
+ul#snippet-list {
+  float: right;
+}
+
+div#snippet-container {
+  width: 250px;
+}
+
+div.clear {
+  clear: both;
+}

@@ -14,7 +14,7 @@ class Nav extends Component {
     const {t, user} = this.props;
 
     return (
-      <div id="navcontainer">
+      <div id="nav-container">
         <Link className="link" to={"/"}>{ t("Home") }</Link>
         { user
         ? <a className="link" href="/auth/logout">{ t("Logout") }</a> 

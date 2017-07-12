@@ -34,7 +34,8 @@ export default class InputCode extends Component {
   submitAnswer() {
     const jsonArray = himalaya.parse(this.getEditor().getValue());
     let checkerText = "";
-    for (const r of this.props.rulejson) {
+    const rulejson = JSON.parse(this.props.rulejson);
+    for (const r of rulejson) {
       if (r.type === "CONTAINS") {
         if (!this.containsTag(r.needle, jsonArray)) {
           checkerText += `${r.error_msg}\n`;

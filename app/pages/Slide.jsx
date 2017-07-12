@@ -31,8 +31,8 @@ class Slide extends Component {
   componentDidUpdate() {
     const {sid} = this.props.params;
     const {currentSlide, slides} = this.state;
-    if (currentSlide && currentSlide.id !== +sid) {
-      const cs = slides.find(slide => slide.id === +sid);
+    if (currentSlide && currentSlide.id !== sid) {
+      const cs = slides.find(slide => slide.id === sid);
       const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       this.setState({currentSlide: cs, blocked});
     }
@@ -42,14 +42,14 @@ class Slide extends Component {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     
-    axios.get(`/api/slides?mlid=${+mlid}`).then(resp => {
+    axios.get(`/api/slides?mlid=${mlid}`).then(resp => {
       const slideList = resp.data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
         sid = slideList[0].id;
         browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
       }
-      const cs = slideList.find(slide => slide.id === +sid);
+      const cs = slideList.find(slide => slide.id === sid);
       const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       this.setState({currentSlide: cs, slides: slideList, blocked});
     });  

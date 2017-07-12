@@ -18,7 +18,9 @@ export default class Quiz extends Component {
     
     const {t, htmlcontent1, quizjson} = this.props;
 
-    const quizItems = quizjson.map(question =>
+    const quizjson_parsed = JSON.parse(quizjson);
+
+    const quizItems = quizjson_parsed.map(question =>
       <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
 
     return (

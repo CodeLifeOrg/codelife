@@ -10,14 +10,8 @@ module.exports = function(sequelize, db) {
       studentcontent: db.TEXT,
       likes: db.INTEGER,
       previewblob: db.BLOB,
-      lid: {
-        type: db.INTEGER,
-        foreignKey: true
-      },
-      uid: {
-        type: db.INTEGER,
-        foreignKey:true
-      }
+      lid: db.TEXT,
+      uid: db.TEXT
     }, 
     {
       freezeTableName: true,

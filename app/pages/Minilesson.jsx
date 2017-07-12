@@ -9,7 +9,8 @@ class Minilesson extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      minilessons: []
+      minilessons: [],
+      lesson: null
     };
   }
 
@@ -17,24 +18,28 @@ class Minilesson extends Component {
     axios.get(`/api/minilessons?lid=${this.props.params.lid}`).then(resp => {
       this.setState({minilessons: resp.data});
     });
+    axios.get(`/api/lessons?id=${this.props.params.lid}`).then(resp => {
+      this.setState({lesson: resp.data[0]});
+    });
   }
 
   render() {
     
     const {t} = this.props;
     const {lid} = this.props.params;
-    const {minilessons} = this.state;
+    const {minilessons, lesson} = this.state;
 
-    if (minilessons === []) return <h1>Loading...</h1>;
+    if (!lesson || minilessons === []) return <h1>Loading...</h1>;
 
     const minilessonItems = minilessons.map(minilesson => 
       <li key={minilesson.id}><Link className="link" to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
 
     return (
       <div>
-        <h1>{t("Minilessons")}</h1>
+        <h1>{lesson.name}</h1>
+        <p>{lesson.description}</p>
         <ul>{minilessonItems}</ul>
-        <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor</Link>
+        <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor (My Snippet)</Link>
         <Nav />
       </div>
     );

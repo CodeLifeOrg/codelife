@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
+import {connect} from "react-redux";
 import Nav from "components/Nav";
 import axios from "axios";
 
@@ -8,9 +9,16 @@ class Lesson extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
+      gotUserFromDB: false,
       lessons: []
     };
+  }
+
+  componentDidUpdate() {
+    if (this.props.user && !this.state.gotUserFromDB) {
+      this.setState({gotUserFromDB: true});
+    }
   }
 
   componentDidMount() {
@@ -22,16 +30,18 @@ class Lesson extends Component {
   render() {
     
     const {t} = this.props;
-    const {lessons} = this.state;
+    const {lessons, gotUserFromDB} = this.state;
+    const {user} = this.props;
 
-    if (lessons === []) return <h1>Loading...</h1>;
+    if (!gotUserFromDB || lessons === []) return <h1>Loading...</h1>;
 
     const lessonItems = lessons.map(lesson => 
       <li key={lesson.id}><Link className="link" to={`/lesson/${lesson.id}`}>{ lesson.name }</Link></li>);
 
     return (
       <div>
-        <h1>{t("Lessons")}</h1>
+        <h1>{t("Islands")}</h1>
+        <p>Welcome Back, {user.username}!</p>
         <ul>{lessonItems}</ul>
         <Nav />
       </div>
@@ -39,4 +49,8 @@ class Lesson extends Component {
   }
 }
 
-export default translate()(Lesson);
+Lesson = connect(state => ({
+  user: state.auth.user
+}))(Lesson);
+Lesson = translate()(Lesson);
+export default Lesson;

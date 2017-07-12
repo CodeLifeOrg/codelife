@@ -15,6 +15,3 @@ minilessons_df.to_sql('minilessons', con=engine, if_exists='replace')
 
 slides_df = pd.read_csv(slides_url)
 slides_df.to_sql('slides', con=engine, if_exists='replace')
-
-
-#print (df)

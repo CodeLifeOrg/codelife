@@ -26,7 +26,7 @@ class ShareSnippet extends Component {
 
   componentDidMount() {
     const {snid} = this.props.params;
-    axios.get(`/api/snippets/byid?id=${snid}`).then(resp => {
+    axios.get(`/api/snippets?id=${snid}`).then(resp => {
       this.setState({snippet: resp.data[0]}, this.renderPage.bind(this));
     });
   }

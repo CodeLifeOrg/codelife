@@ -18,11 +18,13 @@ class Snippets extends Component {
   componentDidUpdate() {
     if (this.props.user && !this.state.gotUserFromDB) {
       this.setState({gotUserFromDB: true});
-      axios.get(`/api/testsnippets/?user_id=${this.props.user.id}`).then(resp => {
+      axios.get(`/api/snippets/?uid=${this.props.user.id}`).then(resp => {
         this.setState({snippets: resp.data});
       });
     }
   }
+
+  /*
 
   createNewSnippet() {
     const snippetName = this.state.snippetName;
@@ -39,6 +41,8 @@ class Snippets extends Component {
       }); 
     }    
   }
+
+  */
 
   handleChange(e) {
     this.setState({snippetName: e.target.value});
@@ -70,13 +74,15 @@ class Snippets extends Component {
     return (
       <div>
         <div id="snippet-container">
-          <ul id="x-list">{snippetXs}</ul>
+          { /* <ul id="x-list">{snippetXs}</ul> */ }
           <ul id="snippet-list">{snippetItems}</ul>   
         </div>
         <div className="clear">
         <form>
+          { /*
           <input className="snippetName" type="text" value={this.state.snippetName} onChange={this.handleChange.bind(this)} /> 
-          <input type="button" value="Create New Snippet From Contents" onClick={this.createNewSnippet.bind(this)} />
+          <input type="button" value="Create New Snippet From Contents" onClick={this.createNewSnippet.bind(this)} /> 
+            */ }
         </form>
         </div>
       </div>

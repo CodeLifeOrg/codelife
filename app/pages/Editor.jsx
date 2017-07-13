@@ -86,7 +86,6 @@ class Editor extends Component {
     let endpoint = "/api/snippets/";
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, studentcontent}).then(resp => {
-      console.log(resp);
       resp.status === 200 ? alert("Saved to DB") : alert("Error");
     });
   }    

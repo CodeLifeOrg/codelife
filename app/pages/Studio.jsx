@@ -26,14 +26,8 @@ class Studio extends Component {
     this.state = { 
       mounted: false, 
       gotUserFromDB: false, 
-      currentText: "", 
-      checkerResult: "", 
-      rules: []
+      currentText: ""
     };
-  }
-
-  getRules() { 
-    axios.get("api/rules"); 
   }
 
   componentDidUpdate() {
@@ -48,9 +42,7 @@ class Studio extends Component {
   }
 
   componentDidMount() {
-    axios.get("api/rules").then(resp => {
-      this.setState({mounted: true, rules: resp.data});
-    });
+    this.setState({mounted: true});
   }
 
   getEditor() {
@@ -80,18 +72,16 @@ class Studio extends Component {
   }
 
   onClickItem(snippet) {
-    this.insertTextAtCursor(snippet.htmlcontent);
+    this.insertTextAtCursor(snippet.studentcontent);
   }
 
   saveCodeToDB() {
-    axios.post("api/projects/save", {user_id: this.props.user.id, htmlcontent: this.state.currentText}).then (resp => {
-      if (resp.status === 200) {
-        alert("Saved to DB");
-      } 
-      else {
-        alert("Error");
-      }
-    });
+    const {id: user_id} = this.props.user;
+    const {currentText: htmlcontent} = this.state;
+
+    axios.post("api/projects/save", {user_id, htmlcontent}).then (resp => {
+      resp.status === 200 ? alert("Saved to DB") : alert("Error");
+    }); 
   }
 
   validateHTML() {
@@ -115,8 +105,6 @@ class Studio extends Component {
         <Snippets onCreateSnippet={this.grabContents.bind(this)} onChoose={this.onClickItem.bind(this)}/>
         <div id="container">
           <div id="acecontainer">
-          {/* todo - the value prop of Editor is where we put code loaded from the database */}
-          {/* or, alternatively, with a seeded template, to which the user can reset while editing */}
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>

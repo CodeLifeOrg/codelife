@@ -4,13 +4,7 @@ module.exports = function(app) {
 
   app.get("/api/snippets", (req, res) => {
 
-    db.snippets.findAll({where: {lid: req.query.lid, uid: req.query.uid}}).then(u => res.json(u).end());
-
-  });
-
-  app.get("/api/snippets/byid", (req, res) => {
-
-    db.snippets.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());    
+    db.snippets.findAll({where: req.query}).then(u => res.json(u).end());
 
   });
 

@@ -83,32 +83,12 @@ class Editor extends Component {
     const {currentText: studentcontent, snippet} = this.state;
     const {lid} = this.props.params;
 
-    if (snippet) {
-      axios.post("/api/snippets/update", {uid, lid, studentcontent}).then(resp => {
-        if (resp.status === 200) {
-          // todo fix this, this is not a good way to cause a refresh
-          this.setState({gotUserFromDB: false});
-          console.log(resp);
-          alert("Saved to DB");
-        } 
-        else {
-          alert("Error");
-        }
-      });
-    } 
-    else {
-      axios.post("/api/snippets/new", {uid, lid, studentcontent}).then(resp => {
-        if (resp.status === 200) {
-          // todo fix this, this is not a good way to cause a refresh
-          this.setState({gotUserFromDB: false});
-          console.log(resp);
-          alert("Saved to DB");
-        } 
-        else {
-          alert("Error");
-        }
-      });
-    }
+    let endpoint = "/api/snippets/";
+    snippet ? endpoint += "update" : endpoint += "new";
+    axios.post(endpoint, {uid, lid, studentcontent}).then(resp => {
+      console.log(resp);
+      resp.status === 200 ? alert("Saved to DB") : alert("Error");
+    });
   }    
 
   validateHTML() {
@@ -130,7 +110,7 @@ class Editor extends Component {
     
     const {t} = this.props;
     const {lid} = this.props.params;
-    const {lesson} = this.state;
+    const {lesson, snippet} = this.state;
 
     if (!this.state.mounted) return <h1>Loading...</h1>;
 
@@ -143,11 +123,14 @@ class Editor extends Component {
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           <br/><br/>
+          { snippet ? <Link className="share-link" to={`/sharesnippet/${this.state.snippet.id}`}>Share this Snippet</Link> : null }
+          <br/><br/>
           <Link className="lesson-link" to={`/lesson/${lid}`}>Back to {lesson.name}</Link>
           </div>
           <iframe id="rendercontainer" ref="rc" />
         </div>
         <div className="clear" />
+
         <Nav />
       </div>
     );

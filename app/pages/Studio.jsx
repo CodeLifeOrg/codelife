@@ -6,9 +6,6 @@ import Snippets from "components/Snippets";
 import axios from "axios";
 import "./Studio.css";
 
-// Studio Page
-// Test zone for inline code editing
-
 class AceWrapper extends Component {
 
   render() {
@@ -127,7 +124,7 @@ class Studio extends Component {
           <iframe id="rendercontainer" ref="rc" />
         </div>
         <div className="clear">
-        <br/><br/>
+          <br/>
           <Nav />
         </div>
       </div>

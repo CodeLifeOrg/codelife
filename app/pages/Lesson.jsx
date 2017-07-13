@@ -33,7 +33,9 @@ class Lesson extends Component {
     const {lessons, gotUserFromDB} = this.state;
     const {user} = this.props;
 
-    if (!gotUserFromDB || lessons === []) return <h1>Loading...</h1>;
+    if (!gotUserFromDB) return <h1>Not Authorized</h1>;
+
+    if (lessons === []) return <h1>Loading...</h1>;
 
     const lessonItems = lessons.map(lesson => 
       <li key={lesson.id}><Link className="link" to={`/lesson/${lesson.id}`}>{ lesson.name }</Link></li>);

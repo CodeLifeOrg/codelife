@@ -8,9 +8,16 @@ module.exports = function(app) {
 
   });
 
-  app.post("/api/snippets/save", (req, res) => {
+  app.post("/api/snippets/update", (req, res) => {
 
     db.snippets.update({studentcontent: req.body.studentcontent}, {where: {uid: req.body.uid, lid: req.body.lid}})
+      .then(u => res.json(u).end());
+
+  });
+
+  app.post("/api/snippets/new", (req, res) => {
+
+    db.snippets.create({studentcontent: req.body.studentcontent, uid: req.body.uid, lid: req.body.lid})
       .then(u => res.json(u).end());
 
   });

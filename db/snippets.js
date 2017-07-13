@@ -4,7 +4,8 @@ module.exports = function(sequelize, db) {
     {
       id: {
         type: db.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
       name: db.STRING,
       studentcontent: db.TEXT,

@@ -27,7 +27,8 @@ class Editor extends Component {
       mounted: false, 
       gotUserFromDB: false, 
       currentText: "",
-      lesson: null
+      lesson: null,
+      snippet: null
     };
   }
 
@@ -37,7 +38,12 @@ class Editor extends Component {
       const {lid} = this.props.params;
       this.setState({gotUserFromDB: true});
       axios.get(`/api/snippets/?uid=${id}&lid=${lid}`).then(resp => {
-        this.setState({currentText: resp.data[0].studentcontent}, this.renderText.bind(this));
+        if (resp.data.length > 0) {
+          this.setState({snippet: resp.data[0], currentText: resp.data[0].studentcontent}, this.renderText.bind(this));
+        } 
+        else {
+          this.setState({currentText: this.state.lesson.initialcontent}, this.renderText.bind(this));
+        }
       });
     }
   }
@@ -74,19 +80,35 @@ class Editor extends Component {
 
   saveCodeToDB() {
     const {id: uid} = this.props.user;
-    const {currentText: studentcontent} = this.state;
+    const {currentText: studentcontent, snippet} = this.state;
     const {lid} = this.props.params;
 
-    axios.post("/api/snippets/save", {uid, lid, studentcontent}).then(resp => {
-      if (resp.status === 200) {
-        // todo fix this, this is not a good way to cause a refresh
-        this.setState({gotUserFromDB: false});
-        alert("Saved to DB");
-      } 
-      else {
-        alert("Error");
-      }
-    }); 
+    if (snippet) {
+      axios.post("/api/snippets/update", {uid, lid, studentcontent}).then(resp => {
+        if (resp.status === 200) {
+          // todo fix this, this is not a good way to cause a refresh
+          this.setState({gotUserFromDB: false});
+          console.log(resp);
+          alert("Saved to DB");
+        } 
+        else {
+          alert("Error");
+        }
+      });
+    } 
+    else {
+      axios.post("/api/snippets/new", {uid, lid, studentcontent}).then(resp => {
+        if (resp.status === 200) {
+          // todo fix this, this is not a good way to cause a refresh
+          this.setState({gotUserFromDB: false});
+          console.log(resp);
+          alert("Saved to DB");
+        } 
+        else {
+          alert("Error");
+        }
+      });
+    }
   }    
 
   validateHTML() {

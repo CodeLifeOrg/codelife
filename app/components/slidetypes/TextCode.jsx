@@ -35,7 +35,8 @@ export default class TextCode extends Component {
 
     return (
       <div id="tc_container">
-        <div id="tc_text-container" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        { /* <div id="tc_text-container" dangerouslySetInnerHTML={{__html: htmlcontent1}} /> */ }
+        <div id="tc_text-container">{htmlcontent1}</div>
         <div id="tc_code-container">{ this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" showGutter={false} readOnly={true} value={htmlcontent2} setOptions={{behavioursEnabled: false}}/> : null }</div>
         <div className="clear" />
       </div>

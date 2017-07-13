@@ -1,0 +1,27 @@
+#container {
+  width: 1100px;
+}
+
+#acecontainer {
+  float: left;
+  width: 450px;
+}
+
+#rendercontainer {
+  float: right;
+  border: solid 1px black; 
+  width: 550px; 
+  height: 498px;
+}
+
+#checker {
+  clear: both;
+  width: 1100px;
+  border: 1px solid black; 
+  padding: 5px;
+}
+
+.button {
+  margin: 10px; 
+  font-size: 30px;
+}

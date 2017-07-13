@@ -8,10 +8,11 @@ import Quiz from "components/slidetypes/Quiz";
 import TextCode from "components/slidetypes/TextCode";
 import TextImage from "components/slidetypes/TextImage";
 import TextText from "components/slidetypes/TextText";
+import RenderCode from "components/slidetypes/RenderCode";
 import axios from "axios";
 import "./Slide.css";
 
-const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, Quiz};
+const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz};
 
 class Slide extends Component {
 

@@ -3,6 +3,11 @@ div#q_container {
   padding: 10px;
 }
 
+div#q_question-container {
+  white-space: pre-wrap;
+  width: 800px;
+}
+
 ul#q_choices li:hover{
   background-color: lightblue;
 }

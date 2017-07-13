@@ -1,0 +1,26 @@
+div#rc_container {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+div#rc_instructions {
+  margin-bottom: 20px;
+}
+
+div#rc_code-container {
+  padding: 10px;
+  width: 300px;
+  float: left;
+}
+
+div#rc_render-container {
+  padding: 10px;
+  width: 500px;
+  height: 500px;
+  float: right;
+}
+
+iframe#render-frame {
+  width: 490px;
+  height: 490px;
+}

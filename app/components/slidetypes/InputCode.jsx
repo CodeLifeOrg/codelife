@@ -69,7 +69,9 @@ export default class InputCode extends Component {
   }
 
   resetAnswer() {
-    this.setState({currentText: this.props.htmlcontent2}, this.renderText.bind(this));
+    let initText = "";
+    if (this.props.htmlcontent2) initText = this.props.htmlcontent2;
+    this.setState({currentText: initText}, this.renderText.bind(this));
   }
 
   renderText() {
@@ -84,7 +86,9 @@ export default class InputCode extends Component {
   }
 
   componentDidMount() {
-    this.setState({mounted: true, currentText: this.props.htmlcontent2}, this.renderText.bind(this));
+    let initText = "";
+    if (this.props.htmlcontent2) initText = this.props.htmlcontent2;
+    this.setState({mounted: true, currentText: initText}, this.renderText.bind(this));
   }
   
   render() {

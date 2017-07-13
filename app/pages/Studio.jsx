@@ -1,10 +1,8 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-import Dragger from "components/Dragger";
 import Nav from "components/Nav";
 import Snippets from "components/Snippets";
-import himalaya from "himalaya";
 import axios from "axios";
 import "./Studio.css";
 
@@ -45,6 +43,7 @@ class Studio extends Component {
     if (this.props.user && !this.state.gotUserFromDB) {
       this.setState({gotUserFromDB: true});
       axios.get(`api/projects/?user_id=${this.props.user.id}`).then(resp => {
+        // todo: catch when htmlcontent is null
         this.setState({currentText: resp.data[0].htmlcontent});
         this.renderText();
       });
@@ -109,42 +108,9 @@ class Studio extends Component {
     alert(`${validationText.info} ${validationText.error}`);
   }
 
-  submitAnswer() {
-    const jsonArray = himalaya.parse(this.getEditor().getValue());
-    let checkerText = "";
-    for (const r of this.state.rules) {
-      if (r.type === "CONTAINS") {
-        if (!this.containsTag(r.needle, jsonArray)) {
-          checkerText += `${r.error_msg}`;
-        }
-      }
-    }
-    if (checkerText === "") checkerText = "You got it right!";
-    this.setState({checkerResult: checkerText});
-  }
-
-  containsTag(needle, haystack) {
-    return this.tagCount(needle, haystack) > 0;
-  }
-
-  tagCount(needle, haystack) {
-    let count = 0;
-    for (const h of haystack) {
-      if (h.type === "Element") {
-        if (h.tagName === needle) {
-          count++;
-        } if (h.children !== null) {
-          count += this.tagCount(needle, h.children);
-        }
-      }
-    }
-    return count;
-  }
-
   render() {
     
     const {t} = this.props;
-    const showDnD = false;
 
     return (  
       <div>
@@ -157,21 +123,12 @@ class Studio extends Component {
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
-          <button className="button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
           </div>
-          { /*
-          <div id="rendercontainer" dangerouslySetInnerHTML={{__html: this.state.currentText}} />
-          */ }
           <iframe id="rendercontainer" ref="rc" />
         </div>
-        <div id="checker">
-          { this.state.checkerResult !== "" ? this.state.checkerResult : "Press Submit to check your answer"}
-        </div>
-        <div>
+        <div className="clear">
         <br/><br/>
           <Nav />
-          <br/><br/>
-          { showDnD ? <Dragger /> : null }
         </div>
       </div>
     );

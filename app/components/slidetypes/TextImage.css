@@ -7,6 +7,7 @@ div#ti_text-container {
   padding: 10px;
   width: 300px;
   float: left;
+  white-space: pre-wrap;
 }
 
 div#ti_img-container {

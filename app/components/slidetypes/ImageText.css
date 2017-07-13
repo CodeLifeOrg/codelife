@@ -7,6 +7,7 @@ div#it_text-container {
   padding: 10px;
   width: 300px;
   float: right;
+  white-space: pre-wrap;
 }
 
 div#it_img-container {

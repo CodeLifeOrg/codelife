@@ -10,7 +10,8 @@ export default class TextImage extends Component {
 
     return (
       <div id="ti_container">
-        <div id="ti_text-container" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        { /*<div id="ti_text-container" dangerouslySetInnerHTML={{__html: htmlcontent1}} /> */ }
+        <div id="ti_text-container">{htmlcontent1}</div>
         <div id="ti_img-container"><img src={`/slide_images/${id}.jpg`} /></div>
         <div className="clear" />
       </div>

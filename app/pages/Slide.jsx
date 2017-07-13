@@ -20,7 +20,8 @@ class Slide extends Component {
     this.state = {
       slides: [],
       currentSlide: null,
-      blocked: true
+      blocked: true,
+      lesson: null
     };
   }
 
@@ -52,14 +53,19 @@ class Slide extends Component {
       const cs = slideList.find(slide => slide.id === sid);
       const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       this.setState({currentSlide: cs, slides: slideList, blocked});
-    });  
+    });
+
+    axios.get(`/api/lessons?id=${lid}`).then(resp => {
+      this.setState({lesson: resp.data[0]});
+    });
+
   }
 
   render() {
     
     const {t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides} = this.state;
+    const {currentSlide, slides, lesson} = this.state;
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;
@@ -67,7 +73,7 @@ class Slide extends Component {
 
     let SlideComponent = null;
 
-    if (!currentSlide) return <h1>Loading...</h1>;
+    if (!currentSlide || !lesson) return <h1>Loading...</h1>;
     
     SlideComponent = compLookup[currentSlide.type];
     
@@ -84,7 +90,7 @@ class Slide extends Component {
         <div id="returncontainer">
           { !nextSlug ? <Link className="editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> : null }
           <br/><br/>
-          <Link className="link" to={`/lesson/${lid}`}>return to lesson {lid}</Link>
+          <Link className="link" to={`/lesson/${lid}`}>return to {lesson.name}</Link>
         </div>
         <Nav />
       </div>

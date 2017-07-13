@@ -26,7 +26,8 @@ class Editor extends Component {
     this.state = { 
       mounted: false, 
       gotUserFromDB: false, 
-      currentText: ""
+      currentText: "",
+      lesson: null
     };
   }
 
@@ -42,7 +43,9 @@ class Editor extends Component {
   }
 
   componentDidMount() {
-    this.setState({mounted: true});
+    axios.get(`/api/lessons?id=${this.props.params.lid}`).then(resp => {
+      this.setState({mounted: true, lesson: resp.data[0]});
+    });
   }
 
   getEditor() {
@@ -65,7 +68,8 @@ class Editor extends Component {
   }
 
   resetSnippet() {
-    console.log("would reset");
+    const {lesson} = this.state;
+    if (lesson) this.setState({currentText: lesson.initialcontent}, this.renderText.bind(this));
   }
 
   saveCodeToDB() {
@@ -104,6 +108,7 @@ class Editor extends Component {
     
     const {t} = this.props;
     const {lid} = this.props.params;
+    const {lesson} = this.state;
 
     if (!this.state.mounted) return <h1>Loading...</h1>;
 
@@ -116,7 +121,7 @@ class Editor extends Component {
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           <br/><br/>
-          <Link className="lesson-link" to={`/lesson/${lid}`}>Back to Lesson</Link>
+          <Link className="lesson-link" to={`/lesson/${lid}`}>Back to {lesson.name}</Link>
           </div>
           <iframe id="rendercontainer" ref="rc" />
         </div>

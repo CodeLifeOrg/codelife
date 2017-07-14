@@ -43,8 +43,7 @@ class Projects extends Component {
 
   handleClick(project) {
     this.props.onChoose(project);
-    // todo fix this, this is not a good way to cause a refresh
-    this.setState({currentProject: project, gotUserFromDB: false});
+    this.setState({gotUserFromDB: false, currentProject: project});
   }
 
   createNewProject() {
@@ -70,7 +69,7 @@ class Projects extends Component {
 
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
-    <li className={project === this.state.currentProject ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>{project.name}</li>);
+    <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>{project.name}</li>);
 
     const projectXs = projectArray.map(project =>
     <li className="x" key={project.id} onClick={() => this.deleteSnippet(project)}>[x]</li>);

@@ -68,8 +68,10 @@ class Projects extends Component {
     const {t} = this.props;
 
     const projectArray = this.state.projects;
+    projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
     const projectItems = projectArray.map(project =>
     <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>{project.name}</li>);
+    
 
     const projectXs = projectArray.map(project =>
     <li className="x" key={project.id} onClick={() => this.deleteSnippet(project)}>[x]</li>);

@@ -4,14 +4,14 @@ import {Link} from "react-router";
 import {connect} from "react-redux";
 import Nav from "components/Nav";
 import axios from "axios";
-import "./ShareSnippet.css"
+import "./Share.css";
 
-class ShareSnippet extends Component {
+class Share extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      snippet: null
+      content: null
     };
   }
 
@@ -19,24 +19,31 @@ class ShareSnippet extends Component {
     if (this.refs.rc) {
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
-      doc.write(this.state.snippet.studentcontent);
+      doc.write(this.state.content.studentcontent);
       doc.close();
     }
   }
 
   componentDidMount() {
-    const {snid} = this.props.params;
-    axios.get(`/api/snippets?id=${snid}`).then(resp => {
-      this.setState({snippet: resp.data[0]}, this.renderPage.bind(this));
-    });
+    const {type, id} = this.props.params;
+    if (type === "snippet") {
+      axios.get(`/api/snippets?id=${id}`).then(resp => {
+        this.setState({content: resp.data[0]}, this.renderPage.bind(this));
+      }); 
+    }
+    if (type === "project") {
+      axios.get(`/api/projects?id=${id}`).then(resp => {
+        this.setState({content: resp.data[0]}, this.renderPage.bind(this));
+      }); 
+    }
   }
 
   render() {
     
     const {t} = this.props;
-    const {snippet} = this.state;
+    const {content} = this.state;
 
-    if (!snippet) return <h1>Loading...</h1>;
+    if (!content) return <h1>Loading...</h1>;
 
     return (
       <div>
@@ -46,4 +53,4 @@ class ShareSnippet extends Component {
   }
 }
 
-export default translate()(ShareSnippet);
+export default translate()(Share);

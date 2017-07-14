@@ -129,7 +129,7 @@ class Editor extends Component {
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           <br/><br/>
-          { snippet ? <Link className="share-link" to={`/sharesnippet/${snippet.id}`}>Share this Snippet</Link> : null }
+          { snippet ? <Link className="share-link" to={`/share/snippet/${snippet.id}`}>Share this Snippet</Link> : null }
           <br/><br/>
           <Link className="lesson-link" to={`/lesson/${lid}`}>Back to {lesson.name}</Link>
           </div>

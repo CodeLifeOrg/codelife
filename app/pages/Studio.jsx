@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import Nav from "components/Nav";
 import Snippets from "components/Snippets";
 import Projects from "components/Projects";
@@ -115,6 +116,7 @@ class Studio extends Component {
   render() {
     
     const {t} = this.props;
+    const {currentProject} = this.state;
 
     return (  
       <div>
@@ -126,6 +128,8 @@ class Studio extends Component {
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
+          <br/><br/>
+          { currentProject ? <Link className="share-link" to={`/share/project/${currentProject.id}`}>Share this Project</Link> : null }
           </div>
           <iframe id="rendercontainer" ref="rc" />
         </div>

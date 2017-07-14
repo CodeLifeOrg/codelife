@@ -10,7 +10,7 @@ import Slide from "pages/Slide";
 import Glossary from "pages/Glossary";
 import Profile from "pages/Profile";
 import Studio from "pages/Studio";
-import ShareSnippet from "pages/ShareSnippet";
+import Share from "pages/Share";
 import {Login, SignUp} from "datawheel-canon";
 
 export default function RouteCreate() {
@@ -27,7 +27,7 @@ export default function RouteCreate() {
 
       <Route path="editor/:lid" component={Editor} />
 
-      <Route path="sharesnippet/:snid" component={ShareSnippet} />
+      <Route path="share/:type/:id" component={Share} />
 
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />

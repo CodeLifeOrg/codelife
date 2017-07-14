@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import Nav from "components/Nav";
 import Snippets from "components/Snippets";
+import Projects from "components/Projects";
 import axios from "axios";
 import "./Studio.css";
 
@@ -26,6 +27,7 @@ class Studio extends Component {
     this.state = { 
       mounted: false, 
       gotUserFromDB: false, 
+      currentProject: null,
       currentText: ""
     };
   }
@@ -33,10 +35,11 @@ class Studio extends Component {
   componentDidUpdate() {
     if (this.props.user && !this.state.gotUserFromDB) {
       this.setState({gotUserFromDB: true});
-      axios.get(`api/projects/?user_id=${this.props.user.id}`).then(resp => {
+      axios.get(`api/projects/?uid=${this.props.user.id}`).then(resp => {
         // todo: catch when htmlcontent is null
-        this.setState({currentText: resp.data[0].htmlcontent});
-        this.renderText();
+        let currentText = "";
+        if (resp.data.length > 0) currentText = resp.data[0].htmlcontent;
+        this.setState({currentText}, this.renderText.bind(this));
       });
     }
   }
@@ -49,14 +52,15 @@ class Studio extends Component {
     return this.editor.editor.editor;
   }
 
-  grabContents() {
-    return this.state.currentText;
+  handleCreateProject(project) {
+    // todo: save first, or ask user if they want to save before clearing
+    console.log("created");
+    this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
   }
 
   insertTextAtCursor(theText) {
     this.getEditor().insert(`\n ${theText} \n`);
-    this.setState({currentText: this.getEditor().getValue()});
-    this.renderText();
+    this.setState({currentText: this.getEditor().getValue()}, this.renderText.bind(this));
   }
 
   renderText() {
@@ -67,19 +71,24 @@ class Studio extends Component {
   }
 
   onChangeText(theText) {
-    this.setState({currentText: theText});
-    this.renderText();
+    this.setState({currentText: theText}, this.renderText.bind(this));
   }
 
-  onClickItem(snippet) {
+  onClickSnippet(snippet) {
     this.insertTextAtCursor(snippet.studentcontent);
   }
 
-  saveCodeToDB() {
-    const {id: user_id} = this.props.user;
-    const {currentText: htmlcontent} = this.state;
+  onClickProject(project) {
+    this.setState({currentText: project.studentcontent, currentProject: project}, this.renderText.bind(this));
+  }
 
-    axios.post("api/projects/save", {user_id, htmlcontent}).then (resp => {
+  saveCodeToDB() {
+    const {id: uid} = this.props.user;
+    const {currentText: studentcontent, currentProject} = this.state;
+    const id = currentProject.id;
+    const name = currentProject.name;
+
+    axios.post("api/projects/update", {id, name, uid, studentcontent}).then (resp => {
       resp.status === 200 ? alert("Saved to DB") : alert("Error");
     }); 
   }
@@ -102,7 +111,8 @@ class Studio extends Component {
     return (  
       <div>
         <h1>{ t("Studio") }</h1>
-        <Snippets onCreateSnippet={this.grabContents.bind(this)} onChoose={this.onClickItem.bind(this)}/>
+        <Snippets onChoose={this.onClickSnippet.bind(this)}/>
+        <Projects onCreateProject={this.handleCreateProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>
         <div id="container">
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }

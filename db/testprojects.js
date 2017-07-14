@@ -4,13 +4,12 @@ module.exports = function(sequelize, db) {
     {
       id: {
         type: db.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
-      user_id: {
-        type: db.CHAR,
-        foreignKey: true
-      },
-      htmlcontent: db.STRING
+      name: db.TEXT,
+      studentcontent: db.TEXT,
+      uid: db.TEXT
     }, 
     {
       freezeTableName: true,

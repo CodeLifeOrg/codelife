@@ -1,0 +1,41 @@
+li.project {
+  display: block; 
+  cursor: pointer; 
+  width: 150px;
+  margin-bottom: 5px;
+}
+
+input.projectName {
+  margin: 10px;
+}
+
+li.selected {
+  background-color: lightblue;
+}
+
+li.x {
+  cursor: pointer;
+}
+
+ul#x-list {
+  float: left;
+  list-style-type: none;
+}f
+
+ul#project-list {
+
+}
+
+div#project-container {
+  width: 250px;
+  border: solid 1px black;
+  margin: 10px;
+}
+
+div#project-title {
+  font-weight:bold;
+}
+
+div.clear {
+  clear: both;
+}

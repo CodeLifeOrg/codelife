@@ -42,11 +42,13 @@ class Snippets extends Component {
     }    
   }
 
-  */
+  
 
   handleChange(e) {
     this.setState({snippetName: e.target.value});
   }
+
+  */
 
   deleteSnippet(snippet) {
     axios.delete("/api/testsnippets/delete", {params: {id: snippet.id}}).then(resp => {
@@ -73,6 +75,7 @@ class Snippets extends Component {
 
     return (
       <div>
+        <div id="snippet-title">My Snippets</div>
         <div id="snippet-container">
           { /* <ul id="x-list">{snippetXs}</ul> */ }
           <ul id="snippet-list">{snippetItems}</ul>   

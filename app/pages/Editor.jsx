@@ -82,11 +82,18 @@ class Editor extends Component {
     const {id: uid} = this.props.user;
     const {currentText: studentcontent, snippet} = this.state;
     const {lid} = this.props.params;
+    const name = `My ${this.state.lesson.name} Snippet`;
 
     let endpoint = "/api/snippets/";
     snippet ? endpoint += "update" : endpoint += "new";
-    axios.post(endpoint, {uid, lid, studentcontent}).then(resp => {
-      resp.status === 200 ? alert("Saved to DB") : alert("Error");
+    axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
+      if (resp.status === 200) { 
+        if (!snippet) this.setState({snippet: resp.data});
+        alert("Saved to DB");
+      } 
+      else {
+        alert("Error");
+      }
     });
   }    
 
@@ -122,7 +129,7 @@ class Editor extends Component {
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           <br/><br/>
-          { snippet ? <Link className="share-link" to={`/sharesnippet/${this.state.snippet.id}`}>Share this Snippet</Link> : null }
+          { snippet ? <Link className="share-link" to={`/sharesnippet/${snippet.id}`}>Share this Snippet</Link> : null }
           <br/><br/>
           <Link className="lesson-link" to={`/lesson/${lid}`}>Back to {lesson.name}</Link>
           </div>

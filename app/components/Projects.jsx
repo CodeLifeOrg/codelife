@@ -29,7 +29,8 @@ class Projects extends Component {
     axios.delete("/api/projects/delete", {params: {id: project.id}}).then(resp => {
       if (resp.status === 200) {
         // todo fix this, this is not a good way to cause a refresh
-        this.setState({gotUserFromDB: false});
+        this.setState({gotUserFromDB: false, projectName: "", currentProject:null});
+        this.props.onDeleteProject();
       } 
       else {
         alert("Error");
@@ -72,7 +73,6 @@ class Projects extends Component {
     const projectItems = projectArray.map(project =>
     <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>{project.name}</li>);
     
-
     const projectXs = projectArray.map(project =>
     <li className="x" key={project.id} onClick={() => this.deleteSnippet(project)}>[x]</li>);
 
@@ -80,15 +80,14 @@ class Projects extends Component {
       <div>
         <div id="project-title">My Projects</div>
         <div id="project-container">
-          { /* <ul id="x-list">{snippetXs}</ul> */ }
+          <ul id="project-x-list">{projectXs}</ul>
           <ul id="project-list">{projectItems}</ul>   
+          <div className="clear" />
         </div>
-        <div className="clear">
         <form>
           <input className="projectName" type="text" value={this.state.projectName} onChange={this.handleChange.bind(this)} /> 
           <input type="button" value="Create New Project File" onClick={this.createNewProject.bind(this)} /> 
         </form>
-        </div>
       </div>
     );
   }

@@ -15,15 +15,16 @@ li.selected {
 
 li.x {
   cursor: pointer;
+  margin-bottom: 5px;
 }
 
-ul#x-list {
+ul#project-x-list {
   float: left;
   list-style-type: none;
-}f
+}
 
 ul#project-list {
-
+  float: right;
 }
 
 div#project-container {

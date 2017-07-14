@@ -54,8 +54,11 @@ class Studio extends Component {
 
   handleCreateProject(project) {
     // todo: save first, or ask user if they want to save before clearing
-    console.log("created");
     this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
+  }
+
+  handleDeleteProject() {
+    this.setState({currentProject: null, currentText: ""}, this.renderText.bind(this));
   }
 
   insertTextAtCursor(theText) {
@@ -85,12 +88,17 @@ class Studio extends Component {
   saveCodeToDB() {
     const {id: uid} = this.props.user;
     const {currentText: studentcontent, currentProject} = this.state;
-    const id = currentProject.id;
-    const name = currentProject.name;
 
-    axios.post("api/projects/update", {id, name, uid, studentcontent}).then (resp => {
-      resp.status === 200 ? alert("Saved to DB") : alert("Error");
-    }); 
+    if (currentProject) {
+      const id = currentProject.id;
+      const name = currentProject.name;
+      axios.post("api/projects/update", {id, name, uid, studentcontent}).then (resp => {
+        resp.status === 200 ? alert("Saved to DB") : alert("Error");
+      });
+    } 
+    else {
+      alert("open a new file first");
+    }
   }
 
   validateHTML() {
@@ -112,7 +120,7 @@ class Studio extends Component {
       <div>
         <h1>{ t("Studio") }</h1>
         <Snippets onChoose={this.onClickSnippet.bind(this)}/>
-        <Projects onCreateProject={this.handleCreateProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>
+        <Projects onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>
         <div id="container">
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }

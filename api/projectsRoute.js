@@ -22,4 +22,10 @@ module.exports = function(app) {
 
   });
 
+  app.delete("/api/projects/delete", (req, res) => {
+
+    db.testprojects.destroy({where: {id: req.query.id}}).then(u => res.json(u).end());
+
+  });
+
 };

@@ -1,9 +1,9 @@
+import axios from "axios";
+import {connect} from "react-redux";
+import {Link} from "react-router";
+import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {connect} from "react-redux";
-import Nav from "components/Nav";
-import {Link} from "react-router";
-import axios from "axios";
 import "./Editor.css";
 
 class AceWrapper extends Component {

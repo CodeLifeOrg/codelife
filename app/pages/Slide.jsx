@@ -1,7 +1,10 @@
-import React, {Component} from "react";
-import {translate} from "react-i18next";
+import axios from "axios";
+import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import Nav from "components/Nav";
+import React, {Component} from "react";
+import {translate} from "react-i18next";
+
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
 import Quiz from "components/slidetypes/Quiz";
@@ -9,8 +12,7 @@ import TextCode from "components/slidetypes/TextCode";
 import TextImage from "components/slidetypes/TextImage";
 import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
-import {connect} from "react-redux";
-import axios from "axios";
+
 import "./Slide.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz};
@@ -23,8 +25,8 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
-      lesson: null,
-      minilesson: null,
+      currentLesson: null,
+      minilessons: null,
       sentProgress: false
     };
   }
@@ -34,13 +36,31 @@ class Slide extends Component {
   }
 
   isLastMinilesson() {
-    const {minilesson} = this.state;
+    const {minilessons} = this.state;
     const {mlid} = this.props.params;
-    if (minilesson) {
-      const sorted = minilesson.sort((a, b) => b.ordering - a.ordering);
+    if (minilessons) {
+      const sorted = minilessons.sort((a, b) => b.ordering - a.ordering);
       return sorted[0].id === mlid;
     }
     return false;
+  }
+
+  saveProgress(uid, level) {
+    axios.get(`/api/userprogress?uid=${uid}&level=${level}`).then (resp => {
+      if (resp.status === 200) {
+        if (resp.data.length === 0) {
+          axios.post("/api/userprogress/save", {uid, level}).then (resp => {
+            resp.status === 200 ? console.log("posted progress") : console.log("error");
+          });
+        }
+        else {
+          console.log("level already beaten, not changing anything");
+        }
+      }
+      else {
+        console.log("failed to find progress");
+      }
+    });
   }
 
   componentDidUpdate() {
@@ -57,32 +77,8 @@ class Slide extends Component {
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
     if (user && isFinalSlide && !sentProgress) {
       this.setState({sentProgress: true});
-      axios.get(`/api/userprogress?uid=${user.id}&level=${mlid}`).then (resp => {
-        if (resp.status === 200) {
-          if (resp.data.length === 0) {
-            axios.post("/api/userprogress/save", {uid: user.id, level: mlid}).then (resp => {
-              resp.status === 200 ? console.log("posted progress") : console.log("error");
-            });
-          }
-          else {
-            console.log("level already beaten, not changing anything");
-          }
-        }
-        else {
-          console.log("failed to find progress");
-        }
-      });
-      if (this.isLastMinilesson()) {
-        axios.get(`/api/userprogress?uid=${user.id}&level=${lid}`).then (resp => {
-          if (resp.status === 200) {
-            if (resp.data.length === 0) {
-              axios.post("/api/userprogress/save", {uid: user.id, level: lid}).then (resp => {
-                resp.status === 200 ? console.log("posted level progress") : console.log("error");
-              });
-            }
-          }
-        });
-      }
+      this.saveProgress(user.id, mlid);
+      if (this.isLastMinilesson()) this.saveProgress(user.id, lid);
     }
   }
 
@@ -103,11 +99,11 @@ class Slide extends Component {
     });
 
     axios.get(`/api/lessons?id=${lid}`).then(resp => {
-      this.setState({lesson: resp.data[0]});
+      this.setState({currentLesson: resp.data[0]});
     });
 
     axios.get(`/api/minilessons?lid=${lid}`).then(resp => {
-      this.setState({minilesson: resp.data});
+      this.setState({minilessons: resp.data});
     });
 
   }
@@ -116,7 +112,7 @@ class Slide extends Component {
     
     const {t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, lesson} = this.state;
+    const {currentSlide, slides, currentLesson} = this.state;
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;
@@ -124,7 +120,7 @@ class Slide extends Component {
 
     let SlideComponent = null;
 
-    if (!currentSlide || !lesson) return <h1>Loading...</h1>;
+    if (!currentSlide || !currentLesson) return <h1>Loading...</h1>;
     
     SlideComponent = compLookup[currentSlide.type];
     
@@ -142,7 +138,7 @@ class Slide extends Component {
           
           { !nextSlug ? <Link className="editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> : null }
           <br/><br/>
-          <Link className="link" to={`/lesson/${lid}`}>return to {lesson.name}</Link>
+          <Link className="link" to={`/lesson/${lid}`}>return to {currentLesson.name}</Link>
         </div>
         <Nav />
       </div>

@@ -1,11 +1,13 @@
-import React, {Component} from "react";
-import {translate} from "react-i18next";
+import axios from "axios";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import Nav from "components/Nav";
+import React, {Component} from "react";
+import {translate} from "react-i18next";
+
 import Snippets from "components/Snippets";
 import Projects from "components/Projects";
-import axios from "axios";
+
 import "./Studio.css";
 
 class AceWrapper extends Component {

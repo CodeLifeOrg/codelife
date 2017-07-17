@@ -45,7 +45,14 @@ class Slide extends Component {
     return false;
   }
 
-  saveProgress(uid, level) {
+  saveProgress(level) {
+    
+    axios.post("/api/userprogress/save", {level}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
+
+    /*
+
     axios.get(`/api/userprogress?uid=${uid}&level=${level}`).then (resp => {
       if (resp.status === 200) {
         if (resp.data.length === 0) {
@@ -61,6 +68,8 @@ class Slide extends Component {
         console.log("failed to find progress");
       }
     });
+
+    */
   }
 
   componentDidUpdate() {
@@ -77,8 +86,8 @@ class Slide extends Component {
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
     if (user && isFinalSlide && !sentProgress) {
       this.setState({sentProgress: true});
-      this.saveProgress(user.id, mlid);
-      if (this.isLastMinilesson()) this.saveProgress(user.id, lid);
+      this.saveProgress(mlid);
+      if (this.isLastMinilesson()) this.saveProgress(lid);
     }
   }
 
@@ -86,8 +95,12 @@ class Slide extends Component {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     
-    axios.get(`/api/slides?mlid=${mlid}`).then(resp => {
-      const slideList = resp.data;
+    const sget = axios.get(`/api/slides?mlid=${mlid}`);
+    const lget = axios.get(`/api/lessons?id=${lid}`);
+    const mlget = axios.get(`/api/minilessons?lid=${lid}`);
+
+    Promise.all([sget, lget, mlget]).then(resp => {
+      const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
         sid = slideList[0].id;
@@ -95,17 +108,8 @@ class Slide extends Component {
       }
       const cs = slideList.find(slide => slide.id === sid);
       const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
-      this.setState({currentSlide: cs, slides: slideList, blocked});
+      this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
-
-    axios.get(`/api/lessons?id=${lid}`).then(resp => {
-      this.setState({currentLesson: resp.data[0]});
-    });
-
-    axios.get(`/api/minilessons?lid=${lid}`).then(resp => {
-      this.setState({minilessons: resp.data});
-    });
-
   }
 
   render() {

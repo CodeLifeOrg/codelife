@@ -1,7 +1,9 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
-import axios from "axios";
+import {Link} from "react-router";
+
 
 // Home Page
 // Currently Contains only the Nav element, for navigation.

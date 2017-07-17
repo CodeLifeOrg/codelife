@@ -16,7 +16,9 @@ module.exports = function(app) {
   });
 
   app.delete("/api/testsnippets/delete", (req, res) => {
-    db.testsnippets.destroy({where: {id: req.query.id}}).then(u => res.json(u).end());
+    db.testsnippets.destroy({where: {id: req.query.id}}).then(() => {
+      db.testsnippets.findAll({where: {uid: req.user.id}}).then(snippets => res.json(snippets).end());
+    });
   });
 
 };

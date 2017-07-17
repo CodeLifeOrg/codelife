@@ -4,13 +4,13 @@ module.exports = function(app) {
 
   app.get("/api/userprogress/", (req, res) => {
 
-    db.userprogress.findAll({where: req.query}).then(u => res.json(u).end());
+    db.userprogress.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
 
   });
 
   app.post("/api/userprogress/save", (req, res) => {
 
-    db.userprogress.create({uid: req.body.uid, level: req.body.level})
+    db.userprogress.findOrCreate({where: {uid: req.user.id, level: req.body.level}})
       .then(u => res.json(u).end());
 
   });

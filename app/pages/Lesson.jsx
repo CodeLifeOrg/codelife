@@ -11,34 +11,25 @@ class Lesson extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gotUserFromDB: false,
       lessons: [],
       userProgress: null
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.user && !this.state.gotUserFromDB) {
-      this.setState({gotUserFromDB: true});
-      axios.get(`/api/userprogress?uid=${this.props.user.id}`).then (resp => {
-        this.setState({userProgress: resp.data});
-      });
-    }
-  }
-
   componentDidMount() {
     axios.get("/api/lessons/").then(resp => {
-      this.setState({lessons: resp.data});
+      axios.get("/api/userprogress").then(prog => {
+        this.setState({userProgress: prog.data, lessons: resp.data});
+      });
     });
+   
   }
 
   render() {
     
     const {t} = this.props;
-    const {lessons, gotUserFromDB, userProgress} = this.state;
+    const {lessons, userProgress} = this.state;
     const {user} = this.props;
-
-    if (!gotUserFromDB) return <h1>Not Authorized</h1>;
 
     if (lessons === [] || !userProgress) return <h1>Loading...</h1>;
 

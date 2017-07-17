@@ -4,7 +4,7 @@ module.exports = function(app) {
 
   app.get("/api/projects", (req, res) => {
 
-    db.testprojects.findAll({where: req.query}).then(u => res.json(u).end());
+    db.testprojects.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
 
   });
 
@@ -17,15 +17,15 @@ module.exports = function(app) {
 
   app.post("/api/projects/new", (req, res) => {
 
-    db.testprojects.create({studentcontent: req.body.studentcontent, name: req.body.name, uid: req.body.uid})
+    db.testprojects.create({studentcontent: req.body.studentcontent, name: req.body.name, uid: req.user.uid})
       .then(u => res.json(u).end());
 
   });
 
   app.delete("/api/projects/delete", (req, res) => {
-
-    db.testprojects.destroy({where: {id: req.query.id}}).then(u => res.json(u).end());
-
+    db.testprojects.destroy({where: {id: req.query.id}}).then(() => {
+      db.testprojects.findAll({where: {uid: req.user.id}}).then(projects => res.json(projects).end());
+    });
   });
 
 };

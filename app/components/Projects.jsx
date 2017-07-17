@@ -9,31 +9,26 @@ class Projects extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gotUserFromDB: false,
       projects: [],
       projectName: "",
       currentProject: null
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.user && !this.state.gotUserFromDB) {
-      this.setState({gotUserFromDB: true});
-      axios.get(`/api/projects/?uid=${this.props.user.id}`).then(resp => {
-        if (resp.data.length > 0) this.setState({projects: resp.data});
-      });
-    }
+  componentDidMount() {
+    axios.get("/api/projects/").then(resp => {
+      if (resp.data.length > 0) this.setState({projects: resp.data});
+    });
   }
 
   deleteSnippet(project) {
     axios.delete("/api/projects/delete", {params: {id: project.id}}).then(resp => {
       if (resp.status === 200) {
-        // todo fix this, this is not a good way to cause a refresh
-        this.setState({gotUserFromDB: false, projectName: "", currentProject:null});
+        this.setState({projectName: "", currentProject: null, projects: resp.data}, this.forceUpdate.bind(this));
         this.props.onDeleteProject();
       } 
       else {
-        alert("Error");
+        console.log("Error");
       }
     });
   }
@@ -44,16 +39,15 @@ class Projects extends Component {
 
   handleClick(project) {
     this.props.onChoose(project);
-    this.setState({gotUserFromDB: false, currentProject: project});
+    this.setState({currentProject: project});
   }
 
   createNewProject() {
     const projectName = this.state.projectName;
     if (projectName !== "") {
-      axios.post("/api/projects/new", {name: projectName, uid: this.props.user.id, studentcontent: ""}).then (resp => {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {
-          // todo fix this, this is not a good way to cause a refresh
-          this.setState({gotUserFromDB: false, projectName: "", currentProject:resp.data});
+          this.setState({projectName: "", currentProject: resp.data}, this.forceUpdate.bind(this));
           this.props.onCreateProject(resp.data);
         } 
         else {

@@ -13,26 +13,22 @@ class Minilesson extends Component {
     this.state = { 
       minilessons: null,
       currentLesson: null,
-      userProgress: null,
-      gotUserFromDB: false
+      userProgress: null
     };
   }
 
   componentDidUpdate() {
-    if (this.props.user && !this.state.gotUserFromDB) {
-      this.setState({gotUserFromDB: true});
-      axios.get(`/api/userprogress?uid=${this.props.user.id}`).then (resp => {
-        this.setState({userProgress: resp.data});
-      });
-    }
+
   }
 
   componentDidMount() {
-    axios.get(`/api/minilessons?lid=${this.props.params.lid}`).then(resp => {
-      this.setState({minilessons: resp.data});
-    });
-    axios.get(`/api/lessons?id=${this.props.params.lid}`).then(resp => {
-      this.setState({currentLesson: resp.data[0]});
+    const {lid} = this.props.params;
+    const mlget = axios.get(`/api/minilessons?lid=${lid}`);
+    const lget = axios.get(`/api/lessons?id=${lid}`);
+    const uget = axios.get("/api/userprogress");
+
+    Promise.all([mlget, lget, uget]).then(resp => {
+      this.setState({minilessons: resp[0].data, currentLesson: resp[1].data[0], userProgress: resp[2].data});
     });
   }
 

@@ -9,6 +9,7 @@ import TextCode from "components/slidetypes/TextCode";
 import TextImage from "components/slidetypes/TextImage";
 import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
+import {connect} from "react-redux";
 import axios from "axios";
 import "./Slide.css";
 
@@ -22,7 +23,8 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
-      lesson: null
+      lesson: null,
+      sentProgress: false
     };
   }
 
@@ -31,12 +33,40 @@ class Slide extends Component {
   }
 
   componentDidUpdate() {
-    const {sid} = this.props.params;
-    const {currentSlide, slides} = this.state;
+    const {mlid, sid} = this.props.params;
+    const {user} = this.props;
+    const {currentSlide, slides, sentProgress} = this.state;
+
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
       const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       this.setState({currentSlide: cs, blocked});
+    }
+    
+    const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
+    if (user && isFinalSlide && !sentProgress) {
+      this.setState({sentProgress: true});
+      axios.get(`/api/userprogress?uid=${user.id}&level=${mlid}`).then (resp => {
+        if (resp.status === 200) {
+          console.log("userprogress object retrieved");
+          if (resp.data.length === 0) {
+            axios.post("/api/userprogress/save", {uid: user.id, level: mlid}).then (resp => {
+              if (resp.status === 200) {
+                console.log("posted new progress to db");
+              }
+              else {
+                console.log("failed to post new progress");
+              }
+            });
+          }
+          else {
+            console.log("level already beaten, not changing anything");
+          }
+        }
+        else {
+          console.log("failed to find progress");
+        }
+      });
     }
   }
 
@@ -89,6 +119,7 @@ class Slide extends Component {
           { nextSlug && !this.state.blocked ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
         </div>
         <div id="returncontainer">
+          
           { !nextSlug ? <Link className="editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> : null }
           <br/><br/>
           <Link className="link" to={`/lesson/${lid}`}>return to {lesson.name}</Link>
@@ -99,5 +130,9 @@ class Slide extends Component {
   }
 }
 
-export default translate()(Slide);
+Slide = connect(state => ({
+  user: state.auth.user
+}))(Slide);
+Slide = translate()(Slide);
+export default Slide;
 

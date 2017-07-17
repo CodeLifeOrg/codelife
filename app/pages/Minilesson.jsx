@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import Nav from "components/Nav";
+import {connect} from "react-redux";
 import axios from "axios";
+import "./Minilesson.css";
 
 class Minilesson extends Component {
 
@@ -10,8 +12,22 @@ class Minilesson extends Component {
     super(props);
     this.state = { 
       minilessons: [],
-      lesson: null
+      lesson: null,
+      userProgress: null,
+      gotUserFromDB: false
     };
+  }
+
+  componentDidUpdate() {
+    const {user} = this.props;
+    const {gotUserFromDB} = this.state;
+
+    if (user && !gotUserFromDB) {
+      this.setState({gotUserFromDB: true});
+      axios.get(`/api/userprogress?uid=${user.id}`).then (resp => {
+        this.setState({userProgress: resp.data});
+      });
+    }
   }
 
   componentDidMount() {
@@ -27,12 +43,12 @@ class Minilesson extends Component {
     
     const {t} = this.props;
     const {lid} = this.props.params;
-    const {minilessons, lesson} = this.state;
+    const {minilessons, lesson, userProgress} = this.state;
 
-    if (!lesson || minilessons === []) return <h1>Loading...</h1>;
+    if (!lesson || minilessons === [] || !userProgress) return <h1>Loading...</h1>;
 
     const minilessonItems = minilessons.map(minilesson => 
-      <li key={minilesson.id}><Link className="link" to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
+      <li key={minilesson.id}><Link className={userProgress.find(up => up.level === minilesson.id) !== undefined ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
 
     return (
       <div>
@@ -46,4 +62,8 @@ class Minilesson extends Component {
   }
 }
 
-export default translate()(Minilesson);
+Minilesson = connect(state => ({
+  user: state.auth.user
+}))(Minilesson);
+Minilesson = translate()(Minilesson);
+export default Minilesson;

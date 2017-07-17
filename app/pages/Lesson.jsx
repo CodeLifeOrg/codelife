@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import {connect} from "react-redux";
 import Nav from "components/Nav";
 import axios from "axios";
+import "./Lesson.css";
 
 class Lesson extends Component {
 
@@ -11,13 +12,17 @@ class Lesson extends Component {
     super(props);
     this.state = {
       gotUserFromDB: false,
-      lessons: []
+      lessons: [],
+      userProgress: null
     };
   }
 
   componentDidUpdate() {
     if (this.props.user && !this.state.gotUserFromDB) {
       this.setState({gotUserFromDB: true});
+      axios.get(`/api/userprogress?uid=${this.props.user.id}`).then (resp => {
+        this.setState({userProgress: resp.data});
+      });
     }
   }
 
@@ -30,15 +35,15 @@ class Lesson extends Component {
   render() {
     
     const {t} = this.props;
-    const {lessons, gotUserFromDB} = this.state;
+    const {lessons, gotUserFromDB, userProgress} = this.state;
     const {user} = this.props;
 
     if (!gotUserFromDB) return <h1>Not Authorized</h1>;
 
-    if (lessons === []) return <h1>Loading...</h1>;
+    if (lessons === [] || !userProgress) return <h1>Loading...</h1>;
 
     const lessonItems = lessons.map(lesson => 
-      <li key={lesson.id}><Link className="link" to={`/lesson/${lesson.id}`}>{ lesson.name }</Link></li>);
+      <li key={lesson.id}><Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"} to={`/lesson/${lesson.id}`}>{ lesson.name }</Link></li>);
 
     return (
       <div>

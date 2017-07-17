@@ -24,6 +24,7 @@ class Slide extends Component {
       currentSlide: null,
       blocked: true,
       lesson: null,
+      minilesson: null,
       sentProgress: false
     };
   }
@@ -32,8 +33,18 @@ class Slide extends Component {
     this.setState({blocked: false});
   }
 
+  isLastMinilesson() {
+    const {minilesson} = this.state;
+    const {mlid} = this.props.params;
+    if (minilesson) {
+      const sorted = minilesson.sort((a, b) => b.ordering - a.ordering);
+      return sorted[0].id === mlid;
+    }
+    return false;
+  }
+
   componentDidUpdate() {
-    const {mlid, sid} = this.props.params;
+    const {lid, mlid, sid} = this.props.params;
     const {user} = this.props;
     const {currentSlide, slides, sentProgress} = this.state;
 
@@ -42,21 +53,15 @@ class Slide extends Component {
       const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       this.setState({currentSlide: cs, blocked});
     }
-    
+
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
     if (user && isFinalSlide && !sentProgress) {
       this.setState({sentProgress: true});
       axios.get(`/api/userprogress?uid=${user.id}&level=${mlid}`).then (resp => {
         if (resp.status === 200) {
-          console.log("userprogress object retrieved");
           if (resp.data.length === 0) {
             axios.post("/api/userprogress/save", {uid: user.id, level: mlid}).then (resp => {
-              if (resp.status === 200) {
-                console.log("posted new progress to db");
-              }
-              else {
-                console.log("failed to post new progress");
-              }
+              resp.status === 200 ? console.log("posted progress") : console.log("error");
             });
           }
           else {
@@ -67,6 +72,17 @@ class Slide extends Component {
           console.log("failed to find progress");
         }
       });
+      if (this.isLastMinilesson()) {
+        axios.get(`/api/userprogress?uid=${user.id}&level=${lid}`).then (resp => {
+          if (resp.status === 200) {
+            if (resp.data.length === 0) {
+              axios.post("/api/userprogress/save", {uid: user.id, level: lid}).then (resp => {
+                resp.status === 200 ? console.log("posted level progress") : console.log("error");
+              });
+            }
+          }
+        });
+      }
     }
   }
 
@@ -88,6 +104,10 @@ class Slide extends Component {
 
     axios.get(`/api/lessons?id=${lid}`).then(resp => {
       this.setState({lesson: resp.data[0]});
+    });
+
+    axios.get(`/api/minilessons?lid=${lid}`).then(resp => {
+      this.setState({minilesson: resp.data});
     });
 
   }

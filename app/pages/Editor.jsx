@@ -37,8 +37,9 @@ class Editor extends Component {
       const {id} = this.props.user;
       const {lid} = this.props.params;
       this.setState({gotUserFromDB: true});
-      axios.get(`/api/snippets/?uid=${id}&lid=${lid}`).then(resp => {
+      axios.get(`/api/snippets/bylid?lid=${lid}`).then(resp => {
         if (resp.data.length > 0) {
+          console.log(resp.data);
           this.setState({snippet: resp.data[0], currentText: resp.data[0].studentcontent}, this.renderText.bind(this));
         } 
         else {

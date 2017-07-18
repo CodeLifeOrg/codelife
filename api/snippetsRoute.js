@@ -8,6 +8,12 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/snippets/bylid", (req, res) => {
+
+    db.snippets.findAll({where: {uid: req.user.id, lid: req.query.lid}}).then(u => res.json(u).end());
+
+  });
+
   // todo: maybe change these into a single "upsert"
 
   app.post("/api/snippets/update", (req, res) => {

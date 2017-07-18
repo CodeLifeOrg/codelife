@@ -1,6 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link} from "react-router";
+import {Link, browserHistory} from "react-router";
 import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
@@ -77,6 +77,7 @@ class Studio extends Component {
   onClickProject(project) {
     axios.get(`/api/projects/byid?id=${project.id}`).then(resp => {
       this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0]}, this.renderText.bind(this));
+      browserHistory.push(`/studio/${this.props.user.username}/${resp.data[0].name}`);
     });
   }
 
@@ -87,7 +88,7 @@ class Studio extends Component {
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
-      axios.post("api/projects/update", {id, name, uid, studentcontent}).then (resp => {
+      axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
           console.log("saved");
         }
@@ -113,9 +114,10 @@ class Studio extends Component {
     
     const {t} = this.props;
     const {currentProject} = this.state;
+    const {id} = this.props.params;
 
     const snippetRef = <Snippets onChoose={this.onClickSnippet.bind(this)}/>;
-    const projectRef = <Projects onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>;
+    const projectRef = <Projects projectToLoad={id} onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>;
 
     return (  
       <div>

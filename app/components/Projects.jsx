@@ -17,7 +17,17 @@ class Projects extends Component {
 
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
-      if (resp.data.length > 0) this.setState({projects: resp.data});
+      const projects = resp.data;
+      // todo: properly load the thing when given a permalink
+      /*
+      let {currentProject} = this.state;
+      console.log(projects);
+      if (this.props.projectToLoad) {
+        currentProject = projects.find(p => p.name = this.props.projectToLoad);
+        this.props.onChoose(currentProject);
+        this.setState({currentProject});
+      }*/
+      this.setState({projects});
     });
   }
 

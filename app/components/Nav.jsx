@@ -23,7 +23,7 @@ class Nav extends Component {
         <Link className="link" to="/lesson">{ t("Overworld") }</Link>
         <Link className="link" to="/glossary">{ t("Glossary") }</Link>
         <Link className="link" to="/profile">{ t("Profile") }</Link>
-        <Link className="link" to="/studio">{ t("Studio") }</Link>
+        {user ? <Link className="link" to={`/studio/${user.username}`}>{ t("Studio") }</Link> : null }
       </div>
     );
   }

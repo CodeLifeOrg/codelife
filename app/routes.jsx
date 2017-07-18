@@ -31,7 +31,7 @@ export default function RouteCreate() {
 
       <Route path="glossary" component={Glossary} />
       <Route path="profile" component={Profile} />
-      <Route path="studio" component={Studio} />
+      <Route path="studio/:user(/:id)" component={Studio} />
     </Route>
   );
 }

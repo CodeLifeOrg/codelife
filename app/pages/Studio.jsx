@@ -84,8 +84,13 @@ class Studio extends Component {
     this.insertTextAtCursor(snippet.studentcontent);
   }
 
+  // todo: i'm loading studentcontent twice.  once when we instantiate projects, and then again
+  // when you click a project.  I did this so that clicks would respect new writes, but i should
+  // find a way to only ever ask for studentcontent once, on-demand only.
   onClickProject(project) {
-    this.setState({currentText: project.studentcontent, currentProject: project}, this.renderText.bind(this));
+    axios.get(`/api/projects/byid?id=${project.id}`).then(resp => {
+      this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0]}, this.renderText.bind(this));
+    });
   }
 
   saveCodeToDB() {
@@ -96,7 +101,9 @@ class Studio extends Component {
       const id = currentProject.id;
       const name = currentProject.name;
       axios.post("api/projects/update", {id, name, uid, studentcontent}).then (resp => {
-        resp.status === 200 ? alert("Saved to DB") : alert("Error");
+        if (resp.status === 200) {
+          console.log("saved");
+        }
       });
     } 
     else {
@@ -120,11 +127,14 @@ class Studio extends Component {
     const {t} = this.props;
     const {currentProject} = this.state;
 
+    const snippetRef = <Snippets onChoose={this.onClickSnippet.bind(this)}/>;
+    const projectRef = <Projects onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>;
+
     return (  
       <div>
         <h1>{ t("Studio") }</h1>
-        <Snippets onChoose={this.onClickSnippet.bind(this)}/>
-        <Projects onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>
+        {snippetRef}
+        {projectRef}
         <div id="container">
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }

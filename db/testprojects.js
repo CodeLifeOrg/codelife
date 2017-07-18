@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("testprojects",
+  return sequelize.define("projects",
     {
       id: {
         type: db.INTEGER,

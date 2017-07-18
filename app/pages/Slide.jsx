@@ -12,10 +12,11 @@ import TextCode from "components/slidetypes/TextCode";
 import TextImage from "components/slidetypes/TextImage";
 import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
+import CheatSheet from "components/slidetypes/CheatSheet";
 
 import "./Slide.css";
 
-const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz};
+const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
 
 class Slide extends Component {
 
@@ -46,30 +47,10 @@ class Slide extends Component {
   }
 
   saveProgress(level) {
-    
     axios.post("/api/userprogress/save", {level}).then(resp => {
+      console.log(resp);
       resp.status === 200 ? console.log("success") : console.log("error");
     });
-
-    /*
-
-    axios.get(`/api/userprogress?uid=${uid}&level=${level}`).then (resp => {
-      if (resp.status === 200) {
-        if (resp.data.length === 0) {
-          axios.post("/api/userprogress/save", {uid, level}).then (resp => {
-            resp.status === 200 ? console.log("posted progress") : console.log("error");
-          });
-        }
-        else {
-          console.log("level already beaten, not changing anything");
-        }
-      }
-      else {
-        console.log("failed to find progress");
-      }
-    });
-
-    */
   }
 
   componentDidUpdate() {

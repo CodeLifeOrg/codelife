@@ -37,10 +37,6 @@ class Projects extends Component {
     this.setState({projectName: e.target.value});
   }
 
-  onCodeSave() {
-    console.log("got here");
-  }
-
   handleClick(project) {
     this.props.onChoose(project);
     this.setState({currentProject: project});
@@ -52,7 +48,7 @@ class Projects extends Component {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {
           this.setState({projectName: "", currentProject: resp.data.currentProject, projects: resp.data.projects}, this.forceUpdate.bind(this));
-          this.props.onCreateProject(resp.data);
+          this.props.onCreateProject(resp.data.currentProject);
         } 
         else {
           alert("Error");

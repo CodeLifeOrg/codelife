@@ -29,22 +29,9 @@ class Studio extends Component {
     super(props);
     this.state = { 
       mounted: false, 
-      gotUserFromDB: false, 
       currentProject: null,
       currentText: ""
     };
-  }
-
-  componentDidUpdate() {
-    if (this.props.user && !this.state.gotUserFromDB) {
-      this.setState({gotUserFromDB: true});
-      axios.get(`api/projects/?uid=${this.props.user.id}`).then(resp => {
-        // todo: catch when htmlcontent is null
-        let currentText = "";
-        if (resp.data.length > 0) currentText = resp.data[0].htmlcontent;
-        this.setState({currentText}, this.renderText.bind(this));
-      });
-    }
   }
 
   componentDidMount() {

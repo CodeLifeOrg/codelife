@@ -1,11 +1,19 @@
 import pandas as pd
 from sqlalchemy import create_engine
+import os
 
 lessons_url = 'https://docs.google.com/spreadsheets/d/19inRDZny2tFUgGoI5e94MT5dBUtnGx5eTlL2TXeKyA4/pub?output=csv&gid=0&chrome=false'
 minilessons_url = 'https://docs.google.com/spreadsheets/d/19inRDZny2tFUgGoI5e94MT5dBUtnGx5eTlL2TXeKyA4/pub?output=csv&gid=1777054873&chrome=false'
 slides_url = 'https://docs.google.com/spreadsheets/d/19inRDZny2tFUgGoI5e94MT5dBUtnGx5eTlL2TXeKyA4/pub?output=csv&gid=1392839100&chrome=false'
 
-engine = create_engine('postgresql://localhost/jimmy')
+name = os.environ.get('CANON_DB_NAME')
+pw = os.environ.get('CANON_DB_PW')
+user = os.environ.get('CANON_DB_USER')
+host = os.environ.get('CANON_DB_HOST')
+
+link = 'postgresql://' + user + ":" + pw + "@" + host + "/" + name
+
+engine = create_engine(link)
 
 lessons_df = pd.read_csv(lessons_url)
 lessons_df.to_sql('lessons', con=engine, if_exists='replace')

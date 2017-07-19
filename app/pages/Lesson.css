@@ -5,3 +5,8 @@
 .completed{
   color: green;
 }
+
+.snippet-link {
+  color: blue;
+  cursor: pointer;
+}

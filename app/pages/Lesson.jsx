@@ -12,29 +12,49 @@ class Lesson extends Component {
     super(props);
     this.state = {
       lessons: [],
+      snippets: [],
       userProgress: null
     };
   }
 
   componentDidMount() {
-    axios.get("/api/lessons/").then(resp => {
-      axios.get("/api/userprogress").then(prog => {
-        this.setState({userProgress: prog.data, lessons: resp.data});
-      });
+    const lget = axios.get("/api/lessons/");
+    const upget = axios.get("/api/userprogress");
+    const sget = axios.get("/api/snippets");
+
+    Promise.all([lget, upget, sget]).then(resp => {
+      this.setState({lessons: resp[0].data, userProgress: resp[1].data, snippets: resp[2].data});
     });
-   
+  }
+
+  displaySnippet(snippet) {
+    alert(`Make a modal box with: \n\n${snippet.studentcontent}`);
   }
 
   render() {
     
     const {t} = this.props;
-    const {lessons, userProgress} = this.state;
+    const {lessons, snippets, userProgress} = this.state;
     const {user} = this.props;
 
     if (lessons === [] || !userProgress) return <h1>Loading...</h1>;
 
-    const lessonItems = lessons.map(lesson => 
-      <li key={lesson.id}><Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"} to={`/lesson/${lesson.id}`}>{ lesson.name }</Link></li>);
+    // clone the array so we don't mess with state
+    const lessonArray = lessons.slice(0);
+
+    for (const l of lessonArray) {
+      l.snippet = snippets.find(s => s.lid === l.id);
+    }
+
+    const lessonItems = lessonArray.map(lesson => 
+      <li key={lesson.id}>
+        <Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"} 
+              to={`/lesson/${lesson.id}`}>{ lesson.name } 
+        </Link>
+        <ul>
+          <li><Link className="snippet-link" onClick={this.displaySnippet.bind(this, lesson.snippet)}>{`My ${lesson.name} Snippet`}</Link></li>
+        </ul>
+      </li>);
 
     return (
       <div>

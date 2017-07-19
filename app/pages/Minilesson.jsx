@@ -17,10 +17,6 @@ class Minilesson extends Component {
     };
   }
 
-  componentDidUpdate() {
-
-  }
-
   componentDidMount() {
     const {lid} = this.props.params;
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);

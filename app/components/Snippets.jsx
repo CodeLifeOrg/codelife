@@ -25,6 +25,8 @@ class Snippets extends Component {
     const {t, onChoose} = this.props;
 
     const snippetArray = this.state.snippets;
+    // todo: this sorts by id, which is not a guarantee of proper order.  need to do by ordered lessons
+    snippetArray.sort((a, b) => a.id - b.id);
     const snippetItems = snippetArray.map(snippet =>
     <li className="snippet" key={snippet.id} onClick={() => onChoose(snippet)}>{snippet.name}</li>);
 

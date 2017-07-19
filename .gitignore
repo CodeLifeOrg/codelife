@@ -57,6 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
-# server.js
-static/assets/server.js
-
+# there are generated files from canon
+static/assets/

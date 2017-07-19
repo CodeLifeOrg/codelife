@@ -2,7 +2,6 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import Nav from "components/Nav";
-import {Link} from "react-router";
 
 
 // Home Page
@@ -12,7 +11,7 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       introduction: null
     };
   }
@@ -24,7 +23,7 @@ class Home extends Component {
   }
 
   render() {
-    
+
     const {t} = this.props;
     const {introduction} = this.state;
 

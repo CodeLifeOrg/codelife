@@ -13,7 +13,14 @@ module.exports = function(sequelize, db) {
       streak: db.INTEGER,
       dob: db.DATE,
       school: db.STRING,
-      location: db.STRING,
+      sid: {
+        type: db.INTEGER,
+        references: {model: "schools", key: "id"}
+      },
+      gid: {
+        type: db.STRING,
+        references: {model: "geos", key: "id"}
+      },
       cpf: db.STRING,
       survey: db.JSONB,
       getInvolved: db.JSONB

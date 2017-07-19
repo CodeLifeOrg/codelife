@@ -31,15 +31,20 @@ class Projects extends Component {
   }
 
   deleteSnippet(project) {
-    axios.delete("/api/projects/delete", {params: {id: project.id}}).then(resp => {
-      if (resp.status === 200) {
-        this.setState({projectName: "", currentProject: null, projects: resp.data}, this.forceUpdate.bind(this));
-        this.props.onDeleteProject();
-      } 
-      else {
-        console.log("Error");
-      }
-    });
+    if (confirm("Are you sure you want to delete this project?")) {
+      axios.delete("/api/projects/delete", {params: {id: project.id}}).then(resp => {
+        if (resp.status === 200) {
+          this.setState({projectName: "", currentProject: null, projects: resp.data}, this.forceUpdate.bind(this));
+          this.props.onDeleteProject();
+        } 
+        else {
+          console.log("Error");
+        }
+      });
+    } 
+    else {
+      // do nothing
+    }
   }
 
   handleChange(e) {
@@ -47,7 +52,7 @@ class Projects extends Component {
   }
 
   handleClick(project) {
-    if (this.props.onChoose(project)) this.setState({currentProject: project});
+    if (this.props.onClickProject(project)) this.setState({currentProject: project});
   }
 
   createNewProject() {

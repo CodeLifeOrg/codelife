@@ -43,12 +43,12 @@ class Studio extends Component {
     return this.editor.editor.editor;
   }
 
-  handleCreateProject(project) {
+  onCreateProject(project) {
     // todo: save first, or ask user if they want to save before clearing
     this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
   }
 
-  handleDeleteProject() {
+  onDeleteProject() {
     this.setState({currentProject: null, currentText: ""}, this.renderText.bind(this));
   }
 
@@ -72,7 +72,7 @@ class Studio extends Component {
     this.insertTextAtCursor(snippet.studentcontent);
   }
 
-  onOpenProject(pid) {
+  openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0], changesMade: false}, this.renderText.bind(this));
       browserHistory.push(`/studio/${this.props.user.username}/${resp.data[0].name}`);
@@ -86,7 +86,7 @@ class Studio extends Component {
     if (this.state.currentProject) { 
       if (this.state.changesMade) {
         if (confirm("Discard changes and open a new file?")) {
-          this.onOpenProject(project.id);
+          this.openProject(project.id);
           return true;
         } 
         else {
@@ -94,12 +94,12 @@ class Studio extends Component {
         }
       }
       else {
-        this.onOpenProject(project.id);
+        this.openProject(project.id);
         return true;
       }
     }
     else {
-      this.onOpenProject(project.id);
+      this.openProject(project.id);
       return true;
     }
   }
@@ -140,7 +140,11 @@ class Studio extends Component {
     const {id} = this.props.params;
 
     const snippetRef = <Snippets onChoose={this.onClickSnippet.bind(this)}/>;
-    const projectRef = <Projects projectToLoad={id} onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} openProject={this.onOpenProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>;
+    const projectRef = <Projects  projectToLoad={id} 
+                                  onCreateProject={this.onCreateProject.bind(this)} 
+                                  onDeleteProject={this.onDeleteProject.bind(this)} 
+                                  openProject={this.openProject.bind(this)} 
+                                  onClickProject={this.onClickProject.bind(this)}/>;
 
     return (  
       <div>

@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("snippets",
+  var s = sequelize.define("snippets",
     {
       id: {
         type: db.INTEGER,
@@ -19,5 +19,7 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  return s;
 
 };

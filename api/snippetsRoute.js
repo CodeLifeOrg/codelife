@@ -36,7 +36,7 @@ module.exports = function(app) {
 
   });
 
-  app.get("/api/snippets/othersbylesson", (req, res) => {
+  app.get("/api/snippets/othersbylid", (req, res) => {
 
     db.snippets.findAll({where: {uid: {$not: req.user.id}, lid: req.query.lid}}).then(u => res.json(u).end());
 

@@ -55,9 +55,8 @@ class Projects extends Component {
     if (this.props.onClickProject(project)) this.setState({currentProject: project});
   }
 
-  createNewProject() {
-    const projectName = this.state.projectName;
-    if (projectName !== "") {
+  createNewProject(projectName) {
+    if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {
           this.setState({projectName: "", currentProject: resp.data.currentProject, projects: resp.data.projects}, this.forceUpdate.bind(this));
@@ -67,8 +66,26 @@ class Projects extends Component {
           alert("Error");
         }
       }); 
+    } 
+    else {
+      alert("File cannot be in use or blank");
     }
+  }
 
+  clickNewProject() {
+    const projectName = this.state.projectName;
+    // todo: maybe check with db instead of local state, should check back on this
+    if (this.state.changesMade) {
+      if (confirm("Abandon changes and open new file?")) {
+        this.createNewProject(projectName);
+      }
+      else {
+        // do nothing
+      }
+    }
+    else {
+      this.createNewProject(projectName);
+    }
   }
 
   render() {
@@ -93,7 +110,7 @@ class Projects extends Component {
         </div>
         <form>
           <input className="projectName" type="text" value={this.state.projectName} onChange={this.handleChange.bind(this)} /> 
-          <input type="button" value="Create New Project File" onClick={this.createNewProject.bind(this)} /> 
+          <input type="button" value="Create New Project File" onClick={this.clickNewProject.bind(this)} /> 
         </form>
       </div>
     );

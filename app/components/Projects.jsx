@@ -21,7 +21,7 @@ class Projects extends Component {
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
-        this.setState({currentProject, projects}, this.props.onChoose(currentProject));
+        this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
       } 
       else {
         this.setState({projects});  
@@ -47,8 +47,7 @@ class Projects extends Component {
   }
 
   handleClick(project) {
-    this.props.onChoose(project);
-    this.setState({currentProject: project});
+    if (this.props.onChoose(project)) this.setState({currentProject: project});
   }
 
   createNewProject() {

@@ -30,7 +30,8 @@ class Studio extends Component {
     this.state = { 
       mounted: false, 
       currentProject: null,
-      currentText: ""
+      currentText: "",
+      changesMade: false
     };
   }
 
@@ -64,21 +65,43 @@ class Studio extends Component {
   }
 
   onChangeText(theText) {
-    this.setState({currentText: theText}, this.renderText.bind(this));
+    this.setState({currentText: theText, changesMade: true}, this.renderText.bind(this));
   }
 
   onClickSnippet(snippet) {
     this.insertTextAtCursor(snippet.studentcontent);
   }
 
+  onOpenProject(pid) {
+    axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
+      this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0], changesMade: false}, this.renderText.bind(this));
+      browserHistory.push(`/studio/${this.props.user.username}/${resp.data[0].name}`);
+    }); 
+  }
+
   // todo: i'm loading studentcontent twice.  once when we instantiate projects, and then again
   // when you click a project.  I did this so that clicks would respect new writes, but i should
   // find a way to only ever ask for studentcontent once, on-demand only.
-  onClickProject(project) {
-    axios.get(`/api/projects/byid?id=${project.id}`).then(resp => {
-      this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0]}, this.renderText.bind(this));
-      browserHistory.push(`/studio/${this.props.user.username}/${resp.data[0].name}`);
-    });
+  onClickProject(project) {   
+    if (this.state.currentProject) { 
+      if (this.state.changesMade) {
+        if (confirm("Discard changes and open a new file?")) {
+          this.onOpenProject(project.id);
+          return true;
+        } 
+        else {
+          return false;
+        }
+      }
+      else {
+        this.onOpenProject(project.id);
+        return true;
+      }
+    }
+    else {
+      this.onOpenProject(project.id);
+      return true;
+    }
   }
 
   saveCodeToDB() {
@@ -90,7 +113,7 @@ class Studio extends Component {
       const name = currentProject.name;
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
-          console.log("saved");
+          this.setState({changesMade: false});
         }
       });
     } 
@@ -117,7 +140,7 @@ class Studio extends Component {
     const {id} = this.props.params;
 
     const snippetRef = <Snippets onChoose={this.onClickSnippet.bind(this)}/>;
-    const projectRef = <Projects projectToLoad={id} onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>;
+    const projectRef = <Projects projectToLoad={id} onCreateProject={this.handleCreateProject.bind(this)} onDeleteProject={this.handleDeleteProject.bind(this)} openProject={this.onOpenProject.bind(this)} onChoose={this.onClickProject.bind(this)}/>;
 
     return (  
       <div>

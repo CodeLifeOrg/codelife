@@ -44,7 +44,6 @@ class Studio extends Component {
   }
 
   onCreateProject(project) {
-    // todo: save first, or ask user if they want to save before clearing
     this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
   }
 
@@ -139,7 +138,7 @@ class Studio extends Component {
     const {currentProject} = this.state;
     const {id} = this.props.params;
 
-    const snippetRef = <Snippets onChoose={this.onClickSnippet.bind(this)}/>;
+    const snippetRef = <Snippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
     const projectRef = <Projects  projectToLoad={id} 
                                   onCreateProject={this.onCreateProject.bind(this)} 
                                   onDeleteProject={this.onDeleteProject.bind(this)} 

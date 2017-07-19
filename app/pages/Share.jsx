@@ -27,12 +27,12 @@ class Share extends Component {
   componentDidMount() {
     const {type, id} = this.props.params;
     if (type === "snippet") {
-      axios.get(`/api/snippets?id=${id}`).then(resp => {
+      axios.get(`/api/snippets/byid?id=${id}`).then(resp => {
         this.setState({content: resp.data[0]}, this.renderPage.bind(this));
       }); 
     }
     if (type === "project") {
-      axios.get(`/api/projects?id=${id}`).then(resp => {
+      axios.get(`/api/projects/byid?id=${id}`).then(resp => {
         this.setState({content: resp.data[0]}, this.renderPage.bind(this));
       }); 
     }

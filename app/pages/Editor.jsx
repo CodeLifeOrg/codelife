@@ -25,33 +25,25 @@ class Editor extends Component {
     super(props);
     this.state = { 
       mounted: false, 
-      gotUserFromDB: false, 
       currentText: "",
       lesson: null,
       snippet: null
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.user && !this.state.gotUserFromDB) {
-      const {id} = this.props.user;
-      const {lid} = this.props.params;
-      this.setState({gotUserFromDB: true});
-      axios.get(`/api/snippets/bylid?lid=${lid}`).then(resp => {
-        if (resp.data.length > 0) {
-          console.log(resp.data);
-          this.setState({snippet: resp.data[0], currentText: resp.data[0].studentcontent}, this.renderText.bind(this));
-        } 
-        else {
-          this.setState({currentText: this.state.lesson.initialcontent}, this.renderText.bind(this));
-        }
-      });
-    }
-  }
-
   componentDidMount() {
-    axios.get(`/api/lessons?id=${this.props.params.lid}`).then(resp => {
-      this.setState({mounted: true, lesson: resp.data[0]});
+    const {lid} = this.props.params;
+    
+    const sget = axios.get(`/api/snippets/bylid?lid=${lid}`);
+    const lget = axios.get(`/api/lessons?id=${lid}`);
+
+    Promise.all([sget, lget]).then(resp => {
+      if (resp[0].data.length > 0) {
+        this.setState({mounted: true, lesson: resp[1].data[0], snippet: resp[0].data[0], currentText: resp[0].data[0].studentcontent}, this.renderText.bind(this));
+      } 
+      else {
+        this.setState({mounted: true, lesson: resp[1].data[0], currentText: resp[1].data[0].initialcontent}, this.renderText.bind(this));
+      }
     });
   }
 

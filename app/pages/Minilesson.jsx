@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Minilesson.css";
 
 class Minilesson extends Component {
@@ -14,7 +15,8 @@ class Minilesson extends Component {
       minilessons: null,
       currentLesson: null,
       userProgress: null,
-      otherSnippets: null
+      otherSnippets: null,
+      currentFrame: null
     };
   }
 
@@ -30,8 +32,56 @@ class Minilesson extends Component {
     });
   }
 
+  componentDidUpdate() {
+    if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
+      const {otherSnippets} = this.state;   
+      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
+      doc.open();
+      doc.write(otherSnippets[this.state.currentFrame].studentcontent);
+      doc.close();
+      this.setState({didInject: true});
+    }
+  }
+
   displaySnippet(snippet) {
     alert(`Make a modal box with: \n\n${snippet.studentcontent}`);
+  }
+
+  toggleDialog(i) {
+    const k = `isOpen_${i}`;  
+    let currentFrame = null;
+    if (!this.state[k]) currentFrame = i;
+    this.setState({[k]: !this.state[k], didInject: false, currentFrame});
+  }
+
+  buildButton(snippet, i) {
+    return (
+      <div>
+        <Button onClick={this.toggleDialog.bind(this, i)} text={`${snippet.id}: ${snippet.name}`} />
+        <Dialog
+          iconName="inbox"
+          isOpen={this.state[`isOpen_${i}`]}
+          onClose={this.toggleDialog.bind(this, i)}
+          title={`${snippet.id}: ${snippet.name}`}
+          lazy={false}
+          inline={true}
+        >
+          <div className="pt-dialog-body">{snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
+          <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+              <Button 
+                text="Other Button" 
+              />
+              <Button
+                intent={Intent.PRIMARY}
+                onClick={this.toggleDialog.bind(this, i)}
+                text="Close"
+              />
+            </div>
+          </div>
+        </Dialog>   
+      </div>
+    );
   }
 
   render() {
@@ -45,8 +95,10 @@ class Minilesson extends Component {
     const minilessonItems = minilessons.map(minilesson => 
       <li key={minilesson.id}><Link className={userProgress.find(up => up.level === minilesson.id) !== undefined ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
 
-    const otherSnippetItems = otherSnippets.map(os => 
-      <li key={os.id}><Link className="othersnippet-link" onClick={this.displaySnippet.bind(this, os)}> {`${os.id}'s Snippet`}</Link></li>);
+    const otherSnippetItems = otherSnippets.map((os, i) => 
+      <li>{this.buildButton.bind(this)(os, i)}</li>);
+
+    this.iframes = new Array(otherSnippets.length);
 
     return (
       <div>

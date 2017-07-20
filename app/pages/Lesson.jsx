@@ -1,9 +1,10 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link} from "react-router";
+import {Link, browserHistory} from "react-router";
 import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Lesson.css";
 
 class Lesson extends Component {
@@ -13,7 +14,9 @@ class Lesson extends Component {
     this.state = {
       lessons: [],
       snippets: [],
-      userProgress: null
+      userProgress: null,
+      didInject: false,
+      currentFrame: null
     };
   }
 
@@ -27,12 +30,62 @@ class Lesson extends Component {
     });
   }
 
-  displaySnippet(snippet) {
-    alert(`Make a modal box with: \n\n${snippet.studentcontent}`);
+  componentDidUpdate() {
+    if (this.refs[this.state.currentFrame] && !this.state.didInject) {
+      const {lessons} = this.state;   
+      const doc = this.refs[this.state.currentFrame].contentWindow.document;
+      doc.open();
+      doc.write(lessons[this.refs[this.state.currentFrame].dataset.index].snippet.studentcontent);
+      doc.close();
+      this.setState({didInject: true});
+    }
+  }
+
+  toggleDialog(i) {
+    const k = `isOpen_${i}`;  
+    let currentFrame = null;
+    if (!this.state[k]) currentFrame = `sr_${i}`;
+    this.setState({[k]: !this.state[k], didInject: false, currentFrame});
+  }
+
+  goToEditor(lid) {
+    browserHistory.push(`/editor/${lid}`);
+  }
+
+  buildButton(lesson, i) {
+    return (
+      <div>
+        <Button onClick={this.toggleDialog.bind(this, i)} text={`My ${lesson.name} Snippet`} />
+        <Dialog
+          iconName="inbox"
+          isOpen={this.state[`isOpen_${i}`]}
+          onClose={this.toggleDialog.bind(this, i)}
+          title={`My ${lesson.name} Snippet`}
+        >
+          <div className="pt-dialog-body">{lesson.snippet ? <iframe id="snippetrender" ref={`sr_${i}`} data-index={i} /> : null}</div>
+          <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+              <Button 
+                text="Edit Snippet" 
+                onClick={this.goToEditor.bind(this, lesson.id)}
+              />
+              <Button
+                intent={Intent.PRIMARY}
+                onClick={this.toggleDialog.bind(this, i)}
+                text="Close"
+              />
+            </div>
+          </div>
+        </Dialog>   
+      </div>
+    );
   }
 
   render() {
     
+    console.log("rendered, with state: ");
+    console.log(this.state.isOpen_0);
+
     const {t} = this.props;
     const {lessons, snippets, userProgress} = this.state;
     const {user} = this.props;
@@ -46,14 +99,12 @@ class Lesson extends Component {
       l.snippet = snippets.find(s => s.lid === l.id);
     }
 
-    const lessonItems = lessonArray.map(lesson => 
+    const lessonItems = lessonArray.map((lesson, i) => 
       <li key={lesson.id}>
         <Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"} 
               to={`/lesson/${lesson.id}`}>{ lesson.name } 
         </Link>
-        <ul>
-          <li><Link className="snippet-link" onClick={this.displaySnippet.bind(this, lesson.snippet)}>{`My ${lesson.name} Snippet`}</Link></li>
-        </ul>
+        { lesson.snippet ? <ul><li>{this.buildButton(lesson, i)}</li></ul> : null }
       </li>);
 
     return (

@@ -1,3 +1,7 @@
+:root {
+  --island-width: 500px;
+}
+
 #splash {
   align-items: center;
   display: flex;
@@ -9,8 +13,6 @@
     max-width: 300px;
     position: relative;
     text-align: center;
-
-    --island-width: 500px;
 
     & .island {
       left: 50%;

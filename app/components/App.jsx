@@ -19,7 +19,7 @@ class App extends Component {
     const {children, auth} = this.props;
 
     return (
-      <div>
+      <div id="app">
         { auth.user
         ? <div>
             <Nav />

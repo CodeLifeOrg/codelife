@@ -10,3 +10,24 @@
   color: blue;
   cursor: pointer;
 }
+
+/*
+1. Theme park island
+2. Jungle island
+3. Ice island
+4. Beach island
+5. City island
+6. Desert island
+7. Dark island
+8. Farm island
+9. Industrial island
+10. Mountain island
+*/
+
+$map: (
+  key: "red"
+);
+
+.island {
+
+}

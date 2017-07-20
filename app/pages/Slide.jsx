@@ -1,7 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
-import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 
@@ -75,7 +74,7 @@ class Slide extends Component {
   componentDidMount() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
-    
+
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
@@ -94,7 +93,7 @@ class Slide extends Component {
   }
 
   render() {
-    
+
     const {t} = this.props;
     const {lid, mlid} = this.props.params;
     const {currentSlide, slides, currentLesson} = this.state;
@@ -106,26 +105,25 @@ class Slide extends Component {
     let SlideComponent = null;
 
     if (!currentSlide || !currentLesson) return <h1>Loading...</h1>;
-    
+
     SlideComponent = compLookup[currentSlide.type];
-    
+
     return (
-      <div> 
+      <div>
         <h1>{currentSlide.title}</h1>
 
         <SlideComponent unblock={this.unblock.bind(this)} {...currentSlide} />
 
-        <div id="slugcontainer"> 
+        <div id="slugcontainer">
           { prevSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>previous</Link> : <span className="deadlink">previous</span> }
-          { nextSlug && !this.state.blocked ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }  
+          { nextSlug && !this.state.blocked ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }
         </div>
         <div id="returncontainer">
-          
+
           { !nextSlug ? <Link className="editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> : null }
           <br/><br/>
           <Link className="link" to={`/lesson/${lid}`}>return to {currentLesson.name}</Link>
         </div>
-        <Nav />
       </div>
     );
   }
@@ -136,4 +134,3 @@ Slide = connect(state => ({
 }))(Slide);
 Slide = translate()(Slide);
 export default Slide;
-

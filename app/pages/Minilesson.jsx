@@ -1,7 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import {Link} from "react-router";
-import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import "./Minilesson.css";
@@ -10,7 +9,7 @@ class Minilesson extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       minilessons: null,
       currentLesson: null,
       userProgress: null,
@@ -35,17 +34,17 @@ class Minilesson extends Component {
   }
 
   render() {
-    
+
     const {t} = this.props;
     const {lid} = this.props.params;
     const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
 
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <h1>Loading...</h1>;
 
-    const minilessonItems = minilessons.map(minilesson => 
+    const minilessonItems = minilessons.map(minilesson =>
       <li key={minilesson.id}><Link className={userProgress.find(up => up.level === minilesson.id) !== undefined ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
 
-    const otherSnippetItems = otherSnippets.map(os => 
+    const otherSnippetItems = otherSnippets.map(os =>
       <li key={os.id}><Link className="othersnippet-link" onClick={this.displaySnippet.bind(this, os)}> {`${os.id}'s Snippet`}</Link></li>);
 
     return (
@@ -57,7 +56,6 @@ class Minilesson extends Component {
         <br/><br/>
         <strong>Other Snippets</strong>
         <ul>{otherSnippetItems}</ul>
-        <Nav />
       </div>
     );
   }

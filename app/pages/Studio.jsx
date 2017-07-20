@@ -1,7 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
-import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 
@@ -27,8 +26,8 @@ class Studio extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
-      mounted: false, 
+    this.state = {
+      mounted: false,
       currentProject: null,
       currentText: "",
       changesMade: false
@@ -75,19 +74,19 @@ class Studio extends Component {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0], changesMade: false}, this.renderText.bind(this));
       browserHistory.push(`/studio/${this.props.user.username}/${resp.data[0].name}`);
-    }); 
+    });
   }
 
   // todo: i'm loading studentcontent twice.  once when we instantiate projects, and then again
   // when you click a project.  I did this so that clicks would respect new writes, but i should
   // find a way to only ever ask for studentcontent once, on-demand only.
-  onClickProject(project) {   
-    if (this.state.currentProject) { 
+  onClickProject(project) {
+    if (this.state.currentProject) {
       if (this.state.changesMade) {
         if (confirm("Discard changes and open a new file?")) {
           this.openProject(project.id);
           return true;
-        } 
+        }
         else {
           return false;
         }
@@ -115,7 +114,7 @@ class Studio extends Component {
           this.setState({changesMade: false});
         }
       });
-    } 
+    }
     else {
       alert("open a new file first");
     }
@@ -133,19 +132,19 @@ class Studio extends Component {
   }
 
   render() {
-    
+
     const {t} = this.props;
     const {currentProject} = this.state;
     const {id} = this.props.params;
 
     const snippetRef = <Snippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
-    const projectRef = <Projects  projectToLoad={id} 
-                                  onCreateProject={this.onCreateProject.bind(this)} 
-                                  onDeleteProject={this.onDeleteProject.bind(this)} 
-                                  openProject={this.openProject.bind(this)} 
+    const projectRef = <Projects  projectToLoad={id}
+                                  onCreateProject={this.onCreateProject.bind(this)}
+                                  onDeleteProject={this.onDeleteProject.bind(this)}
+                                  openProject={this.openProject.bind(this)}
                                   onClickProject={this.onClickProject.bind(this)}/>;
 
-    return (  
+    return (
       <div>
         <h1>{ t("Studio") }</h1>
         {snippetRef}
@@ -162,7 +161,6 @@ class Studio extends Component {
         </div>
         <div className="clear">
           <br/>
-          <Nav />
         </div>
       </div>
     );

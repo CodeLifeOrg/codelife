@@ -31,11 +31,11 @@ class Lesson extends Component {
   }
 
   componentDidUpdate() {
-    if (this.refs[this.state.currentFrame] && !this.state.didInject) {
+    if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
       const {lessons} = this.state;   
-      const doc = this.refs[this.state.currentFrame].contentWindow.document;
+      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
       doc.open();
-      doc.write(lessons[this.refs[this.state.currentFrame].dataset.index].snippet.studentcontent);
+      doc.write(lessons[this.state.currentFrame].snippet.studentcontent);
       doc.close();
       this.setState({didInject: true});
     }
@@ -44,7 +44,7 @@ class Lesson extends Component {
   toggleDialog(i) {
     const k = `isOpen_${i}`;  
     let currentFrame = null;
-    if (!this.state[k]) currentFrame = `sr_${i}`;
+    if (!this.state[k]) currentFrame = i;
     this.setState({[k]: !this.state[k], didInject: false, currentFrame});
   }
 
@@ -61,8 +61,10 @@ class Lesson extends Component {
           isOpen={this.state[`isOpen_${i}`]}
           onClose={this.toggleDialog.bind(this, i)}
           title={`My ${lesson.name} Snippet`}
+          lazy={false}
+          inline={true}
         >
-          <div className="pt-dialog-body">{lesson.snippet ? <iframe id="snippetrender" ref={`sr_${i}`} data-index={i} /> : null}</div>
+          <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
               <Button 
@@ -82,9 +84,6 @@ class Lesson extends Component {
   }
 
   render() {
-    
-    console.log("rendered, with state: ");
-    console.log(this.state.isOpen_0);
 
     const {t} = this.props;
     const {lessons, snippets, userProgress} = this.state;
@@ -99,12 +98,14 @@ class Lesson extends Component {
       l.snippet = snippets.find(s => s.lid === l.id);
     }
 
+    this.iframes = new Array(lessonArray.length);
+
     const lessonItems = lessonArray.map((lesson, i) => 
       <li key={lesson.id}>
         <Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"} 
               to={`/lesson/${lesson.id}`}>{ lesson.name } 
         </Link>
-        { lesson.snippet ? <ul><li>{this.buildButton(lesson, i)}</li></ul> : null }
+        { lesson.snippet ? <ul><li>{this.buildButton.bind(this)(lesson, i)}</li></ul> : null }
       </li>);
 
     return (

@@ -38,7 +38,11 @@ module.exports = function(app) {
 
   app.get("/api/snippets/othersbylid", (req, res) => {
 
-    db.snippets.findAll({where: {uid: {$not: req.user.id}, lid: req.query.lid}}).then(u => res.json(u).end());
+    const q = "SELECT * FROM snippets, users WHERE users.id = snippets.uid AND users.id != '" + req.user.id + "' AND snippets.lid = '" + req.query.lid + "'";
+
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+
+    // db.snippets.findAll({where: {uid: {$not: req.user.id}, lid: req.query.lid}}).then(u => res.json(u).end());
 
   });  
 

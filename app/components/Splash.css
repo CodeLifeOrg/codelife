@@ -1,0 +1,31 @@
+#splash {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+
+  & .center-block {
+    margin-top: -150px;
+    max-width: 300px;
+    position: relative;
+    text-align: center;
+
+    --island-width: 500px;
+
+    & .island {
+      left: 50%;
+      margin-left: calc(var(--island-width) / 2 * -1);
+      position: absolute;
+      top: 60px;
+      width: var(--island-width);
+      z-index: -1;
+    }
+
+    & .logo {
+      margin: 0 auto 50px;
+      width: 90%;
+    }
+
+  }
+
+}

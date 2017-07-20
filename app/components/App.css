@@ -1,0 +1,5 @@
+body {
+  background-color: var(--sky);
+  position: absolute;
+  width: 100%;
+}

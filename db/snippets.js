@@ -7,7 +7,7 @@ module.exports = function(sequelize, db) {
         primaryKey: true,
         autoIncrement: true
       },
-      name: db.STRING,
+      snippetname: db.STRING,
       studentcontent: db.TEXT,
       likes: db.INTEGER,
       previewblob: db.BLOB,

@@ -21,7 +21,7 @@ module.exports = function(sequelize, db) {
       createdAt: db.DATE,
       updatedAt: db.DATE
     }
-  );
+  );  
 
   return u;
 

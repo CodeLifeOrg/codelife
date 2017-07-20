@@ -57,12 +57,12 @@ class Minilesson extends Component {
   buildButton(snippet, i) {
     return (
       <div>
-        <Button onClick={this.toggleDialog.bind(this, i)} text={`${snippet.id}: ${snippet.name}`} />
+        <Button onClick={this.toggleDialog.bind(this, i)} text={`${snippet.username}: ${snippet.snippetname}`} />
         <Dialog
           iconName="inbox"
           isOpen={this.state[`isOpen_${i}`]}
           onClose={this.toggleDialog.bind(this, i)}
-          title={`${snippet.id}: ${snippet.name}`}
+          title={`${snippet.username}: ${snippet.snippetname}`}
           lazy={false}
           inline={true}
         >
@@ -99,6 +99,8 @@ class Minilesson extends Component {
       <li>{this.buildButton.bind(this)(os, i)}</li>);
 
     this.iframes = new Array(otherSnippets.length);
+
+    console.log(this.state.otherSnippets);
 
     return (
       <div>

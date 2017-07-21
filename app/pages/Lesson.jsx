@@ -1,9 +1,8 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
-import Nav from "components/Nav";
 import React, {Component} from "react";
-import {translate} from "react-i18next";
+import {Interpolate, translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Lesson.css";
 
@@ -53,11 +52,12 @@ class Lesson extends Component {
   }
 
   buildButton(lesson, i) {
+    const {userProgress} = this.state;
+    const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
     return (
-      <div>
-        <Button onClick={this.toggleDialog.bind(this, i)} text={`My ${lesson.name} Snippet`} />
+      <div className="view-snippit">
+        <Button className={ complete ? "pt-icon-endorsed" : "" } onClick={this.toggleDialog.bind(this, i)} text={`My ${lesson.name} Snippet`} />
         <Dialog
-          iconName="inbox"
           isOpen={this.state[`isOpen_${i}`]}
           onClose={this.toggleDialog.bind(this, i)}
           title={`My ${lesson.name} Snippet`}
@@ -100,19 +100,18 @@ class Lesson extends Component {
 
     this.iframes = new Array(lessonArray.length);
 
-    const lessonItems = lessonArray.map((lesson, i) =>
-      <li key={lesson.id}>
-        <Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"}
-              to={`/lesson/${lesson.id}`}>{ lesson.name }
-        </Link>
-        { lesson.snippet ? <ul><li>{this.buildButton.bind(this)(lesson, i)}</li></ul> : null }
-      </li>);
+    const lessonItems = lessonArray.map((lesson, i) => {
+      const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
+      return <div className={ complete ? "island completed" : "island" } key={ lesson.id }>
+        <Link className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }-small.png')`}}></Link>
+        { lesson.snippet ? this.buildButton.bind(this)(lesson, i) : null }
+      </div>;
+    });
 
     return (
-      <div>
-        <h1>{t("Islands")}</h1>
-        <p>Welcome Back, {user.username}!</p>
-        <ul>{lessonItems}</ul>
+      <div className="overworld">
+        <h2 className="welcome"><Interpolate i18nKey="overworld.welcome" name={ user.username } /></h2>
+        <div className="map">{lessonItems}</div>
       </div>
     );
   }

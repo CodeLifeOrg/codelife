@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
+import {Button, Dialog, Intent, Select} from "@blueprintjs/core";
 import "./Minilesson.css";
 
 class Minilesson extends Component {
@@ -43,11 +43,19 @@ class Minilesson extends Component {
     }
   }
 
+  filterByCity(e) {
+    console.log(`would filter by ${e.target.value}`);
+  }
+
+  filterBySchool(e) {
+    console.log(`would filter by ${e.target.value}`);
+  }
+
   toggleDialog(i) {
     const k = `isOpen_${i}`;
     let currentFrame = null;
     if (!this.state[k]) currentFrame = i;
-    this.setState({[k]: !this.state[k], didInject: false, currentFrame});
+    this.setState({[k]: !this.state[k], didInject: false, viewingSource: false, currentFrame});
   }
 
   htmlEscape(str) {
@@ -131,7 +139,23 @@ class Minilesson extends Component {
         <ul>{minilessonItems}</ul>
         <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor (My Snippet)</Link>
         <br/><br/>
-        <strong>Other Snippets</strong>
+        <strong>Other Snippets</strong><br/>
+        <div className="pt-select" onChange={this.filterByCity}>
+          <select>
+            <option default>All Cities</option>
+            <option>Cities</option>
+            <option>Go</option>
+            <option>Here</option>
+          </select>
+        </div>
+        <div className="pt-select" onChange={this.filterBySchool}>
+          <select>
+            <option default>All Schools</option>
+            <option>Schools</option>
+            <option>Go</option>
+            <option>Here</option>
+          </select>
+        </div>
         <ul>{otherSnippetItems}</ul>
       </div>
     );

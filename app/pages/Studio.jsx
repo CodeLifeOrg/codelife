@@ -67,7 +67,7 @@ class Studio extends Component {
   }
 
   onClickSnippet(snippet) {
-    this.insertTextAtCursor(snippet.studentcontent);
+    if (this.state.currentProject) this.insertTextAtCursor(snippet.studentcontent);
   }
 
   openProject(pid) {

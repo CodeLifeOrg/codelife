@@ -36,27 +36,28 @@ class Minilesson extends Component {
     });
   }
 
-  buildWindow(content) {
-    let buildstr = "";
-    buildstr += "<div style='width:700px;'>";
-    buildstr += "<div style='font-family:monospace; white-space:pre-wrap; width:340px; float:left;'>";
-    buildstr += `${this.htmlEscape(content)}</div>`;
-    buildstr += "<div style='width:340px; float:right;'>";
-    buildstr += `${content}</div>`;
-    buildstr += "</div>";
-    console.log(buildstr);
-    return buildstr;
-  }
+
 
   componentDidUpdate() {
     if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
       const {otherSnippets} = this.state;
       const doc = this.iframes[this.state.currentFrame].contentWindow.document;
       doc.open();
-      doc.write(this.buildWindow(otherSnippets[this.state.currentFrame].studentcontent));
+      doc.write(otherSnippets[this.state.currentFrame].studentcontent);
       doc.close();
       this.setState({didInject: true});
     }
+  }
+
+  buildWindow(i, content) {
+    return (
+      <div className="snippet-popup-container">
+        <div className="snippet-popup-code blurry-text">{content}</div>
+        <div className="snippet-popup-render">
+          <iframe className="snippetrender" frameBorder="0" ref={ comp => this.iframes[i] = comp } />
+        </div>
+      </div>        
+    );
   }
 
   filterByCity(e) {
@@ -96,7 +97,7 @@ class Minilesson extends Component {
           inline={true}
           style={{width: "800px"}}
         >
-          <div className="pt-dialog-body">{snippet ? <iframe style={{border: "1px solid black"}}className="snippetrender" frameBorder="0" ref={ comp => this.iframes[i] = comp } /> : null}</div>
+          <div className="pt-dialog-body">{snippet ? this.buildWindow(i, snippet.studentcontent) : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
               <Button

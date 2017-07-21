@@ -7,5 +7,27 @@
 }
 
 .snippetrender {
-  width: 750px;
+  width: 390px;
+}
+
+.snippet-popup-container {
+  width: 780px;
+}
+
+.snippet-popup-code {
+  font-family: monospace; 
+  white-space: pre-wrap; 
+  width: 390px; 
+  float: left;
+}
+
+.snippet-popup-render {
+  width: 390px;
+  float: right;
+}
+
+.blurry-text {
+   color: transparent;
+   text-shadow: 0 0 5px rgba(0,0,0,0.3);
+   pointer-events: none;
 }

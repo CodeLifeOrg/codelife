@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Login, SignUp} from "datawheel-canon";
+import Clouds from "./Clouds";
 
 import "./Splash.css";
 
@@ -19,12 +20,13 @@ class Splash extends Component {
 
     return (
       <div id="splash">
+        <Clouds />
         <div className="center-block">
           <img className="island" src="/islands/splash.png" />
           <img className="logo" src="/logo/logo.png" />
           { signup
-          ? <SignUp />
-          : <div>
+          ? <SignUp className="form" />
+          : <div className="form">
               <Login />
               <button className="pt-button pt-fill" onClick={ this.toggleSignup.bind(this) }>Sign Up</button>
             </div>

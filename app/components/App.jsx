@@ -4,6 +4,7 @@ import {isAuthenticated} from "datawheel-canon";
 
 import "./App.css";
 
+import Clouds from "./Clouds";
 import Footer from "./Footer";
 import Nav from "./Nav";
 import Splash from "./Splash";
@@ -22,6 +23,7 @@ class App extends Component {
       <div id="app">
         { auth.user
         ? <div className="container">
+            <Clouds />
             <Nav />
             { children }
             <Footer />

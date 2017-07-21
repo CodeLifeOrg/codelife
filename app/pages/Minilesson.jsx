@@ -16,8 +16,8 @@ class Minilesson extends Component {
       userProgress: null,
       otherSnippets: null,
       currentFrame: null,
-      geos: null,
-      schools: null,
+      // geos: null,
+      // schools: null,
       viewingSource: false
     };
   }
@@ -28,17 +28,17 @@ class Minilesson extends Component {
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/othersbylid?lid=${lid}`);
-    const cget = axios.get("/api/snippets/allgeos");
-    const sget = axios.get("/api/snippets/allschools");
+    // const cget = axios.get("/api/snippets/allgeos");
+    // const sget = axios.get("/api/snippets/allschools");
 
-    Promise.all([mlget, lget, uget, osget, cget, sget]).then(resp => {
+    Promise.all([mlget, lget, uget, osget]).then(resp => {
       this.setState({
         minilessons: resp[0].data, 
         currentLesson: resp[1].data[0], 
         userProgress: resp[2].data, 
-        otherSnippets: resp[3].data, 
-        geos: resp[4].data,
-        schools: resp[5].data
+        otherSnippets: resp[3].data
+        // geos: resp[4].data,
+        // schools: resp[5].data
       });
     });
   }
@@ -131,7 +131,7 @@ class Minilesson extends Component {
 
     const {t} = this.props;
     const {lid} = this.props.params;
-    const {minilessons, currentLesson, userProgress, otherSnippets, geos, schools} = this.state;
+    const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
 
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <h1>Loading...</h1>;
 
@@ -141,11 +141,15 @@ class Minilesson extends Component {
     const otherSnippetItems = otherSnippets.map((os, i) =>
       <li>{this.buildButton.bind(this)(os, i)}</li>);
 
+    /*
+
     const geoItems = geos.slice(0, 20).map(geo =>
       <option>{geo.name}</option>);
 
     const schoolItems = schools.slice(0, 20).map(school => 
       <option>{school.name}</option>);
+    
+    */
 
     this.iframes = new Array(otherSnippets.length);
 
@@ -157,6 +161,7 @@ class Minilesson extends Component {
         <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor (My Snippet)</Link>
         <br/><br/>
         <strong>Other Snippets</strong><br/>
+        { /*
         <div className="pt-select" onChange={this.filterByCity}>
           <select>
             <option default>All Cities</option>
@@ -169,6 +174,7 @@ class Minilesson extends Component {
             {schoolItems}
           </select>
         </div>
+        */ }
         <ul>{otherSnippetItems}</ul>
       </div>
     );

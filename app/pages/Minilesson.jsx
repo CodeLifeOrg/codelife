@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent, Select} from "@blueprintjs/core";
+import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Minilesson.css";
 
 class Minilesson extends Component {
@@ -16,6 +16,8 @@ class Minilesson extends Component {
       userProgress: null,
       otherSnippets: null,
       currentFrame: null,
+      geos: null,
+      schools: null,
       viewingSource: false
     };
   }
@@ -26,9 +28,18 @@ class Minilesson extends Component {
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/othersbylid?lid=${lid}`);
+    const cget = axios.get("/api/snippets/allgeos");
+    const sget = axios.get("/api/snippets/allschools");
 
-    Promise.all([mlget, lget, uget, osget]).then(resp => {
-      this.setState({minilessons: resp[0].data, currentLesson: resp[1].data[0], userProgress: resp[2].data, otherSnippets: resp[3].data});
+    Promise.all([mlget, lget, uget, osget, cget, sget]).then(resp => {
+      this.setState({
+        minilessons: resp[0].data, 
+        currentLesson: resp[1].data[0], 
+        userProgress: resp[2].data, 
+        otherSnippets: resp[3].data, 
+        geos: resp[4].data,
+        schools: resp[5].data
+      });
     });
   }
 
@@ -120,7 +131,7 @@ class Minilesson extends Component {
 
     const {t} = this.props;
     const {lid} = this.props.params;
-    const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
+    const {minilessons, currentLesson, userProgress, otherSnippets, geos, schools} = this.state;
 
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <h1>Loading...</h1>;
 
@@ -129,6 +140,12 @@ class Minilesson extends Component {
 
     const otherSnippetItems = otherSnippets.map((os, i) =>
       <li>{this.buildButton.bind(this)(os, i)}</li>);
+
+    const geoItems = geos.slice(0, 20).map(geo =>
+      <option>{geo.name}</option>);
+
+    const schoolItems = schools.slice(0, 20).map(school => 
+      <option>{school.name}</option>);
 
     this.iframes = new Array(otherSnippets.length);
 
@@ -143,17 +160,13 @@ class Minilesson extends Component {
         <div className="pt-select" onChange={this.filterByCity}>
           <select>
             <option default>All Cities</option>
-            <option>Cities</option>
-            <option>Go</option>
-            <option>Here</option>
+            {geoItems}
           </select>
         </div>
         <div className="pt-select" onChange={this.filterBySchool}>
           <select>
             <option default>All Schools</option>
-            <option>Schools</option>
-            <option>Go</option>
-            <option>Here</option>
+            {schoolItems}
           </select>
         </div>
         <ul>{otherSnippetItems}</ul>

@@ -15,7 +15,8 @@ class Minilesson extends Component {
       currentLesson: null,
       userProgress: null,
       otherSnippets: null,
-      currentFrame: null
+      currentFrame: null,
+      viewingSource: false
     };
   }
 
@@ -42,15 +43,38 @@ class Minilesson extends Component {
     }
   }
 
-  displaySnippet(snippet) {
-    alert(`Make a modal box with: \n\n${snippet.studentcontent}`);
-  }
-
   toggleDialog(i) {
     const k = `isOpen_${i}`;
     let currentFrame = null;
     if (!this.state[k]) currentFrame = i;
     this.setState({[k]: !this.state[k], didInject: false, currentFrame});
+  }
+
+  htmlEscape(str) {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+  }
+
+  toggleSource() {
+    if (this.iframes && this.iframes[this.state.currentFrame]) {
+      const {otherSnippets} = this.state;
+      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
+      const content = otherSnippets[this.state.currentFrame].studentcontent;
+      doc.open();
+      if (!this.state.viewingSource) {
+        doc.write(this.htmlEscape(content));
+        this.setState({viewingSource: true});
+      }
+      else { 
+        doc.write(content);
+        this.setState({viewingSource: false});
+      } 
+      doc.close();
+    }
   }
 
   buildButton(snippet, i) {
@@ -69,7 +93,8 @@ class Minilesson extends Component {
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
               <Button
-                text="Other Button"
+                text={this.state.viewingSource ? "View Page" : "View Source"}
+                onClick={this.toggleSource.bind(this)}
               />
               <Button
                 intent={Intent.PRIMARY}
@@ -98,8 +123,6 @@ class Minilesson extends Component {
       <li>{this.buildButton.bind(this)(os, i)}</li>);
 
     this.iframes = new Array(otherSnippets.length);
-
-    console.log(this.state.otherSnippets);
 
     return (
       <div>

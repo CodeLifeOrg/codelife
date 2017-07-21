@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  var u = sequelize.define("users",
+  return sequelize.define("users",
     {
       id: {
         type: db.STRING,
@@ -22,7 +22,5 @@ module.exports = function(sequelize, db) {
       updatedAt: db.DATE
     }
   );  
-
-  return u;
 
 };

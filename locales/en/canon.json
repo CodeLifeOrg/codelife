@@ -1,8 +1,25 @@
 {
+  "/api/lessons/": "",
+  "/api/projects/": "",
+  "/api/projects/new": "",
+  "/api/projects/update": "",
+  "/api/snippets": "",
+  "/api/snippets/allgeos": "",
+  "/api/snippets/allschools": "",
+  "/api/userprogress": "",
+  "/api/userprogress/save": "",
+  "Error": "",
+  "File cannot be in use or blank": "",
   "Glossary": "Glossary",
-  "Lessons": "Lessons",
+  "Incorrect, please try again!": "",
+  "Logout": "Logout",
+  "Overworld": "Overworld",
   "Profile": "Profile",
+  "Saved to DB": "",
   "Studio": "Studio",
-  "Tracks": "Tracks",
-  "Home": "Home"
+  "That's correct!": "",
+  "open a new file first": "",
+  "overworld": {
+    "welcome": "Welcome back {{name}}!"
+  }
 }

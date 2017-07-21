@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import Nav from "components/Nav";
 import axios from "axios";
 import "./Share.css";
 
@@ -29,17 +28,17 @@ class Share extends Component {
     if (type === "snippet") {
       axios.get(`/api/snippets/byid?id=${id}`).then(resp => {
         this.setState({content: resp.data[0]}, this.renderPage.bind(this));
-      }); 
+      });
     }
     if (type === "project") {
       axios.get(`/api/projects/byid?id=${id}`).then(resp => {
         this.setState({content: resp.data[0]}, this.renderPage.bind(this));
-      }); 
+      });
     }
   }
 
   render() {
-    
+
     const {t} = this.props;
     const {content} = this.state;
 

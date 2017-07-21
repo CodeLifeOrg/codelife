@@ -1,7 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import {Link} from "react-router";
-import Nav from "components/Nav";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
@@ -11,7 +10,7 @@ class Minilesson extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       minilessons: null,
       currentLesson: null,
       userProgress: null,
@@ -34,7 +33,7 @@ class Minilesson extends Component {
 
   componentDidUpdate() {
     if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
-      const {otherSnippets} = this.state;   
+      const {otherSnippets} = this.state;
       const doc = this.iframes[this.state.currentFrame].contentWindow.document;
       doc.open();
       doc.write(otherSnippets[this.state.currentFrame].studentcontent);
@@ -48,7 +47,7 @@ class Minilesson extends Component {
   }
 
   toggleDialog(i) {
-    const k = `isOpen_${i}`;  
+    const k = `isOpen_${i}`;
     let currentFrame = null;
     if (!this.state[k]) currentFrame = i;
     this.setState({[k]: !this.state[k], didInject: false, currentFrame});
@@ -69,8 +68,8 @@ class Minilesson extends Component {
           <div className="pt-dialog-body">{snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
-              <Button 
-                text="Other Button" 
+              <Button
+                text="Other Button"
               />
               <Button
                 intent={Intent.PRIMARY}
@@ -79,23 +78,23 @@ class Minilesson extends Component {
               />
             </div>
           </div>
-        </Dialog>   
+        </Dialog>
       </div>
     );
   }
 
   render() {
-    
+
     const {t} = this.props;
     const {lid} = this.props.params;
     const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
 
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <h1>Loading...</h1>;
 
-    const minilessonItems = minilessons.map(minilesson => 
+    const minilessonItems = minilessons.map(minilesson =>
       <li key={minilesson.id}><Link className={userProgress.find(up => up.level === minilesson.id) !== undefined ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
 
-    const otherSnippetItems = otherSnippets.map((os, i) => 
+    const otherSnippetItems = otherSnippets.map((os, i) =>
       <li>{this.buildButton.bind(this)(os, i)}</li>);
 
     this.iframes = new Array(otherSnippets.length);
@@ -111,7 +110,6 @@ class Minilesson extends Component {
         <br/><br/>
         <strong>Other Snippets</strong>
         <ul>{otherSnippetItems}</ul>
-        <Nav />
       </div>
     );
   }

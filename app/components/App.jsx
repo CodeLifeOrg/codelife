@@ -4,6 +4,8 @@ import {isAuthenticated} from "datawheel-canon";
 
 import "./App.css";
 
+import Footer from "./Footer";
+import Nav from "./Nav";
 import Splash from "./Splash";
 
 class App extends Component {
@@ -17,8 +19,16 @@ class App extends Component {
     const {children, auth} = this.props;
 
     return (
-      <div>
-        { auth.user ? children : auth.error ? <Splash /> : "Please Wait" }
+      <div id="app">
+        { auth.user
+        ? <div>
+            <Nav />
+            { children }
+            <Footer />
+          </div>
+        : auth.error
+        ? <Splash />
+        : "Please Wait" }
       </div>
     );
 

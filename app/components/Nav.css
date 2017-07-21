@@ -1,7 +1,8 @@
-.link {
-  margin-right: 10px;
-}
-
-div#nav-container {
+#nav {
   margin-top:15px;
+
+  & .link {
+    margin-right: 10px;
+  }
+
 }

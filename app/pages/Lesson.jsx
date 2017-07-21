@@ -32,7 +32,7 @@ class Lesson extends Component {
 
   componentDidUpdate() {
     if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
-      const {lessons} = this.state;   
+      const {lessons} = this.state;
       const doc = this.iframes[this.state.currentFrame].contentWindow.document;
       doc.open();
       doc.write(lessons[this.state.currentFrame].snippet.studentcontent);
@@ -42,7 +42,7 @@ class Lesson extends Component {
   }
 
   toggleDialog(i) {
-    const k = `isOpen_${i}`;  
+    const k = `isOpen_${i}`;
     let currentFrame = null;
     if (!this.state[k]) currentFrame = i;
     this.setState({[k]: !this.state[k], didInject: false, currentFrame});
@@ -67,8 +67,8 @@ class Lesson extends Component {
           <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
-              <Button 
-                text="Edit Snippet" 
+              <Button
+                text="Edit Snippet"
                 onClick={this.goToEditor.bind(this, lesson.id)}
               />
               <Button
@@ -78,7 +78,7 @@ class Lesson extends Component {
               />
             </div>
           </div>
-        </Dialog>   
+        </Dialog>
       </div>
     );
   }
@@ -100,10 +100,10 @@ class Lesson extends Component {
 
     this.iframes = new Array(lessonArray.length);
 
-    const lessonItems = lessonArray.map((lesson, i) => 
+    const lessonItems = lessonArray.map((lesson, i) =>
       <li key={lesson.id}>
-        <Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"} 
-              to={`/lesson/${lesson.id}`}>{ lesson.name } 
+        <Link className={userProgress.find(up => up.level === lesson.id) !== undefined ? "l_link completed" : "l_link"}
+              to={`/lesson/${lesson.id}`}>{ lesson.name }
         </Link>
         { lesson.snippet ? <ul><li>{this.buildButton.bind(this)(lesson, i)}</li></ul> : null }
       </li>);
@@ -113,7 +113,6 @@ class Lesson extends Component {
         <h1>{t("Islands")}</h1>
         <p>Welcome Back, {user.username}!</p>
         <ul>{lessonItems}</ul>
-        <Nav />
       </div>
     );
   }

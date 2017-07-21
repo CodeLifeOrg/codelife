@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Overpass:400,600,700");
 
 #app {
-  background-color: var(--sky);
   font-family: "Overpass", sans-serif;
+  letter-spacing: 0.5px;
   min-height: 100vh;
   position: absolute;
   width: 100%;
@@ -11,6 +11,51 @@
     min-height: 100vh;
     padding-bottom: 100px;
     position: relative;
+  }
+
+}
+
+.pt-button {
+  border-radius: 10px;
+  font-family: "Overpass", sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.pt-button.pt-intent-primary {
+  background: #328f86;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat #328f86;
+  color: white;
+
+  &:hover {
+    background-color: color(#328f86 blackness(50%));
+  }
+}
+
+.pt-popover {
+  border-radius: 10px;
+  & .pt-popover-content {
+    border-radius: 10px;
+    & .pt-button:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.pt-dialog {
+  background-color: #fafffe;
+  border: 1px solid #328F86;
+  border-radius: 10px;
+  padding-bottom: 8px;
+
+  & .pt-dialog-header {
+    background: #328F86;
+    border-radius: 8px 8px 0 0;
+
+    & h5, & button, & span {
+      color: white;
+      font-weight: 400;
+    }
+
   }
 
 }

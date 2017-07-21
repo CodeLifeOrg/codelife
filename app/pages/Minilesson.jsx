@@ -15,10 +15,7 @@ class Minilesson extends Component {
       currentLesson: null,
       userProgress: null,
       otherSnippets: null,
-      currentFrame: null,
-      // geos: null,
-      // schools: null,
-      viewingSource: false
+      currentFrame: null
     };
   }
 
@@ -28,8 +25,6 @@ class Minilesson extends Component {
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/othersbylid?lid=${lid}`);
-    // const cget = axios.get("/api/snippets/allgeos");
-    // const sget = axios.get("/api/snippets/allschools");
 
     Promise.all([mlget, lget, uget, osget]).then(resp => {
       this.setState({
@@ -37,10 +32,20 @@ class Minilesson extends Component {
         currentLesson: resp[1].data[0], 
         userProgress: resp[2].data, 
         otherSnippets: resp[3].data
-        // geos: resp[4].data,
-        // schools: resp[5].data
       });
     });
+  }
+
+  buildWindow(content) {
+    let buildstr = "";
+    buildstr += "<div style='width:700px;'>";
+    buildstr += "<div style='font-family:monospace; white-space:pre-wrap; width:340px; float:left;'>";
+    buildstr += `${this.htmlEscape(content)}</div>`;
+    buildstr += "<div style='width:340px; float:right;'>";
+    buildstr += `${content}</div>`;
+    buildstr += "</div>";
+    console.log(buildstr);
+    return buildstr;
   }
 
   componentDidUpdate() {
@@ -48,7 +53,7 @@ class Minilesson extends Component {
       const {otherSnippets} = this.state;
       const doc = this.iframes[this.state.currentFrame].contentWindow.document;
       doc.open();
-      doc.write(otherSnippets[this.state.currentFrame].studentcontent);
+      doc.write(this.buildWindow(otherSnippets[this.state.currentFrame].studentcontent));
       doc.close();
       this.setState({didInject: true});
     }
@@ -78,24 +83,6 @@ class Minilesson extends Component {
         .replace(/>/g, "&gt;");
   }
 
-  toggleSource() {
-    if (this.iframes && this.iframes[this.state.currentFrame]) {
-      const {otherSnippets} = this.state;
-      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
-      const content = otherSnippets[this.state.currentFrame].studentcontent;
-      doc.open();
-      if (!this.state.viewingSource) {
-        doc.write(this.htmlEscape(content));
-        this.setState({viewingSource: true});
-      }
-      else { 
-        doc.write(content);
-        this.setState({viewingSource: false});
-      } 
-      doc.close();
-    }
-  }
-
   buildButton(snippet, i) {
     return (
       <div>
@@ -107,14 +94,11 @@ class Minilesson extends Component {
           title={`${snippet.username}: ${snippet.snippetname}`}
           lazy={false}
           inline={true}
+          style={{width: "800px"}}
         >
-          <div className="pt-dialog-body">{snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
+          <div className="pt-dialog-body">{snippet ? <iframe style={{border: "1px solid black"}}className="snippetrender" frameBorder="0" ref={ comp => this.iframes[i] = comp } /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
-              <Button
-                text={this.state.viewingSource ? "View Page" : "View Source"}
-                onClick={this.toggleSource.bind(this)}
-              />
               <Button
                 intent={Intent.PRIMARY}
                 onClick={this.toggleDialog.bind(this, i)}
@@ -141,16 +125,6 @@ class Minilesson extends Component {
     const otherSnippetItems = otherSnippets.map((os, i) =>
       <li>{this.buildButton.bind(this)(os, i)}</li>);
 
-    /*
-
-    const geoItems = geos.slice(0, 20).map(geo =>
-      <option>{geo.name}</option>);
-
-    const schoolItems = schools.slice(0, 20).map(school => 
-      <option>{school.name}</option>);
-    
-    */
-
     this.iframes = new Array(otherSnippets.length);
 
     return (
@@ -161,20 +135,6 @@ class Minilesson extends Component {
         <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor (My Snippet)</Link>
         <br/><br/>
         <strong>Other Snippets</strong><br/>
-        { /*
-        <div className="pt-select" onChange={this.filterByCity}>
-          <select>
-            <option default>All Cities</option>
-            {geoItems}
-          </select>
-        </div>
-        <div className="pt-select" onChange={this.filterBySchool}>
-          <select>
-            <option default>All Schools</option>
-            {schoolItems}
-          </select>
-        </div>
-        */ }
         <ul>{otherSnippetItems}</ul>
       </div>
     );

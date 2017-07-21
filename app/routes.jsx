@@ -27,7 +27,7 @@ export default function RouteCreate() {
       <Route path="share/:type/:id" component={Share} />
 
       <Route path="glossary" component={Glossary} />
-      <Route path="profile" component={Profile} />
+      <Route path="profile/:username" component={Profile} />
       <Route path="studio/:user(/:id)" component={Studio} />
 
       <Route path="ui" component={Ui} />

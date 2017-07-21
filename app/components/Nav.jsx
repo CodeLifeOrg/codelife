@@ -28,8 +28,8 @@ class Nav extends Component {
           >
             <div className="link">{ user.username }<span className="pt-icon-standard pt-icon-user"></span></div>
             <div>
-              <Link className="pt-button pt-fill" to={ `/profile/${ user.username }` }>{ t("Profile") }</Link>
-              <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>
+              <Link className="pt-button pt-intent-primary pt-fill" to={ `/profile/${ user.username }` }>{ t("Profile") }</Link>
+              <a className="pt-button pt-intent-primary pt-fill" href="/auth/logout">{ t("Logout") }</a>
             </div>
           </Popover>
         </div>

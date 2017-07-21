@@ -21,7 +21,7 @@ class App extends Component {
     return (
       <div id="app">
         { auth.user
-        ? <div>
+        ? <div className="container">
             <Nav />
             { children }
             <Footer />

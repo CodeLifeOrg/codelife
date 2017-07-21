@@ -15,7 +15,14 @@ class Nav extends Component {
 
     return (
       <footer id="footer">
-        <Link className="link" to="/glossary">{ t("Glossary") }</Link>
+        <div className="links">
+          <Link className="link" to="/glossary">{ t("Glossary") }</Link>
+        </div>
+        <div className="logos">
+          <a target="_blank" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
+          <a target="_blank" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
+          <a target="_blank" href="http://www.governo.mg.gov.br/"><img className="logo" src="/footer/logo-mg.svg" /></a>
+        </div>
       </footer>
     );
   }

@@ -69,8 +69,8 @@ class CodeBlock extends Component {
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
-        if (!snippet) this.setState({snippet: resp.data});
         alert("Saved to DB");
+        this.props.handleSave(this.props.lesson.snippet.id, studentcontent);
       }
       else {
         alert("Error");

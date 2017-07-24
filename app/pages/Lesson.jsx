@@ -30,17 +30,6 @@ class Lesson extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
-      const {lessons} = this.state;
-      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
-      doc.open();
-      doc.write(lessons[this.state.currentFrame].snippet.studentcontent);
-      doc.close();
-      this.setState({didInject: true});
-    }
-  }
-
   hasUserCompleted(milestone) {
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
@@ -54,6 +43,17 @@ class Lesson extends Component {
 
   goToEditor(lid) {
     browserHistory.push(`/editor/${lid}`);
+  }
+
+  handleSave(sid, studentcontent) {
+    // todo: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
+    // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
+    // reload all snippets freshly from the database, but I also want to minimize db hits.  revisit this.
+    const {snippets} = this.state;
+    for (const s of snippets) {
+      if (s.id === sid) s.studentcontent = studentcontent;
+    }
+    this.setState(snippets);
   }
 
   buildButton(lesson, i) {
@@ -71,7 +71,7 @@ class Lesson extends Component {
           className="codeblock-dialog"
         >
           {/*<div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>*/}
-          <div className="pt-dialog-body">{lesson.snippet ? <CodeBlock lesson={lesson} /> : null}</div>
+          <div className="pt-dialog-body">{lesson.snippet ? <CodeBlock lesson={lesson} handleSave={this.handleSave.bind(this)} /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
               <Button
@@ -110,8 +110,6 @@ class Lesson extends Component {
       lessonArray[l].isDone = done;
       lessonArray[l].isNext = l === 0 && !done || l > 0 && !done && lessonArray[l - 1].isDone;
     }
-
-    this.iframes = new Array(lessonArray.length);
 
     const lessonItems = lessonArray.map((lesson, i) => {
       return <div className={ this.islandState(lesson) } key={ lesson.id }>

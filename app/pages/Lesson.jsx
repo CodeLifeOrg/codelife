@@ -89,7 +89,7 @@ class Lesson extends Component {
   islandState(lesson) {
     let css = "island";
     if (lesson.isNext) css += " next";
-    if (lesson.isDone) css += " completed";
+    lesson.isDone ? css += " completed" : css += " blocked";
     return css;
   }
 

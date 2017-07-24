@@ -11,10 +11,10 @@ class Nav extends Component {
 
   render() {
 
-    const {t, user} = this.props;
+    const {className, t, user} = this.props;
 
     return (
-      <footer id="footer">
+      <footer id="footer" className={ className }>
         <div className="links">
           <Link className="link" to="/glossary">{ t("Glossary") }</Link>
         </div>

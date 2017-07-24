@@ -7,6 +7,7 @@ import "./App.css";
 import Clouds from "./Clouds";
 import Footer from "./Footer";
 import Nav from "./Nav";
+import Loading from "./Loading";
 import Splash from "./Splash";
 
 class App extends Component {
@@ -17,7 +18,9 @@ class App extends Component {
 
   render() {
 
-    const {children, auth} = this.props;
+    const {auth, children, location} = this.props;
+
+    const routes = location.pathname.split("/");
 
     return (
       <div id="app">
@@ -26,11 +29,14 @@ class App extends Component {
             <Clouds />
             <Nav />
             { children }
-            <Footer />
+            <Footer className={ routes[1] === "lesson" && routes.length > 2 ? routes[2] : "" } />
           </div>
         : auth.error
         ? <Splash />
-        : "Please Wait" }
+        : <div className="container">
+            <Clouds />
+            <Loading />
+          </div> }
       </div>
     );
 

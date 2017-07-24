@@ -8,8 +8,14 @@
   justify-content: space-between;
   left: 0;
   padding: 50px 25px 25px;
-  position: absolute;
+  position: fixed;
   width: 100%;
+
+  @for $i from 1 to 20 {
+    &.island-$i {
+      background-image: url("/islands/island-$(i)-ground.png");
+    }
+  }
 
   & .links {
 

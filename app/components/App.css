@@ -15,6 +15,12 @@
 
 }
 
+.pt-input {
+  border-radius: 10px;
+  font-family: "Overpass", sans-serif;
+  letter-spacing: 0.5px;
+}
+
 .pt-button {
   border-radius: 10px;
   font-family: "Overpass", sans-serif;

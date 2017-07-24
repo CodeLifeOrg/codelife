@@ -47,7 +47,6 @@ class Slide extends Component {
 
   saveProgress(level) {
     axios.post("/api/userprogress/save", {level}).then(resp => {
-      console.log(resp);
       resp.status === 200 ? console.log("success") : console.log("error");
     });
   }

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
+import {Button, Dialog, Intent, Popover} from "@blueprintjs/core";
 import "./Minilesson.css";
 
 class Minilesson extends Component {
@@ -36,8 +36,6 @@ class Minilesson extends Component {
     });
   }
 
-
-
   componentDidUpdate() {
     if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
       const {otherSnippets} = this.state;
@@ -49,23 +47,22 @@ class Minilesson extends Component {
     }
   }
 
+  hasUserCompleted(milestone) {
+    return this.state.userProgress.find(up => up.level === milestone) !== undefined;
+  }
+
   buildWindow(i, content) {
+    const {lid} = this.props.params;
+    const done = this.hasUserCompleted(lid);
     return (
       <div className="snippet-popup-container">
-        <div className="snippet-popup-code blurry-text">{content}</div>
+        <div className={done ? "snippet-popup-code regular-text" : "snippet-popup-code blurry-text"}>{content}</div>
         <div className="snippet-popup-render">
           <iframe className="snippetrender" frameBorder="0" ref={ comp => this.iframes[i] = comp } />
         </div>
+        {!done ? <div className="finish-text">Complete this island to view source from other students!</div> : null}
       </div>        
     );
-  }
-
-  filterByCity(e) {
-    console.log(`would filter by ${e.target.value}`);
-  }
-
-  filterBySchool(e) {
-    console.log(`would filter by ${e.target.value}`);
   }
 
   toggleDialog(i) {
@@ -121,7 +118,7 @@ class Minilesson extends Component {
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <h1>Loading...</h1>;
 
     const minilessonItems = minilessons.map(minilesson =>
-      <li key={minilesson.id}><Link className={userProgress.find(up => up.level === minilesson.id) !== undefined ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
+      <li key={minilesson.id}><Link className={ this.hasUserCompleted(minilesson.id) ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
 
     const otherSnippetItems = otherSnippets.map((os, i) =>
       <li>{this.buildButton.bind(this)(os, i)}</li>);

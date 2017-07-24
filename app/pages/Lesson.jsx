@@ -4,6 +4,7 @@ import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {Interpolate, translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
+import CodeBlock from "components/CodeBlock";
 import "./Lesson.css";
 
 class Lesson extends Component {
@@ -67,14 +68,12 @@ class Lesson extends Component {
           title={`My ${lesson.name} Snippet`}
           lazy={false}
           inline={true}
+          className="codeblock-dialog"
         >
-          <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
+          {/*<div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>*/}
+          <div className="pt-dialog-body">{lesson.snippet ? <CodeBlock lesson={lesson} /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
-              <Button
-                text="Edit Snippet"
-                onClick={this.goToEditor.bind(this, lesson.id)}
-              />
               <Button
                 intent={Intent.PRIMARY}
                 onClick={this.toggleDialog.bind(this, i)}
@@ -109,7 +108,7 @@ class Lesson extends Component {
       lessonArray[l].snippet = snippets.find(s => s.lid === lessonArray[l].id);
       const done = this.hasUserCompleted(lessonArray[l].id);
       lessonArray[l].isDone = done;
-      lessonArray[l].isNext = (l === 0 && !done) || (l > 0 && !done && lessonArray[l - 1].isDone);
+      lessonArray[l].isNext = l === 0 && !done || l > 0 && !done && lessonArray[l - 1].isDone;
     }
 
     this.iframes = new Array(lessonArray.length);

@@ -24,16 +24,20 @@ export default class Clouds extends Component {
       const sX = e.clientX;
       const sY = e.clientY;
 
-      this.cloud8.style[`${p}transform`] = `translate3d(${backX(sX)}px, ${backY(sY)}px, 0px)`;
-      this.cloud7.style[`${p}transform`] = `translate3d(${backX(sX)}px, ${backY(sY)}px, 0px)`;
-      this.cloud4.style[`${p}transform`] = `translate3d(${backX(sX)}px, ${backY(sY)}px, 0px)`;
+      if (this.cloud8) {
 
-      this.cloud1.style[`${p}transform`] = `translate3d(${midX(sX)}px, ${midY(sY)}px, 0px)`;
-      this.cloud5.style[`${p}transform`] = `translate3d(${midX(sX)}px, ${midY(sY)}px, 0px)`;
+        this.cloud8.style[`${p}transform`] = `translate3d(${backX(sX)}px, ${backY(sY)}px, 0px)`;
+        this.cloud7.style[`${p}transform`] = `translate3d(${backX(sX)}px, ${backY(sY)}px, 0px)`;
+        this.cloud4.style[`${p}transform`] = `translate3d(${backX(sX)}px, ${backY(sY)}px, 0px)`;
 
-      this.cloud2.style[`${p}transform`] = `translate3d(${frontX(sX)}px, ${frontY(sY)}px, 0px)`;
-      this.cloud3.style[`${p}transform`] = `translate3d(${frontX(sX)}px, ${frontY(sY)}px, 0px)`;
-      this.cloud6.style[`${p}transform`] = `translate3d(${frontX(sX)}px, ${frontY(sY)}px, 0px)`;
+        this.cloud1.style[`${p}transform`] = `translate3d(${midX(sX)}px, ${midY(sY)}px, 0px)`;
+        this.cloud5.style[`${p}transform`] = `translate3d(${midX(sX)}px, ${midY(sY)}px, 0px)`;
+
+        this.cloud2.style[`${p}transform`] = `translate3d(${frontX(sX)}px, ${frontY(sY)}px, 0px)`;
+        this.cloud3.style[`${p}transform`] = `translate3d(${frontX(sX)}px, ${frontY(sY)}px, 0px)`;
+        this.cloud6.style[`${p}transform`] = `translate3d(${frontX(sX)}px, ${frontY(sY)}px, 0px)`;
+
+      }
 
     });
 

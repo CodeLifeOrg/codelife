@@ -113,7 +113,7 @@ class Minilesson extends Component {
     const {lid} = this.props.params;
     let css = "ml_link";
     if (minilesson.isNext) css += " next";
-    if (minilesson.isDone) css += " completed";
+    minilesson.isDone ? css += " completed" : css += " blocked";
     return (
       <Link className={css} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link>
     ); 

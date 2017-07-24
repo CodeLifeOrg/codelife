@@ -1,0 +1,9 @@
+#loading {
+  margin-top: 30vh;
+  text-align: center;
+
+  & .title {
+    color: white;
+    margin-top: 20px;
+  }
+}

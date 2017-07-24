@@ -29,7 +29,7 @@ class CodeBlock extends Component {
   }
 
   componentDidMount() {
-    this.setState({mounted:true, currentText:this.props.lesson.snippet.studentcontent}, this.renderText.bind(this));
+    this.setState({mounted: true, currentText: this.props.lesson.snippet.studentcontent}, this.renderText.bind(this));
   }
 
   getEditor() {
@@ -99,9 +99,12 @@ class CodeBlock extends Component {
 
     if (!this.state.mounted) return <h1>Loading...</h1>;
 
+    console.log(lesson);
+
     return (
       <div>
         <div id="container">
+          <div id="codeblock-prompt"> {lesson.prompt} </div>
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="kuroir" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>

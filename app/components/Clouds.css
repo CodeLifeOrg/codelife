@@ -28,17 +28,7 @@
     width: 27.1484375%;
     max-width: 278px;
     height: 153px;
-    animation: float-left 100s linear infinite;
-  }
-
-  & #cloud1-5 {
-    background-image: url("/clouds/cloud1.png");
-    opacity: 0.331;
-    right: -2.8828125%;
-    top: 42.3125%;
-    width: 27.1484375%;
-    max-width: 278px;
-    height: 153px;
+    animation: float-left 400s linear infinite;
   }
 
   & #cloud2 {
@@ -49,10 +39,10 @@
     max-width: 431px;
     width: 42.0898438%;
     height: 133px;
-    animation: float-right 120s linear infinite;
+    animation: float-right 500s linear infinite;
   }
 
-  & #cloud2-5 {
+  & #cloud3 {
     background-image: url("/clouds/cloud1.png");
     opacity: 0.55;
     right: -20.6835938%;
@@ -60,16 +50,6 @@
     max-width: 431px;
     width: 42.0898438%;
     height: 133px;
-  }
-
-  & #cloud3 {
-    background-image: url("/clouds/cloud1.png");
-    opacity: 0.4;
-    width: 33.3333%;
-    max-width: 256px;
-    height: 312px;
-    top: 9.9%;
-    left: 48.49%;
   }
 
   & #cloud4 {
@@ -100,17 +80,18 @@
     height: 312px;
     top: 77.19%;
     left: 0;
-    animation: float-right 75s linear infinite;
+    animation: float-right 300s linear infinite;
   }
 
   & #cloud7 {
-    background-image: url("/clouds/cloud1.png");
-    opacity: 0.35;
-    width: 32.72%;
-    max-width: 335px;
-    height: 197px;
-    top: 89.71%;
-    left: 53.52%;
+    background-image: url("/clouds/cloud2.png");
+    opacity: 0.75;
+    width: 27.34375%;
+    max-width: 210px;
+    height: 154px;
+    top: 77.92%;
+    right: 0;
+    animation: float-left 400s linear infinite;
   }
 
   & #cloud8 {
@@ -121,17 +102,6 @@
     height: 109px;
     top: 24.53%;
     right: 0.31%;
-  }
-
-  & #cloud9 {
-    background-image: url("/clouds/cloud2.png");
-    opacity: 0.75;
-    width: 27.34375%;
-    max-width: 210px;
-    height: 154px;
-    top: 77.92%;
-    right: 0;
-    animation: float-left 55s linear infinite;
   }
 
 }

@@ -61,7 +61,7 @@ class Minilesson extends Component {
           <iframe className="snippetrender" frameBorder="0" ref={ comp => this.iframes[i] = comp } />
         </div>
         {!done ? <div className="finish-text">Complete this island to view source from other students!</div> : null}
-      </div>        
+      </div>     
     );
   }
 
@@ -109,6 +109,16 @@ class Minilesson extends Component {
     );
   }
 
+  buildLink(minilesson) {
+    const {lid} = this.props.params;
+    let css = "ml_link";
+    if (minilesson.isNext) css += " next";
+    if (minilesson.isDone) css += " completed";
+    return (
+      <Link className={css} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link>
+    ); 
+  }
+
   render() {
 
     const {t} = this.props;
@@ -117,8 +127,18 @@ class Minilesson extends Component {
 
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <h1>Loading...</h1>;
 
-    const minilessonItems = minilessons.map(minilesson =>
-      <li key={minilesson.id}><Link className={ this.hasUserCompleted(minilesson.id) ? "ml_link completed" : "ml_link"} to={`/lesson/${lid}/${minilesson.id}`}>{ minilesson.name }</Link></li>);
+    // clone minilessons as to not mess with state
+    const minilessonStatuses = minilessons.slice(0);
+    for (let m = 0; m < minilessonStatuses.length; m++) {
+      const done = this.hasUserCompleted(minilessonStatuses[m].id);
+      minilessonStatuses[m].isDone = done;
+      // if i'm the first lesson and i'm not done, i'm next lesson
+      // if i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson
+      minilessonStatuses[m].isNext = (m === 0 && !done) || (m > 0 && !done && minilessonStatuses[m - 1].isDone);
+    }
+
+    const minilessonItems = minilessonStatuses.map(minilesson =>
+      <li>{this.buildLink.bind(this)(minilesson)}</li>);
 
     const otherSnippetItems = otherSnippets.map((os, i) =>
       <li>{this.buildButton.bind(this)(os, i)}</li>);
@@ -130,8 +150,7 @@ class Minilesson extends Component {
         <h1>{currentLesson.name}</h1>
         <p>{currentLesson.description}</p>
         <ul>{minilessonItems}</ul>
-        <Link className="editor-link" to={`/editor/${lid}`}>Go to my editor (My Snippet)</Link>
-        <br/><br/>
+        <ul><li><Link className="editor-link" to={`/editor/${lid}`}>Snippet Boss Castle</Link></li></ul>
         <strong>Other Snippets</strong><br/>
         <ul>{otherSnippetItems}</ul>
       </div>

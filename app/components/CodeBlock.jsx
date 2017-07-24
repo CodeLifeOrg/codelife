@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import himalaya from "himalaya";
 import "./CodeBlock.css";
 
 class AceWrapper extends Component {
@@ -24,7 +25,8 @@ class CodeBlock extends Component {
     super(props);
     this.state = {
       mounted: false,
-      currentText: ""
+      currentText: "",
+      isPassing: false
     };
   }
 
@@ -47,8 +49,37 @@ class CodeBlock extends Component {
     doc.close();
   }
 
+  containsTag(needle, haystack) {
+    return this.tagCount(needle, haystack) > 0;
+  }
+
+  tagCount(needle, haystack) {
+    let count = 0;
+    for (const h of haystack) {
+      if (h.type === "Element") {
+        if (h.tagName === needle) {
+          count++;
+        } if (h.children !== null) {
+          count += this.tagCount(needle, h.children);
+        }
+      }
+    }
+    return count;
+  }
+
   onChangeText(theText) {
-    this.setState({currentText: theText}, this.renderText.bind(this));
+    const jsonArray = himalaya.parse(this.getEditor().getValue());
+    const rulejson = JSON.parse(this.props.lesson.rulejson);
+    let errors = 0;
+    for (const r of rulejson) {
+      if (r.type === "CONTAINS") {
+        if (!this.containsTag(r.needle, jsonArray)) {
+          errors++;
+        }
+      }
+    }
+
+    this.setState({currentText: theText, isPassing: errors === 0}, this.renderText.bind(this));
   }
 
   resetSnippet() {
@@ -96,10 +127,9 @@ class CodeBlock extends Component {
   render() {
 
     const {t, lesson} = this.props;
+    const {isPassing} = this.state;
 
     if (!this.state.mounted) return <h1>Loading...</h1>;
-
-    console.log(lesson);
 
     return (
       <div>
@@ -109,6 +139,7 @@ class CodeBlock extends Component {
           { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="kuroir" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
+          {isPassing ? <div className="status-text passing">Passing</div> : <div className="status-text failing">Failing</div>}
           <br/><br/>
           { lesson.snippet ? <Link className="share-link" to={`/share/snippet/${lesson.snippet.id}`}>Share this Snippet</Link> : null }
           </div>

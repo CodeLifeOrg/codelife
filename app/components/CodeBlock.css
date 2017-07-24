@@ -5,3 +5,15 @@
   margin-bottom: 10px;
   border: 1px solid black;
 }
+
+.status-text {
+  color:black;
+}
+
+.passing{
+  color:green;
+}
+
+.failing {
+  color:red;
+}

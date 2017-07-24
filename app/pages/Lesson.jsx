@@ -40,6 +40,10 @@ class Lesson extends Component {
     }
   }
 
+  hasUserCompleted(milestone) {
+    return this.state.userProgress.find(up => up.level === milestone) !== undefined;
+  }
+
   toggleDialog(i) {
     const k = `isOpen_${i}`;
     let currentFrame = null;
@@ -83,6 +87,13 @@ class Lesson extends Component {
     );
   }
 
+  islandState(lesson) {
+    let css = "island";
+    if (lesson.isNext) css += " next";
+    if (lesson.isDone) css += " completed";
+    return css;
+  }
+
   render() {
 
     const {t} = this.props;
@@ -94,15 +105,17 @@ class Lesson extends Component {
     // clone the array so we don't mess with state
     const lessonArray = lessons.slice(0);
 
-    for (const l of lessonArray) {
-      l.snippet = snippets.find(s => s.lid === l.id);
+    for (let l = 0; l < lessonArray.length; l++) {
+      lessonArray[l].snippet = snippets.find(s => s.lid === lessonArray[l].id);
+      const done = this.hasUserCompleted(lessonArray[l].id);
+      lessonArray[l].isDone = done;
+      lessonArray[l].isNext = (l === 0 && !done) || (l > 0 && !done && lessonArray[l - 1].isDone);
     }
 
     this.iframes = new Array(lessonArray.length);
 
     const lessonItems = lessonArray.map((lesson, i) => {
-      const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
-      return <div className={ complete ? "island completed" : "island" } key={ lesson.id }>
+      return <div className={ this.islandState(lesson) } key={ lesson.id }>
         <Link className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }-small.png')`}}></Link>
         { lesson.snippet ? this.buildButton.bind(this)(lesson, i) : null }
       </div>;

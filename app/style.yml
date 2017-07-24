@@ -1,0 +1,7 @@
+sky: "#74c3b7"
+
+islands:
+  island-1:
+    dark: "#003E00"
+    light: "#90B857"
+    accent: "#00EBE6"

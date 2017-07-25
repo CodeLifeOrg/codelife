@@ -14,6 +14,12 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/projects/byuser", (req, res) => {
+
+    db.projects.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+
+  });
+
   app.post("/api/projects/update", (req, res) => {
 
     db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name}, {where: {uid: req.body.uid, id: req.body.id}})

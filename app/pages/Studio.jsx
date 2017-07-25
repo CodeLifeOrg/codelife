@@ -4,23 +4,11 @@ import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 
+import AceWrapper from "components/AceWrapper";
 import Snippets from "components/Snippets";
 import Projects from "components/Projects";
 
 import "./Studio.css";
-
-class AceWrapper extends Component {
-
-  render() {
-    if (typeof window !== "undefined") {
-      const Ace = require("react-ace").default;
-      require("brace/mode/html");
-      require("brace/theme/monokai");
-      return <Ace ref={editor => this.editor = editor} {...this.props}/>;
-    }
-    return null;
-  }
-}
 
 class Studio extends Component {
 
@@ -151,7 +139,7 @@ class Studio extends Component {
         {projectRef}
         <div id="container">
           <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="kuroir" onChange={this.onChangeText.bind(this)} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <br/><br/>

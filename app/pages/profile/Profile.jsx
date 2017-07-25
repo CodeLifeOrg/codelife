@@ -4,6 +4,8 @@ import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import UserInfo from "./UserInfo";
+import UserSnippets from "./UserSnippets";
+import UserProjects from "./UserProjects";
 import "./Profile.css";
 
 /**
@@ -57,9 +59,8 @@ class Profile extends Component {
    *  - user info
    */
   render() {
-    const {t} = this.props;
+    const {t, user: loggedInUser} = this.props;
     const {loading, error, profileUser} = this.state;
-    const {user: loggedInUser} = this.props;
     console.log(loggedInUser, profileUser);
 
     if (loading) return <h1>Loading ...</h1>;
@@ -80,8 +81,8 @@ class Profile extends Component {
           { profileUser.bio
             ? <p className="bio">{ profileUser.bio }</p>
             : null }
-          {/* <snippetsList /> */}
-          {/* <projectsList /> */}
+          <UserSnippets user={profileUser} />
+          <UserProjects user={profileUser} />
         </content>
       </div>
     );

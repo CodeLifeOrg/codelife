@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Tooltip} from "@blueprintjs/core";
+import CodeBlock from "components/CodeBlock";
 import "./Minilesson.css";
 
 import Loading from "components/Loading";
@@ -17,7 +18,8 @@ class Minilesson extends Component {
       currentLesson: null,
       userProgress: null,
       otherSnippets: null,
-      currentFrame: null
+      currentFrame: null,
+      testOpen: false
     };
   }
 
@@ -26,15 +28,20 @@ class Minilesson extends Component {
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const uget = axios.get("/api/userprogress");
-    const osget = axios.get(`/api/snippets/othersbylid?lid=${lid}`);
+    const osget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
 
     Promise.all([mlget, lget, uget, osget]).then(resp => {
-      this.setState({
-        minilessons: resp[0].data,
-        currentLesson: resp[1].data[0],
-        userProgress: resp[2].data,
-        otherSnippets: resp[3].data
-      });
+      const minilessons = resp[0].data;
+      const currentLesson = resp[1].data[0];
+      const userProgress = resp[2].data;
+      const allSnippets = resp[3].data;
+      const otherSnippets = [];
+      let mySnippet = null;
+      for (const s of allSnippets) {
+        s.uid === this.props.user.id ? mySnippet = s : otherSnippets.push(s);
+      }
+      currentLesson.snippet = mySnippet;
+      this.setState({minilessons, currentLesson, userProgress, otherSnippets});
     });
   }
 
@@ -74,16 +81,11 @@ class Minilesson extends Component {
     this.setState({[k]: !this.state[k], didInject: false, viewingSource: false, currentFrame});
   }
 
-  htmlEscape(str) {
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+  toggleTest() {
+    this.setState({testOpen: !this.state.testOpen});
   }
 
-  buildButton(snippet, i) {
+  buildCodeblockButton(snippet, i) {
     const {t} = this.props;
     return (
       <div className="snippet-link">
@@ -111,6 +113,37 @@ class Minilesson extends Component {
               <Button
                 intent={Intent.PRIMARY}
                 onClick={this.toggleDialog.bind(this, i)}
+                text="Close"
+              />
+            </div>
+          </div>
+        </Dialog>
+      </div>
+    );
+  }
+
+  buildTestPopover() {
+    const {t} = this.props;
+    const {currentLesson} = this.state;
+    return (
+      <div className="editor-popover">
+        <Tooltip content="Final Test" tooltipClassName={ currentLesson.id }>
+          <div className="stop editor-link" onClick={this.toggleTest.bind(this)} />
+        </Tooltip>
+        <Dialog
+          isOpen={this.state.testOpen}
+          onClose={this.toggleTest.bind(this)}
+          title={ `My ${currentLesson.name} CodeBlock` }
+          style={{
+            width: "1150px"
+          }}
+        >
+          <div className="pt-dialog-body"> <CodeBlock lesson={currentLesson} /></div>
+          <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+              <Button
+                intent={Intent.PRIMARY}
+                onClick={this.toggleTest.bind(this)}
                 text="Close"
               />
             </div>
@@ -151,7 +184,8 @@ class Minilesson extends Component {
       return <div className="stop"></div>;
     });
 
-    const otherSnippetItems = otherSnippets.map((os, i) => this.buildButton.bind(this)(os, i));
+    const otherSnippetItems = otherSnippets.map((os, i) => this.buildCodeblockButton.bind(this)(os, i));
+    const testPopover = this.buildTestPopover();
 
     this.iframes = new Array(otherSnippets.length);
 
@@ -162,9 +196,7 @@ class Minilesson extends Component {
           <p className="description">{ currentLesson.description }</p>
           <div id="path">
             { minilessonItems }
-            <Tooltip content="Final Test" tooltipClassName={ currentLesson.id }>
-              <Link className="stop editor-link" to={`/editor/${lid}`}></Link>
-            </Tooltip>
+            { testPopover }
           </div>
         </div>
         { otherSnippets.length

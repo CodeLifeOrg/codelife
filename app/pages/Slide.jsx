@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import {Tooltip} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
 
@@ -121,21 +122,28 @@ class Slide extends Component {
     console.log(this.state.latestSlideCompleted);
 
     return (
-      <div>
-        <h1>{currentSlide.title}</h1>
+      <div id="slide" className={ currentLesson.id }>
+
+        <div id="slide-head">
+          <h1 className="title">{ currentSlide.title }</h1>
+          <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
+            <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
+          </Tooltip>
+        </div>
 
         <SlideComponent unblock={this.unblock.bind(this)} {...currentSlide} />
 
-        <div id="slugcontainer">
-          { prevSlug ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>previous</Link> : <span className="deadlink">previous</span> }
-          { nextSlug && !this.state.blocked ? <Link className="navlink" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>next</Link> : <span className="deadlink">next</span> }
+        <div id="slide-foot">
+          { prevSlug
+          ? <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>Previous</Link>
+          : <div className="pt-button pt-disabled">Previous</div> }
+          { nextSlug
+          ? this.state.blocked
+            ? <div className="pt-button pt-disabled">Next</div>
+            : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>Next</Link>
+          : <Link className="pt-button pt-intent-success editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> }
         </div>
-        <div id="returncontainer">
 
-          { !nextSlug ? <Link className="editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> : null }
-          <br/><br/>
-          <Link className="link" to={`/lesson/${lid}`}>return to {currentLesson.name}</Link>
-        </div>
       </div>
     );
   }

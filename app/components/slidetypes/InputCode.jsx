@@ -1,29 +1,16 @@
 import React, {Component} from "react";
-import {translate} from "react-i18next";
 import himalaya from "himalaya";
-import "./InputCode.css";
 
-class Editor extends Component {
-
-  render() {
-    if (typeof window !== "undefined") {
-      const Ace = require("react-ace").default;
-      require("brace/mode/html");
-      require("brace/theme/monokai");
-      return <Ace ref={editor => this.editor = editor} editorProps={{$blockScrolling: Infinity}} {...this.props}/>;
-    }
-    return null;
-  }
-}
+import AceWrapper from "components/AceWrapper";
 
 export default class InputCode extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
-      mounted: false, 
+    this.state = {
+      mounted: false,
       currentText: "",
-      checkerResult: "Press Submit to submit your answer"
+      checkerResult: false
     };
   }
 
@@ -44,7 +31,7 @@ export default class InputCode extends Component {
     }
     // todo: make this more resilient lol
     if (checkerText === "") {
-      checkerText = "You got it right!";
+      checkerText = true;
       this.props.unblock();
     }
     this.setState({checkerResult: checkerText});
@@ -90,20 +77,28 @@ export default class InputCode extends Component {
     if (this.props.htmlcontent2) initText = this.props.htmlcontent2;
     this.setState({mounted: true, currentText: initText}, this.renderText.bind(this));
   }
-  
+
   render() {
-    
-    const {t, htmlcontent1, htmlcontent2} = this.props;
+
+    const {htmlcontent1} = this.props;
+    const {checkerResult} = this.state;
 
     return (
-      <div id="ic_container">
-        <div id="ic_instructions">{htmlcontent1}</div>
-        <div id="ic_code-container">{ this.state.mounted ? <Editor ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" theme="monokai" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }</div>
-        <div id="ic_render-container"><iframe id="render-frame" ref="rf" /></div>
-        <div className="clear" />
-        <button className="ic_button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>
-        <button className="ic_button" onClick={this.resetAnswer.bind(this)}>RESET</button>
-        <div id="ic_errorcontainer">{this.state.checkerResult}</div>
+      <div id="slide-container" className="renderCode flex-column">
+        <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        <div className="flex-row">
+          { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }
+          <iframe className="slide-render" ref="rf" />
+        </div>
+        <div className="validation">
+          { checkerResult === false
+          ? <div className="pt-callout">Press Submit to submit your answer</div>
+          : checkerResult === true
+          ? <div className="pt-callout pt-intent-success">You got it right!</div>
+          : <div className="pt-callout pt-intent-warning">{ checkerResult }</div> }
+          <button className="pt-button" onClick={this.resetAnswer.bind(this)}>Reset</button>
+          <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>Submit</button>
+        </div>
       </div>
     );
   }

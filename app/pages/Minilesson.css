@@ -167,36 +167,42 @@
     }
   }
 
-  &.island-1 {
-    & .title, & .description { text-shadow: 0 2px 2px map(islands, island-1, dark); }
-    & #path:before, & #path .stop { border-color: map(islands, island-1, dark); }
-    & #path .stop:not(.next):not(.done) { background-color: map(islands, island-1, light); }
-    & #snippets .snippet-link { background-color: map(islands, island-1, dark); }
-    & .pt-dialog { border-color: map(islands, island-1, dark); }
-    & .pt-dialog .pt-dialog-header { background-color: map(islands, island-1, dark); }
-    & .pt-button.pt-intent-primary { background-color: map(islands, island-1, dark); }
-  }
+}
 
-  &.island-2 {
-    & .title, & .description { text-shadow: 0 2px 2px map(islands, island-2, dark); }
-    & #path:before, & #path .stop { border-color: map(islands, island-2, dark); }
-    & #path .stop:not(.next):not(.done) { background-color: map(islands, island-2, light); }
-    & #snippets .snippet-link { background-color: map(islands, island-2, dark); }
-    & .pt-dialog { border-color: map(islands, island-2, dark); }
-    & .pt-dialog .pt-dialog-header { background-color: map(islands, island-2, dark); }
-    & .pt-button.pt-intent-primary { background-color: map(islands, island-2, dark); }
-  }
+.island-1 {
+  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-1, dark); }
+  &#island #path:before, & #path .stop { border-color: map(islands, island-1, dark); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-1, light); }
+  &#island #snippets .snippet-link { background-color: map(islands, island-1, dark); }
+  & .pt-dialog { border-color: map(islands, island-1, dark); }
+  & .pt-dialog .pt-dialog-header { background-color: map(islands, island-1, dark); }
+  & .pt-button.pt-intent-primary { background-color: map(islands, island-1, dark); }
+  &#slide a:not(.pt-button) { color: map(islands, island-1, dark); opacity: 0.75; transition: opacity 0.2s; }
+  &#slide a:not(.pt-button):hover { opacity: 1; }
+}
 
-  &.island-3 {
-    & .title, & .description { text-shadow: 0 2px 2px map(islands, island-3, dark); }
-    & #path:before, & #path .stop { border-color: map(islands, island-3, dark); }
-    & #path .stop:not(.next):not(.done) { background-color: map(islands, island-3, light); }
-    & #snippets .snippet-link { background-color: map(islands, island-3, dark); }
-    & .pt-dialog { border-color: map(islands, island-3, dark); }
-    & .pt-dialog .pt-dialog-header { background-color: map(islands, island-3, dark); }
-    & .pt-button.pt-intent-primary { background-color: map(islands, island-3, dark); }
-  }
+.island-2 {
+  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-2, dark); }
+  &#island #path:before, & #path .stop { border-color: map(islands, island-2, dark); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-2, light); }
+  &#island #snippets .snippet-link { background-color: map(islands, island-2, dark); }
+  & .pt-dialog { border-color: map(islands, island-2, dark); }
+  & .pt-dialog .pt-dialog-header { background-color: map(islands, island-2, dark); }
+  & .pt-button.pt-intent-primary { background-color: map(islands, island-2, dark); }
+  &#slide a:not(.pt-button) { color: map(islands, island-2, dark); opacity: 0.75; transition: opacity 0.2s; }
+  &#slide a:not(.pt-button):hover { opacity: 1; }
+}
 
+.island-3 {
+  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-3, dark); }
+  &#island #path:before, & #path .stop { border-color: map(islands, island-3, dark); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-3, light); }
+  &#island #snippets .snippet-link { background-color: map(islands, island-3, dark); }
+  & .pt-dialog { border-color: map(islands, island-3, dark); }
+  & .pt-dialog .pt-dialog-header { background-color: map(islands, island-3, dark); }
+  & .pt-button.pt-intent-primary { background-color: map(islands, island-3, dark); }
+  &#slide a:not(.pt-button) { color: map(islands, island-3, dark); opacity: 0.75; transition: opacity 0.2s; }
+  &#slide a:not(.pt-button):hover { opacity: 1; }
 }
 
 .pt-tooltip.island-1 .pt-popover-arrow-fill { fill: map(islands, island-1, dark); }

@@ -1,19 +1,159 @@
-.navlink {
-  margin-right: 10px;
-}
+#slide {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 70vh;
+  margin: 0 25px 25px;
+  position: relative;
 
-.deadlink {
-  margin-right: 10px;
-}
+  & #slide-head {
+    margin: 25px 25px 0;
+    position: relative;
+    text-align: center;
 
-div#slugcontainer {
-  margin-top: 15px;
-}
+    & .title {
+      font-size: 32px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
 
-div#returncontainer {
-  margin-top: 15px;
-}
+    & .return-link {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
 
-div.clear {
-  clear: both;
+  }
+
+  & #slide-container {
+    overflow: visible;
+    padding: 0 25px;
+
+    & * {
+      font-size: 18px;
+      line-height: 24px;
+      /*text-align: justify;*/
+    }
+
+    & .slide-image {
+      flex: 1;
+
+      & img {
+        width: 100%;
+      }
+
+    }
+
+    & .slide-editor {
+      align-self: stretch;
+      flex: 1;
+    }
+
+    & .slide-render {
+      align-self: stretch;
+      border: 1px solid #333;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      flex: 1;
+    }
+
+    & .validation {
+      margin-bottom: -75px;
+      text-align: center;
+
+      & .pt-button {
+        margin: 15px 5px 10px;
+      }
+    }
+
+    & .slide-quiz {
+
+      & .questions {
+        list-style: none;
+        margin: 10px 0;
+        padding: 0;
+
+        & .question {
+          background-color: rgba(0, 0, 0, 0.05);
+          counter-increment: item;
+          margin: 1px 0;
+          padding:  10px 15px 10px 40px;
+          position: relative;
+          text-align: left;
+          transition: background-color 0.2s;
+
+          &:before {
+            content: counter(item);
+            display: inline-block;
+            left: 10px;
+            position: absolute;
+            text-align: center;
+            width: 20px;
+          }
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+          }
+        }
+
+      }
+
+    }
+
+  }
+
+  & #slide-foot {
+    display: flex;
+    justify-content: space-between;
+    margin: 35px 25px 15px;
+  }
+
+  & .flex-row {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+
+    & > *:not(.flex-row):not(.flex-column) {
+      margin: 25px 25px 0;
+    }
+
+    & .slide-text {
+      flex: none;
+      width: 400px;
+    }
+
+    @media only screen and (max-width : 768px) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+
+      & .slide-text {
+        width: auto;
+      }
+
+    }
+
+  }
+
+  & .flex-column {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+
+    & > *:not(.flex-row):not(.flex-column) {
+      margin: 25px 25px 0;
+    }
+
+  }
+
 }

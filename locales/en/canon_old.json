@@ -2,5 +2,8 @@
   "Translated Content": "English Content",
   "Lessons": "Lessons",
   "Tracks": "Tracks",
-  "Home": "Home"
+  "Home": "Home",
+  "/api/snippets/allgeos": "",
+  "/api/snippets/allschools": "",
+  "overworld": {}
 }

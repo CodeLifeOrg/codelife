@@ -1,25 +1,31 @@
 {
+  "/": "",
   "/api/lessons/": "",
   "/api/projects/": "",
   "/api/projects/new": "",
   "/api/projects/update": "",
   "/api/snippets": "",
-  "/api/snippets/allgeos": "",
-  "/api/snippets/allschools": "",
   "/api/userprogress": "",
   "/api/userprogress/save": "",
   "Error": "",
   "File cannot be in use or blank": "",
   "Glossary": "Glossary",
   "Incorrect, please try again!": "",
+  "Loading": {
+    "": {
+      "": ""
+    }
+  },
   "Logout": "Logout",
   "Overworld": "Overworld",
   "Profile": "Profile",
   "Saved to DB": "",
   "Studio": "Studio",
   "That's correct!": "",
+  "created by": "",
   "open a new file first": "",
   "overworld": {
+    "blocker": "Complete the previous islands to unlock {{name}}.",
     "welcome": "Welcome back {{name}}!"
   }
 }

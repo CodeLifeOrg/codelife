@@ -88,13 +88,6 @@ class Lesson extends Component {
     );
   }
 
-  islandState(lesson) {
-    let css = "island";
-    if (lesson.isNext) css += " next";
-    lesson.isDone ? css += " completed" : css += " blocked";
-    return css;
-  }
-
   render() {
 
     const {t} = this.props;
@@ -113,10 +106,31 @@ class Lesson extends Component {
       lessonArray[l].isNext = l === 0 && !done || l > 0 && !done && lessonArray[l - 1].isDone;
     }
 
-    const lessonItems = lessonArray.map((lesson, i) => <div className={ this.islandState(lesson) } key={ lesson.id }>
-        <Link className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></Link>
-        { lesson.snippet ? this.buildButton.bind(this)(lesson, i) : null }
-      </div>);
+    const lessonItems = lessonArray.map((lesson, i) => {
+      if (lesson.isNext || lesson.isDone) {
+        let css = "island";
+        if (lesson.isNext) css += " next";
+        if (lesson.isDone) css += " done";
+        return <Link to={`/lesson/${lesson.id}`} className={ css } key={ lesson.id }>
+          <div className="graphic" style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></div>
+          <div className={ `pt-popover pt-tooltip ${ lesson.id }` }>
+            <div className="pt-popover-content">
+              <div className="title">{ lesson.name }</div>
+              <div className="description">{ lesson.description }</div>
+            </div>
+          </div>
+        </Link>;
+      }
+      return <div className="island" key={ lesson.id }>
+        <div className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></div>
+        <div className={ `pt-popover pt-tooltip ${ lesson.id }` }>
+          <div className="pt-popover-content">
+            <div className="title">{ lesson.name }</div>
+            <div className="description"><Interpolate i18nKey="overworld.blocker" name={ lesson.name } /></div>
+          </div>
+        </div>
+      </div>;
+    });
 
     return (
       <div className="overworld">

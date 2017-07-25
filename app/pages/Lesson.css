@@ -2,19 +2,6 @@
   width: 1150px;
 }
 
-/*
-1. Theme park island
-2. Jungle island
-3. Ice island
-4. Beach island
-5. City island
-6. Desert island
-7. Dark island
-8. Farm island
-9. Industrial island
-10. Mountain island
-*/
-
 .snippetrender {
   background-color: white;
   border: 1px solid #A8ABB1;
@@ -31,13 +18,17 @@
 
   & .map {
     display: block;
-    margin: 0 auto 50px;
+    margin: 25px auto 50px;
     max-width: 900px;
     text-align: center;
     width: 100%;
 
     & .island {
-      display: block;
+      align-items: center;
+      display: flex;
+      height: 300px;
+      justify-content: center;
+      position: relative;
       width: 300px;
 
       &:nth-child(even) {
@@ -62,11 +53,45 @@
         background-size: 90% auto;
         display: block;
         height: 300px;
+        position: absolute;
         transition: background-size 0.2s;
         width: 300px;
 
-        &:hover {
+      }
+
+      &:not(.done):not(.next) {
+        & .graphic {
+          filter: grayscale(1);
+        }
+      }
+
+      & .pt-tooltip {
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+        width: 80%;
+
+        & .title {
+          letter-spacing: 0.5px;
+          margin-bottom: 5px;
+          text-transform: uppercase;
+        }
+
+        & .description {
+          font-size: 10px;
+        }
+
+      }
+
+      &:hover {
+        text-decoration: none;
+
+        & .graphic {
           background-size: 100% auto;
+        }
+
+        & .pt-tooltip {
+          opacity: 1;
+          transform: scale(1.3);
         }
 
       }

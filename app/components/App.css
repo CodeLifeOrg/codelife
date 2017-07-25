@@ -52,6 +52,7 @@
   border: 1px solid #328F86;
   border-radius: 10px;
   padding-bottom: 8px;
+  position: fixed !important;
 
   & .pt-dialog-header {
     background: #328F86;
@@ -60,6 +61,19 @@
     & h5, & button, & span {
       color: white;
       font-weight: 400;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+  }
+
+  & .pt-dialog-footer {
+
+    & .pt-dialog-footer-byline {
+      color: #444;
+      float: left;
+      opacity: 0.75;
+      margin-top: 10px;
     }
 
   }

@@ -4,6 +4,8 @@ import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 
+import Loading from "components/Loading";
+
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
 import Quiz from "components/slidetypes/Quiz";
@@ -103,7 +105,7 @@ class Slide extends Component {
 
     let SlideComponent = null;
 
-    if (!currentSlide || !currentLesson) return <h1>Loading...</h1>;
+    if (!currentSlide || !currentLesson) return <Loading />;
 
     SlideComponent = compLookup[currentSlide.type];
 

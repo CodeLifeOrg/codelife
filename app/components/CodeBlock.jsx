@@ -6,6 +6,8 @@ import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import "./CodeBlock.css";
 
+import Loading from "components/Loading";
+
 class AceWrapper extends Component {
 
   render() {
@@ -129,7 +131,7 @@ class CodeBlock extends Component {
     const {t, lesson} = this.props;
     const {isPassing} = this.state;
 
-    if (!this.state.mounted) return <h1>Loading...</h1>;
+    if (!this.state.mounted) return <Loading />;
 
     return (
       <div>

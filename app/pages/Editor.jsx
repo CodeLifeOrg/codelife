@@ -5,6 +5,8 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import "./Editor.css";
 
+import Loading from "components/Loading";
+
 class AceWrapper extends Component {
 
   render() {
@@ -110,7 +112,7 @@ class Editor extends Component {
     const {lid} = this.props.params;
     const {lesson, snippet} = this.state;
 
-    if (!this.state.mounted) return <h1>Loading...</h1>;
+    if (!this.state.mounted) return <Loading />;
 
     return (
       <div>

@@ -7,6 +7,8 @@ import {Button, Dialog, Intent} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import "./Lesson.css";
 
+import Loading from "components/Loading";
+
 class Lesson extends Component {
 
   constructor(props) {
@@ -99,7 +101,7 @@ class Lesson extends Component {
     const {lessons, snippets, userProgress} = this.state;
     const {user} = this.props;
 
-    if (lessons === [] || !userProgress) return <h1>Loading...</h1>;
+    if (lessons === [] || !userProgress) return <Loading />;
 
     // clone the array so we don't mess with state
     const lessonArray = lessons.slice(0);

@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
-import {connect} from "react-redux";
 import axios from "axios";
 import "./Share.css";
+
+import Loading from "components/Loading";
 
 class Share extends Component {
 
@@ -42,7 +42,7 @@ class Share extends Component {
     const {t} = this.props;
     const {content} = this.state;
 
-    if (!content) return <h1>Loading...</h1>;
+    if (!content) return <Loading />;
 
     return (
       <div>

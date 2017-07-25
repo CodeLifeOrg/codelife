@@ -103,7 +103,7 @@ class Lesson extends Component {
     const lessonItems = lessonArray.map((lesson, i) => {
       const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
       return <div className={ complete ? "island completed" : "island" } key={ lesson.id }>
-        <Link className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }-small.png')`}}></Link>
+        <Link className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></Link>
         { lesson.snippet ? this.buildButton.bind(this)(lesson, i) : null }
       </div>;
     });

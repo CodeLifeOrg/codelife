@@ -4,6 +4,7 @@ import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {Interpolate, translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
+import CodeBlock from "components/CodeBlock";
 import "./Lesson.css";
 
 class Lesson extends Component {
@@ -29,15 +30,8 @@ class Lesson extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
-      const {lessons} = this.state;
-      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
-      doc.open();
-      doc.write(lessons[this.state.currentFrame].snippet.studentcontent);
-      doc.close();
-      this.setState({didInject: true});
-    }
+  hasUserCompleted(milestone) {
+    return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 
   toggleDialog(i) {
@@ -49,6 +43,17 @@ class Lesson extends Component {
 
   goToEditor(lid) {
     browserHistory.push(`/editor/${lid}`);
+  }
+
+  handleSave(sid, studentcontent) {
+    // todo: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
+    // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
+    // reload all snippets freshly from the database, but I also want to minimize db hits.  revisit this.
+    const {snippets} = this.state;
+    for (const s of snippets) {
+      if (s.id === sid) s.studentcontent = studentcontent;
+    }
+    this.setState(snippets);
   }
 
   buildButton(lesson, i) {
@@ -63,14 +68,12 @@ class Lesson extends Component {
           title={`My ${lesson.name} Snippet`}
           lazy={false}
           inline={true}
+          className="codeblock-dialog"
         >
-          <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>
+          {/* <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>*/}
+          <div className="pt-dialog-body">{lesson.snippet ? <CodeBlock lesson={lesson} handleSave={this.handleSave.bind(this)} /> : null}</div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
-              <Button
-                text="Edit Snippet"
-                onClick={this.goToEditor.bind(this, lesson.id)}
-              />
               <Button
                 intent={Intent.PRIMARY}
                 onClick={this.toggleDialog.bind(this, i)}
@@ -81,6 +84,13 @@ class Lesson extends Component {
         </Dialog>
       </div>
     );
+  }
+
+  islandState(lesson) {
+    let css = "island";
+    if (lesson.isNext) css += " next";
+    lesson.isDone ? css += " completed" : css += " blocked";
+    return css;
   }
 
   render() {
@@ -94,19 +104,17 @@ class Lesson extends Component {
     // clone the array so we don't mess with state
     const lessonArray = lessons.slice(0);
 
-    for (const l of lessonArray) {
-      l.snippet = snippets.find(s => s.lid === l.id);
+    for (let l = 0; l < lessonArray.length; l++) {
+      lessonArray[l].snippet = snippets.find(s => s.lid === lessonArray[l].id);
+      const done = this.hasUserCompleted(lessonArray[l].id);
+      lessonArray[l].isDone = done;
+      lessonArray[l].isNext = l === 0 && !done || l > 0 && !done && lessonArray[l - 1].isDone;
     }
 
-    this.iframes = new Array(lessonArray.length);
-
-    const lessonItems = lessonArray.map((lesson, i) => {
-      const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
-      return <div className={ complete ? "island completed" : "island" } key={ lesson.id }>
+    const lessonItems = lessonArray.map((lesson, i) => <div className={ this.islandState(lesson) } key={ lesson.id }>
         <Link className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></Link>
         { lesson.snippet ? this.buildButton.bind(this)(lesson, i) : null }
-      </div>;
-    });
+      </div>);
 
     return (
       <div className="overworld">

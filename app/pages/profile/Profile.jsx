@@ -1,7 +1,10 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+import UserInfo from "./UserInfo";
+import "./Profile.css";
 
 /**
  * Class component for a user profile.
@@ -52,13 +55,12 @@ class Profile extends Component {
    *  - show error msg from server
    * case (user found)
    *  - user info
-   * TODO:
-   *  - create 4th state in which user is logged in and this is their profile
-   *  - allowing them to edit it.
    */
   render() {
     const {t} = this.props;
     const {loading, error, profileUser} = this.state;
+    const {user: loggedInUser} = this.props;
+    console.log(loggedInUser, profileUser);
 
     if (loading) return <h1>Loading ...</h1>;
 
@@ -66,8 +68,21 @@ class Profile extends Component {
 
     return (
       <div>
-        <h1>{t("Profile")}</h1>
-        <p>I'm a user and my name is {profileUser.name}</p>
+        <aside className="side-bar">
+          <UserInfo user={profileUser} />
+          {/* <skillsList /> */}
+        </aside>
+        <content>
+          <h2>About Me</h2>
+          { loggedInUser.id === profileUser.id
+            ? <Link className="link" to={`/profile/${profileUser.username}/edit`}>{ t("Edit Resume") }</Link>
+            : null }
+          { profileUser.bio
+            ? <p className="bio">{ profileUser.bio }</p>
+            : null }
+          {/* <snippetsList /> */}
+          {/* <projectsList /> */}
+        </content>
       </div>
     );
   }

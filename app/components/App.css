@@ -15,6 +15,10 @@
 
 }
 
+.pt-overlay-backdrop {
+  background-color: rgba(245, 245, 255, 0.7);
+}
+
 .pt-input {
   border-radius: 10px;
   font-family: "Overpass", sans-serif;

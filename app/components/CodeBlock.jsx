@@ -4,22 +4,11 @@ import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
+import AceWrapper from "components/AceWrapper";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
-
-class AceWrapper extends Component {
-
-  render() {
-    if (typeof window !== "undefined") {
-      const Ace = require("react-ace").default;
-      require("brace/mode/html");
-      require("brace/theme/kuroir");
-      return <Ace ref={editor => this.editor = editor} editorProps={{$blockScrolling: Infinity}} {...this.props}/>;
-    }
-    return null;
-  }
-}
 
 class CodeBlock extends Component {
 
@@ -102,8 +91,9 @@ class CodeBlock extends Component {
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
-        alert("Saved to DB");
-        this.props.handleSave(this.props.lesson.snippet.id, studentcontent);
+        const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+        t.show({message: "Saved!", intent: Intent.SUCCESS});
+        if (this.props.handleSave) this.props.handleSave(this.props.lesson.snippet.id, studentcontent);
       }
       else {
         alert("Error");
@@ -138,7 +128,7 @@ class CodeBlock extends Component {
         <div id="container">
           <div id="codeblock-prompt"> {lesson.prompt} </div>
           <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="kuroir" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           {isPassing ? <div className="status-text passing">Passing</div> : <div className="status-text failing">Failing</div>}

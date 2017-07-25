@@ -1,25 +1,53 @@
 import React, {Component} from "react";
+import {Alert} from "@blueprintjs/core";
 
 export default class Quiz extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
   onChooseAnswer(question) {
+    let alertText = "";
     if (question.isCorrect) {
-      alert("That's correct!");
+      alertText = "That's Correct!";
       this.props.unblock();
     }
     else {
-      alert("Incorrect, please try again!");
+      alertText = "Incorrect, please try again!";
     }
+    this.setState({isOpen: true, alertText});
+  }
+
+  handleClose() {
+    this.setState({isOpen: false});
+  }
+
+  buildAlert() {
+    return (
+      <Alert
+        className="quiz-alert"
+        isOpen={this.state.isOpen}
+        confirmButtonText="Okay"
+        onConfirm={this.handleClose.bind(this)}
+      >
+      <p>
+        {this.state.alertText}
+      </p>
+      </Alert>
+    );
   }
 
   render() {
 
     const {htmlcontent1, quizjson} = this.props;
 
-    const quizjsonParsed = JSON.parse(quizjson);
+    const quizItems = quizjson ? JSON.parse(quizjson).map(question => <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>) : null;
 
-    const quizItems = quizjsonParsed.map(question =>
-      <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
+    const alert = this.buildAlert.bind(this);
 
     return (
       <div id="slide-container" className="quiz flex-row">
@@ -28,6 +56,7 @@ export default class Quiz extends Component {
           <ol className="questions">
             {quizItems}
           </ol>
+          {alert}
         </div>
       </div>
     );

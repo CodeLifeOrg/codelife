@@ -20,6 +20,12 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/snippets/byuser", (req, res) => {
+
+    db.snippets.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+
+  });
+
   // todo: maybe change these into a single "upsert"
 
   app.post("/api/snippets/update", (req, res) => {
@@ -39,6 +45,15 @@ module.exports = function(app) {
   app.get("/api/snippets/othersbylid", (req, res) => {
 
     const q = "SELECT * FROM snippets, users WHERE users.id = snippets.uid AND users.id != '" + req.user.id + "' AND snippets.lid = '" + req.query.lid + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+
+    // db.snippets.findAll({where: {uid: {$not: req.user.id}, lid: req.query.lid}}).then(u => res.json(u).end());
+
+  });
+
+  app.get("/api/snippets/allbylid", (req, res) => {
+
+    const q = "SELECT * FROM snippets, users WHERE users.id = snippets.uid AND snippets.lid = '" + req.query.lid + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
     // db.snippets.findAll({where: {uid: {$not: req.user.id}, lid: req.query.lid}}).then(u => res.json(u).end());

@@ -6,8 +6,14 @@ export default class AceWrapper extends Component {
     if (typeof window !== "undefined") {
       const Ace = require("react-ace").default;
       require("brace/mode/html");
-      require("brace/theme/kuroir");
-      return <Ace theme="kuroir" width="auto" height="auto" ref={editor => this.editor = editor} {...this.props}/>;
+      require("brace/theme/idle_fingers");
+      return <Ace theme="idle_fingers" width="auto" height="auto"
+                  ref={editor => this.editor = editor}
+                  wrapEnabled={false}
+                  editorProps={{
+                    $blockScrolling: Infinity
+                  }}
+                  {...this.props} />;
     }
     return null;
   }

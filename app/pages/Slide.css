@@ -32,7 +32,7 @@
     overflow: visible;
     padding: 0 25px;
 
-    & * {
+    & .slide-text {
       font-size: 18px;
       line-height: 24px;
       /*text-align: justify;*/
@@ -69,6 +69,8 @@
     }
 
     & .slide-quiz {
+      font-size: 18px;
+      line-height: 24px;
 
       & .questions {
         list-style: none;

@@ -1,0 +1,14 @@
+aside {
+  lost-column: 1/3;
+
+  & .user-info {
+    border: solid black 1px;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+content {
+  border: solid darkseagreen 1px;
+  lost-column: 2/3;
+}

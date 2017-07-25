@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -90,7 +91,8 @@ class CodeBlock extends Component {
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
-        alert("Saved to DB");
+        const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+        t.show({message: "Saved!", intent: Intent.SUCCESS});
         if (this.props.handleSave) this.props.handleSave(this.props.lesson.snippet.id, studentcontent);
       }
       else {

@@ -29,7 +29,8 @@ class Slide extends Component {
       blocked: true,
       currentLesson: null,
       minilessons: null,
-      sentProgress: false
+      sentProgress: false,
+      latestSlideCompleted: 0
     };
   }
 
@@ -56,11 +57,12 @@ class Slide extends Component {
   componentDidUpdate() {
     const {lid, mlid, sid} = this.props.params;
     const {user} = this.props;
-    const {currentSlide, slides, sentProgress} = this.state;
+    const {currentSlide, slides, sentProgress, latestSlideCompleted} = this.state;
 
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, blocked});
     }
 
@@ -70,11 +72,17 @@ class Slide extends Component {
       this.saveProgress(mlid);
       if (this.isLastMinilesson()) this.saveProgress(lid);
     }
+
+    const i = slides.indexOf(currentSlide);
+    if (i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
+      this.setState({latestSlideCompleted: i});
+    }
   }
 
   componentDidMount() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
+    const {slides, latestSlideCompleted} = this.state;
 
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
@@ -88,7 +96,8 @@ class Slide extends Component {
         browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
       }
       const cs = slideList.find(slide => slide.id === sid);
-      const blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
   }
@@ -108,6 +117,8 @@ class Slide extends Component {
     if (!currentSlide || !currentLesson) return <Loading />;
 
     SlideComponent = compLookup[currentSlide.type];
+    console.log("latest:");
+    console.log(this.state.latestSlideCompleted);
 
     return (
       <div>

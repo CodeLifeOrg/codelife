@@ -10,7 +10,7 @@ class Editor extends Component {
       const Ace = require("react-ace").default;
       require("brace/mode/html");
       require("brace/theme/monokai");
-      return <Ace ref={editor => this.editor = editor} {...this.props}/>;
+      return <Ace ref={editor => this.editor = editor} editorProps={{$blockScrolling: Infinity}} {...this.props}/>;
     }
     return null;
   }

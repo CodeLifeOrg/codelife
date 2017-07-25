@@ -1,19 +1,3 @@
-.ml_link {
-  color: red;
-  pointer-events: none;
-  cursor: default;
-}
-
-.completed {
-  color: green;
-  pointer-events: auto;
-}
-
-.next {
-  color: yellow;
-  pointer-events: auto;
-}
-
 .snippetrender {
   width: 390px;
 }
@@ -23,9 +7,9 @@
 }
 
 .snippet-popup-code {
-  font-family: monospace; 
-  white-space: pre-wrap; 
-  width: 390px; 
+  font-family: monospace;
+  white-space: pre-wrap;
+  width: 390px;
   float: left;
 }
 
@@ -43,3 +27,183 @@
 .regular-text {
 
 }
+
+
+
+#island {
+  margin-bottom: 50px;
+  text-align: center;
+  width: 100%;
+
+  & .image {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 600px;
+    position: relative;
+    width: 100%;
+  }
+
+  & .title {
+    color: white;
+    text-shadow: 0 2px 2px #444;
+  }
+
+  & .title:first-child {
+    padding-top: 50px;
+  }
+
+  & .description {
+    color: white;
+    margin: 0 auto;
+    text-shadow: 0 2px 2px #444;
+    width: 300px;
+  }
+
+  & #path {
+    display: flex;
+    justify-content: space-between;
+    left: 50%;
+    margin-left: -200px;
+    perspective: 500px;
+    position: absolute;
+    top: 370px;
+    width: 400px;
+
+    &:before {
+      border-size: 3px;
+      border-style: dashed;
+      content: "";
+      height: 0;
+      left: 20px;
+      opacity: 0.5;
+      position: absolute;
+      transform: rotateX(50deg);
+      top: 17px;
+      width: 360px;
+    }
+
+    & .stop {
+      background-color: #444;
+      border-style: ridge;
+      border-width: 4px;
+      border-radius: 100%;
+      box-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
+      display: inline-block;
+      height: 35px;
+      margin: 0;
+      transform: rotateX(50deg);
+      transition: margin 0.2s;
+      width: 35px;
+
+      &.next {
+        background-color: #edff28;
+      }
+
+      &.done {
+        background-color: #436c31;
+      }
+
+      &.next:hover, &.done:hover {
+        margin-top: -2px;
+        margin-bottom: 2px;
+      }
+
+    }
+
+  }
+
+  & #snippets {
+    align-items: stretch;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+
+    & .snippet-link {
+      background-color: #444;
+      border-radius: 10px;
+      box-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
+      color: white;
+      display: inline-block;
+      margin: 0 10px;
+      text-align: left;
+      transition: box-shadow 0.2s, margin 0.2s;
+      width: 200px;
+
+      & .box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding: 15px 20px;
+
+        & .snippet-title {
+          font-size: 16px;
+          letter-spacing: 0.5px;
+          margin-bottom: 5px;
+          text-transform: uppercase;
+        }
+
+        & .author {
+          opacity: 0.75;
+        }
+
+      }
+
+      &:hover {
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        margin-top: -2px;
+        margin-bottom: 2px;
+      }
+
+    }
+
+  }
+
+  @for $i from 1 to 20 {
+    &.island-$i .image {
+      background-image: url("/islands/island-$(i).png");
+    }
+  }
+
+  &.island-1 {
+    & .title, & .description { text-shadow: 0 2px 2px map(islands, island-1, dark); }
+    & #path:before, & #path .stop { border-color: map(islands, island-1, dark); }
+    & #path .stop:not(.next):not(.done) { background-color: map(islands, island-1, light); }
+    & #snippets .snippet-link { background-color: map(islands, island-1, dark); }
+    & .pt-dialog { border-color: map(islands, island-1, dark); }
+    & .pt-dialog .pt-dialog-header { background-color: map(islands, island-1, dark); }
+    & .pt-button.pt-intent-primary { background-color: map(islands, island-1, dark); }
+  }
+
+  &.island-2 {
+    & .title, & .description { text-shadow: 0 2px 2px map(islands, island-2, dark); }
+    & #path:before, & #path .stop { border-color: map(islands, island-2, dark); }
+    & #path .stop:not(.next):not(.done) { background-color: map(islands, island-2, light); }
+    & #snippets .snippet-link { background-color: map(islands, island-2, dark); }
+    & .pt-dialog { border-color: map(islands, island-2, dark); }
+    & .pt-dialog .pt-dialog-header { background-color: map(islands, island-2, dark); }
+    & .pt-button.pt-intent-primary { background-color: map(islands, island-2, dark); }
+  }
+
+  &.island-3 {
+    & .title, & .description { text-shadow: 0 2px 2px map(islands, island-3, dark); }
+    & #path:before, & #path .stop { border-color: map(islands, island-3, dark); }
+    & #path .stop:not(.next):not(.done) { background-color: map(islands, island-3, light); }
+    & #snippets .snippet-link { background-color: map(islands, island-3, dark); }
+    & .pt-dialog { border-color: map(islands, island-3, dark); }
+    & .pt-dialog .pt-dialog-header { background-color: map(islands, island-3, dark); }
+    & .pt-button.pt-intent-primary { background-color: map(islands, island-3, dark); }
+  }
+
+}
+
+.pt-tooltip.island-1 .pt-popover-arrow-fill { fill: map(islands, island-1, dark); }
+.pt-tooltip.island-1 .pt-popover-content { background-color: map(islands, island-1, dark); }
+
+.pt-tooltip.island-2 .pt-popover-arrow-fill { fill: map(islands, island-2, dark); }
+.pt-tooltip.island-2 .pt-popover-content { background-color: map(islands, island-2, dark); }
+
+.pt-tooltip.island-3 .pt-popover-arrow-fill { fill: map(islands, island-3, dark); }
+.pt-tooltip.island-3 .pt-popover-content { background-color: map(islands, island-3, dark); }

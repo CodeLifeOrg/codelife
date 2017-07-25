@@ -4,4 +4,9 @@ islands:
   island-1:
     dark: "#003E00"
     light: "#90B857"
-    accent: "#00EBE6"
+  island-2:
+    dark: "#043f51"
+    light: "#afe2e5"
+  island-3:
+    dark: "#5c1500"
+    light: "#ffb863"

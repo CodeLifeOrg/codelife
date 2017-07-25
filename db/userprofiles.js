@@ -1,10 +1,11 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("userprofiles",
+  const up = sequelize.define("userprofiles",
     {
       uid: {
         type: db.STRING,
-        primaryKey: true
+        primaryKey: true,
+        references: {model: "users", key: "id"}
       },
       bio: db.TEXT,
       img: db.STRING,
@@ -12,7 +13,6 @@ module.exports = function(sequelize, db) {
       coins: db.INTEGER,
       streak: db.INTEGER,
       dob: db.DATE,
-      school: db.STRING,
       sid: {
         type: db.INTEGER,
         references: {model: "schools", key: "id"}
@@ -23,12 +23,24 @@ module.exports = function(sequelize, db) {
       },
       cpf: db.STRING,
       survey: db.JSONB,
-      getInvolved: db.JSONB
+      getinvolved: db.JSONB
     },
     {
       freezeTableName: true,
       timestamps: false
+    },
+    {
+      classMethods: {
+        associate: models => {
+          up.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user", foreignKeyConstraint: true});
+        }
+      }
     }
   );
+
+  // up.hasOne(db.user, {foreignKey: "uid"});
+
+
+  return up;
 
 };

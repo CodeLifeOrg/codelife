@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("users",
+  const u = sequelize.define("users",
     {
       id: {
         type: db.STRING,
@@ -20,7 +20,18 @@ module.exports = function(sequelize, db) {
       instagram: db.STRING,
       createdAt: db.DATE,
       updatedAt: db.DATE
+    },
+    {
+      classMethods: {
+        associate: models => {
+          u.hasOne(models.userprofiles, {foreignKey: "id", targetKey: "uid"});
+        }
+      }
     }
-  );  
+  );
+
+  // u.hasOne(db.userProfiles);
+  // u.hasOne(db.userProfiles, {foreignKey: "id", targetKey: "uid"});
+  return u;
 
 };

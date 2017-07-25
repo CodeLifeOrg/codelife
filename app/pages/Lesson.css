@@ -63,6 +63,10 @@
         & .graphic {
           filter: grayscale(1);
         }
+
+        & .pt-popover-content {
+          background-color: #444 !important;
+        }
       }
 
       & .pt-tooltip {

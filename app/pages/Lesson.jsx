@@ -126,7 +126,7 @@ class Lesson extends Component {
         <div className={ `pt-popover pt-tooltip ${ lesson.id }` }>
           <div className="pt-popover-content">
             <div className="title">{ lesson.name }</div>
-            <div className="description"><Interpolate i18nKey="overworld.blocker" name={ lesson.name } /></div>
+            <div className="description">{ t("Complete the previous islands to unlock.") }</div>
           </div>
         </div>
       </div>;

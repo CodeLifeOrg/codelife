@@ -139,7 +139,7 @@ class Studio extends Component {
         {projectRef}
         <div id="container">
           <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="kuroir" onChange={this.onChangeText.bind(this)} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <br/><br/>

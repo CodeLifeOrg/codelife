@@ -1,20 +1,7 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import himalaya from "himalaya";
+import AceWrapper from "components/AceWrapper";
 import "./RenderCode.css";
-
-class Editor extends Component {
-
-  render() {
-    if (typeof window !== "undefined") {
-      const Ace = require("react-ace").default;
-      require("brace/mode/html");
-      require("brace/theme/monokai");
-      return <Ace ref={editor => this.editor = editor} editorProps={{$blockScrolling: Infinity}} {...this.props}/>;
-    }
-    return null;
-  }
-}
 
 export default class RenderCode extends Component {
 
@@ -50,7 +37,7 @@ export default class RenderCode extends Component {
     return (
       <div id="rc_container">
         <div id="rc_instructions">{htmlcontent1}</div>
-        <div id="rc_code-container">{ this.state.mounted ? <Editor ref={ comp => this.editor = comp } mode="html" theme="monokai" readOnly={true} showGutter={false} value={htmlcontent2} setOptions={{behavioursEnabled: false}}/> : null }</div>
+        <div id="rc_code-container">{ this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" readOnly={true} showGutter={false} value={htmlcontent2} setOptions={{behavioursEnabled: false}}/> : null }</div>
         <div id="rc_render-container"><iframe id="render-frame" ref="rf" /></div>
         <div className="clear" />
       </div>

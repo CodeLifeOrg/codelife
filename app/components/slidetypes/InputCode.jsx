@@ -1,20 +1,9 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
+import AceWrapper from "components/AceWrapper";
+
 import "./InputCode.css";
-
-class Editor extends Component {
-
-  render() {
-    if (typeof window !== "undefined") {
-      const Ace = require("react-ace").default;
-      require("brace/mode/html");
-      require("brace/theme/monokai");
-      return <Ace ref={editor => this.editor = editor} editorProps={{$blockScrolling: Infinity}} {...this.props}/>;
-    }
-    return null;
-  }
-}
 
 export default class InputCode extends Component {
 
@@ -98,7 +87,7 @@ export default class InputCode extends Component {
     return (
       <div id="ic_container">
         <div id="ic_instructions">{htmlcontent1}</div>
-        <div id="ic_code-container">{ this.state.mounted ? <Editor ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" theme="monokai" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }</div>
+        <div id="ic_code-container">{ this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }</div>
         <div id="ic_render-container"><iframe id="render-frame" ref="rf" /></div>
         <div className="clear" />
         <button className="ic_button" onClick={this.submitAnswer.bind(this)}>SUBMIT</button>

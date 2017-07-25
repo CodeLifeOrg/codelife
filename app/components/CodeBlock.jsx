@@ -126,7 +126,7 @@ class CodeBlock extends Component {
         <div id="container">
           <div id="codeblock-prompt"> {lesson.prompt} </div>
           <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="kuroir" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           {isPassing ? <div className="status-text passing">Passing</div> : <div className="status-text failing">Failing</div>}

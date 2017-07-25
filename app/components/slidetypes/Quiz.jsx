@@ -28,6 +28,21 @@ export default class Quiz extends Component {
     this.setState({isOpen: false});
   }
 
+  buildAlert() {
+    return (
+      <Alert
+        className="quiz-alert"
+        isOpen={this.state.isOpen}
+        confirmButtonText="Okay"
+        onConfirm={this.handleClose.bind(this)}
+      >
+      <p>
+        {this.state.alertText}
+      </p>
+      </Alert>
+    );
+  }
+
   render() {
     
     const {t, htmlcontent1, quizjson} = this.props;
@@ -35,20 +50,13 @@ export default class Quiz extends Component {
     const quizItems = JSON.parse(quizjson).map(question =>
       <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
 
+    const alert = this.buildAlert.bind(this);
+
     return (
       <div id="q_container">
         <div id="q_question-container">{htmlcontent1}</div>
         <div id="q_choice-container"><ul id="q_choices">{quizItems}</ul></div>
-        <Alert
-          className="quiz-alert"
-          isOpen={this.state.isOpen}
-          confirmButtonText="Okay"
-          onConfirm={this.handleClose.bind(this)}
-        >
-        <p>
-          {this.state.alertText}
-        </p>
-        </Alert>
+        {alert}
       </div>
     );
   }

@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
 import Snippets from "components/Snippets";
@@ -99,6 +100,8 @@ class Studio extends Component {
       const name = currentProject.name;
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
+          const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+          t.show({message: "Saved!", intent: Intent.SUCCESS});
           this.setState({changesMade: false});
         }
       });

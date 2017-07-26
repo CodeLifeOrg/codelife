@@ -36,7 +36,9 @@ class Slide extends Component {
   }
 
   unblock() {
-    this.setState({blocked: false});
+    const {slides, currentSlide, latestSlideCompleted} = this.state;
+    const i = slides.indexOf(currentSlide);
+    i > latestSlideCompleted ? this.setState({latestSlideCompleted: i, blocked: false}) : this.setState({blocked: false});
   }
 
   isLastMinilesson() {
@@ -75,7 +77,7 @@ class Slide extends Component {
     }
 
     const i = slides.indexOf(currentSlide);
-    if (i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
+    if (currentSlide && ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 && i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i});
     }
   }
@@ -101,6 +103,12 @@ class Slide extends Component {
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
+
+    document.addEventListener("keydown", this.handleKey.bind(this));
+  }
+
+  handleKey(e) {
+    e.keyCode === 192 ? this.unblock() : null;
   }
 
   render() {
@@ -118,8 +126,6 @@ class Slide extends Component {
     if (!currentSlide || !currentLesson) return <Loading />;
 
     SlideComponent = compLookup[currentSlide.type];
-    console.log("latest:");
-    console.log(this.state.latestSlideCompleted);
 
     return (
       <div id="slide" className={ currentLesson.id }>
@@ -141,7 +147,7 @@ class Slide extends Component {
           ? this.state.blocked
             ? <div className="pt-button pt-disabled">Next</div>
             : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>Next</Link>
-          : <Link className="pt-button pt-intent-success editor-link" to={`/editor/${lid}`}>Try it out in my editor!</Link> }
+          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`Back to ${currentLesson.name}!`}</Link> }
         </div>
 
       </div>

@@ -2,6 +2,8 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+import {Button, Intent, MenuItem, Position, Toaster} from "@blueprintjs/core";
+import {Select} from "@blueprintjs/labs";
 
 /**
  * Class component for a user profile.
@@ -9,6 +11,11 @@ import {connect} from "react-redux";
  * If a user is logged in AND this is their profile, show an
  * edit button allowing them to edit it.
  */
+const SCHOOLS = [
+  {id: "4mg030000", name: "Ee Guia Lopes"},
+  {id: "4mg030001", name: "Ee Pero Vaz De Caminha"}
+];
+
 class Profile extends Component {
 
   /**
@@ -22,7 +29,8 @@ class Profile extends Component {
     this.state = {
       loading: true,
       error: null,
-      profileUser: null
+      profileUser: null,
+      schools: []
     };
   }
 
@@ -42,21 +50,55 @@ class Profile extends Component {
       return;
     }
 
-    axios.get(`/api/profile/${username}`).then(resp => {
-      const responseData = resp.data;
-      if (responseData.error) {
-        this.setState({loading: false, error: responseData.error});
-      }
-      else {
-        this.setState({loading: false, profileUser: responseData});
-      }
-    });
+    axios.get("/api/schools/").then(schoolsResp => {
+      axios.get(`/api/profile/${username}`).then(resp => {
+        const responseData = resp.data;
+        if (responseData.error) {
+          this.setState({loading: false, error: responseData.error});
+        }
+        else {
+          this.setState({
+            loading: false,
+            profileUser: responseData,
+            schools: schoolsResp.data
+          });
+        }
+      });
+  });
   }
 
   onSimpleUpdate(e) {
     const {profileUser} = this.state;
     profileUser[e.target.id] = e.target.value;
     this.setState({profileUser});
+  }
+
+  saveUserInfo(e) {
+    e.preventDefault();
+    this.setState({loading: true});
+    const {profileUser} = this.state;
+    console.log("profileUser:\n", profileUser);
+    const userPostData = {
+      name: profileUser.name,
+      bio: profileUser.bio,
+      gender: profileUser.gender
+    };
+    console.log("userPostData:\n", userPostData);
+    axios.post("/api/profile/", userPostData).then(resp => {
+      const responseData = resp.data;
+      if (responseData.error) {
+        this.setState({loading: false, error: responseData.error});
+      }
+      else {
+        const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+        t.show({message: "Profile saved!", intent: Intent.SUCCESS});
+        this.setState({loading: false, msg: responseData});
+      }
+    });
+  }
+
+  filterSchool(q, school) {
+    return `${school.name.toLowerCase()} ${school.id}`.indexOf(q.toLowerCase()) >= 0;
   }
 
   /**
@@ -67,19 +109,17 @@ class Profile extends Component {
    *  - show error msg from server
    * case (user found)
    *  - user info
-   * TODO:
-   *  - create 4th state in which user is logged in and this is their profile
-   *  - allowing them to edit it.
    */
   render() {
     const {t} = this.props;
-    const {loading, error, profileUser} = this.state;
+    const {loading, error, profileUser, schools} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
+    const saveUserInfo = this.saveUserInfo.bind(this);
 
     if (loading) return <h1>Loading ...</h1>;
     if (error) return <h1>{error}</h1>;
 
-    const {name} = profileUser;
+    const {name, bio, gender} = profileUser;
 
     return (
       <div>
@@ -103,7 +143,22 @@ class Profile extends Component {
             </label>
             <div className="pt-form-content">
               <div className="pt-input-group">
-                <textarea onChange={onSimpleUpdate} value={name} id="bio" className="pt-input" dir="auto"></textarea>
+                <textarea onChange={onSimpleUpdate} value={bio || ""} id="bio" className="pt-input" dir="auto"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("Gender")}
+            </label>
+            <div className="pt-form-content">
+              <div className="pt-select">
+                <select onChange={onSimpleUpdate} id="gender" value={gender}>
+                  <option value="OTHER">{t("Rather not say")}</option>
+                  <option value="FEMALE">{t("Female")}</option>
+                  <option value="MALE">{t("Male")}</option>
+                </select>
               </div>
             </div>
           </div>
@@ -141,6 +196,17 @@ class Profile extends Component {
               </div>
             </div>
           </div>
+
+          <Select
+            items={SCHOOLS}
+            itemRenderer={({item: school}) => {return <MenuItem text={school.name} />}}
+            itemPredicate={this.filterSchool}
+            noResults={<MenuItem disabled text="No results." />}
+          >
+            <Button text={SCHOOLS[0].name} rightIconName="double-caret-vertical" />
+          </Select>
+
+          <button onClick={saveUserInfo} type="button" className="pt-button">Save</button>
 
         </form>
       </div>

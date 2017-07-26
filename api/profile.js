@@ -25,4 +25,25 @@ module.exports = function(app) {
     });
   });
 
+  app.post("/api/profile/", (req, res) => {
+    const {name, bio, gender} = req.body;
+    db.users.update(
+      {name},
+      {where: {id: req.user.id}}
+    ).then(() => {
+      db.userprofiles.update(
+        {bio, gender},
+        {where: {uid: req.user.id}}
+      ).then(() => res.json({worked: true}));
+    });
+  });
+
+  app.get("/api/schools", (req, res) => {
+    db.schools.findAll(
+      {where: {gid: {$ilike: "4mg%"}}}
+    ).then(schools => {
+      return res.json(schools)
+    });
+  });
+
 };

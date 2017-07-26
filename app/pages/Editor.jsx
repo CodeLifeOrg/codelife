@@ -3,22 +3,10 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import AceWrapper from "components/AceWrapper";
 import "./Editor.css";
 
 import Loading from "components/Loading";
-
-class AceWrapper extends Component {
-
-  render() {
-    if (typeof window !== "undefined") {
-      const Ace = require("react-ace").default;
-      require("brace/mode/html");
-      require("brace/theme/monokai");
-      return <Ace ref={editor => this.editor = editor} {...this.props}/>;
-    }
-    return null;
-  }
-}
 
 class Editor extends Component {
 
@@ -119,7 +107,7 @@ class Editor extends Component {
         <h1>{ "Editor" }</h1>
         <div id="container">
           <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" theme="monokai" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
+          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
           <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
           <br/><br/>

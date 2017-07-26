@@ -31,14 +31,17 @@ class Slide extends Component {
       currentLesson: null,
       minilessons: null,
       sentProgress: false,
-      latestSlideCompleted: 0
+      latestSlideCompleted: 0, 
+      mounted: false
     };
   }
 
   unblock() {
     const {slides, currentSlide, latestSlideCompleted} = this.state;
     const i = slides.indexOf(currentSlide);
-    i > latestSlideCompleted ? this.setState({latestSlideCompleted: i, blocked: false}) : this.setState({blocked: false});
+    let newlatest = latestSlideCompleted;
+    if (i > latestSlideCompleted) newlatest = i;
+    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
   }
 
   isLastMinilesson() {
@@ -83,6 +86,8 @@ class Slide extends Component {
   }
 
   componentDidMount() {
+    this.setState({mounted: true});
+
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     const {slides, latestSlideCompleted} = this.state;

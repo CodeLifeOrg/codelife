@@ -78,7 +78,7 @@ class CodeBlock extends Component {
     if (lesson) this.setState({currentText: lesson.initialcontent}, this.renderText.bind(this));
   }
 
-  saveCodeToDB() {
+  verifyAndSaveCode() {
     const {id: uid} = this.props.user;
     const {currentText: studentcontent} = this.state;
     const snippet = this.props.lesson.snippet;
@@ -135,7 +135,7 @@ class CodeBlock extends Component {
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
-          <button className="pt-button pt-intent-success" key="save" onClick={this.saveCodeToDB.bind(this)}>Save</button>
+          <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>Save & Submit</button>
           <br />
           { isPassing
             ? <div className="pt-callout pt-intent-success"><h5>Passing</h5></div>

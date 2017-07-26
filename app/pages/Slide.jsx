@@ -44,16 +44,6 @@ class Slide extends Component {
     if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
   }
 
-  isLastMinilesson() {
-    const {minilessons} = this.state;
-    const {mlid} = this.props.params;
-    if (minilessons) {
-      const sorted = minilessons.sort((a, b) => b.ordering - a.ordering);
-      return sorted[0].id === mlid;
-    }
-    return false;
-  }
-
   saveProgress(level) {
     axios.post("/api/userprogress/save", {level}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
@@ -76,7 +66,6 @@ class Slide extends Component {
     if (user && isFinalSlide && !sentProgress) {
       this.setState({sentProgress: true});
       this.saveProgress(mlid);
-      if (this.isLastMinilesson()) this.saveProgress(lid);
     }
 
     const i = slides.indexOf(currentSlide);

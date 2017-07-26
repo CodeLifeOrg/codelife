@@ -56,10 +56,6 @@ class Minilesson extends Component {
     }
   }
 
-  hasUserCompleted(milestone) {
-    return this.state.userProgress.find(up => up.level === milestone) !== undefined;
-  }
-
   buildWindow(i, content) {
     const {lid} = this.props.params;
     const done = this.hasUserCompleted(lid);
@@ -122,9 +118,24 @@ class Minilesson extends Component {
     );
   }
 
+  hasUserCompleted(milestone) {
+    return this.state.userProgress.find(up => up.level === milestone) !== undefined;
+  }
+
+  allMinilessonsBeaten() {
+    const {minilessons} = this.state;
+    let missedlessons = 0;
+    for (const m of minilessons) {
+      if (!this.hasUserCompleted(m.id)) missedlessons++;
+    }
+    return missedlessons === 0;
+  }
+
   buildTestPopover() {
     const {t} = this.props;
     const {currentLesson} = this.state;
+    if (!this.allMinilessonsBeaten()) return <div className="stop"></div>;
+
     return (
       <div className="editor-popover">
         <Tooltip content="Final Test" tooltipClassName={ currentLesson.id }>

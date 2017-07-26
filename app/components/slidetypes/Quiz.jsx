@@ -30,14 +30,21 @@ export default class Quiz extends Component {
 
     const {htmlcontent1, quizjson} = this.props;
 
-    console.log(quizjson);
+    let qText = htmlcontent1;
+    let qParse = [{text: "Go Check the JSON.", isCorrect: true}, {text: "I don't wanna", isCorrect: false}];
+    try {
+      qParse = JSON.parse(quizjson);
+    } 
+    catch (e) {
+      qText = "Json's Busted Yo";
+    }
 
-    const quizItems = quizjson ? JSON.parse(quizjson).map(question => <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>) : null;
+    const quizItems = qParse.map(question => <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
 
     return (
       <div id="slide-container" className="quiz flex-row">
         <div className="slide-quiz">
-          <div dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+          <div dangerouslySetInnerHTML={{__html: qText}} />
           <ol className="questions">
             {quizItems}
           </ol>

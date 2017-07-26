@@ -131,23 +131,18 @@ class Minilesson extends Component {
           <div className="stop editor-link" onClick={this.toggleTest.bind(this)} />
         </Tooltip>
         <Dialog
+          className="codeBlock"
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
           title={ `My ${currentLesson.name} CodeBlock` }
           style={{
-            width: "1150px"
+            "height": "75vh",
+            "max-height": "800px",
+            "max-width": "1150px",
+            "width": "100%"
           }}
         >
-          <div className="pt-dialog-body"> <CodeBlock lesson={currentLesson} /></div>
-          <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-actions">
-              <Button
-                intent={Intent.PRIMARY}
-                onClick={this.toggleTest.bind(this)}
-                text="Close"
-              />
-            </div>
-          </div>
+          <div className="pt-dialog-body"><CodeBlock lesson={currentLesson} /></div>
         </Dialog>
       </div>
     );
@@ -185,7 +180,6 @@ class Minilesson extends Component {
     });
 
     const otherSnippetItems = otherSnippets.map((os, i) => this.buildCodeblockButton.bind(this)(os, i));
-    const testPopover = this.buildTestPopover();
 
     this.iframes = new Array(otherSnippets.length);
 
@@ -196,7 +190,7 @@ class Minilesson extends Component {
           <p className="description">{ currentLesson.description }</p>
           <div id="path">
             { minilessonItems }
-            { testPopover }
+            { this.buildTestPopover() }
           </div>
         </div>
         { otherSnippets.length

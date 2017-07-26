@@ -124,20 +124,24 @@ class CodeBlock extends Component {
     if (!this.state.mounted) return <Loading />;
 
     return (
-      <div>
-        <div id="container">
-          <div id="codeblock-prompt"> {lesson.prompt} </div>
-          <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
-          <button className="button" key="save" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
-          <button className="button" key="reset" onClick={this.resetSnippet.bind(this)}>RESET</button>
-          {isPassing ? <div className="status-text passing">Passing</div> : <div className="status-text failing">Failing</div>}
-          <br/><br/>
-          { lesson.snippet ? <Link className="share-link" to={`/share/snippet/${lesson.snippet.id}`}>Share this Snippet</Link> : null }
-          </div>
-          <iframe id="rendercontainer" ref="rc" />
+      <div id="codeBlock">
+        <div className="codeBlock-head">
+          { lesson.prompt }
+          { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
         </div>
-        <div className="clear" />
+        <div className="codeBlock-body">
+          { this.state.mounted ? <AceWrapper className="codeBlock-editor" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="codeBlock-editor"></div> }
+          <iframe className="codeBlock-render" ref="rc" />
+        </div>
+        <div className="codeBlock-foot">
+          <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
+          <button className="pt-button pt-intent-success" key="save" onClick={this.saveCodeToDB.bind(this)}>Save</button>
+          <br />
+          { isPassing
+            ? <div className="pt-callout pt-intent-success"><h5>Passing</h5></div>
+            : <div className="pt-callout pt-intent-danger"><h5>Failing</h5></div>
+          }
+        </div>
       </div>
     );
   }

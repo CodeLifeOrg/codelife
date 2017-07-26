@@ -1,11 +1,3 @@
-#codeblock-prompt {
-  color:black;
-  text-align:left;
-  padding:10px;
-  margin-bottom: 10px;
-  border: 1px solid black;
-}
-
 .status-text {
   color:black;
 }
@@ -16,4 +8,58 @@
 
 .failing {
   color:red;
+}
+
+
+
+#codeBlock {
+  align-self: stretch;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+
+  & .codeBlock-head {
+    margin: 0 25px;
+  }
+
+  & .codeBlock-body {
+    align-self: stretch;
+    display: flex;
+    flex: 1;
+
+    & .codeBlock-editor {
+      align-items: stretch;
+      flex: 1;
+      margin: 25px;
+    }
+
+    & .codeBlock-render {
+      align-items: stretch;
+      background-color: white;
+      border: 1px solid #333;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      flex: 1;
+      margin: 25px;
+    }
+
+  }
+
+  & .codeBlock-foot {
+    margin: 0 25px;
+    text-align: center;
+
+    & .pt-button {
+      margin: 0 5px 10px;
+    }
+
+    & .pt-callout {
+      display: inline-block;
+    }
+
+  }
+
+}
+
+.pt-dialog.codeBlock .pt-dialog-body {
+  display: flex;
 }

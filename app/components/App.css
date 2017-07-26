@@ -1,8 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Overpass:400,600,700");
 
-#app {
+body {
   font-family: "Overpass", sans-serif;
   letter-spacing: 0.5px;
+}
+
+#app {
   min-height: 100vh;
   position: absolute;
   width: 100%;

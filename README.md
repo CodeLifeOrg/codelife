@@ -27,7 +27,12 @@ export CANON_DB_HOST=1.2.3.4
 export CANON_LOGREDUX=false
 ```
 
-4. Bask in glory
+4. Run dev version of site
+```
+npm run dev
+```
+
+5. Bask in glory (visit localhost:3300 in your browser)
 ```
 http://localhost:3300/
 ```

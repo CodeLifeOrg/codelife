@@ -26,28 +26,11 @@ export default class Quiz extends Component {
     this.setState({isOpen: false});
   }
 
-  buildAlert() {
-    return (
-      <Alert
-        className="quiz-alert"
-        isOpen={this.state.isOpen}
-        confirmButtonText="Okay"
-        onConfirm={this.handleClose.bind(this)}
-      >
-      <p>
-        {this.state.alertText}
-      </p>
-      </Alert>
-    );
-  }
-
   render() {
 
     const {htmlcontent1, quizjson} = this.props;
 
     const quizItems = quizjson ? JSON.parse(quizjson).map(question => <li className="question" key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>) : null;
-
-    const alert = this.buildAlert.bind(this);
 
     return (
       <div id="slide-container" className="quiz flex-row">
@@ -56,7 +39,16 @@ export default class Quiz extends Component {
           <ol className="questions">
             {quizItems}
           </ol>
-          {alert}
+          <Alert
+            className="quiz-alert"
+            isOpen={this.state.isOpen}
+            confirmButtonText="Okay"
+            onConfirm={this.handleClose.bind(this)}
+          >
+          <p>
+            {this.state.alertText}
+          </p>
+          </Alert>
         </div>
       </div>
     );

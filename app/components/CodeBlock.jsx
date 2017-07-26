@@ -126,7 +126,7 @@ class CodeBlock extends Component {
     return (
       <div id="codeBlock">
         <div className="codeBlock-head">
-          { lesson.prompt }
+          { lesson.prompt }<br/><br/>
           { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
         </div>
         <div className="codeBlock-body">

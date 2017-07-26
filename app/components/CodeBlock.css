@@ -20,6 +20,7 @@
 
   & .codeBlock-head {
     margin: 0 25px;
+    white-space: pre-wrap;
   }
 
   & .codeBlock-body {

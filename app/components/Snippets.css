@@ -1,7 +1,7 @@
 li.snippet {
   display: block; 
   cursor: pointer; 
-  width: 180px;
+  width: 230px;
   margin-bottom: 5px;
 }
 
@@ -23,7 +23,7 @@ ul#snippet-list {
 }
 
 div#snippet-container {
-  width: 280px;
+  width: 350px;
   border: solid 1px black;
   margin: 10px;
 }

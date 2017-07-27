@@ -161,27 +161,6 @@ class CodeBlock extends Component {
     });
   }
 
-  showCheatSheet() {
-    console.log(this.props.lesson.cheatsheet);
-  }
-
-
-  validateHTML() {
-
-    /*
-    const annotations = this.getEditor().getSession().getAnnotations();
-    const validationText = {};
-    validationText.info = "WARNINGS: \n\n";
-    validationText.error = "ERRORS: \n\n";
-    for (const a of annotations) {
-      validationText[a.type] += `${a.text} \n\n`;
-    }
-    const alertText = validationText.info + validationText.error;
-    this.setState({isOpen: true, alertText});
-    */
-
-  }
-
   render() {
 
     const {t, lesson} = this.props;

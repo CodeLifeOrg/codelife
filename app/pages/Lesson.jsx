@@ -28,7 +28,11 @@ class Lesson extends Component {
     const sget = axios.get("/api/snippets");
 
     Promise.all([lget, upget, sget]).then(resp => {
-      this.setState({lessons: resp[0].data, userProgress: resp[1].data, snippets: resp[2].data});
+      const lessons = resp[0].data;
+      lessons.sort((a, b) => a.index - b.index);
+      const userProgress = resp[1].data;
+      const snippets = resp[2].data;
+      this.setState({lessons, userProgress, snippets});
     });
   }
 

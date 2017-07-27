@@ -30,7 +30,7 @@
       z-index: 1;
     }
 
-    & .form {
+    & form, & .form {
       position: relative;
       z-index: 1;
     }

@@ -2,8 +2,9 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-import {Button, Intent, MenuItem, Position, Toaster} from "@blueprintjs/core";
-import {Select} from "@blueprintjs/labs";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
+import SelectGeo from "./SelectGeo";
+
 
 /**
  * Class component for a user profile.
@@ -11,11 +12,6 @@ import {Select} from "@blueprintjs/labs";
  * If a user is logged in AND this is their profile, show an
  * edit button allowing them to edit it.
  */
-const SCHOOLS = [
-  {id: "4mg030000", name: "Ee Guia Lopes"},
-  {id: "4mg030001", name: "Ee Pero Vaz De Caminha"}
-];
-
 class Profile extends Component {
 
   /**
@@ -29,8 +25,7 @@ class Profile extends Component {
     this.state = {
       loading: true,
       error: null,
-      profileUser: null,
-      schools: []
+      profileUser: null
     };
   }
 
@@ -50,21 +45,18 @@ class Profile extends Component {
       return;
     }
 
-    axios.get("/api/schools/").then(schoolsResp => {
-      axios.get(`/api/profile/${username}`).then(resp => {
-        const responseData = resp.data;
-        if (responseData.error) {
-          this.setState({loading: false, error: responseData.error});
-        }
-        else {
-          this.setState({
-            loading: false,
-            profileUser: responseData,
-            schools: schoolsResp.data
-          });
-        }
-      });
-  });
+    axios.get(`/api/profile/${username}`).then(userResp => {
+      const userData = userResp.data;
+      if (userResp.error) {
+        this.setState({loading: false, error: userResp.error});
+      }
+      else {
+        this.setState({
+          loading: false,
+          profileUser: userData
+        });
+      }
+    });
   }
 
   onSimpleUpdate(e) {
@@ -77,11 +69,11 @@ class Profile extends Component {
     e.preventDefault();
     this.setState({loading: true});
     const {profileUser} = this.state;
-    console.log("profileUser:\n", profileUser);
     const userPostData = {
       name: profileUser.name,
       bio: profileUser.bio,
-      gender: profileUser.gender
+      gender: profileUser.gender,
+      gid: profileUser.gid
     };
     console.log("userPostData:\n", userPostData);
     axios.post("/api/profile/", userPostData).then(resp => {
@@ -97,8 +89,8 @@ class Profile extends Component {
     });
   }
 
-  filterSchool(q, school) {
-    return `${school.name.toLowerCase()} ${school.id}`.indexOf(q.toLowerCase()) >= 0;
+  setGid(geo) {
+    this.setState({profileUser: Object.assign(this.state.profileUser, {gid: geo.id})});
   }
 
   /**
@@ -112,14 +104,15 @@ class Profile extends Component {
    */
   render() {
     const {t} = this.props;
-    const {loading, error, profileUser, schools} = this.state;
+    const {loading, error, profileUser} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
+    const setGid = this.setGid.bind(this);
 
     if (loading) return <h1>Loading ...</h1>;
     if (error) return <h1>{error}</h1>;
 
-    const {name, bio, gender} = profileUser;
+    const {name, bio, gender, gid} = profileUser;
 
     return (
       <div>
@@ -163,22 +156,7 @@ class Profile extends Component {
             </div>
           </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Where are you from?")}
-            </label>
-            <div className="pt-form-content">
-              <div className="pt-select">
-                <select>
-                  <option selected>Choose an item...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                  <option value="4">Four</option>
-                </select>
-              </div>
-            </div>
-          </div>
+          <SelectGeo gid={gid} setGid={setGid} />
 
           <div className="pt-form-group pt-inline">
             <label className="pt-label" htmlFor="example-form-group-input-d">
@@ -196,15 +174,6 @@ class Profile extends Component {
               </div>
             </div>
           </div>
-
-          <Select
-            items={SCHOOLS}
-            itemRenderer={({item: school}) => {return <MenuItem text={school.name} />}}
-            itemPredicate={this.filterSchool}
-            noResults={<MenuItem disabled text="No results." />}
-          >
-            <Button text={SCHOOLS[0].name} rightIconName="double-caret-vertical" />
-          </Select>
 
           <button onClick={saveUserInfo} type="button" className="pt-button">Save</button>
 

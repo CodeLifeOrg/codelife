@@ -26,13 +26,13 @@ module.exports = function(app) {
   });
 
   app.post("/api/profile/", (req, res) => {
-    const {name, bio, gender} = req.body;
+    const {name, bio, gender, gid} = req.body;
     db.users.update(
       {name},
       {where: {id: req.user.id}}
     ).then(() => {
       db.userprofiles.update(
-        {bio, gender},
+        {bio, gender, gid},
         {where: {uid: req.user.id}}
       ).then(() => res.json({worked: true}));
     });
@@ -43,6 +43,15 @@ module.exports = function(app) {
       {where: {gid: {$ilike: "4mg%"}}}
     ).then(schools => {
       return res.json(schools)
+    });
+  });
+
+  app.get("/api/geos", (req, res) => {
+    const {state} = req.query;
+    db.geos.findAll(
+      {where: {id: {$ilike: `${state}%`}, sumlevel: "MUNICIPALITY"}}
+    ).then(geos => {
+      return res.json(geos)
     });
   });
 

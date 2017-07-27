@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Datawheel/codelife#readme",
   "dependencies": {
+    "@blueprintjs/datetime": "^1.19.0",
     "@blueprintjs/labs": "^0.4.0",
     "datawheel-canon": "^0.8.1",
     "himalaya": "^0.2.10",

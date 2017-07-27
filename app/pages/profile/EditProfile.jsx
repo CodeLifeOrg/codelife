@@ -5,6 +5,10 @@ import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
 import SelectGeo from "./SelectGeo";
 import SelectSchool from "./SelectSchool";
+import "@blueprintjs/datetime/dist/blueprint-datetime.css";
+import "moment/locale/pt-br";
+import moment from "moment";
+import {DateInput} from "@blueprintjs/datetime";
 
 /**
  * Class component for a user profile.
@@ -70,10 +74,11 @@ class Profile extends Component {
     this.setState({loading: true});
     const {profileUser} = this.state;
     const userPostData = {
-      name: profileUser.name,
       bio: profileUser.bio,
+      dob: profileUser.dob,
       gender: profileUser.gender,
       gid: profileUser.gid,
+      name: profileUser.name,
       sid: profileUser.sid
     };
     console.log("userPostData:\n", userPostData);
@@ -98,6 +103,10 @@ class Profile extends Component {
     this.setState({profileUser: Object.assign(this.state.profileUser, {sid: school.id})});
   }
 
+  setBday(bday) {
+    this.setState({profileUser: Object.assign(this.state.profileUser, {dob: moment(bday).format("YYYY-MM-DD")})});
+  }
+
   /**
    * 3 render states:
    * case (loading)
@@ -114,11 +123,15 @@ class Profile extends Component {
     const saveUserInfo = this.saveUserInfo.bind(this);
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
+    const setBday = this.setBday.bind(this);
 
     if (loading) return <h1>Loading ...</h1>;
     if (error) return <h1>{error}</h1>;
 
-    const {name, bio, gender, gid, sid} = profileUser;
+    const {name, bio, dob, gender, gid, sid} = profileUser;
+
+    moment.locale("pt-BR");
+    // console.log(moment.locale()); // pt-BR
 
     return (
       <div>
@@ -178,18 +191,17 @@ class Profile extends Component {
 
           <div className="pt-form-group pt-inline">
             <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("School")}
+              {t("Birthday")}
             </label>
             <div className="pt-form-content">
-              <div className="pt-select">
-                <select>
-                  <option selected>Choose an item...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                  <option value="4">Four</option>
-                </select>
-              </div>
+              <DateInput
+                onChange={setBday}
+                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+                format="DD/MM/YYYY"
+                locale="pt-br"
+                minDate={new Date("1900")}
+                maxDate={new Date()}
+              />
             </div>
           </div>
 

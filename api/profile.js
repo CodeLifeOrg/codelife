@@ -26,13 +26,13 @@ module.exports = function(app) {
   });
 
   app.post("/api/profile/", (req, res) => {
-    const {name, bio, gender, gid, sid} = req.body;
+    const {bio, dob, gender, gid, name, sid} = req.body;
     db.users.update(
       {name},
       {where: {id: req.user.id}}
     ).then(() => {
       db.userprofiles.update(
-        {bio, gender, gid, sid},
+        {bio, dob, gender, gid, sid},
         {where: {uid: req.user.id}}
       ).then(() => res.json({worked: true}));
     });

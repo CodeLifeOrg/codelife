@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
-import {Intent, Position, Toaster, Alert} from "@blueprintjs/core";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -18,7 +18,6 @@ class CodeBlock extends Component {
       mounted: false,
       currentText: "",
       isPassing: false,
-      isOpen: false,
       goodRatio: 0,
       intent: null,
       rulejson: null
@@ -47,10 +46,6 @@ class CodeBlock extends Component {
       doc.write(this.state.currentText);
       doc.close();
     }
-  }
-
-  handleClose() {
-    this.setState({isOpen: false});
   }
 
   containsTag(needle, haystack) {
@@ -140,7 +135,8 @@ class CodeBlock extends Component {
     const name = `My ${this.props.lesson.name} Snippet`;
 
     if (!this.state.isPassing) {
-      this.setState({isOpen: true, alertText: "Can't save a non-passing Codeblock!"});
+      const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
+      t.show({message: "Can't save non-passing code!", timeout: 1500, intent: Intent.DANGER});
       return;
     }
 
@@ -155,7 +151,7 @@ class CodeBlock extends Component {
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-        t.show({message: "Saved!", intent: Intent.SUCCESS});
+        t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});
         if (this.props.handleSave) this.props.handleSave(this.props.lesson.snippet.id, studentcontent);
       }
       else {
@@ -168,6 +164,7 @@ class CodeBlock extends Component {
 
   validateHTML() {
 
+    /*
     const annotations = this.getEditor().getSession().getAnnotations();
     const validationText = {};
     validationText.info = "WARNINGS: \n\n";
@@ -177,6 +174,7 @@ class CodeBlock extends Component {
     }
     const alertText = validationText.info + validationText.error;
     this.setState({isOpen: true, alertText});
+    */
 
   }
 
@@ -203,7 +201,6 @@ class CodeBlock extends Component {
           <iframe className="codeBlock-render" ref="rc" />
         </div>
         <div className="codeBlock-foot">
-        <button className="v" onClick={this.validateHTML.bind(this)}>Validate</button>
           <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
           <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>Save & Submit</button>
           <br />
@@ -212,16 +209,6 @@ class CodeBlock extends Component {
             : <div className="pt-callout pt-intent-danger"><h5>Failing</h5></div>
           }
         </div>
-        <Alert
-            className="fail-alert"
-            isOpen={this.state.isOpen}
-            confirmButtonText="Okay"
-            onConfirm={this.handleClose.bind(this)}
-          >
-          <p>
-            {this.state.alertText}
-          </p>
-        </Alert>
       </div>
     );
   }

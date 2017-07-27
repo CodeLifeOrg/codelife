@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Alert} from "@blueprintjs/core";
+import {Position, Toaster, Intent} from "@blueprintjs/core";
 
 export default class Quiz extends Component {
 
@@ -11,19 +11,14 @@ export default class Quiz extends Component {
   }
 
   onChooseAnswer(question) {
-    let alertText = "";
+    const t = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
     if (question.isCorrect) {
-      alertText = "That's Correct!";
+      t.show({message: "That's right!", timeout: 1500, intent: Intent.SUCCESS});
       this.props.unblock();
     }
     else {
-      alertText = "Incorrect, please try again!";
+      t.show({message: "Sorry, Try again!", timeout: 1500, intent: Intent.DANGER});
     }
-    this.setState({isOpen: true, alertText});
-  }
-
-  handleClose() {
-    this.setState({isOpen: false});
   }
 
   render() {
@@ -48,16 +43,6 @@ export default class Quiz extends Component {
           <ol className="questions">
             {quizItems}
           </ol>
-          <Alert
-            className="quiz-alert"
-            isOpen={this.state.isOpen}
-            confirmButtonText="Okay"
-            onConfirm={this.handleClose.bind(this)}
-          >
-          <p>
-            {this.state.alertText}
-          </p>
-          </Alert>
         </div>
       </div>
     );

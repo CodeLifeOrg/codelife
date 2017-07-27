@@ -118,6 +118,15 @@ class Minilesson extends Component {
     );
   }
 
+  handleSave(sid, studentcontent) {
+    // todo: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
+    // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
+    // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
+    const {currentLesson} = this.state;
+    currentLesson.snippet.studentcontent = studentcontent;
+    this.setState(currentLesson);
+  }
+
   hasUserCompleted(milestone) {
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
@@ -153,7 +162,7 @@ class Minilesson extends Component {
             "width": "100%"
           }}
         >
-          <div className="pt-dialog-body"><CodeBlock lesson={currentLesson} /></div>
+          <div className="pt-dialog-body"><CodeBlock lesson={currentLesson} handleSave={this.handleSave.bind(this)}/></div>
         </Dialog>
       </div>
     );

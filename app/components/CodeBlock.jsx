@@ -200,7 +200,7 @@ class CodeBlock extends Component {
           { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
         </div>
         <div className="codeBlock-body">
-          { this.state.mounted ? <AceWrapper className="codeBlock-editor" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="codeBlock-editor"></div> }
+          { this.state.mounted ? <AceWrapper className="codeBlock-editor" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} showGutter={false} setOptions={{behavioursEnabled: false}}/> : <div className="codeBlock-editor"></div> }
           <iframe className="codeBlock-render" ref="rc" />
         </div>
         <div className="codeBlock-foot">

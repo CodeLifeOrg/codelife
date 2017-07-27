@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
-import {Intent, Position, Toaster, Alert} from "@blueprintjs/core";
+import {Intent, Position, Toaster, Alert, Progress} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -19,6 +19,8 @@ class CodeBlock extends Component {
       currentText: "",
       isPassing: false,
       isOpen: false,
+      goodRatio: 0,
+      intent: null,
       rulejson: null
     };
   }
@@ -91,7 +93,13 @@ class CodeBlock extends Component {
         }
       }
     }
-    this.setState({isPassing: errors === 0, rulejson});
+    let goodRatio = ((rulejson.length - errors) / rulejson.length) * 100;
+    let intent = this.state.intent;
+    if (goodRatio < 30) intent = "pt-intent-danger";
+    if (goodRatio >= 30 && goodRatio <= 60) intent = "pt-intent-warning";
+    if (goodRatio > 60) intent = "pt-intent-success";
+    goodRatio += "%";
+    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson});
   }
 
   onChangeText(theText) {
@@ -107,14 +115,21 @@ class CodeBlock extends Component {
     const {rulejson} = this.state;
     const vList = rulejson.map(rule => {
       if (rule.passing) {
+        good++;
         return <li style={{color: "green"}}>✔ {rule.needle}</li>;
       } 
       else {
         return <li style={{color: "red"}}>✗ {rule.needle}</li>;
       }
     });
+    
     return (
-      <ul>{vList}</ul>
+      <div>
+        <ul>{vList}</ul>
+        <div className={`pt-progress-bar pt-no-animation ${this.state.intent}`} style={{width: "200px"}}>
+          <div className="pt-progress-meter " style={{width: this.state.goodRatio}}></div>
+        </div>
+      </div>
     );
   }
 

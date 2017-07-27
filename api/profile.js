@@ -26,13 +26,13 @@ module.exports = function(app) {
   });
 
   app.post("/api/profile/", (req, res) => {
-    const {bio, dob, gender, gid, name, sid} = req.body;
+    const {bio, cpf, dob, gender, gid, name, sid} = req.body;
     db.users.update(
       {name},
       {where: {id: req.user.id}}
     ).then(() => {
       db.userprofiles.update(
-        {bio, dob, gender, gid, sid},
+        {bio, cpf, dob, gender, gid, sid},
         {where: {uid: req.user.id}}
       ).then(() => res.json({worked: true}));
     });
@@ -41,36 +41,28 @@ module.exports = function(app) {
   app.get("/api/schools", (req, res) => {
     db.schools.findAll(
       {where: {gid: {$ilike: "4mg%"}}}
-    ).then(schools => {
-      return res.json(schools)
-    });
+    ).then(schools => res.json(schools));
   });
 
   app.get("/api/schoolsBySid", (req, res) => {
     const {sid} = req.query;
     const q = `SELECT schools.* FROM schools as s, schools WHERE s.id = '${sid}' AND s.gid = schools.gid;`;
 
-    db.query(q, {type: db.QueryTypes.SELECT}).then(schools => {
-      return res.json(schools);
-    });
+    db.query(q, {type: db.QueryTypes.SELECT}).then(schools => res.json(schools));
   });
 
   app.get("/api/schoolsByGid", (req, res) => {
     const {gid} = req.query;
     db.schools.findAll(
       {where: {gid}}
-    ).then(schools => {
-      return res.json(schools)
-    });
+    ).then(schools => res.json(schools));
   });
 
   app.get("/api/geos", (req, res) => {
     const {state} = req.query;
     db.geos.findAll(
       {where: {id: {$ilike: `${state}%`}, sumlevel: "MUNICIPALITY"}}
-    ).then(geos => {
-      return res.json(geos)
-    });
+    ).then(geos => res.json(geos));
   });
 
 };

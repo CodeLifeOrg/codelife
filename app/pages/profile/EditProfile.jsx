@@ -9,6 +9,7 @@ import "@blueprintjs/datetime/dist/blueprint-datetime.css";
 import "moment/locale/pt-br";
 import moment from "moment";
 import {DateInput} from "@blueprintjs/datetime";
+import {CPF} from "cpf_cnpj";
 
 /**
  * Class component for a user profile.
@@ -75,6 +76,7 @@ class Profile extends Component {
     const {profileUser} = this.state;
     const userPostData = {
       bio: profileUser.bio,
+      cpf: profileUser.cpf,
       dob: profileUser.dob,
       gender: profileUser.gender,
       gid: profileUser.gid,
@@ -107,6 +109,36 @@ class Profile extends Component {
     this.setState({profileUser: Object.assign(this.state.profileUser, {dob: moment(bday).format("YYYY-MM-DD")})});
   }
 
+  formatCPF(input) {
+    // Strip all characters from the input except digits
+    input = input.replace(/\D/g, "");
+
+    // Trim the remaining input to eleven characters, to preserve cpf format
+    input = input.substring(0, 11);
+
+    // Based upon the length of the string, we add formatting as necessary
+    const size = input.length;
+    if (size < 4) {
+      input = input;
+    }
+    else if (size < 7) {
+      input = `${input.substring(0, 3)}.${input.substring(3)}`;
+    }
+    else if (size < 10) {
+      input = `${input.substring(0, 3)}.${input.substring(3, 6)}.${input.substring(6)}`;
+    }
+    else {
+      input = `${input.substring(0, 3)}.${input.substring(3, 6)}.${input.substring(6, 9)}-${input.substring(9)}`;
+    }
+    return input;
+  }
+
+  onCpfUpdate(e) {
+    const cpf = this.formatCPF(e.target.value);
+    const cpfValid = CPF.isValid(cpf);
+    this.setState({profileUser: Object.assign(this.state.profileUser, {cpf})});
+  }
+
   /**
    * 3 render states:
    * case (loading)
@@ -120,6 +152,7 @@ class Profile extends Component {
     const {t} = this.props;
     const {loading, error, profileUser} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
+    const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
@@ -128,7 +161,7 @@ class Profile extends Component {
     if (loading) return <h1>Loading ...</h1>;
     if (error) return <h1>{error}</h1>;
 
-    const {name, bio, dob, gender, gid, sid} = profileUser;
+    const {name, bio, cpf, dob, gender, gid, sid} = profileUser;
 
     moment.locale("pt-BR");
     // console.log(moment.locale()); // pt-BR
@@ -187,6 +220,17 @@ class Profile extends Component {
               {t("What school do you go to?")}
             </label>
             <SelectSchool sid={sid} callback={setSid} />
+          </div>
+
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("CPF")}
+            </label>
+            <div className="pt-form-content">
+              <div className="pt-input-group">
+                <input onChange={onCpfUpdate} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" style={{width: "200px"}} type="text" dir="auto" />
+              </div>
+            </div>
           </div>
 
           <div className="pt-form-group pt-inline">

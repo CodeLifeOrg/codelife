@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
-import {Intent, Position, Toaster, Alert, Progress} from "@blueprintjs/core";
+import {Intent, Position, Toaster, Alert} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -93,11 +93,11 @@ class CodeBlock extends Component {
         }
       }
     }
-    let goodRatio = ((rulejson.length - errors) / rulejson.length) * 100;
+    let goodRatio = (rulejson.length - errors) / rulejson.length * 100;
     let intent = this.state.intent;
-    if (goodRatio < 30) intent = "pt-intent-danger";
-    if (goodRatio >= 30 && goodRatio <= 60) intent = "pt-intent-warning";
-    if (goodRatio > 60) intent = "pt-intent-success";
+    if (goodRatio < 33) intent = "pt-intent-danger";
+    if (goodRatio >= 33 && goodRatio <= 66) intent = "pt-intent-warning";
+    if (goodRatio > 66) intent = "pt-intent-success";
     goodRatio += "%";
     this.setState({isPassing: errors === 0, goodRatio, intent, rulejson});
   }
@@ -168,7 +168,6 @@ class CodeBlock extends Component {
 
   validateHTML() {
 
-    /*
     const annotations = this.getEditor().getSession().getAnnotations();
     const validationText = {};
     validationText.info = "WARNINGS: \n\n";
@@ -176,8 +175,8 @@ class CodeBlock extends Component {
     for (const a of annotations) {
       validationText[a.type] += `${a.text} \n\n`;
     }
-    alert(`${validationText.info} ${validationText.error}`);
-    */
+    const alertText = validationText.info + validationText.error;
+    this.setState({isOpen: true, alertText});
 
   }
 
@@ -204,6 +203,7 @@ class CodeBlock extends Component {
           <iframe className="codeBlock-render" ref="rc" />
         </div>
         <div className="codeBlock-foot">
+        <button className="v" onClick={this.validateHTML.bind(this)}>Validate</button>
           <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
           <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>Save & Submit</button>
           <br />

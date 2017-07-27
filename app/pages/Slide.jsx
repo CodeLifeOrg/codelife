@@ -69,7 +69,7 @@ class Slide extends Component {
     }
 
     const i = slides.indexOf(currentSlide);
-    if (currentSlide && ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 && i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
+    if (this.state.mounted && currentSlide && ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 && i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i});
     }
   }
@@ -102,7 +102,7 @@ class Slide extends Component {
   }
 
   handleKey(e) {
-    e.keyCode === 192 ? this.unblock() : null;
+    e.keyCode === 192 ? this.unblock(this) : null;
   }
 
   render() {

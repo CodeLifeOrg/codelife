@@ -1,0 +1,37 @@
+li.snippet {
+  display: block; 
+  cursor: pointer; 
+  width: 230px;
+  margin-bottom: 5px;
+}
+
+input.snippetName {
+  margin: 10px;
+}
+
+li.x {
+  cursor: pointer;
+}
+
+ul#x-list {
+  float: left;
+  list-style-type: none;
+}
+
+ul#snippet-list {
+
+}
+
+div#snippet-container {
+  width: 350px;
+  border: solid 1px black;
+  margin: 10px;
+}
+
+div#snippet-title {
+  font-weight:bold;
+}
+
+div.clear {
+  clear: both;
+}

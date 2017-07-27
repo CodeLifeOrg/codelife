@@ -6,6 +6,7 @@ import {translate} from "react-i18next";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
+import AllSnippets from "components/AllSnippets";
 import Snippets from "components/Snippets";
 import Projects from "components/Projects";
 
@@ -111,17 +112,6 @@ class Studio extends Component {
     }
   }
 
-  validateHTML() {
-    const annotations = this.getEditor().getSession().getAnnotations();
-    const validationText = {};
-    validationText.info = "WARNINGS: \n\n";
-    validationText.error = "ERRORS: \n\n";
-    for (const a of annotations) {
-      validationText[a.type] += `${a.text} \n\n`;
-    }
-    alert(`${validationText.info} ${validationText.error}`);
-  }
-
   render() {
 
     const {t} = this.props;
@@ -129,6 +119,7 @@ class Studio extends Component {
     const {id} = this.props.params;
 
     const snippetRef = <Snippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
+    const allSnippetRef = <AllSnippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
     const projectRef = <Projects  projectToLoad={id}
                                   onCreateProject={this.onCreateProject.bind(this)}
                                   onDeleteProject={this.onDeleteProject.bind(this)}
@@ -139,12 +130,12 @@ class Studio extends Component {
       <div>
         <h1>{ t("Studio") }</h1>
         {snippetRef}
+        {allSnippetRef}
         {projectRef}
         <div id="container">
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper height="400px" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} showGutter={false} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
           <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
-          <button className="button" onClick={this.validateHTML.bind(this)}>VALIDATE</button>
           <br/><br/>
           { currentProject ? <Link className="share-link" to={`/share/project/${currentProject.id}`}>Share this Project</Link> : null }
           </div>

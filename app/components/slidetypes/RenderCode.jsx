@@ -28,6 +28,12 @@ export default class RenderCode extends Component {
     this.setState({mounted: true, currentText: this.props.htmlcontent2}, this.renderText.bind(this));
   }
 
+  componentDidUpdate() {
+    if (this.state.currentText !== this.props.htmlcontent2) {
+      this.setState({mounted: true, currentText: this.props.htmlcontent2}, this.renderText.bind(this));
+    }
+  }
+
   render() {
 
     const {htmlcontent1, htmlcontent2} = this.props;

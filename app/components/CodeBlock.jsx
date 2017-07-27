@@ -115,7 +115,6 @@ class CodeBlock extends Component {
     const {rulejson} = this.state;
     const vList = rulejson.map(rule => {
       if (rule.passing) {
-        good++;
         return <li style={{color: "green"}}>✔ {rule.needle}</li>;
       } 
       else {

@@ -4,7 +4,7 @@ import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
 import SelectGeo from "./SelectGeo";
-
+import SelectSchool from "./SelectSchool";
 
 /**
  * Class component for a user profile.
@@ -73,7 +73,8 @@ class Profile extends Component {
       name: profileUser.name,
       bio: profileUser.bio,
       gender: profileUser.gender,
-      gid: profileUser.gid
+      gid: profileUser.gid,
+      sid: profileUser.sid
     };
     console.log("userPostData:\n", userPostData);
     axios.post("/api/profile/", userPostData).then(resp => {
@@ -93,6 +94,10 @@ class Profile extends Component {
     this.setState({profileUser: Object.assign(this.state.profileUser, {gid: geo.id})});
   }
 
+  setSid(school) {
+    this.setState({profileUser: Object.assign(this.state.profileUser, {sid: school.id})});
+  }
+
   /**
    * 3 render states:
    * case (loading)
@@ -108,11 +113,12 @@ class Profile extends Component {
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
     const setGid = this.setGid.bind(this);
+    const setSid = this.setSid.bind(this);
 
     if (loading) return <h1>Loading ...</h1>;
     if (error) return <h1>{error}</h1>;
 
-    const {name, bio, gender, gid} = profileUser;
+    const {name, bio, gender, gid, sid} = profileUser;
 
     return (
       <div>
@@ -156,7 +162,19 @@ class Profile extends Component {
             </div>
           </div>
 
-          <SelectGeo gid={gid} setGid={setGid} />
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("Where are you from?")}
+            </label>
+            <SelectGeo gid={gid} callback={setGid} />
+          </div>
+
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("What school do you go to?")}
+            </label>
+            <SelectSchool sid={sid} callback={setSid} />
+          </div>
 
           <div className="pt-form-group pt-inline">
             <label className="pt-label" htmlFor="example-form-group-input-d">

@@ -26,13 +26,13 @@ module.exports = function(app) {
   });
 
   app.post("/api/profile/", (req, res) => {
-    const {name, bio, gender, gid} = req.body;
+    const {name, bio, gender, gid, sid} = req.body;
     db.users.update(
       {name},
       {where: {id: req.user.id}}
     ).then(() => {
       db.userprofiles.update(
-        {bio, gender, gid},
+        {bio, gender, gid, sid},
         {where: {uid: req.user.id}}
       ).then(() => res.json({worked: true}));
     });
@@ -41,6 +41,24 @@ module.exports = function(app) {
   app.get("/api/schools", (req, res) => {
     db.schools.findAll(
       {where: {gid: {$ilike: "4mg%"}}}
+    ).then(schools => {
+      return res.json(schools)
+    });
+  });
+
+  app.get("/api/schoolsBySid", (req, res) => {
+    const {sid} = req.query;
+    const q = `SELECT schools.* FROM schools as s, schools WHERE s.id = '${sid}' AND s.gid = schools.gid;`;
+
+    db.query(q, {type: db.QueryTypes.SELECT}).then(schools => {
+      return res.json(schools);
+    });
+  });
+
+  app.get("/api/schoolsByGid", (req, res) => {
+    const {gid} = req.query;
+    db.schools.findAll(
+      {where: {gid}}
     ).then(schools => {
       return res.json(schools)
     });

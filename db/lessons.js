@@ -12,6 +12,7 @@ module.exports = function(sequelize, db) {
       prompt: db.TEXT,
       initialcontent: db.TEXT,
       rulejson: db.TEXT,
+      cheatsheet: db.TEXT,
       pt_name: db.TEXT,
       pt_description: db.TEXT,
       pt_initialcontent: db.TEXT,

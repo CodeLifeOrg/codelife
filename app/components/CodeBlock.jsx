@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
-import {Intent, Position, Toaster} from "@blueprintjs/core";
+import {Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -18,6 +18,7 @@ class CodeBlock extends Component {
       mounted: false,
       currentText: "",
       isPassing: false,
+      isOpen: false,
       goodRatio: 0,
       intent: null,
       rulejson: null
@@ -160,6 +161,9 @@ class CodeBlock extends Component {
     });
   }
 
+  showCheatSheet() {
+    console.log(this.props.lesson.cheatsheet);
+  }
 
 
   validateHTML() {
@@ -202,12 +206,28 @@ class CodeBlock extends Component {
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
+          
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            popoverClassName="pt-popover-content-sizing"
+            position={Position.RIGHT}
+          >
+            <Button intent={Intent.PRIMARY}>CheatSheet</Button>
+            <div>
+              <h5>{lesson.name} Cheat Sheet</h5>
+                <p style={{whiteSpace: "pre"}}>{lesson.cheatsheet}</p>
+              <Button className="pt-popover-dismiss">Dismiss</Button>
+            </div>
+          </Popover>
+
           <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>Save & Submit</button>
+
           <br />
           { isPassing
             ? <div className="pt-callout pt-intent-success"><h5>Passing</h5></div>
             : <div className="pt-callout pt-intent-danger"><h5>Failing</h5></div>
           }
+
         </div>
       </div>
     );

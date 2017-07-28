@@ -1,6 +1,6 @@
 import pandas as pd
 from sqlalchemy import create_engine
-import os
+import os, math, json
 
 lessons_url = 'https://docs.google.com/spreadsheets/d/19inRDZny2tFUgGoI5e94MT5dBUtnGx5eTlL2TXeKyA4/pub?output=csv&gid=0&chrome=false'
 minilessons_url = 'https://docs.google.com/spreadsheets/d/19inRDZny2tFUgGoI5e94MT5dBUtnGx5eTlL2TXeKyA4/pub?output=csv&gid=1777054873&chrome=false'
@@ -16,10 +16,32 @@ link = 'postgresql://' + user + ":" + pw + "@" + host + "/" + name
 engine = create_engine(link)
 
 lessons_df = pd.read_csv(lessons_url)
-lessons_df.to_sql('lessons', con=engine, if_exists='replace')
 
 minilessons_df = pd.read_csv(minilessons_url)
-minilessons_df.to_sql('minilessons', con=engine, if_exists='replace')
 
+errors = 0
 slides_df = pd.read_csv(slides_url)
-slides_df.to_sql('slides', con=engine, if_exists='replace')
+for index, row in slides_df.iterrows():
+  if type(row['quizjson']) == str:
+    try: 
+      json.loads(row['quizjson'])
+    except:
+      print("JSON error in " + row['id'])
+      errors = errors + 1
+  if type(row['rulejson']) == str:
+    try: 
+      json.loads(row['rulejson'])
+    except:
+      print("JSON error in " + row['id'])
+      errors = errors + 1
+
+if errors == 0:
+  print("no errors detected, uploading")
+  lessons_df.to_sql('lessons', con=engine, if_exists='replace')
+  minilessons_df.to_sql('minilessons', con=engine, if_exists='replace')
+  slides_df.to_sql('slides', con=engine, if_exists='replace')
+else:
+  print("\nTotal Errors: " + str(errors))
+  print("\nPlease correct these before running ingest again")
+    
+

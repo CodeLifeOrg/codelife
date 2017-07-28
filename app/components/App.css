@@ -18,6 +18,8 @@ body {
 
 }
 
+:focus { outline: 0; }
+
 .pt-overlay-backdrop {
   background-color: rgba(245, 245, 255, 0.7);
 }

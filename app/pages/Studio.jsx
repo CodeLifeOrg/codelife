@@ -1,6 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link, browserHistory} from "react-router";
+import {browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
@@ -132,24 +132,22 @@ class Studio extends Component {
                                   onClickProject={this.onClickProject.bind(this)}/>;
 
     return (
-      <div>
-        <h1>{ t("Studio") }</h1>
-        <Tabs2 onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-          <Tab2 id="projects" title="Projects" panel={ projectRef } />
-          <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
-          <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
-        </Tabs2>
-        <div id="container">
-          <div id="acecontainer">
-          { this.state.mounted ? <AceWrapper height="400px" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} showGutter={false} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }
-          <button className="button" onClick={this.saveCodeToDB.bind(this)}>SAVE</button>
-          <br/><br/>
-          { currentProject ? <Link className="share-link" to={`/share/project/${currentProject.id}`}>Share this Project</Link> : null }
+      <div id="studio">
+        <div id="head">
+          <h1 className="title">{ t("Studio") }</h1>
+          <div className="buttons">
+            { currentProject ? <a className="pt-button" target="_blank" href={ `/share/project/${currentProject.id}` }>{ t("Share") }</a> : null }
+            <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>
-          <iframe id="rendercontainer" ref="rc" />
         </div>
-        <div className="clear">
-          <br/>
+        <div id="body">
+          <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+            <Tab2 id="projects" title="Projects" panel={ projectRef } />
+            <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
+            <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
+          </Tabs2>
+          { this.state.mounted ? <AceWrapper className="studio-editor" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} showGutter={false} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="studio-editor"></div> }
+          <iframe className="studio-render" ref="rc" />
         </div>
       </div>
     );

@@ -13,25 +13,29 @@ class Nav extends Component {
 
   render() {
 
-    const {t, user} = this.props;
+    const {auth, t} = this.props;
 
     return (
       <div id="nav">
         <Link to={"/"}><img className="logo" src="/logo/logo-sm.png" /></Link>
         <div className="links">
-          <Link className="link" to="/lesson">{ t("Overworld") }</Link>
-          <Link className="link" to={`/studio/${user.username}`}>{ t("Studio") }</Link>
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing"
-            position={Position.BOTTOM}
-          >
-            <div className="link">{ user.username }<span className="pt-icon-standard pt-icon-user"></span></div>
-            <div>
-              <Link className="pt-button pt-intent-primary pt-fill" to={ `/profile/${ user.username }` }>{ t("Profile") }</Link>
-              <a className="pt-button pt-intent-primary pt-fill" href="/auth/logout">{ t("Logout") }</a>
+          { auth.user
+          ? <div>
+              <Link className="link" to="/lesson">{ t("Overworld") }</Link>
+              <Link className="link" to={`/studio/${auth.user.username}`}>{ t("Studio") }</Link>
+              <Popover
+                interactionKind={PopoverInteractionKind.HOVER}
+                popoverClassName="pt-popover-content-sizing"
+                position={Position.BOTTOM}
+              >
+                <div className="link">{ auth.user.username }<span className="pt-icon-standard pt-icon-user"></span></div>
+                <div>
+                  <Link className="pt-button pt-intent-primary pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
+                  <a className="pt-button pt-intent-primary pt-fill" href="/auth/logout">{ t("Logout") }</a>
+                </div>
+              </Popover>
             </div>
-          </Popover>
+          : null }
         </div>
       </div>
     );
@@ -39,7 +43,7 @@ class Nav extends Component {
 }
 
 Nav = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(Nav);
 Nav = translate()(Nav);
 export default Nav;

@@ -112,9 +112,11 @@ class Slide extends Component {
 
   render() {
 
-    const {t} = this.props;
+    const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
     const {currentSlide, slides, currentLesson, gems} = this.state;
+
+    if (!auth.user) browserHistory.push("/login");
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;
@@ -158,7 +160,7 @@ class Slide extends Component {
 }
 
 Slide = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(Slide);
 Slide = translate()(Slide);
 export default Slide;

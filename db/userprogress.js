@@ -8,8 +8,10 @@ module.exports = function(sequelize, db) {
         autoIncrement: true
       },
       uid: db.STRING,
-      level: db.TEXT
-    }, 
+      level: db.TEXT,
+      gems: db.INTEGER,
+      datecompleted: db.DATE
+    },
     {
       freezeTableName: true,
       timestamps: false

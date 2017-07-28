@@ -43,11 +43,20 @@ class Projects extends Component {
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
         if (resp.status === 200) {
           const projects = resp.data;
-          let currentProject = null;
-          projects.sort((a, b) => a.name < b.name ? -1 : 1);
-          if (projects.length > 0) currentProject = projects[0];
-          this.setState({deleteAlert: false, projectName: "", currentProject, projects});
-          this.props.onDeleteProject(currentProject);
+          let newProject = null;
+          // if the project i'm trying to delete is the one i'm currently on, pick a new project
+          // to open (in this case, the first one in the list)
+          if (deleteAlert.project.id === this.state.currentProject.id) {
+            projects.sort((a, b) => a.name < b.name ? -1 : 1);
+            if (projects.length > 0) newProject = projects[0];
+          } 
+          // if the project i'm trying to delete is a different project, it's fine to stay on
+          // my current project.
+          else {
+            newProject = this.state.currentProject;
+          }
+          this.setState({deleteAlert: false, projectName: "", currentProject: newProject, projects});
+          this.props.onDeleteProject(newProject);
         }
         else {
           console.log("Error");
@@ -114,8 +123,8 @@ class Projects extends Component {
     const projectArray = this.state.projects;
     projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
     const projectItems = projectArray.map(project =>
-      <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>
-        <span className="project-title">{project.name}</span>
+      <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
+        <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
         <Tooltip content={ t("Delete Project") }>
           <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
         </Tooltip>

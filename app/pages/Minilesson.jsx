@@ -138,7 +138,8 @@ class Minilesson extends Component {
     this.setState(currentLesson);
   }
 
-  onFirstCompletion(winMessage) {
+  onFirstCompletion() {
+    const winMessage = this.state.currentLesson.victory;
     this.setState({firstWin: true, winMessage});
   }
 

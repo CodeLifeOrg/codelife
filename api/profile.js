@@ -31,10 +31,22 @@ module.exports = function(app) {
       {name},
       {where: {id: req.user.id}}
     ).then(() => {
-      db.userprofiles.update(
-        {bio, cpf, dob, gender, gid, sid},
-        {where: {uid: req.user.id}}
-      ).then(() => res.json({worked: true}));
+      db.userprofiles.findOrCreate({where: {uid: req.user.id}})
+        .then(userprofiles => {
+          if (userprofiles.length) {
+            const userprofile = userprofiles[0];
+            userprofile.bio = bio;
+            userprofile.cpf = cpf;
+            userprofile.dob = dob;
+            userprofile.gender = gender;
+            userprofile.gid = gid;
+            userprofile.sid = sid;
+            return userprofile.save().then(() => res.json(userprofile).end());
+          }
+          else {
+            return res.json({error: "Unable to update user profile."}).end();
+          }
+        });
     });
   });
 

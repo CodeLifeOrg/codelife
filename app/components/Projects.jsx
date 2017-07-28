@@ -11,7 +11,7 @@ class Projects extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      alert: false,
+      deleteAlert: false,
       projects: [],
       projectName: "",
       currentProject: null
@@ -36,10 +36,10 @@ class Projects extends Component {
   deleteSnippet(project) {
 
     if (project === true) {
-      const {alert} = this.state;
-      axios.delete("/api/projects/delete", {params: {id: alert.payload.id}}).then(resp => {
+      const {deleteAlert} = this.state;
+      axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
         if (resp.status === 200) {
-          this.setState({alert: false, projectName: "", currentProject: null, projects: resp.data});
+          this.setState({deleteAlert: false, projectName: "", currentProject: null, projects: resp.data});
           this.props.onDeleteProject();
         }
         else {
@@ -48,8 +48,8 @@ class Projects extends Component {
       });
     }
     else {
-      this.setState({alert: {
-        payload: project,
+      this.setState({deleteAlert: {
+        project,
         text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
       }});
     }
@@ -100,7 +100,7 @@ class Projects extends Component {
   render() {
 
     const {t} = this.props;
-    const {alert} = this.state;
+    const {deleteAlert} = this.state;
 
     const projectArray = this.state.projects;
     projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
@@ -118,13 +118,13 @@ class Projects extends Component {
           {projectItems}
         </ul>
         <Alert
-            isOpen={ alert ? true : false }
+            isOpen={ deleteAlert ? true : false }
             cancelButtonText={ t("Cancel") }
             confirmButtonText={ t("Delete") }
             intent={ Intent.DANGER }
-            onCancel={ () => this.setState({alert: false}) }
+            onCancel={ () => this.setState({deleteAlert: false}) }
             onConfirm={ () => this.deleteSnippet(true) }>
-            <p>{ alert ? alert.text : "" }</p>
+            <p>{ deleteAlert ? deleteAlert.text : "" }</p>
         </Alert>
         <div className="project-new">
           <div className="project-new-title">Create a New Project</div>

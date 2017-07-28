@@ -21,9 +21,11 @@ class Projects extends Component {
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
       const projects = resp.data;
+      projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
+        if (!currentProject) currentProject = projects[0];
         this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
       }
       else {

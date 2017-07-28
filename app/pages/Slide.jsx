@@ -25,27 +25,28 @@ class Slide extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      gems: 0,
       slides: [],
       currentSlide: null,
       blocked: true,
       currentLesson: null,
       minilessons: null,
       sentProgress: false,
-      latestSlideCompleted: 0, 
+      latestSlideCompleted: 0,
       mounted: false
     };
   }
 
   unblock() {
-    const {slides, currentSlide, latestSlideCompleted} = this.state;
+    const {slides, currentSlide, latestSlideCompleted, gems} = this.state;
     const i = slides.indexOf(currentSlide);
     let newlatest = latestSlideCompleted;
     if (i > latestSlideCompleted) newlatest = i;
-    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
+    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false, gems: gems + 1});
   }
 
-  saveProgress(level) {
-    axios.post("/api/userprogress/save", {level}).then(resp => {
+  saveProgress(level, gems) {
+    axios.post("/api/userprogress/save", {level, gems}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
     });
   }
@@ -53,8 +54,9 @@ class Slide extends Component {
   componentDidUpdate() {
     const {lid, mlid, sid} = this.props.params;
     const {user} = this.props;
-    const {currentSlide, slides, sentProgress, latestSlideCompleted} = this.state;
+    const {currentSlide, slides, sentProgress, latestSlideCompleted, gems} = this.state;
 
+    // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
       let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
@@ -63,14 +65,17 @@ class Slide extends Component {
     }
 
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
+    // if final slide write to DB
     if (user && isFinalSlide && !sentProgress) {
       this.setState({sentProgress: true});
-      this.saveProgress(mlid);
+      this.saveProgress(mlid, gems);
     }
 
     const i = slides.indexOf(currentSlide);
-    if (this.state.mounted && currentSlide && ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 && i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
-      this.setState({latestSlideCompleted: i});
+    if (this.state.mounted && currentSlide &&
+      ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 &&
+      i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
+      this.setState({latestSlideCompleted: i, gems: gems + 1});
     }
   }
 
@@ -109,7 +114,7 @@ class Slide extends Component {
 
     const {t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, currentLesson} = this.state;
+    const {currentSlide, slides, currentLesson, gems} = this.state;
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;
@@ -129,6 +134,9 @@ class Slide extends Component {
           <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
+          <div className="gems">
+          Gems Found: {gems}
+          </div>
         </div>
 
         <SlideComponent unblock={this.unblock.bind(this)} {...currentSlide} />

@@ -19,7 +19,10 @@ class Minilesson extends Component {
       userProgress: null,
       otherSnippets: null,
       currentFrame: null,
-      testOpen: false
+      testOpen: false,
+      winOpen: false,
+      winMessage: "",
+      firstWin: false
     };
   }
 
@@ -37,6 +40,7 @@ class Minilesson extends Component {
       const allSnippets = resp[3].data;
       const otherSnippets = [];
       let mySnippet = null;
+      // Fold over snippets and separate them into mine and others
       for (const s of allSnippets) {
         s.uid === this.props.user.id ? mySnippet = s : otherSnippets.push(s);
       }
@@ -78,7 +82,14 @@ class Minilesson extends Component {
   }
 
   toggleTest() {
-    this.setState({testOpen: !this.state.testOpen});
+    // If I'm about to close the test successfully for the first time
+    if (this.state.testOpen && this.state.firstWin) {
+      this.setState({winOpen: true, firstWin: false, testOpen: !this.state.testOpen});  
+    } 
+    else {
+      this.setState({testOpen: !this.state.testOpen});  
+    }
+    
   }
 
   buildCodeblockButton(snippet, i) {
@@ -118,13 +129,21 @@ class Minilesson extends Component {
     );
   }
 
-  handleSave(sid, studentcontent) {
+  handleSave(newsnippet) {
     // todo: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
     // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
     // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
     const {currentLesson} = this.state;
-    currentLesson.snippet.studentcontent = studentcontent;
+    if (!currentLesson.snippet) currentLesson.snippet = newsnippet;
     this.setState(currentLesson);
+  }
+
+  onFirstCompletion(winMessage) {
+    this.setState({firstWin: true, winMessage});
+  }
+
+  closeOverlay() {
+    this.setState({winOpen: false});
   }
 
   hasUserCompleted(milestone) {
@@ -138,6 +157,30 @@ class Minilesson extends Component {
       if (!this.hasUserCompleted(m.id)) missedlessons++;
     }
     return missedlessons === 0;
+  }
+
+  buildWinPopover() {
+    return (
+      <Dialog
+        iconName="endorsed"
+        isOpen={this.state.winOpen}
+        onClose={this.closeOverlay.bind(this)}
+        title="Great Job!"
+      >
+        <div className="pt-dialog-body">
+          {this.state.winMessage}
+        </div>
+        <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+                <Button
+                    intent={Intent.PRIMARY}
+                    onClick={this.closeOverlay.bind(this)}
+                    text="Great!"
+                />
+            </div>
+        </div>
+      </Dialog>
+    );
   }
 
   buildTestPopover() {
@@ -162,7 +205,13 @@ class Minilesson extends Component {
             "width": "100%"
           }}
         >
-          <div className="pt-dialog-body"><CodeBlock lesson={currentLesson} handleSave={this.handleSave.bind(this)}/></div>
+          <div className="pt-dialog-body">
+            <CodeBlock  
+              lesson={currentLesson} 
+              handleSave={this.handleSave.bind(this)}
+              onFirstCompletion={this.onFirstCompletion.bind(this)}
+            />
+          </div>
         </Dialog>
       </div>
     );
@@ -171,18 +220,17 @@ class Minilesson extends Component {
   render() {
 
     const {t} = this.props;
-    const {lid} = this.props.params;
     const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
 
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <Loading />;
 
-    // clone minilessons as to not mess with state
+    // Clone minilessons as to not mess with state
     const minilessonStatuses = minilessons.slice(0);
     for (let m = 0; m < minilessonStatuses.length; m++) {
       const done = this.hasUserCompleted(minilessonStatuses[m].id);
       minilessonStatuses[m].isDone = done;
-      // if i'm the first lesson and i'm not done, i'm next lesson
-      // if i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson
+      // If i'm the first lesson and i'm not done, i'm next lesson
+      // If i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson
       minilessonStatuses[m].isNext = m === 0 && !done || m > 0 && !done && minilessonStatuses[m - 1].isDone;
     }
 
@@ -205,6 +253,7 @@ class Minilesson extends Component {
 
     return (
       <div id="island" className={ currentLesson.id }>
+        { this.buildWinPopover() }
         <div className="image">
           <h1 className="title">{ currentLesson.name }</h1>
           <p className="description">{ currentLesson.description }</p>

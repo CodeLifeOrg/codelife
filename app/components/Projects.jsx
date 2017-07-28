@@ -28,6 +28,9 @@ class Projects extends Component {
       }
       else {
         this.setState({projects});
+        if (projects.length === 0) {
+          this.createNewProject("mypage.html");
+        }
       }
 
     });

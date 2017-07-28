@@ -35,10 +35,12 @@ class Studio extends Component {
 
   onCreateProject(project) {
     this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
+    browserHistory.push(`/studio/${this.props.user.username}/${project.name}`);
   }
 
   onDeleteProject() {
     this.setState({currentProject: null, currentText: ""}, this.renderText.bind(this));
+    // todo browserhistory push other project
   }
 
   insertTextAtCursor(theText) {

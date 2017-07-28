@@ -137,10 +137,10 @@ class Projects extends Component {
         </Alert>
         <div className="project-new">
           <div className="project-new-title">Create a New Project</div>
-          <form className="project-new-form">
+          <div className="project-new-form">
             <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
             <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>
-          </form>
+          </div>
         </div>
       </div>
     );

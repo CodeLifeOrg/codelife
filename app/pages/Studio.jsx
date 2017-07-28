@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Toaster} from "@blueprintjs/core";
+import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
 import AllSnippets from "components/AllSnippets";
@@ -17,6 +17,7 @@ class Studio extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeTabId: "projects",
       mounted: false,
       currentProject: null,
       currentText: "",
@@ -112,10 +113,14 @@ class Studio extends Component {
     }
   }
 
+  handleTabChange(activeTabId) {
+    this.setState({activeTabId});
+  }
+
   render() {
 
     const {t} = this.props;
-    const {currentProject} = this.state;
+    const {activeTabId, currentProject} = this.state;
     const {id} = this.props.params;
 
     const snippetRef = <Snippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
@@ -129,9 +134,11 @@ class Studio extends Component {
     return (
       <div>
         <h1>{ t("Studio") }</h1>
-        {snippetRef}
-        {allSnippetRef}
-        {projectRef}
+        <Tabs2 onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+          <Tab2 id="projects" title="Projects" panel={ projectRef } />
+          <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
+          <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
+        </Tabs2>
         <div id="container">
           <div id="acecontainer">
           { this.state.mounted ? <AceWrapper height="400px" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} showGutter={false} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : null }

@@ -4,6 +4,7 @@ import {translate} from "react-i18next";
 import {Button, Classes, MenuItem} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/labs";
 import STATES from "./states";
+import "@blueprintjs/labs/dist/blueprint-labs.css";
 
 class SelectGeo extends Component {
 
@@ -33,6 +34,9 @@ class SelectGeo extends Component {
           homeGeo
         });
       });
+    }
+    else {
+      this.setState({loading: false});
     }
   }
 
@@ -86,7 +90,7 @@ class SelectGeo extends Component {
       <div className="pt-form-content">
         <div className="pt-select">
           <select onChange={changeState} value={state || ""}>
-            {STATES.map(s => <option key={s.id} value={s.id}>{`${s.id.substr(1, 2).toUpperCase()} - ${s.name}`}</option>)}
+            {STATES.map(s => <option key={s.id} value={s.id}>{`${s.name} (${s.id.substr(1, 2).toUpperCase()})`}</option>)}
           </select>
         </div>
         { geos.length

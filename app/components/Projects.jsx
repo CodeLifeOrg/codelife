@@ -21,9 +21,11 @@ class Projects extends Component {
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
       const projects = resp.data;
+      projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
+        if (!currentProject) currentProject = projects[0];
         this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
       }
       else {
@@ -36,14 +38,27 @@ class Projects extends Component {
     });
   }
 
-  deleteSnippet(project) {
+  deleteProject(project) {
 
     if (project === true) {
       const {deleteAlert} = this.state;
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
         if (resp.status === 200) {
-          this.setState({deleteAlert: false, projectName: "", currentProject: null, projects: resp.data});
-          this.props.onDeleteProject();
+          const projects = resp.data;
+          let newProject = null;
+          // if the project i'm trying to delete is the one i'm currently on, pick a new project
+          // to open (in this case, the first one in the list)
+          if (deleteAlert.project.id === this.state.currentProject.id) {
+            projects.sort((a, b) => a.name < b.name ? -1 : 1);
+            if (projects.length > 0) newProject = projects[0];
+          } 
+          // if the project i'm trying to delete is a different project, it's fine to stay on
+          // my current project.
+          else {
+            newProject = this.state.currentProject;
+          }
+          this.setState({deleteAlert: false, projectName: "", currentProject: newProject, projects});
+          this.props.onDeleteProject(newProject);
         }
         else {
           console.log("Error");
@@ -71,7 +86,9 @@ class Projects extends Component {
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {
-          this.setState({projectName: "", currentProject: resp.data.currentProject, projects: resp.data.projects});
+          const projects = resp.data.projects;
+          projects.sort((a, b) => a.name < b.name ? -1 : 1);
+          this.setState({projectName: "", currentProject: resp.data.currentProject, projects});
           this.props.onCreateProject(resp.data.currentProject);
         }
         else {
@@ -108,10 +125,10 @@ class Projects extends Component {
     const projectArray = this.state.projects;
     projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
     const projectItems = projectArray.map(project =>
-      <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>
-        <span className="project-title">{project.name}</span>
+      <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
+        <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
         <Tooltip content={ t("Delete Project") }>
-          <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteSnippet(project) }></span>
+          <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
         </Tooltip>
       </li>);
 
@@ -126,15 +143,15 @@ class Projects extends Component {
             confirmButtonText={ t("Delete") }
             intent={ Intent.DANGER }
             onCancel={ () => this.setState({deleteAlert: false}) }
-            onConfirm={ () => this.deleteSnippet(true) }>
+            onConfirm={ () => this.deleteProject(true) }>
             <p>{ deleteAlert ? deleteAlert.text : "" }</p>
         </Alert>
         <div className="project-new">
           <div className="project-new-title">Create a New Project</div>
-          <form className="project-new-form">
+          <div className="project-new-form">
             <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
             <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>
-          </form>
+          </div>
         </div>
       </div>
     );

@@ -199,7 +199,7 @@ class Profile extends Component {
             </label>
             <div className="pt-form-content">
               <div className="pt-select">
-                <select onChange={onSimpleUpdate} id="gender" value={gender}>
+                <select onChange={onSimpleUpdate} id="gender" value={gender || "OTHER"}>
                   <option value="OTHER">{t("Rather not say")}</option>
                   <option value="FEMALE">{t("Female")}</option>
                   <option value="MALE">{t("Male")}</option>

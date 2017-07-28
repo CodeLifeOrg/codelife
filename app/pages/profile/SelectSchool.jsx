@@ -33,21 +33,28 @@ class SelectSchool extends Component {
         });
       });
     }
+    else {
+      this.setState({loading: false});
+    }
   }
 
   updateSchoolList(geo) {
+    // console.log('updateSchoolList', geo)
+    // return
     const {id: gid} = geo;
     this.setState({loading: true});
     axios.get(`/api/schoolsByGid?gid=${gid}`).then(schoolsResp => {
-      const mySchool = schoolsResp.data[0];
-      const schoolQuery = mySchool.name;
-      this.setState({
-        loading: false,
-        schools: schoolsResp.data,
-        filteredSchools: schoolsResp.data,
-        schoolQuery,
-        mySchool
-      });
+      if (schoolsResp.data.length) {
+        const mySchool = schoolsResp.data[0];
+        const schoolQuery = mySchool.name;
+        this.setState({
+          loading: false,
+          schools: schoolsResp.data,
+          filteredSchools: schoolsResp.data,
+          schoolQuery,
+          mySchool
+        });
+      }
     });
   }
 
@@ -78,10 +85,11 @@ class SelectSchool extends Component {
     const filterSchools = this.filterSchools.bind(this);
     const setSelectedSchool = this.setSelectedSchool.bind(this);
     const updateSchoolList = this.updateSchoolList.bind(this);
+    const gid = mySchool ? mySchool.gid : null;
 
     return (
       <div>
-        <SelectGeo gid={mySchool.gid} callback={updateSchoolList} />
+        <SelectGeo gid={gid} callback={updateSchoolList} />
         <div className="pt-form-content">
           { schools.length
             ? <Select

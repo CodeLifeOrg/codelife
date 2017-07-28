@@ -34,6 +34,9 @@ class SelectGeo extends Component {
         });
       });
     }
+    else {
+      this.setState({loading: false});
+    }
   }
 
   changeState(e) {
@@ -86,7 +89,7 @@ class SelectGeo extends Component {
       <div className="pt-form-content">
         <div className="pt-select">
           <select onChange={changeState} value={state || ""}>
-            {STATES.map(s => <option key={s.id} value={s.id}>{`${s.id.substr(1, 2).toUpperCase()} - ${s.name}`}</option>)}
+            {STATES.map(s => <option key={s.id} value={s.id}>{`${s.name} (${s.id.substr(1, 2).toUpperCase()})`}</option>)}
           </select>
         </div>
         { geos.length

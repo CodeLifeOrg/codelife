@@ -38,9 +38,9 @@ class Studio extends Component {
     browserHistory.push(`/studio/${this.props.user.username}/${project.name}`);
   }
 
-  onDeleteProject() {
-    this.setState({currentProject: null, currentText: ""}, this.renderText.bind(this));
-    // todo browserhistory push other project
+  onDeleteProject(newproject) {
+    this.setState({currentProject: newproject, currentText: newproject.studentcontent}, this.renderText.bind(this));
+    browserHistory.push(`/studio/${this.props.user.username}/${newproject.name}`);
   }
 
   insertTextAtCursor(theText) {

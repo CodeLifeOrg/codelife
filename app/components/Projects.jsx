@@ -36,14 +36,18 @@ class Projects extends Component {
     });
   }
 
-  deleteSnippet(project) {
+  deleteProject(project) {
 
     if (project === true) {
       const {deleteAlert} = this.state;
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
         if (resp.status === 200) {
-          this.setState({deleteAlert: false, projectName: "", currentProject: null, projects: resp.data});
-          this.props.onDeleteProject();
+          const projects = resp.data;
+          let currentProject = null;
+          projects.sort((a, b) => a.name < b.name ? -1 : 1);
+          if (projects.length > 0) currentProject = projects[0];
+          this.setState({deleteAlert: false, projectName: "", currentProject, projects});
+          this.props.onDeleteProject(currentProject);
         }
         else {
           console.log("Error");
@@ -71,7 +75,9 @@ class Projects extends Component {
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {
-          this.setState({projectName: "", currentProject: resp.data.currentProject, projects: resp.data.projects});
+          const projects = resp.data.projects;
+          projects.sort((a, b) => a.name < b.name ? -1 : 1);
+          this.setState({projectName: "", currentProject: resp.data.currentProject, projects});
           this.props.onCreateProject(resp.data.currentProject);
         }
         else {
@@ -111,7 +117,7 @@ class Projects extends Component {
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>
         <span className="project-title">{project.name}</span>
         <Tooltip content={ t("Delete Project") }>
-          <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteSnippet(project) }></span>
+          <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
         </Tooltip>
       </li>);
 
@@ -126,7 +132,7 @@ class Projects extends Component {
             confirmButtonText={ t("Delete") }
             intent={ Intent.DANGER }
             onCancel={ () => this.setState({deleteAlert: false}) }
-            onConfirm={ () => this.deleteSnippet(true) }>
+            onConfirm={ () => this.deleteProject(true) }>
             <p>{ deleteAlert ? deleteAlert.text : "" }</p>
         </Alert>
         <div className="project-new">

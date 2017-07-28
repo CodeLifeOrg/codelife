@@ -1,37 +1,46 @@
-li.snippet {
-  display: block; 
-  cursor: pointer; 
-  width: 230px;
-  margin-bottom: 5px;
-}
+#snippets {
 
-input.snippetName {
-  margin: 10px;
-}
+  & .snippets-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
-li.x {
-  cursor: pointer;
-}
+    & .snippet {
+      align-items: center;
+      background-color: transparent;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      opacity: 0.75;
+      padding: 8px 0 9px 0;
+      transition: opacity 0.2s;
+      width: 100%;
 
-ul#x-list {
-  float: left;
-  list-style-type: none;
-}
+      &:hover {
+        opacity: 1;
+      }
 
-ul#snippet-list {
+      & .snippet-title {
+        flex: 1;
+      }
 
-}
+      & .pt-popover-target {
+        margin: 0 5px;
 
-div#snippet-container {
-  width: 350px;
-  border: solid 1px black;
-  margin: 10px;
-}
+        &:hover {
+          cursor: pointer;
+        }
 
-div#snippet-title {
-  font-weight:bold;
-}
+      }
 
-div.clear {
-  clear: both;
+      & .snippet-author {
+        font-size: 12px;
+        opacity: 0.75;
+        width: 100%;
+      }
+
+    }
+
+  }
+
 }

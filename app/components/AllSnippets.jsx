@@ -2,9 +2,8 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
-import Loading from "components/Loading";
-import {Intent, Position, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
-import "./AllSnippets.css";
+import {Tooltip} from "@blueprintjs/core";
+import "./Snippets.css";
 
 class AllSnippets extends Component {
 
@@ -28,29 +27,30 @@ class AllSnippets extends Component {
   }
 
   render() {
-    
+
     const {t, onClickSnippet} = this.props;
     const {snippets, lessons} = this.state;
-    
-    if (!snippets || !lessons) return <Loading />;
 
-    // todo: this sorts by id, which is not a guarantee of proper order.  need to do by ordered lessons
-    snippets.sort((a, b) => a.id - b.id);
-    const snippetItems = snippets.map(snippet =>
-    <li className="snippet" key={snippet.id}> 
-      <span onClick={() => onClickSnippet(snippet)}>
-        {snippet.username} - {snippet.snippetname}
-      </span>
-    </li>);
+    if (!snippets || !lessons) return null;
+
+    const snippetItems = snippets.map(snippet => {
+
+      const lesson = lessons.find(l => snippet.lid === l.id);
+
+      return <li className={ `snippet ${lesson.id}` } key={snippet.id}>
+        <div className="snippet-title">{ snippet.snippetname }</div>
+        <Tooltip content={ t("Insert into Project") }>
+          <span onClick={ () => onClickSnippet(snippet) } className="pt-icon-standard pt-icon-log-in"></span>
+        </Tooltip>
+        <div className="snippet-author">{ t("Created by {{name}}", {name: snippet.username}) }</div>
+      </li>;
+    });
 
     return (
-      <div>
-        <div id="snippet-title">Everyone's Snippets</div>
-        <div id="snippet-container">
-          <ul id="snippet-list">{snippetItems}</ul>   
-        </div>
-        <div className="clear">
-        </div>
+      <div id="snippets">
+        <ul className="snippets-list">
+          { snippetItems }
+        </ul>
       </div>
     );
   }

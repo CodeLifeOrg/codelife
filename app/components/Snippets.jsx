@@ -2,8 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
-import Loading from "components/Loading";
-import {Intent, Position, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import {Position, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
 import "./Snippets.css";
 
 class Snippets extends Component {
@@ -27,49 +26,46 @@ class Snippets extends Component {
     });
   }
 
-  buildPopover(snippet) {
-    const {lessons} = this.state;
-    return (
-      <Popover
-        interactionKind={PopoverInteractionKind.CLICK}
-        popoverClassName="pt-popover-content-sizing"
-        position={Position.RIGHT}
-      >
-        <Button intent={Intent.PRIMARY}>?</Button>
-        <div>
-          <h5>{lessons.find(l => snippet.lid === l.id).name} Cheat Sheet</h5>
-            <p style={{whiteSpace: "pre"}}>{lessons.find(l => snippet.lid === l.id).cheatsheet}</p>
-          <Button className="pt-popover-dismiss">Dismiss</Button>
-        </div>
-      </Popover>
-    );
-  }
-
   render() {
-    
+
     const {t, onClickSnippet} = this.props;
     const {snippets, lessons} = this.state;
-    
-    if (!snippets || !lessons) return <Loading />;
+
+    if (!snippets || !lessons) return null;
 
     // todo: this sorts by id, which is not a guarantee of proper order.  need to do by ordered lessons
     snippets.sort((a, b) => a.id - b.id);
-    const snippetItems = snippets.map(snippet =>
-    <li className="snippet" key={snippet.id}> 
-      <span onClick={() => onClickSnippet(snippet)}>
-        {snippet.snippetname}
-      </span>&nbsp;&nbsp;
-      {this.buildPopover(snippet)}
-    </li>);
+    const snippetItems = snippets.map(snippet => {
+
+      const lesson = lessons.find(l => snippet.lid === l.id);
+
+      return <li className="snippet" key={snippet.id}>
+        <div className="snippet-title">{ snippet.snippetname }</div>
+        <Tooltip content={ t("View Cheat Sheet") }>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            popoverClassName="pt-popover-content-sizing"
+            position={Position.RIGHT}
+          >
+            <span className="pt-icon-standard pt-icon-predictive-analysis"></span>
+            <div>
+              <h5>{lesson.name} Cheat Sheet</h5>
+              <p style={{whiteSpace: "pre"}} dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
+              <button className="pt-button pt-popover-dismiss">{ t("Dismiss") }</button>
+            </div>
+          </Popover>
+        </Tooltip>
+        <Tooltip content={ t("Insert into Project") }>
+          <span onClick={ () => onClickSnippet(snippet) } className="pt-icon-standard pt-icon-log-in"></span>
+        </Tooltip>
+      </li>;
+    });
 
     return (
-      <div>
-        <div id="snippet-title">My Snippets</div>
-        <div id="snippet-container">
-          <ul id="snippet-list">{snippetItems}</ul>   
-        </div>
-        <div className="clear">
-        </div>
+      <div id="snippets">
+        <ul className="snippets-list">
+          { snippetItems }
+        </ul>
       </div>
     );
   }

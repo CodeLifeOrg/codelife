@@ -36,13 +36,15 @@
     flex: 1;
     margin: 0 15px;
 
-    & .pt-tab-list {
-      justify-content: space-between;
-    }
-
     & .studio-panel {
       align-self: stretch;
       margin: 0 10px;
+      width: 300px;
+
+      & .pt-tab-list {
+        justify-content: space-between;
+      }
+
     }
 
     & .studio-editor {

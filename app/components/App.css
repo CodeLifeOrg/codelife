@@ -88,3 +88,7 @@ body {
   }
 
 }
+
+.pt-toast .pt-button {
+  margin: 0;
+}

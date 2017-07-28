@@ -4,11 +4,14 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
+import {Alert, Intent, Tooltip} from "@blueprintjs/core";
+
 class Projects extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      alert: false,
       projects: [],
       projectName: "",
       currentProject: null
@@ -22,29 +25,35 @@ class Projects extends Component {
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
         this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
-      } 
-      else {
-        this.setState({projects});  
       }
-      
+      else {
+        this.setState({projects});
+      }
+
     });
   }
 
   deleteSnippet(project) {
-    if (confirm("Are you sure you want to delete this project?")) {
-      axios.delete("/api/projects/delete", {params: {id: project.id}}).then(resp => {
+
+    if (project === true) {
+      const {alert} = this.state;
+      axios.delete("/api/projects/delete", {params: {id: alert.payload.id}}).then(resp => {
         if (resp.status === 200) {
-          this.setState({projectName: "", currentProject: null, projects: resp.data}, this.forceUpdate.bind(this));
+          this.setState({alert: false, projectName: "", currentProject: null, projects: resp.data});
           this.props.onDeleteProject();
-        } 
+        }
         else {
           console.log("Error");
         }
       });
-    } 
-    else {
-      // do nothing
     }
+    else {
+      this.setState({alert: {
+        payload: project,
+        text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
+      }});
+    }
+
   }
 
   handleChange(e) {
@@ -59,14 +68,14 @@ class Projects extends Component {
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {
-          this.setState({projectName: "", currentProject: resp.data.currentProject, projects: resp.data.projects}, this.forceUpdate.bind(this));
+          this.setState({projectName: "", currentProject: resp.data.currentProject, projects: resp.data.projects});
           this.props.onCreateProject(resp.data.currentProject);
-        } 
+        }
         else {
           alert("Error");
         }
-      }); 
-    } 
+      });
+    }
     else {
       alert("File cannot be in use or blank");
     }
@@ -89,29 +98,41 @@ class Projects extends Component {
   }
 
   render() {
-    
+
     const {t} = this.props;
+    const {alert} = this.state;
 
     const projectArray = this.state.projects;
     projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
     const projectItems = projectArray.map(project =>
-    <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>{project.name}</li>);
-    
-    const projectXs = projectArray.map(project =>
-    <li className="x" key={project.id} onClick={() => this.deleteSnippet(project)}>[x]</li>);
+      <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id} onClick={() => this.handleClick(project)}>
+        <span className="project-title">{project.name}</span>
+        <Tooltip content={ t("Delete Project") }>
+          <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteSnippet(project) }></span>
+        </Tooltip>
+      </li>);
 
     return (
-      <div>
-        <div id="project-title">My Projects</div>
-        <div id="project-container">
-          <ul id="project-x-list">{projectXs}</ul>
-          <ul id="project-list">{projectItems}</ul>   
-          <div className="clear" />
+      <div id="projects">
+        <ul className="project-list">
+          {projectItems}
+        </ul>
+        <Alert
+            isOpen={ alert ? true : false }
+            cancelButtonText={ t("Cancel") }
+            confirmButtonText={ t("Delete") }
+            intent={ Intent.DANGER }
+            onCancel={ () => this.setState({alert: false}) }
+            onConfirm={ () => this.deleteSnippet(true) }>
+            <p>{ alert ? alert.text : "" }</p>
+        </Alert>
+        <div className="project-new">
+          <div className="project-new-title">Create a New Project</div>
+          <form className="project-new-form">
+            <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
+            <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>
+          </form>
         </div>
-        <form>
-          <input className="projectName" type="text" value={this.state.projectName} onChange={this.handleChange.bind(this)} /> 
-          <input type="button" value="Create New Project File" onClick={this.clickNewProject.bind(this)} /> 
-        </form>
       </div>
     );
   }

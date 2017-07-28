@@ -13,10 +13,12 @@ module.exports = function(sequelize, db) {
       initialcontent: db.TEXT,
       rulejson: db.TEXT,
       cheatsheet: db.TEXT,
+      victory: db.TEXT,
       pt_name: db.TEXT,
       pt_description: db.TEXT,
       pt_initialcontent: db.TEXT,
-      pt_prompt: db.TEXT
+      pt_prompt: db.TEXT,
+      pt_victory: db.TEXT
     }, 
     {
       freezeTableName: true,

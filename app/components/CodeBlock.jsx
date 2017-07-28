@@ -147,8 +147,6 @@ class CodeBlock extends Component {
     }
 
     this.saveProgress(lid);
-
-    const winMessage = "Congratulations on beating this island!  Head to the next island to learn more!";
     
     // todo: maybe replace this with findorupdate from userprogress?
     let endpoint = "/api/snippets/";
@@ -157,7 +155,7 @@ class CodeBlock extends Component {
       if (resp.status === 200) {
         const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});        
-        if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion(winMessage);
+        if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion();
         snippet ? snippet.studentcontent = studentcontent : snippet = resp.data;
         if (this.props.handleSave) this.props.handleSave(snippet);    
       }

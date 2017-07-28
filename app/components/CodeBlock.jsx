@@ -27,7 +27,8 @@ class CodeBlock extends Component {
 
   componentDidMount() {
     const rulejson = JSON.parse(this.props.lesson.rulejson);
-    const currentText = this.props.lesson.snippet.studentcontent;
+    let currentText = this.props.lesson.initialcontent;
+    if (this.props.lesson.snippet) currentText = this.props.lesson.snippet.studentcontent;
     this.setState({mounted: true, currentText, rulejson}, this.renderText.bind(this));
   }
 
@@ -66,6 +67,10 @@ class CodeBlock extends Component {
       }
     }
     return count;
+  }
+
+  onFirstCompletion(winMessage) {
+    this.props.onFirstCompletion(winMessage);
   }
 
   saveProgress(level) {
@@ -131,7 +136,7 @@ class CodeBlock extends Component {
   verifyAndSaveCode() {
     const {id: uid} = this.props.user;
     const {currentText: studentcontent} = this.state;
-    const snippet = this.props.lesson.snippet;
+    let snippet = this.props.lesson.snippet;
     const lid = this.props.lesson.id;
     const name = `My ${this.props.lesson.name} Snippet`;
 
@@ -143,17 +148,18 @@ class CodeBlock extends Component {
 
     this.saveProgress(lid);
 
-    let endpoint = "/api/snippets/";
-    // todo: double check that simply having a snippet is enough to justify an update over a new,
-    // given the codeblock refactor
+    const winMessage = "Congratulations on beating this island!  Head to the next island to learn more!";
     
     // todo: maybe replace this with findorupdate from userprogress?
+    let endpoint = "/api/snippets/";
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-        t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});
-        if (this.props.handleSave) this.props.handleSave(this.props.lesson.snippet.id, studentcontent);
+        t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});        
+        if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion(winMessage);
+        snippet ? snippet.studentcontent = studentcontent : snippet = resp.data;
+        if (this.props.handleSave) this.props.handleSave(snippet);    
       }
       else {
         alert("Error");

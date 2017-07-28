@@ -4,6 +4,7 @@ import {translate} from "react-i18next";
 import {Button, Classes, MenuItem} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/labs";
 import STATES from "./states";
+import "@blueprintjs/labs/dist/blueprint-labs.css";
 
 class SelectGeo extends Component {
 

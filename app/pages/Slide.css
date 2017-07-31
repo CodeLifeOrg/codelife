@@ -76,7 +76,7 @@
         padding: 0;
 
         & .question {
-          background-color: rgba(0, 0, 0, 0.05);
+          background-color: transparent;
           counter-increment: item;
           margin: 1px 0;
           padding:  10px 15px 10px 40px;
@@ -85,17 +85,31 @@
           transition: background-color 0.2s;
 
           &:before {
-            content: counter(item);
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            content: counter(item, upper-alpha);
             display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            height: 20px;
             left: 10px;
+            line-height: 20px;
+            padding-left: 1px;
             position: absolute;
             text-align: center;
+            top: 12px;
+            transition: background-color 0.2s;
             width: 20px;
           }
 
           &:hover {
             background-color: rgba(0, 0, 0, 0.15);
             cursor: pointer;
+
+            &:before {
+              background-color: var(--sky);
+            }
+
           }
         }
 

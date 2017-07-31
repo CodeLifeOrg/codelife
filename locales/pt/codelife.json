@@ -1,0 +1,72 @@
+{
+  "/": "",
+  "/api/lessons": "",
+  "/api/lessons/": "",
+  "/api/profile/": "",
+  "/api/projects/": "",
+  "/api/projects/new": "",
+  "/api/projects/update": "",
+  "/api/snippets": "",
+  "/api/snippets/allothers": "",
+  "/api/userprogress": "",
+  "/api/userprogress/save": "",
+  "About Me": "",
+  "Birthday": "",
+  "CPF": "",
+  "Cancel": "",
+  "Create": "",
+  "Created by {{name}}": "Criado por {{name}}",
+  "Delete": "",
+  "Delete Project": "",
+  "Dismiss": "",
+  "Edit Profile": "",
+  "Error": "",
+  "Female": "",
+  "File cannot be in use or blank": "",
+  "Gender": "",
+  "Glossary": "Glossário",
+  "Insert into Project": "",
+  "Loading projects": {
+    "": {
+      "": ""
+    }
+  },
+  "Loading snipppets": {
+    "": {
+      "": ""
+    }
+  },
+  "Loading": {
+    "": {
+      "": ""
+    }
+  },
+  "Logout": "",
+  "MM/DD/YYYY": "",
+  "Male": "",
+  "Name": "",
+  "Overworld": "",
+  "Profile": "Perfil",
+  "Project Title": "",
+  "Projects": "",
+  "Rather not say": "",
+  "Save": "",
+  "Share": "",
+  "Snippets": "",
+  "Studio": "Estúdio",
+  "This user doesn't have any projects yet": "",
+  "This user doesn't have any snippets yet": "",
+  "View Cheat Sheet": "",
+  "What school do you go to?": "",
+  "Where are you from?": "",
+  "YYYY-MM-DD": "",
+  "created by": "",
+  "mypage": {
+    "html": ""
+  },
+  "open a new file first": "",
+  "overworld": {
+    "welcome": "Bem-vindo de volta a {{name}}!"
+  },
+  "return to": ""
+}

@@ -1,0 +1,17 @@
+{
+  "Translated Content": "English Content",
+  "Lessons": "Lessons",
+  "Tracks": "Tracks",
+  "Home": "Home",
+  "/api/snippets/allgeos": "",
+  "/api/snippets/allschools": "",
+  "overworld": {
+    "blocker": "Complete the previous islands to unlock {{name}}."
+  },
+  "Incorrect, please try again!": "",
+  "Loading": {
+    "": {}
+  },
+  "Saved to DB": "",
+  "That's correct!": ""
+}

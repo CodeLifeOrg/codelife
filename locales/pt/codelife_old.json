@@ -5,5 +5,13 @@
   "Home": "Casa",
   "/api/snippets/allgeos": "",
   "/api/snippets/allschools": "",
-  "overworld": {}
+  "overworld": {
+    "blocker": ""
+  },
+  "Incorrect, please try again!": "",
+  "Loading": {
+    "": {}
+  },
+  "Saved to DB": "",
+  "That's correct!": ""
 }

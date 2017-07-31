@@ -4,12 +4,11 @@ import {browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
-import himalaya from "himalaya";
 
-import AceWrapper from "components/AceWrapper";
 import AllSnippets from "components/AllSnippets";
 import Snippets from "components/Snippets";
 import Projects from "components/Projects";
+import StudioEditor from "components/StudioEditor";
 
 import "./Studio.css";
 
@@ -20,10 +19,7 @@ class Studio extends Component {
     this.state = {
       activeTabId: "projects",
       mounted: false,
-      currentProject: null,
-      currentText: "",
-      changesMade: false,
-      titleText: ""
+      currentProject: null
     };
   }
 
@@ -31,70 +27,40 @@ class Studio extends Component {
     this.setState({mounted: true});
   }
 
-  getEditor() {
-    return this.editor.editor.editor;
-  }
-
   onCreateProject(project) {
-    this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
+    this.setState({currentProject: project});
+    if (this.editor) this.editor.setEntireContents("");
     browserHistory.push(`/studio/${this.props.auth.user.username}/${project.name}`);
   }
 
   onDeleteProject(newproject) {
-    let currentText = newproject.studentcontent;
-    // this means we deleted a DIFFERENT project and can therefore keep our current currentText
-    if (newproject.id === this.state.currentProject.id) currentText = this.state.currentText;
-    this.setState({currentProject: newproject, currentText}, this.renderText.bind(this));
-    browserHistory.push(`/studio/${this.props.user.username}/${newproject.name}`);
-  }
-
-  insertTextAtCursor(theText) {
-    this.getEditor().insert(`\n ${theText} \n`);
-    this.setState({currentText: this.getEditor().getValue()}, this.renderText.bind(this));
-  }
-
-  setTitleText() {
-    const content = himalaya.parse(this.state.currentText);
-    let head, title = null;
-    let titleText = "";
-    const html = content.find(e => e.tagName === "html");
-    if (html) head = html.children.find(e => e.tagName === "head");
-    if (head) title = head.children.find(e => e.tagName === "title");
-    if (title) titleText = title.children[0].content;
-    this.setState({titleText});
-  }
-
-  renderText() {
-    if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(this.getEditor().getValue());
-      doc.close();
-    }
-    this.setTitleText();
-  }
-
-  onChangeText(theText) {
-    this.setState({currentText: theText, changesMade: true}, this.renderText.bind(this));
+    if (newproject.id !== this.state.currentProject.id) this.editor.setEntireContents(newproject.studentcontent);
+    this.setState({currentProject: newproject});
+    browserHistory.push(`/studio/${this.props.auth.user.username}/${newproject.name}`);
   }
 
   onClickSnippet(snippet) {
-    if (this.state.currentProject) this.insertTextAtCursor(snippet.studentcontent);
+    if (this.state.currentProject) this.editor.insertTextAtCursor(snippet.studentcontent);
   }
 
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
-      this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0], changesMade: false}, this.renderText.bind(this));
+      this.setState({currentProject: resp.data[0]});
+      this.editor.setEntireContents(resp.data[0].studentcontent);
       browserHistory.push(`/studio/${this.props.auth.user.username}/${resp.data[0].name}`);
     });
   }
 
-  // todo: i'm loading studentcontent twice.  once when we instantiate projects, and then again
+  // TODO: i'm loading studentcontent twice.  once when we instantiate projects, and then again
   // when you click a project.  I did this so that clicks would respect new writes, but i should
   // find a way to only ever ask for studentcontent once, on-demand only.
+
+  // Also, the return value here is because Projects.jsx needs to know if I clicked confirm or not.
+
+  // TODO: clean up this if/then tree, it sucks
   onClickProject(project) {
     if (this.state.currentProject) {
-      if (this.state.changesMade) {
+      if (this.editor.changesMade()) {
         if (confirm("Discard changes and open a new file?")) {
           this.openProject(project.id);
           return true;
@@ -115,17 +81,18 @@ class Studio extends Component {
   }
 
   saveCodeToDB() {
-    const {id: uid} = this.props.user;
-    const {currentText: studentcontent, currentProject} = this.state;
+    const {id: uid} = this.props.auth.user;
+    const {currentProject} = this.state;
 
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
+      const studentcontent = this.editor.getEntireContents();
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
           const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           t.show({message: "Saved!", intent: Intent.SUCCESS});
-          this.setState({changesMade: false});
+          this.editor.setChangeStatus(false);
         }
       });
     }
@@ -170,8 +137,7 @@ class Studio extends Component {
             <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
             <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
           </Tabs2>
-          { this.state.mounted ? <AceWrapper className="studio-editor" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} showGutter={false} readOnly={!currentProject} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="studio-editor"></div> }
-          <iframe className="studio-render" ref="rc" />
+          <StudioEditor ref={i => this.editor = i} />
         </div>
       </div>
     );

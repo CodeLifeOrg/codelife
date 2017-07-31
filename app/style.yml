@@ -5,8 +5,11 @@ islands:
     dark: "#003E00"
     light: "#90B857"
   island-2:
+    dark: "#7f1206"
+    light: "#e7a088"
+  island-3:
     dark: "#043f51"
     light: "#afe2e5"
-  island-3:
+  island-4:
     dark: "#5c1500"
     light: "#ffb863"

@@ -64,7 +64,6 @@ class Profile extends Component {
   render() {
     const {t, user: loggedInUser} = this.props;
     const {loading, error, profileUser} = this.state;
-    console.log(loggedInUser, profileUser);
 
     if (loading) return <Loading />;
 

@@ -1,19 +1,10 @@
-import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Classes, MenuItem} from "@blueprintjs/core";
-import {Select} from "@blueprintjs/labs";
-import SelectGeo from "./SelectGeo";
 
 class SelectImg extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-    };
-  }
-
-  componentWillMount() {
   }
 
   onUpdate(e) {

@@ -7,7 +7,6 @@ class UserInfo extends Component {
 
   render() {
     const {t, loggedInUser, user} = this.props;
-    console.log(user)
 
     return (
       <div className="user-info">

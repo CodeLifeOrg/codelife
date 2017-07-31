@@ -111,7 +111,6 @@ class Profile extends Component {
               t.show({message: "Profile saved!", intent: Intent.SUCCESS});
               browserHistory.push(`/profile/${profileUser.username}`);
             }
-            console.log("imgResp.data", imgResp.data);
           });
         }
         else {
@@ -166,7 +165,6 @@ class Profile extends Component {
   }
 
   onImgUpdate(file) {
-    console.log("onImgUpdate!", file);
     this.setState({img: file});
   }
 

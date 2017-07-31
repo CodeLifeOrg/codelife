@@ -28,7 +28,7 @@
     "@blueprintjs/datetime": "^1.19.0",
     "@blueprintjs/labs": "^0.4.0",
     "cpf_cnpj": "^0.2.0",
-    "datawheel-canon": "^0.8.1",
+    "datawheel-canon": "^0.9.3",
     "himalaya": "^0.2.10",
     "react-ace": "^5.0.1",
     "react-dnd": "^2.4.0",

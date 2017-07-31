@@ -10,7 +10,7 @@
 
   & .center-block {
     margin-top: -150px;
-    max-width: 300px;
+    max-width: 350px;
     position: relative;
     text-align: center;
 
@@ -18,7 +18,7 @@
       left: 50%;
       margin-left: calc(var(--island-width) / 2 * -1);
       position: absolute;
-      top: 60px;
+      top: 80px;
       width: var(--island-width);
       z-index: 0;
     }
@@ -31,6 +31,12 @@
     }
 
     & form, & .form {
+      position: relative;
+      z-index: 1;
+    }
+
+    & #socials {
+      margin-bottom: 10px;
       position: relative;
       z-index: 1;
     }

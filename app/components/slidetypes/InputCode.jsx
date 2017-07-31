@@ -11,7 +11,8 @@ export default class InputCode extends Component {
       mounted: false,
       currentText: "",
       checkerResult: false,
-      titleText: ""
+      titleText: "",
+      baseText: ""
     };
   }
 
@@ -90,7 +91,13 @@ export default class InputCode extends Component {
   componentDidMount() {
     let initText = "";
     if (this.props.htmlcontent2) initText = this.props.htmlcontent2;
-    this.setState({mounted: true, currentText: initText}, this.renderText.bind(this));
+    this.setState({mounted: true, baseText: initText, currentText: initText}, this.renderText.bind(this));
+  }
+
+  componentDidUpdate() {
+    if (this.state.baseText !== this.props.htmlcontent2) {
+      this.setState({baseText: this.props.htmlcontent2, checkerResult: false, currentText: this.props.htmlcontent2}, this.renderText.bind(this));
+    }
   }
 
   render() {
@@ -100,6 +107,7 @@ export default class InputCode extends Component {
 
     return (
       <div id="slide-container" className="renderCode flex-column">
+        <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }

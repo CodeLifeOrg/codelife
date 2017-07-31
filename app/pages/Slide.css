@@ -40,12 +40,11 @@
     }
 
     & .slide-image {
+      align-self: stretch;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
       flex: 1;
-
-      & img {
-        width: 100%;
-      }
-
     }
 
     & .slide-editor {

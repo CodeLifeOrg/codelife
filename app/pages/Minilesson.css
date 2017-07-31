@@ -116,8 +116,9 @@
   & #snippets {
     align-items: stretch;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 25px;
+    margin: 25px;
 
     & .snippet-link {
       background-color: #444;
@@ -125,7 +126,8 @@
       box-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
       color: white;
       display: inline-block;
-      margin: 0 10px;
+      flex: none;
+      margin: 20px;
       text-align: left;
       transition: box-shadow 0.2s, margin 0.2s;
       width: 200px;
@@ -153,8 +155,8 @@
       &:hover {
         box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
         cursor: pointer;
-        margin-top: -2px;
-        margin-bottom: 2px;
+        margin-top: 18px;
+        margin-bottom: 22px;
       }
 
     }

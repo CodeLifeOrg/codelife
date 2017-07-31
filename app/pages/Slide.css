@@ -68,6 +68,7 @@
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
+      max-width: 600px;
 
       & .questions {
         list-style: none;

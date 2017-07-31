@@ -40,11 +40,12 @@ class Slide extends Component {
   }
 
   unblock() {
-    const {slides, currentSlide, latestSlideCompleted, gems} = this.state;
+    const {blocked, slides, currentSlide, latestSlideCompleted, gems} = this.state;
     const i = slides.indexOf(currentSlide);
+    const newGemCount = blocked ? gems + 1 : gems;
     let newlatest = latestSlideCompleted;
     if (i > latestSlideCompleted) newlatest = i;
-    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false, gems: gems + 1});
+    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false, gems: newGemCount});
   }
 
   saveProgress(level, gems) {
@@ -54,8 +55,8 @@ class Slide extends Component {
   }
 
   componentDidUpdate() {
-    const {lid, mlid, sid} = this.props.params;
-    const {user} = this.props;
+    const {mlid, sid} = this.props.params;
+    const {user} = this.props.auth;
     const {currentSlide, slides, sentProgress, latestSlideCompleted, gems} = this.state;
 
     // going to new slide
@@ -66,18 +67,20 @@ class Slide extends Component {
       this.setState({currentSlide: cs, blocked});
     }
 
-    const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
-    // if final slide write to DB
-    if (user && isFinalSlide && !sentProgress) {
-      this.setState({sentProgress: true});
-      this.saveProgress(mlid, gems);
-    }
-
     const i = slides.indexOf(currentSlide);
     if (this.state.mounted && currentSlide &&
       ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i, gems: gems + 1});
+    }
+
+    const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
+    // if final slide write to DB
+    if (user && isFinalSlide && !sentProgress) {
+      this.setState({sentProgress: true});
+      // add 1 to gems since the saving happens before the user "finishes"
+      // the final slide
+      this.saveProgress(mlid, gems + 1);
     }
   }
 

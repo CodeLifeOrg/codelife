@@ -45,6 +45,11 @@
         justify-content: space-between;
       }
 
+      & .pt-tab-panel {
+        max-height: calc(100vh - 375px);
+        overflow-y: scroll;
+      }
+
     }
 
     & .studio-editor {

@@ -64,12 +64,12 @@ export default class InputCode extends Component {
 
   setTitleText() {
     const content = himalaya.parse(this.state.currentText);
-    let head, title = null;
+    let head, html, title = null;
     let titleText = "";
-    const html = content.find(e => e.tagName === "html");
+    if (content) html = content.find(e => e.tagName === "html");
     if (html) head = html.children.find(e => e.tagName === "head");
     if (head) title = head.children.find(e => e.tagName === "title");
-    if (title) titleText = title.children[0].content;
+    if (title && title.children[0]) titleText = title.children[0].content;
     this.setState({titleText});
   }
 

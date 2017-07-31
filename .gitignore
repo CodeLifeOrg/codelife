@@ -3,4 +3,5 @@ node_modules
 static/assets
 /index.js
 .env
+.envrc
 .DS_Store

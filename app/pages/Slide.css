@@ -10,12 +10,12 @@
   position: relative;
 
   & #slide-head {
-    margin: 25px 25px 0;
+    margin: 25px 25px 10px;
     position: relative;
     text-align: center;
 
     & .title {
-      font-size: 32px;
+      font-size: 24px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
@@ -33,8 +33,8 @@
     padding: 0 25px;
 
     & .slide-text {
-      font-size: 18px;
-      line-height: 24px;
+      font-size: 16px;
+      line-height: 20px;
       white-space: pre-wrap;
       /*text-align: justify;*/
     }
@@ -61,7 +61,7 @@
     }
 
     & .validation {
-      margin-bottom: -75px;
+      margin-bottom: -50px;
       text-align: center;
 
       & .pt-button {
@@ -111,7 +111,7 @@
   & #slide-foot {
     display: flex;
     justify-content: space-between;
-    margin: 35px 25px 15px;
+    margin: 10px 25px 25px;
   }
 
   & .flex-row {
@@ -124,12 +124,16 @@
     width: 100%;
 
     & > *:not(.flex-row):not(.flex-column) {
-      margin: 25px 25px 0;
+      margin: 0 0 0 25px;
+    }
+
+    & > *:not(.flex-row):not(.flex-column):first-child {
+      margin-left: 0;
     }
 
     & .slide-text {
       flex: none;
-      width: 400px;
+      width: 300px;
     }
 
     @media only screen and (max-width : 768px) {

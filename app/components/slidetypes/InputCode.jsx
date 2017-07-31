@@ -100,9 +100,8 @@ export default class InputCode extends Component {
 
     return (
       <div id="slide-container" className="renderCode flex-column">
-        <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-        <div className="title-tab">{titleText}</div>
         <div className="flex-row">
+          <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }
           <iframe className="slide-render" ref="rf" />
         </div>

@@ -50,13 +50,11 @@ export default class RenderCode extends Component {
   render() {
 
     const {htmlcontent1, htmlcontent2} = this.props;
-    const {titleText} = this.state;
 
     return (
       <div id="slide-container" className="renderCode flex-column">
-        <div className="title-tab">{titleText}</div>
-        <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
         <div className="flex-row">
+          <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } mode="html" readOnly={true} showGutter={false} value={htmlcontent2} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }
           <iframe className="slide-render" ref="rf" />
         </div>

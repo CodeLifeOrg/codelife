@@ -25,13 +25,13 @@ class Nav extends Component {
               <Link className="link" to={`/studio/${auth.user.username}`}>{ t("Studio") }</Link>
               <Popover
                 interactionKind={PopoverInteractionKind.HOVER}
-                popoverClassName="pt-popover-content-sizing"
+                popoverClassName="pt-popover-content-sizing user-popover"
                 position={Position.BOTTOM}
               >
                 <div className="link">{ auth.user.username }<span className="pt-icon-standard pt-icon-user"></span></div>
                 <div>
-                  <Link className="pt-button pt-intent-primary pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
-                  <a className="pt-button pt-intent-primary pt-fill" href="/auth/logout">{ t("Logout") }</a>
+                  <Link className="pt-button pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
+                  <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>
                 </div>
               </Popover>
             </div>

@@ -21,3 +21,11 @@
   }
 
 }
+
+.user-popover {
+
+  & .pt-button {
+    margin-bottom: 10px;
+  }
+
+}

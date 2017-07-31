@@ -3,6 +3,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
+
+import Loading from "components/Loading";
+
 import SelectGeo from "./SelectGeo";
 import SelectSchool from "./SelectSchool";
 import "@blueprintjs/datetime/dist/blueprint-datetime.css";
@@ -158,7 +161,7 @@ class Profile extends Component {
     const setSid = this.setSid.bind(this);
     const setBday = this.setBday.bind(this);
 
-    if (loading) return <h1>Loading ...</h1>;
+    if (loading) return <Loading />;
     if (error) return <h1>{error}</h1>;
 
     const {name, bio, cpf, dob, gender, gid, sid} = profileUser;

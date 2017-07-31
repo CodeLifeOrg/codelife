@@ -3,6 +3,9 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+
+import Loading from "components/Loading";
+
 import UserInfo from "./UserInfo";
 import UserSnippets from "./UserSnippets";
 import UserProjects from "./UserProjects";
@@ -63,7 +66,7 @@ class Profile extends Component {
     const {loading, error, profileUser} = this.state;
     console.log(loggedInUser, profileUser);
 
-    if (loading) return <h1>Loading ...</h1>;
+    if (loading) return <Loading />;
 
     if (error) return <h1>{error}</h1>;
 

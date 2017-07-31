@@ -47,7 +47,7 @@ class UserSnippets extends Component {
     if (loading) return <h2>{ t("Loading snipppets...") }</h2>;
 
     return (
-      <div className="user-projects">
+      <div className="user-section">
         <h2>{ t("Snippets") }</h2>
         { snippets.length
           ? this.renderSnippets(snippets)

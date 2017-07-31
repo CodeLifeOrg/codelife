@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
 
+import UserInfo from "./UserInfo";
 import SelectGeo from "./SelectGeo";
 import SelectSchool from "./SelectSchool";
 import "@blueprintjs/datetime/dist/blueprint-datetime.css";
@@ -95,7 +97,8 @@ class Profile extends Component {
       else {
         const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         t.show({message: "Profile saved!", intent: Intent.SUCCESS});
-        this.setState({loading: false, msg: responseData});
+        // this.setState({loading: false, msg: responseData});
+        browserHistory.push(`/profile/${profileUser.username}`);
       }
     });
   }
@@ -152,8 +155,8 @@ class Profile extends Component {
    *  - user info
    */
   render() {
-    const {t} = this.props;
-    const {loading, error, profileUser} = this.state;
+    const {t, user: loggedInUser} = this.props;
+    const {error, loading, profileUser} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
@@ -170,91 +173,97 @@ class Profile extends Component {
     // console.log(moment.locale()); // pt-BR
 
     return (
-      <div>
-        <h1>{t("Edit Profile")}</h1>
-        <form>
+      <div id="profile">
+        <aside className="profile-side">
+          <UserInfo user={profileUser} loggedInUser={loggedInUser} />
+          {/* <skillsList /> */}
+        </aside>
+        <content className="profile-info">
+          <h2>{t("Edit Profile")}</h2>
+          <form>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Name")}
-            </label>
-            <div className="pt-form-content">
-              <div className="pt-input-group">
-                <input onChange={onSimpleUpdate} value={name} id="name" className="pt-input" style={{width: "200px"}} type="text" dir="auto" />
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("Name")}
+              </label>
+              <div className="pt-form-content">
+                <div className="pt-input-group">
+                  <input onChange={onSimpleUpdate} value={name} id="name" className="pt-input" type="text" dir="auto" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("About Me")}
-            </label>
-            <div className="pt-form-content">
-              <div className="pt-input-group">
-                <textarea onChange={onSimpleUpdate} value={bio || ""} id="bio" className="pt-input" dir="auto"></textarea>
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("About Me")}
+              </label>
+              <div className="pt-form-content">
+                <div className="pt-input-group">
+                  <textarea onChange={onSimpleUpdate} value={bio || ""} id="bio" className="pt-input" dir="auto"></textarea>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Gender")}
-            </label>
-            <div className="pt-form-content">
-              <div className="pt-select">
-                <select onChange={onSimpleUpdate} id="gender" value={gender || "OTHER"}>
-                  <option value="OTHER">{t("Rather not say")}</option>
-                  <option value="FEMALE">{t("Female")}</option>
-                  <option value="MALE">{t("Male")}</option>
-                </select>
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("Gender")}
+              </label>
+              <div className="pt-form-content">
+                <div className="pt-select">
+                  <select onChange={onSimpleUpdate} id="gender" value={gender || "OTHER"}>
+                    <option value="OTHER">{t("Rather not say")}</option>
+                    <option value="FEMALE">{t("Female")}</option>
+                    <option value="MALE">{t("Male")}</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Where are you from?")}
-            </label>
-            <SelectGeo gid={gid} callback={setGid} />
-          </div>
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("Where are you from?")}
+              </label>
+              <SelectGeo gid={gid} callback={setGid} />
+            </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("What school do you go to?")}
-            </label>
-            <SelectSchool sid={sid} callback={setSid} />
-          </div>
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("What school do you go to?")}
+              </label>
+              <SelectSchool sid={sid} callback={setSid} />
+            </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("CPF")}
-            </label>
-            <div className="pt-form-content">
-              <div className="pt-input-group">
-                <input onChange={onCpfUpdate} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" style={{width: "200px"}} type="text" dir="auto" />
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("CPF")}
+              </label>
+              <div className="pt-form-content">
+                <div className="pt-input-group">
+                  <input onChange={onCpfUpdate} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" type="text" dir="auto" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Birthday")}
-            </label>
-            <div className="pt-form-content">
-              <DateInput
-                onChange={setBday}
-                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
-                format="DD/MM/YYYY"
-                locale="pt-br"
-                minDate={new Date("1900")}
-                maxDate={new Date()}
-              />
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("Birthday")}
+              </label>
+              <div className="pt-form-content">
+                <DateInput
+                  onChange={setBday}
+                  value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+                  format="DD/MM/YYYY"
+                  locale="pt-br"
+                  minDate={new Date("1900")}
+                  maxDate={new Date()}
+                />
+              </div>
             </div>
-          </div>
 
-          <button onClick={saveUserInfo} type="button" className="pt-button">Save</button>
+            <button onClick={saveUserInfo} type="button" className="pt-button pt-intent-success">Save</button>
 
-        </form>
+          </form>
+        </content>
       </div>
     );
   }

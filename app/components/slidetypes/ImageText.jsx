@@ -8,7 +8,7 @@ export default class ImageText extends Component {
 
     return (
       <div id="slide-container" className="imageText flex-row">
-        <div className="slide-image" style={{backgroundImage: `url("/slide_images/${ id }.jpg")`}}></div>
+        <img className="slide-image" src={ `/slide_images/${ id }.jpg` } />
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
       </div>
     );

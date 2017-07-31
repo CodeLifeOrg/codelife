@@ -29,7 +29,7 @@
       height: 300px;
       justify-content: center;
       position: relative;
-      width: 300px;
+      width: 400px;
 
       &:nth-child(even) {
         margin: -100px auto 0 0;
@@ -55,7 +55,7 @@
         height: 300px;
         position: absolute;
         transition: background-size 0.2s;
-        width: 300px;
+        width: 400px;
 
       }
 
@@ -72,7 +72,7 @@
       & .pt-tooltip {
         opacity: 0;
         transition: opacity 0.2s, transform 0.2s;
-        width: 80%;
+        width: 50%;
 
         & .title {
           letter-spacing: 0.5px;

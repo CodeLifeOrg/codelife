@@ -2,7 +2,7 @@ import axios from "axios";
 import {connect} from "react-redux";
 import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
-import {Interpolate, translate} from "react-i18next";
+import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import "./Lesson.css";
@@ -141,7 +141,6 @@ class Lesson extends Component {
 
     return (
       <div className="overworld">
-        <h2 className="welcome"><Interpolate i18nKey="overworld.welcome" name={ auth.user.username } /></h2>
         <div className="map">{lessonItems}</div>
       </div>
     );

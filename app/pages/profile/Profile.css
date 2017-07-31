@@ -13,6 +13,16 @@
     & .user-info {
       text-align: center;
 
+      & .user-img {
+        background-size: cover;
+        background-position: 50% 0;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        margin: 0 auto 20px auto;
+        height: 200px;
+        width: 200px;
+      }
+
       & .edit-link {
         margin: 0 auto 10px;
       }

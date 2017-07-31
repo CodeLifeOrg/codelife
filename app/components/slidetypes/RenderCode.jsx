@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import AceWrapper from "components/AceWrapper";
+import himalaya from "himalaya";
 
 export default class RenderCode extends Component {
 
@@ -7,12 +8,24 @@ export default class RenderCode extends Component {
     super(props);
     this.state = {
       mounted: false,
-      currentText: ""
+      currentText: "",
+      titleText: ""
     };
   }
 
   getEditor() {
     return this.editor.editor.editor;
+  }
+
+  setTitleText() {
+    const content = himalaya.parse(this.state.currentText);
+    let head, title = null;
+    let titleText = "";
+    const html = content.find(e => e.tagName === "html");
+    if (html) head = html.children.find(e => e.tagName === "head");
+    if (head) title = head.children.find(e => e.tagName === "title");
+    if (title) titleText = title.children[0].content;
+    this.setState({titleText});
   }
 
   renderText() {
@@ -37,9 +50,11 @@ export default class RenderCode extends Component {
   render() {
 
     const {htmlcontent1, htmlcontent2} = this.props;
+    const {titleText} = this.state;
 
     return (
       <div id="slide-container" className="renderCode flex-column">
+        <div className="title-tab">{titleText}</div>
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
         <div className="flex-row">
           { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } mode="html" readOnly={true} showGutter={false} value={htmlcontent2} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }

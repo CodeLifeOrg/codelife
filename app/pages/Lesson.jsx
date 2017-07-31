@@ -131,8 +131,9 @@ class Lesson extends Component {
         <div className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></div>
         <div className={ `pt-popover pt-tooltip ${ lesson.id }` }>
           <div className="pt-popover-content">
+            <span className="pt-icon pt-icon-lock"></span>
             <div className="title">{ lesson.name }</div>
-            <div className="description">{ t("Complete the previous islands to unlock.") }</div>
+            <div className="description">{ lesson.description }</div>
           </div>
         </div>
       </div>;

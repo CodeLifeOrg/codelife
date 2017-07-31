@@ -10,7 +10,8 @@ export default class InputCode extends Component {
     this.state = {
       mounted: false,
       currentText: "",
-      checkerResult: false
+      checkerResult: false,
+      titleText: ""
     };
   }
 
@@ -61,11 +62,25 @@ export default class InputCode extends Component {
     this.setState({currentText: initText}, this.renderText.bind(this));
   }
 
+  setTitleText() {
+    const content = himalaya.parse(this.state.currentText);
+    let head, title = null;
+    let titleText = "";
+    const html = content.find(e => e.tagName === "html");
+    if (html) head = html.children.find(e => e.tagName === "head");
+    if (head) title = head.children.find(e => e.tagName === "title");
+    if (title) titleText = title.children[0].content;
+    this.setState({titleText});
+  }
+
   renderText() {
-    const doc = this.refs.rf.contentWindow.document;
-    doc.open();
-    doc.write(this.state.currentText);
-    doc.close();
+    if (this.refs.rf) {
+      const doc = this.refs.rf.contentWindow.document;
+      doc.open();
+      doc.write(this.state.currentText);
+      doc.close();
+    }
+    this.setTitleText();
   }
 
   onChangeText(theText) {
@@ -81,11 +96,12 @@ export default class InputCode extends Component {
   render() {
 
     const {htmlcontent1} = this.props;
-    const {checkerResult} = this.state;
+    const {checkerResult, titleText} = this.state;
 
     return (
       <div id="slide-container" className="renderCode flex-column">
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }
           <iframe className="slide-render" ref="rf" />

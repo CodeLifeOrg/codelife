@@ -4,6 +4,7 @@ import {browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
+import himalaya from "himalaya";
 
 import AceWrapper from "components/AceWrapper";
 import AllSnippets from "components/AllSnippets";
@@ -21,7 +22,8 @@ class Studio extends Component {
       mounted: false,
       currentProject: null,
       currentText: "",
-      changesMade: false
+      changesMade: false,
+      titleText: ""
     };
   }
 
@@ -51,11 +53,25 @@ class Studio extends Component {
     this.setState({currentText: this.getEditor().getValue()}, this.renderText.bind(this));
   }
 
+  setTitleText() {
+    const content = himalaya.parse(this.state.currentText);
+    let head, title = null;
+    let titleText = "";
+    const html = content.find(e => e.tagName === "html");
+    if (html) head = html.children.find(e => e.tagName === "head");
+    if (head) title = head.children.find(e => e.tagName === "title");
+    if (title) titleText = title.children[0].content;
+    this.setState({titleText});
+  }
+
   renderText() {
-    const doc = this.refs.rc.contentWindow.document;
-    doc.open();
-    doc.write(this.getEditor().getValue());
-    doc.close();
+    if (this.refs.rc) {
+      const doc = this.refs.rc.contentWindow.document;
+      doc.open();
+      doc.write(this.getEditor().getValue());
+      doc.close();
+    }
+    this.setTitleText();
   }
 
   onChangeText(theText) {
@@ -125,7 +141,7 @@ class Studio extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {activeTabId, currentProject} = this.state;
+    const {activeTabId, currentProject, titleText} = this.state;
     const {id} = this.props.params;
 
     if (!auth.user) browserHistory.push("/login");
@@ -142,6 +158,7 @@ class Studio extends Component {
       <div id="studio">
         <div id="head">
           <h1 className="title">{ t("Studio") }</h1>
+          <div className="title-tab">{titleText}</div>
           <div className="buttons">
             { currentProject ? <a className="pt-button" target="_blank" href={ `/share/project/${currentProject.id}` }>{ t("Share") }</a> : null }
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>

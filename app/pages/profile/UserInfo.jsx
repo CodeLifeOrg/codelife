@@ -7,10 +7,13 @@ class UserInfo extends Component {
 
   render() {
     const {t, loggedInUser, user} = this.props;
+    console.log(user)
 
     return (
       <div className="user-info">
-        <span className="pt-icon-large pt-icon-user pt-intent-primary"></span>
+        {user.img
+          ? <div className="user-img" style={{backgroundImage: `url(/uploads/${user.img}?v=${new Date().getTime()})`}}></div>
+          : <span className="pt-icon-large pt-icon-user pt-intent-primary"></span>}
         <h1>{ user.name || user.username }</h1>
         { loggedInUser.id === user.id
           ? <Link className="pt-button edit-link" to={`/profile/${user.username}/edit`}>{ t("Edit Profile") }</Link>

@@ -4,12 +4,11 @@ import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
-
 import Loading from "components/Loading";
-
 import UserInfo from "./UserInfo";
 import SelectGeo from "./SelectGeo";
 import SelectSchool from "./SelectSchool";
+import SelectImg from "./SelectImg";
 import "@blueprintjs/datetime/dist/blueprint-datetime.css";
 import "moment/locale/pt-br";
 import moment from "moment";
@@ -35,7 +34,8 @@ class Profile extends Component {
     this.state = {
       loading: true,
       error: null,
-      profileUser: null
+      profileUser: null,
+      img: null
     };
   }
 
@@ -78,7 +78,7 @@ class Profile extends Component {
   saveUserInfo(e) {
     e.preventDefault();
     this.setState({loading: true});
-    const {profileUser} = this.state;
+    const {profileUser, img} = this.state;
     const userPostData = {
       bio: profileUser.bio,
       cpf: profileUser.cpf,
@@ -95,10 +95,30 @@ class Profile extends Component {
         this.setState({loading: false, error: responseData.error});
       }
       else {
-        const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-        t.show({message: "Profile saved!", intent: Intent.SUCCESS});
-        // this.setState({loading: false, msg: responseData});
-        browserHistory.push(`/profile/${profileUser.username}`);
+        if (img) {
+          const config = {headers: {"Content-Type": "multipart/form-data"}};
+          const formData = new FormData();
+          formData.append("file", img);
+          axios.post("/api/profileImgUpload/", formData, config).then(imgResp => {
+            const imgRespData = imgResp.data;
+            if (imgRespData.error) {
+              const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+              t.show({message: "Unable to upload image!", intent: Intent.DANGER});
+              browserHistory.push(`/profile/${profileUser.username}`);
+            }
+            else {
+              const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+              t.show({message: "Profile saved!", intent: Intent.SUCCESS});
+              browserHistory.push(`/profile/${profileUser.username}`);
+            }
+            console.log("imgResp.data", imgResp.data);
+          });
+        }
+        else {
+          const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+          t.show({message: "Profile saved!", intent: Intent.SUCCESS});
+          browserHistory.push(`/profile/${profileUser.username}`);
+        }
       }
     });
   }
@@ -145,6 +165,11 @@ class Profile extends Component {
     this.setState({profileUser: Object.assign(this.state.profileUser, {cpf})});
   }
 
+  onImgUpdate(file) {
+    console.log("onImgUpdate!", file);
+    this.setState({img: file});
+  }
+
   /**
    * 3 render states:
    * case (loading)
@@ -160,6 +185,7 @@ class Profile extends Component {
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
+    const onImgUpdate = this.onImgUpdate.bind(this);
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
     const setBday = this.setBday.bind(this);
@@ -191,6 +217,13 @@ class Profile extends Component {
                   <input onChange={onSimpleUpdate} value={name} id="name" className="pt-input" type="text" dir="auto" />
                 </div>
               </div>
+            </div>
+
+            <div className="pt-form-group pt-inline">
+              <label className="pt-label" htmlFor="example-form-group-input-d">
+                {t("Image")}
+              </label>
+              <SelectImg callback={onImgUpdate} />
             </div>
 
             <div className="pt-form-group pt-inline">

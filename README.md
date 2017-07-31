@@ -25,6 +25,7 @@ export CANON_DB_NAME=codelife
 export CANON_DB_PW=MyPassWerd
 export CANON_DB_HOST=1.2.3.4
 export CANON_LOGREDUX=false
+exoirt CANON_LOGLOCALE=false
 ```
 
 4. Run dev version of site

@@ -1,3 +1,7 @@
+const multer = require("multer");
+const path = require("path");
+const sharp = require("sharp");
+
 module.exports = function(app) {
 
   const {db} = app.settings;
@@ -45,6 +49,56 @@ module.exports = function(app) {
           }
           else {
             return res.json({error: "Unable to update user profile."}).end();
+          }
+        });
+    });
+  });
+
+  // Multer is required to process file uploads and make them available via
+  // req.files.
+  const upload = multer({
+    // storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 5 * 1024 * 1024 // no larger than 5mb
+    },
+    fileFilter: (req, file, callback) => {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return callback(new Error("Only image files are allowed!"));
+      }
+      return callback(null, true);
+    }
+  });
+
+  const imgUpload = upload.single("file");
+  app.post("/api/profileImgUpload/", (req, res) => {
+    imgUpload(req, res, err => {
+      if (err) return res.json({error: err});
+
+      if (!req.file) {
+        return res.json({error: "No file."});
+      }
+
+      const sampleFile = req.file;
+      const {id: uid} = req.user;
+      // const userId = "test-123";
+      const newFileName = `user${uid.replace(/-/g, "")}.jpg`;
+      const imgPath = path.join(process.cwd(), "/static/uploads", newFileName);
+      // return res.json({f: newFileName, f2: imgPath});
+
+      sharp(sampleFile.buffer)
+        .toFormat(sharp.format.jpeg)
+        .resize(350, 350)
+        .toFile(imgPath, (uploadErr, info) => {
+          if (uploadErr) {
+            return res.status(500).send(uploadErr);
+          }
+          else {
+            db.userprofiles.update(
+              {img: newFileName},
+              {where: {uid}}
+            ).then(() => {
+              return res.json(info);
+            });
           }
         });
     });

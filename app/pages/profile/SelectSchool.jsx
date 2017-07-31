@@ -96,11 +96,11 @@ class SelectSchool extends Component {
               resetOnSelect={true}
               items={filteredSchools}
               inputProps={{value: schoolQuery, onChange: filterSchools}}
-              itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={(mySchool.id === geo.id || isActive) ? Classes.ACTIVE : ""} text={geo.name} />}
+              itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
               onItemSelect={setSelectedSchool}
               noResults={<MenuItem disabled text="No results." />}
             >
-              <Button text={mySchool ? mySchool.name : ""} rightIconName="double-caret-vertical" />
+              <Button text={mySchool ? mySchool.name : ""} rightIconName="caret-down" />
             </Select> : null}
         </div>
       </div>

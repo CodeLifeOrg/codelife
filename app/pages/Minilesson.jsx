@@ -1,6 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link} from "react-router";
+import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Tooltip} from "@blueprintjs/core";
@@ -42,7 +42,7 @@ class Minilesson extends Component {
       let mySnippet = null;
       // Fold over snippets and separate them into mine and others
       for (const s of allSnippets) {
-        s.uid === this.props.user.id ? mySnippet = s : otherSnippets.push(s);
+        s.uid === this.props.auth.user.id ? mySnippet = s : otherSnippets.push(s);
       }
       currentLesson.snippet = mySnippet;
       this.setState({minilessons, currentLesson, userProgress, otherSnippets});
@@ -84,12 +84,12 @@ class Minilesson extends Component {
   toggleTest() {
     // If I'm about to close the test successfully for the first time
     if (this.state.testOpen && this.state.firstWin) {
-      this.setState({winOpen: true, firstWin: false, testOpen: !this.state.testOpen});  
-    } 
-    else {
-      this.setState({testOpen: !this.state.testOpen});  
+      this.setState({winOpen: true, firstWin: false, testOpen: !this.state.testOpen});
     }
-    
+    else {
+      this.setState({testOpen: !this.state.testOpen});
+    }
+
   }
 
   buildCodeblockButton(snippet, i) {
@@ -207,8 +207,8 @@ class Minilesson extends Component {
           }}
         >
           <div className="pt-dialog-body">
-            <CodeBlock  
-              lesson={currentLesson} 
+            <CodeBlock
+              lesson={currentLesson}
               handleSave={this.handleSave.bind(this)}
               onFirstCompletion={this.onFirstCompletion.bind(this)}
             />
@@ -220,9 +220,10 @@ class Minilesson extends Component {
 
   render() {
 
-    const {t} = this.props;
+    const {auth, t} = this.props;
     const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
 
+    if (!auth.user) browserHistory.push("/login");
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <Loading />;
 
     // Clone minilessons as to not mess with state
@@ -277,7 +278,7 @@ class Minilesson extends Component {
 }
 
 Minilesson = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(Minilesson);
 Minilesson = translate()(Minilesson);
 export default Minilesson;

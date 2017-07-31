@@ -21,18 +21,33 @@ class Projects extends Component {
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
       const projects = resp.data;
+      projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
+        if (!currentProject) currentProject = projects[0];
         this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
       }
       else {
         this.setState({projects});
         if (projects.length === 0) {
           this.createNewProject("mypage.html");
+        } 
+        else {
+          console.log("got to final");
+          let latestIndex = 0;
+          let latestDate = projects[0].datemodified;
+          for (let i = 0; i < projects.length; i++) {
+            const p = projects[i];
+            if (p.datemodified && Date.parse(p.datemodified) > Date.parse(latestDate)) {
+              latestIndex = i;
+              latestDate = p.datemodified;
+            }
+          }
+          const currentProject = projects[latestIndex];
+          this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
         }
       }
-
     });
   }
 

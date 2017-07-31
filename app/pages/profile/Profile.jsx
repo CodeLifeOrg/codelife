@@ -3,6 +3,9 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+
+import Loading from "components/Loading";
+
 import UserInfo from "./UserInfo";
 import UserSnippets from "./UserSnippets";
 import UserProjects from "./UserProjects";
@@ -63,23 +66,22 @@ class Profile extends Component {
     const {loading, error, profileUser} = this.state;
     console.log(loggedInUser, profileUser);
 
-    if (loading) return <h1>Loading ...</h1>;
+    if (loading) return <Loading />;
 
     if (error) return <h1>{error}</h1>;
 
     return (
-      <div>
-        <aside className="side-bar">
-          <UserInfo user={profileUser} />
+      <div id="profile">
+        <aside className="profile-side">
+          <UserInfo user={profileUser} loggedInUser={loggedInUser} />
           {/* <skillsList /> */}
         </aside>
-        <content>
-          <h2>About Me</h2>
-          { loggedInUser.id === profileUser.id
-            ? <Link className="link" to={`/profile/${profileUser.username}/edit`}>{ t("Edit Resume") }</Link>
-            : null }
+        <content className="profile-info">
           { profileUser.bio
-            ? <p className="bio">{ profileUser.bio }</p>
+            ? <div className="user-section">
+                <h2>About Me</h2>
+                <p className="bio">{ profileUser.bio }</p>
+              </div>
             : null }
           <UserSnippets user={profileUser} />
           <UserProjects user={profileUser} />

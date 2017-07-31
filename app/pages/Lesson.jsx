@@ -1,6 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link, browserHistory} from "react-router";
+import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
 import {Interpolate, translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
@@ -96,7 +96,9 @@ class Lesson extends Component {
 
     const {t} = this.props;
     const {lessons, snippets, userProgress} = this.state;
-    const {user} = this.props;
+    const {auth} = this.props;
+
+    if (!auth.user) browserHistory.push("/login");
 
     if (lessons === [] || !userProgress) return <Loading />;
 
@@ -138,7 +140,7 @@ class Lesson extends Component {
 
     return (
       <div className="overworld">
-        <h2 className="welcome"><Interpolate i18nKey="overworld.welcome" name={ user.username } /></h2>
+        <h2 className="welcome"><Interpolate i18nKey="overworld.welcome" name={ auth.user.username } /></h2>
         <div className="map">{lessonItems}</div>
       </div>
     );
@@ -146,7 +148,7 @@ class Lesson extends Component {
 }
 
 Lesson = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(Lesson);
 Lesson = translate()(Lesson);
 export default Lesson;

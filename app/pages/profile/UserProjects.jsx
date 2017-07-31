@@ -47,7 +47,7 @@ class UserProjects extends Component {
     if (loading) return <h2>{ t("Loading projects...") }</h2>;
 
     return (
-      <div className="user-projects">
+      <div className="user-section">
         <h2>{ t("Projects") }</h2>
         { projects.length
           ? this.renderProjects(projects)

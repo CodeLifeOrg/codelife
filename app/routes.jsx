@@ -2,7 +2,7 @@ import React from "react";
 import {Route, IndexRoute, browserHistory} from "react-router";
 
 import App from "components/App";
-import Editor from "pages/Editor";
+
 import Lesson from "pages/Lesson";
 import Minilesson from "pages/Minilesson";
 import Slide from "pages/Slide";
@@ -11,28 +11,30 @@ import Profile from "pages/profile/Profile";
 import EditProfile from "pages/profile/EditProfile";
 import Studio from "pages/Studio";
 import Share from "pages/Share";
-import Ui from "pages/Ui";
+import Splash from "pages/Splash";
 
 export default function RouteCreate() {
 
   return (
-    <Route path="/" history={browserHistory} component={App}>
+    <Route path="/" component={App} history={browserHistory}>
+
       <IndexRoute component={Lesson} />
+
+      <Route path="login" component={Splash} />
 
       <Route path="lesson" component={Lesson} />
       <Route path="lesson/:lid" component={Minilesson} />
       <Route path="lesson/:lid/:mlid(/:sid)" component={Slide} />
 
-      <Route path="editor/:lid" component={Editor} />
+      <Route path="studio/:user(/:id)" component={Studio} />
+
+      <Route path="profile/:username" component={Profile} />
+      <Route path="profile/:username/edit" component={EditProfile} />
+
+      <Route path="glossary" component={Glossary} />
 
       <Route path="share/:type/:id" component={Share} />
 
-      <Route path="glossary" component={Glossary} />
-      <Route path="profile/:username" component={Profile} />
-      <Route path="profile/:username/edit" component={EditProfile} />
-      <Route path="studio/:user(/:id)" component={Studio} />
-
-      <Route path="ui" component={Ui} />
     </Route>
   );
 }

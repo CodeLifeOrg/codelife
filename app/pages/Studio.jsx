@@ -35,11 +35,14 @@ class Studio extends Component {
 
   onCreateProject(project) {
     this.setState({currentProject: project, currentText: ""}, this.renderText.bind(this));
-    browserHistory.push(`/studio/${this.props.user.username}/${project.name}`);
+    browserHistory.push(`/studio/${this.props.auth.user.username}/${project.name}`);
   }
 
   onDeleteProject(newproject) {
-    this.setState({currentProject: newproject, currentText: newproject.studentcontent}, this.renderText.bind(this));
+    let currentText = newproject.studentcontent;
+    // this means we deleted a DIFFERENT project and can therefore keep our current currentText
+    if (newproject.id === this.state.currentProject.id) currentText = this.state.currentText;
+    this.setState({currentProject: newproject, currentText}, this.renderText.bind(this));
     browserHistory.push(`/studio/${this.props.user.username}/${newproject.name}`);
   }
 
@@ -66,7 +69,7 @@ class Studio extends Component {
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentText: resp.data[0].studentcontent, currentProject: resp.data[0], changesMade: false}, this.renderText.bind(this));
-      browserHistory.push(`/studio/${this.props.user.username}/${resp.data[0].name}`);
+      browserHistory.push(`/studio/${this.props.auth.user.username}/${resp.data[0].name}`);
     });
   }
 
@@ -121,9 +124,11 @@ class Studio extends Component {
 
   render() {
 
-    const {t} = this.props;
+    const {auth, t} = this.props;
     const {activeTabId, currentProject} = this.state;
     const {id} = this.props.params;
+
+    if (!auth.user) browserHistory.push("/login");
 
     const snippetRef = <Snippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
     const allSnippetRef = <AllSnippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
@@ -157,7 +162,7 @@ class Studio extends Component {
 }
 
 Studio = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(Studio);
 Studio = translate()(Studio);
 export default Studio;

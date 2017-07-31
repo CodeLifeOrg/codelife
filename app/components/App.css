@@ -20,9 +20,9 @@ body {
 
 :focus { outline: 0; }
 
-.pt-overlay-backdrop {
+/*.pt-overlay-backdrop {
   background-color: rgba(245, 245, 255, 0.7);
-}
+}*/
 
 .pt-input {
   border-radius: 10px;
@@ -88,7 +88,7 @@ body {
       color: #444;
       float: left;
       opacity: 0.75;
-      margin-top: 10px;
+      margin-top: 5px;
     }
 
   }

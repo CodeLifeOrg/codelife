@@ -1,35 +1,3 @@
-.snippetrender {
-  width: 390px;
-}
-
-.snippet-popup-container {
-  width: 780px;
-}
-
-.snippet-popup-code {
-  font-family: monospace;
-  white-space: pre-wrap;
-  width: 390px;
-  float: left;
-}
-
-.snippet-popup-render {
-  width: 390px;
-  float: right;
-}
-
-.blurry-text {
-   color: transparent;
-   text-shadow: 0 0 5px rgba(0,0,0,0.3);
-   pointer-events: none;
-}
-
-.regular-text {
-  color:black;
-}
-
-
-
 #island {
   margin-bottom: 50px;
   text-align: center;
@@ -157,6 +125,97 @@
         cursor: pointer;
         margin-top: 18px;
         margin-bottom: 22px;
+      }
+
+      & .pt-overlay .pt-dialog-body {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+
+        & .header {
+          display: flex;
+          margin-bottom: 10px;
+
+          & .label {
+            color: black;
+            flex: 1;
+            font-weight: bold;
+            text-align: center;
+
+            &:first-child {
+              padding: 0 15px;
+            }
+
+            &:nth-child(even) {
+              margin-left: 25px;
+            }
+
+          }
+
+        }
+
+        & .content {
+          display: flex;
+          flex: 1;
+
+          & .snippet-popup-code {
+            align-self: stretch;
+            background-color: #323232;
+            color: white;
+            flex: 1;
+            font-size: 12px;
+            margin: 0;
+            overflow-y: scroll;
+            padding: 10px 15px;
+            white-space: pre-wrap;
+
+            &.blurry-text {
+               color: transparent;
+               text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+               pointer-events: none;
+            }
+
+          }
+
+          & .snippet-popup-render {
+            align-self: stretch;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            flex: 1;
+            margin-left: 25px;
+          }
+
+          & .pt-tooltip {
+            opacity: 0;
+            left: 25%;
+            margin-left: -140px;
+            position: absolute;
+            text-align: center;
+            top: 45%;
+            transform: scale(0.9);
+            transition: opacity 0.2s, transform 0.2s;
+            width: 300px;
+
+            & .title {
+              letter-spacing: 0.5px;
+              margin-bottom: 5px;
+              text-transform: uppercase;
+            }
+
+            & .description {
+              font-size: 10px;
+            }
+
+          }
+
+          &.blurry-text:hover .pt-tooltip {
+            opacity: 1;
+            transform: scale(1);
+          }
+
+        }
+
       }
 
     }

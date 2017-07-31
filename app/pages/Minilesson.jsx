@@ -62,14 +62,24 @@ class Minilesson extends Component {
 
   buildWindow(i, content) {
     const {lid} = this.props.params;
+    const {currentLesson} = this.state;
     const done = this.hasUserCompleted(lid);
     return (
-      <div className="snippet-popup-container">
-        <div className={done ? "snippet-popup-code regular-text" : "snippet-popup-code blurry-text"}>{content}</div>
-        <div className="snippet-popup-render">
-          <iframe className="snippetrender" frameBorder="0" ref={ comp => this.iframes[i] = comp } />
+      <div className="pt-dialog-body">
+        <div className="header">
+          <div className="label">Code</div>
+          <div className="label">Preview</div>
         </div>
-        {!done ? <div className="finish-text">Complete this island to view source from other students!</div> : null}
+        <div className={ `content ${ done ? "" : "blurry-text" }` }>
+          <pre className={ `snippet-popup-code ${ done ? "" : "blurry-text" }` }>{content}</pre>
+          <iframe className="snippet-popup-render" frameBorder="0" ref={ comp => this.iframes[i] = comp } />
+          { done ? null
+          : <div className={ `pt-popover pt-tooltip ${ currentLesson.id }` }>
+              <div className="pt-popover-content">
+                Codeblock's code will be shown after completing the last level of this island.
+              </div>
+            </div> }
+        </div>
       </div>
     );
   }
@@ -107,13 +117,13 @@ class Minilesson extends Component {
           lazy={false}
           inline={true}
           style={{
-            "height": "75vh",
-            "max-height": "600px",
-            "max-width": "800px",
-            "width": "100%"
+            height: "75vh",
+            maxHeight: "600px",
+            maxWidth: "800px",
+            width: "100%"
           }}
         >
-          <div className="pt-dialog-body">{snippet ? this.buildWindow(i, snippet.studentcontent) : null}</div>
+          { snippet ? this.buildWindow(i, snippet.studentcontent) : <div className="pt-dialog-body"></div> }
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ t("created by") } { snippet.username }</div>
             <div className="pt-dialog-footer-actions">
@@ -200,10 +210,10 @@ class Minilesson extends Component {
           onClose={this.toggleTest.bind(this)}
           title={ `My ${currentLesson.name} CodeBlock` }
           style={{
-            "height": "75vh",
-            "max-height": "800px",
-            "max-width": "1150px",
-            "width": "100%"
+            height: "75vh",
+            maxHeight: "800px",
+            maxWidth: "1150px",
+            width: "100%"
           }}
         >
           <div className="pt-dialog-body">

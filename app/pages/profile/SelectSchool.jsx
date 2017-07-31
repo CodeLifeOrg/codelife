@@ -40,7 +40,6 @@ class SelectSchool extends Component {
 
   updateSchoolList(geo) {
     // console.log('updateSchoolList', geo)
-    // return
     const {id: gid} = geo;
     this.setState({loading: true});
     axios.get(`/api/schoolsByGid?gid=${gid}`).then(schoolsResp => {
@@ -48,11 +47,18 @@ class SelectSchool extends Component {
         const mySchool = schoolsResp.data[0];
         const schoolQuery = mySchool.name;
         this.setState({
+          error: null,
           loading: false,
           schools: schoolsResp.data,
           filteredSchools: schoolsResp.data,
           schoolQuery,
           mySchool
+        });
+      }
+      else {
+        this.setState({
+          loading: false,
+          error: "Schools list for this location is unavailable."
         });
       }
     });
@@ -80,7 +86,6 @@ class SelectSchool extends Component {
     const {loading, error, mySchool, schools, filteredSchools, schoolQuery} = this.state;
 
     if (loading) return <p>Loading ...</p>;
-    if (error) return <h1>{error}</h1>;
 
     const filterSchools = this.filterSchools.bind(this);
     const setSelectedSchool = this.setSelectedSchool.bind(this);
@@ -91,7 +96,8 @@ class SelectSchool extends Component {
       <div>
         <SelectGeo gid={gid} callback={updateSchoolList} />
         <div className="pt-form-content">
-          { schools.length
+          {error ? <p>{error}</p> : null}
+          {schools.length
             ? <Select
               resetOnSelect={true}
               items={filteredSchools}

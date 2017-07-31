@@ -8,8 +8,8 @@ export default class TextText extends Component {
 
     return (
       <div id="slide-container" className="textImage flex-row">
-        <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-        { htmlcontent2 ? <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent2}} /> : null }
+        <div className="slide-text wide" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
+        { htmlcontent2 ? <div className="slide-text wide" dangerouslySetInnerHTML={{__html: htmlcontent2}} /> : null }
       </div>
     );
   }

@@ -11,6 +11,7 @@
 
   & #slide-head {
     margin: 25px 25px 10px;
+    min-height: 29px;
     position: relative;
     text-align: center;
 
@@ -18,6 +19,22 @@
       font-size: 24px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
+    }
+
+    & .gems {
+      font-weight: 600;
+      left: 0;
+      letter-spacing: 0.5px;
+      position: absolute;
+      text-transform: uppercase;
+      top: 0;
+
+      & img {
+        margin-right: 5px;
+        vertical-align: top;
+        width: 20px;
+      }
+
     }
 
     & .return-link {
@@ -32,15 +49,21 @@
     overflow: visible;
     padding: 0 25px;
 
+    & pre {
+      font-size: 12px;
+      overflow-x: scroll;
+      padding: 5px 10px;
+    }
+
     & .slide-text {
       font-size: 16px;
       line-height: 20px;
       white-space: pre-wrap;
-      /*text-align: justify;*/
+
     }
 
     & .slide-image {
-      height: 100%;
+      height: 80%;
     }
 
     & .slide-editor {
@@ -145,6 +168,10 @@
     & .slide-text {
       flex: none;
       width: 300px;
+
+      &.wide {
+        width: 400px;
+      }
     }
 
     @media only screen and (max-width : 768px) {

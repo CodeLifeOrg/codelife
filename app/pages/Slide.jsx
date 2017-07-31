@@ -16,6 +16,8 @@ import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
 import CheatSheet from "components/slidetypes/CheatSheet";
 
+import gemIcon from "icons/gem.svg";
+
 import "./Slide.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
@@ -132,13 +134,11 @@ class Slide extends Component {
       <div id="slide" className={ currentLesson.id }>
 
         <div id="slide-head">
-          <h1 className="title">{ currentSlide.title }</h1>
+          { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
+          { gems ? <div className="gems"><img src={gemIcon} />{gems} Gem{ gems > 1 ? "s" : "" } Found</div> : null }
           <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
-          <div className="gems">
-          Gems Found: {gems}
-          </div>
         </div>
 
         <SlideComponent unblock={this.unblock.bind(this)} {...currentSlide} />

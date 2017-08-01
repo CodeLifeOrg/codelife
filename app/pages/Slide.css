@@ -9,6 +9,16 @@
   margin: 0 25px 25px;
   position: relative;
 
+  & a:not(.pt-button) {
+    opacity: 0.75;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+  }
+
   & #slide-head {
     margin: 25px 25px 10px;
     min-height: 29px;

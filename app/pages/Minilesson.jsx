@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent, Tooltip} from "@blueprintjs/core";
+import {Button, Dialog, Intent, Position, Tooltip} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import "./Minilesson.css";
 
@@ -248,12 +248,14 @@ class Minilesson extends Component {
 
     const minilessonItems = minilessonStatuses.map(minilesson => {
       const {lid} = this.props.params;
-      if (minilesson.isNext || minilesson.isDone) {
-        let css = "stop";
-        if (minilesson.isNext) css += " next";
-        else if (minilesson.isDone) css += " done";
-        return <Tooltip content={ minilesson.name } tooltipClassName={ currentLesson.id }>
-          <Link className={css} to={`/lesson/${lid}/${minilesson.id}`}></Link>
+      if (minilesson.isDone) {
+        return <Tooltip position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+          <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
+        </Tooltip>;
+      }
+      else if (minilesson.isNext) {
+        return <Tooltip position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+          <Link className="stop next" to={`/lesson/${lid}/${minilesson.id}`}></Link>
         </Tooltip>;
       }
       return <div className="stop"></div>;

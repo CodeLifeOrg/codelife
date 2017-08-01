@@ -23,7 +23,7 @@ class CodeEditor extends Component {
   }
 
   componentDidMount() {
-    this.setState({mounted: true});
+    this.setState({mounted: true, currentText: this.props.initialValue}, this.renderText.bind(this));
   }
 
   getEditor() {
@@ -52,6 +52,7 @@ class CodeEditor extends Component {
   }
 
   onChangeText(theText) {
+    console.log("hi");
     this.setState({currentText: theText, changesMade: true}, this.renderText.bind(this));
   }
 

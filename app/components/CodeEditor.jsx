@@ -1,9 +1,4 @@
-import axios from "axios";
-import {connect} from "react-redux";
-import {browserHistory} from "react-router";
 import React, {Component} from "react";
-import {translate} from "react-i18next";
-import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 import himalaya from "himalaya";
 
 import AceWrapper from "components/AceWrapper";
@@ -33,6 +28,7 @@ class CodeEditor extends Component {
 
   getEditor() {
     if (this.editor) return this.editor.editor.editor;
+    return undefined;
   }
 
   getTitleText(theText) {
@@ -88,31 +84,36 @@ class CodeEditor extends Component {
 
   render() {
 
-    const {auth, t} = this.props;
+    const {island} = this.props;
     const {titleText, currentText} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
     return (
-      <div id="code-editor-comp">
-        <div className="title-tab" style={{color: "black", textAlign:"right"}}>{titleText}</div>
-        
-        <div id="code-editor-panels">
-          { !this.props.preventSelection ? 
-            <AceWrapper 
-              width="400px"
-              height="350px" 
-              className="code-editor-ace" 
-              ref={ comp => this.editor = comp } 
-              onChange={this.onChangeText.bind(this)} 
-              value={currentText}
-              {...this.props}
-            /> : <pre className="snippet-popup-code blurry-text">{currentText}</pre> }
-          <iframe className="code-editor-render" ref="rc" />
+      <div id="codeEditor">
+        <div className="code">
+          <div className="title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>Code</div>
+            { !this.props.preventSelection
+              ? <AceWrapper
+                className="editor"
+                ref={ comp => this.editor = comp }
+                onChange={this.onChangeText.bind(this)}
+                value={currentText}
+                {...this.props}
+              />
+            : <pre className="editor blurry-text">{currentText}</pre> }
+        </div>
+        <div className="render">
+          <div className="title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || "Webpage" }</div>
+          <iframe className="iframe" ref="rc" />
         </div>
       </div>
     );
   }
 }
+
+CodeEditor.defaultProps = {
+  island: "island-1"
+};
 
 export default CodeEditor;

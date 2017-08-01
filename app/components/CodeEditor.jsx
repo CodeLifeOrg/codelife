@@ -52,8 +52,11 @@ class CodeEditor extends Component {
   }
 
   onChangeText(theText) {
-    console.log("hi");
     this.setState({currentText: theText, changesMade: true}, this.renderText.bind(this));
+  }
+
+  onSelectText(s, e) {
+    if (this.editor && this.props.preventSelection) this.getEditor().selection.clearSelection();
   }
 
   /* External Functions for Parent Component to Call */
@@ -88,7 +91,7 @@ class CodeEditor extends Component {
 
     return (
       <div id="code-editor-comp">
-        <div className="title-tab" style={{textAlign:"right"}}>{titleText}</div>
+        <div className="title-tab" style={{color: "black", textAlign:"right"}}>{titleText}</div>
         
         <div id="code-editor-panels">
           { this.state.mounted ? 
@@ -98,6 +101,7 @@ class CodeEditor extends Component {
               className="code-editor-ace" 
               ref={ comp => this.editor = comp } 
               onChange={this.onChangeText.bind(this)} 
+              onSelectionChange={this.onSelectText.bind(this)}
               value={currentText}
               {...this.props}
             /> : <div className="code-editor-ace"></div> }

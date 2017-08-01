@@ -5,6 +5,8 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Position, Tooltip} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
+import CodeEditor from "components/CodeEditor";
+
 import "./Minilesson.css";
 
 import Loading from "components/Loading";
@@ -66,20 +68,14 @@ class Minilesson extends Component {
     const done = this.hasUserCompleted(lid);
     return (
       <div className="pt-dialog-body">
-        <div className="header">
-          <div className="label">Code</div>
-          <div className="label">Preview</div>
-        </div>
-        <div className={ `content ${ done ? "" : "blurry-text" }` }>
-          <pre className={ `snippet-popup-code ${ done ? "" : "blurry-text" }` }>{content}</pre>
-          <iframe className="snippet-popup-render" frameBorder="0" ref={ comp => this.iframes[i] = comp } />
-          { done ? null
+        <CodeEditor initialValue={content} preventSelection={!done} className="slide-editor" ref={c => this.editor = c} readOnly={true} />
+        { /* TODO: find a way to use "done" to blur out code in ace-editor */ }
+        { done ? null
           : <div className={ `pt-popover pt-tooltip ${ currentLesson.id }` }>
               <div className="pt-popover-content">
                 Codeblock's code will be shown after completing the last level of this island.
               </div>
             </div> }
-        </div>
       </div>
     );
   }

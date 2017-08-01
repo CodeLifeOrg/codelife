@@ -134,7 +134,7 @@ class CodeBlock extends Component {
   }
 
   verifyAndSaveCode() {
-    const {id: uid} = this.props.user;
+    const {id: uid} = this.props.auth.user;
     const {currentText: studentcontent} = this.state;
     let snippet = this.props.lesson.snippet;
     const lid = this.props.lesson.id;

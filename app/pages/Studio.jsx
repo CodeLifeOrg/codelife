@@ -8,7 +8,7 @@ import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 import AllSnippets from "components/AllSnippets";
 import Snippets from "components/Snippets";
 import Projects from "components/Projects";
-import StudioEditor from "components/StudioEditor";
+import CodeEditor from "components/CodeEditor";
 
 import "./Studio.css";
 
@@ -137,7 +137,7 @@ class Studio extends Component {
             <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
             <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
           </Tabs2>
-          <StudioEditor ref={i => this.editor = i} />
+          <CodeEditor ref={c => this.editor = c} />
         </div>
       </div>
     );

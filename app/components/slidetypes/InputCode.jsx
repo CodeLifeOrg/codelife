@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import himalaya from "himalaya";
 
-import AceWrapper from "components/AceWrapper";
+import CodeEditor from "components/CodeEditor";
 import Loading from "components/Loading";
 
 export default class InputCode extends Component {
@@ -17,12 +17,9 @@ export default class InputCode extends Component {
     };
   }
 
-  getEditor() {
-    return this.editor.editor.editor;
-  }
-
   submitAnswer() {
-    const jsonArray = himalaya.parse(this.getEditor().getValue());
+    const contents = this.editor.getEntireContents();
+    const jsonArray = himalaya.parse(contents);
     let checkerText = "";
     const rulejson = JSON.parse(this.props.rulejson);
     for (const r of rulejson) {
@@ -61,45 +58,22 @@ export default class InputCode extends Component {
   resetAnswer() {
     let initText = "";
     if (this.props.htmlcontent2) initText = this.props.htmlcontent2;
-    this.setState({currentText: initText}, this.renderText.bind(this));
-  }
-
-  setTitleText() {
-    const content = himalaya.parse(this.state.currentText);
-    let head, html, title = null;
-    let titleText = "";
-    if (content) html = content.find(e => e.tagName === "html");
-    if (html) head = html.children.find(e => e.tagName === "head");
-    if (head) title = head.children.find(e => e.tagName === "title");
-    if (title && title.children[0]) titleText = title.children[0].content;
-    this.setState({titleText});
-  }
-
-  renderText() {
-    if (this.refs.rf) {
-      const doc = this.refs.rf.contentWindow.document;
-      doc.open();
-      doc.write(this.state.currentText);
-      doc.close();
-    }
-    this.setTitleText();
-  }
-
-  onChangeText(theText) {
-    this.setState({currentText: theText}, this.renderText.bind(this));
+    this.editor.setEntireContents(initText);
   }
 
   componentDidMount() {
     let initText = "";
     if (this.props.htmlcontent2) initText = this.props.htmlcontent2;
-    this.setState({mounted: true, baseText: initText, currentText: initText}, this.renderText.bind(this));
+    this.setState({mounted: true, baseText: initText});
+    console.log(this.editor);
   }
 
   componentDidUpdate() {
     let newText = "";
     if (this.props.htmlcontent2) newText = this.props.htmlcontent2;
     if (this.state.baseText !== newText) {
-      this.setState({baseText: newText, checkerResult: false, currentText: newText}, this.renderText.bind(this));
+      this.setState({baseText: newText, checkerResult: false});
+      this.editor.setEntireContents(newText);
     }
   }
 
@@ -113,8 +87,7 @@ export default class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } onChange={this.onChangeText.bind(this)} mode="html" showGutter={false} value={this.state.currentText} setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }
-          <iframe className="slide-render" ref="rf" />
+          { this.state.mounted ? <CodeEditor className="slide-editor" ref={c => this.editor = c} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           { checkerResult === false

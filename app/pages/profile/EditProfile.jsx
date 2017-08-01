@@ -45,7 +45,7 @@ class Profile extends Component {
    */
   componentWillMount() {
     const {username} = this.props.params;
-    const {username: loggedInUsername} = this.props.auth.user;
+    const {username: loggedInUsername} = this.props.user;
 
     if (username !== loggedInUsername) {
       this.setState({

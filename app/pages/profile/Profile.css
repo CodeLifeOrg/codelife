@@ -6,6 +6,15 @@
   margin: 0 25px 25px;
   width: calc(100% - 50px);
 
+  & .user-img {
+    background-size: cover;
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+  }
+
   & .profile-side {
     flex: none;
     margin: 25px;
@@ -14,10 +23,6 @@
       text-align: center;
 
       & .user-img {
-        background-size: cover;
-        background-position: 50% 0;
-        background-repeat: no-repeat;
-        border-radius: 50%;
         margin: 0 auto 20px auto;
         height: 200px;
         width: 200px;

@@ -40,7 +40,18 @@ class Profile extends Component {
    */
   componentWillMount() {
     const {username} = this.props.params;
+    this.fetchUser(username);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.username !== this.props.params.username) {
+      console.log("changed url!");
+      this.setState({loading: true});
+      this.fetchUser(nextProps.params.username);
+    }
+  }
+
+  fetchUser(username) {
     axios.get(`/api/profile/${username}`).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {

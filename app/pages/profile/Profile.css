@@ -101,4 +101,22 @@
 
   }
 
+  & .users-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    & .pt-card {
+      margin: 0 0 20px 0;
+      width: 200px;
+      text-decoration: none;
+
+      & .user-bio {
+        color: black;
+        display: block;
+        margin: 10px 0 0 0;
+      }
+    }
+  }
+
 }

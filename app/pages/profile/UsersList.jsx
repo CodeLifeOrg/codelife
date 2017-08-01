@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Profile.css";
@@ -43,13 +44,13 @@ class UsersList extends Component {
       return
     }
     return users.map((user, i) =>
-      <div className="pt-card pt-elevation-0 pt-interactive">
+      <Link className="pt-card pt-elevation-0 pt-interactive" to={`/profile/${user.username}`}>
         {user.img
           ? <div className="user-img" style={{backgroundImage: `url(/uploads/${user.img})`}}></div>
           : <span className="pt-icon-large pt-icon-user pt-intent-primary"></span>}
-        <h5><a href="#">{user.name}</a></h5>
-        <p>{user.bio}</p>
-      </div>
+        <span className="user-name">{user.name}</span>
+        <span className="user-bio">{user.bio}</span>
+      </Link>
     );
   }
 
@@ -72,11 +73,11 @@ class UsersList extends Component {
     return (
       <div className="user-section">
         <h2>{title}</h2>
-        <ul>
+        <div className="users-list">
         { users.length
           ? this.renderUsers(users)
           : <p>{ t("No other users found.") }</p>}
-        </ul>
+        </div>
       </div>
     );
   }

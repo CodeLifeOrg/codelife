@@ -24,8 +24,10 @@ class CodeEditor extends Component {
   }
 
   componentDidMount() {
-    const titleText = this.getTitleText(this.props.initialValue);
-    this.setState({mounted: true, currentText: this.props.initialValue, titleText}, this.renderText.bind(this));
+    let init = "";
+    if (this.props.initialValue) init = this.props.initialValue;
+    const titleText = this.getTitleText(init);
+    this.setState({mounted: true, currentText: init, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
   }
 

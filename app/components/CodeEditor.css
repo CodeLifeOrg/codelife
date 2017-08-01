@@ -9,7 +9,7 @@
     flex-direction: column;
     margin: 0 10px;
 
-    & .title {
+    & .panel-title {
       align-self: flex-start;
       background-color: #2c2c2c;
       color: white;
@@ -25,7 +25,21 @@
 
     & .editor {
       align-self: stretch;
+      border-radius: 0 5px 5px 5px;
       flex: 1;
+
+      &.blurry-text {
+        background-color: #323232;
+        color: transparent;
+        font-size: 12px;
+        margin: 0;
+        overflow-y: scroll;
+        padding: 10px 15px;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+        white-space: pre-wrap;
+      }
+
     }
 
   }
@@ -37,10 +51,11 @@
     flex-direction: column;
     margin: 0 10px;
 
-    & .title {
+    & .panel-title {
       align-self: flex-start;
       background-color: #ddd;
       border-radius: 5px 5px 0 0;
+      color: black;
       padding: 5px 10px;
 
       & .favicon {
@@ -55,7 +70,7 @@
       align-self: stretch;
       background-color: white;
       border: 1px solid #ddd;
-      border-radius: 0 3px 3px 3px;
+      border-radius: 0 5px 5px 5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
       flex: 1;
     }

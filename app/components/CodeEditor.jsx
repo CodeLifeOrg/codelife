@@ -92,7 +92,7 @@ class CodeEditor extends Component {
     return (
       <div id="codeEditor">
         <div className="code">
-          <div className="title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>Code</div>
+          <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>Code</div>
             { !this.props.preventSelection
               ? <AceWrapper
                 className="editor"
@@ -104,7 +104,7 @@ class CodeEditor extends Component {
             : <pre className="editor blurry-text">{currentText}</pre> }
         </div>
         <div className="render">
-          <div className="title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || "Webpage" }</div>
+          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || "Webpage" }</div>
           <iframe className="iframe" ref="rc" />
         </div>
       </div>

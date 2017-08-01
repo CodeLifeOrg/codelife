@@ -27,22 +27,7 @@
     align-self: stretch;
     display: flex;
     flex: 1;
-
-    & .codeBlock-editor {
-      align-items: stretch;
-      flex: 1;
-      margin: 25px;
-    }
-
-    & .codeBlock-render {
-      align-items: stretch;
-      background-color: white;
-      border: 1px solid #333;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-      flex: 1;
-      margin: 25px;
-    }
-
+    padding: 25px 0;
   }
 
   & .codeBlock-foot {

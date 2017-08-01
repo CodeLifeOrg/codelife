@@ -81,6 +81,11 @@
       flex: 1;
     }
 
+    & #codeEditor {
+      align-self: stretch;
+      flex: 2;
+    }
+
     & .validation {
       margin-bottom: -50px;
       text-align: center;

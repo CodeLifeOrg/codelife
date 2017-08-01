@@ -68,7 +68,7 @@ class Minilesson extends Component {
     const done = this.hasUserCompleted(lid);
     return (
       <div className="pt-dialog-body">
-        <CodeEditor initialValue={content} preventSelection={!done} className="slide-editor" ref={c => this.editor = c} readOnly={true} />
+        <CodeEditor initialValue={content} preventSelection={!done} island={ currentLesson.id } ref={c => this.editor = c} readOnly={true} />
         { /* TODO: find a way to use "done" to blur out code in ace-editor */ }
         { done ? null
           : <div className={ `pt-popover pt-tooltip ${ currentLesson.id }` }>

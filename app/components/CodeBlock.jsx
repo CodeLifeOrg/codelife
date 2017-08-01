@@ -99,12 +99,12 @@ class CodeBlock extends Component {
     const vList = rulejson.map(rule => {
       if (rule.passing) {
         return <li style={{color: "green"}}>✔ {rule.needle}</li>;
-      } 
+      }
       else {
         return <li style={{color: "red"}}>✗ {rule.needle}</li>;
       }
     });
-    
+
     return (
       <div>
         <ul>{vList}</ul>
@@ -129,17 +129,17 @@ class CodeBlock extends Component {
     }
 
     this.saveProgress(lid);
-    
+
     // todo: maybe replace this with findorupdate from userprogress?
     let endpoint = "/api/snippets/";
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-        t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});        
+        t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});
         if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion();
         snippet ? snippet.studentcontent = studentcontent : snippet = resp.data;
-        if (this.props.handleSave) this.props.handleSave(snippet);    
+        if (this.props.handleSave) this.props.handleSave(snippet);
       }
       else {
         alert("Error");
@@ -166,11 +166,11 @@ class CodeBlock extends Component {
           { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
         </div>
         <div className="codeBlock-body">
-          { this.state.mounted ? <CodeEditor className="codeBlock-editor" ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeBlock-editor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeBlock-editor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
-          
+
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"

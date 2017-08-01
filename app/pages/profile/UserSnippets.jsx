@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import {Button, Dialog, Intent} from "@blueprintjs/core";
+import CodeBlock from "components/CodeBlock";
 import "./Profile.css";
 
 /**
@@ -19,7 +21,11 @@ class UserSnippets extends Component {
     super(props);
     this.state = {
       loading: true,
-      snippets: []
+      lessons: [],
+      snippets: [],
+      userProgress: null,
+      didInject: false,
+      currentFrame: null
     };
   }
 
@@ -34,9 +40,39 @@ class UserSnippets extends Component {
     });
   }
 
+  toggleDialog(i) {
+    const k = `isOpen_${i}`;
+    let currentFrame = null;
+    if (!this.state[k]) currentFrame = i;
+    this.setState({[k]: !this.state[k], didInject: false, currentFrame});
+  }
+
   renderSnippets(snippets) {
-    return snippets.map(snippet =>
-      <li className="snippet" key={snippet.id}>{snippet.snippetname}</li>
+    // console.log(snippets)
+    // return <div>snippets</div>
+    return snippets.map((snippet, i) =>
+      <div className="view-snippit">
+        <Button className="pt-icon-endorsed" onClick={this.toggleDialog.bind(this, i)} text={snippet.snippetname} />
+        <Dialog
+          isOpen={this.state[`isOpen_${i}`]}
+          onClose={this.toggleDialog.bind(this, i)}
+          title={snippet.snippetname}
+          lazy={false}
+          inline={true}
+          className="codeblock-dialog"
+        >
+          <div className="pt-dialog-body">{<CodeBlock lesson={snippet.lid} />}</div>
+          <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+              <Button
+                intent={Intent.PRIMARY}
+                onClick={this.toggleDialog.bind(this, i)}
+                text="Close"
+              />
+            </div>
+          </div>
+        </Dialog>
+      </div>
     );
   }
 

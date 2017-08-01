@@ -36,7 +36,9 @@ class UserProjects extends Component {
 
   renderProjects(projects) {
     return projects.map(project =>
-      <li className="project" key={project.id}>{project.name}</li>
+      <li className="project" key={project.id}>
+        <a href={`/studio/${project.uid}/${project.name}`}>{project.name}</a>
+      </li>
     );
   }
 

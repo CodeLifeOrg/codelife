@@ -1,6 +1,7 @@
 npm-debug.log*
 node_modules
 static/assets
+static/uploads
 /index.js
 .env
 .envrc

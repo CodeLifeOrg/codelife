@@ -24,7 +24,8 @@ class CodeEditor extends Component {
   }
 
   componentDidMount() {
-    this.setState({mounted: true, currentText: this.props.initialValue}, this.renderText.bind(this));
+    const titleText = this.getTitleText(this.props.initialValue);
+    this.setState({mounted: true, currentText: this.props.initialValue, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
   }
 
@@ -98,7 +99,7 @@ class CodeEditor extends Component {
           { !this.props.preventSelection ? 
             <AceWrapper 
               width="400px"
-              height="500px" 
+              height="350px" 
               className="code-editor-ace" 
               ref={ comp => this.editor = comp } 
               onChange={this.onChangeText.bind(this)} 

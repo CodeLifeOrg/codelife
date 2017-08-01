@@ -2,6 +2,9 @@ const faker = require("faker");
 // sets locale to Brazil
 faker.locale = "pt_BR";
 const bcrypt = require("bcrypt");
+const request = require("request");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = function(app) {
 
@@ -18,11 +21,17 @@ module.exports = function(app) {
           uid: {$ilike: "fakeUser%"}
         }
       }).then(() => {
-        db.users.destroy({
+        db.userprofiles.destroy({
           where: {
-            id: {$ilike: "fakeUser%"}
+            uid: {$ilike: "fakeUser%"}
           }
-        }).then(() => res.json({success: "All fake items deleted."}));
+        }).then(() => {
+          db.users.destroy({
+            where: {
+              id: {$ilike: "fakeUser%"}
+            }
+          }).then(() => res.json({success: "All fake items deleted."}));
+        });
       });
     });
   });
@@ -46,6 +55,28 @@ module.exports = function(app) {
           salt
         };
         db.users.upsert(newUser).then(() => {
+          const userProfile = {
+            uid,
+            bio: "I'm a fake user!",
+            img: `user${uid}.jpg`,
+            gid: "4mg030000",
+            sid: "31006238",
+            coins: faker.random.number(1000),
+            streak: faker.random.number(55),
+            dob: "2001-01-05"
+          };
+          db.userprofiles.create(userProfile);
+          request.get({url: faker.image.avatar(), encoding: "binary"}, (err, response, body) => {
+            const imgPath = path.join(process.cwd(), "/static/uploads", `user${uid}.jpg`);
+            fs.writeFile(imgPath, body, "binary", err => {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                console.log(`Downloaded file at ${imgPath}!`);
+              }
+            });
+          });
           for (let ii = 0; ii < faker.random.number(10); ii++) {
             const newProject = {
               name: faker.lorem.slug(3),

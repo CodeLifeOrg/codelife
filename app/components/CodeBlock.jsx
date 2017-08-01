@@ -4,7 +4,7 @@ import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
-import AceWrapper from "components/AceWrapper";
+import CodeEditor from "components/CodeEditor";
 import {Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
@@ -16,7 +16,7 @@ class CodeBlock extends Component {
     super(props);
     this.state = {
       mounted: false,
-      currentText: "",
+      initialContent: "",
       isPassing: false,
       isOpen: false,
       goodRatio: 0,
@@ -27,27 +27,9 @@ class CodeBlock extends Component {
 
   componentDidMount() {
     const rulejson = JSON.parse(this.props.lesson.rulejson);
-    let currentText = this.props.lesson.initialcontent;
-    if (this.props.lesson.snippet) currentText = this.props.lesson.snippet.studentcontent;
-    this.setState({mounted: true, currentText, rulejson}, this.renderText.bind(this));
-  }
-
-  getEditor() {
-    return this.editor.editor.editor;
-  }
-
-  grabContents() {
-    return this.state.currentText;
-  }
-
-  renderText() {
-    this.checkForErrors();
-    if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(this.state.currentText);
-      doc.close();
-    }
+    let initialContent = this.props.lesson.initialcontent;
+    if (this.props.lesson.snippet) initialContent = this.props.lesson.snippet.studentcontent;
+    this.setState({mounted: true, initialContent, rulejson});
   }
 
   containsTag(needle, haystack) {
@@ -79,8 +61,8 @@ class CodeBlock extends Component {
     });
   }
 
-  checkForErrors() {
-    const jsonArray = himalaya.parse(this.state.currentText);
+  checkForErrors(theText) {
+    const jsonArray = himalaya.parse(theText);
     const {rulejson} = this.state;
     let errors = 0;
     for (const r of rulejson) {
@@ -104,12 +86,12 @@ class CodeBlock extends Component {
   }
 
   onChangeText(theText) {
-    this.setState({currentText: theText}, this.renderText.bind(this));
+    this.checkForErrors(theText);
   }
 
   resetSnippet() {
     const {lesson} = this.props;
-    if (lesson) this.setState({currentText: lesson.initialcontent}, this.renderText.bind(this));
+    if (lesson) this.editor.setEntireContents(lesson.initialcontent);
   }
 
   getValidationBox() {
@@ -135,7 +117,7 @@ class CodeBlock extends Component {
 
   verifyAndSaveCode() {
     const {id: uid} = this.props.auth.user;
-    const {currentText: studentcontent} = this.state;
+    const studentcontent = this.editor.getEntireContents();
     let snippet = this.props.lesson.snippet;
     const lid = this.props.lesson.id;
     const name = `My ${this.props.lesson.name} Snippet`;
@@ -168,7 +150,7 @@ class CodeBlock extends Component {
   render() {
 
     const {t, lesson} = this.props;
-    const {isPassing} = this.state;
+    const {isPassing, initialContent} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -184,8 +166,7 @@ class CodeBlock extends Component {
           { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
         </div>
         <div className="codeBlock-body">
-          { this.state.mounted ? <AceWrapper className="codeBlock-editor" ref={ comp => this.editor = comp } mode="html" onChange={this.onChangeText.bind(this)} value={this.state.currentText} showGutter={false} setOptions={{behavioursEnabled: false}}/> : <div className="codeBlock-editor"></div> }
-          <iframe className="codeBlock-render" ref="rc" />
+          { this.state.mounted ? <CodeEditor className="codeBlock-editor" ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeBlock-editor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
@@ -218,7 +199,7 @@ class CodeBlock extends Component {
 }
 
 CodeBlock = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(CodeBlock);
 CodeBlock = translate()(CodeBlock);
 export default CodeBlock;

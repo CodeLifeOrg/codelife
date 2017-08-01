@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import himalaya from "himalaya";
 
 import AceWrapper from "components/AceWrapper";
+import Loading from "components/Loading";
 
 export default class InputCode extends Component {
 
@@ -25,7 +26,7 @@ export default class InputCode extends Component {
     let checkerText = "";
     const rulejson = JSON.parse(this.props.rulejson);
     for (const r of rulejson) {
-      if (r.type === "CONTAINS") {
+      if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
         if (!this.containsTag(r.needle, jsonArray)) {
           checkerText += `${r.error_msg}\n`;
         }
@@ -95,8 +96,10 @@ export default class InputCode extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.baseText !== this.props.htmlcontent2) {
-      this.setState({baseText: this.props.htmlcontent2, checkerResult: false, currentText: this.props.htmlcontent2}, this.renderText.bind(this));
+    let newText = "";
+    if (this.props.htmlcontent2) newText = this.props.htmlcontent2;
+    if (this.state.baseText !== newText) {
+      this.setState({baseText: newText, checkerResult: false, currentText: newText}, this.renderText.bind(this));
     }
   }
 

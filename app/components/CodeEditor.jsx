@@ -8,9 +8,9 @@ import himalaya from "himalaya";
 
 import AceWrapper from "components/AceWrapper";
 
-import "./StudioEditor.css";
+import "./CodeEditor.css";
 
-class StudioEditor extends Component {
+class CodeEditor extends Component {
 
   constructor(props) {
     super(props);
@@ -55,7 +55,7 @@ class StudioEditor extends Component {
     this.setState({currentText: theText, changesMade: true}, this.renderText.bind(this));
   }
 
-  /* External Functions for Parent Studio to Call */
+  /* External Functions for Parent Component to Call */
 
   setEntireContents(theText) {
     this.setState({currentText: theText, changesMade: false}, this.renderText.bind(this));
@@ -86,27 +86,25 @@ class StudioEditor extends Component {
     const {titleText, currentText} = this.state;
 
     return (
-      <div id="studio-comp">
+      <div id="code-editor-comp">
         <div className="title-tab" style={{textAlign:"right"}}>{titleText}</div>
         
-        <div id="body">
+        <div id="code-editor-panels">
           { this.state.mounted ? 
             <AceWrapper 
               width="400px"
               height="500px" 
-              className="studio-editor" 
+              className="code-editor-ace" 
               ref={ comp => this.editor = comp } 
-              mode="html" 
               onChange={this.onChangeText.bind(this)} 
-              showGutter={false} 
               value={currentText}
-              setOptions={{behavioursEnabled: false}}
-            /> : <div className="studio-editor"></div> }
-          <iframe className="studio-render" ref="rc" />
+              {...this.props}
+            /> : <div className="code-editor-ace"></div> }
+          <iframe className="code-editor-render" ref="rc" />
         </div>
       </div>
     );
   }
 }
 
-export default StudioEditor;
+export default CodeEditor;

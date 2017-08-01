@@ -7,6 +7,10 @@
   display: flex;
   justify-content: center;
   height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 
   & .center-block {
     margin-top: -150px;

@@ -26,7 +26,7 @@ class App extends Component {
         { auth.user || auth.error
         ? <div className="container">
             <Clouds />
-            <Nav />
+            <Nav logo={ !location.pathname.includes("login") } />
             { children }
             <Footer className={ routes[1] === "lesson" && routes.length > 2 ? routes[2] : "" } />
           </div>

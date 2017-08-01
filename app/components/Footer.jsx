@@ -4,10 +4,7 @@ import {Link} from "react-router";
 import {connect} from "react-redux";
 import "./Footer.css";
 
-// Nav Component
-// Contains a list of links in Footer format, inserted at the bottom of each page
-
-class Nav extends Component {
+class Footer extends Component {
 
   render() {
 
@@ -28,8 +25,12 @@ class Nav extends Component {
   }
 }
 
-Nav = connect(state => ({
+Footer.defaultProps = {
+  className: ""
+};
+
+Footer = connect(state => ({
   user: state.auth.user
-}))(Nav);
-Nav = translate()(Nav);
-export default Nav;
+}))(Footer);
+Footer = translate()(Footer);
+export default Footer;

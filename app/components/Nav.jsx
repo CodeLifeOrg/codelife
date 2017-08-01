@@ -13,11 +13,11 @@ class Nav extends Component {
 
   render() {
 
-    const {auth, t} = this.props;
+    const {auth, logo, t} = this.props;
 
     return (
       <div id="nav">
-        <Link to={"/"}><img className="logo" src="/logo/logo-sm.png" /></Link>
+        { logo ? <Link to={"/"}><img className="logo" src="/logo/logo-sm.png" /></Link> : <div></div> }
         <div className="links">
           { auth.user
           ? <div>
@@ -41,6 +41,10 @@ class Nav extends Component {
     );
   }
 }
+
+Nav.defaultProps = {
+  logo: true
+};
 
 Nav = connect(state => ({
   auth: state.auth

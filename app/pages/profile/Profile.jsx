@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, {Component} from "react";
-import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 
@@ -9,6 +8,7 @@ import Loading from "components/Loading";
 import UserInfo from "./UserInfo";
 import UserSnippets from "./UserSnippets";
 import UserProjects from "./UserProjects";
+import UsersList from "./UsersList";
 import "./Profile.css";
 
 /**
@@ -40,7 +40,18 @@ class Profile extends Component {
    */
   componentWillMount() {
     const {username} = this.props.params;
+    this.fetchUser(username);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.username !== this.props.params.username) {
+      console.log("changed url!");
+      this.setState({loading: true});
+      this.fetchUser(nextProps.params.username);
+    }
+  }
+
+  fetchUser(username) {
     axios.get(`/api/profile/${username}`).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {
@@ -84,6 +95,8 @@ class Profile extends Component {
             : null }
           <UserSnippets user={profileUser} />
           <UserProjects user={profileUser} />
+          {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
+          {profileUser.sid ? <UsersList type="school" user={profileUser} /> : null}
         </content>
       </div>
     );

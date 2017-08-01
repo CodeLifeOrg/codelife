@@ -30,6 +30,14 @@ body {
   letter-spacing: 0.5px;
 }
 
+.pt-file-upload-input {
+  border-radius: 10px 0 0 10px;
+
+  &:after {
+    border-radius: 0 10px 10px 0;
+  }
+}
+
 .pt-select select {
   border-radius: 10px;
   font-family: "Overpass", sans-serif;

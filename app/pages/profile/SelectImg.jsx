@@ -16,7 +16,7 @@ class SelectImg extends Component {
     const onUpdate = this.onUpdate.bind(this);
     return (
       <div className="pt-form-content">
-        <label className="pt-file-upload .modifier">
+        <label className="pt-file-upload">
           <input onChange={onUpdate} type="file" />
           <span className="pt-file-upload-input">Upload new picture...</span>
         </label>

@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import CodeEditor from "components/CodeEditor";
-import {Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -22,7 +22,9 @@ class CodeBlock extends Component {
       goodRatio: 0,
       intent: null,
       rulejson: null, 
-      tagMeanings: []
+      tagMeanings: [],
+      timeout: null,
+      timeoutAlert: false
     };
   }
 
@@ -39,14 +41,25 @@ class CodeBlock extends Component {
     tagMeanings.h5 = "<h5> is a header tag, where you can write kind of small text.";
     tagMeanings.h6 = "<h6> is a header tag, where you can write really small text.";
     tagMeanings.style = "<style> is where you customize your page with cool colors and fonts.";
+    tagMeanings.p = "<p> is a paragraph tag, write sentences in here.";
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     let initialContent = this.props.lesson.initialcontent;
     if (this.props.lesson.snippet) initialContent = this.props.lesson.snippet.studentcontent;
     this.setState({mounted: true, initialContent, rulejson, tagMeanings});
   }
 
+  componentWillUnmount() {
+    if (this.state.timeout) {
+      clearTimeout(this.state.timeout);
+    }
+  }
+
   containsTag(needle, haystack) {
     return this.tagCount(needle, haystack) > 0;
+  }
+
+  askForHelp() {
+    this.setState({timeoutAlert: "Having trouble? Check with a neighbor and ask for help!"});
   }
 
   tagCount(needle, haystack) {
@@ -94,7 +107,19 @@ class CodeBlock extends Component {
     if (goodRatio < 0.5) intent = Intent.DANGER;
     else if (goodRatio < 1) intent = Intent.WARNING;
     else intent = Intent.SUCCESS;
-    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson});
+    let timeout = this.state.timeout;
+    if (errors === 0) {
+      if (timeout) {
+        clearTimeout(this.state.timeout);
+        timeout = null;
+      }
+    } 
+    else {
+      if (!timeout) {
+        timeout = setTimeout(this.askForHelp.bind(this), 30000);
+      }
+    }
+    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson, timeout});
   }
 
   onChangeText(theText) {
@@ -115,7 +140,7 @@ class CodeBlock extends Component {
           <Popover
             interactionKind={PopoverInteractionKind.HOVER}
             popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP}
+            position={Position.TOP_LEFT}
           >
             <li className="validation-item complete"><span className="checkbox pt-icon-standard pt-icon-small-tick"></span><span className="rule">{rule.needle}</span></li>
             <div>
@@ -129,7 +154,7 @@ class CodeBlock extends Component {
           <Popover
             interactionKind={PopoverInteractionKind.HOVER}
             popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP}
+            position={Position.TOP_LEFT}
           >
             <li className="validation-item"><span className="checkbox pt-icon-standard">&nbsp;</span><span className="rule">{rule.needle}</span></li>  
             <div>
@@ -147,6 +172,10 @@ class CodeBlock extends Component {
         { Math.round(goodRatio * 100) }% { t("Complete") }
       </div>
     );
+  }
+
+  closeAlert() {
+
   }
 
   verifyAndSaveCode() {
@@ -184,7 +213,7 @@ class CodeBlock extends Component {
   render() {
 
     const {t, lesson} = this.props;
-    const {isPassing, initialContent} = this.state;
+    const {initialContent, timeoutAlert} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -193,6 +222,13 @@ class CodeBlock extends Component {
     return (
       <div id="codeBlock">
         <div className="codeBlock-body">
+          <Alert
+            isOpen={ timeoutAlert ? true : false }
+            confirmButtonText={ t("Okay") }
+            intent={ Intent.SUCCESS }
+            onConfirm={ () => this.setState({timeoutAlert: false}) }>
+            <p>{ timeoutAlert ? timeoutAlert : "" }</p>
+        </Alert>
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
             { validationBox }

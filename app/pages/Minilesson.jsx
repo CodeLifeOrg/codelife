@@ -6,7 +6,6 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Position, Tooltip} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
-import CodeEditor from "components/CodeEditor";
 
 import "./Minilesson.css";
 
@@ -217,7 +216,7 @@ class Minilesson extends Component {
         </div>
         { otherSnippets.length
         ? <div>
-            <h2 className="title">Other Students Snippets</h2>
+            <h2 className="title">Other Students' CodeBlocks</h2>
             <div id="snippets">
               { otherSnippets.map(os => <CodeBlockCard codeBlock={os} userProgress={userProgress} />) }
             </div>

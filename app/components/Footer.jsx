@@ -6,14 +6,24 @@ import "./Footer.css";
 
 class Footer extends Component {
 
-  render() {
+  changeLang(e) {
+    e.preventDefault();
+    const newOrigin = e.target.id === "en"
+      ? window.location.origin.replace("pt.", "en.")
+      : window.location.origin.replace("en.", "pt.");
+    window.location = `${newOrigin}${window.location.pathname}`;
+  }
 
-    const {className, t, user} = this.props;
+  render() {
+    const {className, t, user, i18n} = this.props;
+    const {language} = i18n;
+    console.log(language);
 
     return (
       <footer id="footer" className={ className }>
         <div className="links">
-          <Link className="link" to="/glossary">{ t("Glossary") }</Link>
+          <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;
+          <a href="#" id="en" onClick={this.changeLang}>EN</a> | <a id="pt" href="#" onClick={this.changeLang}>PT</a>
         </div>
         <div className="logos">
           <a target="_blank" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>

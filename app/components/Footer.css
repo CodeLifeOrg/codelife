@@ -18,9 +18,10 @@
   }
 
   & .links {
+    color: white;
 
-    & .link {
-      color: white;
+    & a {
+      color: inherit;
       letter-spacing: 1px;
       text-transform: uppercase;
     }

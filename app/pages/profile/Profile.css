@@ -18,6 +18,7 @@
   & .profile-side {
     flex: none;
     margin: 25px;
+    width: 300px;
 
     & .user-info {
       text-align: center;
@@ -28,8 +29,13 @@
         width: 200px;
       }
 
+      & .user-name {
+        line-height: 40px;
+        margin-bottom: 25px;
+      }
+
       & .edit-link {
-        margin: 0 auto 10px;
+        margin: 10px auto;
       }
 
       & .pt-icon-large {
@@ -107,22 +113,14 @@
 
   }
 
-  & .users-list {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  @media only screen and (max-width : 768px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
 
-    & .pt-card {
-      margin: 0 0 20px 0;
-      width: 200px;
-      text-decoration: none;
-
-      & .user-bio {
-        color: black;
-        display: block;
-        margin: 10px 0 0 0;
-      }
+    & .profile-side {
+      width: auto;
     }
+
   }
 
 }

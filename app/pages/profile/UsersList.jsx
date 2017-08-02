@@ -5,6 +5,8 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Profile.css";
 
+import UserCard from "components/UserCard";
+
 /**
  * Class component for displaying lists of user's snippets.
  * This is shown on the public profile for a user and requires sending
@@ -37,23 +39,6 @@ class UsersList extends Component {
     });
   }
 
-  renderUsers(users) {
-    const {user: me} = this.props;
-    // remove myself
-    if (!users.length) {
-      return
-    }
-    return users.map((user, i) =>
-      <Link className="pt-card pt-elevation-0 pt-interactive" to={`/profile/${user.username}`}>
-        {user.img
-          ? <div className="user-img" style={{backgroundImage: `url(/uploads/${user.img})`}}></div>
-          : <span className="pt-icon-large pt-icon-user pt-intent-primary"></span>}
-        <span className="user-name">{user.name}</span>
-        <span className="user-bio">{user.bio}</span>
-      </Link>
-    );
-  }
-
   render() {
     const {user: me, t, type} = this.props;
     const {loading} = this.state;
@@ -73,11 +58,9 @@ class UsersList extends Component {
     return (
       <div className="user-section">
         <h2>{title}</h2>
-        <div className="users-list">
         { users.length
-          ? this.renderUsers(users)
+          ? <div className="flex-row">{ users.map(user => <UserCard user={user} />) }</div>
           : <p>{ t("No other users found.") }</p>}
-        </div>
       </div>
     );
   }

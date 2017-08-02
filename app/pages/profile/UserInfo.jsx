@@ -13,10 +13,7 @@ class UserInfo extends Component {
         {user.img
           ? <div className="user-img" style={{backgroundImage: `url(/uploads/${user.img}?v=${new Date().getTime()})`}}></div>
           : <span className="pt-icon-large pt-icon-user pt-intent-primary"></span>}
-        <h1>{ user.name || user.username }</h1>
-        { loggedInUser.id === user.id
-          ? <Link className="pt-button edit-link" to={`/profile/${user.username}/edit`}>{ t("Edit Profile") }</Link>
-          : null }
+        <h1 className="user-name">{ user.name || user.username }</h1>
         { user.gid
           ? <p className="geo-name"><span className="pt-icon-standard pt-icon-map-marker"></span>{ user.geoname ? `${user.geoname}, ` : null }{ user.gid.substr(1, 2).toUpperCase() }</p>
           : null }
@@ -30,6 +27,9 @@ class UserInfo extends Component {
           <span className="pt-icon-standard pt-icon-link"></span>
           <a href={`/profile/${user.username}/`}>{`http://codelife.com/profile/${user.username}/`}</a>
         </p>
+        { loggedInUser.id === user.id
+          ? <Link className="pt-button edit-link" to={`/profile/${user.username}/edit`}>{ t("Edit Profile") }</Link>
+          : null }
       </div>
     );
   }

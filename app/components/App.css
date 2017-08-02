@@ -118,6 +118,11 @@ body {
   text-align: left;
   width: 225px;
 
+  &:hover {
+    color: white;
+    text-decoration: inherit;
+  }
+
   & .box {
     align-items: center;
     align-self: stretch;
@@ -128,7 +133,7 @@ body {
       background-color: white;
       background-position: center;
       background-repeat: no-repeat;
-      background-size: 75%;
+      background-size: cover;
       border-radius: 25px;
       flex: none;
       height: 50px;

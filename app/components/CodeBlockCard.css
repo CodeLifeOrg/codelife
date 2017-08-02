@@ -1,5 +1,9 @@
 .codeBlockCard {
 
+  & .box .icon {
+    background-size: 75%;
+  }
+
   & .pt-overlay .pt-dialog-body {
     display: flex;
 

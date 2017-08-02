@@ -49,8 +49,6 @@ class ProjectCard extends Component {
 
     const titleText = this.getTitleText(studentcontent);
 
-    console.log(project);
-
     moment.locale("pt-BR");
 
     return (

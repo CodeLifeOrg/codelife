@@ -1,4 +1,5 @@
 import axios from "axios";
+import Confetti from "react-dom-confetti";
 import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
@@ -35,6 +36,7 @@ class Slide extends Component {
       minilessons: null,
       sentProgress: false,
       latestSlideCompleted: 0,
+      lessonComplete: false,
       mounted: false
     };
   }
@@ -77,7 +79,7 @@ class Slide extends Component {
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
     // if final slide write to DB
     if (user && isFinalSlide && !sentProgress) {
-      this.setState({sentProgress: true});
+      this.setState({sentProgress: true, lessonComplete: true});
       // add 1 to gems since the saving happens before the user "finishes"
       // the final slide
       this.saveProgress(mlid, gems + 1);
@@ -129,15 +131,24 @@ class Slide extends Component {
 
     let SlideComponent = null;
 
+    const config = {
+      angle: 270,
+      spread: 180,
+      startVelocity: 20,
+      elementCount: 100,
+      decay: 0.93
+    };
+
     if (!currentSlide || !currentLesson) return <Loading />;
 
     SlideComponent = compLookup[currentSlide.type];
 
     return (
       <div id="slide" className={ currentLesson.id }>
-
+        <Confetti className="confetti" config={config} active={ this.state.lessonComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
+          
           { gems ? <div className="gems"><img src={gemIcon} />{gems} Gem{ gems > 1 ? "s" : "" } Found</div> : null }
           <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>

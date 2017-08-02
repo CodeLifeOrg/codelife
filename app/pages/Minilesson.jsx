@@ -52,6 +52,7 @@ class Minilesson extends Component {
     });
   }
 
+  // TODO: I think iframes are dead and can be removed
   componentDidUpdate() {
     if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
       const {otherSnippets} = this.state;

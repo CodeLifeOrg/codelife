@@ -137,7 +137,7 @@ class Studio extends Component {
             <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
             <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
           </Tabs2>
-          <CodeEditor ref={c => this.editor = c} />
+          <CodeEditor codeTitle={ currentProject.name } ref={c => this.editor = c} />
         </div>
       </div>
     );

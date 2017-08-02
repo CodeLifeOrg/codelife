@@ -84,7 +84,7 @@ class CodeEditor extends Component {
 
   render() {
 
-    const {island} = this.props;
+    const {codeTitle, island} = this.props;
     const {titleText, currentText} = this.state;
 
     if (!this.state.mounted) return <Loading />;
@@ -92,7 +92,7 @@ class CodeEditor extends Component {
     return (
       <div id="codeEditor">
         <div className="code">
-          <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>Code</div>
+          <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>{ codeTitle || "Code" }</div>
             { !this.props.preventSelection
               ? <AceWrapper
                 className="editor"

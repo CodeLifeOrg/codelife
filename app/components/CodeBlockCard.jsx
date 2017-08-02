@@ -27,12 +27,12 @@ class CodeBlockCard extends Component {
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-2 pt-interactive ${lid}` }>
+      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}` }>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
           <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
           <div className="info">
-            <div className="snippet-title">{ snippetname }</div>
-            { username ? <div className="author">{ t("created by") } { username }</div> : null }
+            <div className="card-title">{ snippetname }</div>
+            { username ? <div className="card-author">{ t("Created by") } { username }</div> : null }
           </div>
         </div>
         <Dialog
@@ -59,7 +59,7 @@ class CodeBlockCard extends Component {
                 </div> }
           </div>
           <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">{ t("created by") } { username }</div>
+            <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} {username}` : "" }</div>
             <div className="pt-dialog-footer-actions">
               <Button
                 intent={ Intent.PRIMARY }

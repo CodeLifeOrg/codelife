@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+
+import ProjectCard from "components/ProjectCard";
 import "./Profile.css";
 
 /**
@@ -34,14 +36,6 @@ class UserProjects extends Component {
     });
   }
 
-  renderProjects(projects) {
-    return projects.map(project =>
-      <li className="project" key={project.id}>
-        <a href={`/studio/${project.uid}/${project.name}`}>{project.name}</a>
-      </li>
-    );
-  }
-
   render() {
     const {t} = this.props;
     const {loading, projects} = this.state;
@@ -52,7 +46,7 @@ class UserProjects extends Component {
       <div className="user-section">
         <h2>{ t("Projects") }</h2>
         { projects.length
-          ? this.renderProjects(projects)
+          ? <div className="flex-row">{ projects.map(p => <ProjectCard project={ p } />) }</div>
           : <p>{ t("This user doesn't have any projects yet.") }</p>}
       </div>
     );

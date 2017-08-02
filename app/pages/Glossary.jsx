@@ -11,7 +11,7 @@ class Glossary extends Component {
     const {t} = this.props;
 
     return (
-      <div>
+      <div id="about-container">
         <h1>{ t("Glossary") }</h1>
         <h3>Words</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit.</p>

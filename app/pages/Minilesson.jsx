@@ -250,12 +250,12 @@ class Minilesson extends Component {
     const minilessonItems = minilessonStatuses.map(minilesson => {
       const {lid} = this.props.params;
       if (minilesson.isDone) {
-        return <Tooltip position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+        return <Tooltip position={ Position.TOP } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
           <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
         </Tooltip>;
       }
       else if (minilesson.isNext) {
-        return <Tooltip position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
           <Link className="stop next" to={`/lesson/${lid}/${minilesson.id}`}></Link>
         </Tooltip>;
       }

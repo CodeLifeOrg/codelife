@@ -211,10 +211,10 @@ class Minilesson extends Component {
           onClose={this.toggleTest.bind(this)}
           title={ `My ${currentLesson.name} CodeBlock` }
           style={{
-            height: "75vh",
-            maxHeight: "800px",
-            maxWidth: "1150px",
-            width: "100%"
+            height: "80vh",
+            maxHeight: "1000px",
+            maxWidth: "1200px",
+            width: "95%"
           }}
         >
           <div className="pt-dialog-body">

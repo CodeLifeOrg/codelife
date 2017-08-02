@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import CodeEditor from "components/CodeEditor";
-import {Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import {Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
 import Loading from "components/Loading";
@@ -76,12 +76,11 @@ class CodeBlock extends Component {
         }
       }
     }
-    let goodRatio = (rulejson.length - errors) / rulejson.length * 100;
+    const goodRatio = (rulejson.length - errors) / rulejson.length;
     let intent = this.state.intent;
-    if (goodRatio < 33) intent = "pt-intent-danger";
-    if (goodRatio >= 33 && goodRatio <= 66) intent = "pt-intent-warning";
-    if (goodRatio > 66) intent = "pt-intent-success";
-    goodRatio += "%";
+    if (goodRatio < 0.5) intent = Intent.DANGER;
+    else if (goodRatio < 1) intent = Intent.WARNING;
+    else intent = Intent.SUCCESS;
     this.setState({isPassing: errors === 0, goodRatio, intent, rulejson});
   }
 
@@ -95,22 +94,22 @@ class CodeBlock extends Component {
   }
 
   getValidationBox() {
-    const {rulejson} = this.state;
+    const {t} = this.props;
+    const {goodRatio, intent, rulejson} = this.state;
     const vList = rulejson.map(rule => {
       if (rule.passing) {
-        return <li className="validation-item complete">✔ {rule.needle}</li>;
+        return <li className="validation-item complete"><span className="checkbox pt-icon-standard pt-icon-small-tick"></span><span className="rule">{rule.needle}</span></li>;
       }
       else {
-        return <li className="validation-item">✗ {rule.needle}</li>;
+        return <li className="validation-item"><span className="checkbox pt-icon-standard">&nbsp;</span><span className="rule">{rule.needle}</span></li>;
       }
     });
 
     return (
       <div id="validation-box">
         <ul className="validation-list">{vList}</ul>
-        <div className={`pt-progress-bar pt-no-animation ${this.state.intent}`} style={{width: "200px"}}>
-          <div className="pt-progress-meter " style={{width: this.state.goodRatio}}></div>
-        </div>
+        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+        { Math.round(goodRatio * 100) }% { t("Complete") }
       </div>
     );
   }

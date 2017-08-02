@@ -73,7 +73,7 @@ export default class InputCode extends Component {
 
   render() {
 
-    const {htmlcontent1, htmlcontent2} = this.props;
+    const {htmlcontent1, htmlcontent2, island} = this.props;
     const {checkerResult, titleText} = this.state;
 
     const initialContent = htmlcontent2 ? htmlcontent2 : "";
@@ -83,7 +83,7 @@ export default class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           { checkerResult === false

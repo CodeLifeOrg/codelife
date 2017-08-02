@@ -148,14 +148,14 @@ class Slide extends Component {
         <Confetti className="confetti" config={config} active={ this.state.lessonComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
-          
+
           { gems ? <div className="gems"><img src={gemIcon} />{gems} Gem{ gems > 1 ? "s" : "" } Found</div> : null }
           <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>
 
-        <SlideComponent unblock={this.unblock.bind(this)} {...currentSlide} />
+        <SlideComponent island={lid} unblock={this.unblock.bind(this)} {...currentSlide} />
 
         <div id="slide-foot">
           { prevSlug

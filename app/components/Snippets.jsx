@@ -45,13 +45,12 @@ class Snippets extends Component {
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"
-            position={Position.RIGHT}
+            position={Position.RIGHT_TOP}
           >
             <span className="pt-icon-standard pt-icon-predictive-analysis"></span>
             <div>
               <h5>{lesson.name} Cheat Sheet</h5>
-              <p style={{whiteSpace: "pre"}} dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
-              <button className="pt-button pt-popover-dismiss">{ t("Dismiss") }</button>
+              <p style={{whiteSpace: "pre-wrap"}} dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
             </div>
           </Popover>
         </Tooltip>

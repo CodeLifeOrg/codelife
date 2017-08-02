@@ -206,7 +206,7 @@ class Minilesson extends Component {
           </div>
         </Tooltip>
         <Dialog
-          className="codeBlock"
+          className={ `codeBlock ${ currentLesson.id }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
           title={ `My ${currentLesson.name} CodeBlock` }

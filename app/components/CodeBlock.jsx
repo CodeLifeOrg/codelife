@@ -98,16 +98,16 @@ class CodeBlock extends Component {
     const {rulejson} = this.state;
     const vList = rulejson.map(rule => {
       if (rule.passing) {
-        return <li style={{color: "green"}}>✔ {rule.needle}</li>;
+        return <li className="validation-item complete">✔ {rule.needle}</li>;
       }
       else {
-        return <li style={{color: "red"}}>✗ {rule.needle}</li>;
+        return <li className="validation-item">✗ {rule.needle}</li>;
       }
     });
 
     return (
-      <div>
-        <ul>{vList}</ul>
+      <div id="validation-box">
+        <ul className="validation-list">{vList}</ul>
         <div className={`pt-progress-bar pt-no-animation ${this.state.intent}`} style={{width: "200px"}}>
           <div className="pt-progress-meter " style={{width: this.state.goodRatio}}></div>
         </div>
@@ -158,40 +158,28 @@ class CodeBlock extends Component {
 
     return (
       <div id="codeBlock">
-        <div className="codeBlock-head">
-          { lesson.prompt }<br/><br/>
-          <div className="validation-text">
-          { validationBox }
-          </div>
-          { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
-        </div>
         <div className="codeBlock-body">
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeBlock-editor"></div> }
+          <div className="codeBlock-text">
+            <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
+            { validationBox }
+          </div>
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
-          <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>Reset</button>
-
+          <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>{t("Reset")}</button>
+          { lesson.snippet ? <Link className="pt-button" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"
-            position={Position.RIGHT}
+            position={Position.RIGHT_BOTTOM}
           >
-            <Button intent={Intent.PRIMARY}>CheatSheet</Button>
+            <Button intent={Intent.PRIMARY}>{t("Cheat Sheet")}</Button>
             <div>
               <h5>{lesson.name} Cheat Sheet</h5>
-                <p style={{whiteSpace: "pre"}}>{lesson.cheatsheet}</p>
-              <Button className="pt-popover-dismiss">Dismiss</Button>
+              <p dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
             </div>
           </Popover>
-
-          <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>Save & Submit</button>
-
-          <br />
-          { isPassing
-            ? <div className="pt-callout pt-intent-success"><h5>Passing</h5></div>
-            : <div className="pt-callout pt-intent-danger"><h5>Failing</h5></div>
-          }
-
+          <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
         </div>
       </div>
     );

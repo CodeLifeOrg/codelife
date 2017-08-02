@@ -1,33 +1,52 @@
-.status-text {
-  color:black;
-}
-
-.passing{
-  color:green;
-}
-
-.failing {
-  color:red;
-}
-
-
-
 #codeBlock {
   align-self: stretch;
   display: flex;
-  flex: 1 1 auto;
+  flex: 1;
   flex-direction: column;
-
-  & .codeBlock-head {
-    margin: 0 25px;
-    white-space: pre-wrap;
-  }
 
   & .codeBlock-body {
     align-self: stretch;
     display: flex;
     flex: 1;
-    padding: 25px 0;
+    padding: 10px 0;
+
+    & .codeBlock-text {
+      flex: none;
+      font-size: 16px;
+      line-height: 20px;
+      margin: 0 25px;
+      white-space: pre-wrap;
+      width: 300px;
+
+      & .validation-list {
+        list-style: none;
+        margin: 10px 0;
+        padding: 0;
+
+        & .validation-item {
+          color: red;
+
+          &.complete {
+            color: green;
+          }
+        }
+      }
+    }
+
+    & .codeEditor {
+      flex: 2;
+    }
+
+    @media only screen and (max-width : 768px) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+
+      & .codeBlock-text {
+        width: auto;
+      }
+
+    }
+
   }
 
   & .codeBlock-foot {
@@ -48,4 +67,9 @@
 
 .pt-dialog.codeBlock .pt-dialog-body {
   display: flex;
+}
+
+.pt-popover.pt-popover-content-sizing .pt-popover-content {
+  max-width: 35vw;
+  white-space: pre-wrap;
 }

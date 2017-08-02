@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {isAuthenticated} from "datawheel-canon";
 
 import "./App.css";
+import "./Islands.css";
 
 import Clouds from "./Clouds";
 import Footer from "./Footer";

@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Position, Tooltip} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
+import CodeBlockCard from "components/CodeBlockCard";
 import CodeEditor from "components/CodeEditor";
 
 import "./Minilesson.css";
@@ -62,31 +63,6 @@ class Minilesson extends Component {
     }
   }
 
-  buildWindow(i, content) {
-    const {lid} = this.props.params;
-    const {currentLesson} = this.state;
-    const done = this.hasUserCompleted(lid);
-    return (
-      <div className="pt-dialog-body">
-        <CodeEditor initialValue={content} preventSelection={!done} island={ currentLesson.id } ref={c => this.editor = c} readOnly={true} />
-        { /* TODO: find a way to use "done" to blur out code in ace-editor */ }
-        { done ? null
-          : <div className={ `pt-popover pt-tooltip ${ currentLesson.id }` }>
-              <div className="pt-popover-content">
-                Codeblock's code will be shown after completing the last level of this island.
-              </div>
-            </div> }
-      </div>
-    );
-  }
-
-  toggleDialog(i) {
-    const k = `isOpen_${i}`;
-    let currentFrame = null;
-    if (!this.state[k]) currentFrame = i;
-    this.setState({[k]: !this.state[k], didInject: false, viewingSource: false, currentFrame});
-  }
-
   toggleTest() {
     // If I'm about to close the test successfully for the first time
     if (this.state.testOpen && this.state.firstWin) {
@@ -96,43 +72,6 @@ class Minilesson extends Component {
       this.setState({testOpen: !this.state.testOpen});
     }
 
-  }
-
-  buildCodeblockButton(snippet, i) {
-    const {t} = this.props;
-    return (
-      <div className="snippet-link">
-        <div className="box" onClick={this.toggleDialog.bind(this, i)}>
-          <div className="snippet-title">{ snippet.snippetname }</div>
-          <div className="author">{ t("created by") } { snippet.username }</div>
-        </div>
-        <Dialog
-          isOpen={this.state[`isOpen_${i}`]}
-          onClose={this.toggleDialog.bind(this, i)}
-          title={ snippet.snippetname }
-          lazy={false}
-          inline={true}
-          style={{
-            height: "75vh",
-            maxHeight: "600px",
-            maxWidth: "800px",
-            width: "100%"
-          }}
-        >
-          { snippet ? this.buildWindow(i, snippet.studentcontent) : <div className="pt-dialog-body"></div> }
-          <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">{ t("created by") } { snippet.username }</div>
-            <div className="pt-dialog-footer-actions">
-              <Button
-                intent={Intent.PRIMARY}
-                onClick={this.toggleDialog.bind(this, i)}
-                text="Close"
-              />
-            </div>
-          </div>
-        </Dialog>
-      </div>
-    );
   }
 
   handleSave(newsnippet) {
@@ -262,8 +201,6 @@ class Minilesson extends Component {
       return <div className="stop"></div>;
     });
 
-    const otherSnippetItems = otherSnippets.map((os, i) => this.buildCodeblockButton.bind(this)(os, i));
-
     this.iframes = new Array(otherSnippets.length);
 
     return (
@@ -281,7 +218,7 @@ class Minilesson extends Component {
         ? <div>
             <h2 className="title">Other Students Snippets</h2>
             <div id="snippets">
-              { otherSnippetItems }
+              { otherSnippets.map(os => <CodeBlockCard island={currentLesson.id} codeBlock={os} userProgress={userProgress} />) }
             </div>
           </div>
         : null }

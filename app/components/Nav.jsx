@@ -26,9 +26,9 @@ class Nav extends Component {
               <Popover
                 interactionKind={PopoverInteractionKind.HOVER}
                 popoverClassName="pt-popover-content-sizing user-popover"
-                position={Position.BOTTOM}
+                position={Position.BOTTOM_RIGHT}
               >
-                <div className="link">{ auth.user.username }<span className="pt-icon-standard pt-icon-user"></span></div>
+                <Link className="link" to={ `/profile/${ auth.user.username }` }>{ auth.user.username }<span className="pt-icon-standard pt-icon-user"></span></Link>
                 <div>
                   <Link className="pt-button pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
                   <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>

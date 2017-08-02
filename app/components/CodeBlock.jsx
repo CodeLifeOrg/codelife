@@ -158,14 +158,6 @@ class CodeBlock extends Component {
 
     return (
       <div id="codeBlock">
-        <div className="codeBlock-head">
-          <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
-          <br/><br/>
-          <div className="validation-text">
-          { validationBox }
-          </div>
-          { lesson.snippet ? <Link className="share-link" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
-        </div>
         <div className="codeBlock-body">
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />

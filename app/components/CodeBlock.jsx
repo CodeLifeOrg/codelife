@@ -21,15 +21,28 @@ class CodeBlock extends Component {
       isOpen: false,
       goodRatio: 0,
       intent: null,
-      rulejson: null
+      rulejson: null, 
+      tagMeanings: []
     };
   }
 
   componentDidMount() {
+    const tagMeanings = [];
+    tagMeanings.html = "<html> surrounds your whole codeblock and tells the computer this is a webpage.";
+    tagMeanings.head = "<head> is where your metadata is stored, such as your <title>.";
+    tagMeanings.title = "<title> is the title of your page! Make sure it's inside a <head> tag.";
+    tagMeanings.body = "<body> is where you put the content you want everyone to see.";
+    tagMeanings.h1 = "<h1> is a header tag, where you can write really large text.";
+    tagMeanings.h2 = "<h2> is a header tag, where you can write kind of large text.";
+    tagMeanings.h3 = "<h3> is a header tag, where you can write large text.";
+    tagMeanings.h4 = "<h4> is a header tag, where you can write small text.";
+    tagMeanings.h5 = "<h5> is a header tag, where you can write kind of small text.";
+    tagMeanings.h6 = "<h6> is a header tag, where you can write really small text.";
+    tagMeanings.style = "<style> is where you customize your page with cool colors and fonts.";
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     let initialContent = this.props.lesson.initialcontent;
     if (this.props.lesson.snippet) initialContent = this.props.lesson.snippet.studentcontent;
-    this.setState({mounted: true, initialContent, rulejson});
+    this.setState({mounted: true, initialContent, rulejson, tagMeanings});
   }
 
   containsTag(needle, haystack) {
@@ -98,10 +111,32 @@ class CodeBlock extends Component {
     const {goodRatio, intent, rulejson} = this.state;
     const vList = rulejson.map(rule => {
       if (rule.passing) {
-        return <li className="validation-item complete"><span className="checkbox pt-icon-standard pt-icon-small-tick"></span><span className="rule">{rule.needle}</span></li>;
+        return (
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP}
+          >
+            <li className="validation-item complete"><span className="checkbox pt-icon-standard pt-icon-small-tick"></span><span className="rule">{rule.needle}</span></li>
+            <div>
+              {this.state.tagMeanings[rule.needle]}
+            </div>
+          </Popover>
+        );
       }
       else {
-        return <li className="validation-item"><span className="checkbox pt-icon-standard">&nbsp;</span><span className="rule">{rule.needle}</span></li>;
+        return (
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP}
+          >
+            <li className="validation-item"><span className="checkbox pt-icon-standard">&nbsp;</span><span className="rule">{rule.needle}</span></li>  
+            <div>
+              {this.state.tagMeanings[rule.needle]}<br/><br/><div style={{color: "red"}}>{rule.error_msg}</div>
+            </div>
+          </Popover>
+        );
       }
     });
 

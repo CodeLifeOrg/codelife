@@ -159,7 +159,8 @@ class CodeBlock extends Component {
     return (
       <div id="codeBlock">
         <div className="codeBlock-head">
-          { lesson.prompt }<br/><br/>
+          <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
+          <br/><br/>
           <div className="validation-text">
           { validationBox }
           </div>

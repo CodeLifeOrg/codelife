@@ -218,7 +218,7 @@ class Minilesson extends Component {
         ? <div>
             <h2 className="title">Other Students Snippets</h2>
             <div id="snippets">
-              { otherSnippets.map(os => <CodeBlockCard island={currentLesson.id} codeBlock={os} userProgress={userProgress} />) }
+              { otherSnippets.map(os => <CodeBlockCard codeBlock={os} userProgress={userProgress} />) }
             </div>
           </div>
         : null }

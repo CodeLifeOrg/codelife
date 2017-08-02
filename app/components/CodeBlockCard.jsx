@@ -21,16 +21,19 @@ class CodeBlockCard extends Component {
   render() {
 
     const {open} = this.state;
-    const {codeBlock, island, t, userProgress} = this.props;
-    const {snippetname, studentcontent, username} = codeBlock;
+    const {codeBlock, t, userProgress} = this.props;
+    const {lid, snippetname, studentcontent, username} = codeBlock;
 
-    const done = userProgress ? userProgress.find(p => p.level === island) !== undefined : true;
+    const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-2 pt-interactive ${island}` }>
+      <div className={ `codeBlockCard pt-card pt-elevation-2 pt-interactive ${lid}` }>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
-          <div className="snippet-title">{ snippetname }</div>
-          <div className="author">{ t("created by") } { username }</div>
+          <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
+          <div className="info">
+            <div className="snippet-title">{ snippetname }</div>
+            { username ? <div className="author">{ t("created by") } { username }</div> : null }
+          </div>
         </div>
         <Dialog
           isOpen={ open }
@@ -46,10 +49,10 @@ class CodeBlockCard extends Component {
           }}
         >
           <div className="pt-dialog-body">
-            <CodeEditor initialValue={studentcontent} preventSelection={!done} island={ island } ref={c => this.editor = c} readOnly={true} />
+            <CodeEditor initialValue={studentcontent} preventSelection={!done} island={ lid } ref={c => this.editor = c} readOnly={true} />
             { /* TODO: find a way to use "done" to blur out code in ace-editor */ }
             { done ? null
-              : <div className={ `pt-popover pt-tooltip ${ island }` }>
+              : <div className={ `pt-popover pt-tooltip ${ lid }` }>
                   <div className="pt-popover-content">
                     Codeblock's code will be shown after completing the last level of this island.
                   </div>

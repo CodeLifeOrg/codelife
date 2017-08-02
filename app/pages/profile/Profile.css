@@ -58,6 +58,12 @@
 
     & .user-section {
       margin-bottom: 25px;
+
+      & .flex-row {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
     }
 
     & .user-section:last-child {

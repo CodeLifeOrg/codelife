@@ -46,7 +46,13 @@ class Minilesson extends Component {
       for (const s of allSnippets) {
         s.uid === this.props.auth.user.id ? mySnippet = s : otherSnippets.push(s);
       }
+      otherSnippets.sort((a, b) => b.likes - a.likes);
       currentLesson.snippet = mySnippet;
+      let top = 5;
+      for (const os of otherSnippets) {
+        os.starred = top > 0;
+        top--;
+      }
       this.setState({minilessons, currentLesson, userProgress, otherSnippets});
     });
   }

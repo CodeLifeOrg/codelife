@@ -27,18 +27,21 @@ class CodeBlockCard extends Component {
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}` }>
+      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}`} style={{boxShadow: codeBlock.starred ? "0px 0px 10px 10px rgba(255, 255, 120, .5)" : ""}}>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
           <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
           <div className="info">
-            <div className="card-title">{ snippetname }</div>
+            <div className="card-title">
+              { snippetname } 
+              {codeBlock.starred ? <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span> : null}
+            </div>
             { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
           </div>
         </div>
         <Dialog
           isOpen={ open }
           onClose={ this.toggleDialog.bind(this) }
-          title={ snippetname }
+          title={ codeBlock.starred ? <div>{snippetname} <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span></div> : {snippetname} } 
           lazy={false}
           inline={true}
           style={{

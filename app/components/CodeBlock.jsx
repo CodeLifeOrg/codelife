@@ -22,31 +22,36 @@ class CodeBlock extends Component {
       goodRatio: 0,
       intent: null,
       rulejson: null, 
-      tagMeanings: [],
+      meanings: [],
+      styleMeanings: [],
       timeout: null,
       timeoutAlert: false
     };
   }
 
   componentDidMount() {
-    const tagMeanings = [];
-    tagMeanings.html = "<html> surrounds your whole codeblock and tells the computer this is a webpage.";
-    tagMeanings.head = "<head> is where your metadata is stored, such as your <title>.";
-    tagMeanings.title = "<title> is the title of your page! Make sure it's inside a <head> tag.";
-    tagMeanings.body = "<body> is where you put the content you want everyone to see.";
-    tagMeanings.h1 = "<h1> is a header tag, where you can write really large text.";
-    tagMeanings.h2 = "<h2> is a header tag, where you can write kind of large text.";
-    tagMeanings.h3 = "<h3> is a header tag, where you can write large text.";
-    tagMeanings.h4 = "<h4> is a header tag, where you can write small text.";
-    tagMeanings.h5 = "<h5> is a header tag, where you can write kind of small text.";
-    tagMeanings.h6 = "<h6> is a header tag, where you can write really small text.";
-    tagMeanings.style = "<style> is where you customize your page with cool colors and fonts.";
-    tagMeanings.p = "<p> is a paragraph tag, write sentences in here.";
+    const meanings = [];
+    meanings.CONTAINS = [];
+    meanings.CSS_CONTAINS = [];
+    meanings.CONTAINS.html = "<html> surrounds your whole codeblock and tells the computer this is a webpage.";
+    meanings.CONTAINS.head = "<head> is where your metadata is stored, such as your <title>.";
+    meanings.CONTAINS.title = "<title> is the title of your page! Make sure it's inside a <head> tag.";
+    meanings.CONTAINS.body = "<body> is where you put the content you want everyone to see.";
+    meanings.CONTAINS.h1 = "<h1> is a header tag, where you can write really large text.";
+    meanings.CONTAINS.h2 = "<h2> is a header tag, where you can write kind of large text.";
+    meanings.CONTAINS.h3 = "<h3> is a header tag, where you can write large text.";
+    meanings.CONTAINS.h4 = "<h4> is a header tag, where you can write small text.";
+    meanings.CONTAINS.h5 = "<h5> is a header tag, where you can write kind of small text.";
+    meanings.CONTAINS.h6 = "<h6> is a header tag, where you can write really small text.";
+    meanings.CONTAINS.style = "<style> is where you customize your page with cool colors and fonts.";
+    meanings.CONTAINS.p = "<p> is a paragraph tag, write sentences in here.";
+    meanings.CSS_CONTAINS.h1 = "h1 within a <style> tag is how you customize your header tags.";
+    meanings.CSS_CONTAINS.p = "p within a <style> tag is how you customize your <p> tags";
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     let initialContent = "";
     if (this.props.lesson.initialContent) initialContent = this.props.lesson.initialcontent;
     if (this.props.lesson.snippet) initialContent = this.props.lesson.snippet.studentcontent;
-    this.setState({mounted: true, initialContent, rulejson, tagMeanings});
+    this.setState({mounted: true, initialContent, rulejson, meanings});
   }
 
   componentWillUnmount() {
@@ -88,6 +93,18 @@ class CodeBlock extends Component {
     });
   }
 
+  containsStyle(needle, haystack) {
+    let head, html, style = null;
+    let styleContent = "";
+    if (haystack) html = haystack.find(e => e.tagName === "html");
+    if (html) head = html.children.find(e => e.tagName === "head");
+    if (head) style = head.children.find(e => e.tagName === "style");
+    if (style) styleContent = style.children[0].content;
+
+    const re = new RegExp(`${needle}\\s*{`);
+    return re.exec(styleContent) ? true : false;
+  }
+
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {rulejson} = this.state;
@@ -95,6 +112,15 @@ class CodeBlock extends Component {
     for (const r of rulejson) {
       if (r.type === "CONTAINS") {
         if (!this.containsTag(r.needle, jsonArray)) {
+          errors++;
+          r.passing = false;
+        }
+        else {
+          r.passing = true;
+        }
+      }
+      if (r.type === "CSS_CONTAINS") {
+        if (!this.containsStyle(r.needle, jsonArray)) {
           errors++;
           r.passing = false;
         }
@@ -138,6 +164,10 @@ class CodeBlock extends Component {
   getValidationBox() {
     const {t} = this.props;
     const {goodRatio, intent, rulejson} = this.state;
+    const iconList = [];
+    iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
+
     const vList = rulejson.map(rule => {
       if (rule.passing) {
         return (
@@ -146,9 +176,12 @@ class CodeBlock extends Component {
             popoverClassName="pt-popover-content-sizing user-popover"
             position={Position.TOP_LEFT}
           >
-            <li className="validation-item complete"><span className="checkbox pt-icon-standard pt-icon-small-tick"></span><span className="rule">{rule.needle}</span></li>
+            <li className="validation-item complete">
+              <span className="checkbox pt-icon-standard pt-icon-small-tick"></span>
+              <span className="rule">{rule.needle} {iconList[rule.type]}</span>
+            </li>
             <div>
-              {this.state.tagMeanings[rule.needle]}
+              { this.state.meanings[rule.type][rule.needle] }
             </div>
           </Popover>
         );
@@ -160,9 +193,12 @@ class CodeBlock extends Component {
             popoverClassName="pt-popover-content-sizing user-popover"
             position={Position.TOP_LEFT}
           >
-            <li className="validation-item"><span className="checkbox pt-icon-standard">&nbsp;</span><span className="rule">{rule.needle}</span></li>  
+            <li className="validation-item">
+              <span className="checkbox pt-icon-standard">&nbsp;</span>
+              <span className="rule">{rule.needle} {iconList[rule.type]}</span>
+            </li>  
             <div>
-              {this.state.tagMeanings[rule.needle]}<br/><br/><div style={{color: "red"}}>{rule.error_msg}</div>
+              { this.state.meanings[rule.type][rule.needle] }<br/><br/><div style={{color: "red"}}>{rule.error_msg}</div>
             </div>
           </Popover>
         );

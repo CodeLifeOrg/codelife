@@ -43,7 +43,8 @@ class CodeBlock extends Component {
     tagMeanings.style = "<style> is where you customize your page with cool colors and fonts.";
     tagMeanings.p = "<p> is a paragraph tag, write sentences in here.";
     const rulejson = JSON.parse(this.props.lesson.rulejson);
-    let initialContent = this.props.lesson.initialcontent;
+    let initialContent = "";
+    if (this.props.lesson.initialContent) initialContent = this.props.lesson.initialcontent;
     if (this.props.lesson.snippet) initialContent = this.props.lesson.snippet.studentcontent;
     this.setState({mounted: true, initialContent, rulejson, tagMeanings});
   }
@@ -116,7 +117,7 @@ class CodeBlock extends Component {
     } 
     else {
       if (!timeout) {
-        timeout = setTimeout(this.askForHelp.bind(this), 30000);
+        timeout = setTimeout(this.askForHelp.bind(this), 120000);
       }
     }
     this.setState({isPassing: errors === 0, goodRatio, intent, rulejson, timeout});
@@ -128,7 +129,10 @@ class CodeBlock extends Component {
 
   resetSnippet() {
     const {lesson} = this.props;
-    if (lesson) this.editor.setEntireContents(lesson.initialcontent);
+    let initialcontent = "";
+    if (lesson & lesson.initialcontent) initialcontent = lesson.initialcontent;
+    this.editor.setEntireContents(initialcontent);
+    this.checkForErrors(initialcontent);
   }
 
   getValidationBox() {
@@ -172,10 +176,6 @@ class CodeBlock extends Component {
         { Math.round(goodRatio * 100) }% { t("Complete") }
       </div>
     );
-  }
-
-  closeAlert() {
-
   }
 
   verifyAndSaveCode() {

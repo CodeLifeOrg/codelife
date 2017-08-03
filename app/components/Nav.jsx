@@ -22,7 +22,7 @@ class Nav extends Component {
           { auth.user
           ? <div>
               <Link className="link" to="/lesson">{ t("Map") }</Link>
-              <Link className="link" to={`/studio/${auth.user.username}`}>{ t("Studio") }</Link>
+              <Link className="link" to={`/projects/${auth.user.username}`}>{ t("Projects") }</Link>
               <Popover
                 interactionKind={PopoverInteractionKind.HOVER}
                 popoverClassName="pt-popover-content-sizing user-popover"

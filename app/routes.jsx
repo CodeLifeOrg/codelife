@@ -26,7 +26,7 @@ export default function RouteCreate() {
       <Route path="lesson/:lid" component={Minilesson} />
       <Route path="lesson/:lid/:mlid(/:sid)" component={Slide} />
 
-      <Route path="studio/:user(/:id)" component={Studio} />
+      <Route path="projects/:user(/:id)" component={Studio} />
 
       <Route path="profile/:username" component={Profile} />
       <Route path="profile/:username/edit" component={EditProfile} />

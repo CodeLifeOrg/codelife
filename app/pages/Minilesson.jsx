@@ -136,7 +136,7 @@ class Minilesson extends Component {
 
     return (
       <div className="editor-popover">
-        <Tooltip content="Final Test" tooltipClassName={ currentLesson.id }>
+        <Tooltip content="Earn your Codeblock" tooltipClassName={ currentLesson.id }>
           <div className="code-block" onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>

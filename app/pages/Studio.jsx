@@ -30,13 +30,13 @@ class Studio extends Component {
   onCreateProject(project) {
     this.setState({currentProject: project});
     if (this.editor) this.editor.setEntireContents("");
-    browserHistory.push(`/studio/${this.props.auth.user.username}/${project.name}`);
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}`);
   }
 
   onDeleteProject(newproject) {
     if (newproject.id !== this.state.currentProject.id) this.editor.setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
-    browserHistory.push(`/studio/${this.props.auth.user.username}/${newproject.name}`);
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);
   }
 
   onClickSnippet(snippet) {
@@ -47,7 +47,7 @@ class Studio extends Component {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
       this.editor.setEntireContents(resp.data[0].studentcontent);
-      browserHistory.push(`/studio/${this.props.auth.user.username}/${resp.data[0].name}`);
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}`);
     });
   }
 
@@ -124,7 +124,7 @@ class Studio extends Component {
     return (
       <div id="studio">
         <div id="head">
-          <h1 className="title">{ t("Studio") }</h1>
+          <h1 className="title">{ t("Projects") }</h1>
           <div className="title-tab">{titleText}</div>
           <div className="buttons">
             { currentProject ? <a className="pt-button" target="_blank" href={ `/share/project/${currentProject.id}` }>{ t("Share") }</a> : null }

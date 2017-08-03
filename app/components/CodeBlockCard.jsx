@@ -32,7 +32,7 @@ class CodeBlockCard extends Component {
           <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
           <div className="info">
             <div className="card-title">{ snippetname }</div>
-            { username ? <div className="card-author">{ t("Created by") } { username }</div> : null }
+            { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
           </div>
         </div>
         <Dialog
@@ -59,7 +59,7 @@ class CodeBlockCard extends Component {
                 </div> }
           </div>
           <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} {username}` : "" }</div>
+            <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
             <div className="pt-dialog-footer-actions">
               <Button
                 intent={ Intent.PRIMARY }

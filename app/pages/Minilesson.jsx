@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent, Position, Tooltip} from "@blueprintjs/core";
+import {Button, Dialog, Intent, Popover, Position, Tooltip, PopoverInteractionKind} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
 
@@ -176,6 +176,8 @@ class Minilesson extends Component {
     if (!auth.user) browserHistory.push("/login");
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <Loading />;
 
+    const islandDone = this.hasUserCompleted(this.props.params.lid);
+
     // Clone minilessons as to not mess with state
     const minilessonStatuses = minilessons.slice(0);
     for (let m = 0; m < minilessonStatuses.length; m++) {
@@ -216,7 +218,20 @@ class Minilesson extends Component {
         </div>
         { otherSnippets.length
         ? <div>
-            <h2 className="title">Other Students' CodeBlocks</h2>
+            <h2 className="title">
+              Other Students' CodeBlocks&nbsp;
+              { !islandDone 
+              ? <Popover
+                interactionKind={PopoverInteractionKind.HOVER}
+                popoverClassName="pt-popover-content-sizing user-popover"
+                position={Position.TOP}
+              >
+              <span className="pt-icon pt-icon-lock"></span>
+                <div>
+                  { t("Earn your Codeblock for this Island to unlock source code from other students!") }
+                </div>
+              </Popover> : null } 
+            </h2>
             <div id="snippets">
               { otherSnippets.map(os => <CodeBlockCard codeBlock={os} userProgress={userProgress} />) }
             </div>

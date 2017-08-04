@@ -67,6 +67,13 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/snippets/all", (req, res) => {
+
+    const q = "SELECT snippets.id, snippets.snippetname, snippets.studentcontent, snippets.likes, snippets.previewblob, snippets.lid, snippets.uid, users.username FROM snippets, users WHERE users.id = snippets.uid";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+
+  });
+
   app.get("/api/snippets/allgeos", (req, res) => {
 
     const q = "SELECT * FROM geos WHERE sumlevel = 'MUNICIPALITY' AND substring(id, 1, 3) = '4mg' ORDER BY name";

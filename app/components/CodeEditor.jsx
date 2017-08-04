@@ -4,6 +4,8 @@ import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
 
+import {Popover, PopoverInteractionKind, Position, Intent, Button} from "@blueprintjs/core";
+
 import "./CodeEditor.css";
 
 class CodeEditor extends Component {
@@ -14,7 +16,8 @@ class CodeEditor extends Component {
       mounted: false,
       currentText: "",
       changesMade: false,
-      titleText: ""
+      titleText: "",
+      isOpen: false
     };
   }
 
@@ -57,6 +60,12 @@ class CodeEditor extends Component {
     if (this.props.onChangeText) this.props.onChangeText(theText);
   }
 
+  showContextMenu(selectionObject) {
+    const text = selectionObject.toString();
+    console.log("Would Copy:");
+    console.log(text);
+  }
+
   /* External Functions for Parent Component to Call */
 
   setEntireContents(theText) {
@@ -93,15 +102,29 @@ class CodeEditor extends Component {
       <div id="codeEditor">
         <div className="code">
           <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>{ codeTitle || "Code" }</div>
-            { !this.props.preventSelection
-              ? <AceWrapper
-                className="editor"
-                ref={ comp => this.editor = comp }
-                onChange={this.onChangeText.bind(this)}
-                value={currentText}
-                {...this.props}
-              />
-            : <pre className="editor blurry-text">{currentText}</pre> }
+          { /* 
+            TODO: This is terrible and it sucks, I need a better way to do this bizarre configuration.  
+            projectMode is a special mode where you open the project as a read-only popover in the Studio.
+            This means we need it to be a <pre>, not an AceEditor, but we need to NOT blur out the 
+            text as we normally do.  So I have this stupid override.  In the future, abstract CodeEditor to have
+            multiple modes:
+              - Test Mode: AceEditor, Editable, for use by Codeblock Tests
+              - View Mode Beaten: AceEditor, Read-only, for the Island Popovers, with visible code
+              - View Mode, Not Beaten: <pre>tag, blurred
+              - Project Mode: <pre>tag, not blurred, WITH copy powers
+          */ }
+            {!this.props.projectMode 
+              ? !this.props.preventSelection
+                ? <AceWrapper
+                  className="editor"
+                  ref={ comp => this.editor = comp }
+                  onChange={this.onChangeText.bind(this)}
+                  value={currentText}
+                  {...this.props}
+                />
+                : <pre className="editor blurry-text">{currentText}</pre> 
+              : <pre className="editor" onMouseUp={this.showContextMenu.bind(this, window.getSelection())} style={{overflow: "hidden", overflowY: "scroll", height: "300px", whiteSpace: "pre-wrap", width: "350px"}}>{currentText}</pre> 
+            }
         </div>
         <div className="render">
           <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || "Webpage" }</div>

@@ -134,8 +134,8 @@ class Studio extends Component {
         <div id="body">
           <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
             <Tab2 id="projects" title="Projects" panel={ projectRef } />
-            <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } />
-            <Tab2 id="other-blocks" title="Other Blocks" panel={ allSnippetRef } />
+            { /* <Tab2 id="my-blocks" title="Code Blocks" panel={ snippetRef } /> */ }
+            <Tab2 id="code-blocks" title="CodeBlocks" panel={ allSnippetRef } />
           </Tabs2>
           <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } ref={c => this.editor = c} />
         </div>

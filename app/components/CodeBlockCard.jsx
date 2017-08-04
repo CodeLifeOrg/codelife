@@ -26,13 +26,16 @@ class CodeBlockCard extends Component {
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
+    const inline = !this.props.breakout;
+    const projectMode = this.props.projectMode;
+
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}`} style={{boxShadow: codeBlock.starred ? "0px 0px 10px 10px rgba(255, 255, 120, .5)" : ""}}>
+      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}`} style={{boxShadow: codeBlock.starred ? "0px 0px 5px 5px rgba(255, 255, 120, .5)" : ""}}>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
           <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
           <div className="info">
             <div className="card-title">
-              { snippetname } 
+              {snippetname} 
               {codeBlock.starred ? <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span> : null}
             </div>
             { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
@@ -41,9 +44,9 @@ class CodeBlockCard extends Component {
         <Dialog
           isOpen={ open }
           onClose={ this.toggleDialog.bind(this) }
-          title={ codeBlock.starred ? <div>{snippetname} <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span></div> : {snippetname} } 
+          title={ codeBlock.starred ? <div> {snippetname} <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span></div> : <div>{snippetname}</div> } 
           lazy={false}
-          inline={true}
+          inline={inline}
           style={{
             height: "75vh",
             maxHeight: "600px",
@@ -52,8 +55,7 @@ class CodeBlockCard extends Component {
           }}
         >
           <div className="pt-dialog-body">
-            <CodeEditor initialValue={studentcontent} preventSelection={!done} island={ lid } ref={c => this.editor = c} readOnly={true} />
-            { /* TODO: find a way to use "done" to blur out code in ace-editor */ }
+            <CodeEditor initialValue={studentcontent} preventSelection={!done} projectMode={projectMode} island={ lid } ref={c => this.editor = c} readOnly={true} />
             { done ? null
               : <div className={ `pt-popover pt-tooltip ${ lid }` }>
                   <div className="pt-popover-content">

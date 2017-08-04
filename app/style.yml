@@ -13,3 +13,6 @@ islands:
   island-4:
     dark: "#5c1500"
     light: "#ffb863"
+  island-5:
+    dark: "#321418"
+    light: "#d0acaf"

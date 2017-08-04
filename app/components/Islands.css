@@ -61,3 +61,19 @@
   &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-4, dark); }
   &.pt-tooltip .pt-popover-content { background-color: map(islands, island-4, dark); }
 }
+
+.island-5 {
+  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-5, dark); }
+  &#island #path:before { background-color: map(islands, island-5, dark); }
+  & #path .stop { border-color: map(islands, island-5, dark); }
+  &#island #path .stop.done { background-color: color(map(islands, island-5, dark) lightness(+10%)); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-5, light); }
+  &#island #path .code-block .side { border-color: map(islands, island-5, dark); }
+  &.codeBlockCard { background-color: map(islands, island-5, dark); }
+  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-5, dark); }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-5, dark); }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-5, dark); }
+  &#slide a:not(.pt-button) { color: map(islands, island-5, dark); }
+  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-5, dark); }
+  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-5, dark); }
+}

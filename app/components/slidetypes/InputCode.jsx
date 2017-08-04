@@ -3,6 +3,8 @@ import himalaya from "himalaya";
 
 import CodeEditor from "components/CodeEditor";
 
+import {Toaster, Position, Intent} from "@blueprintjs/core";
+
 export default class InputCode extends Component {
 
   constructor(props) {
@@ -10,7 +12,6 @@ export default class InputCode extends Component {
     this.state = {
       mounted: false,
       currentText: "",
-      checkerResult: false,
       titleText: "",
       baseText: ""
     };
@@ -23,7 +24,7 @@ export default class InputCode extends Component {
   componentDidUpdate() {
     const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
     if (this.state.baseText !== newText) {
-      this.setState({baseText: newText, checkerResult: false});
+      this.setState({baseText: newText});
       this.editor.setEntireContents(newText);
     }
   }
@@ -31,21 +32,22 @@ export default class InputCode extends Component {
   submitAnswer() {
     const contents = this.editor.getEntireContents();
     const jsonArray = himalaya.parse(contents);
-    let checkerText = "";
+    let errors = 0;
     const rulejson = JSON.parse(this.props.rulejson);
+    const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
         if (!this.containsTag(r.needle, jsonArray)) {
-          checkerText += `${r.error_msg}\n`;
+          errors++;
+          t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }
       }
     }
-    // todo: make this more resilient lol
-    if (checkerText === "") {
-      checkerText = true;
+    if (errors === 0) {
+      const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
+      t.show({message: "You got it right!", timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
     }
-    this.setState({checkerResult: checkerText});
   }
 
   containsTag(needle, haystack) {
@@ -74,7 +76,7 @@ export default class InputCode extends Component {
   render() {
 
     const {htmlcontent1, htmlcontent2, island} = this.props;
-    const {checkerResult, titleText} = this.state;
+    const {titleText} = this.state;
 
     const initialContent = htmlcontent2 ? htmlcontent2 : "";
 
@@ -86,11 +88,6 @@ export default class InputCode extends Component {
           { this.state.mounted ? <CodeEditor island={island} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
-          { checkerResult === false
-          ? <div className="pt-callout">Press Submit to submit your answer</div>
-          : checkerResult === true
-          ? <div className="pt-callout pt-intent-success">You got it right!</div>
-          : <div className="pt-callout pt-intent-warning">{ checkerResult }</div> }
           <button className="pt-button" onClick={this.resetAnswer.bind(this)}>Reset</button>
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>Submit</button>
         </div>

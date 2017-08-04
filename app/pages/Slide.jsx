@@ -87,7 +87,6 @@ class Slide extends Component {
   }
 
   componentDidMount() {
-    console.log("Slide Mounted");
     this.setState({mounted: true});
 
     const {lid, mlid} = this.props.params;
@@ -106,10 +105,14 @@ class Slide extends Component {
         browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
       } 
       const cs = slideList.find(slide => slide.id === sid);
-      /*if (cs.ordering !== 0) {
+      
+      /*
+      if (cs.ordering !== 0) {
         browserHistory.push(`/lesson/${lid}/${mlid}`);
         return;
-      }*/
+      }
+      */
+      
       let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});

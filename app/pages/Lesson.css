@@ -61,7 +61,8 @@
 
       &:not(.done):not(.next) {
         & .graphic {
-          filter: grayscale(1);
+          /*filter: grayscale(1);*/
+          opacity: .5;
         }
 
         & .pt-popover-content {

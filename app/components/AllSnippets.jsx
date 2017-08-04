@@ -54,7 +54,7 @@ class AllSnippets extends Component {
 
   render() {
 
-    const {t, onClickSnippet} = this.props;
+    const {t} = this.props;
     const {lessons} = this.state;
 
     if (!lessons) return null;

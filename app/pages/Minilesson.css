@@ -132,7 +132,7 @@
 
   }
 
-  & #snippets {
+  & .snippets {
     align-items: stretch;
     display: flex;
     flex-wrap: wrap;

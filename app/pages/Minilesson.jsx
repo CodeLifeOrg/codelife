@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent, Popover, Position, Tooltip, PopoverInteractionKind} from "@blueprintjs/core";
+import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
 
@@ -24,7 +24,8 @@ class Minilesson extends Component {
       testOpen: false,
       winOpen: false,
       winMessage: "",
-      firstWin: false
+      firstWin: false,
+      showMore: false
     };
   }
 
@@ -48,7 +49,7 @@ class Minilesson extends Component {
       }
       otherSnippets.sort((a, b) => b.likes - a.likes);
       currentLesson.snippet = mySnippet;
-      let top = 5;
+      let top = 3;
       for (const os of otherSnippets) {
         os.starred = top > 0;
         top--;
@@ -113,6 +114,10 @@ class Minilesson extends Component {
 
   promptFinalTest() {
     return this.allMinilessonsBeaten() && !this.state.currentLesson.snippet;
+  }
+
+  showMore() {
+    this.setState({showMore: !this.state.showMore});
   }
 
   buildWinPopover() {
@@ -198,6 +203,15 @@ class Minilesson extends Component {
       minilessonStatuses[m].isNext = m === 0 && !done || m > 0 && !done && minilessonStatuses[m - 1].isDone;
     }
 
+    const otherSnippetItemsBeforeFold = [];
+    const otherSnippetItemsAfterFold = [];
+    let top = 5;
+    for (const os of otherSnippets) {
+      const cbc = <CodeBlockCard codeBlock={os} userProgress={userProgress} />;
+      top > 0 ? otherSnippetItemsBeforeFold.push(cbc) : otherSnippetItemsAfterFold.push(cbc);
+      top--;
+    }
+
     const minilessonItems = minilessonStatuses.map(minilesson => {
       const {lid} = this.props.params;
       if (minilesson.isDone) {
@@ -242,8 +256,10 @@ class Minilesson extends Component {
                 </div>
               </Popover> : null } 
             </h2>
-            <div id="snippets">
-              { otherSnippets.map(os => <CodeBlockCard codeBlock={os} userProgress={userProgress} />) }
+            <div className="snippets">
+              {otherSnippetItemsBeforeFold}
+              <Button onClick={this.showMore.bind(this)}>{this.state.showMore ? "Show Less" : "Show More"}</Button>
+              <Collapse isOpen={this.state.showMore}><div className="snippets">{otherSnippetItemsAfterFold}</div></Collapse>
             </div>
           </div>
         : null }

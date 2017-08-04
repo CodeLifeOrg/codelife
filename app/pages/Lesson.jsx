@@ -52,7 +52,7 @@ class Lesson extends Component {
   }
 
   handleSave(sid, studentcontent) {
-    // todo: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
+    // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
     // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
     // reload all snippets freshly from the database, but I also want to minimize db hits.  revisit this.
     const {snippets} = this.state;

@@ -1,11 +1,13 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import {translate} from "react-i18next";
 import himalaya from "himalaya";
 
 import CodeEditor from "components/CodeEditor";
 
-import {Toaster, Position, Intent} from "@blueprintjs/core";
+import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
-export default class InputCode extends Component {
+class InputCode extends Component {
 
   constructor(props) {
     super(props);
@@ -13,7 +15,8 @@ export default class InputCode extends Component {
       mounted: false,
       currentText: "",
       titleText: "",
-      baseText: ""
+      baseText: "",
+      resetAlert: false
     };
   }
 
@@ -71,27 +74,48 @@ export default class InputCode extends Component {
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
   resetAnswer() {
     this.editor.setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
+    this.setState({resetAlert: false});
+  }
+  
+  attemptReset() {
+    this.setState({resetAlert: true});
   }
 
   render() {
 
-    const {htmlcontent1, htmlcontent2, island} = this.props;
+    const {t, htmlcontent1, htmlcontent2, island} = this.props;
     const {titleText} = this.state;
 
     const initialContent = htmlcontent2 ? htmlcontent2 : "";
 
     return (
       <div id="slide-container" className="renderCode flex-column">
+        <Alert
+            isOpen={ this.state.resetAlert }
+            cancelButtonText={ t("Cancel") }
+            confirmButtonText={ t("Reset") }
+            intent={ Intent.DANGER }
+            onCancel={ () => this.setState({resetAlert: false}) }
+            onConfirm={ () => this.resetAnswer() }>
+            <p>Are you sure you want to reset the code to its original state?</p>
+        </Alert>
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <CodeEditor island={island} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
-          <button className="pt-button" onClick={this.resetAnswer.bind(this)}>Reset</button>
+          <button className="pt-button" onClick={this.attemptReset.bind(this)}>Reset</button>
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>Submit</button>
         </div>
       </div>
     );
   }
 }
+
+InputCode = connect(state => ({
+  user: state.auth.user
+}))(InputCode);
+InputCode = translate()(InputCode);
+export default InputCode;
+

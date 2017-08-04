@@ -25,7 +25,8 @@ class CodeBlock extends Component {
       meanings: [],
       styleMeanings: [],
       timeout: null,
-      timeoutAlert: false
+      timeoutAlert: false,
+      resetAlert: false
     };
   }
 
@@ -155,10 +156,18 @@ class CodeBlock extends Component {
 
   resetSnippet() {
     const {lesson} = this.props;
+    console.log(lesson);
     let initialcontent = "";
-    if (lesson & lesson.initialcontent) initialcontent = lesson.initialcontent;
+    console.log(lesson.initialcontent);
+    if (lesson && lesson.initialcontent) initialcontent = lesson.initialcontent;
+    console.log(initialcontent);
     this.editor.setEntireContents(initialcontent);
     this.checkForErrors(initialcontent);
+    this.setState({resetAlert: false});
+  }
+
+  attemptReset() {
+    this.setState({resetAlert: true});
   }
 
   getValidationBox() {
@@ -265,6 +274,15 @@ class CodeBlock extends Component {
             onConfirm={ () => this.setState({timeoutAlert: false}) }>
             <p>{ timeoutAlert ? timeoutAlert : "" }</p>
         </Alert>
+         <Alert
+            isOpen={ this.state.resetAlert }
+            cancelButtonText={ t("Cancel") }
+            confirmButtonText={ t("Reset") }
+            intent={ Intent.DANGER }
+            onCancel={ () => this.setState({resetAlert: false}) }
+            onConfirm={ () => this.resetSnippet() }>
+            <p>Are you sure you want to reset the code to its original state?</p>
+        </Alert>
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
             { validationBox }
@@ -272,7 +290,7 @@ class CodeBlock extends Component {
           { this.state.mounted ? <CodeEditor ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
-          <button className="pt-button" key="reset" onClick={this.resetSnippet.bind(this)}>{t("Reset")}</button>
+          <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
           { lesson.snippet ? <Link className="pt-button" to={ `/share/snippet/${lesson.snippet.id}` }>Share this Snippet</Link> : null }
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}

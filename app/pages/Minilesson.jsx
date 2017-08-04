@@ -111,6 +111,10 @@ class Minilesson extends Component {
     return missedlessons === 0;
   }
 
+  promptFinalTest() {
+    return this.allMinilessonsBeaten() && !this.state.currentLesson.snippet;
+  }
+
   buildWinPopover() {
     return (
       <Dialog
@@ -145,8 +149,8 @@ class Minilesson extends Component {
         <Tooltip content="Earn your Codeblock" tooltipClassName={ currentLesson.id }>
           <div className="code-block" onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
-            <div className="side top"></div>
-            <div className="side left"></div>
+            <div className="side top" style={{backgroundColor: this.promptFinalTest() ? "yellow" : "grey"}}></div>
+            <div className="side left" style={{backgroundColor: this.promptFinalTest() ? "yellow" : "grey"}}></div>
             <div className="side front"><span className="pt-icon-standard pt-icon-code-block"></span></div>
           </div>
         </Tooltip>

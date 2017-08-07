@@ -9,6 +9,8 @@ import CodeBlockCard from "components/CodeBlockCard";
 
 import "./Minilesson.css";
 
+import gemIcon from "icons/gem.svg";
+
 import Loading from "components/Loading";
 
 class Minilesson extends Component {
@@ -215,7 +217,10 @@ class Minilesson extends Component {
     const minilessonItems = minilessonStatuses.map(minilesson => {
       const {lid} = this.props.params;
       if (minilesson.isDone) {
-        return <Tooltip position={ Position.TOP } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+        const up = userProgress.find(p => p.level === minilesson.id);
+        const gems = up ? up.gems : 0;
+        const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
+        return <Tooltip position={ Position.TOP } content={ `${minilesson.name} - ${gemCount} ` } tooltipClassName={ currentLesson.id }>
           <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
         </Tooltip>;
       }

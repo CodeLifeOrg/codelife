@@ -3,13 +3,12 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import css from "css";
 import himalaya from "himalaya";
 import CodeEditor from "components/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
-import {cvGetMeanings, cvContainsTag} from "utils/codeValidation.js";
+import {cvGetMeanings, cvContainsTag, cvContainsStyle} from "utils/codeValidation.js";
 
 import Loading from "components/Loading";
 
@@ -61,29 +60,13 @@ class CodeBlock extends Component {
     });
   }
 
-  containsStyle(needle, haystack) {
-    let head, html, style = null;
-    let styleContent = "";
-    if (haystack) html = haystack.find(e => e.tagName === "html");
-    if (html) head = html.children.find(e => e.tagName === "head");
-    if (head) style = head.children.find(e => e.tagName === "style");
-    if (style) styleContent = style.children[0].content;
-    const obj = css.parse(styleContent, {silent: true});
-    let found = 0;
-    console.log(obj.stylesheet);
-    for (const r of obj.stylesheet.rules) {
-      if (r.selectors.includes(needle)) found++;
-    }
-    return found > 0 && obj.stylesheet.parsingErrors.length === 0;
-  }
-
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {rulejson} = this.state;
     let errors = 0;
     for (const r of rulejson) {
       if (r.type === "CONTAINS") {
-        if (!cvContainsTag(r.needle, jsonArray)) {
+        if (!cvContainsTag(r, jsonArray)) {
           errors++;
           r.passing = false;
         }
@@ -92,7 +75,7 @@ class CodeBlock extends Component {
         }
       }
       if (r.type === "CSS_CONTAINS") {
-        if (!this.containsStyle(r.needle, jsonArray)) {
+        if (!cvContainsStyle(r, jsonArray)) {
           errors++;
           r.passing = false;
         }
@@ -127,11 +110,8 @@ class CodeBlock extends Component {
 
   resetSnippet() {
     const {lesson} = this.props;
-    console.log(lesson);
     let initialcontent = "";
-    console.log(lesson.initialcontent);
     if (lesson && lesson.initialcontent) initialcontent = lesson.initialcontent;
-    console.log(initialcontent);
     this.editor.setEntireContents(initialcontent);
     this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});

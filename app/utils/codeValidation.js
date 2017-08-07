@@ -1,3 +1,5 @@
+import css from "css";
+
 export const cvGetMeanings = () => {
   const meanings = [];
   meanings.CONTAINS = [];
@@ -34,4 +36,39 @@ export const cvTagCount = (needle, haystack) => {
   return count;
 };
 
-export const cvContainsTag = (needle, haystack) => cvTagCount(needle, haystack) > 0;
+export const cvContainsTag = (rule, haystack) => cvTagCount(rule.needle, haystack) > 0;
+
+export const cvContainsStyle = (rule, haystack) => {
+  const needle = rule.needle;
+  const property = rule.property;
+  const value = rule.value;
+  console.log(needle, property, value);
+  let head, html, style = null;
+  let styleContent = "";
+  if (haystack) html = haystack.find(e => e.tagName === "html");
+  if (html) head = html.children.find(e => e.tagName === "head");
+  if (head) style = head.children.find(e => e.tagName === "style");
+  if (style) styleContent = style.children[0].content;
+  const obj = css.parse(styleContent, {silent: true});
+  let found = 0;
+  for (const r of obj.stylesheet.rules) {
+    if (r.selectors.includes(needle)) {
+      if (property) {
+        for (const d of r.declarations) {
+          if (d.property === property) {
+            if (value) {
+              if (d.value === value) found++;
+            }
+            else {
+              found++;
+            }
+          }
+        }
+      } 
+      else {
+        found++;
+      }
+    }
+  }
+  return found > 0 && obj.stylesheet.parsingErrors.length === 0;
+};

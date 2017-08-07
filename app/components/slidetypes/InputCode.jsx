@@ -5,7 +5,7 @@ import himalaya from "himalaya";
 
 import CodeEditor from "components/CodeEditor";
 
-import {cvGetMeanings, cvContainsTag} from "utils/codeValidation.js";
+import {cvContainsTag, cvContainsStyle} from "utils/codeValidation.js";
 
 import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
@@ -42,7 +42,13 @@ class InputCode extends Component {
     const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
-        if (!cvContainsTag(r.needle, jsonArray)) {
+        if (!cvContainsTag(r, jsonArray)) {
+          errors++;
+          t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+        }
+      }
+      if (r.type === "CSS_CONTAINS") {
+        if (!cvContainsStyle(r, jsonArray)) {
           errors++;
           t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }

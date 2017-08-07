@@ -12,6 +12,7 @@ import EditProfile from "pages/profile/EditProfile";
 import Studio from "pages/Studio";
 import Share from "pages/Share";
 import Splash from "pages/Splash";
+import Survey from "pages/Survey";
 
 export default function RouteCreate() {
 
@@ -32,6 +33,8 @@ export default function RouteCreate() {
       <Route path="profile/:username/edit" component={EditProfile} />
 
       <Route path="glossary" component={Glossary} />
+
+      <Route path="survey" component={Survey} />
 
       <Route path="share/:type/:id" component={Share} />
 

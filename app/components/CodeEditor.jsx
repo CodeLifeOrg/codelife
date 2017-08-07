@@ -4,7 +4,7 @@ import himalaya from "himalaya";
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
 
-import {Popover, PopoverInteractionKind, Position, Intent, Button} from "@blueprintjs/core";
+// import {Popover, PopoverInteractionKind, Position, Intent, Button} from "@blueprintjs/core";
 
 import "./CodeEditor.css";
 

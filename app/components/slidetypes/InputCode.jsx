@@ -5,6 +5,8 @@ import himalaya from "himalaya";
 
 import CodeEditor from "components/CodeEditor";
 
+import {cvGetMeanings, cvContainsTag} from "utils/codeValidation.js";
+
 import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
 class InputCode extends Component {
@@ -40,7 +42,7 @@ class InputCode extends Component {
     const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
-        if (!this.containsTag(r.needle, jsonArray)) {
+        if (!cvContainsTag(r.needle, jsonArray)) {
           errors++;
           t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }
@@ -51,24 +53,6 @@ class InputCode extends Component {
       t.show({message: "You got it right!", timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
     }
-  }
-
-  containsTag(needle, haystack) {
-    return this.tagCount(needle, haystack) > 0;
-  }
-
-  tagCount(needle, haystack) {
-    let count = 0;
-    for (const h of haystack) {
-      if (h.type === "Element") {
-        if (h.tagName === needle) {
-          count++;
-        } if (h.children !== null) {
-          count += this.tagCount(needle, h.children);
-        }
-      }
-    }
-    return count;
   }
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests

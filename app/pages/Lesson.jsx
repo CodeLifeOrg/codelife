@@ -6,7 +6,6 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import "./Lesson.css";
-
 import Loading from "components/Loading";
 
 class Lesson extends Component {

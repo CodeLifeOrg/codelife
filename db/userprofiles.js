@@ -23,6 +23,7 @@ module.exports = function(sequelize, db) {
       },
       cpf: db.STRING,
       survey: db.JSONB,
+      survey2: db.JSONB,
       getinvolved: db.JSONB
     },
     {

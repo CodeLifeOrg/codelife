@@ -1,6 +1,8 @@
 import React, {Component} from "react";
+import axios from "axios";
 import {translate} from "react-i18next";
-import {RadioGroup, Radio} from "@blueprintjs/core";
+import {RadioGroup, Radio, Intent, Position, Toaster} from "@blueprintjs/core";
+import Loading from "components/Loading";
 
 class Survey extends Component {
 
@@ -8,6 +10,8 @@ class Survey extends Component {
 
     super(props);
     this.state = {
+      error: null,
+      loading: true,
       q0: null,
       q1: null,
       q2: null,
@@ -18,20 +22,48 @@ class Survey extends Component {
     };
   }
 
+  /**
+   * Grabs username from URL param, makes AJAX call to server and sets error
+   * state (if no user is found) or overrides state (if one is).
+   */
+  componentWillMount() {
+    axios.get("/api/survey/").then(surveyResp => {
+      const surveyData = surveyResp.data;
+      console.log(surveyData);
+      if (surveyData.error) {
+        this.setState({loading: false, error: surveyData.error});
+      }
+      else {
+        this.setState({
+          error: false,
+          loading: false,
+          ...surveyData
+        });
+      }
+    });
+  }
+
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  // TODO: Write to db when user submits!
   submit() {
     console.log("submitting:", this.state);
+    axios.post("/api/survey/", {survey: this.state}).then(resp => {
+      const responseData = resp.data;
+      const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+      t.show({message: "Survey saved!", intent: Intent.SUCCESS});
+    });
   }
 
   render() {
     const {t} = this.props;
-    const {q0, q1, q2, q3, q4, q5, q6} = this.state;
+    const {error, loading, q0, q1, q2, q3, q4, q5, q6} = this.state;
     const handleChange = this.handleChange.bind(this);
     const submit = this.submit.bind(this);
+
+    if (loading) return <Loading />;
+    if (error) return <h1>{error}</h1>;
 
     return (
       <div id="about-container">
@@ -122,7 +154,7 @@ class Survey extends Component {
         </RadioGroup>
 
         <button type="button" className="pt-button" onClick={submit}>
-          Submit Survey
+          { t("Submit Survey") }
           <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>
         </button>
       </div>

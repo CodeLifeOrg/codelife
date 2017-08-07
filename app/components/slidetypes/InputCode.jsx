@@ -55,7 +55,6 @@ class InputCode extends Component {
       }
     }
     if (errors === 0) {
-      const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
       t.show({message: "You got it right!", timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
     }

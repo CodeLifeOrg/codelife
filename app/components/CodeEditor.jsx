@@ -47,6 +47,7 @@ class CodeEditor extends Component {
 
   renderText() {
     if (this.refs.rc) {
+      // const newText = this.stripJS(himalaya.parse(this.state.currentText));
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
       doc.write(this.state.currentText);

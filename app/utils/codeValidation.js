@@ -42,7 +42,6 @@ export const cvContainsStyle = (rule, haystack) => {
   const needle = rule.needle;
   const property = rule.property;
   const value = rule.value;
-  console.log(needle, property, value);
   let head, html, style = null;
   let styleContent = "";
   if (haystack) html = haystack.find(e => e.tagName === "html");
@@ -54,13 +53,15 @@ export const cvContainsStyle = (rule, haystack) => {
   for (const r of obj.stylesheet.rules) {
     if (r.selectors.includes(needle)) {
       if (property) {
-        for (const d of r.declarations) {
-          if (d.property === property) {
-            if (value) {
-              if (d.value === value) found++;
-            }
-            else {
-              found++;
+        if (r.declarations) {
+          for (const d of r.declarations) {
+            if (d.property === property) {
+              if (value) {
+                if (d.value === value) found++;
+              }
+              else {
+                found++;
+              }
             }
           }
         }

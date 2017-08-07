@@ -26,7 +26,7 @@ class AllSnippets extends Component {
       const lessons = resp[2].data;
       for (const l of lessons) {
         l.snippets = [];
-        l.top = 5;
+        l.top = 3;
       }
       for (const ms of mysnippets) {
         for (const l of lessons) {

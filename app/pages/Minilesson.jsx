@@ -9,7 +9,7 @@ import CodeBlockCard from "components/CodeBlockCard";
 
 import "./Minilesson.css";
 
-import gemIcon from "icons/gem.svg";
+// import gemIcon from "icons/gem.svg";
 
 import Loading from "components/Loading";
 

@@ -147,6 +147,13 @@ class Projects extends Component {
 
     return (
       <div id="projects">
+        <div className="project-new">
+          <div className="project-new-title">Create a New Project</div>
+          <div className="project-new-form">
+            <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
+            <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>
+          </div>
+        </div>
         <ul className="project-list">
           {projectItems}
         </ul>
@@ -159,13 +166,6 @@ class Projects extends Component {
             onConfirm={ () => this.deleteProject(true) }>
             <p>{ deleteAlert ? deleteAlert.text : "" }</p>
         </Alert>
-        <div className="project-new">
-          <div className="project-new-title">Create a New Project</div>
-          <div className="project-new-form">
-            <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
-            <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>
-          </div>
-        </div>
       </div>
     );
   }

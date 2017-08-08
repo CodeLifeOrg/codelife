@@ -39,6 +39,7 @@ class InputCode extends Component {
     const jsonArray = himalaya.parse(contents);
     let errors = 0;
     const rulejson = JSON.parse(this.props.rulejson);
+    console.log(rulejson);
     const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
@@ -70,6 +71,10 @@ class InputCode extends Component {
     this.setState({resetAlert: true});
   }
 
+  executeCode() {
+    this.editor.executeCode();
+  }
+
   render() {
 
     const {t, htmlcontent1, htmlcontent2, island} = this.props;
@@ -95,6 +100,7 @@ class InputCode extends Component {
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>Reset</button>
+          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button> : null}
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>Submit</button>
         </div>
       </div>

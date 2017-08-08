@@ -23,6 +23,10 @@ export default class RenderCode extends Component {
     }
   }
 
+  executeCode() {
+    this.editor.executeCode();
+  }
+
   render() {
 
     const {htmlcontent1, htmlcontent2, island} = this.props;
@@ -32,6 +36,9 @@ export default class RenderCode extends Component {
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <CodeEditor island={island} initialValue={htmlcontent2} className="slide-editor" ref={c => this.editor = c} readOnly={true} /> : <div className="slide-editor"></div> }
+        </div>
+        <div className="validation">
+          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button> : null}
         </div>
       </div>
     );

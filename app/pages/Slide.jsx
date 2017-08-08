@@ -64,14 +64,14 @@ class Slide extends Component {
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, blocked});
     }
 
     const i = slides.indexOf(currentSlide);
     if (this.state.mounted && currentSlide &&
-      ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 &&
+      ["InputCode", "InputCodeExec", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i, gems: gems + 1});
     }
@@ -113,7 +113,7 @@ class Slide extends Component {
       }
       */
       
-      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
@@ -149,7 +149,14 @@ class Slide extends Component {
 
     if (!currentSlide || !currentLesson) return <Loading />;
 
-    SlideComponent = compLookup[currentSlide.type];
+    let exec = false;
+    let sType = currentSlide.type;
+    if (sType.includes("Exec")) {
+      exec = true;
+      sType = sType.replace("Exec", "");
+    }
+
+    SlideComponent = compLookup[sType];
 
     return (
       <div id="slide" className={ currentLesson.id }>
@@ -163,7 +170,7 @@ class Slide extends Component {
           </Tooltip>
         </div>
 
-        <SlideComponent island={lid} unblock={this.unblock.bind(this)} {...currentSlide} />
+        <SlideComponent exec={exec} island={lid} unblock={this.unblock.bind(this)} {...currentSlide} />
 
         <div id="slide-foot">
           { prevSlug

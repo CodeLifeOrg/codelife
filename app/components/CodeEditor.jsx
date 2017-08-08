@@ -78,7 +78,6 @@ class CodeEditor extends Component {
     if (this.refs.rc) {
       let theText = this.state.currentText;
       if (theText.includes("script")) {
-        console.log("scripting");
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
         theText = translate.toHTML(newJSON);

@@ -37,7 +37,7 @@ class CodeBlock extends Component {
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     let initialContent = "";
     let filename = "";
-    if (this.props.lesson.initialContent) initialContent = this.props.lesson.initialcontent;
+    if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
     if (this.props.lesson.snippet) {
       initialContent = this.props.lesson.snippet.studentcontent;
       filename = this.props.lesson.snippet.snippetname;

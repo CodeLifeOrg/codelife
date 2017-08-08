@@ -36,7 +36,8 @@ class CodeBlockCard extends Component {
           <div className="info">
             <div className="card-title">
               {snippetname} 
-              {codeBlock.starred ? <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span> : null}
+              {codeBlock.username === "you!" ? <span style={{color: "lightgreen", marginLeft: "5px"}} className="pt-icon-standard pt-icon-user"></span> : null}
+              {codeBlock.starred ? <span style={{color: "yellow", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null}
             </div>
             { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
           </div>

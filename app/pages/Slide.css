@@ -1,3 +1,8 @@
+.quiz-selected {
+  /* lol sorry dave */
+  outline: 1px solid black;
+}
+
 .confetti {
   position: absolute;
   margin-left: auto;

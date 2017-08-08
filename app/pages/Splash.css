@@ -4,7 +4,9 @@
 
 #splash {
   align-items: center;
+  color: white;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   height: 100vh;
   left: 0;
@@ -45,6 +47,17 @@
       z-index: 1;
     }
 
+  }
+
+  & .about {
+    color: white;
+    margin: 60px 0 0 0;
+    max-width: 350px;
+
+    & h2 {
+      color: white;
+      text-align: center;
+    }
   }
 
 }

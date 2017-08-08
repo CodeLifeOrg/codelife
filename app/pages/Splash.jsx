@@ -20,7 +20,7 @@ class Splash extends Component {
 
   render() {
 
-    const {auth} = this.props;
+    const {auth, t} = this.props;
     const {signup} = this.state;
 
     if (auth && auth.user) browserHistory.push("/");
@@ -38,6 +38,13 @@ class Splash extends Component {
               <button className="pt-button pt-fill" onClick={ this.toggleSignup.bind(this) }>Sign Up</button>
             </div>
           }
+        </div>
+        <div className="about">
+          <h2>About</h2>
+          <p>{ t("CodeLife is a website for teenagers in Brazil to learn information technology and web skills for free.") }</p>
+          <p>{ t("The platform is currently under development but early users will be invited to preview the site in summer 2017. Testing will begin with users in Greater Belo Horizonte but users in other regions eager to help us build CodeLife are encouraged to get in touch.") }</p>
+          <p>{ t("The platform’s seed curriculum will cover dynamic web development and data visualization using the DataViva API.") }</p>
+          <p>{ t("Interested in learning more? Sign up or shoot us an email.") }</p>
         </div>
       </div>
     );

@@ -121,6 +121,10 @@ class CodeBlock extends Component {
     this.setState({resetAlert: true});
   }
 
+  executeCode() {
+    this.editor.executeCode();
+  }
+
   getValidationBox() {
     const {t} = this.props;
     const {goodRatio, intent, rulejson} = this.state;
@@ -254,6 +258,7 @@ class CodeBlock extends Component {
               <p dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
             </div>
           </Popover>
+          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button>
           <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
         </div>
       </div>

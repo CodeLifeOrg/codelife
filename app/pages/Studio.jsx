@@ -105,6 +105,10 @@ class Studio extends Component {
     this.setState({activeTabId});
   }
 
+  executeCode() {
+    this.editor.executeCode();
+  }
+
   render() {
 
     const {auth, t} = this.props;
@@ -128,6 +132,7 @@ class Studio extends Component {
           <div className="title-tab">{titleText}</div>
           <div className="buttons">
             { currentProject ? <a className="pt-button" target="_blank" href={ `/share/project/${currentProject.id}` }>{ t("Share") }</a> : null }
+            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button>
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>
         </div>

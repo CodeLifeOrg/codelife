@@ -103,7 +103,8 @@ class CodeEditor extends Component {
   /* External Functions for Parent Component to Call */
 
   setEntireContents(theText) {
-    this.setState({currentText: theText, changesMade: false}, this.renderText.bind(this));
+    const titleText = this.getTitleText(theText);
+    this.setState({currentText: theText, changesMade: false, titleText}, this.renderText.bind(this));
   }
 
   insertTextAtCursor(theText) {

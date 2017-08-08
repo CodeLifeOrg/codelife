@@ -135,14 +135,19 @@ class Projects extends Component {
     const {t} = this.props;
     const {deleteAlert} = this.state;
 
+    const showDeleteButton = this.state.projects.length > 1;
+
     const projectArray = this.state.projects;
     projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
         <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
-        <Tooltip content={ t("Delete Project") }>
-          <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
-        </Tooltip>
+        { showDeleteButton 
+          ? <Tooltip content={ t("Delete Project") }>
+              <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
+            </Tooltip>
+          : null
+        }
       </li>);
 
     return (

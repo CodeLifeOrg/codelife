@@ -33,10 +33,10 @@ class Studio extends Component {
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}`);
   }
 
-  onDeleteProject(newproject) {
+  onDeleteProject(newproject) { 
     if (newproject.id !== this.state.currentProject.id) this.editor.setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);         
   }
 
   onClickSnippet(snippet) {

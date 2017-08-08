@@ -25,5 +25,7 @@
   "This user doesn't have any snippets yet": "",
   "created by": "created by",
   "mypage": {},
-  "Overworld": "Overworld"
+  "Overworld": "Overworld",
+  "Created by {{name}}": "Created by {{name}}",
+  "Studio": "Studio"
 }

@@ -23,6 +23,7 @@ class Footer extends Component {
         <div className="links">
           <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;
           <Link className="link" to="/about">{ t("About") }</Link>&nbsp;
+          <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>&nbsp;
           { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
           <a href="#" id="en" onClick={this.changeLang}>EN</a> | <a id="pt" href="#" onClick={this.changeLang}>PT</a>
         </div>

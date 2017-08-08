@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import himalaya from "himalaya";
+import translate from "himalaya/translate";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
@@ -45,12 +46,46 @@ class CodeEditor extends Component {
     return titleText;
   }
 
+  stripJS(json) {
+    const arr = [];
+    if (json.length === 0) return arr;
+    for (const n of json) {
+      if (n.tagName !== "script") {
+        const newObj = {};
+        // clone the object
+        for (const prop in n) {
+          if (n.hasOwnProperty(prop)) {
+            newObj[prop] = n[prop];
+          }
+        }
+        // this is a hack for a himalaya bug
+        if (!newObj.tagName) newObj.tagName = "";
+        // if the old object had children, set the new object's children 
+        // to nothing because we need to make it ourselves
+        if (n.children) newObj.children = [];
+        // if the old object had children
+        if (n.children && n.children.length > 0) {
+          // then construct a new array recursively
+          newObj.children = this.stripJS(n.children);
+        }
+        arr.push(newObj);
+      }
+    }
+    return arr;
+  }
+
   renderText() {
     if (this.refs.rc) {
-      // const newText = this.stripJS(himalaya.parse(this.state.currentText));
+      let theText = this.state.currentText;
+      if (theText.includes("script")) {
+        console.log("scripting");
+        const oldJSON = himalaya.parse(this.state.currentText);
+        const newJSON = this.stripJS(oldJSON);
+        theText = translate.toHTML(newJSON);
+      }
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
-      doc.write(this.state.currentText);
+      doc.write(theText);
       doc.close();
     }
   }
@@ -88,6 +123,15 @@ class CodeEditor extends Component {
 
   setChangeStatus(changesMade) {
     this.setState({changesMade});
+  }
+
+  executeCode() {
+    if (this.refs.rc) {
+      const doc = this.refs.rc.contentWindow.document;
+      doc.open();
+      doc.write(this.state.currentText);
+      doc.close();
+    }
   }
 
   /* End of external functions */

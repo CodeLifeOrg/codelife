@@ -149,6 +149,9 @@ class Minilesson extends Component {
   buildTestPopover() {
     const {t} = this.props;
     const {currentLesson} = this.state;
+    let title = `My ${currentLesson.name} CodeBlock`;
+    if (currentLesson.snippet) title = currentLesson.snippet.snippetname;
+
     if (!this.allMinilessonsBeaten()) return <div className="stop"></div>;
 
     return (
@@ -165,7 +168,7 @@ class Minilesson extends Component {
           className={ `codeBlock ${ currentLesson.id }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
-          title={ `My ${currentLesson.name} CodeBlock` }
+          title={ title }
           style={{
             height: "80vh",
             maxHeight: "1000px",

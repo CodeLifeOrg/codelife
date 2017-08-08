@@ -27,7 +27,8 @@ class CodeBlock extends Component {
       meanings: [],
       timeout: null,
       timeoutAlert: false,
-      resetAlert: false
+      resetAlert: false,
+      filename: ""
     };
   }
 
@@ -35,9 +36,13 @@ class CodeBlock extends Component {
     const meanings = cvGetMeanings();
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     let initialContent = "";
+    let filename = "";
     if (this.props.lesson.initialContent) initialContent = this.props.lesson.initialcontent;
-    if (this.props.lesson.snippet) initialContent = this.props.lesson.snippet.studentcontent;
-    this.setState({mounted: true, initialContent, rulejson, meanings});
+    if (this.props.lesson.snippet) {
+      initialContent = this.props.lesson.snippet.studentcontent;
+      filename = this.props.lesson.snippet.snippetname;
+    }
+    this.setState({mounted: true, initialContent, filename, rulejson, meanings});
   }
 
   componentWillUnmount() {
@@ -125,6 +130,10 @@ class CodeBlock extends Component {
     this.editor.executeCode();
   }
 
+  changeFilename(e) {
+    this.setState({filename: e.target.value});
+  }
+
   getValidationBox() {
     const {t} = this.props;
     const {goodRatio, intent, rulejson} = this.state;
@@ -183,7 +192,7 @@ class CodeBlock extends Component {
     const studentcontent = this.editor.getEntireContents();
     let snippet = this.props.lesson.snippet;
     const lid = this.props.lesson.id;
-    const name = `My ${this.props.lesson.name} Snippet`;
+    let name = `My ${this.props.lesson.name} Snippet`;
 
     if (!this.state.isPassing) {
       const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
@@ -194,6 +203,7 @@ class CodeBlock extends Component {
     this.saveProgress(lid);
 
     // todo: maybe replace this with findorupdate from userprogress?
+    if (this.state.filename !== "") name = this.state.filename;
     let endpoint = "/api/snippets/";
     snippet ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
@@ -201,7 +211,17 @@ class CodeBlock extends Component {
         const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         t.show({message: "Saved!", timeout: 1500, intent: Intent.SUCCESS});
         if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion();
-        snippet ? snippet.studentcontent = studentcontent : snippet = resp.data;
+        if (snippet) {
+          // If there's already a snippet, and we've saved new data down to the 
+          // database, we need to update our "in-memory" snippet to reflect the
+          // db changes.  We then call parent.handleSave to put this updated snippet
+          // back into currentLesson.snippet, saving us a db call.
+          snippet.studentcontent = studentcontent;
+          snippet.snippetname = name;
+        }
+        else {
+          snippet = resp.data;
+        }
         if (this.props.handleSave) this.props.handleSave(snippet);
       }
       else {
@@ -221,6 +241,9 @@ class CodeBlock extends Component {
 
     return (
       <div id="codeBlock">
+        <div style={{textAlign: "right"}} className="codeblock-filename-form">
+            Codeblock Name: <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
+        </div>
         <div className="codeBlock-body">
           <Alert
             isOpen={ timeoutAlert ? true : false }

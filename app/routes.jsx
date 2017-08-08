@@ -3,6 +3,7 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 
 import App from "components/App";
 
+import About from "pages/About";
 import Lesson from "pages/Lesson";
 import Minilesson from "pages/Minilesson";
 import Slide from "pages/Slide";
@@ -35,6 +36,8 @@ export default function RouteCreate() {
       <Route path="glossary" component={Glossary} />
 
       <Route path="survey" component={Survey} />
+
+      <Route path="about" component={About} />
 
       <Route path="share/:type/:id" component={Share} />
 

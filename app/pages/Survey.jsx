@@ -27,20 +27,27 @@ class Survey extends Component {
    * state (if no user is found) or overrides state (if one is).
    */
   componentWillMount() {
-    axios.get("/api/survey/").then(surveyResp => {
-      const surveyData = surveyResp.data;
-      console.log(surveyData);
-      if (surveyData.error) {
-        this.setState({loading: false, error: surveyData.error});
-      }
-      else {
+    axios.get("/api/survey/")
+      .then(surveyResp => {
+        const surveyData = surveyResp.data;
+        console.log(surveyData);
+        if (surveyData.error) {
+          this.setState({loading: false, error: surveyData.error});
+        }
+        else {
+          this.setState({
+            error: false,
+            loading: false,
+            ...surveyData
+          });
+        }
+      })
+      .catch(() => {
         this.setState({
-          error: false,
-          loading: false,
-          ...surveyData
+          error: "You need to be logged in to take the survey!",
+          loading: false
         });
-      }
-    });
+      });
   }
 
   handleChange(e) {

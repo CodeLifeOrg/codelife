@@ -17,12 +17,13 @@ class Footer extends Component {
   render() {
     const {className, t, user, i18n} = this.props;
     const {language} = i18n;
-    console.log(language);
 
     return (
       <footer id="footer" className={ className }>
         <div className="links">
           <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;
+          <Link className="link" to="/about">{ t("About") }</Link>&nbsp;
+          { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
           <a href="#" id="en" onClick={this.changeLang}>EN</a> | <a id="pt" href="#" onClick={this.changeLang}>PT</a>
         </div>
         <div className="logos">

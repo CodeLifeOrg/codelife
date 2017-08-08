@@ -12,7 +12,8 @@ class AllSnippets extends Component {
     super(props);
     this.state = {
       lessons: null,
-      isOpen: false
+      isOpen: false,
+      userProgress: null
     };
   }
 
@@ -20,10 +21,12 @@ class AllSnippets extends Component {
     const osget = axios.get("/api/snippets/allothers");
     const sget = axios.get("/api/snippets/");
     const lget = axios.get("/api/lessons");
-    Promise.all([sget, osget, lget]).then(resp => {
+    const upget = axios.get("/api/userprogress");
+    Promise.all([sget, osget, lget, upget]).then(resp => {
       const mysnippets = resp[0].data;
       const othersnippets = resp[1].data;
       const lessons = resp[2].data;
+      const userProgress = resp[3].data;
       for (const l of lessons) {
         l.snippets = [];
         l.top = 3;
@@ -44,7 +47,7 @@ class AllSnippets extends Component {
           }
         }
       }
-      this.setState({lessons});
+      this.setState({lessons, userProgress});
     });
   }
 
@@ -55,9 +58,9 @@ class AllSnippets extends Component {
   render() {
 
     const {t} = this.props;
-    const {lessons} = this.state;
+    const {lessons, userProgress} = this.state;
 
-    if (!lessons) return null;
+    if (!lessons || !userProgress) return null;
 
     const snippetItems = [];
 

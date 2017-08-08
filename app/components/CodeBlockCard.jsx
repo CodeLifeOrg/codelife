@@ -59,7 +59,7 @@ class CodeBlockCard extends Component {
             { done ? null
               : <div className={ `pt-popover pt-tooltip ${ lid }` }>
                   <div className="pt-popover-content">
-                    Codeblock's code will be shown after completing the last level of this island.
+                    Codeblock's code will be shown after you complete the last level of this island.
                   </div>
                 </div> }
           </div>

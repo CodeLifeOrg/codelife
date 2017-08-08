@@ -97,8 +97,7 @@ class CodeEditor extends Component {
 
   showContextMenu(selectionObject) {
     const text = selectionObject.toString();
-    console.log("Would Copy:");
-    console.log(text);
+    // If you want to insert the selected text here, it's available
   }
 
   /* External Functions for Parent Component to Call */

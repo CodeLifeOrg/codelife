@@ -32,6 +32,10 @@ class Minilesson extends Component {
   }
 
   componentDidMount() {
+    this.loadFromDB();
+  }
+
+  loadFromDB() {
     const {lid} = this.props.params;
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
@@ -98,6 +102,10 @@ class Minilesson extends Component {
   }
 
   onFirstCompletion() {
+    // TODO: i'm reloading everything here because after the first completion, we need to
+    // unlock all codeblocks AND show your brand-new written one at the top of the list.
+    // perhaps revisit if this is on the heavy DB-interaction side?
+    this.loadFromDB();
     const winMessage = this.state.currentLesson.victory;
     this.setState({firstWin: true, winMessage});
   }

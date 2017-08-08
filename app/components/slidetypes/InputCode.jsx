@@ -39,7 +39,6 @@ class InputCode extends Component {
     const jsonArray = himalaya.parse(contents);
     let errors = 0;
     const rulejson = JSON.parse(this.props.rulejson);
-    console.log(rulejson);
     const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {

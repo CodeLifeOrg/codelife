@@ -47,7 +47,7 @@ export const cvContainsStyle = (rule, haystack) => {
   if (haystack) html = haystack.find(e => e.tagName === "html");
   if (html) head = html.children.find(e => e.tagName === "head");
   if (head) style = head.children.find(e => e.tagName === "style");
-  if (style) styleContent = style.children[0].content;
+  if (style && style.children && style.children[0]) styleContent = style.children[0].content;
   const obj = css.parse(styleContent, {silent: true});
   let found = 0;
   for (const r of obj.stylesheet.rules) {

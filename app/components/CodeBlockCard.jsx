@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
@@ -10,13 +11,32 @@ class CodeBlockCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      liked: false
     };
   }
 
   toggleDialog() {
+    if (this.state.open) {
+      axios.post("/api/likes/save", {liked: this.state.liked, likeid: this.props.codeBlock.id}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
+    }
     this.setState({open: !this.state.open});
   }
+
+  toggleLike() {
+    // TODO: can this be done better?  I'm storing likestate in two places, and this makes it possible
+    // that they get out of sync. Revisit this later
+    this.props.codeBlock.liked = !this.props.codeBlock.liked;
+    this.setState({liked: !this.state.liked});
+  }
+
+  componentDidMount() {
+    this.setState({liked: this.props.codeBlock.liked ? true : false});
+  }
+
+
 
   render() {
     const {open} = this.state;
@@ -36,7 +56,8 @@ class CodeBlockCard extends Component {
             <div className="card-title">
               {snippetname}
               {codeBlock.mine ? <span style={{color: "lightgreen", marginLeft: "5px"}} className="pt-icon-standard pt-icon-user"></span> : null}
-              {codeBlock.starred ? <span style={{color: "yellow", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null}
+              { /* codeBlock.starred ? <span style={{color: "yellow", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null */ }
+              {codeBlock.liked ? <span style={{color: "pink", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null }
             </div>
             { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
           </div>
@@ -44,7 +65,7 @@ class CodeBlockCard extends Component {
         <Dialog
           isOpen={ open }
           onClose={ this.toggleDialog.bind(this) }
-          title={ codeBlock.starred ? <div> {snippetname} <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span></div> : <div>{snippetname}</div> }
+          title={snippetname}
           lazy={false}
           inline={inline}
           style={{
@@ -65,8 +86,11 @@ class CodeBlockCard extends Component {
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
-            <div className="pt-dialog-footer-likebutton">
-              <span style={{color: "pink"}} className="pt-icon-standard pt-icon-heart"></span>
+            <div className="pt-dialog-footer-likebutton" onClick={this.toggleLike.bind(this)}>
+              {codeBlock.liked 
+                ? <span style={{color: "pink", marginLeft: "10px", marginTop: "6px"}} className="pt-icon-standard pt-icon-star"></span>
+                : <span style={{color: "pink", marginLeft: "10px", marginTop: "6px"}} className="pt-icon-standard pt-icon-star-empty"></span>
+              }
             </div>
             <div className="pt-dialog-footer-actions">
               <Button

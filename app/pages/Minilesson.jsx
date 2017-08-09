@@ -42,17 +42,26 @@ class Minilesson extends Component {
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
+    const lkget = axios.get("/api/likes");
 
-    Promise.all([mlget, lget, uget, osget]).then(resp => {
+    Promise.all([mlget, lget, uget, osget, lkget]).then(resp => {
       const minilessons = resp[0].data;
       const currentLesson = resp[1].data[0];
       const userProgress = resp[2].data;
       const allSnippets = resp[3].data;
+      const likes = resp[4].data;
       const otherSnippets = [];
       let mySnippet = null;
       // Fold over snippets and separate them into mine and others
       for (const s of allSnippets) {
-        s.uid === this.props.auth.user.id ? mySnippet = s : otherSnippets.push(s);
+        if (s.uid === this.props.auth.user.id) {
+          mySnippet = s;
+        } 
+        else {
+          // TODO: do this in a database join, not here.
+          if (likes.find(l => l.likeid === s.id)) s.liked = true;
+          otherSnippets.push(s);
+        } 
       }
       otherSnippets.sort((a, b) => b.likes - a.likes);
       let top = 3;

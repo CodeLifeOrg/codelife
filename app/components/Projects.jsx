@@ -32,7 +32,7 @@ class Projects extends Component {
         this.setState({projects});
         if (projects.length === 0) {
           this.createNewProject("mypage.html");
-        } 
+        }
         else {
           console.log("got to final");
           let latestIndex = 0;
@@ -52,6 +52,7 @@ class Projects extends Component {
   }
 
   deleteProject(project) {
+    const {t} = this.props;
 
     if (project === true) {
       const {deleteAlert} = this.state;
@@ -64,7 +65,7 @@ class Projects extends Component {
           if (deleteAlert.project.id === this.state.currentProject.id) {
             projects.sort((a, b) => a.name < b.name ? -1 : 1);
             if (projects.length > 0) newProject = projects[0];
-          } 
+          }
           // if the project i'm trying to delete is a different project, it's fine to stay on
           // my current project.
           else {
@@ -81,7 +82,8 @@ class Projects extends Component {
     else {
       this.setState({deleteAlert: {
         project,
-        text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
+        // text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
+        text: t("deleteAlert", {projectName: project.name})
       }});
     }
 
@@ -142,7 +144,7 @@ class Projects extends Component {
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
         <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
-        { showDeleteButton 
+        { showDeleteButton
           ? <Tooltip content={ t("Delete Project") }>
               <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
             </Tooltip>

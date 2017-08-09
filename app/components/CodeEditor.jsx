@@ -60,7 +60,7 @@ class CodeEditor extends Component {
         }
         // this is a hack for a himalaya bug
         if (!newObj.tagName) newObj.tagName = "";
-        // if the old object had children, set the new object's children 
+        // if the old object had children, set the new object's children
         // to nothing because we need to make it ourselves
         if (n.children) newObj.children = [];
         // if the old object had children
@@ -136,8 +136,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-
-    const {codeTitle, island} = this.props;
+    const {codeTitle, island, t} = this.props;
     const {titleText, currentText} = this.state;
 
     if (!this.state.mounted) return <Loading />;
@@ -146,10 +145,10 @@ class CodeEditor extends Component {
       <div id="codeEditor">
         <div className="code">
           <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>{ codeTitle || "Code" }</div>
-          { /* 
-            TODO: This is terrible and it sucks, I need a better way to do this bizarre configuration.  
+          { /*
+            TODO: This is terrible and it sucks, I need a better way to do this bizarre configuration.
             projectMode is a special mode where you open the project as a read-only popover in the Studio.
-            This means we need it to be a <pre>, not an AceEditor, but we need to NOT blur out the 
+            This means we need it to be a <pre>, not an AceEditor, but we need to NOT blur out the
             text as we normally do.  So I have this stupid override.  In the future, abstract CodeEditor to have
             multiple modes:
               - Test Mode: AceEditor, Editable, for use by Codeblock Tests
@@ -157,7 +156,7 @@ class CodeEditor extends Component {
               - View Mode, Not Beaten: <pre>tag, blurred
               - Project Mode: <pre>tag, not blurred, WITH copy powers
           */ }
-            {!this.props.projectMode 
+            {!this.props.projectMode
               ? !this.props.preventSelection
                 ? <AceWrapper
                   className="editor"
@@ -166,12 +165,12 @@ class CodeEditor extends Component {
                   value={currentText}
                   {...this.props}
                 />
-                : <pre className="editor blurry-text">{currentText}</pre> 
-              : <pre className="editor" onMouseUp={this.showContextMenu.bind(this, window.getSelection())} style={{overflow: "hidden", overflowY: "scroll", height: "300px", whiteSpace: "pre-wrap", width: "350px"}}>{currentText}</pre> 
+                : <pre className="editor blurry-text">{currentText}</pre>
+              : <pre className="editor" onMouseUp={this.showContextMenu.bind(this, window.getSelection())} style={{overflow: "hidden", overflowY: "scroll", height: "300px", whiteSpace: "pre-wrap", width: "350px"}}>{currentText}</pre>
             }
         </div>
         <div className="render">
-          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || "Webpage" }</div>
+          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || t("Webpage") }</div>
           <iframe className="iframe" ref="rc" />
         </div>
       </div>

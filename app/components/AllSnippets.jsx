@@ -56,8 +56,6 @@ class AllSnippets extends Component {
   }
 
   render() {
-
-    const {t} = this.props;
     const {lessons, userProgress} = this.state;
 
     if (!lessons || !userProgress) return null;

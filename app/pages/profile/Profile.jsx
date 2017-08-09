@@ -89,7 +89,7 @@ class Profile extends Component {
         <content className="profile-info">
           { profileUser.bio
             ? <div className="user-section">
-                <h2>About Me</h2>
+                <h2>{t("About Me")}</h2>
                 <p className="bio">{ profileUser.bio }</p>
               </div>
             : null }

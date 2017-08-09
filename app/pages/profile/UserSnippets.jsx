@@ -43,7 +43,7 @@ class UserSnippets extends Component {
     const {t} = this.props;
     const {loading, snippets} = this.state;
 
-    if (loading) return <h2>{ t("Loading snipppets...") }</h2>;
+    if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 
     return (
       <div className="user-section">

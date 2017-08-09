@@ -19,7 +19,6 @@ class CodeBlockCard extends Component {
   }
 
   render() {
-
     const {open} = this.state;
     const {codeBlock, t, userProgress} = this.props;
     const {lid, snippetname, studentcontent, username} = codeBlock;
@@ -35,7 +34,7 @@ class CodeBlockCard extends Component {
           <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
           <div className="info">
             <div className="card-title">
-              {snippetname} 
+              {snippetname}
               {codeBlock.username === "you!" ? <span style={{color: "lightgreen", marginLeft: "5px"}} className="pt-icon-standard pt-icon-user"></span> : null}
               {codeBlock.starred ? <span style={{color: "yellow", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null}
             </div>
@@ -45,7 +44,7 @@ class CodeBlockCard extends Component {
         <Dialog
           isOpen={ open }
           onClose={ this.toggleDialog.bind(this) }
-          title={ codeBlock.starred ? <div> {snippetname} <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span></div> : <div>{snippetname}</div> } 
+          title={ codeBlock.starred ? <div> {snippetname} <span style={{color: "yellow"}} className="pt-icon-standard pt-icon-star"></span></div> : <div>{snippetname}</div> }
           lazy={false}
           inline={inline}
           style={{
@@ -60,7 +59,7 @@ class CodeBlockCard extends Component {
             { done ? null
               : <div className={ `pt-popover pt-tooltip ${ lid }` }>
                   <div className="pt-popover-content">
-                    Codeblock's code will be shown after you complete the last level of this island.
+                    { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
                 </div> }
           </div>

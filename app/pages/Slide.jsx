@@ -103,16 +103,16 @@ class Slide extends Component {
       if (sid === undefined) {
         sid = slideList[0].id;
         browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
-      } 
+      }
       const cs = slideList.find(slide => slide.id === sid);
-      
+
       /*
       if (cs.ordering !== 0) {
         browserHistory.push(`/lesson/${lid}/${mlid}`);
         return;
       }
       */
-      
+
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
@@ -126,7 +126,6 @@ class Slide extends Component {
   }
 
   render() {
-
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
     const {currentSlide, slides, currentLesson, gems} = this.state;
@@ -174,12 +173,12 @@ class Slide extends Component {
 
         <div id="slide-foot">
           { prevSlug
-          ? <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>Previous</Link>
-          : <div className="pt-button pt-disabled">Previous</div> }
+          ? <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
+          : <div className="pt-button pt-disabled">{t("Previous")}</div> }
           { nextSlug
           ? this.state.blocked
-            ? <div className="pt-button pt-disabled">Next</div>
-            : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>Next</Link>
+            ? <div className="pt-button pt-disabled">{t("Next")}</div>
+            : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
           : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`Back to ${currentLesson.name}!`}</Link> }
         </div>
 

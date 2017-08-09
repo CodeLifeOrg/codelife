@@ -12,7 +12,7 @@ class Loading extends Component {
     return (
       <div id="loading">
         <Spinner intent={Intent.WARNING} />
-        <h1 className="title">{ t("Loading...") }</h1>
+        <h1 className="title">{ t("Loading") }...</h1>
       </div>
     );
 

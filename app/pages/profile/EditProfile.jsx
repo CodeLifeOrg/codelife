@@ -44,13 +44,14 @@ class Profile extends Component {
    * state (if no user is found) or profileUser (if one is).
    */
   componentWillMount() {
-    const {username} = this.props.params;
+    const {params, t} = this.props;
+    const {username} = params;
     const {username: loggedInUsername} = this.props.user;
 
     if (username !== loggedInUsername) {
       this.setState({
         loading: false,
-        error: "You don't have permission to edit this user's profile."
+        error: t("You don't have permission to edit this user's profile.")
       });
       return;
     }
@@ -78,6 +79,7 @@ class Profile extends Component {
   saveUserInfo(e) {
     e.preventDefault();
     this.setState({loading: true});
+    const {t} = this.props;
     const {profileUser, img} = this.state;
     const userPostData = {
       bio: profileUser.bio,
@@ -102,20 +104,20 @@ class Profile extends Component {
           axios.post("/api/profileImgUpload/", formData, config).then(imgResp => {
             const imgRespData = imgResp.data;
             if (imgRespData.error) {
-              const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-              t.show({message: "Unable to upload image!", intent: Intent.DANGER});
+              const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+              toast.show({message: t("Unable to upload image!"), intent: Intent.DANGER});
               browserHistory.push(`/profile/${profileUser.username}`);
             }
             else {
-              const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-              t.show({message: "Profile saved!", intent: Intent.SUCCESS});
+              const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+              toast.show({message: t("Profile saved!"), intent: Intent.SUCCESS});
               browserHistory.push(`/profile/${profileUser.username}`);
             }
           });
         }
         else {
-          const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-          t.show({message: "Profile saved!", intent: Intent.SUCCESS});
+          const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Profile saved!"), intent: Intent.SUCCESS});
           browserHistory.push(`/profile/${profileUser.username}`);
         }
       }
@@ -291,7 +293,7 @@ class Profile extends Component {
               </div>
             </div>
 
-            <button onClick={saveUserInfo} type="button" className="pt-button pt-intent-success">Save</button>
+            <button onClick={saveUserInfo} type="button" className="pt-button pt-intent-success">{t("Save")}</button>
 
           </form>
         </content>

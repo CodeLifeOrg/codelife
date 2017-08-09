@@ -23,11 +23,11 @@ class About extends Component {
     return (
       <div id="about-container">
         <h1>{ t("About") }</h1>
-        <p>{ t("Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector. The platform’s seed content will focus on teaching basic Javascript.") }</p>
-        <p>{ t("Code School Brazil (CSB) aims to be a free web platform where students can learn a variety skills useful for work in Brazil’s IT sector (ex. frontend development, UI design, data visualization). Users of CSB will be able to learn independently from physical classrooms, in order to provide a resource for students who may not otherwise have adequate learning opportunities.") }</p>
-        <p>{ t("The primary target audience of the platform MVP are students aged 14-18 in Brazilian public school. Testing will initially focus on students in Greater Belo Horizonte. At minimum all content will be created natively in Portuguese and English and the curriculum will be designed to complement the public education in Brazil") }</p>
-        <p>{ t("The platform’s seed curriculum will cover dynamic web development and integrate Brazilian data using the DataViva API.") }</p>
-        <p>{ t("In addition to working with students, school administration, teachers and government officials, the platform’s features will be designed with Brazilian businesses to connect students with potential employers.") }</p>
+        <p>{ t("aboutP1") }</p>
+        <p>{ t("aboutP2") }</p>
+        <p>{ t("aboutP3") }</p>
+        <p>{ t("aboutP4") }</p>
+        <p>{ t("aboutP5") }</p>
       </div>
     );
   }

@@ -13,12 +13,13 @@ class SelectImg extends Component {
   }
 
   render() {
+    const {t} = this.props;
     const onUpdate = this.onUpdate.bind(this);
     return (
       <div className="pt-form-content">
         <label className="pt-file-upload">
           <input onChange={onUpdate} type="file" />
-          <span className="pt-file-upload-input">Upload new picture...</span>
+          <span className="pt-file-upload-input">{t("Upload new picture")}</span>
         </label>
       </div>
     );

@@ -62,11 +62,12 @@ class Lesson extends Component {
   }
 
   buildButton(lesson, i) {
+    const {t} = this.props;
     const {userProgress} = this.state;
     const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
     return (
       <div className="view-snippit">
-        <Button className={ complete ? "pt-icon-endorsed" : "" } onClick={this.toggleDialog.bind(this, i)} text={`My ${lesson.name} Snippet`} />
+        <Button className={ complete ? "pt-icon-endorsed" : "" } onClick={this.toggleDialog.bind(this, i)} text={`My ${lesson.name} Codeblock`} />
         <Dialog
           isOpen={this.state[`isOpen_${i}`]}
           onClose={this.toggleDialog.bind(this, i)}
@@ -82,7 +83,7 @@ class Lesson extends Component {
               <Button
                 intent={Intent.PRIMARY}
                 onClick={this.toggleDialog.bind(this, i)}
-                text="Close"
+                text={t("Close")}
               />
             </div>
           </div>

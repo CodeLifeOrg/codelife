@@ -36,7 +36,8 @@ class Minilesson extends Component {
   }
 
   loadFromDB() {
-    const {lid} = this.props.params;
+    const {params, t} = this.props;
+    const {lid} = params;
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const uget = axios.get("/api/userprogress");
@@ -60,7 +61,7 @@ class Minilesson extends Component {
         top--;
       }
       if (mySnippet) {
-        mySnippet.username = "you!";
+        mySnippet.username = t("you!");
         otherSnippets.unshift(mySnippet);
       }
       currentLesson.snippet = mySnippet;
@@ -93,7 +94,7 @@ class Minilesson extends Component {
   }
 
   handleSave(newsnippet) {
-    // todo: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
+    // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
     // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
     // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
     const {currentLesson} = this.state;
@@ -136,12 +137,13 @@ class Minilesson extends Component {
   }
 
   buildWinPopover() {
+    const {t} = this.props;
     return (
       <Dialog
         iconName="endorsed"
         isOpen={this.state.winOpen}
         onClose={this.closeOverlay.bind(this)}
-        title="Great Job!"
+        title={t("Great Job!")}
       >
         <div className="pt-dialog-body">
           {this.state.winMessage}
@@ -151,7 +153,7 @@ class Minilesson extends Component {
                 <Button
                     intent={Intent.PRIMARY}
                     onClick={this.closeOverlay.bind(this)}
-                    text="Great!"
+                    text={t("Great!")}
                 />
             </div>
         </div>
@@ -162,14 +164,14 @@ class Minilesson extends Component {
   buildTestPopover() {
     const {t} = this.props;
     const {currentLesson} = this.state;
-    let title = `My ${currentLesson.name} CodeBlock`;
+    let title = t("myCodeblock", {islandName: currentLesson.name});
     if (currentLesson.snippet) title = currentLesson.snippet.snippetname;
 
     if (!this.allMinilessonsBeaten()) return <div className="stop"></div>;
 
     return (
       <div className="editor-popover">
-        <Tooltip content="Earn your Codeblock" tooltipClassName={ currentLesson.id }>
+        <Tooltip content={t("Earn your Codeblock")} tooltipClassName={ currentLesson.id }>
           <div className="code-block" onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top" style={{backgroundColor: this.promptFinalTest() ? "yellow" : "grey"}}></div>
@@ -264,8 +266,8 @@ class Minilesson extends Component {
         { otherSnippets.length
         ? <div>
             <h2 className="title">
-              Other Students' CodeBlocks&nbsp;
-              { !islandDone 
+              {t("Other Students' CodeBlocks")}&nbsp;
+              { !islandDone
               ? <Popover
                 interactionKind={PopoverInteractionKind.HOVER}
                 popoverClassName="pt-popover-content-sizing user-popover"
@@ -273,13 +275,13 @@ class Minilesson extends Component {
               >
               <span className="pt-icon pt-icon-lock"></span>
                 <div>
-                  { t("Earn your Codeblock for this Island to unlock source code from other students!") }
+                  { t("Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!") }
                 </div>
-              </Popover> : null } 
+              </Popover> : null }
             </h2>
             <div className="snippets">
               {otherSnippetItemsBeforeFold}
-              <Button onClick={this.showMore.bind(this)}>{this.state.showMore ? "Show Less" : "Show More"}</Button>
+              <Button onClick={this.showMore.bind(this)}>{this.state.showMore ? t("Show Less") : t("Show More")}</Button>
               <Collapse isOpen={this.state.showMore}><div className="snippets">{otherSnippetItemsAfterFold}</div></Collapse>
             </div>
           </div>

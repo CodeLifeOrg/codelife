@@ -40,6 +40,7 @@ class SelectSchool extends Component {
 
   updateSchoolList(geo) {
     // console.log('updateSchoolList', geo)
+    const {t} = this.props;
     const {id: gid} = geo;
     this.setState({loading: true});
     axios.get(`/api/schoolsByGid?gid=${gid}`).then(schoolsResp => {
@@ -58,7 +59,7 @@ class SelectSchool extends Component {
       else {
         this.setState({
           loading: false,
-          error: "Schools list for this location is unavailable."
+          error: t("Schools list for this location is unavailable.")
         });
       }
     });
@@ -83,9 +84,10 @@ class SelectSchool extends Component {
   }
 
   render() {
+    const {t} = this.props;
     const {loading, error, mySchool, schools, filteredSchools, schoolQuery} = this.state;
 
-    if (loading) return <p>Loading ...</p>;
+    if (loading) return <p>{t("Loading")}...</p>;
 
     const filterSchools = this.filterSchools.bind(this);
     const setSelectedSchool = this.setSelectedSchool.bind(this);
@@ -104,7 +106,7 @@ class SelectSchool extends Component {
               inputProps={{value: schoolQuery, onChange: filterSchools}}
               itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
               onItemSelect={setSelectedSchool}
-              noResults={<MenuItem disabled text="No results." />}
+              noResults={<MenuItem disabled text={t("No results.")} />}
             >
               <Button text={mySchool ? mySchool.name : ""} rightIconName="caret-down" />
             </Select> : null}

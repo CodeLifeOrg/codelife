@@ -40,7 +40,7 @@ class UserProjects extends Component {
     const {t} = this.props;
     const {loading, projects} = this.state;
 
-    if (loading) return <h2>{ t("Loading projects...") }</h2>;
+    if (loading) return <h2>{ t("Loading projects") }...</h2>;
 
     return (
       <div className="user-section">

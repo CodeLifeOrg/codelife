@@ -33,10 +33,10 @@ class Studio extends Component {
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}`);
   }
 
-  onDeleteProject(newproject) { 
+  onDeleteProject(newproject) {
     if (newproject.id !== this.state.currentProject.id) this.editor.setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);         
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);
   }
 
   onClickSnippet(snippet) {
@@ -132,7 +132,7 @@ class Studio extends Component {
           <div className="title-tab">{titleText}</div>
           <div className="buttons">
             { currentProject ? <a className="pt-button" target="_blank" href={ `/share/project/${currentProject.id}` }>{ t("Share") }</a> : null }
-            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button>
+            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{ t("Execute") }</button>
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>
         </div>

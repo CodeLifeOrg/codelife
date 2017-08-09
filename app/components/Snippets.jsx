@@ -49,7 +49,7 @@ class Snippets extends Component {
           >
             <span className="pt-icon-standard pt-icon-predictive-analysis"></span>
             <div>
-              <h5>{lesson.name} Cheat Sheet</h5>
+              <h5>{lesson.name} {t("Cheat Sheet")}</h5>
               <p style={{whiteSpace: "pre-wrap"}} dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
             </div>
           </Popover>

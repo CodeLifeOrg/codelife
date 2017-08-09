@@ -17,6 +17,7 @@ class ProjectCard extends Component {
   }
 
   getTitleText(theText) {
+    const {t} = this.props;
     const content = himalaya.parse(theText);
     let head, html, title = null;
     let titleText = "";
@@ -24,7 +25,7 @@ class ProjectCard extends Component {
     if (html) head = html.children.find(e => e.tagName === "head");
     if (head) title = head.children.find(e => e.tagName === "title");
     if (title && title.children[0]) titleText = title.children[0].content;
-    return titleText || "Webpage";
+    return titleText || t("Webpage");
   }
 
   componentDidUpdate() {
@@ -42,7 +43,6 @@ class ProjectCard extends Component {
   }
 
   render() {
-
     const {open} = this.state;
     const {project, t} = this.props;
     const {datemodified, id, name, studentcontent, username} = project;

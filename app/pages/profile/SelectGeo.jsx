@@ -83,7 +83,7 @@ class SelectGeo extends Component {
     const filterGeos = this.filterGeos.bind(this);
     const setSelectedGeo = this.setSelectedGeo.bind(this);
 
-    if (loading) return <p>Loading ...</p>;
+    if (loading) return <p>{t("Loading")}...</p>;
     if (error) return <h1>{error}</h1>;
 
     return (
@@ -100,7 +100,7 @@ class SelectGeo extends Component {
             inputProps={{value: geoQuery, onChange: filterGeos}}
             itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={homeGeo.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
             onItemSelect={setSelectedGeo}
-            noResults={<MenuItem disabled text="No results." />}
+            noResults={<MenuItem disabled text={t("No results.")} />}
           >
             <Button text={homeGeo ? homeGeo.name : ""} rightIconName="caret-down" />
           </Select> : null}

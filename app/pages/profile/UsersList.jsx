@@ -44,13 +44,15 @@ class UsersList extends Component {
     const {loading} = this.state;
     let {users} = this.state;
 
-    if (loading) return <h2>{ t("Loading snipppets...") }</h2>;
+    if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
     let title;
     if (type === "geo") {
-      title = `Other users from ${me.geoname}, ${me.gid.substr(1, 2).toUpperCase()}`;
+      // title = `Other users from ${me.geoname}, ${me.gid.substr(1, 2).toUpperCase()}`;
+      title = t("usersByLocation", {municipality: me.geoname, state: me.gid.substr(1, 2).toUpperCase()});
     }
     else {
-      title = `Other users from ${me.schoolname}`;
+      // title = `Other users from ${me.schoolname}`;
+      title = t("usersBySchool", {school: me.schoolname});
     }
     // remove myself
     users = users.filter(u => u.id !== me.id);

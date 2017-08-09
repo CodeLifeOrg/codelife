@@ -5,18 +5,10 @@ import {connect} from "react-redux";
 import "./Footer.css";
 
 class Footer extends Component {
-
-  changeLang(e) {
-    e.preventDefault();
-    const newOrigin = e.target.id === "en"
-      ? window.location.origin.replace("pt.", "en.")
-      : window.location.origin.replace("en.", "pt.");
-    window.location = `${newOrigin}${window.location.pathname}`;
-  }
-
   render() {
-    const {className, t, user, i18n} = this.props;
-    const {language} = i18n;
+    const {className, t, user, location} = this.props;
+    const {protocol, host, pathname} = location;
+    const hostSansSub = host.replace("pt.", "").replace("en.", "");
 
     return (
       <footer id="footer" className={ className }>
@@ -25,7 +17,7 @@ class Footer extends Component {
           <Link className="link" to="/about">{ t("About") }</Link>&nbsp;
           <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>&nbsp;
           { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
-          <a href="#" id="en" onClick={this.changeLang}>EN</a> | <a id="pt" href="#" onClick={this.changeLang}>PT</a>
+          <a href={`${protocol}//en.${hostSansSub}${pathname}`} >EN</a> | <a href={`${protocol}//pt.${hostSansSub}${pathname}`} >PT</a>
         </div>
         <div className="logos">
           <a target="_blank" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
@@ -42,7 +34,8 @@ Footer.defaultProps = {
 };
 
 Footer = connect(state => ({
-  user: state.auth.user
+  user: state.auth.user,
+  location: state.location
 }))(Footer);
 Footer = translate()(Footer);
 export default Footer;

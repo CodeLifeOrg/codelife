@@ -18,6 +18,7 @@ class AllSnippets extends Component {
   }
 
   componentDidMount() {
+    const {t} = this.props;
     const osget = axios.get("/api/snippets/allothers");
     const sget = axios.get("/api/snippets/");
     const lget = axios.get("/api/lessons");
@@ -33,7 +34,8 @@ class AllSnippets extends Component {
       }
       for (const ms of mysnippets) {
         for (const l of lessons) {
-          ms.username = "you!";
+          ms.username = t("you!");
+          ms.mine = true;
           if (ms.lid === l.id) l.snippets.push(ms);
         }
       }

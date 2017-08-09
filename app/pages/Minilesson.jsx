@@ -62,6 +62,7 @@ class Minilesson extends Component {
       }
       if (mySnippet) {
         mySnippet.username = t("you!");
+        mySnippet.mine = true;
         otherSnippets.unshift(mySnippet);
       }
       currentLesson.snippet = mySnippet;

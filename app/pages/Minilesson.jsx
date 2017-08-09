@@ -53,20 +53,26 @@ class Minilesson extends Component {
       const otherSnippets = [];
       let mySnippet = null;
       // Fold over snippets and separate them into mine and others
+      allSnippets.sort((a, b) => b.likes - a.likes);
       for (const s of allSnippets) {
         if (s.uid === this.props.auth.user.id) {
           mySnippet = s;
         } 
         else {
           // TODO: do this in a database join, not here.
-          if (likes.find(l => l.likeid === s.id)) s.liked = true;
-          otherSnippets.push(s);
+          if (likes.find(l => l.likeid === s.id)) {
+            s.liked = true;
+            otherSnippets.unshift(s);
+          }
+          else {
+            otherSnippets.push(s);
+          }
         } 
       }
-      otherSnippets.sort((a, b) => b.likes - a.likes);
+      // otherSnippets.sort((a, b) => b.likes - a.likes);
       let top = 3;
       for (const os of otherSnippets) {
-        os.featured = top > 0;
+        //os.featured = top > 0;
         top--;
       }
       if (mySnippet) {

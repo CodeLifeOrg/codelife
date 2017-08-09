@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
-import {Login, SignUp} from "datawheel-canon";
+import {AnchorLink, Login, SignUp} from "datawheel-canon";
 import Clouds from "components/Clouds";
 
 import "./Splash.css";
@@ -28,19 +28,22 @@ class Splash extends Component {
     return (
       <div id="splash">
         <Clouds />
-        <div className="center-block">
-          <img className="island" src="/islands/splash.png" />
-          <img className="logo" src="/logo/logo.png" />
-          { signup
-          ? <SignUp className="form" />
-          : <div className="form">
-              <Login />
-              <button className="pt-button pt-fill" onClick={ this.toggleSignup.bind(this) }>{ t("Sign Up") }</button>
-            </div>
-          }
+        <div className="panel">
+          <div id="entry">
+            <img className="island" src="/islands/splash.png" />
+            <img className="logo" src="/logo/logo.png" />
+            { signup
+            ? <SignUp className="form" />
+            : <div className="form">
+                <Login />
+                <button className="pt-button pt-fill" onClick={ this.toggleSignup.bind(this) }>{ t("Sign Up") }</button>
+              </div>
+            }
+          </div>
+          <AnchorLink className="about-anchor" to="about">{ t("About") }<span className="pt-icon-large pt-icon-caret-down" /></AnchorLink>
         </div>
-        <div className="about">
-          <h2>{ t("About") }</h2>
+        <div id="about" className="panel">
+          <h2>{ t("What is CodeLife?") }</h2>
           <p>{ t("splashP1") }</p>
           <p>{ t("splashP2") }</p>
           <p>{ t("splashP3") }</p>

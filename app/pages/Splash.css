@@ -3,18 +3,19 @@
 }
 
 #splash {
-  align-items: center;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100vh;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
 
-  & .center-block {
+  & .panel {
+    align-items: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 90vh;
+    position: relative;
+    width: 100%;
+  }
+
+  & #entry {
     margin-top: -150px;
     max-width: 350px;
     position: relative;
@@ -49,15 +50,45 @@
 
   }
 
-  & .about {
+  & .about-anchor {
+    bottom: 0;
     color: white;
-    margin: 60px 0 0 0;
-    max-width: 350px;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    & .pt-icon-large {
+      display: block;
+    }
+
+  }
+
+  & #about {
 
     & h2 {
       color: white;
+      margin-bottom: 25px;
       text-align: center;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     }
+
+    & p {
+      color: white;
+      font-size: 18px;
+      line-height: 30px;
+      max-width: 500px;
+      text-align: left;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      width: 100%;
+    }
+
   }
 
 }

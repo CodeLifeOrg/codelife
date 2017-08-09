@@ -44,12 +44,17 @@ class AllSnippets extends Component {
       othersnippets.sort((a, b) => b.likes - a.likes);
       for (const os of othersnippets) {
         for (const l of lessons) {
-          if (os.lid === l.id) {
-            // TODO: move this to db call, don't do this here
-            if (likes.find(l => l.likeid === os.id)) os.liked = true;
-            os.featured = l.top > 0;
+          if (os.lid === l.id) { 
+            //os.featured = l.top > 0;
             l.top--;
-            l.snippets.push(os);
+            // TODO: move this to db call, don't do this here
+            if (likes.find(l => l.likeid === os.id)) {
+              os.liked = true;
+              l.snippets.unshift(os);
+            } 
+            else {
+              l.snippets.push(os);
+            }
           }
         }
       }

@@ -8,4 +8,4 @@ module.exports = function (host, lang, resp) {
     }
   }
   return resp;
-}
+};

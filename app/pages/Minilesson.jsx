@@ -66,6 +66,8 @@ class Minilesson extends Component {
       }
       currentLesson.snippet = mySnippet;
 
+      minilessons.sort((a, b) => a.ordering - b.ordering);
+
       this.setState({minilessons, currentLesson, userProgress, otherSnippets});
     });
   }

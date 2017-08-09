@@ -44,14 +44,14 @@ class AllSnippets extends Component {
       othersnippets.sort((a, b) => b.likes - a.likes);
       for (const os of othersnippets) {
         for (const l of lessons) {
-          if (os.lid === l.id) { 
-            //os.featured = l.top > 0;
+          if (os.lid === l.id) {
+            // os.featured = l.top > 0;
             l.top--;
             // TODO: move this to db call, don't do this here
             if (likes.find(l => l.likeid === os.id)) {
               os.liked = true;
               l.snippets.unshift(os);
-            } 
+            }
             else {
               l.snippets.push(os);
             }
@@ -72,6 +72,8 @@ class AllSnippets extends Component {
     if (!lessons || !userProgress) return null;
 
     const snippetItems = [];
+
+    console.log(lessons);
 
     for (const l of lessons) {
       snippetItems.push(

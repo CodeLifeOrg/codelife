@@ -167,7 +167,7 @@ class CodeEditor extends Component {
                   {...this.props}
                 />
                 : <pre className="editor blurry-text">{currentText}</pre>
-              : <pre className="editor" onMouseUp={this.showContextMenu.bind(this, window.getSelection())} style={{overflow: "hidden", overflowY: "scroll", height: "300px", whiteSpace: "pre-wrap", width: "350px"}}>{currentText}</pre>
+              : <pre className="editor" onMouseUp={this.showContextMenu.bind(this, window.getSelection())}>{currentText}</pre>
             }
         </div>
         <div className="render">

@@ -42,7 +42,7 @@
       width: 300px;
 
       & .pt-tab-list {
-        justify-content: space-between;
+        justify-content: flex-start;
       }
 
       & .pt-tab-panel {

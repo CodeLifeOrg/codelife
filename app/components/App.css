@@ -97,13 +97,18 @@ body {
 
   }
 
+  & .pt-dialog-body {
+    display: flex;
+  }
+
   & .pt-dialog-footer {
+    padding: 0 10px;
 
     & .pt-dialog-footer-byline {
       color: #444;
       float: left;
       opacity: 0.75;
-      margin-top: 5px;
+      margin-top: 7px;
     }
 
   }

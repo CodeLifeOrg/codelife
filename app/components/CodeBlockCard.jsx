@@ -41,7 +41,7 @@ class CodeBlockCard extends Component {
   render() {
     const {open} = this.state;
     const {codeBlock, t, userProgress} = this.props;
-    const {lid, snippetname, studentcontent, username} = codeBlock;
+    const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
@@ -55,9 +55,9 @@ class CodeBlockCard extends Component {
           <div className="info">
             <div className="card-title">
               {snippetname}
-              {codeBlock.mine ? <span style={{color: "lightgreen", marginLeft: "5px"}} className="pt-icon-standard pt-icon-user"></span> : null}
+              {mine ? <span style={{color: "lightgreen", marginLeft: "5px"}} className="pt-icon-standard pt-icon-user"></span> : null}
               { /* codeBlock.featured ? <span style={{color: "yellow", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null */ }
-              {codeBlock.liked ? <span style={{color: "pink", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null }
+              {liked ? <span style={{color: "pink", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null }
             </div>
             { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
           </div>
@@ -68,6 +68,7 @@ class CodeBlockCard extends Component {
           title={snippetname}
           lazy={false}
           inline={inline}
+          className={ lid }
           style={{
             height: "75vh",
             maxHeight: "600px",
@@ -78,7 +79,7 @@ class CodeBlockCard extends Component {
           <div className="pt-dialog-body">
             <CodeEditor initialValue={studentcontent} preventSelection={!done} projectMode={projectMode} island={ lid } ref={c => this.editor = c} readOnly={true} />
             { done ? null
-              : <div className={ `pt-popover pt-tooltip ${ lid }` }>
+              : <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ lid }` }>
                   <div className="pt-popover-content">
                     { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
@@ -86,13 +87,13 @@ class CodeBlockCard extends Component {
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
-            <div className="pt-dialog-footer-likebutton" onClick={this.toggleLike.bind(this)}>
-              {codeBlock.liked 
-                ? <span style={{color: "pink", marginLeft: "10px", marginTop: "6px"}} className="pt-icon-standard pt-icon-star"></span>
-                : <span style={{color: "pink", marginLeft: "10px", marginTop: "6px"}} className="pt-icon-standard pt-icon-star-empty"></span>
-              }
-            </div>
             <div className="pt-dialog-footer-actions">
+              <Button
+                intent={ liked ? Intent.WARNING : Intent.DEFAULT }
+                iconName={ `star${ liked ? "" : "-empty"}` }
+                onClick={ this.toggleLike.bind(this) }
+                text={ `${ t("Favorite") } (${ likes })` }
+              />
               <Button
                 intent={ Intent.PRIMARY }
                 onClick={ this.toggleDialog.bind(this) }

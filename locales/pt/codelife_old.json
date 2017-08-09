@@ -1,2 +1,34 @@
 {
+  "/": "/",
+  "/api/lessons": "/api/lessons",
+  "/api/lessons/": "/api/lessons/",
+  "/api/profile/": "/api/profile/",
+  "/api/profileImgUpload/": "/api/profileImgUpload/",
+  "/api/projects/": "/api/projects/",
+  "/api/projects/new": "/api/projects/new",
+  "/api/projects/update": "/api/projects/update",
+  "/api/snippets": "/api/snippets",
+  "/api/snippets/": "/api/snippets/",
+  "/api/snippets/allothers": "/api/snippets/allothers",
+  "/api/survey/": "/api/survey/",
+  "/api/userprogress": "/api/userprogress",
+  "/api/userprogress/save": "/api/userprogress/save",
+  "DD/MM/YY": "DD/MM/AA",
+  "File cannot be in use or blank": "O arquivo não pode ser usado ou em branco",
+  "How much does the potential of receiving a \\": "How much does the potential of receiving a \\",
+  "Loading": {},
+  "Loading projects": {},
+  "MM/DD/YYYY": "MM/DD/AAAA",
+  "YYYY-MM-DD": "AAAA-MM-DD",
+  "mypage": {
+    "html": "html"
+  },
+  "open a new file first": "Abra primeiro um novo arquivo",
+  "Login": {
+    "Other": "Other"
+  },
+  "SignUp": {
+    "error": {}
+  },
+  "home": {}
 }

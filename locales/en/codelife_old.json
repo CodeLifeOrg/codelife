@@ -1,2 +1,34 @@
 {
+  "/": "/",
+  "/api/lessons": "/api/lessons",
+  "/api/lessons/": "/api/lessons/",
+  "/api/profile/": "/api/profile/",
+  "/api/profileImgUpload/": "/api/profileImgUpload/",
+  "/api/projects/": "/api/projects/",
+  "/api/projects/new": "/api/projects/new",
+  "/api/projects/update": "/api/projects/update",
+  "/api/snippets": "/api/snippets",
+  "/api/snippets/": "/api/snippets/",
+  "/api/snippets/allothers": "/api/snippets/allothers",
+  "/api/survey/": "/api/survey/",
+  "/api/userprogress": "/api/userprogress",
+  "/api/userprogress/save": "/api/userprogress/save",
+  "DD/MM/YY": "DD/MM/YY",
+  "File cannot be in use or blank": "File cannot be in use or blank",
+  "How much does the potential of receiving a \\": "How much does the potential of receiving a \\",
+  "Loading": {},
+  "Loading projects": {},
+  "MM/DD/YYYY": "MM/DD/YYYY",
+  "YYYY-MM-DD": "YYYY-MM-DD",
+  "mypage": {
+    "html": "html"
+  },
+  "open a new file first": "open a new file first",
+  "Login": {
+    "Other": "Other"
+  },
+  "SignUp": {
+    "error": {}
+  },
+  "home": {}
 }

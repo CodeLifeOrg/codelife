@@ -65,6 +65,9 @@ class CodeBlockCard extends Component {
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
+            <div className="pt-dialog-footer-likebutton">
+              <span style={{color: "pink"}} className="pt-icon-standard pt-icon-heart"></span>
+            </div>
             <div className="pt-dialog-footer-actions">
               <Button
                 intent={ Intent.PRIMARY }

@@ -7,6 +7,7 @@ export default class Quiz extends Component {
     super(props);
     this.state = {
       isOpen: false,
+      quizjson: null,
       activeQ: null
     };
   }
@@ -21,6 +22,16 @@ export default class Quiz extends Component {
       toast.show({message: "Sorry, Try again!", timeout: 1500, intent: Intent.DANGER});
     }
     this.setState({activeQ: question.text});
+  }
+
+  componentDidMount() {
+    if (this.props.htmlcontent1) this.setState({prompt: this.props.htmlcontent1});
+  }
+
+  componentDidUpdate() {
+    if (this.state.quizjson !== this.props.quizjson) {
+      this.setState({quizjson: this.props.quizjson, activeQ: null});
+    }
   }
 
   render() {

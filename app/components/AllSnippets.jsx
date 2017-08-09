@@ -47,7 +47,7 @@ class AllSnippets extends Component {
           if (os.lid === l.id) {
             // TODO: move this to db call, don't do this here
             if (likes.find(l => l.likeid === os.id)) os.liked = true;
-            os.starred = l.top > 0;
+            os.featured = l.top > 0;
             l.top--;
             l.snippets.push(os);
           }

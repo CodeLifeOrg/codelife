@@ -66,7 +66,7 @@ class Minilesson extends Component {
       otherSnippets.sort((a, b) => b.likes - a.likes);
       let top = 3;
       for (const os of otherSnippets) {
-        os.starred = top > 0;
+        os.featured = top > 0;
         top--;
       }
       if (mySnippet) {

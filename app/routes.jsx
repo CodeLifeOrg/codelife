@@ -4,15 +4,16 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 import App from "components/App";
 
 import About from "pages/About";
+import EditProfile from "pages/profile/EditProfile";
+import Glossary from "pages/Glossary";
 import Lesson from "pages/Lesson";
 import Minilesson from "pages/Minilesson";
-import Slide from "pages/Slide";
-import Glossary from "pages/Glossary";
+import Privacy from "pages/Privacy";
 import Profile from "pages/profile/Profile";
-import EditProfile from "pages/profile/EditProfile";
-import Studio from "pages/Studio";
 import Share from "pages/Share";
+import Slide from "pages/Slide";
 import Splash from "pages/Splash";
+import Studio from "pages/Studio";
 import Survey from "pages/Survey";
 
 export default function RouteCreate() {
@@ -38,6 +39,8 @@ export default function RouteCreate() {
       <Route path="survey" component={Survey} />
 
       <Route path="about" component={About} />
+
+      <Route path="privacy" component={Privacy} />
 
       <Route path="share/:type/:id" component={Share} />
 

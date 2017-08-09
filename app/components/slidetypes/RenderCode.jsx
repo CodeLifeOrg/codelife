@@ -18,13 +18,13 @@ export default class RenderCode extends Component {
   componentDidUpdate() {
     let content = "";
     if (this.props.htmlcontent2) content = this.props.htmlcontent2;
-    if (this.editor.getEntireContents() !== content) {
-      this.editor.setEntireContents(content);
+    if (this.editor.getWrappedInstance().getEntireContents() !== content) {
+      this.editor.getWrappedInstance().setEntireContents(content);
     }
   }
 
   executeCode() {
-    this.editor.executeCode();
+    this.editor.getWrappedInstance().executeCode();
   }
 
   render() {

@@ -118,7 +118,7 @@ class CodeBlock extends Component {
     const {lesson} = this.props;
     let initialcontent = "";
     if (lesson && lesson.initialcontent) initialcontent = lesson.initialcontent;
-    this.editor.setEntireContents(initialcontent);
+    this.editor.getWrappedInstance().setEntireContents(initialcontent);
     this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
   }
@@ -128,7 +128,7 @@ class CodeBlock extends Component {
   }
 
   executeCode() {
-    this.editor.executeCode();
+    this.editor.getWrappedInstance().executeCode();
   }
 
   changeFilename(e) {
@@ -191,7 +191,7 @@ class CodeBlock extends Component {
   verifyAndSaveCode() {
     const {t} = this.props;
     const {id: uid} = this.props.auth.user;
-    const studentcontent = this.editor.getEntireContents();
+    const studentcontent = this.editor.getWrappedInstance().getEntireContents();
     let snippet = this.props.lesson.snippet;
     const lid = this.props.lesson.id;
     // let name = `My ${this.props.lesson.name} Codeblock`;

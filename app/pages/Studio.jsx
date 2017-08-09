@@ -29,24 +29,24 @@ class Studio extends Component {
 
   onCreateProject(project) {
     this.setState({currentProject: project});
-    if (this.editor) this.editor.setEntireContents("");
+    if (this.editor.getWrappedInstance()) this.editor.getWrappedInstance().setEntireContents("");
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}`);
   }
 
   onDeleteProject(newproject) {
-    if (newproject.id !== this.state.currentProject.id) this.editor.setEntireContents(newproject.studentcontent);
+    if (newproject.id !== this.state.currentProject.id) this.editor.getWrappedInstance().setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);
   }
 
   onClickSnippet(snippet) {
-    if (this.state.currentProject) this.editor.insertTextAtCursor(snippet.studentcontent);
+    if (this.state.currentProject) this.editor.getWrappedInstance().insertTextAtCursor(snippet.studentcontent);
   }
 
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
-      this.editor.setEntireContents(resp.data[0].studentcontent);
+      this.editor.getWrappedInstance().setEntireContents(resp.data[0].studentcontent);
       browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}`);
     });
   }
@@ -60,7 +60,7 @@ class Studio extends Component {
   // TODO: clean up this if/then tree, it sucks
   onClickProject(project) {
     if (this.state.currentProject) {
-      if (this.editor.changesMade()) {
+      if (this.editor.getWrappedInstance().changesMade()) {
         if (confirm("Discard changes and open a new file?")) {
           this.openProject(project.id);
           return true;
@@ -87,12 +87,12 @@ class Studio extends Component {
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
-      const studentcontent = this.editor.getEntireContents();
+      const studentcontent = this.editor.getWrappedInstance().getEntireContents();
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
           const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           t.show({message: "Saved!", intent: Intent.SUCCESS});
-          this.editor.setChangeStatus(false);
+          this.editor.getWrappedInstance().setChangeStatus(false);
         }
       });
     }
@@ -106,7 +106,7 @@ class Studio extends Component {
   }
 
   executeCode() {
-    this.editor.executeCode();
+    this.editor.getWrappedInstance().executeCode();
   }
 
   render() {

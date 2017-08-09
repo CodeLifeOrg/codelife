@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import himalaya from "himalaya";
-import translate from "himalaya/translate";
+import {toHTML} from "himalaya/translate";
+import {translate} from "react-i18next";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
@@ -80,7 +81,7 @@ class CodeEditor extends Component {
       if (theText.includes("script")) {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
-        theText = translate.toHTML(newJSON);
+        theText = toHTML(newJSON);
       }
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
@@ -182,4 +183,6 @@ CodeEditor.defaultProps = {
   island: "island-1"
 };
 
+
+CodeEditor = translate(undefined, {withRef: true})(CodeEditor);
 export default CodeEditor;

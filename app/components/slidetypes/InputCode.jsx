@@ -30,12 +30,12 @@ class InputCode extends Component {
     const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
     if (this.state.baseText !== newText) {
       this.setState({baseText: newText});
-      this.editor.setEntireContents(newText);
+      this.editor.getWrappedInstance().setEntireContents(newText);
     }
   }
 
   submitAnswer() {
-    const contents = this.editor.getEntireContents();
+    const contents = this.editor.getWrappedInstance().getEntireContents();
     const jsonArray = himalaya.parse(contents);
     let errors = 0;
     const rulejson = JSON.parse(this.props.rulejson);
@@ -62,7 +62,7 @@ class InputCode extends Component {
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
   resetAnswer() {
-    this.editor.setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
+    this.editor.getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
     this.setState({resetAlert: false});
   }
   
@@ -71,7 +71,7 @@ class InputCode extends Component {
   }
 
   executeCode() {
-    this.editor.executeCode();
+    this.editor.getWrappedInstance().executeCode();
   }
 
   render() {

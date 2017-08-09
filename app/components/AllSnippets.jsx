@@ -23,11 +23,13 @@ class AllSnippets extends Component {
     const sget = axios.get("/api/snippets/");
     const lget = axios.get("/api/lessons");
     const upget = axios.get("/api/userprogress");
-    Promise.all([sget, osget, lget, upget]).then(resp => {
+    const lkget = axios.get("/api/likes");
+    Promise.all([sget, osget, lget, upget, lkget]).then(resp => {
       const mysnippets = resp[0].data;
       const othersnippets = resp[1].data;
       const lessons = resp[2].data;
       const userProgress = resp[3].data;
+      const likes = resp[4].data;
       for (const l of lessons) {
         l.snippets = [];
         l.top = 3;
@@ -43,7 +45,9 @@ class AllSnippets extends Component {
       for (const os of othersnippets) {
         for (const l of lessons) {
           if (os.lid === l.id) {
-            os.starred = l.top > 0;
+            // TODO: move this to db call, don't do this here
+            if (likes.find(l => l.likeid === os.id)) os.liked = true;
+            os.featured = l.top > 0;
             l.top--;
             l.snippets.push(os);
           }

@@ -84,6 +84,11 @@
       white-space: pre-wrap;
     }
 
+    &.cheatSheet .slide-text {
+      max-height: 100%;
+      overflow-y: scroll;
+    }
+
     & .slide-image {
       height: 80%;
     }
@@ -164,7 +169,7 @@
   & #slide-foot {
     display: flex;
     justify-content: space-between;
-    margin: 10px 25px 25px;
+    margin: 15px 25px 20px;
   }
 
   & .flex-row {

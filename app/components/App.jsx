@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {isAuthenticated} from "datawheel-canon";
+import Helmet from "react-helmet";
+
+import header from "../helmet.js";
 
 import "./App.css";
 import "./Islands.css";
@@ -18,14 +21,21 @@ class App extends Component {
 
   render() {
 
-    const {auth, children, location} = this.props;
+    const {auth, children, i18n, location} = this.props;
 
     const routes = location.pathname.split("/");
 
     const bareRoute = routes[1] === "share";
 
+    const meta = header.meta.slice();
+    if (i18n.locale === "en") {
+      meta.find(d => d.property === "og:image").content = "https://dataafrica.io/social/codelife-share-en.jpg";
+      meta.find(d => d.property === "og:description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
+    }
+
     return (
       <div id="app">
+        <Helmet title={ header.title } link={ header.link } meta={ meta } />
         { auth.user || auth.error
         ? bareRoute ? children
         : <div className="container">
@@ -50,4 +60,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(state => ({auth: state.auth}), mapDispatchToProps)(App);
+export default connect(state => ({auth: state.auth, i18n: state.i18n}), mapDispatchToProps)(App);

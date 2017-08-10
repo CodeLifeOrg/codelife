@@ -2,9 +2,11 @@
   &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-1, dark); }
   &#island #path:before { background-color: map(islands, island-1, dark); }
   & #path .stop { border-color: map(islands, island-1, dark); }
-  &#island #path .stop.done { background-color: color(map(islands, island-1, dark) lightness(+10%)); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-1, light); }
-  &#island #path .code-block .side { border-color: map(islands, island-1, dark); }
+  &#island #path .stop.done { background-color: map(islands, island-1, light); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-1, dark); }
+  &#island #path .code-block .side { border-color: map(islands, island-1, dark); color: map(islands, island-1, dark); }
+  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-1, dark); }
+    &#island #path .code-block.done .side { background-color: map(islands, island-1, light); }
   &.codeBlockCard { background-color: map(islands, island-1, dark); }
   &.pt-dialog, & .pt-dialog { border-color: map(islands, island-1, dark); }
   &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-1, dark); }
@@ -18,9 +20,11 @@
   &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-2, dark); }
   &#island #path:before { background-color: map(islands, island-2, dark); }
   & #path .stop { border-color: map(islands, island-2, dark); }
-  &#island #path .stop.done { background-color: color(map(islands, island-2, dark) lightness(+10%)); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-2, light); }
-  &#island #path .code-block .side { border-color: map(islands, island-2, dark); }
+  &#island #path .stop.done { background-color: map(islands, island-2, light); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-2, dark); }
+  &#island #path .code-block .side { border-color: map(islands, island-2, dark); color: map(islands, island-2, dark); }
+  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-2, dark); }
+  &#island #path .code-block.done .side { background-color: map(islands, island-2, light); }
   &.codeBlockCard { background-color: map(islands, island-2, dark); }
   &.pt-dialog, & .pt-dialog { border-color: map(islands, island-2, dark); }
   &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-2, dark); }
@@ -34,9 +38,11 @@
   &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-3, dark); }
   &#island #path:before { background-color: map(islands, island-3, dark); }
   & #path .stop { border-color: map(islands, island-3, dark); }
-  &#island #path .stop.done { background-color: color(map(islands, island-3, dark) lightness(+10%)); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-3, light); }
-  &#island #path .code-block .side { border-color: map(islands, island-3, dark); }
+  &#island #path .stop.done { background-color: map(islands, island-3, light); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-3, dark); }
+  &#island #path .code-block .side { border-color: map(islands, island-3, dark); color: map(islands, island-3, dark); }
+  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-3, dark); }
+  &#island #path .code-block.done .side { background-color: map(islands, island-3, light); }
   &.codeBlockCard { background-color: map(islands, island-3, dark); }
   &.pt-dialog, & .pt-dialog { border-color: map(islands, island-3, dark); }
   &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-3, dark); }
@@ -50,9 +56,11 @@
   &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-4, dark); }
   &#island #path:before { background-color: map(islands, island-4, dark); }
   & #path .stop { border-color: map(islands, island-4, dark); }
-  &#island #path .stop.done { background-color: color(map(islands, island-4, dark) lightness(+10%)); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-4, light); }
-  &#island #path .code-block .side { border-color: map(islands, island-4, dark); }
+  &#island #path .stop.done { background-color: map(islands, island-4, light); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-4, dark); }
+  &#island #path .code-block .side { border-color: map(islands, island-4, dark); color: map(islands, island-4, dark); }
+  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-4, dark); }
+  &#island #path .code-block.done .side { background-color: map(islands, island-4, light); }
   &.codeBlockCard { background-color: map(islands, island-4, dark); }
   &.pt-dialog, & .pt-dialog { border-color: map(islands, island-4, dark); }
   &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-4, dark); }
@@ -66,9 +74,11 @@
   &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-5, dark); }
   &#island #path:before { background-color: map(islands, island-5, dark); }
   & #path .stop { border-color: map(islands, island-5, dark); }
-  &#island #path .stop.done { background-color: color(map(islands, island-5, dark) lightness(+10%)); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-5, light); }
-  &#island #path .code-block .side { border-color: map(islands, island-5, dark); }
+  &#island #path .stop.done { background-color: map(islands, island-5, light); }
+  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-5, dark); }
+  &#island #path .code-block .side { border-color: map(islands, island-5, dark); color: map(islands, island-5, dark); }
+  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-5, dark); }
+  &#island #path .code-block.done .side { background-color: map(islands, island-5, light); }
   &.codeBlockCard { background-color: map(islands, island-5, dark); }
   &.pt-dialog, & .pt-dialog { border-color: map(islands, island-5, dark); }
   &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-5, dark); }

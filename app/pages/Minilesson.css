@@ -95,10 +95,8 @@
         width: 40px;
 
         & .pt-icon-standard {
-          color: white;
           font-size: 20px;
           line-height: 37px;
-          opacity: 0.5;
         }
 
         &.left {
@@ -116,13 +114,23 @@
         }
         &.bottom {
           box-shadow: 0 2px 15px rgba(0, 0, 0, 0.75);
-        	transform: rotateX(90deg) translateY(20px);
+        	transform: rotateX(90deg)translateY(20px);
         	transform-origin: bottom center;
         }
 
       }
 
-      &:hover {
+      &.next {
+        animation: blockBounce 2s infinite;
+
+        & .side {
+          animation: blockGlow 2s infinite;
+          background-color: #f7e944;
+        }
+
+      }
+
+      &.next:hover, &.done:hover {
         cursor: pointer;
         margin-top: -2px;
         margin-bottom: 2px;
@@ -148,8 +156,20 @@
 
 }
 
+@keyframes blockBounce {
+  0%, 40%, 50%, 65%, 100% {transform: translateY(0)rotateX(-33deg)translateZ(-28px)translateX(2px);}
+  45% {transform: translateY(-4px)rotateX(-33deg)translateZ(-28px)translateX(2px);}
+  55% {transform: translateY(-2px)rotateX(-33deg)translateZ(-28px)translateX(2px);}
+}
+
+@keyframes blockGlow {
+  0%, 40%, 50%, 65%, 100% {background-color: #f7e944;}
+  45% {background-color: color(#f7e944 lightness(75%));}
+  55% {background-color: color(#f7e944 lightness(75%));}
+}
+
 @keyframes bounce {
-  0%, 40%, 50%, 65%, 100% {background-color: #edff28; transform: translateY(0)rotateX(50deg);}
-  45% {background-color: color(#edff28 lightness(75%)); transform: translateY(-4px)rotateX(50deg);}
-  55% {background-color: color(#edff28 lightness(75%)); transform: translateY(-2px)rotateX(50deg);}
+  0%, 40%, 50%, 65%, 100% {background-color: #f7e944; transform: translateY(0)rotateX(50deg);}
+  45% {background-color: color(#f7e944 lightness(75%)); transform: translateY(-4px)rotateX(50deg);}
+  55% {background-color: color(#f7e944 lightness(75%)); transform: translateY(-2px)rotateX(50deg);}
 }

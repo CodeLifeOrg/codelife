@@ -57,7 +57,7 @@ class Minilesson extends Component {
       for (const s of allSnippets) {
         if (s.uid === this.props.auth.user.id) {
           mySnippet = s;
-        } 
+        }
         else {
           // TODO: do this in a database join, not here.
           if (likes.find(l => l.likeid === s.id)) {
@@ -67,12 +67,12 @@ class Minilesson extends Component {
           else {
             otherSnippets.push(s);
           }
-        } 
+        }
       }
       // otherSnippets.sort((a, b) => b.likes - a.likes);
       let top = 3;
       for (const os of otherSnippets) {
-        //os.featured = top > 0;
+        // os.featured = top > 0;
         top--;
       }
       if (mySnippet) {
@@ -185,16 +185,29 @@ class Minilesson extends Component {
     let title = t("myCodeblock", {islandName: currentLesson.name});
     if (currentLesson.snippet) title = currentLesson.snippet.snippetname;
 
-    if (!this.allMinilessonsBeaten()) return <div className="stop"></div>;
+    if (!this.allMinilessonsBeaten()) {
+      return (
+        <div className="editor-popover">
+          <div className="code-block" onClick={this.toggleTest.bind(this)}>
+            <div className="side bottom"></div>
+            <div className="side top"></div>
+            <div className="side left"></div>
+            <div className="side front"></div>
+          </div>
+        </div>
+      );
+    }
+
+    const next = this.promptFinalTest();
 
     return (
       <div className="editor-popover">
-        <Tooltip content={t("Earn your Codeblock")} tooltipClassName={ currentLesson.id }>
-          <div className="code-block" onClick={this.toggleTest.bind(this)}>
+        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentLesson.id }>
+          <div className={ `code-block ${ next ? "next" : "done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
-            <div className="side top" style={{backgroundColor: this.promptFinalTest() ? "yellow" : "grey"}}></div>
-            <div className="side left" style={{backgroundColor: this.promptFinalTest() ? "yellow" : "grey"}}></div>
-            <div className="side front"><span className="pt-icon-standard pt-icon-code-block"></span></div>
+            <div className="side top"></div>
+            <div className="side left"></div>
+            <div className="side front"><span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` }></span></div>
           </div>
         </Tooltip>
         <Dialog

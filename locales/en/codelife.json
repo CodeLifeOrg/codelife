@@ -30,6 +30,7 @@
   "Great Job!": "Great Job!",
   "Great!": "Great!",
   "Having trouble? Check with a neighbor and ask for help!": "Having trouble? Check with a neighbor and ask for help!",
+  "Hosted by": "",
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",
   "How likely are you to revisit the site?": "How likely are you to revisit the site?",
   "How likely are you to tell a friend or classmate about CodeLife?": "How likely are you to tell a friend or classmate about CodeLife?",
@@ -76,6 +77,7 @@
   "Reset": "Reset",
   "Save": "Save",
   "Save & Submit": "Save & Submit",
+  "Save your webpage before sharing!": "",
   "Saved!": "Saved!",
   "Schools list for this location is unavailable": "Schools list for this location is unavailable",
   "Share": "Share",
@@ -130,14 +132,54 @@
   "aboutP3": "The primary target audience of the platform MVP are students aged 14-18 in Brazilian public school. Testing will initially focus on students in Greater Belo Horizonte. At minimum all content will be created natively in Portuguese and English and the curriculum will be designed to complement the public education in Brazil",
   "aboutP4": "The platform’s seed curriculum will cover dynamic web development and integrate Brazilian data using the DataViva API.",
   "aboutP5": "In addition to working with students, school administration, teachers and government officials, the platform’s features will be designed with Brazilian businesses to connect students with potential employers.",
+  "by": "",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
+    "CSS": {
+      "def": "CSS is a computer language that can change the style of a web page."
+    },
+    "alert": {
+      "def": "A javascript method that makes a popup."
+    },
+    "backgroundColor": {
+      "def": "A CSS property that changes the color of an element’s background."
+    },
+    "backgroundImage": {
+      "def": "A CSS property that adds a background image to a webpage."
+    },
+    "color": {
+      "def": "A CSS property that changes the color of text and content."
+    },
     "example": "Example",
     "html": {
       "def": "HTML creates the content and structure of a webpage, and it's one of the main languages for building websites",
       "exampleTxt1": "The rest of your web page goes in here!"
     },
-    "title": "Glossary"
+    "letterSpacing": {
+      "def": "A CSS property that changes the distance between letters in text."
+    },
+    "method": {
+      "def": "In JavaScript, we use methods to perform tasks and actions in the code we are writing."
+    },
+    "property": {
+      "def": "A CSS term. A property indicates what about your content you want to style."
+    },
+    "script": {
+      "def": "A tag that indicates JavaScript is being written instead of HTML."
+    },
+    "string": {
+      "def": "When you want to use text in JavaScript, wrap it in quotes to make it a string. This way, javascript can understand your text."
+    },
+    "style": {
+      "def": "A tag that indicates CSS is being written instead of HTML."
+    },
+    "textAlign": {
+      "def": "A CSS property that changes how text is aligned on the page. Its three most common values are left, center, and right."
+    },
+    "title": "Glossary",
+    "value": {
+      "def": ""
+    }
   },
   "home": {
     "sub": "",

@@ -37,9 +37,11 @@ export default class RenderCode extends Component {
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <CodeEditor island={island} initialValue={htmlcontent2} className="slide-editor" ref={c => this.editor = c} readOnly={true} /> : <div className="slide-editor"></div> }
         </div>
-        <div className="validation">
-          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button> : null}
-        </div>
+        { this.props.exec
+        ? <div className="validation">
+            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button>
+          </div>
+        : null}
       </div>
     );
   }

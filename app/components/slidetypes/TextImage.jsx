@@ -9,7 +9,7 @@ export default class TextImage extends Component {
     return (
       <div id="slide-container" className="textImage flex-row">
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-        <img className="slide-image" src={ `/slide_images/${ id }.jpg` } />
+        <div className="slide-image" style={{backgroundImage: `url('/slide_images/${ id }.jpg')`}}></div>
       </div>
     );
   }

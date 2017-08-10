@@ -90,7 +90,12 @@
     }
 
     & .slide-image {
-      height: 80%;
+      align-self: stretch;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      flex: 1;
+      margin: 25px 0;
     }
 
     & .slide-editor {

@@ -77,6 +77,7 @@ class Survey extends Component {
         <h1>{ t("Survey") }</h1>
 
         <RadioGroup
+          className="pt-form-group"
           label={ t("How likely are you to revisit the site?") }
           onChange={handleChange}
           selectedValue={q0}
@@ -90,6 +91,7 @@ class Survey extends Component {
         </RadioGroup>
 
         <RadioGroup
+          className="pt-form-group"
           label={ t("How likely are you to tell a friend or classmate about CodeLife?") }
           onChange={handleChange}
           selectedValue={q1}
@@ -103,6 +105,7 @@ class Survey extends Component {
         </RadioGroup>
 
         <RadioGroup
+          className="pt-form-group"
           label={ t("How difficult was the material you learned in CodeLife?") }
           onChange={handleChange}
           selectedValue={q2}
@@ -120,7 +123,7 @@ class Survey extends Component {
             { t("What was the thing you struggled with the most from today's exercise?") }
           </label>
           <div className="pt-form-content">
-            <textarea className="pt-input" dir="auto" name="q3" onChange={handleChange}  value={q3 || ""}></textarea>
+            <textarea rows="4" className="pt-input" dir="auto" name="q3" onChange={handleChange}  value={q3 || ""}></textarea>
             <div className="pt-form-helper-text">{ t("Please be as detailed as possible with your feedback") }</div>
           </div>
         </div>
@@ -130,12 +133,13 @@ class Survey extends Component {
             { t("What was the thing you enjoyed the most from today's exercise?") }
           </label>
           <div className="pt-form-content">
-            <textarea className="pt-input" dir="auto" name="q4" onChange={handleChange} value={q4 || ""}></textarea>
+            <textarea rows="4" className="pt-input" dir="auto" name="q4" onChange={handleChange} value={q4 || ""}></textarea>
             <div className="pt-form-helper-text">{ t("Please be as detailed as possible with your feedback") }</div>
           </div>
         </div>
 
         <RadioGroup
+          className="pt-form-group"
           label={ t("What part of the site did you enjoy the most?") }
           onChange={handleChange}
           selectedValue={q5}
@@ -148,6 +152,7 @@ class Survey extends Component {
         </RadioGroup>
 
         <RadioGroup
+          className="pt-form-group"
           label={ t("How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?") }
           onChange={handleChange}
           selectedValue={q6}
@@ -160,7 +165,7 @@ class Survey extends Component {
           <Radio label={ t("Not sure") } value="4" />
         </RadioGroup>
 
-        <button type="button" className="pt-button" onClick={submit}>
+        <button type="button" className="pt-button pt-fill pt-intent-success" onClick={submit}>
           { t("Submit Survey") }
           <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>
         </button>

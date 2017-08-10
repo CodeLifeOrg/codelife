@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
+import "./About.css";
 
 class About extends Component {
   constructor(props) {

@@ -1,0 +1,35 @@
+#about-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin: 50px auto;
+  max-width: 800px;
+  padding: 50px;
+  width: 100%;
+
+  & h1 {
+    margin: 25px 0;
+  }
+
+  & h1:first-child {
+    margin-top: 0;
+  }
+
+  & h2 {
+    margin: 35px 0 25px;
+  }
+
+  & p {
+    margin-bottom: 15px;
+  }
+
+  & .pt-form-group {
+    margin: 40px 0;
+
+    & textarea {
+      width: 100%;
+    }
+
+  }
+
+}

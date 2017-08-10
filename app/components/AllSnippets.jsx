@@ -69,8 +69,6 @@ class AllSnippets extends Component {
 
     const snippetItems = [];
 
-    console.log(lessons);
-
     for (const l of lessons) {
       snippetItems.push(
         <li className={`lesson-header ${l.id}`} key={l.id}>

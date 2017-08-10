@@ -68,7 +68,7 @@ class ProjectCard extends Component {
           onClose={ this.toggleDialog.bind(this) }
           title={ name }
           lazy={false}
-          inline={true}
+          inline={false}
           style={{
             height: "75vh",
             maxHeight: "600px",

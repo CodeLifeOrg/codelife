@@ -73,7 +73,7 @@ class Lesson extends Component {
           onClose={this.toggleDialog.bind(this, i)}
           title={`My ${lesson.name} Snippet`}
           lazy={false}
-          inline={true}
+          inline={false}
           className="codeblock-dialog"
         >
           {/* <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>*/}

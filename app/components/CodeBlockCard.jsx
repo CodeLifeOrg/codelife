@@ -84,7 +84,7 @@ class CodeBlockCard extends Component {
           onClose={ this.toggleDialog.bind(this) }
           title={snippetname}
           lazy={false}
-          inline={inline}
+          inline={false}
           className={ lid }
           style={{
             height: "75vh",

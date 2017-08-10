@@ -20,7 +20,13 @@ class CodeBlockCard extends Component {
   toggleDialog() {
     if (this.state.open) {
       axios.post("/api/likes/save", {liked: this.state.liked, likeid: this.props.codeBlock.id}).then(resp => {
-        resp.status === 200 ? console.log("success") : console.log("error");
+        if (resp.status === 200) {
+          console.log("success");
+          if (this.props.reportLike) this.props.reportLike();
+        }
+        else {
+          console.log("error");
+        }
       });
     }
     this.setState({open: !this.state.open});

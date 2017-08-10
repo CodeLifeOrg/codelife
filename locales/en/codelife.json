@@ -1,4 +1,17 @@
 {
+  "<body> is where you put the content you want everyone to see": "",
+  "<h1> is a header tag, where you can write large text": "",
+  "<h2> is a header tag, where you can write large text": "",
+  "<h3> is a header tag, where you can write medium text": "",
+  "<h4> is a header tag, where you can write medium text": "",
+  "<h5> is a header tag, where you can write small text": "",
+  "<h6> is a header tag, where you can write small text": "",
+  "<head> is where your metadata is stored, such as your <title>": "",
+  "<html> surrounds your whole codeblock and tells the computer this is a webpage": "",
+  "<p> is a paragraph tag, you can write sentences in here": "",
+  "<script> is where you write interactive content with javascript": "",
+  "<style> is where you customize your page with cool colors and fonts": "",
+  "<title> is the title of your page! Make sure it's inside a <head> tag": "",
   "About": "About",
   "About Me": "About Me",
   "Are you sure you want to reset the code to its original state?": "Are you sure you want to reset the code to its original state?",
@@ -132,9 +145,22 @@
   "aboutP3": "The primary target audience of the platform MVP are students aged 14-18 in Brazilian public school. Testing will initially focus on students in Greater Belo Horizonte. At minimum all content will be created natively in Portuguese and English and the curriculum will be designed to complement the public education in Brazil",
   "aboutP4": "The platform’s seed curriculum will cover dynamic web development and integrate Brazilian data using the DataViva API.",
   "aboutP5": "In addition to working with students, school administration, teachers and government officials, the platform’s features will be designed with Brazilian businesses to connect students with potential employers.",
+  "body within a <style> tag is how you customize everything in your webpage's body": "",
   "by": "",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
+    "CSS": {
+      "def": "CSS is a computer language that can change the style of a web page."
+    },
+    "alert": {
+      "def": "A javascript method that makes a popup."
+    },
+    "backgroundColor": {
+      "def": "A CSS property that changes the color of an element’s background."
+    },
+    "backgroundImage": {
+      "def": "A CSS property that adds a background image to a webpage."
+    },
     "body": {
       "def": "Content inside the &lt;body&gt; tag is displayed directly on the webpage."
     },
@@ -147,6 +173,9 @@
     },
     "codeeditor": {
       "def": "The code editor is where you will edit your code to make your webpages."
+    },
+    "color": {
+      "def": "A CSS property that changes the color of text and content."
     },
     "css": {
       "def": "CSS is a computer language that can change the style of a web page."
@@ -165,8 +194,14 @@
     "javascript": {
       "def": "JavaScript is one of the languages for creating webpages. It creates the interactive components of a website. Examples can be slideshows, animations, etc."
     },
+    "letterSpacing": {
+      "def": "A CSS property that changes the distance between letters in text."
+    },
     "metadata": {
       "def": "Information about the webpage."
+    },
+    "method": {
+      "def": "In JavaScript, we use methods to perform tasks and actions in the code we are writing."
     },
     "openingtag": {
       "def": "This tag indicates the beginning of an HTML element.",
@@ -175,22 +210,45 @@
     "p": {
       "def": "This tag is used to indicate that the content will be a paragraph.This tag is used to indicate that the content will be a paragraph."
     },
+    "property": {
+      "def": "A CSS term. A property indicates what about your content you want to style."
+    },
+    "script": {
+      "def": "A tag that indicates JavaScript is being written instead of HTML."
+    },
+    "selector": {
+      "def": "A CSS term. A selector indicates which content in your html file you want to style."
+    },
     "sourcecode": {
       "def": "The source code is the original code of the website. You can find the source code for any website following instructions in this link"
+    },
+    "string": {
+      "def": "When you want to use text in JavaScript, wrap it in quotes to make it a string. This way, javascript can understand your text."
+    },
+    "style": {
+      "def": "A tag that indicates CSS is being written instead of HTML."
     },
     "tags": {
       "def": "Tags are part of the HTML language."
     },
+    "textAlign": {
+      "def": "A CSS property that changes how text is aligned on the page. Its three most common values are left, center, and right."
+    },
     "title": "Glossary",
     "titletag": {
       "def": "Content inside the <title> tag is displayed on the top tab of a page, when you add a page to favorites, and for search-engine results."
+    },
+    "value": {
+      "def": "A CSS term. A value indicates how you want to style your content."
     }
   },
+  "h1 within a <style> tag is how you customize your header tags": "",
   "home": {
     "sub": "",
     "title": ""
   },
   "myCodeblock": "My {{ islandName }} CodeBlock",
+  "p within a <style> tag is how you customize your <p> tags": "",
   "privacy": {
     "access": {
       "li1": "See what data we have about you, if any.",

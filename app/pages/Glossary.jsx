@@ -29,7 +29,7 @@ class Glossary extends Component {
         <p>{ t("glossary.CSS.def") }</p>
         
         <h2 name="selector">selector</h2>
-        <p>{ t("glossary.property.def") }</p>
+        <p>{ t("glossary.selector.def") }</p>
         
         <h2 name="property">property</h2>
         <p>{ t("glossary.property.def") }</p>

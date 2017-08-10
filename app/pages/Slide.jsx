@@ -37,7 +37,6 @@ class Slide extends Component {
       sentProgress: false,
       latestSlideCompleted: 0,
       lessonComplete: false,
-      gemConfetti: false,
       mounted: false
     };
   }
@@ -67,14 +66,14 @@ class Slide extends Component {
       const cs = slides.find(slide => slide.id === sid);
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
-      this.setState({currentSlide: cs, blocked, gemConfetti: false});
+      this.setState({currentSlide: cs, blocked});
     }
 
     const i = slides.indexOf(currentSlide);
     if (this.state.mounted && currentSlide &&
       ["InputCode", "InputCodeExec", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
-      this.setState({latestSlideCompleted: i, gemConfetti: true, gems: gems + 1});
+      this.setState({latestSlideCompleted: i, gems: gems + 1});
     }
 
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
@@ -147,14 +146,6 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    const gemConfettiConfig = {
-      angle: 334,
-      spread: 120,
-      startVelocity: 7,
-      elementCount: 36,
-      decay: 0.93
-    };
-
     if (!currentSlide || !currentLesson) return <Loading />;
 
     let exec = false;
@@ -172,7 +163,7 @@ class Slide extends Component {
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
-          { gems ? <div className="gems"><Confetti className="gem-confetti" config={gemConfettiConfig} active={ this.state.gemConfetti } /><img src={gemIcon} />{gems} Gem{ gems > 1 ? "s" : "" } Found</div> : null }
+          { gems ? <div className="gems"><img src={gemIcon} />{gems} Gem{ gems > 1 ? "s" : "" } Found</div> : null }
           <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>

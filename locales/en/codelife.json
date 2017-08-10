@@ -135,6 +135,7 @@
   "by": "",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
+
     "CSS": {
       "def": "CSS is a computer language that can change the style of a web page."
     },
@@ -149,6 +150,10 @@
     },
     "color": {
       "def": "A CSS property that changes the color of text and content."
+    },
+    "css": {
+      "def": "CSS is a computer language that can change the style of a web page.",
+      "exampleTxt1": "some example text in english"
     },
     "example": "Example",
     "html": {

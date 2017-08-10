@@ -66,7 +66,15 @@ class Glossary extends Component {
         
         <h2 name="script">%lt;script&gt;</h2>
         <p>{ t("glossary.script.def") }</p>
-        
+
+        <h2 name="css">CSS</h2>
+        <p>{ t("glossary.css.def") }</p>
+        <p><strong>{ t("glossary.example") }</strong></p>
+        <pre>
+        &lt;html&gt;
+          { t("glossary.css.exampleTxt1") }
+        &lt;/html&gt;
+        </pre>
       </div>
     );
   }

@@ -21,7 +21,7 @@ export const cvGetMeanings = () => {
   return meanings;
 };
 
-export const cvTagCount = (needle, haystack) => {
+export const cvTagCountOld = (needle, haystack) => {
   let count = 0;
   if (haystack.length === 0) return 0;
   for (const h of haystack) {
@@ -29,14 +29,21 @@ export const cvTagCount = (needle, haystack) => {
       if (h.tagName === needle) {
         count++;
       } if (h.children !== null) {
-        count += cvTagCount(needle, h.children);
+        count += cvTagCountOld(needle, h.children);
       }
     }
   }
   return count;
 };
 
-export const cvContainsTag = (rule, haystack) => cvTagCount(rule.needle, haystack) > 0;
+export const cvContainsTagOld = (rule, haystack) => cvTagCountOld(rule.needle, haystack) > 0;
+
+export const cvContainsTag = (rule, haystack) => {
+  const needle = rule.needle;
+  const open = haystack.indexOf(`<${needle}>`);
+  const close = haystack.indexOf(`</${needle}>`);
+  return open !== -1 && close !== -1 && open < close;
+};
 
 export const cvContainsStyle = (rule, haystack) => {
   const needle = rule.needle;

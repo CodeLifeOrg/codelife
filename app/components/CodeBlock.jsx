@@ -72,7 +72,7 @@ class CodeBlock extends Component {
     let errors = 0;
     for (const r of rulejson) {
       if (r.type === "CONTAINS") {
-        if (!this.cvContainsTag(r.needle, theText)) {
+        if (!cvContainsTag(r.needle, theText)) {
           errors++;
           r.passing = false;
         }

@@ -64,7 +64,11 @@ export const cvContainsStyle = (rule, haystack) => {
           for (const d of r.declarations) {
             if (d.property === property) {
               if (value) {
-                if (d.value === value) found++;
+                // regex to remove spaces from between parens
+                const re = new RegExp("\\s+(?=[^()]*\\))", "g");
+                const userValue = d.value.replace(re, "");
+                const ruleValue = value.replace(re, "");
+                if (userValue === ruleValue) found++;
               }
               else {
                 found++;

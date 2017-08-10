@@ -42,7 +42,7 @@ class InputCode extends Component {
     const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
-        if (!cvContainsTag(r, jsonArray)) {
+        if (!cvContainsTag(r, contents)) {
           errors++;
           t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }

@@ -66,19 +66,13 @@ class CodeBlock extends Component {
     });
   }
 
-  containsTagNew(needle, haystack) {
-    const open = haystack.indexOf(`<${needle}>`);
-    const close = haystack.indexOf(`</${needle}>`);
-    return open !== -1 && close !== -1 && open < close;
-  }
-
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {rulejson} = this.state;
     let errors = 0;
     for (const r of rulejson) {
       if (r.type === "CONTAINS") {
-        if (!this.containsTagNew(r.needle, theText)) {
+        if (!this.cvContainsTag(r.needle, theText)) {
           errors++;
           r.passing = false;
         }

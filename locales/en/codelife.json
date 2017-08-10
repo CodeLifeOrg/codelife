@@ -77,6 +77,7 @@
   "Reset": "Reset",
   "Save": "Save",
   "Save & Submit": "Save & Submit",
+  "Save your webpage before sharing!": "",
   "Saved!": "Saved!",
   "Schools list for this location is unavailable": "Schools list for this location is unavailable",
   "Share": "Share",
@@ -134,16 +135,56 @@
   "by": "",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
+    "body": {
+      "def": "Content inside the &lt;body&gt; tag is displayed directly on the webpage."
+    },
+    "closingtag": {
+      "def": "This tag indicates the end of an HTML element. It has a slash before its name.",
+      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+    },
+    "code": {
+      "def": "Code is a set of written instructions that tells a computer what to do. Examples of coding languages: HTML, CSS.and JavaScript."
+    },
+    "codeeditor": {
+      "def": "The code editor is where you will edit your code to make your webpages."
+    },
     "css": {
-      "def": "CSS is a computer language that can change the style of a web page.",
-      "exampleTxt1": "some example text in english"
+      "def": "CSS is a computer language that can change the style of a web page."
     },
     "example": "Example",
+    "h1": {
+      "def": "This tag is used to indicate that the content will be a large title."
+    },
     "html": {
       "def": "HTML creates the content and structure of a webpage, and it's one of the main languages for building websites",
       "exampleTxt1": "The rest of your web page goes in here!"
     },
-    "title": "Glossary"
+    "htmltag": {
+      "def": "Content inside the &lt;html&gt; tag is HTML code"
+    },
+    "javascript": {
+      "def": "JavaScript is one of the languages for creating webpages. It creates the interactive components of a website. Examples can be slideshows, animations, etc."
+    },
+    "metadata": {
+      "def": "Information about the webpage."
+    },
+    "openingtag": {
+      "def": "This tag indicates the beginning of an HTML element.",
+      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+    },
+    "p": {
+      "def": "This tag is used to indicate that the content will be a paragraph.This tag is used to indicate that the content will be a paragraph."
+    },
+    "sourcecode": {
+      "def": "The source code is the original code of the website. You can find the source code for any website following instructions in this link"
+    },
+    "tags": {
+      "def": "Tags are part of the HTML language."
+    },
+    "title": "Glossary",
+    "titletag": {
+      "def": "Content inside the <title> tag is displayed on the top tab of a page, when you add a page to favorites, and for search-engine results."
+    }
   },
   "home": {
     "sub": "",

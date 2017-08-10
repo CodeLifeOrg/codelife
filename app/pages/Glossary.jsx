@@ -2,7 +2,9 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 
 // Glossary Page
-// Currently a placeholder for what will be a glossary of CS terms
+//  - make sure all examples use HTML entities to escape reserve characters
+//  - like '<' or '>'
+//  - use this site for help: https://mothereff.in/html-entities
 
 class Glossary extends Component {
 
@@ -12,13 +14,16 @@ class Glossary extends Component {
 
     return (
       <div id="about-container">
-        <h1>{ t("Glossary") }</h1>
-        <h3>Words</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit.</p>
-        <h3>Go</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit.</p>
-        <h3>Here</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit.</p>
+        <h1>{ t("glossary.title") }</h1>
+
+        <h2 name="html">HTML</h2>
+        <p>{ t("glossary.html.def") }</p>
+        <p><strong>{ t("glossary.example") }</strong></p>
+        <pre>
+        &lt;html&gt;
+          { t("glossary.html.exampleTxt1") }
+        &lt;/html&gt;
+        </pre>
       </div>
     );
   }

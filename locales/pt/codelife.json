@@ -9,6 +9,7 @@
   "Cheat Sheet": "Folha de dicas",
   "Close": "Fechar",
   "Code Blocks": "Desafios",
+  "CodeBlock": "",
   "Codeblock Name": "Codeblock Name",
   "Codeblock Title": "Codeblock Title",
   "Codeblock's code will be shown after you complete the last level of this island": "Codeblock's code will be shown after you complete the last level of this island",
@@ -18,7 +19,7 @@
   "Customizing my profile": "Customizing my profile",
   "Delete": "Excluir",
   "Delete Project": "Excluir projeto",
-  "Earn your Codeblock": "Earn your Codeblock",
+  "Earn your CodeBlock": "",
   "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!": "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!",
   "Edit Profile": "Editar Perfil",
   "Error": "Erro",
@@ -36,6 +37,8 @@
   "Image": "Imagem",
   "Insert into Project": "Inserir no Projeto",
   "Islands (lessons)": "Islands (lessons)",
+  "Like": "",
+  "Likes": "",
   "Loading": "Carregando",
   "Loading codeblocks": "Loading codeblocks",
   "Loading projects": "Loading projects",
@@ -128,6 +131,14 @@
   "aboutP4": "aboutP4",
   "aboutP5": "aboutP5",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
+  "glossary": {
+    "example": "Examplo",
+    "html": {
+      "def": "HTML creates the content and structure of a webpage, and it's one of the main languages for building websites",
+      "exampleTxt1": "The rest of your web page goes in here!"
+    },
+    "title": "Glossário"
+  },
   "home": {
     "sub": "",
     "title": ""

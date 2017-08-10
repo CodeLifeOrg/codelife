@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   app.get("/api/projects/byid", (req, res) => {
 
-    db.projects.findAll({where: {uid: req.user.id, id: req.query.id}}).then(u => res.json(u).end());
+    db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
 
   });
 
@@ -36,7 +36,7 @@ module.exports = function(app) {
   });
 
   app.delete("/api/projects/delete", (req, res) => {
-    
+
     db.projects.destroy({where: {id: req.query.id}}).then(() => {
       db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json(projects).end());
     });

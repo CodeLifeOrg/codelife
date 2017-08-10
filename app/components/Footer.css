@@ -3,6 +3,7 @@
   background-image: url("/ground.png");
   background-repeat: repeat-x;
   bottom: 0;
+  color: white;
   display: flex;
   height: 100px;
   justify-content: space-between;
@@ -18,12 +19,15 @@
   }
 
   & .links {
-    color: white;
 
-    & a {
-      color: inherit;
+    & .link {
+      color: white;
       letter-spacing: 1px;
       text-transform: uppercase;
+    }
+
+    & .link:not(.language) {
+      margin-right: 15px;
     }
 
   }

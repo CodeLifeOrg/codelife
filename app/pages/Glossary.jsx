@@ -27,12 +27,57 @@ class Glossary extends Component {
 
         <h2 name="css">CSS</h2>
         <p>{ t("glossary.css.def") }</p>
+
+        <h2 name="javascript">JavaScript</h2>
+        <p>{ t("glossary.javascript.def") }</p>
+
+        <h2 name="code">code</h2>
+        <p>{ t("glossary.code.def") }</p>
+
+        <h2 name="codeeditor">code editor</h2>
+        <p>{ t("glossary.codeeditor.def") }</p>
+
+        <h2 name="tags">tags</h2>
+        <p>{ t("glossary.tags.def") }</p>
+
+        <h2 name="openingtag">opening tag</h2>
+        <p>{ t("glossary.openingtag.def") }</p>
         <p><strong>{ t("glossary.example") }</strong></p>
         <pre>
         &lt;html&gt;
-          { t("glossary.css.exampleTxt1") }
+          { t("glossary.openingtag.exampleTxt1") }
         &lt;/html&gt;
         </pre>
+
+        <h2 name="closingtag">closing tag</h2>
+        <p>{ t("glossary.closingtag.def") }</p>
+        <p><strong>{ t("glossary.example") }</strong></p>
+        <pre>
+        &lt;html&gt;
+          { t("glossary.closingtag.exampleTxt1") }
+        &lt;/html&gt;
+        </pre>
+
+        <h2 name="metadata">metadata</h2>
+        <p>{ t("glossary.metadata.def") }</p>
+
+        <h2 name="sourcecode">source code</h2>
+        <p>{ t("glossary.sourcecode.def") }</p>
+
+        <h2 name="htmltag">html tag</h2>
+        <p>{ t("glossary.htmltag.def") }</p>
+
+        <h2 name="titletag">title tag</h2>
+        <p>{ t("glossary.titletag.def") }</p>
+
+        <h2 name="body">body tag</h2>
+        <p>{ t("glossary.body.def") }</p>
+
+        <h2 name="h1">h1 tag</h2>
+        <p>{ t("glossary.h1.def") }</p>
+
+        <h2 name="p">p tag</h2>
+        <p>{ t("glossary.p.def") }</p>
       </div>
     );
   }

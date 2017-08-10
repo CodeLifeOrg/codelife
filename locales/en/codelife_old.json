@@ -41,6 +41,17 @@
   },
   "Earn your Codeblock": "Earn your Codeblock",
   "glossary": {
-    "html": {}
+    "closingtag": {},
+    "code": {},
+    "codeeditor": {},
+    "css": {},
+    "html": {},
+    "htmltag": {},
+    "javascript": {},
+    "metadata": {},
+    "openingtag": {},
+    "sourcecode": {},
+    "tags": {},
+    "titletag": {}
   }
 }

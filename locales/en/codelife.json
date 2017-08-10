@@ -9,6 +9,7 @@
   "Cheat Sheet": "Cheat Sheet",
   "Close": "Close",
   "Code Blocks": "Code Blocks",
+  "CodeBlock": "",
   "Codeblock Name": "Codeblock Name",
   "Codeblock Title": "Codeblock Title",
   "Codeblock's code will be shown after you complete the last level of this island": "Codeblock's code will be shown after you complete the last level of this island",
@@ -18,7 +19,7 @@
   "Customizing my profile": "Customizing my profile",
   "Delete": "Delete",
   "Delete Project": "Delete Project",
-  "Earn your Codeblock": "Earn your Codeblock",
+  "Earn your CodeBlock": "",
   "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!": "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!",
   "Edit Profile": "Edit Profile",
   "Error": "Error",
@@ -36,6 +37,8 @@
   "Image": "Image",
   "Insert into Project": "Insert into Project",
   "Islands (lessons)": "Islands (lessons)",
+  "Like": "",
+  "Likes": "",
   "Loading": "Loading",
   "Loading codeblocks": "Loading codeblocks",
   "Loading projects": "Loading projects",
@@ -128,6 +131,14 @@
   "aboutP4": "The platform’s seed curriculum will cover dynamic web development and integrate Brazilian data using the DataViva API.",
   "aboutP5": "In addition to working with students, school administration, teachers and government officials, the platform’s features will be designed with Brazilian businesses to connect students with potential employers.",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
+  "glossary": {
+    "example": "Example",
+    "html": {
+      "def": "HTML creates the content and structure of a webpage, and it's one of the main languages for building websites",
+      "exampleTxt1": "The rest of your web page goes in here!"
+    },
+    "title": "Glossary"
+  },
   "home": {
     "sub": "",
     "title": ""

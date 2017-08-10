@@ -51,6 +51,17 @@ class Studio extends Component {
     });
   }
 
+  shareProject() {
+    const {t} = this.props;
+    if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
+      browserHistory.push(`/share/project/${this.state.currentProject.id}`);  
+    }
+    else {
+      const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
+      toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
+    }
+  }
+
   // TODO: i'm loading studentcontent twice.  once when we instantiate projects, and then again
   // when you click a project.  I did this so that clicks would respect new writes, but i should
   // find a way to only ever ask for studentcontent once, on-demand only.
@@ -117,7 +128,6 @@ class Studio extends Component {
 
     if (!auth.user) browserHistory.push("/login");
 
-    const snippetRef = <Snippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
     const allSnippetRef = <AllSnippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
     const projectRef = <Projects  projectToLoad={id}
                                   onCreateProject={this.onCreateProject.bind(this)}
@@ -131,7 +141,7 @@ class Studio extends Component {
           <h1 className="title">{ t("Projects") }</h1>
           <div className="title-tab">{titleText}</div>
           <div className="buttons">
-            { currentProject ? <a className="pt-button" target="_blank" href={ `/share/project/${currentProject.id}` }>{ t("Share") }</a> : null }
+            { currentProject ? <span className="pt-button" onClick={this.shareProject.bind(this)}>{ t("Share") }</span> : null }
             <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{ t("Execute") }</button>
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>

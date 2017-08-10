@@ -49,17 +49,17 @@ class CodeBlockCard extends Component {
     const projectMode = this.props.projectMode;
 
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}`} style={{boxShadow: codeBlock.featured ? "0px 0px 5px 5px rgba(255, 255, 120, .5)" : ""}}>
+      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}`}>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
-          <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}></div>
+          <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}>
+          </div>
           <div className="info">
-            <div className="card-title">
-              {snippetname}
-              {mine ? <span style={{color: "lightgreen", marginLeft: "5px"}} className="pt-icon-standard pt-icon-user"></span> : null}
-              { /* codeBlock.featured ? <span style={{color: "yellow", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null */ }
-              {liked ? <span style={{color: "pink", marginLeft: "5px"}} className="pt-icon-standard pt-icon-star"></span> : null }
-            </div>
-            { username ? <div className="card-author">{ `${t("Created by")} ${username}` }</div> : null }
+            <div className="card-title">{snippetname}</div>
+            { username ? <div className="card-author">
+              { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }
+              { `${t("Created by")} ${username}` }
+            </div> : null }
+            <div className="card-like"><span className={ `pt-icon-standard pt-icon-star${ liked ? " pt-intent-warning" : "-empty" }` }></span>{ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }</div>
           </div>
         </div>
         <Dialog
@@ -92,7 +92,7 @@ class CodeBlockCard extends Component {
                 intent={ liked ? Intent.WARNING : Intent.DEFAULT }
                 iconName={ `star${ liked ? "" : "-empty"}` }
                 onClick={ this.toggleLike.bind(this) }
-                text={ `${ t("Favorite") } (${ likes })` }
+                text={ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
               />
               <Button
                 intent={ Intent.PRIMARY }

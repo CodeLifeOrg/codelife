@@ -129,7 +129,7 @@ body {
   margin: 20px;
   padding: 0;
   text-align: left;
-  width: 225px;
+  width: 250px;
 
   &:hover {
     color: white;
@@ -173,10 +173,27 @@ body {
         text-transform: uppercase;
       }
 
+      & .card-like {
+        font-size: 12px;
+        margin-top: 5px;
+        opacity: 0.75;
+
+        & .pt-icon-standard {
+          margin-right: 5px;
+        }
+
+      }
+
       & .card-author {
         font-size: 12px;
         margin-top: 5px;
         opacity: 0.75;
+
+        & .pt-icon-standard {
+          color: white;
+          margin-right: 5px;
+        }
+
       }
 
     }

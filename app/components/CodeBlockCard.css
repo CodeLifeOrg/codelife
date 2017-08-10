@@ -1,13 +1,8 @@
-.like-heart {
-  color: "pink";
-  margin-left: "10px";
-  margin-top: "6px";
-}
-
 .codeBlockCard {
 
   & .box .icon {
     background-size: 75%;
+    position: relative;
   }
 
 }

@@ -29,7 +29,7 @@ class App extends Component {
 
     const meta = header.meta.slice();
     if (i18n.locale === "en") {
-      meta.find(d => d.property === "og:image").content = "https://dataafrica.io/social/codelife-share-en.jpg";
+      meta.find(d => d.property === "og:image").content = "https://codelife.com/social/codelife-share-en.jpg";
       meta.find(d => d.property === "og:description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
     }
 

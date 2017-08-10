@@ -162,9 +162,10 @@ body {
     }
 
     & .info {
+      align-self: stretch;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       padding-right: 5px;
 
       & .card-title {
@@ -173,25 +174,20 @@ body {
         text-transform: uppercase;
       }
 
-      & .card-like {
+      & .card-meta {
         font-size: 12px;
-        margin-top: 5px;
         opacity: 0.75;
+
+        & > * {
+          margin-top: 3px;
+        }
 
         & .pt-icon-standard {
           margin-right: 5px;
         }
 
-      }
-
-      & .card-author {
-        font-size: 12px;
-        margin-top: 5px;
-        opacity: 0.75;
-
-        & .pt-icon-standard {
+        & .card-author .pt-icon-standard {
           color: white;
-          margin-right: 5px;
         }
 
       }

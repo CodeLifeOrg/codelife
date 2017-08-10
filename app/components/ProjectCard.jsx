@@ -57,8 +57,10 @@ class ProjectCard extends Component {
           <div className="icon"><span className="pt-icon-standard pt-icon-code pt-intent-warning" /></div>
           <div className="info">
             <div className="card-title">{ name }</div>
-            { datemodified ? <div className="card-author">{ t("Modified on") } { moment(datemodified).format("DD/MM/YY") }</div> : null }
-            { username ? <div className="card-author">{ t("Created by") } { username }</div> : null }
+            <div className="card-meta">
+              { datemodified ? <div className="card-author">{ t("Modified on") } { moment(datemodified).format("DD/MM/YY") }</div> : null }
+              { username ? <div className="card-author">{ t("Created by") } { username }</div> : null }
+            </div>
           </div>
         </div>
         <Dialog

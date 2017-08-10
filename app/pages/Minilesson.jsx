@@ -50,40 +50,39 @@ class Minilesson extends Component {
       const userProgress = resp[2].data;
       const allSnippets = resp[3].data;
       const likes = resp[4].data;
-      const otherSnippets = [];
+
       let mySnippet = null;
-      // Fold over snippets and separate them into mine and others
+      const mySnippets = [];
+      const likedSnippets = [];
+      const unlikedSnippets = [];
+      
       allSnippets.sort((a, b) => b.likes - a.likes);
+      
+      // Fold over snippets and separate them into mine and others
       for (const s of allSnippets) {
         if (s.uid === this.props.auth.user.id) {
           mySnippet = s;
-        }
+          mySnippet.username = t("you!");
+          mySnippet.mine = true;
+          mySnippets.push(mySnippet);
+        } 
         else {
           // TODO: do this in a database join, not here.
           if (likes.find(l => l.likeid === s.id)) {
             s.liked = true;
-            otherSnippets.unshift(s);
+            likedSnippets.push(s);
           }
           else {
-            otherSnippets.push(s);
+            unlikedSnippets.push(s);
           }
         }
       }
-      // otherSnippets.sort((a, b) => b.likes - a.likes);
-      let top = 3;
-      for (const os of otherSnippets) {
-        // os.featured = top > 0;
-        top--;
-      }
-      if (mySnippet) {
-        mySnippet.username = t("you!");
-        mySnippet.mine = true;
-        otherSnippets.unshift(mySnippet);
-      }
+
+      const otherSnippets = mySnippets.concat(likedSnippets, unlikedSnippets);
+
       currentLesson.snippet = mySnippet;
 
       minilessons.sort((a, b) => a.ordering - b.ordering);
-
       this.setState({minilessons, currentLesson, userProgress, otherSnippets});
     });
   }

@@ -30,33 +30,29 @@ class AllSnippets extends Component {
       const lessons = resp[2].data;
       const userProgress = resp[3].data;
       const likes = resp[4].data;
+      othersnippets.sort((a, b) => b.likes - a.likes);
       for (const l of lessons) {
         l.snippets = [];
-        l.top = 3;
-      }
-      for (const ms of mysnippets) {
-        for (const l of lessons) {
+        for (const ms of mysnippets) {
           ms.username = t("you!");
           ms.mine = true;
           if (ms.lid === l.id) l.snippets.push(ms);
         }
-      }
-      othersnippets.sort((a, b) => b.likes - a.likes);
-      for (const os of othersnippets) {
-        for (const l of lessons) {
+        const likedsnippets = [];
+        const unlikedsnippets = [];
+        for (const os of othersnippets) {
           if (os.lid === l.id) {
-            // os.featured = l.top > 0;
-            l.top--;
             // TODO: move this to db call, don't do this here
             if (likes.find(l => l.likeid === os.id)) {
               os.liked = true;
-              l.snippets.unshift(os);
+              likedsnippets.push(os);
             }
             else {
-              l.snippets.push(os);
+              unlikedsnippets.push(os);
             }
           }
         }
+        l.snippets = l.snippets.concat(likedsnippets, unlikedsnippets);
       }
       this.setState({lessons, userProgress});
     });

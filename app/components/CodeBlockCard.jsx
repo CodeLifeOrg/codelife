@@ -12,7 +12,8 @@ class CodeBlockCard extends Component {
     super(props);
     this.state = {
       open: false,
-      liked: false
+      liked: false,
+      likes: 0
     };
   }
 
@@ -28,20 +29,28 @@ class CodeBlockCard extends Component {
   toggleLike() {
     // TODO: can this be done better?  I'm storing likestate in two places, and this makes it possible
     // that they get out of sync. Revisit this later
-    this.props.codeBlock.liked = !this.props.codeBlock.liked;
-    this.setState({liked: !this.state.liked});
+    let {likes} = this.state;
+    if (this.props.codeBlock.liked) {
+      this.props.codeBlock.liked = false;
+      likes--;
+    }
+    else {
+      this.props.codeBlock.liked = true;
+      likes++;
+    }
+    this.setState({liked: !this.state.liked, likes});
   }
 
   componentDidMount() {
-    this.setState({liked: this.props.codeBlock.liked ? true : false});
+    this.setState({liked: this.props.codeBlock.liked ? true : false, likes: this.props.codeBlock.likes});
   }
 
 
 
   render() {
-    const {open} = this.state;
+    const {likes, open} = this.state;
     const {codeBlock, t, userProgress} = this.props;
-    const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
+    const {lid, liked, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
@@ -55,11 +64,13 @@ class CodeBlockCard extends Component {
           </div>
           <div className="info">
             <div className="card-title">{snippetname}</div>
-            { username ? <div className="card-author">
-              { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }
-              { `${t("Created by")} ${username}` }
-            </div> : null }
-            <div className="card-like"><span className={ `pt-icon-standard pt-icon-star${ liked ? " pt-intent-warning" : "-empty" }` }></span>{ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }</div>
+            <div className="card-meta">
+              { username ? <div className="card-author">
+                { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }
+                { `${t("Created by")} ${username}` }
+              </div> : null }
+              <div className="card-like"><span className={ `pt-icon-standard pt-icon-star${ liked ? " pt-intent-warning" : "-empty" }` }></span>{ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }</div>
+            </div>
           </div>
         </div>
         <Dialog

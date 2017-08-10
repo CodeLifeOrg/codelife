@@ -63,7 +63,7 @@
   "Other Students' CodeBlocks": "Other Students' CodeBlocks",
   "Please be as detailed as possible with your feedback": "Please be as detailed as possible with your feedback",
   "Previous": "Previous",
-  "Privacy Policy": "Privacy Policy",
+  "Privacy Policy": "Política de privacidade",
   "Profile": "Perfil",
   "Profile saved!": "Profile saved!",
   "Project Title": "título do projeto",
@@ -133,6 +133,50 @@
     "title": ""
   },
   "myCodeblock": "My {{ islandName }} CodeBlock",
+  "privacy": {
+    "access": {
+      "li1": "Ver quais os dados que temos sobre você, se houver",
+      "li2": "Alterar ou corrigir quaisquer dados que temos sobre você.",
+      "li3": "Excluir os dados que temos sobre você.",
+      "li4": "Expressar qualquer preocupação que você tem sobre o uso dos seus dados.",
+      "p1": "Você pode optar por não receber qualquer contato nosso a qualquer momento. A qualquer momento você pode entrar em contato conosco através do endereço de e-mail disponível em nosso site para:",
+      "title": "Seu acesso e controle sobre informações"
+    },
+    "cookies": {
+      "p1": "Usamos \"cookies\" neste site. Um cookie é um pedaço de dados armazenados no disco rígido de um visitante do site para ajudar a melhorar o seu acesso ao nosso site e identificar visitantes repetidos ao nosso site. Por exemplo, quando usamos um cookie para identificá-lo, você não precisará informar uma senha mais de uma vez, economizando tempo enquanto estiver no nosso site. Os cookies também nos permitem acompanhar e direcionar os interesses de nossos usuários para melhorar a experiência em nosso site. O uso de um cookie não está de forma alguma vinculado a qualquer informação pessoal identificável em nosso site. Ao usar o site, você concorda com a gravação de cookies em seu computador de acordo com os termos desta política. Se você não deseja aceitar cookies deste site, por favor, desative a funcionalidade de cookies do seu navegador ou abstenha-se de usar este site.",
+      "title": "Cookies"
+    },
+    "footer": {
+      "p1": "Se você acha que não estamos respeitando esta política de privacidade, você deve entrar em contato conosco imediatamente pelo e-mail disponível em nosso site."
+    },
+    "info": {
+      "p1": "Somos os únicos proprietários das informações coletadas neste site. Só temos acesso a e coletamos informações que você voluntariamente nos transmite por e-mail ou outra forma de contato direto com você. Não venderemos nem alugaremos esta informação a ninguém. Usaremos suas informações para responder a você, com relação ao motivo pelo qual você nos contatou.",
+      "p2": "Nós transferimos informações para fornecedores, provedores de serviços e outros parceiros que globalmente suportam nosso projeto provendo, por exemplo, serviços técnicos de infraestrutura, analisando como nossos serviços são usados, medindo a eficácia de serviços e publicidade, provendo serviços ao cliente, facilitando transações ou conduzindo pesquisas acadêmicas e estudos. Poderemos também compartilhar informações pessoalmente identificáveis com parceiros educacionais, como, por exemplo, universidades e outros parceiros do CodeLife, como descrito no parágrafo anterior, para que estes parceiros possam distribuir informações sobre seus produtos e serviços que possam ser de seu interesse.",
+      "p3": "Podemos realizar estudos, usando dados gerais dos cursos (incluindo questionários ou tarefas submetidas, desempenho, notas e discussões de fóruns), informações sobre sua atividade em nosso site e dados demográficos de pesquisas realizadas conjuntamente com nossos parceiros educacionais e outros parceiros do projeto para que estes realizem pesquisas relacionadas à educação à distância. Não compartilharemos suas informações com terceiros além dos já descritos. A menos que você nos solicite para não o fazer, podemos entrar em contato com você por e-mail no futuro para informá-lo sobre eventos especiais, novos recursos ou serviços ou alterações a esta política de privacidade.",
+      "title": "Coleta, Uso e Compartilhamento de Informações"
+    },
+    "links": {
+      "p1": "Este site contém links para outros sites. Lembre-se de que não somos responsáveis pelo conteúdo ou práticas de privacidade desses outros sites. Encorajamos os nossos utilizadores a estarem conscientes quando saem do nosso site e a ler as declarações de privacidade de qualquer outro site que recolhe informações pessoais identificáveis.",
+      "title": "Links"
+    },
+    "notice": {
+      "li1": "Quais informações pessoalmente identificáveis são coletadas de você através do site, como elas são usadas e com quem elas podem ser compartilhadas.",
+      "li2": "Quais opções estão disponíveis para você com relação ao uso de seus dados.",
+      "li3": "Os procedimentos de segurança em vigor para proteger o uso indevido de suas informações.",
+      "li4": "Como você pode corrigir quaisquer imprecisões nas suas informações.",
+      "p1": "Esta Política de Privacidade representa as práticas de privacidade para o site codelife.tech e se aplica exclusivamente às informações coletadas por este site. Nossa Política de Privacidade explica:"
+    },
+    "registration": {
+      "p1": "Para usar este site, o usuário deve primeiro preencher o formulário de cadastro. Durante o cadastro, o usuário é obrigado a fornecer certas informações (como nome e informações de contato). Essas informações são usadas para contatar você sobre os recursos do nosso site no qual você manifestou interesse. Como opção, você também pode fornecer informações demográficas (como sexo ou idade) sobre si mesmo, mas isto não é obrigatório.",
+      "title": "Cadastro"
+    },
+    "security": {
+      "p1": "Nós tomamos precauções para proteger sua informação. Quando você envia informações confidenciais através do site, suas informações são protegidas on-line e off-line.",
+      "p2": "Sempre que coletamos informações confidenciais, essas informações são criptografadas e transmitidas de forma segura. Você pode verificar isso procurando o ícone de bloqueio na barra de endereços e procurando \"https\" no início do endereço da página da web.",
+      "p3": "Enquanto usamos criptografia para proteger informações confidenciais transmitidas on-line, também protegemos suas informações off-line. Somente os funcionários que precisam de informações para realizar um trabalho específico (por exemplo, serviço de atendimento ao cliente) têm acesso a informações pessoalmente identificáveis. Os computadores e servidores nos quais armazenamos informações de identificação pessoal são mantidos em um ambiente seguro.",
+      "title": "Segurança"
+    }
+  },
   "return to": "voltou para",
   "splashP1": "Você sabia que a programação é a linguagem do futuro? O mercado de trabalho é muito promissor para todos que sabem se relacionar bem com as novas tecnologias. Você já ouviu falar em carros autônomos e inteligência artificial? Aplicativos de celular? Games? Animações? O que tudo isso tem em comum? Uma lógica que chamamos de linguagem da computação ou pensamento computacional. O CodeLife surgiu da necessidade de permitir que qualquer pessoa possa fazer parte desse mundo novo.",
   "splashP2": "CodeLife é uma plataforma online e gratuita direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas ao universo da tecnologia. O conteúdo inicial deverá abordar temas como desenvolvimento web e visualização de dados.",

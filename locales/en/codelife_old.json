@@ -28,5 +28,15 @@
   "SignUp": {
     "error": {}
   },
-  "home": {}
+  "home": {},
+  "privacy": {
+    "access": {},
+    "cookies": {},
+    "footer": {},
+    "info": {},
+    "links": {},
+    "notice": {},
+    "registration": {},
+    "security": {}
+  }
 }

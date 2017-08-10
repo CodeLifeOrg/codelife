@@ -12,7 +12,8 @@ class CodeBlockCard extends Component {
     super(props);
     this.state = {
       open: false,
-      liked: false
+      liked: false,
+      likes: 0
     };
   }
 
@@ -28,12 +29,20 @@ class CodeBlockCard extends Component {
   toggleLike() {
     // TODO: can this be done better?  I'm storing likestate in two places, and this makes it possible
     // that they get out of sync. Revisit this later
-    this.props.codeBlock.liked = !this.props.codeBlock.liked;
-    this.setState({liked: !this.state.liked});
+    let {likes} = this.state;
+    if (this.props.codeBlock.liked) {
+      this.props.codeBlock.liked = false;
+      likes--;
+    } 
+    else {
+      this.props.codeBlock.liked = true;
+      likes++;
+    }
+    this.setState({liked: !this.state.liked, likes});
   }
 
   componentDidMount() {
-    this.setState({liked: this.props.codeBlock.liked ? true : false});
+    this.setState({liked: this.props.codeBlock.liked ? true : false, likes: this.props.codeBlock.likes});
   }
 
 
@@ -92,7 +101,7 @@ class CodeBlockCard extends Component {
                 intent={ liked ? Intent.WARNING : Intent.DEFAULT }
                 iconName={ `star${ liked ? "" : "-empty"}` }
                 onClick={ this.toggleLike.bind(this) }
-                text={ `${ t("Favorite") } (${ likes })` }
+                text={ `${ t("Favorite") } (${ this.state.likes })` }
               />
               <Button
                 intent={ Intent.PRIMARY }

@@ -54,7 +54,7 @@ class ProjectCard extends Component {
     return (
       <div className="projectCard pt-card pt-elevation-0 pt-interactive" key={id}>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
-          <div className="icon"><span className="pt-icon-standard pt-icon-code-block pt-intent-warning" /></div>
+          <div className="icon"><span className="pt-icon-standard pt-icon-code pt-intent-warning" /></div>
           <div className="info">
             <div className="card-title">{ name }</div>
             { datemodified ? <div className="card-author">{ t("Modified on") } { moment(datemodified).format("DD/MM/YY") }</div> : null }

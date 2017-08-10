@@ -145,7 +145,7 @@ class CodeEditor extends Component {
     return (
       <div id="codeEditor">
         <div className="code">
-          <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code-block"></span>{ codeTitle || "Code" }</div>
+          <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
           { /*
             TODO: This is terrible and it sucks, I need a better way to do this bizarre configuration.
             projectMode is a special mode where you open the project as a read-only popover in the Studio.

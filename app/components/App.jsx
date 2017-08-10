@@ -22,10 +22,13 @@ class App extends Component {
 
     const routes = location.pathname.split("/");
 
+    const bareRoute = routes[1] === "share";
+
     return (
       <div id="app">
         { auth.user || auth.error
-        ? <div className="container">
+        ? bareRoute ? children
+        : <div className="container">
             <Clouds />
             <Nav logo={ !location.pathname.includes("login") } />
             { children }

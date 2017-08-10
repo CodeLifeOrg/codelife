@@ -1,5 +1,52 @@
-iframe#sharecontainer {
+#share {
+  height: 100vh;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+
+  & #iframe {
+    border: 0;
+    display: block;
+    height: calc(100vh - 50px);
+    margin: 0;
+    overflow-y: scroll;
+    width: 100%;
+  }
+
+  & #tag {
+    align-items: center;
+    background-color: var(--sky);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    color: white;
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 25px;
+    position: relative;
+
+    & .info {
+
+      & .pt-icon-standard {
+        margin-right: 5px;
+        opacity: 0.75;
+      }
+
+      & .user-link {
+        color: white;
+      }
+
+    }
+
+    & .logo {
+      align-items: center;
+      display: flex;
+
+      & img {
+        margin-left: 5px;
+        margin-top: 2px;
+        width: 80px;
+      }
+    }
+
+  }
+
 }

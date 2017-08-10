@@ -10,7 +10,8 @@ class Share extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: null
+      content: null,
+      user: null
     };
   }
 
@@ -20,6 +21,10 @@ class Share extends Component {
       doc.open();
       doc.write(this.state.content.studentcontent);
       doc.close();
+      const {uid} = this.state.content;
+      axios.get(`/api/user/${uid}/`).then(resp => {
+        this.setState({user: resp.data});
+      });
     }
   }
 
@@ -38,15 +43,25 @@ class Share extends Component {
   }
 
   render() {
-
-    const {t} = this.props;
-    const {content} = this.state;
+    const {content, user} = this.state;
 
     if (!content) return <Loading />;
 
+    const {t} = this.props;
+    const {name} = content;
+
     return (
-      <div>
-        <iframe id="sharecontainer" ref="rc" frameBorder="0" width="100%" height="100%" />
+      <div id="share">
+        <iframe id="iframe" ref="rc" />
+        <div id="tag">
+          <div className="info">
+            <span className="pt-icon-standard pt-icon-code"></span>
+            { name }{ user ? ` ${ t("by") } ` : "" }{ user ? <a className="user-link" href={ `/profile/${ user.username }` }>{ user.name || user.username }</a> : null }
+          </div>
+          <div className="logo">
+            { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
+          </div>
+        </div>
       </div>
     );
   }

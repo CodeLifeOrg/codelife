@@ -8,7 +8,7 @@ import CodeEditor from "components/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
-import {cvGetMeanings, cvContainsTag, cvContainsStyle} from "utils/codeValidation.js";
+import {cvContainsTag, cvContainsStyle} from "utils/codeValidation.js";
 
 import Loading from "components/Loading";
 
@@ -33,7 +33,7 @@ class CodeBlock extends Component {
   }
 
   componentDidMount() {
-    const meanings = cvGetMeanings();
+    const meanings = this.getMeanings();
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     let initialContent = "";
     let filename = "";
@@ -49,6 +49,28 @@ class CodeBlock extends Component {
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
     }
+  }
+
+  getMeanings() {
+    const {t} = this.props;
+    const meanings = [];
+    meanings.CONTAINS = [];
+    meanings.CSS_CONTAINS = [];
+    meanings.CONTAINS.html = t("<html> surrounds your whole codeblock and tells the computer this is a webpage.");
+    meanings.CONTAINS.head = t("<head> is where your metadata is stored, such as your <title>.");
+    meanings.CONTAINS.title = t("<title> is the title of your page! Make sure it's inside a <head> tag.");
+    meanings.CONTAINS.body = t("<body> is where you put the content you want everyone to see.");
+    meanings.CONTAINS.h1 = t("<h1> is a header tag, where you can write large text.");
+    meanings.CONTAINS.h2 = t("<h2> is a header tag, where you can write large text.");
+    meanings.CONTAINS.h3 = t("<h3> is a header tag, where you can write medium text.");
+    meanings.CONTAINS.h4 = t("<h4> is a header tag, where you can write medium text.");
+    meanings.CONTAINS.h5 = t("<h5> is a header tag, where you can write small text.");
+    meanings.CONTAINS.h6 = t("<h6> is a header tag, where you can write small text.");
+    meanings.CONTAINS.style = t("<style> is where you customize your page with cool colors and fonts.");
+    meanings.CONTAINS.p = t("<p> is a paragraph tag, you can write sentences in here.");
+    meanings.CSS_CONTAINS.h1 = t("h1 within a <style> tag is how you customize your header tags.");
+    meanings.CSS_CONTAINS.p = t("p within a <style> tag is how you customize your <p> tags");
+    return meanings;
   }
 
   askForHelp() {

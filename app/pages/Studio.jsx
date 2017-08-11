@@ -57,7 +57,7 @@ class Studio extends Component {
     }
     else {
       const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
-      toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
+      toast.show({message: t("Save your webpage before sharing!"), timeout: 1500, intent: Intent.WARNING});
     }
   }
 
@@ -67,18 +67,14 @@ class Studio extends Component {
 
   // Also, the return value here is because Projects.jsx needs to know if I clicked confirm or not.
 
-  // TODO: clean up this if/then tree, it sucks
   onClickProject(project) {
+    const {t} = this.props;
+    const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().changesMade()) {
-        if (confirm("Discard changes and open a new file?")) {
-          this.openProject(project.id);
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
+        toast.show({message: t("Save your changes before opening a new webpage."), timeout: 1500, intent: Intent.WARNING});  
+        return false;
+      } 
       else {
         this.openProject(project.id);
         return true;
@@ -102,13 +98,13 @@ class Studio extends Component {
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-          toast.show({message: t("Saved!"), intent: Intent.SUCCESS});
+          toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().setChangeStatus(false);
         }
       });
     }
     else {
-      alert("open a new file first");
+      alert("Open a new file first");
     }
   }
 

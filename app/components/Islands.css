@@ -1,5 +1,5 @@
 .island-1 {
-  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-1, dark); }
+  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-1, dark); }
   &#island #path:before { background-color: map(islands, island-1, dark); }
   & #path .stop { border-color: map(islands, island-1, dark); }
   &#island #path .stop.done { background-color: map(islands, island-1, light); }
@@ -17,7 +17,7 @@
 }
 
 .island-2 {
-  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-2, dark); }
+  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-2, dark); }
   &#island #path:before { background-color: map(islands, island-2, dark); }
   & #path .stop { border-color: map(islands, island-2, dark); }
   &#island #path .stop.done { background-color: map(islands, island-2, light); }
@@ -35,7 +35,7 @@
 }
 
 .island-3 {
-  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-3, dark); }
+  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-3, dark); }
   &#island #path:before { background-color: map(islands, island-3, dark); }
   & #path .stop { border-color: map(islands, island-3, dark); }
   &#island #path .stop.done { background-color: map(islands, island-3, light); }
@@ -53,7 +53,7 @@
 }
 
 .island-4 {
-  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-4, dark); }
+  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-4, dark); }
   &#island #path:before { background-color: map(islands, island-4, dark); }
   & #path .stop { border-color: map(islands, island-4, dark); }
   &#island #path .stop.done { background-color: map(islands, island-4, light); }
@@ -71,7 +71,7 @@
 }
 
 .island-5 {
-  &#island .title, & .description { text-shadow: 0 2px 2px map(islands, island-5, dark); }
+  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-5, dark); }
   &#island #path:before { background-color: map(islands, island-5, dark); }
   & #path .stop { border-color: map(islands, island-5, dark); }
   &#island #path .stop.done { background-color: map(islands, island-5, light); }

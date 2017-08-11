@@ -47,7 +47,7 @@ class Minilesson extends Component {
         s.username = t("you!");
         s.mine = true;
         mySnippets.push(s);
-      } 
+      }
       else {
         // TODO: do this in a database join, not here.
         if (likes.find(l => l.likeid === s.id)) {
@@ -97,7 +97,7 @@ class Minilesson extends Component {
       const userProgress = resp[2].data;
       const allSnippets = resp[3].data;
       const likes = resp[4].data;
-      
+
       const otherSnippets = this.sortSnippets(allSnippets, likes);
 
       otherSnippets[0].mine ? currentLesson.snippet = otherSnippets[0] : currentLesson.snippet = null;
@@ -261,7 +261,7 @@ class Minilesson extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {minilessons, currentLesson, userProgress, otherSnippets} = this.state;
+    const {minilessons, currentLesson, userProgress, otherSnippets, showMore} = this.state;
 
     if (!auth.user) browserHistory.push("/login");
     if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <Loading />;
@@ -280,7 +280,7 @@ class Minilesson extends Component {
 
     const otherSnippetItemsBeforeFold = [];
     const otherSnippetItemsAfterFold = [];
-    let top = 5;
+    let top = 4;
     for (const os of otherSnippets) {
       const cbc = <CodeBlockCard codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherSnippetItemsBeforeFold.push(cbc) : otherSnippetItemsAfterFold.push(cbc);
@@ -334,11 +334,15 @@ class Minilesson extends Component {
                 </div>
               </Popover> : null }
             </h2>
-            <div className="snippets">
-              {otherSnippetItemsBeforeFold}
-              <Button onClick={this.showMore.bind(this)}>{this.state.showMore ? t("Show Less") : t("Show More")}</Button>
-              <Collapse isOpen={this.state.showMore}><div className="snippets">{otherSnippetItemsAfterFold}</div></Collapse>
-            </div>
+            <div className="snippets">{otherSnippetItemsBeforeFold}</div>
+            { otherSnippetItemsAfterFold.length
+            ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherSnippetItemsAfterFold}</div></Collapse>
+            : null }
+            { otherSnippetItemsAfterFold.length
+            ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+                { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherSnippetItemsAfterFold.length}) }
+              </div>
+            : null }
           </div>
         : null }
       </div>

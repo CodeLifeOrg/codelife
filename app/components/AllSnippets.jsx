@@ -34,6 +34,7 @@ class AllSnippets extends Component {
         l.likedSnippets = [];
         l.unlikedSnippets = [];
         for (const s of allSnippets) {
+          s.likes = Number(s.likes);
           if (s.uid === this.props.auth.user.id) {
             s.username = t("you!");
             s.mine = true;

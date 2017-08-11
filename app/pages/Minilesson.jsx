@@ -63,6 +63,7 @@ class Minilesson extends Component {
       allSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
       // Fold over snippets and separate them into mine and others
       for (const s of allSnippets) {
+        s.likes = Number(s.likes);
         if (s.uid === this.props.auth.user.id) {
           s.username = t("you!");
           s.mine = true;

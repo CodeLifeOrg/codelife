@@ -71,6 +71,8 @@ class CodeBlockCard extends Component {
     const {t, userProgress} = this.props;
     const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
+    console.log(likes === "1");
+
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
     const projectMode = this.props.projectMode;

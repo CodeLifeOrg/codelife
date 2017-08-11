@@ -20,9 +20,7 @@
   "Loading projects": {},
   "MM/DD/YYYY": "MM/DD/YYYY",
   "YYYY-MM-DD": "YYYY-MM-DD",
-  "mypage": {
-    "html": "html"
-  },
+  "mypage": {},
   "open a new file first": "open a new file first",
   "Login": {
     "E-mail": "E-mail",
@@ -99,5 +97,6 @@
   "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "",
   "Share this Snippet": "Share this Snippet",
   "Show More": "Show More",
-  "This is a full sentence used as the translation key": ""
+  "This is a full sentence used as the translation key": "",
+  "<p> is a paragraph tag, you can write sentences in here": ""
 }

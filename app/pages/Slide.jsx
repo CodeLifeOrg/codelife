@@ -73,7 +73,7 @@ class Slide extends Component {
     if (this.state.mounted && currentSlide &&
       ["InputCode", "InputCodeExec", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
-      this.setState({latestSlideCompleted: i, gems: gems + 1});
+      this.setState({latestSlideCompleted: i});
     }
 
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
@@ -82,7 +82,7 @@ class Slide extends Component {
       this.setState({sentProgress: true, lessonComplete: true});
       // add 1 to gems since the saving happens before the user "finishes"
       // the final slide
-      this.saveProgress(mlid, gems + 1);
+      this.saveProgress(mlid, gems);
     }
   }
 
@@ -125,10 +125,17 @@ class Slide extends Component {
     e.keyCode === 192 ? this.unblock(this) : null;
   }
 
+  updateGems(newGems) {
+    console.log("updateGems!!!")
+    const {gems: oldGems} = this.state;
+    this.setState({gems: oldGems + newGems});
+  }
+
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
     const {currentSlide, slides, currentLesson, gems} = this.state;
+    const updateGems = this.updateGems.bind(this);
 
     if (!auth.user) browserHistory.push("/login");
 
@@ -169,7 +176,12 @@ class Slide extends Component {
           </Tooltip>
         </div>
 
-        <SlideComponent exec={exec} island={lid} unblock={this.unblock.bind(this)} {...currentSlide} />
+        <SlideComponent
+          exec={exec}
+          island={lid}
+          updateGems={updateGems}
+          unblock={this.unblock.bind(this)}
+          {...currentSlide} />
 
         <div id="slide-foot">
           { prevSlug

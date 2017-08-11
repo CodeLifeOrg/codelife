@@ -13,13 +13,16 @@ export default class Quiz extends Component {
   }
 
   onChooseAnswer(question) {
+    const {updateGems} = this.props;
     const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
     if (question.isCorrect) {
       toast.show({message: "That's right!", timeout: 1500, intent: Intent.SUCCESS});
       this.props.unblock();
+      updateGems(1);
     }
     else {
       toast.show({message: "Sorry, Try again!", timeout: 1500, intent: Intent.DANGER});
+      updateGems(-1);
     }
     this.setState({activeQ: question.text});
   }
@@ -42,7 +45,7 @@ export default class Quiz extends Component {
     let qParse = [{text: "Check with", isCorrect: true}, {text: "Administrator", isCorrect: false}];
     try {
       qParse = JSON.parse(quizjson);
-    } 
+    }
     catch (e) {
       qText = "Quiz Data is Unavailable.";
     }

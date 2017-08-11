@@ -13,6 +13,8 @@ export default class RenderCode extends Component {
 
   componentDidMount() {
     this.setState({mounted: true});
+    const {updateGems} = this.props;
+    updateGems(1);
   }
 
   componentDidUpdate() {

@@ -24,6 +24,8 @@ class InputCode extends Component {
 
   componentDidMount() {
     this.setState({mounted: true, baseText: this.props.htmlcontent2 ? this.props.htmlcontent2 : ""});
+    const {updateGems} = this.props;
+    updateGems(1);
   }
 
   componentDidUpdate() {
@@ -65,7 +67,7 @@ class InputCode extends Component {
     this.editor.getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
     this.setState({resetAlert: false});
   }
-  
+
   attemptReset() {
     this.setState({resetAlert: true});
   }
@@ -112,4 +114,3 @@ InputCode = connect(state => ({
 }))(InputCode);
 InputCode = translate()(InputCode);
 export default InputCode;
-

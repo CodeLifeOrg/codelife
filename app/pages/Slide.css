@@ -1,8 +1,3 @@
-.quiz-selected {
-  /* lol sorry dave */
-  outline: 1px solid black;
-}
-
 .confetti {
   position: absolute;
   margin-left: auto;
@@ -137,7 +132,7 @@
           transition: background-color 0.2s;
 
           &:before {
-            background-color: rgba(0, 0, 0, 0.15);
+            background-color: rgba(0, 0, 0, 0.05);
             border-radius: 10px;
             content: counter(item, upper-alpha);
             display: inline-block;
@@ -154,6 +149,15 @@
             width: 20px;
           }
 
+          &.quiz-selected {
+            background-color: rgba(0, 0, 0, 0.05);
+
+            &:before {
+              background-color: transparent;
+            }
+
+          }
+
           &:hover {
             background-color: rgba(0, 0, 0, 0.15);
             cursor: pointer;
@@ -163,6 +167,7 @@
             }
 
           }
+
         }
 
       }

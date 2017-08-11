@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import axios from "axios";
 import {Collapse} from "@blueprintjs/core";
 import CodeBlockCard from "components/CodeBlockCard";
-import "./Snippets.css";
+import "./AllSnippets.css";
 
 class AllSnippets extends Component {
 

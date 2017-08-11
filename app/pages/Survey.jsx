@@ -30,7 +30,6 @@ class Survey extends Component {
     axios.get("/api/survey/")
       .then(surveyResp => {
         const surveyData = surveyResp.data;
-        console.log(surveyData);
         if (surveyData.error) {
           this.setState({loading: false, error: surveyData.error});
         }

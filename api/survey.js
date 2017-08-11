@@ -4,9 +4,15 @@ module.exports = function(app) {
 
   app.get("/api/survey/", (req, res) => {
     const {id: uid} = req.user;
-    db.userprofiles.findOne(
-      {where: {uid}}
-    ).then(userprofile => res.json(userprofile.survey2));
+    db.userprofiles.findOrCreate({where: {uid}})
+      .then(userprofiles => {
+        if (userprofiles.length) {
+          res.json(userprofiles[0].survey2 || {});
+        }
+        else {
+          return res.json({error: "Unable to find a survey associated to that user."}).end();
+        }
+      });
   });
 
   app.post("/api/survey/", (req, res) => {

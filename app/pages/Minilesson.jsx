@@ -137,7 +137,6 @@ class Minilesson extends Component {
   }
 
   reportLike(codeBlock) {
-    console.log("Report Change In Likes");
     const likedSnippets = this.state.likedSnippets.slice(0);
     const unlikedSnippets = this.state.unlikedSnippets.slice(0);
     if (codeBlock.mine) return;

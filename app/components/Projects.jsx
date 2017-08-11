@@ -34,7 +34,6 @@ class Projects extends Component {
           this.createNewProject("mypage.html");
         }
         else {
-          console.log("got to final");
           let latestIndex = 0;
           let latestDate = projects[0].datemodified;
           for (let i = 0; i < projects.length; i++) {

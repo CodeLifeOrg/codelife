@@ -19,44 +19,68 @@ class AllSnippets extends Component {
 
   componentDidMount() {
     const {t} = this.props;
-    const osget = axios.get("/api/snippets/allothers");
-    const sget = axios.get("/api/snippets/");
+    const asget = axios.get("/api/snippets/all");
     const lget = axios.get("/api/lessons");
     const upget = axios.get("/api/userprogress");
     const lkget = axios.get("/api/likes");
-    Promise.all([sget, osget, lget, upget, lkget]).then(resp => {
-      const mysnippets = resp[0].data;
-      const othersnippets = resp[1].data;
-      const lessons = resp[2].data;
-      const userProgress = resp[3].data;
-      const likes = resp[4].data;
-      othersnippets.sort((a, b) => b.likes - a.likes);
+    Promise.all([asget, lget, upget, lkget]).then(resp => {
+      const allSnippets = resp[0].data;
+      const lessons = resp[1].data;
+      const userProgress = resp[2].data;
+      const likes = resp[3].data;
+      allSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
       for (const l of lessons) {
-        l.snippets = [];
-        for (const ms of mysnippets) {
-          ms.username = t("you!");
-          ms.mine = true;
-          if (ms.lid === l.id) l.snippets.push(ms);
-        }
-        const likedsnippets = [];
-        const unlikedsnippets = [];
-        for (const os of othersnippets) {
-          if (os.lid === l.id) {
-            // TODO: move this to db call, don't do this here
-            if (likes.find(l => l.likeid === os.id)) {
-              os.liked = true;
-              likedsnippets.push(os);
-            }
-            else {
-              os.liked = false;
-              unlikedsnippets.push(os);
+        l.mySnippets = [];
+        l.likedSnippets = [];
+        l.unlikedSnippets = [];
+        for (const s of allSnippets) {
+          if (s.uid === this.props.auth.user.id) {
+            s.username = t("you!");
+            s.mine = true;
+            if (likes.find(l => l.likeid === s.id)) s.liked = true;
+            if (s.lid === l.id) l.mySnippets.push(s);
+          }
+          else {
+            if (s.lid === l.id) {
+              // TODO: move this to db call, don't do this here
+              if (likes.find(l => l.likeid === s.id)) {
+                s.liked = true;
+                l.likedSnippets.push(s);
+              }
+              else {
+                s.liked = false;
+                l.unlikedSnippets.push(s);
+              }
             }
           }
         }
-        l.snippets = l.snippets.concat(likedsnippets, unlikedsnippets);
       }
       this.setState({lessons, userProgress});
     });
+  }
+
+  reportLike(codeBlock) {
+    const lesson = this.state.lessons.find(l => l.id === codeBlock.lid);
+    if (lesson) {
+      const likedSnippets = lesson.likedSnippets.slice(0);
+      const unlikedSnippets = lesson.unlikedSnippets.slice(0);
+      if (codeBlock.mine) return;
+      if (codeBlock.liked) {
+        likedSnippets.push(codeBlock);
+        unlikedSnippets.splice(unlikedSnippets.map(s => s.id).indexOf(codeBlock.id), 1);
+      }
+      else {
+        unlikedSnippets.push(codeBlock);
+        likedSnippets.splice(likedSnippets.map(s => s.id).indexOf(codeBlock.id), 1);
+      }
+      likedSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
+      unlikedSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
+      lesson.likedSnippets = likedSnippets;
+      lesson.unlikedSnippets = unlikedSnippets;
+      // updating the parameter arrays of a lesson does not intrinsically update state
+      // so we have to force an update to rearrange the render after a like is reported
+      this.forceUpdate();
+    }
   }
 
   handleClick(l) {
@@ -77,9 +101,9 @@ class AllSnippets extends Component {
         </li>
       );
       const thisLessonItems = [];
-      for (const s of l.snippets) {
+      for (const s of l.mySnippets.concat(l.likedSnippets, l.unlikedSnippets)) {
         thisLessonItems.push(
-          <li><CodeBlockCard codeBlock={s} projectMode={true}/></li>
+          <li><CodeBlockCard codeBlock={s} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
         );
       }
       snippetItems.push(<Collapse isOpen={this.state[l.id]}>{thisLessonItems}</Collapse>);
@@ -96,7 +120,7 @@ class AllSnippets extends Component {
 }
 
 AllSnippets = connect(state => ({
-  user: state.auth.user
+  auth: state.auth
 }))(AllSnippets);
 AllSnippets = translate()(AllSnippets);
 export default AllSnippets;

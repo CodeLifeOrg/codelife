@@ -1,6 +1,5 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {Link} from "react-router";
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
@@ -67,9 +66,9 @@ class CodeBlock extends Component {
     meanings.CONTAINS.h4 = t("<h4> is a header tag, where you can write medium text.");
     meanings.CONTAINS.h5 = t("<h5> is a header tag, where you can write small text.");
     meanings.CONTAINS.h6 = t("<h6> is a header tag, where you can write small text.");
-    meanings.CONTAINS.style = t("<style> is where you customize your page with cool colors and fonts.");
+    meanings.CONTAINS.style = t("<style> is where you customize your page with cool colors and fonts. Make sure it's inside a <head> tag!");
     meanings.CONTAINS.script = t("<script> is where you write interactive content with javascript.");
-    meanings.CONTAINS.p = t("<p> is a paragraph tag, you can write sentences in here.");
+    meanings.CONTAINS.p = t("<p> is a paragraph tag, you can write words sentences in here.");
     meanings.CSS_CONTAINS.h1 = t("h1 within a <style> tag is how you customize your header tags.");
     meanings.CSS_CONTAINS.p = t("p within a <style> tag is how you customize your <p> tags");
     meanings.CSS_CONTAINS.body = t("body within a <style> tag is how you customize everything in your webpage's body");

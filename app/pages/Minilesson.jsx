@@ -21,7 +21,9 @@ class Minilesson extends Component {
       minilessons: null,
       currentLesson: null,
       userProgress: null,
-      otherSnippets: null,
+      mySnippets: null,
+      likedSnippets: null,
+      unlikedSnippets: null,
       currentFrame: null,
       testOpen: false,
       winOpen: false,
@@ -35,55 +37,8 @@ class Minilesson extends Component {
     this.loadFromDB();
   }
 
-  sortSnippets(allSnippets, likes) {
-    const {t} = this.props;
-    const mySnippets = [];
-    const likedSnippets = [];
-    const unlikedSnippets = [];
-    allSnippets.sort((a, b) => b.likes - a.likes || b.snippetname < a.snippetname);
-    // Fold over snippets and separate them into mine and others
-    for (const s of allSnippets) {
-      if (s.uid === this.props.auth.user.id) {
-        s.username = t("you!");
-        s.mine = true;
-        mySnippets.push(s);
-      }
-      else {
-        // TODO: do this in a database join, not here.
-        if (likes.find(l => l.likeid === s.id)) {
-          s.liked = true;
-          likedSnippets.push(s);
-        }
-        else {
-          unlikedSnippets.push(s);
-        }
-      }
-    }
-    return mySnippets.concat(likedSnippets, unlikedSnippets);
-  }
-
-  resortSnippets() {
-    const allSnippets = this.state.otherSnippets.slice(0);
-    const mySnippets = [];
-    const likedSnippets = [];
-    const unlikedSnippets = [];
-    allSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
-    // Fold over snippets and separate them into mine and others
-    for (const s of allSnippets) {
-      if (s.uid === this.props.auth.user.id) {
-        console.log(s);
-        mySnippets.push(s);
-      }
-      else {
-        s.liked ? likedSnippets.push(s) : unlikedSnippets.push(s);
-      }
-    }
-    console.log(mySnippets.concat(likedSnippets, unlikedSnippets));
-    this.setState({otherSnippets: mySnippets.concat(likedSnippets, unlikedSnippets)});
-  }
-
   loadFromDB() {
-    const {params} = this.props;
+    const {params, t} = this.props;
     const {lid} = params;
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
@@ -98,12 +53,37 @@ class Minilesson extends Component {
       const allSnippets = resp[3].data;
       const likes = resp[4].data;
 
-      const otherSnippets = this.sortSnippets(allSnippets, likes);
+      const mySnippets = [];
+      const likedSnippets = [];
+      const unlikedSnippets = [];
 
-      otherSnippets[0].mine ? currentLesson.snippet = otherSnippets[0] : currentLesson.snippet = null;
+      currentLesson.snippet = null;
 
       minilessons.sort((a, b) => a.ordering - b.ordering);
-      this.setState({minilessons, currentLesson, userProgress, otherSnippets});
+      allSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
+      // Fold over snippets and separate them into mine and others
+      for (const s of allSnippets) {
+        if (s.uid === this.props.auth.user.id) {
+          s.username = t("you!");
+          s.mine = true;
+          currentLesson.snippet = s;
+          if (likes.find(l => l.likeid === s.id)) s.liked = true;
+          mySnippets.push(s);
+        }
+        else {
+          // TODO: do this in a database join, not here.
+          if (likes.find(l => l.likeid === s.id)) {
+            s.liked = true;
+            likedSnippets.push(s);
+          }
+          else {
+            s.liked = false;
+            unlikedSnippets.push(s);
+          }
+        }
+      }
+      
+      this.setState({minilessons, currentLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
     });
   }
 
@@ -156,9 +136,22 @@ class Minilesson extends Component {
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 
-  reportLike() {
-    // this is broken for now
-    // this.resortSnippets();
+  reportLike(codeBlock) {
+    console.log("Report Change In Likes");
+    const likedSnippets = this.state.likedSnippets.slice(0);
+    const unlikedSnippets = this.state.unlikedSnippets.slice(0);
+    if (codeBlock.mine) return;
+    if (codeBlock.liked) {
+      likedSnippets.push(codeBlock);
+      unlikedSnippets.splice(unlikedSnippets.map(s => s.id).indexOf(codeBlock.id), 1);
+    }
+    else {
+      unlikedSnippets.push(codeBlock);
+      likedSnippets.splice(likedSnippets.map(s => s.id).indexOf(codeBlock.id), 1);
+    }
+    likedSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
+    unlikedSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
+    this.setState({likedSnippets, unlikedSnippets});
   }
 
   allMinilessonsBeaten() {
@@ -266,12 +259,13 @@ class Minilesson extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {minilessons, currentLesson, userProgress, otherSnippets, showMore} = this.state;
+    const {minilessons, currentLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, showMore} = this.state;
 
     if (!auth.user) browserHistory.push("/login");
-    if (!currentLesson || !minilessons || !userProgress || !otherSnippets) return <Loading />;
+    if (!currentLesson || !minilessons || !userProgress) return <Loading />;
 
     const islandDone = this.hasUserCompleted(this.props.params.lid);
+    const otherSnippets = mySnippets.concat(likedSnippets, unlikedSnippets);
 
     // Clone minilessons as to not mess with state
     const minilessonStatuses = minilessons.slice(0);

@@ -4,7 +4,9 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 
 import CodeEditor from "components/CodeEditor";
+import Loading from "components/Loading";
 import "./CodeBlockCard.css";
+
 
 class CodeBlockCard extends Component {
 
@@ -12,55 +14,65 @@ class CodeBlockCard extends Component {
     super(props);
     this.state = {
       open: false,
-      liked: false,
-      likes: 0
+      codeBlock: null,
+      initialLikeState: false
     };
   }
 
   toggleDialog() {
     if (this.state.open) {
-      axios.post("/api/likes/save", {liked: this.state.liked, likeid: this.props.codeBlock.id}).then(resp => {
-        if (resp.status === 200) {
-          console.log("success");
-          if (this.props.reportLike) this.props.reportLike();
-        }
-        else {
-          console.log("error");
-        }
-      });
+      if (this.state.initialLikeState !== this.state.codeBlock.liked) {
+        axios.post("/api/likes/save", {liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
+          if (resp.status === 200) {
+            console.log("success");
+            if (this.props.reportLike) this.props.reportLike(this.state.codeBlock);
+          }
+          else {
+            console.log("error");
+          }
+        });
+      }
     }
     this.setState({open: !this.state.open});
   }
 
   toggleLike() {
-    // TODO: can this be done better?  I'm storing likestate in two places, and this makes it possible
-    // that they get out of sync. Revisit this later
-    let {likes} = this.state;
-    if (this.props.codeBlock.liked) {
-      this.props.codeBlock.liked = false;
-      likes--;
-    }
+    const {codeBlock} = this.state;
+    if (codeBlock.liked) {
+      codeBlock.liked = false;
+      codeBlock.likes--;
+    } 
     else {
-      this.props.codeBlock.liked = true;
-      likes++;
+      codeBlock.liked = true;
+      codeBlock.likes++;
     }
-    this.setState({liked: !this.state.liked, likes});
+    this.setState({codeBlock});
   }
 
   componentDidMount() {
-    this.setState({liked: this.props.codeBlock.liked ? true : false, likes: this.props.codeBlock.likes});
+    const {codeBlock} = this.props;
+    const initialLikeState = codeBlock.liked ? true : false;
+    this.setState({initialLikeState, codeBlock});
   }
 
-
+  componentDidUpdate() {
+    if (this.state.codeBlock && this.props.codeBlock.id !== this.state.codeBlock.id) {
+      const {codeBlock} = this.props;
+      const initialLikeState = codeBlock.liked ? true : false;
+      this.setState({initialLikeState, codeBlock});
+    }
+  }
 
   render() {
-    const {likes, open} = this.state;
-    const {codeBlock, t, userProgress} = this.props;
-    const {lid, liked, mine, snippetname, studentcontent, username} = codeBlock;
+    const {codeBlock, open} = this.state;
+
+    if (!codeBlock) return <Loading />;
+
+    const {t, userProgress} = this.props;
+    const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
-    const inline = !this.props.breakout;
     const projectMode = this.props.projectMode;
 
     return (

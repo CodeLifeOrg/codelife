@@ -48,6 +48,7 @@ class AllSnippets extends Component {
               likedsnippets.push(os);
             }
             else {
+              os.liked = false;
               unlikedsnippets.push(os);
             }
           }
@@ -78,7 +79,7 @@ class AllSnippets extends Component {
       const thisLessonItems = [];
       for (const s of l.snippets) {
         thisLessonItems.push(
-          <li><CodeBlockCard codeBlock={s} breakout={true} projectMode={true}/></li>
+          <li><CodeBlockCard codeBlock={s} projectMode={true}/></li>
         );
       }
       snippetItems.push(<Collapse isOpen={this.state[l.id]}>{thisLessonItems}</Collapse>);

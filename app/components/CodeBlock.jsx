@@ -2,6 +2,7 @@ import axios from "axios";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import React, {Component} from "react";
+import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
 import himalaya from "himalaya";
 import CodeEditor from "components/CodeEditor";
@@ -159,6 +160,17 @@ class CodeBlock extends Component {
     this.setState({filename: e.target.value});
   }
 
+  shareCodeblock() {
+    const {t} = this.props;
+    if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
+      browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);  
+    }
+    else {
+      const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
+      toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
+    }
+  }
+
   getValidationBox() {
     const {t} = this.props;
     const {goodRatio, intent, rulejson} = this.state;
@@ -237,6 +249,7 @@ class CodeBlock extends Component {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
+        if (this.editor) this.editor.getWrappedInstance().setChangeStatus(false);
         if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion();
         if (snippet) {
           // If there's already a snippet, and we've saved new data down to the
@@ -295,7 +308,7 @@ class CodeBlock extends Component {
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
-          { lesson.snippet ? <Link className="pt-button" to={ `/share/snippet/${lesson.snippet.id}` }>{ t("Share this Snippet") }</Link> : null }
+          { lesson.snippet ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"

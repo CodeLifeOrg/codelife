@@ -6,7 +6,6 @@ import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 
 import AllSnippets from "components/AllSnippets";
-import Snippets from "components/Snippets";
 import Projects from "components/Projects";
 import CodeEditor from "components/CodeEditor";
 
@@ -93,6 +92,7 @@ class Studio extends Component {
 
   saveCodeToDB() {
     const {id: uid} = this.props.auth.user;
+    const {t} = this.props;
     const {currentProject} = this.state;
 
     if (currentProject) {
@@ -101,8 +101,8 @@ class Studio extends Component {
       const studentcontent = this.editor.getWrappedInstance().getEntireContents();
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
-          const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-          t.show({message: "Saved!", intent: Intent.SUCCESS});
+          const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Saved!"), intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().setChangeStatus(false);
         }
       });

@@ -1,4 +1,32 @@
 {
+  "/": "/",
+  "/api/lessons": "/api/lessons",
+  "/api/lessons/": "/api/lessons/",
+  "/api/likes": "",
+  "/api/likes/save": "",
+  "/api/profile/": "/api/profile/",
+  "/api/profileImgUpload/": "/api/profileImgUpload/",
+  "/api/projects/": "/api/projects/",
+  "/api/projects/new": "/api/projects/new",
+  "/api/projects/update": "/api/projects/update",
+  "/api/snippets": "/api/snippets",
+  "/api/snippets/all": "",
+  "/api/survey/": "/api/survey/",
+  "/api/userprogress": "/api/userprogress",
+  "/api/userprogress/save": "/api/userprogress/save",
+  "<body> is where you put the content you want everyone to see": "",
+  "<h1> is a header tag, where you can write large text": "",
+  "<h2> is a header tag, where you can write large text": "",
+  "<h3> is a header tag, where you can write medium text": "",
+  "<h4> is a header tag, where you can write medium text": "",
+  "<h5> is a header tag, where you can write small text": "",
+  "<h6> is a header tag, where you can write small text": "",
+  "<head> is where your metadata is stored, such as your <title>": "",
+  "<html> surrounds your whole codeblock and tells the computer this is a webpage": "",
+  "<p> is a paragraph tag, you can write sentences in here": "",
+  "<script> is where you write interactive content with javascript": "",
+  "<style> is where you customize your page with cool colors and fonts": "",
+  "<title> is the title of your page! Make sure it's inside a <head> tag": "",
   "About": "Sobre o CodeLife",
   "About Me": "Sobre mim",
   "Are you sure you want to reset the code to its original state?": "Are you sure you want to reset the code to its original state?",
@@ -17,6 +45,7 @@
   "Create": "Crio",
   "Created by": "Criado por",
   "Customizing my profile": "Customizing my profile",
+  "DD/MM/YY": "DD/MM/YY",
   "Delete": "Excluir",
   "Delete Project": "Excluir projeto",
   "Earn your CodeBlock": "",
@@ -25,33 +54,26 @@
   "Error": "Erro",
   "Execute": "Execute",
   "Female": "Fêmea",
+  "File cannot be in use or blank": "File cannot be in use or blank",
   "Gender": "Gênero",
   "Glossary": "Glossário",
-  "Great Job!": "Great Job!",
-  "Great!": "Great!",
   "Having trouble? Check with a neighbor and ask for help!": "Having trouble? Check with a neighbor and ask for help!",
   "Hosted by": "",
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",
   "How likely are you to revisit the site?": "How likely are you to revisit the site?",
   "How likely are you to tell a friend or classmate about CodeLife?": "How likely are you to tell a friend or classmate about CodeLife?",
-  "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "",
+  "How much does the potential of receiving a \\": "How much does the potential of receiving a \\",
   "Image": "Imagem",
   "Insert into Project": "Inserir no Projeto",
   "Islands (lessons)": "Islands (lessons)",
+  "Keep Exploring": "",
   "Like": "",
   "Likes": "",
   "Loading": "Carregando",
   "Loading codeblocks": "Loading codeblocks",
   "Loading projects": "Loading projects",
-  "Login": {
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Login": "Login",
-    "Password": "Senha",
-    "Twitter": "Twitter"
-  },
   "Logout": "Sair",
+  "MM/DD/YYYY": "MM/DD/YYYY",
   "Male": "Masculino",
   "Map": "Mapa",
   "Modified on": "Modificado em",
@@ -77,29 +99,13 @@
   "Reset": "Restabelecer",
   "Save": "Salve",
   "Save & Submit": "Salvar e enviar",
+  "Save your webpage before sharing!": "Save your webpage before sharing!",
   "Saved!": "Saved!",
   "Schools list for this location is unavailable": "Schools list for this location is unavailable",
   "Share": "Compartilhar",
-  "Share this Snippet": "Share this Snippet",
   "Show Less": "Show Less",
-  "Show More": "Show More",
+  "Show {{x}} More": "",
   "Sign Up": "Cadastre-Se",
-  "SignUp": {
-    "Confirm Password": "Confirme a Senha",
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Password": "Senha",
-    "PolicyText": "By checking this box, you agree to our Privacy Policy",
-    "Sign Up": "Cadastre-Se",
-    "Twitter": "Twitter",
-    "Username": "Username",
-    "error": {
-      "IncompleteFields": "Please set all fields.",
-      "PasswordMatch": "Passwords don't match.",
-      "TermsAgree": "Must agree to terms to continue."
-    }
-  },
   "Somewhat difficult": "Somewhat difficult",
   "Somewhat easy": "Somewhat easy",
   "Somewhat likely": "Somewhat likely",
@@ -107,7 +113,6 @@
   "Somewhat unlikely": "Somewhat unlikely",
   "Submit Survey": "Submit Survey",
   "Survey": "Survey",
-  "This is a full sentence used as the translation key": "",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",
   "Unable to upload image!": "Unable to upload image!",
@@ -125,31 +130,117 @@
   "What was the thing you enjoyed the most from today's exercise?": "What was the thing you enjoyed the most from today's exercise?",
   "What was the thing you struggled with the most from today's exercise?": "What was the thing you struggled with the most from today's exercise?",
   "Where are you from?": "De onde?",
+  "YYYY-MM-DD": "YYYY-MM-DD",
   "You don't have permission to edit this user's profile": "You don't have permission to edit this user's profile",
   "aboutP1": "CodeLife é uma plataforma online e gratuita voltada para alunos brasileiros do ensino médio que desejam aprender uma variedade de habilidades relevantes para trabalhar no setor de TI (desenvolvimento frontend, design de UI, visualização de dados etc). O currículo da plataforma abordará temas como desenvolvimento web e visualização de dados.",
   "aboutP2": "Os usuários do CodeLife poderão aprender em seu próprio ritmo e independente de aulas presenciais. Todo o conteúdo será oferecido em português e inglês e será projetado para complementar o currículo de educação no Brasil.",
   "aboutP3": "Além de trabalhar com alunos, gestores de escolas, professores e funcionários do governo, os recursos da plataforma serão projetados para conectar os estudantes com potenciais empregadores.",
   "aboutP4": "aboutP4",
   "aboutP5": "aboutP5",
+  "body within a <style> tag is how you customize everything in your webpage's body": "",
   "by": "",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
+    "CSS": {
+      "def": "CSS is a computer language that can change the style of a web page."
+    },
+    "alert": {
+      "def": "A javascript method that makes a popup."
+    },
+    "backgroundColor": {
+      "def": "A CSS property that changes the color of an element’s background."
+    },
+    "backgroundImage": {
+      "def": "A CSS property that adds a background image to a webpage."
+    },
+    "body": {
+      "def": "Content inside the &lt;body&gt; tag is displayed directly on the webpage."
+    },
+    "closingtag": {
+      "def": "This tag indicates the end of an HTML element. It has a slash before its name.",
+      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+    },
+    "code": {
+      "def": "Code is a set of written instructions that tells a computer what to do. Examples of coding languages: HTML, CSS.and JavaScript."
+    },
+    "codeeditor": {
+      "def": "The code editor is where you will edit your code to make your webpages."
+    },
+    "color": {
+      "def": "A CSS property that changes the color of text and content."
+    },
     "css": {
-      "def": "CSS is a computer language that can change the style of a web page.",
-      "exampleTxt1": "some example text in english"
+      "def": "CSS is a computer language that can change the style of a web page."
     },
     "example": "Examplo",
+    "h1": {
+      "def": "This tag is used to indicate that the content will be a large title."
+    },
     "html": {
       "def": "HTML creates the content and structure of a webpage, and it's one of the main languages for building websites",
       "exampleTxt1": "The rest of your web page goes in here!"
     },
-    "title": "Glossário"
+    "htmltag": {
+      "def": "Content inside the &lt;html&gt; tag is HTML code"
+    },
+    "javascript": {
+      "def": "JavaScript is one of the languages for creating webpages. It creates the interactive components of a website. Examples can be slideshows, animations, etc."
+    },
+    "letterSpacing": {
+      "def": "A CSS property that changes the distance between letters in text."
+    },
+    "metadata": {
+      "def": "Information about the webpage."
+    },
+    "method": {
+      "def": "In JavaScript, we use methods to perform tasks and actions in the code we are writing."
+    },
+    "openingtag": {
+      "def": "This tag indicates the beginning of an HTML element.",
+      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+    },
+    "p": {
+      "def": "This tag is used to indicate that the content will be a paragraph.This tag is used to indicate that the content will be a paragraph."
+    },
+    "property": {
+      "def": "A CSS term. A property indicates what about your content you want to style."
+    },
+    "script": {
+      "def": "A tag that indicates JavaScript is being written instead of HTML."
+    },
+    "selector": {
+      "def": "A CSS term. A selector indicates which content in your html file you want to style."
+    },
+    "sourcecode": {
+      "def": "The source code is the original code of the website. You can find the source code for any website following instructions in this link"
+    },
+    "string": {
+      "def": "When you want to use text in JavaScript, wrap it in quotes to make it a string. This way, javascript can understand your text."
+    },
+    "style": {
+      "def": "A tag that indicates CSS is being written instead of HTML."
+    },
+    "tags": {
+      "def": "Tags are part of the HTML language."
+    },
+    "textAlign": {
+      "def": "A CSS property that changes how text is aligned on the page. Its three most common values are left, center, and right."
+    },
+    "title": "Glossário",
+    "titletag": {
+      "def": "Content inside the <title> tag is displayed on the top tab of a page, when you add a page to favorites, and for search-engine results."
+    },
+    "value": {
+      "def": "A CSS term. A value indicates how you want to style your content."
+    }
   },
-  "home": {
-    "sub": "",
-    "title": ""
-  },
+  "h1 within a <style> tag is how you customize your header tags": "",
   "myCodeblock": "My {{ islandName }} CodeBlock",
+  "mypage": {
+    "html": "html"
+  },
+  "open a new file first": "open a new file first",
+  "p within a <style> tag is how you customize your <p> tags": "",
   "privacy": {
     "access": {
       "li1": "Ver quais os dados que temos sobre você, se houver",
@@ -201,5 +292,6 @@
   "splashP4": " ",
   "usersByLocation": "Other users from {{municipality}}, {{state}}",
   "usersBySchool": "Other users from {{school}}",
-  "you!": "you!"
+  "you!": "you!",
+  "{{island}} Complete": ""
 }

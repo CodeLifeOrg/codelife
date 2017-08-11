@@ -24,11 +24,34 @@
     "html": "html"
   },
   "open a new file first": "Abra primeiro um novo arquivo",
-  "Login": {},
-  "SignUp": {
-    "error": {}
+  "Login": {
+    "E-mail": "E-mail",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "Login": "Login",
+    "Password": "Senha",
+    "Twitter": "Twitter"
   },
-  "home": {},
+  "SignUp": {
+    "Confirm Password": "Confirme a Senha",
+    "E-mail": "E-mail",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "Password": "Senha",
+    "PolicyText": "By checking this box, you agree to our Privacy Policy",
+    "Sign Up": "Cadastre-Se",
+    "Twitter": "Twitter",
+    "Username": "Username",
+    "error": {
+      "IncompleteFields": "Please set all fields.",
+      "PasswordMatch": "Passwords don't match.",
+      "TermsAgree": "Must agree to terms to continue."
+    }
+  },
+  "home": {
+    "sub": "",
+    "title": ""
+  },
   "privacy": {
     "access": {},
     "cookies": {},
@@ -41,6 +64,15 @@
   },
   "Earn your Codeblock": "Earn your Codeblock",
   "glossary": {
+    "css": {
+      "exampleTxt1": "some example text in english"
+    },
     "html": {}
-  }
+  },
+  "Great Job!": "Great Job!",
+  "Great!": "Great!",
+  "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "",
+  "Share this Snippet": "Share this Snippet",
+  "Show More": "Show More",
+  "This is a full sentence used as the translation key": ""
 }

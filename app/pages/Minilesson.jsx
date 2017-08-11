@@ -179,23 +179,28 @@ class Minilesson extends Component {
   }
 
   buildWinPopover() {
+
     const {t} = this.props;
+    const {id, name} = this.state.currentLesson;
+
     return (
       <Dialog
-        iconName="endorsed"
+        className={ id }
         isOpen={this.state.winOpen}
         onClose={this.closeOverlay.bind(this)}
-        title={t("Great Job!")}
+        title={ t("{{island}} Complete", {island: name}) }
       >
         <div className="pt-dialog-body">
+          <div className="island-icon" style={{backgroundImage: `url('/islands/${id}-small.png')`}} />
           {this.state.winMessage}
         </div>
         <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-actions">
                 <Button
+                    className="pt-fill"
                     intent={Intent.PRIMARY}
                     onClick={this.closeOverlay.bind(this)}
-                    text={t("Great!")}
+                    text={t("Keep Exploring")}
                 />
             </div>
         </div>

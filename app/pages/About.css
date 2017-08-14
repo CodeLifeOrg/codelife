@@ -32,4 +32,19 @@
 
   }
 
+  & .about-photos {
+    margin-top: 25px;
+
+    & .pt-tab-list {
+      display: flex;
+
+      & .pt-tab {
+        flex: 1;
+        text-align: center;
+      }
+
+    }
+
+  }
+
 }

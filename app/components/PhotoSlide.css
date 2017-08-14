@@ -1,0 +1,44 @@
+.photoSlide {
+
+  & .photo-group {
+    display: flex;
+    height: 266px;
+    width: 100%;
+
+    & div {
+      align-self: stretch;
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    & .half {
+      align-self: flex-start;
+      flex: 1;
+      min-width: 40%;
+      max-width: 50%;
+    }
+
+    & img, & .img {
+      align-self: stretch;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      margin: 0 10px 10px 0;
+    }
+
+    & .half:nth-child(2n) {
+      margin-right: 0;
+    }
+
+  }
+
+  & .school-name {
+    font-weight: bold;
+  }
+
+  & .location-name {
+
+  }
+
+}

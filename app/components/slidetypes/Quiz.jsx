@@ -6,25 +6,28 @@ export default class Quiz extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      slideId: null,
       isOpen: false,
       quizjson: null,
-      activeQ: null
+      activeQ: null,
+      gemEarned: false
     };
   }
 
   onChooseAnswer(question) {
     const {updateGems} = this.props;
+    const {gemEarned} = this.state;
     const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
     if (question.isCorrect) {
       toast.show({message: "That's right!", timeout: 1500, intent: Intent.SUCCESS});
+      if (!gemEarned) updateGems(1);
       this.props.unblock();
-      updateGems(1);
     }
     else {
       toast.show({message: "Sorry, Try again!", timeout: 1500, intent: Intent.DANGER});
-      updateGems(-1);
+      if (!gemEarned) updateGems(-1);
     }
-    this.setState({activeQ: question.text});
+    this.setState({activeQ: question.text, firstAttempt: false, gemEarned: true});
   }
 
   componentDidMount() {
@@ -33,7 +36,7 @@ export default class Quiz extends Component {
 
   componentDidUpdate() {
     if (this.state.quizjson !== this.props.quizjson) {
-      this.setState({quizjson: this.props.quizjson, activeQ: null});
+      this.setState({quizjson: this.props.quizjson, activeQ: null, gemEarned: false});
     }
   }
 

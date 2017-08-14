@@ -36,18 +36,18 @@ class Slide extends Component {
       minilessons: null,
       sentProgress: false,
       latestSlideCompleted: 0,
+      latestSlideOfGemEarned: -1,
       lessonComplete: false,
       mounted: false
     };
   }
 
   unblock() {
-    const {blocked, slides, currentSlide, latestSlideCompleted, gems} = this.state;
+    const {slides, currentSlide, latestSlideCompleted} = this.state;
     const i = slides.indexOf(currentSlide);
-    const newGemCount = blocked ? gems + 1 : gems;
     let newlatest = latestSlideCompleted;
     if (i > latestSlideCompleted) newlatest = i;
-    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false, gems: newGemCount});
+    if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
   }
 
   saveProgress(level, gems) {
@@ -126,9 +126,12 @@ class Slide extends Component {
   }
 
   updateGems(newGems) {
-    console.log("updateGems!!!")
-    const {gems: oldGems} = this.state;
-    this.setState({gems: oldGems + newGems});
+    const {gems: oldGems, slides, currentSlide, latestSlideOfGemEarned} = this.state;
+    console.log("latestSlideOfGemEarned", latestSlideOfGemEarned);
+    const indexOfCurrentSlide = slides.indexOf(currentSlide);
+    if (indexOfCurrentSlide > latestSlideOfGemEarned) {
+      this.setState({gems: oldGems + newGems, latestSlideOfGemEarned: indexOfCurrentSlide});
+    }
   }
 
   render() {

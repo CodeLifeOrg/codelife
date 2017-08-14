@@ -2,9 +2,25 @@ import React, {Component} from "react";
 
 export default class TextImage extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      slideId: null
+    };
+  }
+
   componentDidMount() {
     const {updateGems} = this.props;
     updateGems(1);
+    this.setState({slideId: this.props.id});
+  }
+
+  componentDidUpdate() {
+    if (this.state.slideId !== this.props.id) {
+      const {updateGems} = this.props;
+      updateGems(1);
+      this.setState({slideId: this.props.id});
+    }
   }
 
   render() {

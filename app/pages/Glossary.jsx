@@ -24,48 +24,62 @@ class Glossary extends Component {
           { t("glossary.html.exampleTxt1") }
         &lt;/html&gt;
         </pre>
-        
+
         <h2 name="css">CSS</h2>
         <p>{ t("glossary.CSS.def") }</p>
-        
+
         <h2 name="selector">selector</h2>
         <p>{ t("glossary.selector.def") }</p>
-        
+
         <h2 name="property">property</h2>
         <p>{ t("glossary.property.def") }</p>
-        
+
         <h2 name="value">Value</h2>
         <p>{ t("glossary.value.def") }</p>
-        
+
         <h2 name="style">&lt;style&gt;</h2>
         <p>{ t("glossary.style.def") }</p>
-        
+
         <h2 name="letterSpacing">letter-spacing</h2>
         <p>{ t("glossary.letterSpacing.def") }</p>
-        
+        <p><strong>{ t("glossary.example") }</strong></p>
+        <pre>
+        &lt;html&gt;
+          h1 {
+            letter-spacing: 20px;
+            }
+        &lt;/html&gt;
+        </pre>
+
         <h2 name="color">color</h2>
         <p>{ t("glossary.color.def") }</p>
-        
+
         <h2 name="backgroundColor">background-color</h2>
         <p>{ t("glossary.backgroundColor.def") }</p>
-        
+
         <h2 name="string">String</h2>
         <p>{ t("glossary.string.def") }</p>
-        
+
         <h2 name="textAlign">text-align</h2>
         <p>{ t("glossary.textAlign.def") }</p>
-            
+
         <h2 name="alert">alert()</h2>
         <p>{ t("glossary.alert.def") }</p>
-        
+
         <h2 name="backgroundImage">background-image</h2>
         <p>{ t("glossary.backgroundImage.def") }</p>
-        
+
         <h2 name="method">Method</h2>
         <p>{ t("glossary.method.def") }</p>
-        
+
         <h2 name="script">&lt;script&gt;</h2>
         <p>{ t("glossary.script.def") }</p>
+        <p><strong>{ t("glossary.example") }</strong></p>
+        <pre>
+        &lt;script&gt;
+          { t("glossary.script.exampleTxt1") }
+        &lt;/script&gt;
+        </pre>
 
         <h2 name="css">CSS</h2>
         <p>{ t("glossary.css.def") }</p>
@@ -102,9 +116,6 @@ class Glossary extends Component {
 
         <h2 name="metadata">metadata</h2>
         <p>{ t("glossary.metadata.def") }</p>
-
-        <h2 name="sourcecode">source code</h2>
-        <p>{ t("glossary.sourcecode.def") }</p>
 
         <h2 name="htmltag">html tag</h2>
         <p>{ t("glossary.htmltag.def") }</p>

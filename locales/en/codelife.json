@@ -157,7 +157,10 @@
       "def": "A CSS property that changes the color of an element’s background."
     },
     "backgroundImage": {
-      "def": "A CSS property that adds a background image to a webpage."
+      "def": "A CSS property that adds a background image to a webpage.",
+      "exampleTxt1": "body {
+    background-image: https://upload.wikimedia.org/wikipedia/commons/e/ec/Happy_smiley_face.png;
+}"
     },
     "body": {
       "def": "Content inside the &lt;body&gt; tag is displayed directly on the webpage."
@@ -193,7 +196,7 @@
       "def": "JavaScript is one of the languages for creating webpages. It creates the interactive components of a website. Examples can be slideshows, animations, etc."
     },
     "letterSpacing": {
-      "def": "A CSS property that changes the distance between letters in text."
+      "def": "A CSS property that changes the distance between letters in text.",
     },
     "metadata": {
       "def": "Information about the webpage."
@@ -212,19 +215,17 @@
       "def": "A CSS term. A property indicates what about your content you want to style."
     },
     "script": {
-      "def": "A tag that indicates JavaScript is being written instead of HTML."
+      "def": "A tag that indicates JavaScript is being written instead of HTML. It goes right before the closing <body> tag.",
+      "exampleTxt1": "alert(“This is JavaScript inside a script tag!”);"
     },
     "selector": {
       "def": "A CSS term. A selector indicates which content in your html file you want to style."
-    },
-    "sourcecode": {
-      "def": "The source code is the original code of the website. You can find the source code for any website following instructions in this link"
     },
     "string": {
       "def": "When you want to use text in JavaScript, wrap it in quotes to make it a string. This way, javascript can understand your text."
     },
     "style": {
-      "def": "A tag that indicates CSS is being written instead of HTML."
+      "def": "A tag that indicates CSS is being written instead of HTML. It goes inside the <head> tag."
     },
     "tags": {
       "def": "Tags are part of the HTML language."

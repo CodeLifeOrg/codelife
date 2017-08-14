@@ -148,7 +148,7 @@
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
     "CSS": {
-      "def": "CSS is a computer language that can change the style of a web page."
+      "def": "CSS é uma linguagem de programação que permite alterar o estilo de uma página web, modificando sua aparência."
     },
     "alert": {
       "def": "A javascript method that makes a popup."
@@ -160,17 +160,17 @@
       "def": "A CSS property that adds a background image to a webpage."
     },
     "body": {
-      "def": "Content inside the &lt;body&gt; tag is displayed directly on the webpage."
+      "def": "O que estiver escrito dentro da tag <body> aparece diretamente na sua página web."
     },
     "closingtag": {
-      "def": "This tag indicates the end of an HTML element. It has a slash before its name.",
-      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+      "def": "Essa tag indica o final de um elemento HTML.",
+      "exampleTxt1": ""
     },
     "code": {
-      "def": "Code is a set of written instructions that tells a computer what to do. Examples of coding languages: HTML, CSS.and JavaScript."
+      "def": "Código é um conjunto de instruções escritas que diz ao computador o que ele deve fazer. HTML, CSS e JavaScript são exemplos de linguagens de codificação ou programação."
     },
     "codeeditor": {
-      "def": "The code editor is where you will edit your code to make your webpages."
+      "def": "O editor de código é onde você escreve seu código para criar suas páginas web."
     },
     "color": {
       "def": "A CSS property that changes the color of text and content."
@@ -183,26 +183,26 @@
       "def": "This tag is used to indicate that the content will be a large title."
     },
     "html": {
-      "def": "HTML creates the content and structure of a webpage, and it's one of the main languages for building websites",
+      "def": "O HTML é usado para adicionar conteúdo e definir a estrutura de uma página web e é uma das principais linguagens utilizadas na criação de sites.",
       "exampleTxt1": "The rest of your web page goes in here!"
     },
     "htmltag": {
-      "def": "Content inside the &lt;html&gt; tag is HTML code"
+      "def": "O conteúdo escrito dentro da tag <html> é o código HTML."
     },
     "javascript": {
-      "def": "JavaScript is one of the languages for creating webpages. It creates the interactive components of a website. Examples can be slideshows, animations, etc."
+      "def": "O JavaScript é uma das linguagens utilizadas para construir sites. Ele cria os componentes interativos de um site. Slideshows e animações são exemplos da aplicação do JavaScript."
     },
     "letterSpacing": {
       "def": "A CSS property that changes the distance between letters in text."
     },
     "metadata": {
-      "def": "Information about the webpage."
+      "def": "São informações sobre a página web que não aparecem diretamente na página. Normalmente, os metadados são escritos dentro da tag <head>."
     },
     "method": {
       "def": "In JavaScript, we use methods to perform tasks and actions in the code we are writing."
     },
     "openingtag": {
-      "def": "This tag indicates the beginning of an HTML element.",
+      "def": "Essa tag indica o início de um elemento HTML.",
       "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
     },
     "p": {
@@ -227,14 +227,17 @@
       "def": "A tag that indicates CSS is being written instead of HTML."
     },
     "tags": {
-      "def": "Tags are part of the HTML language."
+      "def": "As tags são utilizadas para estruturar seu código HTML. Quando você cria sua página em HTML, cada item dessa página é identificado por uma tag. Existem tags para diferentes aplicações, cada uma com um nome."
     },
     "textAlign": {
       "def": "A CSS property that changes how text is aligned on the page. Its three most common values are left, center, and right."
     },
     "title": "Glossário",
     "titletag": {
-      "def": "Content inside the <title> tag is displayed on the top tab of a page, when you add a page to favorites, and for search-engine results."
+      "def": "A tag <title>, que significa título em português, deve ser inserida dentro da tag <head>. O conteúdo escrito dentro da tag <title> aparece:
+Na guia da sua página
+Quando você a adiciona a página aos seus favoritos
+Em ferramentas de pesquisa online, como o Google"
     },
     "value": {
       "def": "A CSS term. A value indicates how you want to style your content."

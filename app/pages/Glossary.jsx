@@ -107,8 +107,6 @@ class Glossary extends Component {
         <p>{ t("glossary.closingtag.def") }</p>
         <p><strong>{ t("glossary.example") }</strong></p>
         <pre>
-        &lt;html&gt;
-          { t("glossary.closingtag.exampleTxt1") }
         &lt;/html&gt;
         </pre>
 

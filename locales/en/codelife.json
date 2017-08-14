@@ -163,14 +163,14 @@
 }"
     },
     "body": {
-      "def": "Content inside the &lt;body&gt; tag is displayed directly on the webpage."
+      "def": "Content inside the <body> tag is displayed directly on the webpage."
     },
     "closingtag": {
       "def": "This tag indicates the end of an HTML element. It has a slash before its name.",
-      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+      "exampleTxt1": ""
     },
     "code": {
-      "def": "Code is a set of written instructions that tells a computer what to do. Examples of coding languages: HTML, CSS.and JavaScript."
+      "def": "Code is a set of written instructions that tells a computer what to do. Examples of coding languages: HTML, CSS, and JavaScript."
     },
     "codeeditor": {
       "def": "The code editor is where you will edit your code to make your webpages."
@@ -190,7 +190,7 @@
       "exampleTxt1": "The rest of your web page goes in here!"
     },
     "htmltag": {
-      "def": "Content inside the &lt;html&gt; tag is HTML code"
+      "def": "Content inside the <html> tag is HTML code"
     },
     "javascript": {
       "def": "JavaScript is one of the languages for creating webpages. It creates the interactive components of a website. Examples can be slideshows, animations, etc."

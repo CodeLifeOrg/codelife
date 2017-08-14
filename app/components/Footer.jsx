@@ -35,7 +35,7 @@ Footer.defaultProps = {
 
 Footer = connect(state => ({
   user: state.auth.user,
-  location: state.location
+  serverLocation: state.location
 }))(Footer);
 Footer = translate()(Footer);
 export default Footer;

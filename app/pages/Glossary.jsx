@@ -44,11 +44,9 @@ class Glossary extends Component {
         <p>{ t("glossary.letterSpacing.def") }</p>
         <p><strong>{ t("glossary.example") }</strong></p>
         <pre>
-        &lt;html&gt;
-          h1 {
-            letter-spacing: 20px;
-            }
-        &lt;/html&gt;
+        &lt;style&gt;
+          {"\n  h1 {\n    letter-spacing: 20px;\n  }\n"}
+        &lt;/style&gt;
         </pre>
 
         <h2 name="color">color</h2>

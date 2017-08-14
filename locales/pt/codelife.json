@@ -173,7 +173,7 @@
       "def": "O editor de código é onde você escreve seu código para criar suas páginas web."
     },
     "color": {
-      "def": "A CSS property that changes the color of text and content."
+      "def": "Essa é uma propriedade da linguagem CSS que permite mudar a cor de um texto ou outro conteúdo."
     },
     "css": {
       "def": "CSS is a computer language that can change the style of a web page."
@@ -193,7 +193,7 @@
       "def": "O JavaScript é uma das linguagens utilizadas para construir sites. Ele cria os componentes interativos de um site. Slideshows e animações são exemplos da aplicação do JavaScript."
     },
     "letterSpacing": {
-      "def": "A CSS property that changes the distance between letters in text."
+      "def": "Essa é uma propriedade da linguagem CSS que permite alterar o espaçamento entre as letras de um texto."
     },
     "metadata": {
       "def": "São informações sobre a página web que não aparecem diretamente na página. Normalmente, os metadados são escritos dentro da tag <head>."
@@ -224,7 +224,7 @@
       "def": "When you want to use text in JavaScript, wrap it in quotes to make it a string. This way, javascript can understand your text."
     },
     "style": {
-      "def": "A tag that indicates CSS is being written instead of HTML."
+      "def": "Essa é uma tag que indica que o código foi escrito em CSS e não em HTML. Ela deve ser utilizada dentro da tag <head>."
     },
     "tags": {
       "def": "As tags são utilizadas para estruturar seu código HTML. Quando você cria sua página em HTML, cada item dessa página é identificado por uma tag. Existem tags para diferentes aplicações, cada uma com um nome."
@@ -237,7 +237,7 @@
       "def": "A tag <title>, que significa título em português, deve ser inserida dentro da tag <head>. O conteúdo escrito dentro da tag <title> aparece na guia da sua página, quando você a adiciona a página aos seus favoritos, em ferramentas de pesquisa online, como o Google"
     },
     "value": {
-      "def": "A CSS term. A value indicates how you want to style your content."
+      "def": "Esse é um termo usado em CSS para indicar como você deseja adicionar estilo ao seu conteúdo."
     }
   },
   "h1 within a <style> tag is how you customize your header tags": "",

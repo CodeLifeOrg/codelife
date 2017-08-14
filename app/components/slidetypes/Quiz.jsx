@@ -15,16 +15,16 @@ export default class Quiz extends Component {
   }
 
   onChooseAnswer(question) {
-    const {updateGems} = this.props;
+    const {t, updateGems} = this.props;
     const {gemEarned} = this.state;
     const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
     if (question.isCorrect) {
-      toast.show({message: "That's right!", timeout: 1500, intent: Intent.SUCCESS});
+      toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
       if (!gemEarned) updateGems(1);
       this.props.unblock();
     }
     else {
-      toast.show({message: "Sorry, Try again!", timeout: 1500, intent: Intent.DANGER});
+      toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});
       if (!gemEarned) updateGems(-1);
     }
     this.setState({activeQ: question.text, firstAttempt: false, gemEarned: true});

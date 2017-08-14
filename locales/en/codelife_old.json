@@ -20,7 +20,9 @@
   "Loading projects": {},
   "MM/DD/YYYY": "MM/DD/YYYY",
   "YYYY-MM-DD": "YYYY-MM-DD",
-  "mypage": {},
+  "mypage": {
+    "html": "html"
+  },
   "open a new file first": "open a new file first",
   "Login": {
     "E-mail": "E-mail",
@@ -98,5 +100,11 @@
   "Share this Snippet": "Share this Snippet",
   "Show More": "Show More",
   "This is a full sentence used as the translation key": "",
-  "<p> is a paragraph tag, you can write sentences in here": ""
+  "<p> is a paragraph tag, you can write sentences in here": "",
+  "/api/likes": "",
+  "/api/likes/save": "",
+  "/api/snippets/all": "",
+  "Insert into Project": "Insert into Project",
+  "Open a new file first": "",
+  "View Cheat Sheet": "View Cheat Sheet"
 }

@@ -13,14 +13,16 @@
   "/api/survey/": "/api/survey/",
   "/api/userprogress": "/api/userprogress",
   "/api/userprogress/save": "/api/userprogress/save",
-  "DD/MM/YY": "DD/MM/AA",
-  "File cannot be in use or blank": "O arquivo não pode ser usado ou em branco",
+  "DD/MM/YY": "DD/MM/YY",
+  "File cannot be in use or blank": "File cannot be in use or blank",
   "How much does the potential of receiving a \\": "How much does the potential of receiving a \\",
   "Loading": {},
   "Loading projects": {},
-  "MM/DD/YYYY": "MM/DD/AAAA",
-  "YYYY-MM-DD": "AAAA-MM-DD",
-  "mypage": {},
+  "MM/DD/YYYY": "MM/DD/YYYY",
+  "YYYY-MM-DD": "YYYY-MM-DD",
+  "mypage": {
+    "html": "html"
+  },
   "open a new file first": "open a new file first",
   "Login": {
     "E-mail": "E-mail",
@@ -98,5 +100,11 @@
   "Share this Snippet": "Share this Snippet",
   "Show More": "Show More",
   "This is a full sentence used as the translation key": "",
-  "<p> is a paragraph tag, you can write sentences in here": ""
+  "<p> is a paragraph tag, you can write sentences in here": "",
+  "/api/likes": "",
+  "/api/likes/save": "",
+  "/api/snippets/all": "",
+  "Insert into Project": "Inserir no Projeto",
+  "Open a new file first": "",
+  "View Cheat Sheet": "Ver folha de dicas"
 }

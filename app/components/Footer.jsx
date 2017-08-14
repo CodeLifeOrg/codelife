@@ -6,8 +6,8 @@ import "./Footer.css";
 
 class Footer extends Component {
   render() {
-    const {className, t, user, location} = this.props;
-    const {protocol, host, pathname} = location;
+    const {className, currentPath, t, user, serverLocation} = this.props;
+    const {protocol, host} = serverLocation;
     const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
 
     return (
@@ -17,7 +17,7 @@ class Footer extends Component {
           <Link className="link" to="/about">{ t("About") }</Link>&nbsp;
           <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>&nbsp;
           { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
-          <a className="link language" href={`${protocol}//en.${hostSansSub}${pathname}`} >EN</a> | <a className="link language" href={`${protocol}//pt.${hostSansSub}${pathname}`} >PT</a>
+          <a className="link language" href={`${protocol}//en.${hostSansSub}${currentPath}`} >EN</a> | <a className="link language" href={`${protocol}//pt.${hostSansSub}${currentPath}`} >PT</a>
         </div>
         <div className="logos">
           <a target="_blank" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>

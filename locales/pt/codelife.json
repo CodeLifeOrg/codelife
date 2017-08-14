@@ -180,7 +180,7 @@
     },
     "example": "Examplo",
     "h1": {
-      "def": "This tag is used to indicate that the content will be a large title."
+      "def": "Esta tag é usada para indicar que o conteúdo  será um título grande, de destaque."
     },
     "html": {
       "def": "O HTML é usado para adicionar conteúdo e definir a estrutura de uma página web e é uma das principais linguagens utilizadas na criação de sites.",
@@ -206,16 +206,16 @@
       "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
     },
     "p": {
-      "def": "This tag is used to indicate that the content will be a paragraph.This tag is used to indicate that the content will be a paragraph."
+      "def": "Esta tag é usada para indicar que o conteúdo é um parágrafo."
     },
     "property": {
-      "def": "A CSS term. A property indicates what about your content you want to style."
+      "def": "Esse é um termo usado em CSS para indicar que tipo de estilo você quer adicionar ao seu conteúdo."
     },
     "script": {
       "def": "A tag that indicates JavaScript is being written instead of HTML."
     },
     "selector": {
-      "def": "A CSS term. A selector indicates which content in your html file you want to style."
+      "def": "Esse é um termo usado em CSS para indicar a qual elemento do seu código HTML você quer adicionar algum estilo."
     },
     "sourcecode": {
       "def": "The source code is the original code of the website. You can find the source code for any website following instructions in this link"

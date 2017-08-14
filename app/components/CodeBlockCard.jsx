@@ -106,7 +106,7 @@ class CodeBlockCard extends Component {
           }}
         >
           <div className="pt-dialog-body">
-            <CodeEditor initialValue={studentcontent} preventSelection={!done} projectMode={projectMode} island={ lid } ref={c => this.editor = c} readOnly={true} />
+            <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ lid } ref={c => this.editor = c} />
             { done ? null
               : <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ lid }` }>
                   <div className="pt-popover-content">

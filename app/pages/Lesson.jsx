@@ -96,8 +96,8 @@ class Lesson extends Component {
 
   render() {
 
-    const {t} = this.props;
     const {lessons, snippets, userProgress} = this.state;
+
     const {auth} = this.props;
 
     if (!auth.user) browserHistory.push("/login");

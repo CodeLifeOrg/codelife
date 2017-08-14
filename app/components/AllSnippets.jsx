@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import axios from "axios";
 import {Collapse} from "@blueprintjs/core";
 import CodeBlockCard from "components/CodeBlockCard";
-import "./Snippets.css";
+import "./AllSnippets.css";
 
 class AllSnippets extends Component {
 
@@ -34,6 +34,7 @@ class AllSnippets extends Component {
         l.likedSnippets = [];
         l.unlikedSnippets = [];
         for (const s of allSnippets) {
+          s.likes = Number(s.likes);
           if (s.uid === this.props.auth.user.id) {
             s.username = t("you!");
             s.mine = true;

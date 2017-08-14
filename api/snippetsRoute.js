@@ -22,7 +22,9 @@ module.exports = function(app) {
 
   app.get("/api/snippets/byuser", (req, res) => {
 
-    db.snippets.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+    const id = req.query.uid;
+    const q = "SELECT snippets.id, snippets.snippetname, snippets.studentcontent, (select count(*) FROM likes where likes.likeid = snippets.id) AS likes, snippets.previewblob, snippets.lid, snippets.uid, users.username FROM snippets, users WHERE users.id = snippets.uid AND users.id = '" + id + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
 

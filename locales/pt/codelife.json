@@ -23,7 +23,7 @@
   "<h6> is a header tag, where you can write small text": "",
   "<head> is where your metadata is stored, such as your <title>": "",
   "<html> surrounds your whole codeblock and tells the computer this is a webpage": "",
-  "<p> is a paragraph tag, you can write sentences in here": "",
+  "<p> is a paragraph tag, you can write words and sentences in here": "",
   "<script> is where you write interactive content with javascript": "",
   "<style> is where you customize your page with cool colors and fonts": "",
   "<title> is the title of your page! Make sure it's inside a <head> tag": "",
@@ -86,6 +86,7 @@
   "Not sure": "Not sure",
   "Not very motivated": "Not very motivated",
   "Okay": "Ok",
+  "Open a new file first": "",
   "Other Students' CodeBlocks": "Other Students' CodeBlocks",
   "Please be as detailed as possible with your feedback": "Please be as detailed as possible with your feedback",
   "Previous": "Previous",
@@ -99,6 +100,7 @@
   "Reset": "Restabelecer",
   "Save": "Salve",
   "Save & Submit": "Salvar e enviar",
+  "Save your changes before opening a new webpage": "",
   "Save your webpage before sharing!": "Save your webpage before sharing!",
   "Saved!": "Saved!",
   "Schools list for this location is unavailable": "Schools list for this location is unavailable",
@@ -239,7 +241,6 @@
   "mypage": {
     "html": "html"
   },
-  "open a new file first": "open a new file first",
   "p within a <style> tag is how you customize your <p> tags": "",
   "privacy": {
     "access": {

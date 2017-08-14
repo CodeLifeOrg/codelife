@@ -4,6 +4,7 @@ import himalaya from "himalaya";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "moment/locale/pt-br";
 import moment from "moment";
+import CodeEditor from "components/CodeEditor";
 
 import "components/ProjectCard.css";
 
@@ -16,28 +17,6 @@ class ProjectCard extends Component {
     };
   }
 
-  getTitleText(theText) {
-    const {t} = this.props;
-    const content = himalaya.parse(theText);
-    let head, html, title = null;
-    let titleText = "";
-    if (content) html = content.find(e => e.tagName === "html");
-    if (html) head = html.children.find(e => e.tagName === "head");
-    if (head) title = head.children.find(e => e.tagName === "title");
-    if (title && title.children[0]) titleText = title.children[0].content;
-    return titleText || t("Webpage");
-  }
-
-  componentDidUpdate() {
-    if (this.iframe) {
-      const doc = this.iframe.contentWindow.document;
-      const {studentcontent} = this.props.project;
-      doc.open();
-      doc.write(studentcontent);
-      doc.close();
-    }
-  }
-
   toggleDialog() {
     this.setState({open: !this.state.open});
   }
@@ -46,8 +25,6 @@ class ProjectCard extends Component {
     const {open} = this.state;
     const {project, t} = this.props;
     const {datemodified, id, name, studentcontent, username} = project;
-
-    const titleText = this.getTitleText(studentcontent);
 
     moment.locale("pt-BR");
 
@@ -78,8 +55,7 @@ class ProjectCard extends Component {
         >
           <div className="pt-dialog-body">
             <div className="render">
-              <div className="panel-title"><img className="favicon" src="/islands/island-1-small.png" />{ titleText }</div>
-              <iframe className="iframe" ref={ comp => this.iframe = comp } />
+              <CodeEditor initialValue={studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} />
             </div>
           </div>
           <div className="pt-dialog-footer">

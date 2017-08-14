@@ -37,6 +37,7 @@ class CodeEditor extends Component {
   }
 
   getTitleText(theText) {
+    const {t} = this.props;
     const content = himalaya.parse(theText);
     let head, html, title = null;
     let titleText = "";
@@ -44,7 +45,7 @@ class CodeEditor extends Component {
     if (html) head = html.children.find(e => e.tagName === "head");
     if (head) title = head.children.find(e => e.tagName === "title");
     if (title && title.children[0]) titleText = title.children[0].content;
-    return titleText;
+    return titleText || t("Webpage");
   }
 
   stripJS(json) {
@@ -137,41 +138,31 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, island, t} = this.props;
+    const {codeTitle, island} = this.props;
     const {titleText, currentText} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
     return (
       <div id="codeEditor">
-        <div className="code">
-          <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
-          { /*
-            TODO: This is terrible and it sucks, I need a better way to do this bizarre configuration.
-            projectMode is a special mode where you open the project as a read-only popover in the Studio.
-            This means we need it to be a <pre>, not an AceEditor, but we need to NOT blur out the
-            text as we normally do.  So I have this stupid override.  In the future, abstract CodeEditor to have
-            multiple modes:
-              - Test Mode: AceEditor, Editable, for use by Codeblock Tests
-              - View Mode Beaten: AceEditor, Read-only, for the Island Popovers, with visible code
-              - View Mode, Not Beaten: <pre>tag, blurred
-              - Project Mode: <pre>tag, not blurred, WITH copy powers
-          */ }
-            {!this.props.projectMode
-              ? !this.props.preventSelection
+        { this.props.showEditor 
+          ? <div className="code">
+              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div> 
+              { !this.props.blurred 
                 ? <AceWrapper
-                  className="editor"
-                  ref={ comp => this.editor = comp }
-                  onChange={this.onChangeText.bind(this)}
-                  value={currentText}
-                  {...this.props}
-                />
+                    className="editor"
+                    ref={ comp => this.editor = comp }
+                    onChange={this.onChangeText.bind(this)}
+                    value={currentText}
+                    {...this.props}
+                  />
                 : <pre className="editor blurry-text">{currentText}</pre>
-              : <pre className="editor" onMouseUp={this.showContextMenu.bind(this, window.getSelection())}>{currentText}</pre>
-            }
-        </div>
+              }
+            </div>
+          : null
+        }
         <div className="render">
-          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || t("Webpage") }</div>
+          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText }</div>
           <iframe className="iframe" ref="rc" />
         </div>
       </div>
@@ -180,7 +171,10 @@ class CodeEditor extends Component {
 }
 
 CodeEditor.defaultProps = {
-  island: "island-1"
+  island: "island-1",
+  readOnly: false,
+  blurred: false,
+  showEditor: true
 };
 
 

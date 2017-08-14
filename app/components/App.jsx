@@ -20,7 +20,6 @@ class App extends Component {
   }
 
   render() {
-
     const {auth, children, i18n, location} = this.props;
 
     const routes = location.pathname.split("/");
@@ -42,7 +41,7 @@ class App extends Component {
             <Clouds />
             <Nav logo={ !location.pathname.includes("login") } />
             { children }
-            <Footer className={ routes[1] === "lesson" && routes.length > 2 ? routes[2] : "" } />
+            <Footer currentPath={location.pathname} className={ routes[1] === "lesson" && routes.length > 2 ? routes[2] : "" } />
           </div>
         : <div className="container">
             <Clouds />

@@ -50,6 +50,10 @@ class Slide extends Component {
     if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
   }
 
+  reblock() {
+    this.setState({blocked: true});
+  }
+
   saveProgress(level, gems) {
     axios.post("/api/userprogress/save", {level, gems}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
@@ -184,6 +188,7 @@ class Slide extends Component {
           island={lid}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
+          reblock={this.reblock.bind(this)}
           {...currentSlide} />
 
         <div id="slide-foot">

@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {Position, Toaster, Intent} from "@blueprintjs/core";
+import {translate} from "react-i18next";
 
-export default class Quiz extends Component {
+class Quiz extends Component {
 
   constructor(props) {
     super(props);
@@ -67,3 +68,6 @@ export default class Quiz extends Component {
     );
   }
 }
+
+Quiz = translate()(Quiz);
+export default Quiz;

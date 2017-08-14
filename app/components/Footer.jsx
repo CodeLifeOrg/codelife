@@ -8,7 +8,7 @@ class Footer extends Component {
   render() {
     const {className, t, user, location} = this.props;
     const {protocol, host, pathname} = location;
-    const hostSansSub = host.replace("pt.", "").replace("en.", "");
+    const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
 
     return (
       <footer id="footer" className={ className }>

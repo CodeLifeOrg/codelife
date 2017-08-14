@@ -160,7 +160,7 @@
       "def": "A CSS property that adds a background image to a webpage."
     },
     "body": {
-      "def": "O que estiver escrito dentro da tag <body> aparece diretamente na sua página web."
+      "def": "O que estiver escrito dentro da tag &lt;body&gt; aparece diretamente na sua página web."
     },
     "closingtag": {
       "def": "Essa tag indica o final de um elemento HTML.",
@@ -234,10 +234,7 @@
     },
     "title": "Glossário",
     "titletag": {
-      "def": "A tag <title>, que significa título em português, deve ser inserida dentro da tag <head>. O conteúdo escrito dentro da tag <title> aparece:
-Na guia da sua página
-Quando você a adiciona a página aos seus favoritos
-Em ferramentas de pesquisa online, como o Google"
+      "def": "A tag <title>, que significa título em português, deve ser inserida dentro da tag <head>. O conteúdo escrito dentro da tag <title> aparece na guia da sua página, quando você a adiciona a página aos seus favoritos, em ferramentas de pesquisa online, como o Google"
     },
     "value": {
       "def": "A CSS term. A value indicates how you want to style your content."

@@ -18,48 +18,54 @@ class InputCode extends Component {
       currentText: "",
       titleText: "",
       baseText: "",
-      resetAlert: false
+      resetAlert: false,
+      gemEarned: false
     };
   }
 
   componentDidMount() {
     this.setState({mounted: true, baseText: this.props.htmlcontent2 ? this.props.htmlcontent2 : ""});
-    const {updateGems} = this.props;
-    updateGems(1);
   }
 
   componentDidUpdate() {
     const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
     if (this.state.baseText !== newText) {
-      this.setState({baseText: newText});
+      this.setState({baseText: newText, gemEarned: false});
       this.editor.getWrappedInstance().setEntireContents(newText);
     }
   }
 
   submitAnswer() {
+    const {t, updateGems} = this.props;
+    const {gemEarned} = this.state;
     const contents = this.editor.getWrappedInstance().getEntireContents();
     const jsonArray = himalaya.parse(contents);
     let errors = 0;
     const rulejson = JSON.parse(this.props.rulejson);
-    const t = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
+    const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     for (const r of rulejson) {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
         if (!cvContainsTag(r, contents)) {
           errors++;
-          t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }
       }
       if (r.type === "CSS_CONTAINS") {
         if (!cvContainsStyle(r, jsonArray)) {
           errors++;
-          t.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }
       }
     }
     if (errors === 0) {
-      t.show({message: "You got it right!", timeout: 2000, intent: Intent.SUCCESS});
+      toast.show({message: t("You got it right!"), timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
+      if (!gemEarned) updateGems(1);
     }
+    else {
+      if (!gemEarned) updateGems(-1);
+    }
+    this.setState({gemEarned: true});
   }
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
@@ -77,7 +83,6 @@ class InputCode extends Component {
   }
 
   render() {
-
     const {t, htmlcontent1, htmlcontent2, island} = this.props;
     const {titleText} = this.state;
 

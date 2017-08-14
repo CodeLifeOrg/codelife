@@ -37,6 +37,7 @@ class CodeEditor extends Component {
   }
 
   getTitleText(theText) {
+    const {t} = this.props;
     const content = himalaya.parse(theText);
     let head, html, title = null;
     let titleText = "";
@@ -44,7 +45,7 @@ class CodeEditor extends Component {
     if (html) head = html.children.find(e => e.tagName === "head");
     if (head) title = head.children.find(e => e.tagName === "title");
     if (title && title.children[0]) titleText = title.children[0].content;
-    return titleText;
+    return titleText || t("Webpage");
   }
 
   stripJS(json) {
@@ -171,7 +172,7 @@ class CodeEditor extends Component {
             }
         </div>
         <div className="render">
-          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText || t("Webpage") }</div>
+          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText }</div>
           <iframe className="iframe" ref="rc" />
         </div>
       </div>

@@ -162,7 +162,7 @@ class CodeBlock extends Component {
   shareCodeblock() {
     const {t} = this.props;
     if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
-      browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);  
+      browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);
     }
     else {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
@@ -186,8 +186,8 @@ class CodeBlock extends Component {
             position={Position.TOP_LEFT}
           >
             <li className="validation-item complete">
-              <span className="checkbox pt-icon-standard pt-icon-small-tick"></span>
-              <span className="rule">{rule.needle} {iconList[rule.type]}</span>
+              {iconList[rule.type]}
+              <span className="rule">{rule.needle}</span>
             </li>
             <div>
               { this.state.meanings[rule.type][rule.needle] }
@@ -203,8 +203,8 @@ class CodeBlock extends Component {
             position={Position.TOP_LEFT}
           >
             <li className="validation-item">
-              <span className="checkbox pt-icon-standard">&nbsp;</span>
-              <span className="rule">{rule.needle} {iconList[rule.type]}</span>
+              {iconList[rule.type]}
+              <span className="rule">{rule.needle}</span>
             </li>
             <div>
               { this.state.meanings[rule.type][rule.needle] }<br/><br/><div style={{color: "red"}}>{rule.error_msg}</div>

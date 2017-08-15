@@ -43,26 +43,15 @@
             padding: 5px 8px 5px 5px;
             transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 
-            & .checkbox {
-              background-color: white;
-              border: 1px solid #2c2c2c;
-              border-radius: 10px;
-              color: #0f9960;
-              height: 17px;
-              line-height: 15px;
+            & .pt-icon-standard {
               margin-right: 5px;
-              transition: border-color 0.2s;
-              width: 17px;
+              vertical-align: middle;
             }
 
             &.complete {
               background-color: #0f9960;
               border-color: #0f9960;
               color: white;
-
-              & .checkbox {
-                border-color: #0f9960;
-              }
 
             }
 

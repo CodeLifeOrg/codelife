@@ -177,7 +177,7 @@
       "def": "Essa é uma propriedade da linguagem CSS que permite mudar a cor de um texto ou outro conteúdo."
     },
     "css": {
-      "def": "CSS is a computer language that can change the style of a web page."
+      "def": "CSS é uma linguagem de programação que permite alterar o estilo de uma página web, modificando sua aparência."
     },
     "example": "Examplo",
     "h1": {
@@ -204,7 +204,7 @@
     },
     "openingtag": {
       "def": "Essa tag indica o início de um elemento HTML.",
-      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+      "exampleTxt1": "<h1> Hello </h1>;"
     },
     "p": {
       "def": "Esta tag é usada para indicar que o conteúdo é um parágrafo."
@@ -213,9 +213,8 @@
       "def": "Esse é um termo usado em CSS para indicar que tipo de estilo você quer adicionar ao seu conteúdo."
     },
     "script": {
-      "def": "Essa é um tag que indica que a linguagem JavaScript está sendo usada ao invés de HTML. Ela deve ser inserida imediatamente antes da tag <body> de fechamento.
-"",
-      "exampleTxt1": ""
+      "def": "Essa é um tag que indica que a linguagem JavaScript está sendo usada ao invés de HTML. Ela deve ser inserida imediatamente antes da tag <body> de fechamento.",
+      "exampleTxt1": "Olá!"
     },
     "selector": {
       "def": "Esse é um termo usado em CSS para indicar a qual elemento do seu código HTML você quer adicionar algum estilo."

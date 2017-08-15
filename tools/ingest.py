@@ -34,6 +34,19 @@ for index, row in slides_df.iterrows():
     except:
       print("JSON error in " + row['id'])
       errors = errors + 1
+  if type(row['pt_quizjson']) == str:
+    try: 
+      json.loads(row['pt_quizjson'])
+    except:
+      print("JSON error in " + row['id'])
+      errors = errors + 1
+  if type(row['pt_rulejson']) == str:
+    try: 
+      json.loads(row['pt_rulejson'])
+    except:
+      print("JSON error in " + row['id'])
+      errors = errors + 1
+
 
 if errors == 0:
   print("no errors detected, uploading")

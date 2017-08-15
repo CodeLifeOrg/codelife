@@ -9,6 +9,7 @@
     flex: 1;
     flex-direction: column;
     margin: 0 10px;
+    max-width: 400px;
 
     & .panel-title {
       align-self: flex-start;

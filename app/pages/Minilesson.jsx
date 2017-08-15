@@ -83,7 +83,7 @@ class Minilesson extends Component {
           }
         }
       }
-      
+
       this.setState({minilessons, currentLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
     });
   }
@@ -240,8 +240,7 @@ class Minilesson extends Component {
           style={{
             height: "80vh",
             maxHeight: "1000px",
-            maxWidth: "1200px",
-            width: "95%"
+            width: "90%"
           }}
         >
           <div className="pt-dialog-body">

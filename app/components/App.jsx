@@ -15,15 +15,28 @@ import Loading from "./Loading";
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {userInit: false};
+  }
+
   componentWillMount() {
     this.props.isAuthenticated();
   }
 
+  componentDidUpdate() {
+    const {auth} = this.props;
+    const {userInit} = this.state;
+    if (!userInit && auth.loading) this.setState({userInit: true});
+  }
+
   render() {
     const {auth, children, i18n, location} = this.props;
+    const {userInit} = this.state;
 
     const routes = location.pathname.split("/");
 
+    const authRoute = routes[1] === "login";
     const bareRoute = routes[1] === "share";
 
     const meta = header.meta.slice();
@@ -35,7 +48,7 @@ class App extends Component {
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
-        { auth.user || auth.error
+        { userInit && !auth.loading || authRoute
         ? bareRoute ? children
         : <div className="container">
             <Clouds />

@@ -7,6 +7,7 @@ import CodeEditor from "components/CodeEditor";
 import Loading from "components/Loading";
 import "./CodeBlockCard.css";
 
+import {ICONS} from "consts";
 
 class CodeBlockCard extends Component {
 
@@ -79,7 +80,7 @@ class CodeBlockCard extends Component {
           <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}>
           </div>
           <div className="info">
-            <div className="card-title">{snippetname}</div>
+            <div className="card-title">{ ICONS[lid] ? <span className={ `pt-icon-standard pt-icon-${ICONS[lid]}` } /> : null }{snippetname}</div>
             <div className="card-meta">
               { username ? <div className="card-author">
                 { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }

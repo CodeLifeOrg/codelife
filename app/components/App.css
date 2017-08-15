@@ -179,6 +179,12 @@ body {
         font-size: 16px;
         letter-spacing: 0.5px;
         text-transform: uppercase;
+
+        & .pt-icon-standard {
+          margin-right: 5px;
+          opacity: 0.75;
+        }
+
       }
 
       & .card-meta {

@@ -6,6 +6,8 @@ import {translate} from "react-i18next";
 import "./Lesson.css";
 import Loading from "components/Loading";
 
+import {ICONS} from "consts";
+
 class Lesson extends Component {
 
   constructor(props) {
@@ -81,7 +83,7 @@ class Lesson extends Component {
           <div className="graphic" style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></div>
           <div className={ `pt-popover pt-tooltip ${ lesson.id }` }>
             <div className="pt-popover-content">
-              <div className="title">{ lesson.name }</div>
+              <div className="title">{ ICONS[lesson.id] ? <span className={ `pt-icon-standard pt-icon-${ICONS[lesson.id]}` } /> : null }{ lesson.name }</div>
               <div className="description">{ lesson.description }</div>
             </div>
           </div>
@@ -91,8 +93,7 @@ class Lesson extends Component {
         <div className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/island-${ i + 1 }.png')`}}></div>
         <div className={ `pt-popover pt-tooltip ${ lesson.id }` }>
           <div className="pt-popover-content">
-            <span className="pt-icon pt-icon-lock"></span>
-            <div className="title">{ lesson.name }</div>
+            <div className="title"><span className="pt-icon-standard pt-icon-lock" />{ lesson.name }</div>
             <div className="description">{ lesson.description }</div>
           </div>
         </div>

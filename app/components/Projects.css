@@ -1,4 +1,4 @@
-#pt-tab-panel_undefined_projects {
+#pt-tab-panel_undefined_projects[aria-hidden="false"] {
   align-items: stretch;
   display: flex;
 }

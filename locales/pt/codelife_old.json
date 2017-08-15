@@ -24,34 +24,11 @@
     "html": "html"
   },
   "open a new file first": "open a new file first",
-  "Login": {
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Login": "Login",
-    "Password": "Senha",
-    "Twitter": "Twitter"
-  },
+  "Login": {},
   "SignUp": {
-    "Confirm Password": "Confirme a Senha",
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Password": "Senha",
-    "PolicyText": "By checking this box, you agree to our Privacy Policy",
-    "Sign Up": "Cadastre-Se",
-    "Twitter": "Twitter",
-    "Username": "Username",
-    "error": {
-      "IncompleteFields": "Please set all fields.",
-      "PasswordMatch": "Passwords don't match.",
-      "TermsAgree": "Must agree to terms to continue."
-    }
+    "error": {}
   },
-  "home": {
-    "sub": "",
-    "title": ""
-  },
+  "home": {},
   "privacy": {
     "access": {},
     "cookies": {},
@@ -86,7 +63,6 @@
     "property": {},
     "script": {},
     "selector": {},
-    "sourcecode": {},
     "string": {},
     "style": {},
     "tags": {},

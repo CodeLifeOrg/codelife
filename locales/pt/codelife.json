@@ -1,4 +1,19 @@
 {
+  "/": "/",
+  "/api/lessons": "/api/lessons",
+  "/api/lessons/": "/api/lessons/",
+  "/api/likes": "",
+  "/api/likes/save": "",
+  "/api/profile/": "/api/profile/",
+  "/api/profileImgUpload/": "/api/profileImgUpload/",
+  "/api/projects/": "/api/projects/",
+  "/api/projects/new": "/api/projects/new",
+  "/api/projects/update": "/api/projects/update",
+  "/api/snippets": "/api/snippets",
+  "/api/snippets/all": "",
+  "/api/survey/": "/api/survey/",
+  "/api/userprogress": "/api/userprogress",
+  "/api/userprogress/save": "/api/userprogress/save",
   "<body> is where you put the content you want everyone to see": "",
   "<h1> is a header tag, where you can write large text": "",
   "<h2> is a header tag, where you can write large text": "",
@@ -12,6 +27,7 @@
   "<script> is where you write interactive content with javascript": "",
   "<style> is where you customize your page with cool colors and fonts": "",
   "<title> is the title of your page! Make sure it's inside a <head> tag": "",
+  "Abandon changes and open new file?": "",
   "About": "Sobre o CodeLife",
   "About Me": "Sobre mim",
   "Are you sure you want to reset the code to its original state?": "",
@@ -23,13 +39,16 @@
   "Close": "Fechar",
   "Code Blocks": "Desafios",
   "CodeBlock": "Desafio",
+  "CodeBlocks": "",
   "Codeblock Name": "Nome do desafio",
   "Codeblock Title": "Título do desafio",
   "Codeblock's code will be shown after you complete the last level of this island": "",
   "Complete": "Completo",
   "Create": "Crio",
+  "Create a New Project": "",
   "Created by": "Criado por",
   "Customizing my profile": "Personalizando meu perfil",
+  "DD/MM/YY": "DD/MM/YY",
   "Delete": "Excluir",
   "Delete Project": "Excluir projeto",
   "Earn your CodeBlock": "",
@@ -38,6 +57,7 @@
   "Error": "Erro",
   "Execute": "Execute",
   "Female": "Fêmea",
+  "File cannot be in use or blank": "File cannot be in use or blank",
   "Gender": "Gênero",
   "Glossary": "Glossário",
   "Having trouble? Check with a neighbor and ask for help!": "",
@@ -45,7 +65,7 @@
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",
   "How likely are you to revisit the site?": "How likely are you to revisit the site?",
   "How likely are you to tell a friend or classmate about CodeLife?": "How likely are you to tell a friend or classmate about CodeLife?",
-  "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "",
+  "How much does the potential of receiving a \\": "How much does the potential of receiving a \\",
   "Image": "Imagem",
   "Islands (lessons)": "Ilhas (lições)",
   "Keep Exploring": "Continue explorando",
@@ -55,16 +75,10 @@
   "Loading codeblocks": "Carregando desafios",
   "Loading projects": "Carregando projetos",
   "Login": {
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Login": "Login",
-    "Password": "Password",
-    "Twitter": "Twitter",
-    "error": "Wrong Username or Password",
-    "success": "Successfully Logged In"
+    "Login": "Login"
   },
   "Logout": "Sair",
+  "MM/DD/YYYY": "MM/DD/YYYY",
   "Male": "Masculino",
   "Map": "Mapa",
   "Modified on": "Modificado em",
@@ -98,32 +112,15 @@
   "Show Less": "Mostre menos",
   "Show {{x}} More": "Mostre mais {{x}}",
   "Sign Up": "Cadastre-Se",
-  "SignUp": {
-    "Confirm Password": "Confirmar Senha",
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Password": "Senha",
-    "PolicyText": "Eu concordo com a política de privacidade do site.",
-    "Sign Up": "Cadastre-se",
-    "Twitter": "Twitter",
-    "Username": "Usuário",
-    "error": {
-      "Exists": "E-mail or Username already in use",
-      "IncompleteFields": "Please set all fields",
-      "PasswordMatch": "Passwords don't match",
-      "TermsAgree": "Must agree to terms to continue"
-    },
-    "success": "Sign Up Successful"
-  },
   "Somewhat difficult": "",
   "Somewhat easy": "",
   "Somewhat likely": "",
   "Somewhat motivated": "",
   "Somewhat unlikely": "",
+  "Sorry, Try again!": "",
+  "Submit": "",
   "Submit Survey": "",
   "Survey": "",
-  "This is a full sentence used as the translation key": "",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",
   "Unable to upload image!": "Unable to upload image!",
@@ -140,6 +137,7 @@
   "What was the thing you enjoyed the most from today's exercise?": "What was the thing you enjoyed the most from today's exercise?",
   "What was the thing you struggled with the most from today's exercise?": "What was the thing you struggled with the most from today's exercise?",
   "Where are you from?": "De onde?",
+  "YYYY-MM-DD": "YYYY-MM-DD",
   "You don't have permission to edit this user's profile": "You don't have permission to edit this user's profile",
   "You got it right!": "Você acertou!",
   "aboutP1": "CodeLife é uma plataforma online e gratuita voltada para alunos brasileiros do ensino médio que desejam aprender uma variedade de habilidades relevantes para trabalhar no setor de TI (desenvolvimento frontend, design de UI, visualização de dados etc). O currículo da plataforma abordará temas como desenvolvimento web e visualização de dados.",
@@ -161,7 +159,7 @@
       "def": "Essa é uma propriedade da linguagem CSS que permite mudar a cor de fundo de um elemento."
     },
     "backgroundImage": {
-      "def": "A CSS property that adds a background image to a webpage."
+      "def": "Essa é uma propriedade CSS que adiciona uma imagem de fundo à sua página web."
     },
     "body": {
       "def": "O que estiver escrito dentro da tag &lt;body&gt; aparece diretamente na sua página web."
@@ -202,7 +200,7 @@
       "def": "São informações sobre a página web que não aparecem diretamente na página. Normalmente, os metadados são escritos dentro da tag <head>."
     },
     "method": {
-      "def": "In JavaScript, we use methods to perform tasks and actions in the code we are writing."
+      "def": "Em JavaScript, utilizamos funções para desempenhar tarefas e ações no código que estamos escrevendo.s"
     },
     "openingtag": {
       "def": "Essa tag indica o início de um elemento HTML.",
@@ -215,7 +213,8 @@
       "def": "Esse é um termo usado em CSS para indicar que tipo de estilo você quer adicionar ao seu conteúdo."
     },
     "script": {
-      "def": "A tag that indicates JavaScript is being written instead of HTML.",
+      "def": "Essa é um tag que indica que a linguagem JavaScript está sendo usada ao invés de HTML. Ela deve ser inserida imediatamente antes da tag <body> de fechamento.
+"",
       "exampleTxt1": ""
     },
     "selector": {
@@ -242,12 +241,10 @@
     }
   },
   "h1 within a <style> tag is how you customize your header tags": "",
-  "home": {
-    "body": "",
-    "sub": "",
-    "title": ""
-  },
   "myCodeblock": "Meu {{ islandName }} Desafio",
+  "mypage": {
+    "html": "html"
+  },
   "p within a <style> tag is how you customize your <p> tags": "",
   "privacy": {
     "access": {

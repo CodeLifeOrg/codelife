@@ -13,8 +13,23 @@ islands:
     dark: "#043f51"
     light: "#afe2e5"
   island-4:
-    dark: "#5c1500"
+    dark: "#411100"
     light: "#ffb863"
   island-5:
     dark: "#321418"
     light: "#d0acaf"
+  island-6:
+    dark: "#02291a"
+    light: "#ba1c2e"
+  island-7:
+    dark: "#373844"
+    light: "#ed8e8a"
+  island-8:
+    dark: "#13171d"
+    light: "#b2bbc4"
+  island-9:
+    dark: "#06334c"
+    light: "#f9f8b4"
+  island-10:
+    dark: "#6f3100"
+    light: "#ddf1eb"

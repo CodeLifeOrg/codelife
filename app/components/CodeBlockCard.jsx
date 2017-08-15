@@ -104,12 +104,6 @@ class CodeBlockCard extends Component {
         >
           <div className="pt-dialog-body">
             <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ lid } ref={c => this.editor = c} />
-            { done ? null
-              : <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ lid }` }>
-                  <div className="pt-popover-content">
-                    { t("Codeblock's code will be shown after you complete the last level of this island.") }
-                  </div>
-                </div> }
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>

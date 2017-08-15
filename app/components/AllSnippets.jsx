@@ -97,8 +97,8 @@ class AllSnippets extends Component {
 
     for (const l of lessons) {
       snippetItems.push(
-        <li className={`lesson-header ${l.id}`} key={l.id}>
-          <div className="lesson-title" style={{cursor: "pointer"}} onClick={this.handleClick.bind(this, l.id)} ><img src={`/islands/${l.id}-small.png`} width="30px" height="30px"/>{l.name}</div>
+        <li className={`snippet ${l.id}`} key={l.id} onClick={this.handleClick.bind(this, l.id)}>
+          <img className="icon" src={`/islands/${l.id}-small.png`} />{ l.name }
         </li>
       );
       const thisLessonItems = [];

@@ -92,8 +92,7 @@
   "Not sure": "Not sure",
   "Not very motivated": "Not very motivated",
   "Okay": "Ok",
-  "Open a new file first": "",
-  "Other Students' CodeBlocks": "Other Students' CodeBlocks",
+  "Other Students' CodeBlocks": "CodeBlocks outros alunos",
   "Please be as detailed as possible with your feedback": "Por favor, seja detalhado com sua resposta",
   "Previous": "Anterior",
   "Privacy Policy": "Política de privacidade",
@@ -155,13 +154,13 @@
       "def": "CSS é uma linguagem de programação que permite alterar o estilo de uma página web, modificando sua aparência."
     },
     "alert": {
-      "def": "A javascript method that makes a popup."
+      "def": "Essa é uma função (method) da linguagem JavaScript utilizada para criar janelas pop-ups, ou janelas de alerta."
     },
     "backgroundColor": {
-      "def": "A CSS property that changes the color of an element’s background."
+      "def": "Essa é uma propriedade da linguagem CSS que permite mudar a cor de fundo de um elemento."
     },
     "backgroundImage": {
-      "def": "A CSS property that adds a background image to a webpage."
+      "def": "Essa é uma propriedade CSS que adiciona uma imagem de fundo à sua página web."
     },
     "body": {
       "def": "O que estiver escrito dentro da tag &lt;body&gt; aparece diretamente na sua página web."
@@ -179,7 +178,7 @@
       "def": "Essa é uma propriedade da linguagem CSS que permite mudar a cor de um texto ou outro conteúdo."
     },
     "css": {
-      "def": "CSS is a computer language that can change the style of a web page."
+      "def": "CSS é uma linguagem de programação que permite alterar o estilo de uma página web, modificando sua aparência."
     },
     "example": "Examplo",
     "h1": {
@@ -202,11 +201,11 @@
       "def": "São informações sobre a página web que não aparecem diretamente na página. Normalmente, os metadados são escritos dentro da tag <head>."
     },
     "method": {
-      "def": "In JavaScript, we use methods to perform tasks and actions in the code we are writing."
+      "def": "Em JavaScript, utilizamos funções para desempenhar tarefas e ações no código que estamos escrevendo.s"
     },
     "openingtag": {
       "def": "Essa tag indica o início de um elemento HTML.",
-      "exampleTxt1": "&lt;h1&gt; Hello &lt;/h1&gt;"
+      "exampleTxt1": "<h1> Hello </h1>;"
     },
     "p": {
       "def": "Esta tag é usada para indicar que o conteúdo é um parágrafo."
@@ -215,14 +214,14 @@
       "def": "Esse é um termo usado em CSS para indicar que tipo de estilo você quer adicionar ao seu conteúdo."
     },
     "script": {
-      "def": "A tag that indicates JavaScript is being written instead of HTML.",
-      "exampleTxt1": ""
+      "def": "Essa é um tag que indica que a linguagem JavaScript está sendo usada ao invés de HTML. Ela deve ser inserida imediatamente antes da tag <body> de fechamento.",
+      "exampleTxt1": "Olá!"
     },
     "selector": {
       "def": "Esse é um termo usado em CSS para indicar a qual elemento do seu código HTML você quer adicionar algum estilo."
     },
     "string": {
-      "def": "When you want to use text in JavaScript, wrap it in quotes to make it a string. This way, javascript can understand your text."
+      "def": "Quando você quiser usar um texto em JavaScript, ele deve ser escrito entre aspas, tornando-o um valor do tipo string, que em computação, significa uma sequência de caracteres. Desta forma, o JavaScript entende seu conteúdo como um texto."
     },
     "style": {
       "def": "Essa é uma tag que indica que o código foi escrito em CSS e não em HTML. Ela deve ser utilizada dentro da tag <head>."
@@ -231,7 +230,7 @@
       "def": "As tags são utilizadas para estruturar seu código HTML. Quando você cria sua página em HTML, cada item dessa página é identificado por uma tag. Existem tags para diferentes aplicações, cada uma com um nome."
     },
     "textAlign": {
-      "def": "A CSS property that changes how text is aligned on the page. Its three most common values are left, center, and right."
+      "def": "Essa é uma propriedade CSS que altera a forma como o texto ficará alinhado na página. Seus três valores, ou opções, mais comuns são left, center e right, que significam esquerda, centro e direita em português."
     },
     "title": "Glossário",
     "titletag": {

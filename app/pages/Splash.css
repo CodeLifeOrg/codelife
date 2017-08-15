@@ -9,14 +9,22 @@
     color: white;
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    min-height: 625px;
     justify-content: center;
-    height: 90vh;
+    margin-top: calc(var(--nav-height) * -1);
     position: relative;
     width: 100%;
+
+    &:last-child {
+      height: calc(100vh - var(--footer-height));
+      min-height: 500px;
+      margin-top: 0;
+    }
   }
 
   & #entry {
-    margin-top: -150px;
+    margin-bottom: 100px;
     max-width: 350px;
     position: relative;
     text-align: center;
@@ -79,7 +87,7 @@
   }
 
   & .about-anchor {
-    bottom: 0;
+    bottom: 25px;
     color: white;
     font-size: 16px;
     font-weight: bold;

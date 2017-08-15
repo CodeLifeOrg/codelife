@@ -2,7 +2,8 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 25px 25px;
+  height: var(--nav-height);
+  padding: 0 25px;
 
   & .logo {
     width: 125px;

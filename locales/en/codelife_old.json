@@ -20,15 +20,32 @@
   "Loading projects": {},
   "MM/DD/YYYY": "MM/DD/YYYY",
   "YYYY-MM-DD": "YYYY-MM-DD",
-  "mypage": {
-    "html": "html"
-  },
+  "mypage": {},
   "open a new file first": "open a new file first",
   "Login": {},
   "SignUp": {
-    "error": {}
+    "Confirm Password": "Confirm Password",
+    "E-mail": "E-mail",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "Password": "Password",
+    "PolicyText": "By checking this box, you agree to our Privacy Policy",
+    "Sign Up": "Sign Up",
+    "Twitter": "Twitter",
+    "Username": "Username",
+    "error": {
+      "Exists": "E-mail or Username already in use",
+      "IncompleteFields": "Please set all fields",
+      "PasswordMatch": "Passwords don't match",
+      "TermsAgree": "Must agree to terms to continue"
+    },
+    "success": "Sign Up Successful"
   },
-  "home": {},
+  "home": {
+    "body": "",
+    "sub": "",
+    "title": ""
+  },
   "privacy": {
     "access": {},
     "cookies": {},
@@ -44,13 +61,9 @@
     "CSS": {},
     "alert": {},
     "backgroundColor": {},
-    "backgroundImage": {
-      "exampleTxt1": "body {\n  background-image: https://upload.wikimedia.org/wikipedia/commons/e/ec/Happy_smiley_face.png;\n}"
-    },
+    "backgroundImage": {},
     "body": {},
-    "closingtag": {
-      "exampleTxt1": ""
-    },
+    "closingtag": {},
     "code": {},
     "codeeditor": {},
     "color": {},
@@ -86,5 +99,6 @@
   "/api/snippets/all": "",
   "Insert into Project": "Insert into Project",
   "Open a new file first": "",
-  "View Cheat Sheet": "View Cheat Sheet"
+  "View Cheat Sheet": "View Cheat Sheet",
+  "Some Text": ""
 }

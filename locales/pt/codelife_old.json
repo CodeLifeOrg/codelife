@@ -20,15 +20,32 @@
   "Loading projects": {},
   "MM/DD/YYYY": "MM/DD/YYYY",
   "YYYY-MM-DD": "YYYY-MM-DD",
-  "mypage": {
-    "html": "html"
-  },
+  "mypage": {},
   "open a new file first": "open a new file first",
   "Login": {},
   "SignUp": {
-    "error": {}
+    "Confirm Password": "Confirmar Senha",
+    "E-mail": "E-mail",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "Password": "Senha",
+    "PolicyText": "Eu concordo com a política de privacidade do site.",
+    "Sign Up": "Cadastre-se",
+    "Twitter": "Twitter",
+    "Username": "Usuário",
+    "error": {
+      "Exists": "E-mail or Username already in use",
+      "IncompleteFields": "Please set all fields",
+      "PasswordMatch": "Passwords don't match",
+      "TermsAgree": "Must agree to terms to continue"
+    },
+    "success": "Sign Up Successful"
   },
-  "home": {},
+  "home": {
+    "body": "",
+    "sub": "",
+    "title": ""
+  },
   "privacy": {
     "access": {},
     "cookies": {},

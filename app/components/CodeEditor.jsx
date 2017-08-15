@@ -158,7 +158,7 @@ class CodeEditor extends Component {
                   />
                 : <pre className="editor blurry-text">{currentText}</pre>
               }
-              { this.props.blurred ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island }` }>
+              { this.props.blurred ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island ? island : "" }` }>
                   <div className="pt-popover-content">
                     { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
@@ -167,7 +167,12 @@ class CodeEditor extends Component {
           : null
         }
         <div className="render">
-          <div className="panel-title"><img className="favicon" src={ `/islands/${island}-small.png` } />{ titleText }</div>
+          <div className="panel-title">
+            { island
+            ? <img className="favicon" src={ `/islands/${island}-small.png` } />
+            : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
+            { titleText }
+          </div>
           <iframe className="iframe" ref="rc" />
         </div>
       </div>
@@ -176,7 +181,7 @@ class CodeEditor extends Component {
 }
 
 CodeEditor.defaultProps = {
-  island: "island-1",
+  island: false,
   readOnly: false,
   blurred: false,
   showEditor: true

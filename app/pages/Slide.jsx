@@ -177,7 +177,7 @@ class Slide extends Component {
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
-          { gems ? <div className="gems"><img src={gemIcon} />{gems} Gem{ gems > 1 ? "s" : "" } Found</div> : null }
+          { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
           <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>

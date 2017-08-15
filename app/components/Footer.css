@@ -5,7 +5,7 @@
   bottom: 0;
   color: white;
   display: flex;
-  height: 100px;
+  height: var(--footer-height);
   justify-content: space-between;
   left: 0;
   padding: 50px 25px 25px;

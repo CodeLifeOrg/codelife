@@ -102,7 +102,7 @@ class InputCode extends Component {
             intent={ Intent.DANGER }
             onCancel={ () => this.setState({resetAlert: false}) }
             onConfirm={ () => this.resetAnswer() }>
-            <p>Are you sure you want to reset the code to its original state?</p>
+            <p>{t("Are you sure you want to reset the code to its original state?")}</p>
         </Alert>
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
@@ -110,9 +110,9 @@ class InputCode extends Component {
           { this.state.mounted ? <CodeEditor island={island} onChangeText={this.onChangeText.bind(this)} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
-          <button className="pt-button" onClick={this.attemptReset.bind(this)}>Reset</button>
-          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button> : null}
-          <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>Submit</button>
+          <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
+          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null}
+          <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>
         </div>
       </div>
     );

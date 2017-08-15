@@ -116,10 +116,11 @@ class Projects extends Component {
   }
 
   clickNewProject() {
+    const {t} = this.props;
     const projectName = this.state.projectName;
     // todo: maybe check with db instead of local state, should check back on this
     if (this.state.changesMade) {
-      if (confirm("Abandon changes and open new file?")) {
+      if (confirm(t("Abandon changes and open new file?"))) {
         this.createNewProject(projectName);
       }
       else {
@@ -154,7 +155,7 @@ class Projects extends Component {
     return (
       <div id="projects">
         <div className="project-new">
-          <div className="project-new-title">Create a New Project</div>
+          <div className="project-new-title">{t("Create a New Project")}</div>
           <div className="project-new-form">
             <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
             <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>

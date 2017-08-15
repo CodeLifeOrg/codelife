@@ -7,7 +7,7 @@
     display: block;
     height: calc(100vh - 50px);
     margin: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 100%;
   }
 

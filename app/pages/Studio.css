@@ -47,7 +47,7 @@
 
       & .pt-tab-panel {
         max-height: calc(100vh - 375px);
-        overflow-y: scroll;
+        overflow-y: auto;
       }
 
     }

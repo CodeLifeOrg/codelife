@@ -96,6 +96,7 @@ class AllSnippets extends Component {
     const snippetItems = [];
 
     for (const l of lessons) {
+      if (l.likedSnippets.length + l.unlikedSnippets.length + l.mySnippets.length === 0) continue;
       snippetItems.push(
         <li className={`snippet ${l.id}`} key={l.id} onClick={this.handleClick.bind(this, l.id)}>
           <img className="icon" src={`/islands/${l.id}-small.png`} />{ l.name }

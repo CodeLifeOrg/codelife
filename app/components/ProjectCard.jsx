@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import himalaya from "himalaya";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "moment/locale/pt-br";
 import moment from "moment";
@@ -47,10 +46,9 @@ class ProjectCard extends Component {
           lazy={false}
           inline={false}
           style={{
-            height: "75vh",
-            maxHeight: "600px",
-            maxWidth: "800px",
-            width: "100%"
+            height: "80vh",
+            maxHeight: "1000px",
+            width: "90%"
           }}
         >
           <div className="pt-dialog-body">

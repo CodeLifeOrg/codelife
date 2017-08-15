@@ -9,6 +9,8 @@
     flex: 1;
     flex-direction: column;
     margin: 0 10px;
+    max-width: 400px;
+    position: relative;
 
     & .panel-title {
       align-self: flex-start;
@@ -42,6 +44,15 @@
         text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
       }
 
+    }
+
+    & .codeBlockTooltip {
+      left: 50%;
+      margin-left: -150px;
+      position: absolute;
+      text-align: center;
+      top: 45%;
+      width: 300px;
     }
 
   }

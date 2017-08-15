@@ -3,8 +3,6 @@ import {connect} from "react-redux";
 import {browserHistory, Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
-import CodeBlock from "components/CodeBlock";
 import "./Lesson.css";
 import Loading from "components/Loading";
 
@@ -15,9 +13,7 @@ class Lesson extends Component {
     this.state = {
       lessons: [],
       snippets: [],
-      userProgress: null,
-      didInject: false,
-      currentFrame: null
+      userProgress: null
     };
   }
 
@@ -41,13 +37,6 @@ class Lesson extends Component {
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 
-  toggleDialog(i) {
-    const k = `isOpen_${i}`;
-    let currentFrame = null;
-    if (!this.state[k]) currentFrame = i;
-    this.setState({[k]: !this.state[k], didInject: false, currentFrame});
-  }
-
   goToEditor(lid) {
     browserHistory.push(`/editor/${lid}`);
   }
@@ -61,37 +50,6 @@ class Lesson extends Component {
       if (s.id === sid) s.studentcontent = studentcontent;
     }
     this.setState(snippets);
-  }
-
-  buildButton(lesson, i) {
-    const {t} = this.props;
-    const {userProgress} = this.state;
-    const complete = userProgress.find(up => up.level === lesson.id) !== undefined;
-    return (
-      <div className="view-snippit">
-        <Button className={ complete ? "pt-icon-endorsed" : "" } onClick={this.toggleDialog.bind(this, i)} text={`My ${lesson.name} Codeblock`} />
-        <Dialog
-          isOpen={this.state[`isOpen_${i}`]}
-          onClose={this.toggleDialog.bind(this, i)}
-          title={`My ${lesson.name} Snippet`}
-          lazy={false}
-          inline={false}
-          className="codeblock-dialog"
-        >
-          {/* <div className="pt-dialog-body">{lesson.snippet ? <iframe className="snippetrender" ref={ comp => this.iframes[i] = comp } /> : null}</div>*/}
-          <div className="pt-dialog-body">{lesson.snippet ? <CodeBlock lesson={lesson} handleSave={this.handleSave.bind(this)} /> : null}</div>
-          <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-actions">
-              <Button
-                intent={Intent.PRIMARY}
-                onClick={this.toggleDialog.bind(this, i)}
-                text={t("Close")}
-              />
-            </div>
-          </div>
-        </Dialog>
-      </div>
-    );
   }
 
   render() {

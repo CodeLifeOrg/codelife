@@ -138,17 +138,17 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, island} = this.props;
+    const {codeTitle, island, t} = this.props;
     const {titleText, currentText} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
     return (
       <div id="codeEditor">
-        { this.props.showEditor 
+        { this.props.showEditor
           ? <div className="code">
-              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div> 
-              { !this.props.blurred 
+              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
+              { !this.props.blurred
                 ? <AceWrapper
                     className="editor"
                     ref={ comp => this.editor = comp }
@@ -158,6 +158,11 @@ class CodeEditor extends Component {
                   />
                 : <pre className="editor blurry-text">{currentText}</pre>
               }
+              { this.props.blurred ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island }` }>
+                  <div className="pt-popover-content">
+                    { t("Codeblock's code will be shown after you complete the last level of this island.") }
+                  </div>
+                </div> : null }
             </div>
           : null
         }

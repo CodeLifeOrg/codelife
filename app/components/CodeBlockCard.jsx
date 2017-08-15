@@ -41,7 +41,7 @@ class CodeBlockCard extends Component {
     if (codeBlock.liked) {
       codeBlock.liked = false;
       codeBlock.likes--;
-    } 
+    }
     else {
       codeBlock.liked = true;
       codeBlock.likes++;
@@ -97,20 +97,13 @@ class CodeBlockCard extends Component {
           inline={false}
           className={ lid }
           style={{
-            height: "75vh",
-            maxHeight: "600px",
-            maxWidth: "800px",
-            width: "100%"
+            height: "80vh",
+            maxHeight: "1000px",
+            width: "90%"
           }}
         >
           <div className="pt-dialog-body">
             <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ lid } ref={c => this.editor = c} />
-            { done ? null
-              : <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ lid }` }>
-                  <div className="pt-popover-content">
-                    { t("Codeblock's code will be shown after you complete the last level of this island.") }
-                  </div>
-                </div> }
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>

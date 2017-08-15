@@ -77,6 +77,12 @@
       margin-right: 5px;
       vertical-align: middle;
       width: 16px;
+
+      &.pt-icon-standard {
+        font-size: 14px;
+        opacity: 0.25;
+      }
+
     }
 
   }

@@ -1,8 +1,9 @@
 import React, {Component} from "react";
+import {translate} from "react-i18next";
 
 import CodeEditor from "components/CodeEditor";
 
-export default class RenderCode extends Component {
+class RenderCode extends Component {
 
   constructor(props) {
     super(props);
@@ -31,7 +32,7 @@ export default class RenderCode extends Component {
 
   render() {
 
-    const {htmlcontent1, htmlcontent2, island} = this.props;
+    const {htmlcontent1, htmlcontent2, island, t} = this.props;
 
     return (
       <div id="slide-container" className="renderCode flex-column">
@@ -41,10 +42,13 @@ export default class RenderCode extends Component {
         </div>
         { this.props.exec
         ? <div className="validation">
-            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>Execute</button>
+            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
           </div>
         : null}
       </div>
     );
   }
 }
+
+RenderCode = translate()(RenderCode);
+export default RenderCode;

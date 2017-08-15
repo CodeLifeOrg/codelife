@@ -1,19 +1,4 @@
 {
-  "/": "/",
-  "/api/lessons": "/api/lessons",
-  "/api/lessons/": "/api/lessons/",
-  "/api/likes": "",
-  "/api/likes/save": "",
-  "/api/profile/": "/api/profile/",
-  "/api/profileImgUpload/": "/api/profileImgUpload/",
-  "/api/projects/": "/api/projects/",
-  "/api/projects/new": "/api/projects/new",
-  "/api/projects/update": "/api/projects/update",
-  "/api/snippets": "/api/snippets",
-  "/api/snippets/all": "",
-  "/api/survey/": "/api/survey/",
-  "/api/userprogress": "/api/userprogress",
-  "/api/userprogress/save": "/api/userprogress/save",
   "<body> is where you put the content you want everyone to see": "",
   "<h1> is a header tag, where you can write large text": "",
   "<h2> is a header tag, where you can write large text": "",
@@ -48,7 +33,6 @@
   "Create a New Project": "",
   "Created by": "Criado por",
   "Customizing my profile": "Personalizando meu perfil",
-  "DD/MM/YY": "DD/MM/YY",
   "Delete": "Excluir",
   "Delete Project": "Excluir projeto",
   "Earn your CodeBlock": "",
@@ -57,7 +41,6 @@
   "Error": "Erro",
   "Execute": "Execute",
   "Female": "Fêmea",
-  "File cannot be in use or blank": "File cannot be in use or blank",
   "Gems": "",
   "Gender": "Gênero",
   "Glossary": "Glossário",
@@ -66,7 +49,7 @@
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",
   "How likely are you to revisit the site?": "How likely are you to revisit the site?",
   "How likely are you to tell a friend or classmate about CodeLife?": "How likely are you to tell a friend or classmate about CodeLife?",
-  "How much does the potential of receiving a \\": "How much does the potential of receiving a \\",
+  "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "",
   "Image": "Imagem",
   "Islands (lessons)": "Ilhas (lições)",
   "Keep Exploring": "Continue explorando",
@@ -76,10 +59,16 @@
   "Loading codeblocks": "Carregando desafios",
   "Loading projects": "Carregando projetos",
   "Login": {
-    "Login": "Login"
+    "E-mail": "Translated E-mail",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "Login": "Login",
+    "Password": "Password",
+    "Twitter": "Twitter",
+    "error": "Wrong Username or Password",
+    "success": "Successfully Logged In"
   },
   "Logout": "Sair",
-  "MM/DD/YYYY": "MM/DD/YYYY",
   "Male": "Masculino",
   "Map": "Mapa",
   "Modified on": "Modificado em",
@@ -113,6 +102,25 @@
   "Show Less": "Mostre menos",
   "Show {{x}} More": "Mostre mais {{x}}",
   "Sign Up": "Cadastre-Se",
+  "SignUp": {
+    "Confirm Password": "Confirm Password",
+    "E-mail": "E-mail",
+    "Facebook": "Facebook",
+    "Instagram": "Instagram",
+    "Password": "Password",
+    "PolicyText": "By checking this box, you agree to our Privacy Policy",
+    "Sign Up": "Sign Up",
+    "Twitter": "Twitter",
+    "Username": "Username",
+    "error": {
+      "Exists": "E-mail or Username already in use",
+      "IncompleteFields": "Please set all fields",
+      "PasswordMatch": "Passwords don't match",
+      "TermsAgree": "Must agree to terms to continue"
+    },
+    "success": "Sign Up Successful"
+  },
+  "Some Text": "",
   "Somewhat difficult": "",
   "Somewhat easy": "",
   "Somewhat likely": "",
@@ -122,6 +130,7 @@
   "Submit": "",
   "Submit Survey": "",
   "Survey": "",
+  "This is a full sentence used as the translation key": "",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",
   "Unable to upload image!": "Unable to upload image!",
@@ -138,7 +147,6 @@
   "What was the thing you enjoyed the most from today's exercise?": "What was the thing you enjoyed the most from today's exercise?",
   "What was the thing you struggled with the most from today's exercise?": "What was the thing you struggled with the most from today's exercise?",
   "Where are you from?": "De onde?",
-  "YYYY-MM-DD": "YYYY-MM-DD",
   "You don't have permission to edit this user's profile": "You don't have permission to edit this user's profile",
   "You got it right!": "Você acertou!",
   "aboutP1": "CodeLife é uma plataforma online e gratuita voltada para alunos brasileiros do ensino médio que desejam aprender uma variedade de habilidades relevantes para trabalhar no setor de TI (desenvolvimento frontend, design de UI, visualização de dados etc). O currículo da plataforma abordará temas como desenvolvimento web e visualização de dados.",
@@ -241,10 +249,12 @@
     }
   },
   "h1 within a <style> tag is how you customize your header tags": "",
-  "myCodeblock": "Meu {{ islandName }} Desafio",
-  "mypage": {
-    "html": "html"
+  "home": {
+    "body": "",
+    "sub": "",
+    "title": ""
   },
+  "myCodeblock": "Meu {{ islandName }} Desafio",
   "p within a <style> tag is how you customize your <p> tags": "",
   "privacy": {
     "access": {

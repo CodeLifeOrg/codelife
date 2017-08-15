@@ -20,7 +20,9 @@
   "Loading projects": {},
   "MM/DD/YYYY": "MM/DD/YYYY",
   "YYYY-MM-DD": "YYYY-MM-DD",
-  "mypage": {},
+  "mypage": {
+    "html": "html"
+  },
   "open a new file first": "open a new file first",
   "Login": {},
   "SignUp": {

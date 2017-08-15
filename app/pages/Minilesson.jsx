@@ -9,7 +9,7 @@ import CodeBlockCard from "components/CodeBlockCard";
 
 import "./Minilesson.css";
 
-// import gemIcon from "icons/gem.svg";
+import gemIcon from "icons/gem.svg";
 
 import Loading from "components/Loading";
 
@@ -290,10 +290,21 @@ class Minilesson extends Component {
       if (minilesson.isDone) {
         const up = userProgress.find(p => p.level === minilesson.id);
         const gems = up ? up.gems : 0;
-        const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
-        return <Tooltip position={ Position.TOP } content={ `${minilesson.name} - ${gemCount} ` } tooltipClassName={ currentLesson.id }>
+        // const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
+        return <Popover
+          interactionKind={PopoverInteractionKind.HOVER}
+          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ lid }` }
+          position={Position.TOP}
+        >
           <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
-        </Tooltip>;
+          <span>
+            {minilesson.name}
+            <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div>
+          </span>
+        </Popover>;
+        // return <Tooltip position={ Position.TOP } content={ `${minilesson.name} - ${gemCount} ` } tooltipClassName={ currentLesson.id }>
+        //   <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
+        // </Tooltip>;
       }
       else if (minilesson.isNext) {
         return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>

@@ -20,19 +20,9 @@
   "Loading projects": {},
   "MM/DD/YYYY": "MM/DD/YYYY",
   "YYYY-MM-DD": "YYYY-MM-DD",
-  "mypage": {
-    "html": "html"
-  },
+  "mypage": {},
   "open a new file first": "open a new file first",
-  "Login": {
-    "E-mail": "E-mail",
-    "Facebook": "Facebook",
-    "Instagram": "Instagram",
-    "Password": "Password",
-    "Twitter": "Twitter",
-    "error": "Wrong Username or Password",
-    "success": "Successfully Logged In"
-  },
+  "Login": {},
   "SignUp": {
     "Confirm Password": "Confirm Password",
     "E-mail": "E-mail",

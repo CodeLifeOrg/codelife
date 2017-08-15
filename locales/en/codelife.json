@@ -39,7 +39,7 @@
   "Close": "Close",
   "Code Blocks": "Code Blocks",
   "CodeBlock": "CodeBlock",
-  "CodeBlocks": "",
+  "CodeBlocks": "CodeBlocks",
   "Codeblock Name": "Codeblock Name",
   "Codeblock Title": "Codeblock Title",
   "Codeblock's code will be shown after you complete the last level of this island": "Codeblock's code will be shown after you complete the last level of this island",
@@ -58,10 +58,11 @@
   "Execute": "Execute",
   "Female": "Female",
   "File cannot be in use or blank": "File cannot be in use or blank",
+  "Gems": "Gems",
   "Gender": "Gender",
   "Glossary": "Glossary",
   "Having trouble? Check with a neighbor and ask for help!": "Having trouble? Check with a neighbor and ask for help!",
-  "Hosted by": "",
+  "Hosted by": "Hosted by",
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",
   "How likely are you to revisit the site?": "How likely are you to revisit the site?",
   "How likely are you to tell a friend or classmate about CodeLife?": "How likely are you to tell a friend or classmate about CodeLife?",
@@ -119,7 +120,7 @@
   "Somewhat motivated": "Somewhat motivated",
   "Somewhat unlikely": "Somewhat unlikely",
   "Sorry, Try again!": "",
-  "Submit": "",
+  "Submit": "Submit",
   "Submit Survey": "Submit Survey",
   "Survey": "Survey",
   "This user doesn't have any code blocks yet": "This user doesn't have any code blocks yet",
@@ -298,5 +299,5 @@
   "usersByLocation": "Other users from {{municipality}}, {{state}}",
   "usersBySchool": "Other users from {{school}}",
   "you!": "you!",
-  "{{island}} Complete": ""
+  "{{island}} Complete": "{{island}} Complete"
 }

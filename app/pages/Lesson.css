@@ -53,10 +53,11 @@
         background-size: 90% auto;
         display: block;
         height: 300px;
+        left: 0;
         position: absolute;
+        top: 0;
         transition: background-size 0.2s;
         width: 400px;
-
       }
 
       &:not(.done):not(.next) {

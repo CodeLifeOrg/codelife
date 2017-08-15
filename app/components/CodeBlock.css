@@ -12,11 +12,13 @@
     padding: 10px 0;
 
     & .codeBlock-text {
+      align-self: stretch;
       flex: none;
       font-size: 16px;
       line-height: 20px;
       margin: 0 10px 0 0;
       max-width: 300px;
+      overflow-y: scroll;
       white-space: pre-wrap;
 
       & #validation-box {

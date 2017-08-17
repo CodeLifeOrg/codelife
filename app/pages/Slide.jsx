@@ -122,12 +122,12 @@ class Slide extends Component {
       this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
 
-    document.addEventListener("keydown", this.handleKey.bind(this));
+    // document.addEventListener("keydown", this.handleKey.bind(this));
   }
 
-  handleKey(e) {
-    e.keyCode === 192 ? this.unblock(this) : null;
-  }
+  // handleKey(e) {
+  //   e.keyCode === 192 ? this.unblock(this) : null;
+  // }
 
   updateGems(newGems) {
     const {gems: oldGems, slides, currentSlide, latestSlideOfGemEarned} = this.state;

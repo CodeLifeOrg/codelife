@@ -199,7 +199,7 @@ class Slide extends Component {
           ? this.state.blocked
             ? <div className="pt-button pt-disabled">{t("Next")}</div>
             : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`Back to ${currentLesson.name}!`}</Link> }
+          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`${t("Back to")} ${currentLesson.name}!`}</Link> }
         </div>
 
       </div>

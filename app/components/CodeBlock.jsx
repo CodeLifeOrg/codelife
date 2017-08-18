@@ -308,18 +308,18 @@ class CodeBlock extends Component {
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
           { lesson.snippet ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
+          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"
             position={Position.RIGHT_BOTTOM}
           >
-            <Button intent={Intent.PRIMARY}>{t("Cheat Sheet")}</Button>
+            <Button intent={Intent.PRIMARY} iconName="help">{t("Help")}</Button>
             <div>
-              <h5>{lesson.name} Cheat Sheet</h5>
+              <h5>{lesson.name} - {t("Help")}</h5>
               <p dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
             </div>
           </Popover>
-          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
           <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Tooltip} from "@blueprintjs/core";
+import {Position, Tooltip} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
 
@@ -178,7 +178,7 @@ class Slide extends Component {
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
           { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
+          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id } position={Position.TOP_RIGHT}>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>

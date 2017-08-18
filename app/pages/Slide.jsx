@@ -178,7 +178,7 @@ class Slide extends Component {
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
           { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
-          <Tooltip className="return-link" content={ `${ t("return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
+          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id }>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>
@@ -199,7 +199,7 @@ class Slide extends Component {
           ? this.state.blocked
             ? <div className="pt-button pt-disabled">{t("Next")}</div>
             : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`${t("Back to")} ${currentLesson.name}!`}</Link> }
+          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`${t("Return to")} ${currentLesson.name}!`}</Link> }
         </div>
 
       </div>

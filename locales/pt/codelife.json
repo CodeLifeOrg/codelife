@@ -16,7 +16,6 @@
   "About": "Sobre o CodeLife",
   "About Me": "Sobre mim",
   "Are you sure you want to reset the code to its original state?": "Você tem certeza de que quer voltar o código para sua versão original?",
-  "Back to": "De volta à",
   "Birthday": "Data de nascimento",
   "CPF": "CPF",
   "Can't save non-passing code!": "Não pode salvar o código com erros",
@@ -93,6 +92,7 @@
   "Projects (build your own site)": "Projetos (crie seu site)",
   "Rather not say": "Prefiro não dizer",
   "Reset": "Restabelecer",
+  "Return to": "Voltou para",
   "Save": "Salve",
   "Save & Submit": "Salvar e enviar",
   "Save your changes before opening a new webpage": "Salve suas alterações antes de abrir uma nova página",
@@ -301,7 +301,6 @@
       "title": "Segurança"
     }
   },
-  "return to": "voltou para",
   "splashP1": "Você sabia que a programação é a linguagem do futuro? O mercado de trabalho é muito promissor para todos que sabem se relacionar bem com as novas tecnologias. Você já ouviu falar em carros autônomos e inteligência artificial? Aplicativos de celular? Games? Animações? O que tudo isso tem em comum? Uma lógica que chamamos de linguagem da computação ou pensamento computacional. O CodeLife surgiu da necessidade de permitir que qualquer pessoa possa fazer parte desse mundo novo.",
   "splashP2": "CodeLife é uma plataforma online e gratuita direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas ao universo da tecnologia. O conteúdo inicial deverá abordar temas como desenvolvimento web e visualização de dados.",
   "splashP3": "A plataforma está em desenvolvimento e esta página é para que possamos criar uma rede de pessoas e parceiros interessados em testá-la ainda durante o ano de 2017. Queremos sua ajuda para desenvolver a melhor plataforma possível.",

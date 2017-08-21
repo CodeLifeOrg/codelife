@@ -20,6 +20,7 @@ class Minilesson extends Component {
     this.state = {
       minilessons: null,
       currentLesson: null,
+      nextLesson: null,
       userProgress: null,
       mySnippets: null,
       likedSnippets: null,
@@ -41,17 +42,24 @@ class Minilesson extends Component {
     const {params, t} = this.props;
     const {lid} = params;
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
-    const lget = axios.get(`/api/lessons?id=${lid}`);
+    // const lget = axios.get(`/api/lessons?id=${lid}`);
+    const lget = axios.get("/api/lessons");
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
 
     Promise.all([mlget, lget, uget, osget, lkget]).then(resp => {
       const minilessons = resp[0].data;
-      const currentLesson = resp[1].data[0];
+      const lessons = resp[1].data;
       const userProgress = resp[2].data;
       const allSnippets = resp[3].data;
       const likes = resp[4].data;
+
+      const currentLesson = lessons.find(l => l.id === lid);
+      // TODO: after august test, change this from index to a new ordering field
+      // ALSO: add an exception for level 10.  
+      const nextOrdering = Number(currentLesson.index) + 1;
+      const nextLesson = lessons.find(l => Number(l.index) === Number(nextOrdering));
 
       const mySnippets = [];
       const likedSnippets = [];
@@ -84,7 +92,7 @@ class Minilesson extends Component {
         }
       }
 
-      this.setState({minilessons, currentLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
+      this.setState({minilessons, currentLesson, nextLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
     });
   }
 
@@ -101,6 +109,9 @@ class Minilesson extends Component {
   }
 
   toggleTest() {
+    this.setState({testOpen: !this.state.testOpen});
+
+    /*
     // If I'm about to close the test successfully for the first time
     if (this.state.testOpen && this.state.firstWin) {
       this.setState({winOpen: true, firstWin: false, testOpen: !this.state.testOpen});
@@ -108,6 +119,7 @@ class Minilesson extends Component {
     else {
       this.setState({testOpen: !this.state.testOpen});
     }
+    */
 
   }
 
@@ -126,11 +138,19 @@ class Minilesson extends Component {
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
     const winMessage = this.state.currentLesson.victory;
-    this.setState({firstWin: true, winMessage});
+    this.setState({firstWin: true, winMessage, testOpen: false, winOpen: true});
   }
 
   closeOverlay() {
-    this.setState({winOpen: false});
+    // this.setState({winOpen: false});
+    // TODO: take out island 4 catcher after august
+    if (this.state.nextLesson && this.state.nextLesson.id && this.state.nextLesson.id !== "island-4") {
+      browserHistory.push(`/lesson/${this.state.nextLesson.id}`);
+      window.location.reload();
+    }
+    else {
+      this.setState({winOpen: false});
+    }
   }
 
   hasUserCompleted(milestone) {

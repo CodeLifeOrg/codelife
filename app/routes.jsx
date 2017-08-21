@@ -15,6 +15,7 @@ import Slide from "pages/Slide";
 import Splash from "pages/Splash";
 import Studio from "pages/Studio";
 import Survey from "pages/Survey";
+import LevelEditor from "pages/LevelEditor";
 
 export default function RouteCreate() {
 
@@ -43,6 +44,8 @@ export default function RouteCreate() {
       <Route path="privacy" component={Privacy} />
 
       <Route path="share/:type/:id" component={Share} />
+
+      <Route path="leveleditor" component={LevelEditor} />
 
     </Route>
   );

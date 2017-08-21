@@ -22,6 +22,15 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/minilessons/all", (req, res) => {
+
+    db.minilessons.findAll({where: req.query}).then(u => {
+      u = translate(req.headers.host, "pt", u);
+      res.json(u).end();
+    });
+
+  });
+
   app.get("/api/slides", (req, res) => {
 
     db.slides.findAll({where: {mlid: req.query.mlid}}).then(u => {
@@ -30,5 +39,14 @@ module.exports = function(app) {
     });
 
   });
+
+  app.get("/api/slides/all", (req, res) => {
+
+    db.slides.findAll({where: req.query}).then(u => {
+      u = translate(req.headers.host, "pt", u);
+      res.json(u).end();
+    });
+
+  });  
 
 };

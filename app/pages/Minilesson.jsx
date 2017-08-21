@@ -145,8 +145,7 @@ class Minilesson extends Component {
     // this.setState({winOpen: false});
     // TODO: take out island 4 catcher after august
     if (this.state.nextLesson && this.state.nextLesson.id && this.state.nextLesson.id !== "island-4") {
-      browserHistory.push(`/lesson/${this.state.nextLesson.id}`);
-      window.location.reload();
+      window.location = `/lesson/${this.state.nextLesson.id}`;
     }
     else {
       this.setState({winOpen: false});

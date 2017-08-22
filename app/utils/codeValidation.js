@@ -17,6 +17,13 @@ export const cvTagCountOld = (needle, haystack) => {
 
 export const cvContainsTagOld = (rule, haystack) => cvTagCountOld(rule.needle, haystack) > 0;
 
+export const cvContainsSelfClosingTag = (rule, haystack) => {
+  const needle = rule.needle;
+  const open = haystack.indexOf(`<${needle}`);
+  const close = haystack.indexOf("/>");
+  return open !== -1 && close !== -1 && open < close;
+};
+
 export const cvContainsTag = (rule, haystack) => {
   const needle = rule.needle;
   const open = haystack.indexOf(`<${needle}>`);

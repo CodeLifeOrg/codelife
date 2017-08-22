@@ -14,7 +14,8 @@ class LevelEditor extends Component {
     this.state = {
       mounted: false,
       lessons: null, 
-      nodes: null
+      nodes: null,
+      currentNode: null
     };
   }
 
@@ -57,29 +58,58 @@ class LevelEditor extends Component {
       for (const m of l.minilessons) {
         const stree = [];
         for (const s of m.slides) {
-          stree.push({id: s.id, hasCaret: false, iconName: "page-layout", label: s.title});
+          stree.push({
+            id: s.id, 
+            hasCaret: false, 
+            iconName: "page-layout", 
+            label: s.title,
+            data: s
+          });
         }
-        mltree.push({id: m.id, hasCaret: m.slides.length, iconName: "multi-select", label: m.name, childNodes: stree});
+        mltree.push({
+          id: m.id, 
+          hasCaret: m.slides.length, 
+          iconName: "multi-select", 
+          label: m.name, 
+          childNodes: stree,
+          data: m
+        });
       }
-      ltree.push({id: l.id, hasCaret: l.minilessons.length, iconName: "map", label: l.name, childNodes: mltree});
+      ltree.push({
+        id: l.id, 
+        hasCaret: 
+        l.minilessons.length, 
+        iconName: "map", 
+        label: l.name, 
+        childNodes: mltree,
+        data: l
+      });
     }
     return ltree;
   }
 
-  handleNodeClick(nodeData, _nodePath, e) {
-
+  handleNodeClick(node) {
+    const {currentNode} = this.state;
+    if (!currentNode) {
+      node.isSelected = true;
+    }
+    else if (node.id !== currentNode.id) {
+      node.isSelected = true;
+      currentNode.isSelected = false;
+    }
+    this.setState({currentNode: node});
+    console.log(node.data);
   }
 
-  handleNodeCollapse(nodeData) {
-    nodeData.isExpanded = false;
+  handleNodeCollapse(node) {
+    node.isExpanded = false;
     this.setState({nodes: this.state.nodes});
   }
 
-  handleNodeExpand(nodeData) {
-    nodeData.isExpanded = true;
+  handleNodeExpand(node) {
+    node.isExpanded = true;
     this.setState({nodes: this.state.nodes});
   }
-
 
   render() {
 

@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
+import IslandEditor from "pages/IslandEditor";
 
 import "./LevelEditor.css";
 
@@ -142,31 +143,7 @@ class LevelEditor extends Component {
         </div>
         { currentNode 
           ? <div id="item-editor">
-              <label className="pt-label">
-                id
-                <span className="pt-text-muted">(required, unique)</span>
-                <input className="pt-input" type="text" placeholder="id" dir="auto" value={currentNode.data.id} />
-              </label>
-              <label className="pt-label">
-                Name
-                <span className="pt-text-muted">(required)</span>
-                <input className="pt-input" type="text" placeholder="name" dir="auto" value={currentNode.data.name}/>
-              </label>
-              <label className="pt-label">
-                Description
-                <span className="pt-text-muted">(required)</span>
-                <textarea className="pt-input pt-fill" type="text" placeholder="desc" dir="auto" value={currentNode.data.description} />
-              </label>
-              <label className="pt-label">
-                Final Puzzle Prompt
-                <span className="pt-text-muted">(required)</span>
-                <textarea className="pt-input pt-fill" type="text" placeholder="prompt" dir="auto" value={currentNode.data.prompt} />
-              </label>
-              <label className="pt-label">
-                Victory Text
-                <span className="pt-text-muted">(required)</span>
-                <textarea className="pt-input pt-fill" type="text" placeholder="victory" dir="auto" value={currentNode.data.victory} />
-              </label> 
+              <IslandEditor data={currentNode.data} />
             </div>
           : null 
         }

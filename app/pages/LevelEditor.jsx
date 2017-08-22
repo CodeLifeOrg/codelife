@@ -32,14 +32,19 @@ class LevelEditor extends Component {
       slides.sort((a, b) => a.ordering - b.ordering);
       minilessons.map(m => m.slides = []);
       lessons.map(l => l.minilessons = []);
-      for (const s of slides) {
+      for (let l of lessons) {
+        l = this.fixNulls(l);
+      }
+      for (let s of slides) {
+        s = this.fixNulls(s);
         const minilesson = minilessons.find(m => m.id === s.mlid);
         if (minilesson) {
           if (!minilesson.slides) minilesson.slides = [];
           minilesson.slides.push(s);
         }
       }
-      for (const m of minilessons) {
+      for (let m of minilessons) {
+        m = this.fixNulls(m);
         const lesson = lessons.find(l => l.id === m.lid);
         if (lesson) {
           if (!lesson.minilessons) lesson.minilessons = [];
@@ -49,6 +54,15 @@ class LevelEditor extends Component {
       const nodes = this.buildNodes(lessons);
       this.setState({mounted: true, lessons, nodes});
     });
+  }
+
+  fixNulls(obj) {
+    for (const k in obj) {
+      if (obj.hasOwnProperty(k) && (obj[k] === undefined || obj[k] === null)) {
+        obj[k] = "";
+      }
+    }
+    return obj;
   }
   
   buildNodes(lessons) {
@@ -98,7 +112,6 @@ class LevelEditor extends Component {
       currentNode.isSelected = false;
     }
     this.setState({currentNode: node});
-    console.log(node.data);
   }
 
   handleNodeCollapse(node) {
@@ -113,18 +126,50 @@ class LevelEditor extends Component {
 
   render() {
 
-    const {lessons, nodes} = this.state;
+    const {lessons, nodes, currentNode} = this.state;
 
     if (!lessons) return <Loading />;
     
     return (
-      <div id="leveleditor">
-        <Tree
-          onNodeClick={this.handleNodeClick.bind(this)}
-          onNodeCollapse={this.handleNodeCollapse.bind(this)}
-          onNodeExpand={this.handleNodeExpand.bind(this)}
-          contents={nodes}
-        />
+      <div id="level-editor">
+        <div id="tree">
+          <Tree
+            onNodeClick={this.handleNodeClick.bind(this)}
+            onNodeCollapse={this.handleNodeCollapse.bind(this)}
+            onNodeExpand={this.handleNodeExpand.bind(this)}
+            contents={nodes}
+          />
+        </div>
+        { currentNode 
+          ? <div id="item-editor">
+              <label className="pt-label">
+                id
+                <span className="pt-text-muted">(required, unique)</span>
+                <input className="pt-input" type="text" placeholder="id" dir="auto" value={currentNode.data.id} />
+              </label>
+              <label className="pt-label">
+                Name
+                <span className="pt-text-muted">(required)</span>
+                <input className="pt-input" type="text" placeholder="name" dir="auto" value={currentNode.data.name}/>
+              </label>
+              <label className="pt-label">
+                Description
+                <span className="pt-text-muted">(required)</span>
+                <textarea className="pt-input pt-fill" type="text" placeholder="desc" dir="auto" value={currentNode.data.description} />
+              </label>
+              <label className="pt-label">
+                Final Puzzle Prompt
+                <span className="pt-text-muted">(required)</span>
+                <textarea className="pt-input pt-fill" type="text" placeholder="prompt" dir="auto" value={currentNode.data.prompt} />
+              </label>
+              <label className="pt-label">
+                Victory Text
+                <span className="pt-text-muted">(required)</span>
+                <textarea className="pt-input pt-fill" type="text" placeholder="victory" dir="auto" value={currentNode.data.victory} />
+              </label> 
+            </div>
+          : null 
+        }
       </div>
     );
   }

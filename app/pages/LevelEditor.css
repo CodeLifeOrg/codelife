@@ -1,6 +1,24 @@
-#leveleditor {
-  margin: 10px; 
+#level-editor {
+  width: 100%;
+  display: flex;
+}
+
+#tree {
+  margin-left: 10px; 
+  margin-right: 5px;
   padding: 5px;
-  width: 300px; 
+  width: 30%; 
   background-color: rgba(255, 255, 255, 0.5);
+}
+
+#item-editor {
+  width: 70%;
+  padding: 10px;
+  margin-left: 5px;
+  margin-right: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.pt-input {
+  width: 400px;
 }

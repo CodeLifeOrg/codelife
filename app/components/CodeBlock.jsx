@@ -8,7 +8,7 @@ import CodeEditor from "components/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
-import {cvContainsTag, cvContainsStyle} from "utils/codeValidation.js";
+import {cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import Loading from "components/Loading";
 
@@ -56,6 +56,7 @@ class CodeBlock extends Component {
     const meanings = [];
     meanings.CONTAINS = [];
     meanings.CSS_CONTAINS = [];
+    meanings.CONTAINS_SELF_CLOSE = [];
     meanings.CONTAINS.html = t("<html> surrounds your whole codeblock and tells the computer this is a webpage.");
     meanings.CONTAINS.head = t("<head> is where your metadata is stored, such as your <title>.");
     meanings.CONTAINS.title = t("<title> is the title of your page! Make sure it's inside a <head> tag.");
@@ -72,6 +73,7 @@ class CodeBlock extends Component {
     meanings.CSS_CONTAINS.h1 = t("h1 within a <style> tag is how you customize your header tags.");
     meanings.CSS_CONTAINS.p = t("p within a <style> tag is how you customize your <p> tags");
     meanings.CSS_CONTAINS.body = t("body within a <style> tag is how you customize everything in your webpage's body");
+    meanings.CONTAINS_SELF_CLOSE.img = t("<img> is a self-closing that places an image on your webpage.");
     return meanings;
   }
 
@@ -106,6 +108,15 @@ class CodeBlock extends Component {
       }
       if (r.type === "CSS_CONTAINS") {
         if (!cvContainsStyle(r, jsonArray)) {
+          errors++;
+          r.passing = false;
+        }
+        else {
+          r.passing = true;
+        }
+      }
+      if (r.type === "CONTAINS_SELF_CLOSE") {
+        if (!cvContainsSelfClosingTag(r, theText)) {
           errors++;
           r.passing = false;
         }
@@ -176,6 +187,7 @@ class CodeBlock extends Component {
     const iconList = [];
     iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
+    iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
 
     const vList = rulejson.map(rule => {
       if (rule.passing) {

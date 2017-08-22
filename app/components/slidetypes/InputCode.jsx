@@ -5,7 +5,7 @@ import himalaya from "himalaya";
 
 import CodeEditor from "components/CodeEditor";
 
-import {cvContainsTag, cvContainsStyle} from "utils/codeValidation.js";
+import {cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
@@ -52,6 +52,12 @@ class InputCode extends Component {
       }
       if (r.type === "CSS_CONTAINS") {
         if (!cvContainsStyle(r, jsonArray)) {
+          errors++;
+          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+        }
+      }
+      if (r.type === "CONTAINS_SELF_CLOSE") {
+        if (!cvContainsSelfClosingTag(r, contents)) {
           errors++;
           toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
         }

@@ -15,7 +15,7 @@ import Slide from "pages/Slide";
 import Splash from "pages/Splash";
 import Studio from "pages/Studio";
 import Survey from "pages/Survey";
-import LevelEditor from "pages/LevelEditor";
+import LevelEditor from "pages/leveleditor/LevelEditor";
 
 export default function RouteCreate() {
 

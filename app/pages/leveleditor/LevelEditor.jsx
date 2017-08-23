@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
-import IslandEditor from "pages/IslandEditor";
+import IslandEditor from "pages/leveleditor/IslandEditor";
 
 import "./LevelEditor.css";
 

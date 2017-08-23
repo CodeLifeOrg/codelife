@@ -45,8 +45,7 @@ class SlideEditor extends Component {
           Type
           <span className="pt-text-muted"> (required)</span>
           <div className="pt-select">
-            <select>
-              <option selected>Choose an item...</option>
+            <select value={data.type} >
               <option value="TextImage">Text Left, Image Right</option>
               <option value="ImageText">Image Left, Text Right</option>
               <option value="TextCode">Text Left, Code Right</option>
@@ -57,6 +56,33 @@ class SlideEditor extends Component {
               <option value="CheatSheet">Cheat Sheet</option>
             </select>
           </div>
+        </label>
+        <label className="pt-label">
+          Title
+          <span className="pt-text-muted"> (required)</span>
+          <input className="pt-input" type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
+        </label>
+        <label className="pt-label">
+          htmlcontent1
+          <span className="pt-text-muted"> (required)</span>
+          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent1} />
+        </label>
+        <label className="pt-label">
+          htmlcontent2
+          <span className="pt-text-muted"> (optional)</span>
+          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent2} />
+        </label>
+        <label className="pt-label">
+          quizjson
+          { /* todo make this different for different type selections */ }
+          <span className="pt-text-muted"> (optional)</span>
+          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.quizjson} />
+        </label>
+        <label className="pt-label">
+          rulejson
+          { /* todo make this different for different type selections */ }
+          <span className="pt-text-muted"> (optional)</span>
+          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.rulejson} />
         </label>
       </div>
     );

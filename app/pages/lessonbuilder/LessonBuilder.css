@@ -26,3 +26,23 @@
 .pt-select {
   width: 400px;
 }
+
+.rule-section {
+  display: flex;
+}
+
+.rule-select {
+  width: 200px;
+  margin: 5px;
+}
+
+.rule-needle {
+  width: 80px;
+  margin: 5px;
+}
+
+.rule-error {
+  width: 350px;
+  margin: 5px;
+}
+

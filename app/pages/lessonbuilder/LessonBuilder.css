@@ -1,4 +1,4 @@
-#level-editor {
+#lesson-builder {
   width: 100%;
   display: flex;
 }
@@ -20,5 +20,9 @@
 }
 
 .pt-input {
+  width: 400px;
+}
+
+.pt-select {
   width: 400px;
 }

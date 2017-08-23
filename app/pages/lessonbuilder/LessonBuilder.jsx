@@ -4,11 +4,13 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
-import IslandEditor from "pages/leveleditor/IslandEditor";
+import IslandEditor from "pages/lessonbuilder/IslandEditor";
+import LevelEditor from "pages/lessonbuilder/LevelEditor";
+import SlideEditor from "pages/lessonbuilder/SlideEditor";
 
-import "./LevelEditor.css";
+import "./LessonBuilder.css";
 
-class LevelEditor extends Component {
+class LessonBuilder extends Component {
 
   constructor(props) {
     super(props);
@@ -35,9 +37,11 @@ class LevelEditor extends Component {
       lessons.map(l => l.minilessons = []);
       for (let l of lessons) {
         l = this.fixNulls(l);
+        l.itemType = "ISLAND";
       }
       for (let s of slides) {
         s = this.fixNulls(s);
+        s.itemType = "SLIDE";
         const minilesson = minilessons.find(m => m.id === s.mlid);
         if (minilesson) {
           if (!minilesson.slides) minilesson.slides = [];
@@ -46,6 +50,7 @@ class LevelEditor extends Component {
       }
       for (let m of minilessons) {
         m = this.fixNulls(m);
+        m.itemType = "LEVEL";
         const lesson = lessons.find(l => l.id === m.lid);
         if (lesson) {
           if (!lesson.minilessons) lesson.minilessons = [];
@@ -132,7 +137,7 @@ class LevelEditor extends Component {
     if (!lessons) return <Loading />;
     
     return (
-      <div id="level-editor">
+      <div id="lesson-builder">
         <div id="tree">
           <Tree
             onNodeClick={this.handleNodeClick.bind(this)}
@@ -143,7 +148,9 @@ class LevelEditor extends Component {
         </div>
         { currentNode 
           ? <div id="item-editor">
-              <IslandEditor data={currentNode.data} />
+              {currentNode.data.itemType === "ISLAND" ? <IslandEditor data={currentNode.data}/> : null}
+              {currentNode.data.itemType === "LEVEL" ? <LevelEditor data={currentNode.data}/> : null }
+              {currentNode.data.itemType === "SLIDE" ? <SlideEditor data={currentNode.data}/> : null }
             </div>
           : null 
         }
@@ -152,8 +159,8 @@ class LevelEditor extends Component {
   }
 }
 
-LevelEditor = connect(state => ({
+LessonBuilder = connect(state => ({
   auth: state.auth
-}))(LevelEditor);
-LevelEditor = translate()(LevelEditor);
-export default LevelEditor;
+}))(LessonBuilder);
+LessonBuilder = translate()(LessonBuilder);
+export default LessonBuilder;

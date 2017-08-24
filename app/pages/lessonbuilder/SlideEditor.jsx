@@ -42,6 +42,11 @@ class SlideEditor extends Component {
           <input className="pt-input" type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
         </label>
         <label className="pt-label">
+          Title
+          <span className="pt-text-muted"> (required)</span>
+          <input className="pt-input" type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
+        </label>
+        <label className="pt-label">
           Type
           <span className="pt-text-muted"> (required)</span>
           <div className="pt-select">
@@ -56,11 +61,6 @@ class SlideEditor extends Component {
               <option value="CheatSheet">Cheat Sheet</option>
             </select>
           </div>
-        </label>
-        <label className="pt-label">
-          Title
-          <span className="pt-text-muted"> (required)</span>
-          <input className="pt-input" type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
         </label>
         <label className="pt-label">
           htmlcontent1

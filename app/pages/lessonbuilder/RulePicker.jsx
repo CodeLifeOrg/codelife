@@ -16,8 +16,31 @@ class RulePicker extends Component {
   }
 
   componentDidMount() {
-    const {rules} = this.props;
+    const rules = JSON.parse(this.props.rules);
+    for (let i = 0; i < rules.length; i++) {
+      rules[i].id = i;
+    }
     this.setState({rules});   
+  }
+
+  changeType(e) {
+    const {rules} = this.state;
+    rules[e.target.id].type = e.target.value;
+    // TODO: again, i'm storing state in a js object that doesn't cause a state change
+    // so I'm forced to refresh. ask dave if there's a better way to accomplish this
+    this.forceUpdate();
+  }
+
+  changeValue(e) {
+    const {rules} = this.state;
+    rules[e.target.id].needle = e.target.value;
+    this.forceUpdate();
+  }
+
+  changeError(e) {
+    const {rules} = this.state;
+    rules[e.target.id].error_msg = e.target.value;
+    this.forceUpdate();
   }
 
   render() {
@@ -32,13 +55,13 @@ class RulePicker extends Component {
       <option value="CONTAINS_SELF_CLOSE">Contains Void Element</option>
     ];
 
-    const ruleItems = JSON.parse(rules).map(r => 
+    const ruleItems = rules.map(r => 
       <div className="rule-section">
         <div className="pt-select rule-select">
-          <select value={r.type}>{ruleTypes}</select>
+          <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypes}</select>
         </div>
-        <input className="pt-input rule-needle" type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
-        <input className="pt-input rule-error" type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
+        <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
+        <input className="pt-input rule-error" id={r.id} onChange={this.changeError.bind(this)} type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
       </div>
     );
     

@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import CodeEditor from "components/CodeEditor";
 
 import "./RulePicker.css";
 
@@ -11,36 +10,49 @@ class RulePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rules: null
+      rules: null,
+      parentID: null
     };
   }
 
   componentDidMount() {
-    const rules = JSON.parse(this.props.rules);
+    const rules = this.extractRules(this.props.rules);
+    const {parentID} = this.props;
+    this.setState({rules, parentID});
+  }
+
+  componentDidUpdate() {
+    if (this.props.parentID !== this.state.parentID) {
+      const rules = this.extractRules(this.props.rules);
+      const {parentID} = this.props;
+      this.setState({rules, parentID});
+    }
+  }
+
+  extractRules(rulejson) {
+    const rules = JSON.parse(rulejson);
     for (let i = 0; i < rules.length; i++) {
       rules[i].id = i;
     }
-    this.setState({rules});   
+    return rules;
   }
 
   changeType(e) {
     const {rules} = this.state;
     rules[e.target.id].type = e.target.value;
-    // TODO: again, i'm storing state in a js object that doesn't cause a state change
-    // so I'm forced to refresh. ask dave if there's a better way to accomplish this
-    this.forceUpdate();
+    this.setState({rules});
   }
 
   changeValue(e) {
     const {rules} = this.state;
     rules[e.target.id].needle = e.target.value;
-    this.forceUpdate();
+    this.setState({rules});
   }
 
   changeError(e) {
     const {rules} = this.state;
     rules[e.target.id].error_msg = e.target.value;
-    this.forceUpdate();
+    this.setState({rules});
   }
 
   render() {

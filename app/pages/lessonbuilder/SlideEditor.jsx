@@ -23,9 +23,14 @@ class SlideEditor extends Component {
 
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
-      //this.editor.getWrappedInstance().setEntireContents(this.props.data.initialcontent);
       this.setState({data: this.props.data});
     }
+  }
+
+  changeType(e) {
+    const {data} = this.state;
+    data.type = e.target.value;
+    this.setState({data});    
   }
 
   render() {
@@ -33,6 +38,10 @@ class SlideEditor extends Component {
     const {data} = this.state;
 
     if (!data) return <Loading />;
+
+    const showQuiz = data.type === "Quiz";
+    const showRules = data.type === "InputCode";
+    const showContent2 = ["TextImage", "Quiz", "CheatSheet"].indexOf(data.type) === -1;
     
     return (
       <div id="slide-editor">
@@ -50,7 +59,7 @@ class SlideEditor extends Component {
           Type
           <span className="pt-text-muted"> (required)</span>
           <div className="pt-select">
-            <select value={data.type} >
+            <select value={data.type} onChange={this.changeType.bind(this)}>
               <option value="TextImage">Text Left, Image Right</option>
               <option value="ImageText">Image Left, Text Right</option>
               <option value="TextCode">Text Left, Code Right</option>
@@ -64,16 +73,16 @@ class SlideEditor extends Component {
         </label>
         <label className="pt-label">
           htmlcontent1
-          <span className="pt-text-muted"> (required)</span>
           <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent1} />
         </label>
-        <label className="pt-label">
-          htmlcontent2
-          <span className="pt-text-muted"> (optional)</span>
-          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent2} />
-        </label>
-        <QuizPicker quiz={data.quizjson} />
-        <RulePicker rules={data.rulejson} />
+        { showContent2
+          ? <label className="pt-label">
+            htmlcontent2
+            <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent2} />
+          </label> : null
+        }
+        { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id}/> : null }
+        { showRules ? <RulePicker rules={data.rulejson} parentID={data.id}/> : null }
       </div>
     );
   }

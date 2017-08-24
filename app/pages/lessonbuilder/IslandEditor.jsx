@@ -61,7 +61,7 @@ class IslandEditor extends Component {
           Initial Codeblock State<br/><br/>
           <CodeEditor initialValue={data.initialcontent} ref={c => this.editor = c}/>       
         </label>
-        <RulePicker rules={data.rulejson} />
+        <RulePicker rules={data.rulejson} parentID={data.id}/>
         <label className="pt-label">
           Victory Text
           <textarea className="pt-input pt-fill" type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.victory} />

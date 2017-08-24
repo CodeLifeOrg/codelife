@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import RulePicker from "pages/lessonbuilder/RulePicker";
+import QuizPicker from "pages/lessonbuilder/QuizPicker";
 
 import "./SlideEditor.css";
 
@@ -71,12 +72,7 @@ class SlideEditor extends Component {
           <span className="pt-text-muted"> (optional)</span>
           <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent2} />
         </label>
-        <label className="pt-label">
-          quizjson
-          { /* todo make this different for different type selections */ }
-          <span className="pt-text-muted"> (optional)</span>
-          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.quizjson} />
-        </label>
+        <QuizPicker quiz={data.quizjson} />
         <RulePicker rules={data.rulejson} />
       </div>
     );

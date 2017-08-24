@@ -2,8 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import CodeEditor from "components/CodeEditor";
-import {Select} from "@blueprintjs/core";
+import RulePicker from "pages/lessonbuilder/RulePicker";
 
 import "./SlideEditor.css";
 
@@ -78,12 +77,7 @@ class SlideEditor extends Component {
           <span className="pt-text-muted"> (optional)</span>
           <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.quizjson} />
         </label>
-        <label className="pt-label">
-          rulejson
-          { /* todo make this different for different type selections */ }
-          <span className="pt-text-muted"> (optional)</span>
-          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.rulejson} />
-        </label>
+        <RulePicker rules={data.rulejson} />
       </div>
     );
   }

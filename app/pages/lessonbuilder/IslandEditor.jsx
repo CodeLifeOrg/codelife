@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
+import RulePicker from "pages/lessonbuilder/RulePicker";
 
 import "./IslandEditor.css";
 
@@ -32,26 +33,6 @@ class IslandEditor extends Component {
     const {data} = this.state;
 
     if (!data) return <Loading />;
-
-    const ruleTypes = [
-      <option value="CONTAINS">Contains Tag</option>,
-      <option value="CSS_CONTAINS">Contains CSS</option>,
-      <option value="CONTAINS_SELF_CLOSE">Contains Void Element</option>
-    ];
-
-    let ruleItems = [];
-    if (data.rulejson) {
-      const rules = JSON.parse(data.rulejson);
-      ruleItems = rules.map(r => 
-        <div className="rule-section">
-          <div className="pt-select rule-select">
-            <select value={r.type}>{ruleTypes}</select>
-          </div>
-          <input className="pt-input rule-needle" type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
-          <input className="pt-input rule-error" type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
-        </div>
-      );
-    }
     
     return (
       <div id="island-editor">
@@ -85,10 +66,7 @@ class IslandEditor extends Component {
           <span className="pt-text-muted"> (optional)</span><br/><br/>
           <CodeEditor initialValue={data.initialcontent} ref={c => this.editor = c}/>       
         </label>
-        <label className="pt-label">
-          Passing Rules
-          {ruleItems}
-        </label>
+        <RulePicker rules={data.rulejson} />
         <label className="pt-label">
           Victory Text
           <span className="pt-text-muted"> (required)</span>

@@ -4,6 +4,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import RulePicker from "pages/lessonbuilder/RulePicker";
 import QuizPicker from "pages/lessonbuilder/QuizPicker";
+import CodeEditor from "components/CodeEditor";
 
 import "./SlideEditor.css";
 
@@ -42,6 +43,7 @@ class SlideEditor extends Component {
     const showQuiz = data.type === "Quiz";
     const showRules = data.type === "InputCode";
     const showContent2 = ["TextImage", "Quiz", "CheatSheet"].indexOf(data.type) === -1;
+    const showAce2 = ["TextCode", "RenderCode", "InputCode"].indexOf(data.type) !== -1;
     
     return (
       <div id="slide-editor">
@@ -73,12 +75,15 @@ class SlideEditor extends Component {
         </label>
         <label className="pt-label">
           htmlcontent1
-          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent1} />
+          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
         </label>
         { showContent2
           ? <label className="pt-label">
             htmlcontent2
-            <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.htmlcontent2} />
+            { showAce2 
+              ? <CodeEditor style={{height: "400px"}} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
+              : <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
+            }
           </label> : null
         }
         { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id}/> : null }

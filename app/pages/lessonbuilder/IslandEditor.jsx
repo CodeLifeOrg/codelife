@@ -59,7 +59,7 @@ class IslandEditor extends Component {
         </label>
         <label className="pt-label">
           Initial Codeblock State<br/><br/>
-          <CodeEditor initialValue={data.initialcontent} ref={c => this.editor = c}/>       
+          <CodeEditor style={{height: "400px"}} initialValue={data.initialcontent} ref={c => this.editor = c}/>       
         </label>
         <RulePicker rules={data.rulejson} parentID={data.id}/>
         <label className="pt-label">

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Tree} from "@blueprintjs/core";
+import {Tree, ContextMenuTarget, Menu, MenuItem} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import IslandEditor from "pages/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/lessonbuilder/LevelEditor";
@@ -106,6 +106,19 @@ class LessonBuilder extends Component {
       });
     }
     return ltree;
+  }
+
+  renderContextMenu() {
+    return (
+      <Menu>
+        <MenuItem onClick={this.handleSave} text="Save" />
+        <MenuItem onClick={this.handleDelete} text="Delete" />
+      </Menu>
+    );
+  }
+
+  onContextMenuClose() {
+    // optional
   }
 
   handleNodeClick(node) {

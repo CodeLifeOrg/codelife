@@ -17,8 +17,8 @@ class QuizPicker extends Component {
   }
 
   componentDidMount() {
-    const quiz = JSON.parse(this.props.quiz);
-    const parentID = this.props.parentID;
+    const quiz = this.extractQuiz(this.props.quiz);
+    const {parentID} = this.props;
     this.setState({quiz, parentID});   
   }
 
@@ -46,10 +46,12 @@ class QuizPicker extends Component {
 
   handleCheckbox(e) {
     const {quiz} = this.state;
+    console.log(e.target);
     if (e.target.checked) {
       quiz.map(q => q.isCorrect = false);
       quiz[e.target.id].isCorrect = e.target.checked;  
     }
+    console.log(quiz);
     this.setState({quiz});
   }
 
@@ -65,8 +67,6 @@ class QuizPicker extends Component {
         <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} style={{margin: "12px"}} />        
       </div>
     );
-
-    console.log(quiz, quizItems);
     
     return (
       <div id="quiz-picker">

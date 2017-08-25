@@ -5,6 +5,7 @@ import Loading from "components/Loading";
 import RulePicker from "pages/lessonbuilder/RulePicker";
 import QuizPicker from "pages/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor";
+import {Button} from "@blueprintjs/core";
 
 import "./SlideEditor.css";
 
@@ -88,6 +89,7 @@ class SlideEditor extends Component {
         }
         { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id}/> : null }
         { showRules ? <RulePicker rules={data.rulejson} parentID={data.id}/> : null }
+        <Button type="button" className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

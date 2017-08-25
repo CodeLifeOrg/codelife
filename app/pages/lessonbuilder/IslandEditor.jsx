@@ -4,6 +4,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
+import {Button} from "@blueprintjs/core";
 
 import "./IslandEditor.css";
 
@@ -66,6 +67,7 @@ class IslandEditor extends Component {
           Victory Text
           <textarea className="pt-input pt-fill" type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.victory} />
         </label> 
+        <Button type="button" className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

@@ -29,7 +29,9 @@ export default function RouteCreate() {
       <Route path="lesson/:lid" component={Minilesson} />
       <Route path="lesson/:lid/:mlid(/:sid)" component={Slide} />
 
-      <Route path="projects/:user(/:id)" component={Studio} />
+      <Route path="projects/:username" component={Studio} />
+      <Route path="projects/:username/:filename" component={Share} />
+      <Route path="projects/:user/:filename/edit" component={Studio} />
 
       <Route path="profile/:username" component={Profile} />
       <Route path="profile/:username/edit" component={EditProfile} />
@@ -42,7 +44,7 @@ export default function RouteCreate() {
 
       <Route path="privacy" component={Privacy} />
 
-      <Route path="share/:type/:id" component={Share} />
+      <Route path="snippets/:username/:filename" component={Share} />
 
     </Route>
   );

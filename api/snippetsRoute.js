@@ -28,6 +28,13 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/snippets/byUsernameAndFilename", (req, res) => {
+
+    const q = "select snippets.id, snippets.snippetname, snippets.studentcontent, snippets.likes, snippets.previewblob, snippets.lid, snippets.uid from snippets, users where snippets.uid = users.id AND snippets.snippetname = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+
+  });
+
   // todo: maybe change these into a single "upsert"
 
   app.post("/api/snippets/update", (req, res) => {

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Tree, ContextMenuTarget, Menu, MenuItem} from "@blueprintjs/core";
+import {Tree, Popover, Position, Menu, MenuItem, MenuDivider, Button} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import IslandEditor from "pages/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/lessonbuilder/LevelEditor";
@@ -70,6 +70,31 @@ class LessonBuilder extends Component {
     }
     return obj;
   }
+
+  buildMenu() {
+    const menu = <Menu>
+      <MenuItem
+        iconName="new-text-box"
+        onClick={this.handleClick}
+        text="New text box"
+      />
+      <MenuItem
+        iconName="new-object"
+        onClick={this.handleClick}
+        text="New object"
+      />
+      <MenuItem
+        iconName="new-link"
+        onClick={this.handleClick}
+        text="New link"
+      />
+      <MenuDivider />
+      <MenuItem text="Settings..." iconName="cog" />
+    </Menu>;
+    return <Popover content={menu} position={Position.RIGHT_TOP}>
+      <Button iconName="menu"/>
+    </Popover>;
+  }
   
   buildNodes(lessons) {
     const ltree = [];
@@ -83,6 +108,7 @@ class LessonBuilder extends Component {
             hasCaret: false, 
             iconName: "page-layout", 
             label: s.title,
+            secondaryLabel: this.buildMenu(),
             data: s
           });
         }
@@ -106,19 +132,6 @@ class LessonBuilder extends Component {
       });
     }
     return ltree;
-  }
-
-  renderContextMenu() {
-    return (
-      <Menu>
-        <MenuItem onClick={this.handleSave} text="Save" />
-        <MenuItem onClick={this.handleDelete} text="Delete" />
-      </Menu>
-    );
-  }
-
-  onContextMenuClose() {
-    // optional
   }
 
   handleNodeClick(node) {

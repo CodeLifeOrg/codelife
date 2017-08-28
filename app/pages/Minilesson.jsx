@@ -21,6 +21,7 @@ class Minilesson extends Component {
       minilessons: null,
       currentLesson: null,
       nextLesson: null,
+      prevLesson: null,
       userProgress: null,
       mySnippets: null,
       likedSnippets: null,
@@ -60,6 +61,8 @@ class Minilesson extends Component {
       // ALSO: add an exception for level 10.  
       const nextOrdering = Number(currentLesson.index) + 1;
       const nextLesson = lessons.find(l => Number(l.index) === Number(nextOrdering));
+      const prevOrdering = Number(currentLesson.index) - 1;
+      const prevLesson = lessons.find(l => Number(l.index) === Number(prevOrdering));
 
       const mySnippets = [];
       const likedSnippets = [];
@@ -92,7 +95,7 @@ class Minilesson extends Component {
         }
       }
 
-      this.setState({minilessons, currentLesson, nextLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
+      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
     });
   }
 
@@ -190,6 +193,10 @@ class Minilesson extends Component {
     this.setState({showMore: !this.state.showMore});
   }
 
+  changeIsland(id) {
+    window.location = `/lesson/${id}`;
+  }
+
   buildWinPopover() {
 
     const {t} = this.props;
@@ -277,7 +284,7 @@ class Minilesson extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {minilessons, currentLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, showMore} = this.state;
+    const {minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, showMore} = this.state;
 
     if (!auth.user) browserHistory.push("/login");
     if (!currentLesson || !minilessons || !userProgress) return <Loading />;
@@ -346,6 +353,9 @@ class Minilesson extends Component {
             { this.buildTestPopover() }
           </div>
         </div>
+        { prevLesson ? <span style={{cursor: "pointer"}} onClick={this.changeIsland.bind(this, prevLesson.id)}>{ t("<-- Back to {{x}}", {x: prevLesson.name}) }<br/></span> : null}
+        { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST */}
+        { nextLesson && Number(nextLesson.index) < 3 ? <span style={{cursor: "pointer"}} onClick={this.changeIsland.bind(this, nextLesson.id)}>{ t("Go to {{x}} -->", {x: nextLesson.name}) }</span> : null}
         { otherSnippets.length
         ? <div>
             <h2 className="title">

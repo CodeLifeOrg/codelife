@@ -78,11 +78,6 @@ class InputCode extends Component {
   resetAnswer() {
     this.editor.getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
     this.setState({resetAlert: false});
-    if (this.props.reblock) this.props.reblock();
-  }
-
-  onChangeText(theText) {
-    if (this.props.reblock) this.props.reblock();
   }
 
   attemptReset() {
@@ -113,7 +108,7 @@ class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} onChangeText={this.onChangeText.bind(this)} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

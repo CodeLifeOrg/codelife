@@ -347,7 +347,7 @@ class Minilesson extends Component {
         </div>
         { prevLesson ? <IslandLink done={true} width={250} lesson={prevLesson} description={false} /> : null}
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST */}
-        { nextLesson && Number(nextLesson.index) < 3 ? <IslandLink next={true} width={250} lesson={nextLesson} description={false} /> : null}
+        { nextLesson && Number(nextLesson.index) < 3  && this.hasUserCompleted(currentLesson.id) ? <IslandLink next={true} width={250} lesson={nextLesson} description={false} /> : null}
         { otherSnippets.length
         ? <div>
             <h2 className="title">

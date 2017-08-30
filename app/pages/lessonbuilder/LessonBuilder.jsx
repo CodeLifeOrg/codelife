@@ -32,16 +32,16 @@ class LessonBuilder extends Component {
       const slides = resp[2].data;
       lessons.sort((a, b) => a.index - b.index);
       minilessons.sort((a, b) => a.ordering - b.ordering);
-      slides.sort((a, b) => a.ordering - b.ordering);
+      slides.sort((a, b) => a.ordering - b.ordering);      
       minilessons.map(m => m.slides = []);
       lessons.map(l => l.minilessons = []);
       for (let l of lessons) {
         l = this.fixNulls(l);
-        l.itemType = "ISLAND";
+        l.itemType = "Island";
       }
       for (let s of slides) {
         s = this.fixNulls(s);
-        s.itemType = "SLIDE";
+        s.itemType = "Slide";
         const minilesson = minilessons.find(m => m.id === s.mlid);
         if (minilesson) {
           if (!minilesson.slides) minilesson.slides = [];
@@ -50,11 +50,18 @@ class LessonBuilder extends Component {
       }
       for (let m of minilessons) {
         m = this.fixNulls(m);
-        m.itemType = "LEVEL";
+        m.itemType = "Level";
         const lesson = lessons.find(l => l.id === m.lid);
         if (lesson) {
           if (!lesson.minilessons) lesson.minilessons = [];
           lesson.minilessons.push(m);
+        }
+      }
+      if (lessons.length > 1) lessons[lessons.length - 1].isLast = true;
+      for (const l of lessons) {
+        if (l.minilessons.length > 1) l.minilessons[l.minilessons.length - 1].isLast = true;
+        for (const m of l.minilessons) {
+          if (m.slides.length > 1) m.slides[m.slides.length - 1].isLast = true;
         }
       }
       const nodes = this.buildNodes(lessons);
@@ -71,28 +78,26 @@ class LessonBuilder extends Component {
     return obj;
   }
 
-  buildMenu() {
+  buildMenu(n) {
+    console.log(n);
     const menu = <Menu>
       <MenuItem
-        iconName="new-text-box"
+        iconName="arrow-up"
         onClick={this.handleClick}
-        text="New text box"
+        text={`Move ${n.itemType} Up`}
+        disabled={n.ordering === 0 || n.index === "0"}
       />
       <MenuItem
-        iconName="new-object"
+        iconName="arrow-down"
         onClick={this.handleClick}
-        text="New object"
-      />
-      <MenuItem
-        iconName="new-link"
-        onClick={this.handleClick}
-        text="New link"
+        text={`Move ${n.itemType} Down`}
+        disabled={n.isLast}
       />
       <MenuDivider />
-      <MenuItem text="Settings..." iconName="cog" />
+      <MenuItem className="pt-intent-danger" text={`Delete ${n.itemType}`} iconName="delete" />
     </Menu>;
     return <Popover content={menu} position={Position.RIGHT_TOP}>
-      <Button iconName="menu"/>
+      <Button className="pt-button" iconName="changes"/>
     </Popover>;
   }
   
@@ -108,7 +113,6 @@ class LessonBuilder extends Component {
             hasCaret: false, 
             iconName: "page-layout", 
             label: s.title,
-            secondaryLabel: this.buildMenu(),
             data: s
           });
         }
@@ -142,6 +146,8 @@ class LessonBuilder extends Component {
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
       currentNode.isSelected = false;
+      node.secondaryLabel = this.buildMenu(node.data);
+      currentNode.secondaryLabel = null;
     }
     this.setState({currentNode: node});
   }
@@ -174,9 +180,9 @@ class LessonBuilder extends Component {
         </div>
         { currentNode 
           ? <div id="item-editor">
-              {currentNode.data.itemType === "ISLAND" ? <IslandEditor data={currentNode.data}/> : null}
-              {currentNode.data.itemType === "LEVEL" ? <LevelEditor data={currentNode.data}/> : null }
-              {currentNode.data.itemType === "SLIDE" ? <SlideEditor data={currentNode.data}/> : null }
+              {currentNode.data.itemType === "Island" ? <IslandEditor data={currentNode.data}/> : null}
+              {currentNode.data.itemType === "Level" ? <LevelEditor data={currentNode.data}/> : null }
+              {currentNode.data.itemType === "Slide" ? <SlideEditor data={currentNode.data}/> : null }
             </div>
           : null 
         }

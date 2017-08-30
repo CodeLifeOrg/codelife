@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
 
 import "./RulePicker.css";
 
@@ -58,12 +57,30 @@ class RulePicker extends Component {
     this.setState({rules});
   }
 
-  addRule(e) {
-    
+  addRule() {
+    const {rules} = this.state;
+    const nextID = rules.length;
+    rules.push({
+      id: nextID,
+      type: "CONTAINS",
+      needle: "tag",
+      error_msg: "Error Message"
+    });
+    this.setState({rules});
   }
 
   removeRule(e) {
-
+    const {rules} = this.state;
+    const newRules = [];
+    let i = 0;
+    for (const r of rules) {
+      if (r.id !== Number(e.target.id)) {
+        r.id = i;
+        newRules[i] = r;
+        i++;
+      }
+    }
+    this.setState({rules: newRules});
   }
 
   render() {

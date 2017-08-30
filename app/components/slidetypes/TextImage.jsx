@@ -10,15 +10,13 @@ export default class TextImage extends Component {
   }
 
   componentDidMount() {
-    const {updateGems} = this.props;
-    updateGems(1);
+    if (this.props.updateGems) this.props.updateGems(1);
     this.setState({slideId: this.props.id});
   }
 
   componentDidUpdate() {
     if (this.state.slideId !== this.props.id) {
-      const {updateGems} = this.props;
-      updateGems(1);
+      if (this.props.updateGems) this.props.updateGems(1);
       this.setState({slideId: this.props.id});
     }
   }

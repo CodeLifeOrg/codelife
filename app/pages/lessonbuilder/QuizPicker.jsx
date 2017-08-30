@@ -31,9 +31,12 @@ class QuizPicker extends Component {
   }
 
   extractQuiz(quizjson) {
-    const quiz = JSON.parse(quizjson);
-    for (let i = 0; i < quiz.length; i++) {
-      quiz[i].id = i;
+    let quiz = [];
+    if (quizjson) {
+      quiz = JSON.parse(quizjson);
+      for (let i = 0; i < quiz.length; i++) {
+        quiz[i].id = i;
+      }
     }
     return quiz;
   }
@@ -53,24 +56,30 @@ class QuizPicker extends Component {
     this.setState({quiz});
   }
 
+  addAnswer() {
+    
+  }
+
   render() {
 
     const {quiz} = this.state;
 
-    if (!quiz) return <Loading />;
-
-    const quizItems = quiz.map(q => 
-      <div className="quiz-section" style={{display: "flex"}}>
-        <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeQuestion.bind(this)} type="text" placeholder="Question" dir="auto" value={q.text} /> 
-        <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} style={{margin: "12px"}} />        
-      </div>
-    );
+    let quizItems = [];
+    if (quiz) {
+      quizItems = quiz.map(q => 
+        <div className="quiz-section" style={{display: "flex"}}>
+          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeQuestion.bind(this)} type="text" placeholder="Question" dir="auto" value={q.text} /> 
+          <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} style={{margin: "12px"}} />        
+        </div>
+      );
+    }
     
     return (
       <div id="quiz-picker">
         <label className="pt-label">
           Quiz
           {quizItems}
+          <button className="pt-button pt-intent-success pt-icon-add" type="button" onClick={this.addAnswer.bind(this)}>Add Answer</button>
         </label>
       </div>
     );

@@ -36,7 +36,7 @@ class InputCode extends Component {
   }
 
   submitAnswer() {
-    const {t, updateGems} = this.props;
+    const {t} = this.props;
     const {gemEarned} = this.state;
     const contents = this.editor.getWrappedInstance().getEntireContents();
     const jsonArray = himalaya.parse(contents);
@@ -66,10 +66,10 @@ class InputCode extends Component {
     if (errors === 0) {
       toast.show({message: t("You got it right!"), timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
-      if (!gemEarned) updateGems(1);
+      if (!gemEarned && this.props.updateGems) this.props.updateGems(1);
     }
     else {
-      if (!gemEarned) updateGems(-1);
+      if (!gemEarned && this.props.updateGems) this.props.updateGems(-1);
     }
     this.setState({gemEarned: true});
   }

@@ -30,9 +30,12 @@ class RulePicker extends Component {
   }
 
   extractRules(rulejson) {
-    const rules = JSON.parse(rulejson);
-    for (let i = 0; i < rules.length; i++) {
-      rules[i].id = i;
+    let rules = [];
+    if (rulejson) { 
+      rules = JSON.parse(rulejson);
+      for (let i = 0; i < rules.length; i++) {
+        rules[i].id = i;
+      }
     }
     return rules;
   }
@@ -67,29 +70,30 @@ class RulePicker extends Component {
 
     const {rules} = this.state;
 
-    if (!rules) return <Loading />;
-
     const ruleTypes = [
       <option value="CONTAINS">Contains Tag</option>,
       <option value="CSS_CONTAINS">Contains CSS</option>,
       <option value="CONTAINS_SELF_CLOSE">Contains Void Element</option>
     ];
 
-    const ruleItems = rules.map(r => 
-      <div className="rule-section">
-        <div className="pt-select rule-select">
-          <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypes}</select>
+    let ruleItems = [];
+    if (rules) {
+      ruleItems = rules.map(r => 
+        <div className="rule-section">
+          <div className="pt-select rule-select">
+            <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypes}</select>
+          </div>
+          <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
+          <input className="pt-input rule-error" id={r.id} onChange={this.changeError.bind(this)} type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
+          <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}>Remove</button>
         </div>
-        <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
-        <input className="pt-input rule-error" id={r.id} onChange={this.changeError.bind(this)} type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
-        <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}>Remove</button>
-      </div>
-    );
+      );
+    }
     
     return (
       <div id="rule-picker">
         <label className="pt-label">
-          Passing Rules
+          Passing Rules<br/>
           {ruleItems}
           <button className="pt-button pt-intent-success pt-icon-add" type="button" onClick={this.addRule.bind(this)}>Add Rule</button>
         </label>

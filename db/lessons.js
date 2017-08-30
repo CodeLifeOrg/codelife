@@ -19,7 +19,8 @@ module.exports = function(sequelize, db) {
       pt_initialcontent: db.TEXT,
       pt_prompt: db.TEXT,
       pt_cheatsheet: db.TEXT,
-      pt_victory: db.TEXT
+      pt_victory: db.TEXT,
+      pt_rulejson: db.TEXT
     },
     {
       freezeTableName: true,

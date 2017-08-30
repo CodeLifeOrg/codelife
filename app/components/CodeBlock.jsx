@@ -172,8 +172,10 @@ class CodeBlock extends Component {
 
   shareCodeblock() {
     const {t} = this.props;
+    const {username} = this.props.auth.user;
     if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
-      browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);
+      // browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);
+      browserHistory.push(`/snippets/${username}/${this.props.lesson.snippet.snippetname}`);
     }
     else {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});

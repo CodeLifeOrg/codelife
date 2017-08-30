@@ -6,6 +6,7 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
+import IslandLink from "components/IslandLink";
 
 import "./Minilesson.css";
 
@@ -21,21 +22,18 @@ class Minilesson extends Component {
       minilessons: null,
       currentLesson: null,
       nextLesson: null,
+      prevLesson: null,
       userProgress: null,
       mySnippets: null,
       likedSnippets: null,
+      loading: false,
       unlikedSnippets: null,
-      currentFrame: null,
       testOpen: false,
       winOpen: false,
       winMessage: "",
       firstWin: false,
       showMore: false
     };
-  }
-
-  componentDidMount() {
-    this.loadFromDB();
   }
 
   loadFromDB() {
@@ -57,9 +55,11 @@ class Minilesson extends Component {
 
       const currentLesson = lessons.find(l => l.id === lid);
       // TODO: after august test, change this from index to a new ordering field
-      // ALSO: add an exception for level 10.  
+      // ALSO: add an exception for level 10.
       const nextOrdering = Number(currentLesson.index) + 1;
       const nextLesson = lessons.find(l => Number(l.index) === Number(nextOrdering));
+      const prevOrdering = Number(currentLesson.index) - 1;
+      const prevLesson = lessons.find(l => Number(l.index) === Number(prevOrdering));
 
       const mySnippets = [];
       const likedSnippets = [];
@@ -92,20 +92,21 @@ class Minilesson extends Component {
         }
       }
 
-      this.setState({minilessons, currentLesson, nextLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets});
+      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, loading: false});
     });
   }
 
-  // TODO: I think iframes are dead and can be removed
   componentDidUpdate() {
-    if (this.iframes && this.iframes[this.state.currentFrame] && !this.state.didInject) {
-      const {otherSnippets} = this.state;
-      const doc = this.iframes[this.state.currentFrame].contentWindow.document;
-      doc.open();
-      doc.write(otherSnippets[this.state.currentFrame].studentcontent);
-      doc.close();
-      this.setState({didInject: true});
+    const {location} = this.props;
+    const {currentLesson, loading} = this.state;
+    if (!loading && !currentLesson || currentLesson && currentLesson.id !== location.pathname.split("/")[2]) {
+      this.setState({currentLesson: null, minilessons: null, userProgress: null, loading: true}, this.loadFromDB);
+      // this.loadFromDB();
     }
+  }
+
+  componentDidMount() {
+    this.forceUpdate();
   }
 
   toggleTest() {
@@ -277,7 +278,7 @@ class Minilesson extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {minilessons, currentLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, showMore} = this.state;
+    const {minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, showMore} = this.state;
 
     if (!auth.user) browserHistory.push("/login");
     if (!currentLesson || !minilessons || !userProgress) return <Loading />;
@@ -333,8 +334,6 @@ class Minilesson extends Component {
       return <div className="stop"></div>;
     });
 
-    this.iframes = new Array(otherSnippets.length);
-
     return (
       <div id="island" className={ currentLesson.id }>
         { this.buildWinPopover() }
@@ -346,6 +345,9 @@ class Minilesson extends Component {
             { this.buildTestPopover() }
           </div>
         </div>
+        { prevLesson ? <IslandLink done={true} width={250} lesson={prevLesson} description={false} /> : null}
+        { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST */}
+        { nextLesson && Number(nextLesson.index) < 3  && this.hasUserCompleted(currentLesson.id) ? <IslandLink next={true} width={250} lesson={nextLesson} description={false} /> : null}
         { otherSnippets.length
         ? <div>
             <h2 className="title">

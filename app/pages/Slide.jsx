@@ -38,7 +38,8 @@ class Slide extends Component {
       latestSlideCompleted: 0,
       latestSlideOfGemEarned: -1,
       lessonComplete: false,
-      mounted: false
+      mounted: false,
+      done: false
     };
   }
 
@@ -48,10 +49,6 @@ class Slide extends Component {
     let newlatest = latestSlideCompleted;
     if (i > latestSlideCompleted) newlatest = i;
     if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
-  }
-
-  reblock() {
-    this.setState({blocked: true});
   }
 
   saveProgress(level, gems) {
@@ -70,6 +67,7 @@ class Slide extends Component {
       const cs = slides.find(slide => slide.id === sid);
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
+      if (this.state.done) blocked = false;
       this.setState({currentSlide: cs, blocked});
     }
 
@@ -100,8 +98,9 @@ class Slide extends Component {
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
+    const upget = axios.get("/api/userprogress");
 
-    Promise.all([sget, lget, mlget]).then(resp => {
+    Promise.all([sget, lget, mlget, upget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
@@ -117,9 +116,13 @@ class Slide extends Component {
       }
       */
 
+      const up = resp[3].data;
+      const done = up.find(p => p.level === mlid) !== undefined;
+
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, currentLesson: resp[1].data[0], minilessons: resp[2].data});
+      if (done) blocked = false;
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
 
     // document.addEventListener("keydown", this.handleKey.bind(this));
@@ -188,7 +191,6 @@ class Slide extends Component {
           island={lid}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
-          reblock={this.reblock.bind(this)}
           {...currentSlide} />
 
         <div id="slide-foot">

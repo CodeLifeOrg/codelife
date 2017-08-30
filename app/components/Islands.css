@@ -1,179 +1,489 @@
 .island-1 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-1, dark); }
-  &#island #path:before { background-color: map(islands, island-1, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-1, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-1, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-1, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-1, dark); color: map(islands, island-1, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-1, dark); }
-    &#island #path .code-block.done .side { background-color: map(islands, island-1, light); }
-  &.codeBlockCard { background-color: map(islands, island-1, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-1, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-1, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-1, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-1, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-1, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-1, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-1, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-1, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-1, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-1, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-1, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-1, dark);
+    color: map(islands, island-1, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-1, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-1, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-1, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-1, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-1, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-1, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-1, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-1, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-1, dark);
+  }
 }
 
 .island-2 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-2, dark); }
-  &#island #path:before { background-color: map(islands, island-2, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-2, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-2, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-2, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-2, dark); color: map(islands, island-2, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-2, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-2, light); }
-  &.codeBlockCard { background-color: map(islands, island-2, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-2, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-2, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-2, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-2, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-2, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-2, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-2, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-2, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-2, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-2, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-2, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-2, dark);
+    color: map(islands, island-2, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-2, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-2, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-2, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-2, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-2, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-2, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-2, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-2, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-2, dark);
+  }
 }
 
 .island-3 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-3, dark); }
-  &#island #path:before { background-color: map(islands, island-3, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-3, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-3, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-3, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-3, dark); color: map(islands, island-3, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-3, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-3, light); }
-  &.codeBlockCard { background-color: map(islands, island-3, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-3, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-3, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-3, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-3, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-3, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-3, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-3, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-3, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-3, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-3, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-3, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-3, dark);
+    color: map(islands, island-3, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-3, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-3, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-3, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-3, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-3, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-3, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-3, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-3, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-3, dark);
+  }
 }
 
 .island-4 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-4, dark); }
-  &#island #path:before { background-color: map(islands, island-4, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-4, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-4, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-4, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-4, dark); color: map(islands, island-4, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-4, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-4, light); }
-  &.codeBlockCard { background-color: map(islands, island-4, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-4, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-4, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-4, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-4, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-4, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-4, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-4, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-4, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-4, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-4, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-4, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-4, dark);
+    color: map(islands, island-4, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-4, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-4, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-4, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-4, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-4, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-4, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-4, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-4, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-4, dark);
+  }
 }
 
 .island-5 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-5, dark); }
-  &#island #path:before { background-color: map(islands, island-5, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-5, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-5, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-5, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-5, dark); color: map(islands, island-5, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-5, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-5, light); }
-  &.codeBlockCard { background-color: map(islands, island-5, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-5, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-5, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-5, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-5, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-5, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-5, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-5, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-5, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-5, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-5, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-5, dark);
+    color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-5, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-5, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-5, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-5, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-5, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-5, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-5, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-5, dark);
+  }
 }
 
 .island-6 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-6, dark); }
-  &#island #path:before { background-color: map(islands, island-6, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-6, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-6, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-6, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-6, dark); color: map(islands, island-5, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-6, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-6, light); }
-  &.codeBlockCard { background-color: map(islands, island-6, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-6, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-6, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-6, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-6, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-6, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-6, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-6, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-6, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-6, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-6, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-6, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-6, dark);
+    color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-6, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-6, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-6, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-6, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-6, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-6, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-6, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-6, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-6, dark);
+  }
 }
 
 .island-7 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-7, dark); }
-  &#island #path:before { background-color: map(islands, island-7, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-7, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-7, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-7, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-7, dark); color: map(islands, island-5, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-7, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-7, light); }
-  &.codeBlockCard { background-color: map(islands, island-7, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-7, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-7, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-7, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-7, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-7, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-7, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-7, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-7, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-7, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-7, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-7, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-7, dark);
+    color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-7, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-7, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-7, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-7, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-7, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-7, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-7, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-7, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-7, dark);
+  }
 }
 
 .island-8 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-8, dark); }
-  &#island #path:before { background-color: map(islands, island-8, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-8, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-8, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-8, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-8, dark); color: map(islands, island-5, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-8, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-8, light); }
-  &.codeBlockCard { background-color: map(islands, island-8, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-8, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-8, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-8, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-8, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-8, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-8, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-8, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-8, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-8, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-8, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-8, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-8, dark);
+    color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-8, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-8, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-8, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-8, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-8, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-8, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-8, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-8, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-8, dark);
+  }
 }
 
 .island-9 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-9, dark); }
-  &#island #path:before { background-color: map(islands, island-9, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-9, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-9, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-9, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-9, dark); color: map(islands, island-5, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-9, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-9, light); }
-  &.codeBlockCard { background-color: map(islands, island-9, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-9, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-9, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-9, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-9, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-9, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-9, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-9, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-9, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-9, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-9, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-9, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-9, dark);
+    color: map(islands, island-5, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-9, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-9, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-9, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-9, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-9, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-9, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-9, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-9, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-9, dark);
+  }
 }
 
 .island-10 {
-  &#island .title, & .description, & .toggle-show { text-shadow: 0 2px 2px map(islands, island-10, dark); }
-  &#island #path:before { background-color: map(islands, island-10, dark); }
-  & #path .stop, & .island-icon { border-color: map(islands, island-10, dark); }
-  &#island #path .stop.done { background-color: map(islands, island-10, light); }
-  &#island #path .stop:not(.next):not(.done) { background-color: map(islands, island-10, dark); }
-  &#island #path .code-block .side { border-color: map(islands, island-10, dark); color: map(islands, island-10, dark); }
-  &#island #path .code-block:not(.next) .side { background-color: map(islands, island-10, dark); }
-  &#island #path .code-block.done .side { background-color: map(islands, island-10, light); }
-  &.codeBlockCard { background-color: map(islands, island-10, dark); }
-  &.pt-dialog, & .pt-dialog { border-color: map(islands, island-10, dark); }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header { background-color: map(islands, island-10, dark); }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary { background-color: map(islands, island-10, dark); }
-  &#slide a:not(.pt-button) { color: map(islands, island-10, dark); }
-  &.pt-tooltip .pt-popover-arrow-fill { fill: map(islands, island-10, dark); }
-  &.pt-tooltip .pt-popover-content { background-color: map(islands, island-10, dark); }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-10, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-10, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-10, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-10, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-10, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-10, dark);
+    color: map(islands, island-10, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-10, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-10, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-10, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-10, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-10, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-10, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-10, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-10, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-10, dark);
+  }
 }

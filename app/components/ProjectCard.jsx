@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "moment/locale/pt-br";
@@ -22,10 +23,12 @@ class ProjectCard extends Component {
 
   render() {
     const {open} = this.state;
-    const {project, t} = this.props;
+    const {location, project, t, user} = this.props;
     const {datemodified, id, name, studentcontent, username} = project;
 
     moment.locale("pt-BR");
+
+    const embedLink = `${ location.origin }/projects/${ username || user.username }/${ project.name }`;
 
     return (
       <div className="projectCard pt-card pt-elevation-0 pt-interactive" key={id}>
@@ -57,7 +60,10 @@ class ProjectCard extends Component {
             </div>
           </div>
           <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} {username}` : "" }</div>
+            <div className="pt-dialog-footer-byline">
+              { t("Created by") } { username || user.username }
+              <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
+            </div>
             <div className="pt-dialog-footer-actions">
               <Button
                 intent={ Intent.PRIMARY }
@@ -72,5 +78,9 @@ class ProjectCard extends Component {
   }
 }
 
+ProjectCard = connect(state => ({
+  location: state.location,
+  user: state.auth.user
+}))(ProjectCard);
 ProjectCard = translate()(ProjectCard);
 export default ProjectCard;

@@ -37,7 +37,7 @@ class App extends Component {
     const routes = location.pathname.split("/");
 
     const authRoute = routes[1] === "login";
-    const bareRoute = routes[1] === "share";
+    const bareRoute = routes.includes("projects") && routes.length === 4;
 
     const meta = header.meta.slice();
     if (i18n.locale === "en") {

@@ -29,13 +29,13 @@ class Studio extends Component {
   onCreateProject(project) {
     this.setState({currentProject: project});
     if (this.editor.getWrappedInstance()) this.editor.getWrappedInstance().setEntireContents("");
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}`);
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}/edit`);
   }
 
   onDeleteProject(newproject) {
     if (newproject.id !== this.state.currentProject.id) this.editor.getWrappedInstance().setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}`);
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
   }
 
   onClickSnippet(snippet) {
@@ -46,14 +46,16 @@ class Studio extends Component {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
       this.editor.getWrappedInstance().setEntireContents(resp.data[0].studentcontent);
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}`);
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}/edit`);
     });
   }
 
   shareProject() {
     const {t} = this.props;
+    const {username} = this.props.auth.user;
     if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
-      browserHistory.push(`/share/project/${this.state.currentProject.id}`);  
+      // browserHistory.push(`/share/project/${this.state.currentProject.id}`);  
+      browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);  
     }
     else {
       const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
@@ -120,12 +122,12 @@ class Studio extends Component {
 
     const {auth, t} = this.props;
     const {activeTabId, currentProject, titleText} = this.state;
-    const {id} = this.props.params;
+    const {filename} = this.props.params;
 
     if (!auth.user) browserHistory.push("/login");
 
     const allSnippetRef = <AllSnippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
-    const projectRef = <Projects  projectToLoad={id}
+    const projectRef = <Projects  projectToLoad={filename}
                                   onCreateProject={this.onCreateProject.bind(this)}
                                   onDeleteProject={this.onDeleteProject.bind(this)}
                                   openProject={this.openProject.bind(this)}

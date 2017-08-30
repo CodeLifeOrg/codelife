@@ -26,6 +26,28 @@ class LevelEditor extends Component {
     }
   }
 
+  onChangeID(e) {
+    const {data} = this.state;
+    data.id = e.target.value;
+    if (this.props.reportChange) this.props.reportChange(data);
+    this.setState({data});
+  }
+
+  onChangeName(e) {
+    const {data} = this.state;
+    data.name = e.target.value;
+    if (this.props.reportChange) this.props.reportChange(data);
+    this.setState({data});
+  }
+
+  onChangeDescription(e) {
+    const {data} = this.state;
+    data.description = e.target.value;
+    if (this.props.reportChange) this.props.reportChange(data);
+    this.setState({data});
+  }
+
+
   render() {
 
     const {data} = this.state;
@@ -37,15 +59,15 @@ class LevelEditor extends Component {
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (unique)</span>
-          <input className="pt-input" type="text" placeholder="Enter a unique level id e.g. level-1" dir="auto" value={data.id} />
+          <input className="pt-input" onChange={this.onChangeID.bind(this)} type="text" placeholder="Enter a unique level id e.g. level-1" dir="auto" value={data.id} />
         </label>
         <label className="pt-label">
           Name
-          <input className="pt-input" type="text" placeholder="Enter the name of this Island" dir="auto" value={data.name}/>
+          <input className="pt-input" onChange={this.onChangeName.bind(this)} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.name}/>
         </label>
         <label className="pt-label">
           Description
-          <input className="pt-input" type="text" placeholder="Describe this island in a few words" dir="auto" value={data.description} />
+          <input className="pt-input" onChange={this.onChangeDescription.bind(this)} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.description} />
         </label>
         <Button type="button" className="pt-button pt-large pt-intent-success">Save</Button>
       </div>

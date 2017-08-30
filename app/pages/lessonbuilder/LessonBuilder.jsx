@@ -79,7 +79,6 @@ class LessonBuilder extends Component {
   }
 
   buildMenu(n) {
-    console.log(n);
     const menu = <Menu>
       <MenuItem
         iconName="arrow-up"
@@ -142,6 +141,7 @@ class LessonBuilder extends Component {
     const {currentNode} = this.state;
     if (!currentNode) {
       node.isSelected = true;
+      node.secondaryLabel = this.buildMenu(node.data);
     }
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
@@ -162,6 +162,10 @@ class LessonBuilder extends Component {
     this.setState({nodes: this.state.nodes});
   }
 
+  reportChange(newdata) {
+
+  }
+
   render() {
 
     const {lessons, nodes, currentNode} = this.state;
@@ -180,9 +184,9 @@ class LessonBuilder extends Component {
         </div>
         { currentNode 
           ? <div id="item-editor">
-              {currentNode.data.itemType === "Island" ? <IslandEditor data={currentNode.data}/> : null}
-              {currentNode.data.itemType === "Level" ? <LevelEditor data={currentNode.data}/> : null }
-              {currentNode.data.itemType === "Slide" ? <SlideEditor data={currentNode.data}/> : null }
+              {currentNode.data.itemType === "Island" ? <IslandEditor data={currentNode.data} reportChange={this.reportChange.bind(this)} /> : null}
+              {currentNode.data.itemType === "Level" ? <LevelEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
+              {currentNode.data.itemType === "Slide" ? <SlideEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
             </div>
           : null 
         }

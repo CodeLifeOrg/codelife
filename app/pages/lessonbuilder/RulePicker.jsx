@@ -55,6 +55,14 @@ class RulePicker extends Component {
     this.setState({rules});
   }
 
+  addRule(e) {
+    
+  }
+
+  removeRule(e) {
+
+  }
+
   render() {
 
     const {rules} = this.state;
@@ -74,6 +82,7 @@ class RulePicker extends Component {
         </div>
         <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
         <input className="pt-input rule-error" id={r.id} onChange={this.changeError.bind(this)} type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
+        <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}>Remove</button>
       </div>
     );
     
@@ -82,6 +91,7 @@ class RulePicker extends Component {
         <label className="pt-label">
           Passing Rules
           {ruleItems}
+          <button className="pt-button pt-intent-success pt-icon-add" type="button" onClick={this.addRule.bind(this)}>Add Rule</button>
         </label>
       </div>
     );

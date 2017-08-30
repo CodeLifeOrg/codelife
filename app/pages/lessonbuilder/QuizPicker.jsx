@@ -46,12 +46,10 @@ class QuizPicker extends Component {
 
   handleCheckbox(e) {
     const {quiz} = this.state;
-    console.log(e.target);
     if (e.target.checked) {
       quiz.map(q => q.isCorrect = false);
       quiz[e.target.id].isCorrect = e.target.checked;  
     }
-    console.log(quiz);
     this.setState({quiz});
   }
 

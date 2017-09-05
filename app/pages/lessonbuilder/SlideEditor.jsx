@@ -73,8 +73,13 @@ class SlideEditor extends Component {
     this.setState({data});
   }
 
+  onChangeText(t) {
+    const {data} = this.state;
+    data.htmlcontent2 = t;
+    this.setState({data});
+  }
 
-  previewSlide(e) {
+  previewSlide() {
     this.setState({isOpen: !this.state.isOpen});
   }
 
@@ -146,7 +151,7 @@ class SlideEditor extends Component {
           ? <label className="pt-label">
             htmlcontent2
             { showAce2 
-              ? <CodeEditor style={{height: "400px"}} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
+              ? <CodeEditor style={{height: "400px"}} onChangeText={this.onChangeText.bind(this)} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
               : <textarea className="pt-input pt-fill" onChange={this.changeHTML2.bind(this)} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
             }
           </label> : null

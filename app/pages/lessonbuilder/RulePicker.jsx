@@ -39,6 +39,19 @@ class RulePicker extends Component {
     return rules;
   }
 
+  compileJSON() {
+    const {rules} = this.state;
+    const json = [];
+    for (const r of rules) {
+      json.push({
+        type: r.type,
+        needle: r.needle,
+        error_msg: r.error_msg
+      });
+    }
+    return json;
+  }
+
   changeType(e) {
     const {rules} = this.state;
     rules[e.target.id].type = e.target.value;
@@ -86,6 +99,8 @@ class RulePicker extends Component {
   render() {
 
     const {rules} = this.state;
+
+    if (this.props.onChangeRules) this.props.onChangeRules(this.compileJSON());
 
     const ruleTypes = [
       <option value="CONTAINS">Contains Tag</option>,

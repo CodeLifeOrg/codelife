@@ -55,6 +55,18 @@ class QuizPicker extends Component {
     this.setState({quiz});
   }
 
+  compileJSON() {
+    const {quiz} = this.state;
+    const json = [];
+    for (const q of quiz) {
+      json.push({
+        text: q.text,
+        isCorrect: q.isCorrect
+      });
+    }
+    return json;
+  }  
+
   addAnswer() {
     const {quiz} = this.state;
     const nextID = quiz.length;
@@ -83,6 +95,8 @@ class QuizPicker extends Component {
   render() {
 
     const {quiz} = this.state;
+
+    if (this.props.onChangeQuiz) this.props.onChangeQuiz(this.compileJSON());
 
     let quizItems = [];
     if (quiz) {

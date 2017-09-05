@@ -37,7 +37,11 @@ class SlideEditor extends Component {
 
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
-      console.log("got here");
+      if (["TextCode", "RenderCode", "InputCode"].indexOf(this.props.data.type) !== -1) {
+        if (this.editor) {
+          this.editor.getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
+        }
+      }
       this.setState({data: this.props.data});
     }
   }
@@ -85,6 +89,24 @@ class SlideEditor extends Component {
 
   closePreview() {
     this.setState({isOpen: false});
+  }
+
+  saveSlide() {
+    console.log(this.state.data);
+  }
+
+  onChangeQuiz(json) {
+    console.log(json);
+    /*const {data} = this.state;
+    data.quizjson = json;
+    this.setState({data});*/
+  }
+
+  onChangeRules(json) {
+    console.log(json);
+    /*const {data} = this.state;
+    data.rulejson = json;
+    this.setState({data});*/
   }
 
   render() {
@@ -156,10 +178,10 @@ class SlideEditor extends Component {
             }
           </label> : null
         }
-        { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id}/> : null }
-        { showRules ? <RulePicker rules={data.rulejson} parentID={data.id}/> : null }
+        { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id} onChangeQuiz={this.onChangeQuiz.bind(this)} /> : null }
+        { showRules ? <RulePicker rules={data.rulejson} parentID={data.id} onChangeRules={this.onChangeRules.bind(this)} /> : null }
         <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveSlide.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

@@ -96,17 +96,11 @@ class SlideEditor extends Component {
   }
 
   onChangeQuiz(json) {
-    console.log(json);
-    /*const {data} = this.state;
-    data.quizjson = json;
-    this.setState({data});*/
+    
   }
 
   onChangeRules(json) {
-    console.log(json);
-    /*const {data} = this.state;
-    data.rulejson = json;
-    this.setState({data});*/
+    
   }
 
   render() {

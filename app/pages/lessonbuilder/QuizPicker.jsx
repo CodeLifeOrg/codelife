@@ -58,11 +58,13 @@ class QuizPicker extends Component {
   compileJSON() {
     const {quiz} = this.state;
     const json = [];
-    for (const q of quiz) {
-      json.push({
-        text: q.text,
-        isCorrect: q.isCorrect
-      });
+    if (quiz) {
+      for (const q of quiz) {
+        json.push({
+          text: q.text,
+          isCorrect: q.isCorrect
+        });
+      }
     }
     return json;
   }  

@@ -42,12 +42,14 @@ class RulePicker extends Component {
   compileJSON() {
     const {rules} = this.state;
     const json = [];
-    for (const r of rules) {
-      json.push({
-        type: r.type,
-        needle: r.needle,
-        error_msg: r.error_msg
-      });
+    if (rules) {
+      for (const r of rules) {
+        json.push({
+          type: r.type,
+          needle: r.needle,
+          error_msg: r.error_msg
+        });
+      }
     }
     return json;
   }

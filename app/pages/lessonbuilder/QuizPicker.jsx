@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
 import {Checkbox} from "@blueprintjs/core";
 
 import "./QuizPicker.css";
@@ -57,7 +56,28 @@ class QuizPicker extends Component {
   }
 
   addAnswer() {
-    
+    const {quiz} = this.state;
+    const nextID = quiz.length;
+    quiz.push({
+      id: nextID,
+      text: "Set Answer Text",
+      isCorrect: false
+    });
+    this.setState({quiz});
+  }
+
+  removeAnswer(e) {
+    const {quiz} = this.state;
+    const newQuiz = [];
+    let i = 0;
+    for (const q of quiz) {
+      if (q.id !== Number(e.target.id)) {
+        q.id = i;
+        newQuiz[i] = q;
+        i++;
+      }
+    }
+    this.setState({quiz: newQuiz});
   }
 
   render() {
@@ -68,8 +88,9 @@ class QuizPicker extends Component {
     if (quiz) {
       quizItems = quiz.map(q => 
         <div className="quiz-section" style={{display: "flex"}}>
-          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeQuestion.bind(this)} type="text" placeholder="Question" dir="auto" value={q.text} /> 
+          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeQuestion.bind(this)} type="text" placeholder="Answer" dir="auto" value={q.text} /> 
           <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} style={{margin: "12px"}} />        
+          <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={q.id} onClick={this.removeAnswer.bind(this)}>Remove</button>
         </div>
       );
     }

@@ -37,6 +37,7 @@ class SlideEditor extends Component {
 
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
+      console.log("got here");
       this.setState({data: this.props.data});
     }
   }
@@ -46,6 +47,32 @@ class SlideEditor extends Component {
     data.type = e.target.value;
     this.setState({data});    
   }
+
+  changeID(e) {
+    const {data} = this.state;
+    data.id = e.target.value;
+    // TODO: confirm that changing this doesn't mess with state in Update 
+    this.setState({data});    
+  }
+
+  changeTitle(e) {
+    const {data} = this.state;
+    data.title = e.target.value;
+    this.setState({data});
+  }
+
+  changeHTML1(e) {
+    const {data} = this.state;
+    data.htmlcontent1 = e.target.value;
+    this.setState({data});
+  }
+
+  changeHTML2(e) {
+    const {data} = this.state;
+    data.htmlcontent2 = e.target.value;
+    this.setState({data});
+  }
+
 
   previewSlide(e) {
     this.setState({isOpen: !this.state.isOpen});
@@ -88,12 +115,12 @@ class SlideEditor extends Component {
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, unique)</span>
-          <input className="pt-input" type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
+          <input className="pt-input" onChange={this.changeID.bind(this)} type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
         </label>
         <label className="pt-label">
           Title
           <span className="pt-text-muted"> (required)</span>
-          <input className="pt-input" type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
+          <input className="pt-input" onChange={this.changeTitle.bind(this)} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
         </label>
         <label className="pt-label">
           Type
@@ -113,14 +140,14 @@ class SlideEditor extends Component {
         </label>
         <label className="pt-label">
           htmlcontent1
-          <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
+          <textarea className="pt-input pt-fill" onChange={this.changeHTML1.bind(this)} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
         </label>
         { showContent2
           ? <label className="pt-label">
             htmlcontent2
             { showAce2 
               ? <CodeEditor style={{height: "400px"}} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
-              : <textarea className="pt-input pt-fill" rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
+              : <textarea className="pt-input pt-fill" onChange={this.changeHTML2.bind(this)} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
             }
           </label> : null
         }

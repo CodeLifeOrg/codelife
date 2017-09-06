@@ -93,6 +93,17 @@ class LessonBuilder extends Component {
         disabled={n.isLast}
       />
       <MenuDivider />
+      <MenuItem
+        iconName="add"
+        onClick={this.handleClick}
+        text={`Add ${n.itemType} Above`}
+      />
+      <MenuItem
+        iconName="add"
+        onClick={this.handleClick}
+        text={`Add ${n.itemType} Below`}
+      />
+      <MenuDivider />
       <MenuItem className="pt-intent-danger" text={`Delete ${n.itemType}`} iconName="delete" />
     </Menu>;
     return <Popover content={menu} position={Position.RIGHT_TOP}>
@@ -163,7 +174,7 @@ class LessonBuilder extends Component {
   }
 
   reportChange(newdata) {
-
+    
   }
 
   render() {

@@ -20,7 +20,8 @@ module.exports = function(sequelize, db) {
       pt_prompt: db.TEXT,
       pt_cheatsheet: db.TEXT,
       pt_victory: db.TEXT,
-      pt_rulejson: db.TEXT
+      pt_rulejson: db.TEXT,
+      ordering: db.INTEGER
     },
     {
       freezeTableName: true,

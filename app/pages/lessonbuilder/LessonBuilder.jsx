@@ -30,7 +30,7 @@ class LessonBuilder extends Component {
       const lessons = resp[0].data;
       const minilessons = resp[1].data;
       const slides = resp[2].data;
-      lessons.sort((a, b) => a.index - b.index);
+      lessons.sort((a, b) => a.ordering - b.ordering);
       minilessons.sort((a, b) => a.ordering - b.ordering);
       slides.sort((a, b) => a.ordering - b.ordering);      
       minilessons.map(m => m.slides = []);
@@ -58,10 +58,13 @@ class LessonBuilder extends Component {
         }
       }
       if (lessons.length > 1) lessons[lessons.length - 1].isLast = true;
+      if (lessons.length === 1) lessons[0].isOnly = true;
       for (const l of lessons) {
         if (l.minilessons.length > 1) l.minilessons[l.minilessons.length - 1].isLast = true;
+        if (l.minilessons.length === 1) l.minilessons[0].isOnly = true;
         for (const m of l.minilessons) {
           if (m.slides.length > 1) m.slides[m.slides.length - 1].isLast = true;
+          if (m.slides.length === 1) m.slides[0].isOnly = true;
         }
       }
       const nodes = this.buildNodes(lessons);
@@ -78,33 +81,72 @@ class LessonBuilder extends Component {
     return obj;
   }
 
+  onClickMoveUp(n) {
+    const {nodes} = this.state;
+    if (n.data.ordering === 0) return;
+    /*let arr = [];
+    if (n.data.itemType === "Island") arr = nodes;
+    if (n.data.itemType === "Level") arr = nodes.find(island => island.id === n.data.lid).childNodes;
+    if (n.data.itemType === "Slide") arr = nodes.find(island => )*/
+    if (n.data.itemType === "Island") {
+      const oldLoc = nodes.findIndex(node => node.data.ordering === n.data.ordering - 1);
+      const oldObj = nodes[oldLoc];
+      oldObj.data.ordering++;
+      n.data.ordering--;
+      nodes[oldLoc] = n;
+      nodes[oldLoc + 1] = oldObj;
+    }
+    this.setState({nodes});
+    
+  }
+
+  onClickMoveDown(e) {
+
+  }
+
+  onClickAddBelow(e) {
+
+  }
+
+  onClickAddAbove(e) {
+
+  }
+
+  onClickDelete(e) {
+
+  }
+
   buildMenu(n) {
     const menu = <Menu>
       <MenuItem
         iconName="arrow-up"
-        onClick={this.handleClick}
-        text={`Move ${n.itemType} Up`}
-        disabled={n.ordering === 0 || n.index === "0"}
+        onClick={this.onClickMoveUp.bind(this, n)}
+        text={`Move ${n.data.itemType} Up`}
+        disabled={n.data.ordering === 0}
       />
       <MenuItem
         iconName="arrow-down"
-        onClick={this.handleClick}
-        text={`Move ${n.itemType} Down`}
-        disabled={n.isLast}
+        onClick={this.onClickMoveDown.bind(this)}
+        text={`Move ${n.data.itemType} Down`}
+        disabled={n.data.isLast}
       />
       <MenuDivider />
       <MenuItem
         iconName="add"
-        onClick={this.handleClick}
-        text={`Add ${n.itemType} Above`}
+        onClick={this.onClickAddAbove.bind(this)}
+        text={`Add ${n.data.itemType} Above`}
       />
       <MenuItem
         iconName="add"
-        onClick={this.handleClick}
-        text={`Add ${n.itemType} Below`}
+        onClick={this.onClickAddBelow.bind(this)}
+        text={`Add ${n.data.itemType} Below`}
       />
       <MenuDivider />
-      <MenuItem className="pt-intent-danger" text={`Delete ${n.itemType}`} iconName="delete" />
+      <MenuItem 
+        className="pt-intent-danger" 
+        text={`Delete ${n.data.itemType}`} 
+        iconName="delete"
+        disabled={n.data.isOnly} />
     </Menu>;
     return <Popover content={menu} position={Position.RIGHT_TOP}>
       <Button className="pt-button" iconName="changes"/>
@@ -137,8 +179,7 @@ class LessonBuilder extends Component {
       }
       ltree.push({
         id: l.id, 
-        hasCaret: 
-        l.minilessons.length, 
+        hasCaret: l.minilessons.length, 
         iconName: "map", 
         label: l.name, 
         childNodes: mltree,
@@ -152,12 +193,12 @@ class LessonBuilder extends Component {
     const {currentNode} = this.state;
     if (!currentNode) {
       node.isSelected = true;
-      node.secondaryLabel = this.buildMenu(node.data);
+      node.secondaryLabel = this.buildMenu(node);
     }
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
       currentNode.isSelected = false;
-      node.secondaryLabel = this.buildMenu(node.data);
+      node.secondaryLabel = this.buildMenu(node);
       currentNode.secondaryLabel = null;
     }
     this.setState({currentNode: node});

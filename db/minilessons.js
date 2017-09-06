@@ -9,7 +9,7 @@ module.exports = function(sequelize, db) {
       },
       name: db.TEXT,
       description: db.TEXT,
-      ordering: db.BIGINT,
+      ordering: db.INTEGER,
       lid: db.TEXT,
       pt_name: db.TEXT,
       pt_description: db.TEXT

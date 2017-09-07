@@ -16,6 +16,8 @@ import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
 import CheatSheet from "components/slidetypes/CheatSheet";
 
+//import RichTextEditor from "react-rte/lib/RichTextEditor";
+
 import "./SlideEditor.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
@@ -118,6 +120,8 @@ class SlideEditor extends Component {
     return (
       <div id="slide-editor">
         
+        { /* <RichTextEditor /> */ }
+
         <Dialog
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}

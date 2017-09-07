@@ -117,11 +117,91 @@ class LessonBuilder extends Component {
   }
 
   addItem(n, dir) {
-    console.log(n, dir);
+    const {nodes} = this.state;
+    const arr = n.parent.childNodes;
+    let obj = null;
+    let loc = n.data.ordering;
+    const epoch = Date.now();
+    if (dir === "above") {
+      arr.map(node => node.data.ordering >= n.data.ordering ? node.data.ordering++ : null);
+    }
+    if (dir === "below") {
+      loc++;
+      arr.map(node => node.data.ordering >= n.data.ordering + 1 ? node.data.ordering++ : null);
+    }
+    if (n.itemType === "slide") {
+      obj = {
+        id: `new-slide${epoch}`,
+        hasCaret: false, 
+        iconName: "page-layout", 
+        label: "New Slide",
+        itemType: "slide",
+        parent: n.parent,
+        data: {
+          id: `new-slide${epoch}`,
+          type: "TextImage",
+          title: "New Slide",
+          htmlcontent1: "New Content 1",
+          mlid: n.data.mlid,
+          ordering: loc
+        }
+      };
+    }
+    if (n.itemType === "level") {
+      obj = {
+        id: `new-level${epoch}`,
+        hasCaret: true, 
+        iconName: "multi-select", 
+        label: "New Level",
+        itemType: "level",
+        parent: n.parent,
+        data: {
+          id: `new-level${epoch}`,
+          name: "New Level",
+          description: "New Description",
+          lid: n.data.lid,
+          ordering: loc
+        }
+      };
+    }
+    if (n.itemType === "island") {
+      obj = {
+        id: `new-island${epoch}`,
+        hasCaret: true, 
+        iconName: "map", 
+        label: "New Island",
+        itemType: "island",
+        parent: n.parent,
+        data: {
+          id: `new-island${epoch}`,
+          name: "New Island",
+          description: "New Description",
+          prompt: "New Prompt",
+          victory: "New Victory",
+          initialcontent: "",
+          rulejson: "",
+          cheatsheet: "New Cheatsheet",
+          ordering: loc
+        }
+      };
+    }
+    if (obj) {
+      arr.push(obj);
+      arr.sort((a, b) => a.data.ordering - b.data.ordering);  
+      this.setState({nodes});
+      this.handleNodeClick(obj);
+    }
   }
 
   deleteItem(n) {
-    console.log(n);
+    const {nodes} = this.state;
+    const oldLoc = n.data.ordering;
+    const i = n.parent.childNodes.indexOf(n);
+    n.parent.childNodes.splice(i, 1);
+    n.parent.childNodes.map(node => node.data.ordering > oldLoc ? node.data.ordering-- : null);
+    // n.parent.childNodes.sort((a, b) => a.data.ordering - b.data.ordering);
+    this.setState({nodes});
+    if (n.parent.childNodes[0]) this.handleNodeClick(n.parent.childNodes[0]);
   }
 
   handleNodeClick(node) {

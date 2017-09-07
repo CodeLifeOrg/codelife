@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Tree, Popover, Position, Menu, MenuItem, MenuDivider, Button} from "@blueprintjs/core";
+import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import IslandEditor from "pages/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/lessonbuilder/LevelEditor";
@@ -229,13 +229,19 @@ class LessonBuilder extends Component {
     this.setState({nodes: this.state.nodes});
   }
 
-  reportChange() {}
+  reportSave(newTitle) {
+    const {currentNode} = this.state;
+    currentNode.label = newTitle;
+    this.setState({currentNode});
+  }
 
   render() {
 
     const {nodes, currentNode} = this.state;
 
     if (!nodes) return <Loading />;
+
+    console.log("render");
     
     return (
       <div id="lesson-builder">
@@ -249,9 +255,9 @@ class LessonBuilder extends Component {
         </div>
         { currentNode 
           ? <div id="item-editor">
-              {currentNode.itemType === "island" ? <IslandEditor data={currentNode.data} reportChange={this.reportChange.bind(this)} /> : null}
-              {currentNode.itemType === "level" ? <LevelEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
-              {currentNode.itemType === "slide" ? <SlideEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
+              {currentNode.itemType === "island" ? <IslandEditor data={currentNode.data} reportSave={this.reportSave.bind(this)} /> : null}
+              {currentNode.itemType === "level" ? <LevelEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/> : null }
+              {currentNode.itemType === "slide" ? <SlideEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/> : null }
             </div>
           : null 
         }

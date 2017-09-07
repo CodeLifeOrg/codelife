@@ -29,21 +29,18 @@ class LevelEditor extends Component {
   onChangeID(e) {
     const {data} = this.state;
     data.id = e.target.value;
-    if (this.props.reportChange) this.props.reportChange(data);
     this.setState({data});
   }
 
   onChangeName(e) {
     const {data} = this.state;
     data.name = e.target.value;
-    if (this.props.reportChange) this.props.reportChange(data);
     this.setState({data});
   }
 
   onChangeDescription(e) {
     const {data} = this.state;
     data.description = e.target.value;
-    if (this.props.reportChange) this.props.reportChange(data);
     this.setState({data});
   }
 

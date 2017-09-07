@@ -71,6 +71,11 @@ class IslandEditor extends Component {
     this.setState({data});  
   }
 
+  saveContent() {
+    const {data} = this.state;
+    if (this.props.reportSave) this.props.reportSave(data.name);
+  }
+
   render() {
 
     const {data} = this.state;
@@ -109,7 +114,7 @@ class IslandEditor extends Component {
           Victory Text
           <textarea className="pt-input pt-fill" onChange={this.changeVictory.bind(this)} type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.victory} />
         </label> 
-        <Button type="button" className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

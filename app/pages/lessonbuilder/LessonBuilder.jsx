@@ -7,6 +7,7 @@ import Loading from "components/Loading";
 import IslandEditor from "pages/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/lessonbuilder/LevelEditor";
 import SlideEditor from "pages/lessonbuilder/SlideEditor";
+import CtxMenu from "pages/lessonbuilder/CtxMenu";
 
 import "./LessonBuilder.css";
 
@@ -45,7 +46,7 @@ class LessonBuilder extends Component {
           iconName: "map", 
           label: l.name,
           itemType: "island",
-          parent: null,
+          parent: {childNodes: nodes},
           childNodes: [],
           data: l
         });
@@ -98,91 +99,41 @@ class LessonBuilder extends Component {
     return obj;
   }
 
-  onClickMoveUp(n) {
+  moveItem(n, dir) {
     const {nodes} = this.state;
-    let arr = [];
-    if (n.itemType === "island") arr = nodes;
-    if (n.itemType === "level" || n.itemType === "slide") arr = n.parent.childNodes;
-    const old = arr.find(node => node.data.ordering === n.data.ordering - 1);
-    old.data.ordering++;
-    n.data.ordering--;
+    const arr = n.parent.childNodes;
+    if (dir === "up") {
+      const old = arr.find(node => node.data.ordering === n.data.ordering - 1);
+      old.data.ordering++;
+      n.data.ordering--;
+    }
+    if (dir === "down") {
+      const old = arr.find(node => node.data.ordering === n.data.ordering + 1);
+      old.data.ordering--;
+      n.data.ordering++;
+    }
     arr.sort((a, b) => a.data.ordering - b.data.ordering);  
-    this.setState({nodes});
+    this.setState({nodes}); 
   }
 
-  onClickMoveDown(n) {
-    const {nodes} = this.state;
-    let arr = [];
-    if (n.itemType === "island") arr = nodes;
-    if (n.itemType === "level" || n.itemType === "slide") arr = n.parent.childNodes;
-    const old = arr.find(node => node.data.ordering === n.data.ordering + 1);
-    old.data.ordering--;
-    n.data.ordering++;
-    arr.sort((a, b) => a.data.ordering - b.data.ordering);  
-    this.setState({nodes});
+  addItem(n, dir) {
+    console.log(n, dir);
   }
 
-  onClickAddBelow(e) {
-    
-  }
-
-  onClickAddAbove(e) {
-
-  }
-
-  onClickDelete(e) {
-
-  }
-
-  buildMenu(n) {
-    const {nodes} = this.state;
-    const menu = <Menu>
-      <MenuItem
-        iconName="arrow-up"
-        onClick={this.onClickMoveUp.bind(this, n)}
-        text={`Move ${n.itemType} Up`}
-        disabled={n.data.ordering === 0}
-      />
-      <MenuItem
-        iconName="arrow-down"
-        onClick={this.onClickMoveDown.bind(this, n)}
-        text={`Move ${n.itemType} Down`}
-        disabled={!n.parent && nodes[nodes.length - 1].data.id === n.data.id || 
-          n.parent && n.parent.childNodes[n.parent.childNodes.length - 1].data.id === n.data.id}
-      />
-      <MenuDivider />
-      <MenuItem
-        iconName="add"
-        onClick={this.onClickAddAbove.bind(this)}
-        text={`Add ${n.itemType} Above`}
-      />
-      <MenuItem
-        iconName="add"
-        onClick={this.onClickAddBelow.bind(this)}
-        text={`Add ${n.itemType} Below`}
-      />
-      <MenuDivider />
-      <MenuItem 
-        className="pt-intent-danger" 
-        text={`Delete ${n.itemType}`} 
-        iconName="delete"
-        disabled={!n.parent && nodes.length === 1 || n.parent && n.parent.childNodes.length === 1} />
-    </Menu>;
-    return <Popover content={menu} position={Position.RIGHT_TOP}>
-      <Button className="pt-button" iconName="changes"/>
-    </Popover>;
+  deleteItem(n) {
+    console.log(n);
   }
 
   handleNodeClick(node) {
     const {currentNode} = this.state;
     if (!currentNode) {
       node.isSelected = true;
-      node.secondaryLabel = this.buildMenu(node);
+      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
     }
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
       currentNode.isSelected = false;
-      node.secondaryLabel = this.buildMenu(node);
+      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
       currentNode.secondaryLabel = null;
     }
     this.setState({currentNode: node});

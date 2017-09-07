@@ -16,7 +16,6 @@ class LessonBuilder extends Component {
     super(props);
     this.state = {
       mounted: false,
-      lessons: null, 
       nodes: null,
       currentNode: null
     };
@@ -35,40 +34,58 @@ class LessonBuilder extends Component {
       slides.sort((a, b) => a.ordering - b.ordering);      
       minilessons.map(m => m.slides = []);
       lessons.map(l => l.minilessons = []);
+
+      const nodes = [];
+
       for (let l of lessons) {
         l = this.fixNulls(l);
-        l.itemType = "Island";
-      }
-      for (let s of slides) {
-        s = this.fixNulls(s);
-        s.itemType = "Slide";
-        const minilesson = minilessons.find(m => m.id === s.mlid);
-        if (minilesson) {
-          if (!minilesson.slides) minilesson.slides = [];
-          minilesson.slides.push(s);
-        }
+        nodes.push({
+          id: l.id,
+          hasCaret: true, 
+          iconName: "map", 
+          label: l.name,
+          itemType: "island",
+          parent: null,
+          childNodes: [],
+          data: l
+        });
       }
       for (let m of minilessons) {
         m = this.fixNulls(m);
-        m.itemType = "Level";
-        const lesson = lessons.find(l => l.id === m.lid);
-        if (lesson) {
-          if (!lesson.minilessons) lesson.minilessons = [];
-          lesson.minilessons.push(m);
+        const lessonNode = nodes.find(node => node.data.id === m.lid);
+        if (lessonNode) {
+          lessonNode.childNodes.push({
+            id: m.id,
+            hasCaret: true, 
+            iconName: "multi-select", 
+            label: m.name,
+            itemType: "level",
+            parent: lessonNode,
+            childNodes: [],
+            data: m
+          });
         }
       }
-      if (lessons.length > 1) lessons[lessons.length - 1].isLast = true;
-      if (lessons.length === 1) lessons[0].isOnly = true;
-      for (const l of lessons) {
-        if (l.minilessons.length > 1) l.minilessons[l.minilessons.length - 1].isLast = true;
-        if (l.minilessons.length === 1) l.minilessons[0].isOnly = true;
-        for (const m of l.minilessons) {
-          if (m.slides.length > 1) m.slides[m.slides.length - 1].isLast = true;
-          if (m.slides.length === 1) m.slides[0].isOnly = true;
+      for (let s of slides) {
+        s = this.fixNulls(s);
+        let levelNode = null;
+        for (const lessonNode of nodes) {
+          levelNode = lessonNode.childNodes.find(cn => cn.data.id === s.mlid);
+          if (levelNode) break;
+        }
+        if (levelNode) {
+          levelNode.childNodes.push({
+            id: s.id,
+            hasCaret: false, 
+            iconName: "page-layout", 
+            label: s.title,
+            itemType: "slide",
+            parent: levelNode,
+            data: s
+          });
         }
       }
-      const nodes = this.buildNodes(lessons);
-      this.setState({mounted: true, lessons, nodes});
+      this.setState({mounted: true, nodes});
     });
   }
 
@@ -83,29 +100,30 @@ class LessonBuilder extends Component {
 
   onClickMoveUp(n) {
     const {nodes} = this.state;
-    if (n.data.ordering === 0) return;
-    /*let arr = [];
-    if (n.data.itemType === "Island") arr = nodes;
-    if (n.data.itemType === "Level") arr = nodes.find(island => island.id === n.data.lid).childNodes;
-    if (n.data.itemType === "Slide") arr = nodes.find(island => )*/
-    if (n.data.itemType === "Island") {
-      const oldLoc = nodes.findIndex(node => node.data.ordering === n.data.ordering - 1);
-      const oldObj = nodes[oldLoc];
-      oldObj.data.ordering++;
-      n.data.ordering--;
-      nodes[oldLoc] = n;
-      nodes[oldLoc + 1] = oldObj;
-    }
+    let arr = [];
+    if (n.itemType === "island") arr = nodes;
+    if (n.itemType === "level" || n.itemType === "slide") arr = n.parent.childNodes;
+    const old = arr.find(node => node.data.ordering === n.data.ordering - 1);
+    old.data.ordering++;
+    n.data.ordering--;
+    arr.sort((a, b) => a.data.ordering - b.data.ordering);  
     this.setState({nodes});
-    
   }
 
-  onClickMoveDown(e) {
-
+  onClickMoveDown(n) {
+    const {nodes} = this.state;
+    let arr = [];
+    if (n.itemType === "island") arr = nodes;
+    if (n.itemType === "level" || n.itemType === "slide") arr = n.parent.childNodes;
+    const old = arr.find(node => node.data.ordering === n.data.ordering + 1);
+    old.data.ordering--;
+    n.data.ordering++;
+    arr.sort((a, b) => a.data.ordering - b.data.ordering);  
+    this.setState({nodes});
   }
 
   onClickAddBelow(e) {
-
+    
   }
 
   onClickAddAbove(e) {
@@ -117,76 +135,42 @@ class LessonBuilder extends Component {
   }
 
   buildMenu(n) {
+    const {nodes} = this.state;
     const menu = <Menu>
       <MenuItem
         iconName="arrow-up"
         onClick={this.onClickMoveUp.bind(this, n)}
-        text={`Move ${n.data.itemType} Up`}
+        text={`Move ${n.itemType} Up`}
         disabled={n.data.ordering === 0}
       />
       <MenuItem
         iconName="arrow-down"
-        onClick={this.onClickMoveDown.bind(this)}
-        text={`Move ${n.data.itemType} Down`}
-        disabled={n.data.isLast}
+        onClick={this.onClickMoveDown.bind(this, n)}
+        text={`Move ${n.itemType} Down`}
+        disabled={!n.parent && nodes[nodes.length - 1].data.id === n.data.id || 
+          n.parent && n.parent.childNodes[n.parent.childNodes.length - 1].data.id === n.data.id}
       />
       <MenuDivider />
       <MenuItem
         iconName="add"
         onClick={this.onClickAddAbove.bind(this)}
-        text={`Add ${n.data.itemType} Above`}
+        text={`Add ${n.itemType} Above`}
       />
       <MenuItem
         iconName="add"
         onClick={this.onClickAddBelow.bind(this)}
-        text={`Add ${n.data.itemType} Below`}
+        text={`Add ${n.itemType} Below`}
       />
       <MenuDivider />
       <MenuItem 
         className="pt-intent-danger" 
-        text={`Delete ${n.data.itemType}`} 
+        text={`Delete ${n.itemType}`} 
         iconName="delete"
-        disabled={n.data.isOnly} />
+        disabled={!n.parent && nodes.length === 1 || n.parent && n.parent.childNodes.length === 1} />
     </Menu>;
     return <Popover content={menu} position={Position.RIGHT_TOP}>
       <Button className="pt-button" iconName="changes"/>
     </Popover>;
-  }
-  
-  buildNodes(lessons) {
-    const ltree = [];
-    for (const l of lessons) {
-      const mltree = [];
-      for (const m of l.minilessons) {
-        const stree = [];
-        for (const s of m.slides) {
-          stree.push({
-            id: s.id, 
-            hasCaret: false, 
-            iconName: "page-layout", 
-            label: s.title,
-            data: s
-          });
-        }
-        mltree.push({
-          id: m.id, 
-          hasCaret: m.slides.length, 
-          iconName: "multi-select", 
-          label: m.name, 
-          childNodes: stree,
-          data: m
-        });
-      }
-      ltree.push({
-        id: l.id, 
-        hasCaret: l.minilessons.length, 
-        iconName: "map", 
-        label: l.name, 
-        childNodes: mltree,
-        data: l
-      });
-    }
-    return ltree;
   }
 
   handleNodeClick(node) {
@@ -214,15 +198,13 @@ class LessonBuilder extends Component {
     this.setState({nodes: this.state.nodes});
   }
 
-  reportChange(newdata) {
-    
-  }
+  reportChange() {}
 
   render() {
 
-    const {lessons, nodes, currentNode} = this.state;
+    const {nodes, currentNode} = this.state;
 
-    if (!lessons) return <Loading />;
+    if (!nodes) return <Loading />;
     
     return (
       <div id="lesson-builder">
@@ -236,9 +218,9 @@ class LessonBuilder extends Component {
         </div>
         { currentNode 
           ? <div id="item-editor">
-              {currentNode.data.itemType === "Island" ? <IslandEditor data={currentNode.data} reportChange={this.reportChange.bind(this)} /> : null}
-              {currentNode.data.itemType === "Level" ? <LevelEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
-              {currentNode.data.itemType === "Slide" ? <SlideEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
+              {currentNode.itemType === "island" ? <IslandEditor data={currentNode.data} reportChange={this.reportChange.bind(this)} /> : null}
+              {currentNode.itemType === "level" ? <LevelEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
+              {currentNode.itemType === "slide" ? <SlideEditor data={currentNode.data} reportChange={this.reportChange.bind(this)}/> : null }
             </div>
           : null 
         }

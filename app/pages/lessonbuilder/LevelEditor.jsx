@@ -26,24 +26,16 @@ class LevelEditor extends Component {
     }
   }
 
-  onChangeID(e) {
+  changeField(field, e) {
     const {data} = this.state;
-    data.id = e.target.value;
+    data[field] = e.target.value;
     this.setState({data});
   }
 
-  onChangeName(e) {
+  saveContent() {
     const {data} = this.state;
-    data.name = e.target.value;
-    this.setState({data});
+    if (this.props.reportSave) this.props.reportSave(data);
   }
-
-  onChangeDescription(e) {
-    const {data} = this.state;
-    data.description = e.target.value;
-    this.setState({data});
-  }
-
 
   render() {
 
@@ -56,17 +48,17 @@ class LevelEditor extends Component {
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (unique)</span>
-          <input className="pt-input" onChange={this.onChangeID.bind(this)} type="text" placeholder="Enter a unique level id e.g. level-1" dir="auto" value={data.id} />
+          <input className="pt-input" onChange={this.changeField.bind(this, "id")} type="text" placeholder="Enter a unique level id e.g. level-1" dir="auto" value={data.id} />
         </label>
         <label className="pt-label">
           Name
-          <input className="pt-input" onChange={this.onChangeName.bind(this)} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.name}/>
+          <input className="pt-input" onChange={this.changeField.bind(this, "name")} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.name}/>
         </label>
         <label className="pt-label">
           Description
-          <input className="pt-input" onChange={this.onChangeDescription.bind(this)} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.description} />
+          <input className="pt-input" onChange={this.changeField.bind(this, "description")} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.description} />
         </label>
-        <Button type="button" className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

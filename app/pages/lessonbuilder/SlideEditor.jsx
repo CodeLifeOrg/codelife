@@ -48,34 +48,9 @@ class SlideEditor extends Component {
     }
   }
 
-  changeType(e) {
+  changeField(field, e) {
     const {data} = this.state;
-    data.type = e.target.value;
-    this.setState({data});    
-  }
-
-  changeID(e) {
-    const {data} = this.state;
-    data.id = e.target.value;
-    // TODO: confirm that changing this doesn't mess with state in Update 
-    this.setState({data});    
-  }
-
-  changeTitle(e) {
-    const {data} = this.state;
-    data.title = e.target.value;
-    this.setState({data});
-  }
-
-  changeHTML1(e) {
-    const {data} = this.state;
-    data.htmlcontent1 = e.target.value;
-    this.setState({data});
-  }
-
-  changeHTML2(e) {
-    const {data} = this.state;
-    data.htmlcontent2 = e.target.value;
+    data[field] = e.target.value;
     this.setState({data});
   }
 
@@ -93,8 +68,9 @@ class SlideEditor extends Component {
     this.setState({isOpen: false});
   }
 
-  saveSlide() {
-    console.log(this.state.data);
+  saveContent() {
+    const {data} = this.state;
+    if (this.props.reportSave) this.props.reportSave(data);
   }
 
   onChangeQuiz(json) {
@@ -140,18 +116,18 @@ class SlideEditor extends Component {
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, unique)</span>
-          <input className="pt-input" onChange={this.changeID.bind(this)} type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
+          <input className="pt-input" onChange={this.changeField.bind(this, "id")} type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
         </label>
         <label className="pt-label">
           Title
           <span className="pt-text-muted"> (required)</span>
-          <input className="pt-input" onChange={this.changeTitle.bind(this)} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
+          <input className="pt-input" onChange={this.changeField.bind(this, "title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
         </label>
         <label className="pt-label">
           Type
           <span className="pt-text-muted"> (required)</span>
           <div className="pt-select">
-            <select value={data.type} onChange={this.changeType.bind(this)}>
+            <select value={data.type} onChange={this.changeField.bind(this, "type")}>
               <option value="TextImage">Text Left, Image Right</option>
               <option value="ImageText">Image Left, Text Right</option>
               <option value="TextCode">Text Left, Code Right</option>
@@ -165,21 +141,21 @@ class SlideEditor extends Component {
         </label>
         <label className="pt-label">
           htmlcontent1
-          <textarea className="pt-input pt-fill" onChange={this.changeHTML1.bind(this)} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
+          <textarea className="pt-input pt-fill" onChange={this.changeField.bind(this, "htmlcontent1")} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
         </label>
         { showContent2
           ? <label className="pt-label">
             htmlcontent2
             { showAce2 
               ? <CodeEditor style={{height: "400px"}} onChangeText={this.onChangeText.bind(this)} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
-              : <textarea className="pt-input pt-fill" onChange={this.changeHTML2.bind(this)} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
+              : <textarea className="pt-input pt-fill" onChange={this.changeField.bind(this, "htmlcontent2")} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
             }
           </label> : null
         }
         { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id} onChangeQuiz={this.onChangeQuiz.bind(this)} /> : null }
         { showRules ? <RulePicker rules={data.rulejson} parentID={data.id} onChangeRules={this.onChangeRules.bind(this)} /> : null }
         <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" onClick={this.saveSlide.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

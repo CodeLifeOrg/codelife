@@ -23,9 +23,9 @@ class LessonBuilder extends Component {
   }
 
   componentDidMount() {
-    const lget = axios.get("/api/lessons");
-    const mlget = axios.get("/api/minilessons/all");
-    const sget = axios.get("/api/slides/all");
+    const lget = axios.get("/api/builder/lessons");
+    const mlget = axios.get("/api/builder/minilessons/all");
+    const sget = axios.get("/api/builder/slides/all");
     Promise.all([lget, mlget, sget]).then(resp => {
       const lessons = resp[0].data;
       const minilessons = resp[1].data;
@@ -229,9 +229,10 @@ class LessonBuilder extends Component {
     this.setState({nodes: this.state.nodes});
   }
 
-  reportSave(newTitle) {
+  reportSave(newData) {
     const {currentNode} = this.state;
-    currentNode.label = newTitle;
+    if (currentNode.itemType === "island" || currentNode.itemType === "level") currentNode.label = newData.name;
+    if (currentNode.itemType === "slide") currentNode.label = newData.title;
     this.setState({currentNode});
   }
 
@@ -240,8 +241,6 @@ class LessonBuilder extends Component {
     const {nodes, currentNode} = this.state;
 
     if (!nodes) return <Loading />;
-
-    console.log("render");
     
     return (
       <div id="lesson-builder">

@@ -18,6 +18,14 @@ module.exports = function(app) {
 
   });  
 
+  app.post("/api/builder/lessons/new", (req, res) => {
+    
+    db.lessons.create(req.body).then(u => {
+      res.json(u).end();
+    });
+
+  });
+
   app.get("/api/builder/minilessons", (req, res) => {
 
     db.minilessons.findAll({where: {lid: req.query.lid}}).then(u => {
@@ -69,6 +77,14 @@ module.exports = function(app) {
   app.post("/api/builder/slides/save", (req, res) => {
     
     db.slides.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+
+  });
+
+  app.post("/api/builder/slides/new", (req, res) => {
+    
+    db.slides.create(req.body).then(u => {
       res.json(u).end();
     });
 

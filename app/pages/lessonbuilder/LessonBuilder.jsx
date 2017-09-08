@@ -109,6 +109,18 @@ class LessonBuilder extends Component {
     }
   }
 
+  newNode(node) {
+    let path = null;
+    if (node.itemType === "island") path = "/api/builder/lessons/new";
+    if (node.itemType === "level") path = "/api/builder/minilessons/new";
+    if (node.itemType === "slide") path = "/api/builder/slides/new";
+    if (path) {
+      axios.post(path, node.data).then(resp => {
+        resp.status === 200 ? console.log("saved") : console.log("error");
+      });
+    }
+  }
+
   moveItem(n, dir) {
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
@@ -133,7 +145,6 @@ class LessonBuilder extends Component {
   addItem(n, dir) {
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
-    let obj = null;
     let loc = n.data.ordering;
     const epoch = Date.now();
     if (dir === "above") {
@@ -143,65 +154,100 @@ class LessonBuilder extends Component {
       loc++;
       arr.map(node => node.data.ordering >= n.data.ordering + 1 ? node.data.ordering++ : null);
     }
-    if (n.itemType === "slide") {
-      obj = {
+    const objSlide = {
+      id: `new-slide${epoch}`,
+      hasCaret: false, 
+      iconName: "page-layout", 
+      label: "New Slide",
+      itemType: "slide",
+      parent: n.parent,
+      data: {
         id: `new-slide${epoch}`,
-        hasCaret: false, 
-        iconName: "page-layout", 
-        label: "New Slide",
-        itemType: "slide",
-        parent: n.parent,
-        data: {
-          id: `new-slide${epoch}`,
-          type: "TextImage",
-          title: "New Slide",
-          htmlcontent1: "New Content 1",
-          mlid: n.data.mlid,
-          ordering: loc
-        }
-      };
+        type: "TextImage",
+        title: "New Slide",
+        htmlcontent1: "New Content 1",
+        htmlcontent2: "New Content 2",
+        quizjson: "",
+        rulejson: "",
+        pt_title: "New Slide",
+        pt_htmlcontent1: "New Content 1",
+        pt_htmlcontent2: "New Content 2",
+        pt_quizjson: "",
+        pt_rulejson: "",
+        mlid: n.data.mlid,
+        ordering: loc
+      }
+    };
+    const objLevel = {
+      id: `new-level${epoch}`,
+      hasCaret: true, 
+      iconName: "multi-select", 
+      label: "New Level",
+      itemType: "level",
+      parent: n.parent,
+      data: {
+        id: `new-level${epoch}`,
+        name: "New Level",
+        description: "New Description",
+        pt_name: "New Level",
+        pt_description: "New Description",
+        lid: n.data.lid,
+        ordering: loc
+      }
+    };
+    const objIsland = {
+      id: `new-island${epoch}`,
+      hasCaret: true, 
+      iconName: "map", 
+      label: "New Island",
+      itemType: "island",
+      parent: n.parent,
+      data: {
+        id: `new-island${epoch}`,
+        name: "New Island",
+        description: "New Description",
+        prompt: "New Prompt",
+        victory: "New Victory",
+        initialcontent: "",
+        rulejson: "",
+        cheatsheet: "New Cheatsheet",
+        pt_name: "New Island",
+        pt_description: "New Description",
+        pt_prompt: "New Prompt",
+        pt_victory: "New Victory",
+        pt_initialcontent: "",
+        pt_rulejson: "",
+        pt_cheatsheet: "New Cheatsheet",
+        ordering: loc
+      }
+    };
+
+    let obj = null;
+    if (n.itemType === "slide") {
+      obj = objSlide;
     }
     if (n.itemType === "level") {
-      obj = {
-        id: `new-level${epoch}`,
-        hasCaret: true, 
-        iconName: "multi-select", 
-        label: "New Level",
-        itemType: "level",
-        parent: n.parent,
-        data: {
-          id: `new-level${epoch}`,
-          name: "New Level",
-          description: "New Description",
-          lid: n.data.lid,
-          ordering: loc
-        }
-      };
+      obj = objLevel;
+      objSlide.data.ordering = 0;
+      objSlide.data.mlid = obj.data.id;
+      obj.childNodes = [objSlide];
+      this.newNode(objSlide);
     }
     if (n.itemType === "island") {
-      obj = {
-        id: `new-island${epoch}`,
-        hasCaret: true, 
-        iconName: "map", 
-        label: "New Island",
-        itemType: "island",
-        parent: n.parent,
-        data: {
-          id: `new-island${epoch}`,
-          name: "New Island",
-          description: "New Description",
-          prompt: "New Prompt",
-          victory: "New Victory",
-          initialcontent: "",
-          rulejson: "",
-          cheatsheet: "New Cheatsheet",
-          ordering: loc
-        }
-      };
+      obj = objIsland;
+      objLevel.data.ordering = 0;
+      objLevel.data.lid = obj.data.id;
+      objSlide.data.ordering = 0;
+      objSlide.data.mlid = objLevel.data.id;
+      objLevel.childNodes = [objSlide];
+      obj.childNodes = [objLevel];
+      this.newNode(objLevel);
+      this.newNode(objSlide);
     }
     if (obj) {
       arr.push(obj);
       arr.sort((a, b) => a.data.ordering - b.data.ordering);  
+      this.newNode(obj);
       this.setState({nodes});
       this.handleNodeClick(obj);
     }

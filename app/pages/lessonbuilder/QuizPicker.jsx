@@ -10,22 +10,23 @@ class QuizPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: null,
       quiz: null,
       parentID: null
     };
   }
 
   componentDidMount() {
-    const quiz = this.extractQuiz(this.props.quiz);
-    const {parentID} = this.props;
-    this.setState({quiz, parentID});   
+    const {data, parentID} = this.props;
+    const quiz = this.extractQuiz(this.props.data.quizjson);
+    this.setState({data, quiz, parentID});   
   }
 
   componentDidUpdate() {
     if (this.props.parentID !== this.state.parentID) {
-      const quiz = this.extractQuiz(this.props.quiz);
-      const {parentID} = this.props;
-      this.setState({quiz, parentID});
+      const {data, parentID} = this.props;
+      const quiz = this.extractQuiz(this.props.data.quizjson);
+      this.setState({data, quiz, parentID});   
     }
   }
 
@@ -43,7 +44,7 @@ class QuizPicker extends Component {
   changeQuestion(e) {
     const {quiz} = this.state;
     quiz[e.target.id].text = e.target.value;
-    this.setState({quiz});
+    this.setState({quiz}, this.updateJSON.bind(this));
   }
 
   handleCheckbox(e) {
@@ -52,11 +53,11 @@ class QuizPicker extends Component {
       quiz.map(q => q.isCorrect = false);
       quiz[e.target.id].isCorrect = e.target.checked;  
     }
-    this.setState({quiz});
+    this.setState({quiz}, this.updateJSON.bind(this));
   }
 
-  compileJSON() {
-    const {quiz} = this.state;
+  updateJSON() {
+    const {data, quiz} = this.state;
     const json = [];
     if (quiz) {
       for (const q of quiz) {
@@ -66,7 +67,8 @@ class QuizPicker extends Component {
         });
       }
     }
-    return json;
+    data.quizjson = JSON.stringify(json);
+    this.setState({data});
   }  
 
   addAnswer() {
@@ -77,7 +79,7 @@ class QuizPicker extends Component {
       text: "Set Answer Text",
       isCorrect: false
     });
-    this.setState({quiz});
+    this.setState({quiz}, this.updateJSON.bind(this));
   }
 
   removeAnswer(e) {
@@ -91,14 +93,12 @@ class QuizPicker extends Component {
         i++;
       }
     }
-    this.setState({quiz: newQuiz});
+    this.setState({quiz: newQuiz}, this.updateJSON.bind(this));
   }
 
   render() {
 
     const {quiz} = this.state;
-
-    if (this.props.onChangeQuiz) this.props.onChangeQuiz(this.compileJSON());
 
     let quizItems = [];
     if (quiz) {

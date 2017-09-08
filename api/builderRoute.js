@@ -66,4 +66,12 @@ module.exports = function(app) {
 
   });  
 
+  app.post("/api/builder/slides/save", (req, res) => {
+    
+    db.slides.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+
+  });
+
 };

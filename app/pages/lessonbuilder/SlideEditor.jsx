@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
@@ -76,18 +77,13 @@ class SlideEditor extends Component {
   closePreview() {
     this.setState({isOpen: false});
   }
-
+  
   saveContent() {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
-  }
-
-  onChangeQuiz(json) {
-    
-  }
-
-  onChangeRules(json) {
-    
+    axios.post("/api/builder/slides/save", data).then(resp => {
+      resp.status === 200 ? console.log("saved") : console.log("error");
+    });
   }
 
   render() {
@@ -189,8 +185,8 @@ class SlideEditor extends Component {
               </div>
           : null
         }
-        { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id} onChangeQuiz={this.onChangeQuiz.bind(this)} /> : null }
-        { showRules ? <RulePicker rulejson={data.rulejson} parentID={data.id} onChangeRules={this.onChangeRules.bind(this)} /> : null }
+        { showQuiz ? <QuizPicker data={data} parentID={data.id} /> : null }
+        { showRules ? <RulePicker data={data} parentID={data.id} /> : null }
         <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
         <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
       </div>

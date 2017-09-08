@@ -98,8 +98,12 @@ class LessonBuilder extends Component {
   }
 
   saveNode(node) {
-    if (node.itemType === "level") {
-      axios.post("/api/builder/minilessons/save", node.data).then(resp => {
+    let path = null;
+    if (node.itemType === "island") path = "/api/builder/lessons/save";
+    if (node.itemType === "level") path = "/api/builder/minilessons/save";
+    if (node.itemType === "slide") path = "/api/builder/slides/save";
+    if (path) {
+      axios.post(path, node.data).then(resp => {
         resp.status === 200 ? console.log("saved") : console.log("error");
       });
     }

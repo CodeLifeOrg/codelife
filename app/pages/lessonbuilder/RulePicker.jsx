@@ -9,22 +9,23 @@ class RulePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: null,
       rules: null,
       parentID: null
     };
   }
 
   componentDidMount() {
-    const rules = this.extractRules(this.props.rules);
-    const {parentID} = this.props;
-    this.setState({rules, parentID});
+    const {data, parentID} = this.props;
+    const rules = this.extractRules(data.rulejson);
+    this.setState({data, rules, parentID});
   }
 
   componentDidUpdate() {
     if (this.props.parentID !== this.state.parentID) {
-      const rules = this.extractRules(this.props.rules);
-      const {parentID} = this.props;
-      this.setState({rules, parentID});
+      const {data, parentID} = this.props;
+      const rules = this.extractRules(data.rulejson);
+      this.setState({data, rules, parentID});
     }
   }
 
@@ -39,8 +40,8 @@ class RulePicker extends Component {
     return rules;
   }
 
-  compileJSON() {
-    const {rules} = this.state;
+  updateJSON() {
+    const {data, rules} = this.state;
     const json = [];
     if (rules) {
       for (const r of rules) {
@@ -51,25 +52,26 @@ class RulePicker extends Component {
         });
       }
     }
-    return json;
+    data.rulejson = JSON.stringify(json);
+    this.setState({data});
   }
 
   changeType(e) {
     const {rules} = this.state;
     rules[e.target.id].type = e.target.value;
-    this.setState({rules});
+    this.setState({rules}, this.updateJSON.bind(this));
   }
 
   changeValue(e) {
     const {rules} = this.state;
     rules[e.target.id].needle = e.target.value;
-    this.setState({rules});
+    this.setState({rules}, this.updateJSON.bind(this));
   }
 
   changeError(e) {
     const {rules} = this.state;
     rules[e.target.id].error_msg = e.target.value;
-    this.setState({rules});
+    this.setState({rules}, this.updateJSON.bind(this));
   }
 
   addRule() {
@@ -81,7 +83,7 @@ class RulePicker extends Component {
       needle: "tag",
       error_msg: "Error Message"
     });
-    this.setState({rules});
+    this.setState({rules}, this.updateJSON.bind(this));
   }
 
   removeRule(e) {
@@ -95,14 +97,12 @@ class RulePicker extends Component {
         i++;
       }
     }
-    this.setState({rules: newRules});
+    this.setState({rules: newRules}, this.updateJSON.bind(this));
   }
 
   render() {
 
     const {rules} = this.state;
-
-    if (this.props.onChangeRules) this.props.onChangeRules(this.compileJSON());
 
     const ruleTypes = [
       <option value="CONTAINS">Contains Tag</option>,

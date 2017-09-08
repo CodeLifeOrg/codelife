@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
@@ -35,6 +36,9 @@ class LevelEditor extends Component {
   saveContent() {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
+    axios.post("/api/builder/minilessons/save", data).then(resp => {
+      resp.status === 200 ? console.log("saved") : console.log("error");
+    });
   }
 
   render() {

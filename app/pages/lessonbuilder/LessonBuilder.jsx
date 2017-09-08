@@ -32,9 +32,7 @@ class LessonBuilder extends Component {
       const slides = resp[2].data;
       lessons.sort((a, b) => a.ordering - b.ordering);
       minilessons.sort((a, b) => a.ordering - b.ordering);
-      slides.sort((a, b) => a.ordering - b.ordering);      
-      minilessons.map(m => m.slides = []);
-      lessons.map(l => l.minilessons = []);
+      slides.sort((a, b) => a.ordering - b.ordering); 
 
       const nodes = [];
 
@@ -99,6 +97,14 @@ class LessonBuilder extends Component {
     return obj;
   }
 
+  saveNode(node) {
+    if (node.itemType === "level") {
+      axios.post("/api/builder/minilessons/save", node.data).then(resp => {
+        resp.status === 200 ? console.log("saved") : console.log("error");
+      });
+    }
+  }
+
   moveItem(n, dir) {
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
@@ -106,11 +112,15 @@ class LessonBuilder extends Component {
       const old = arr.find(node => node.data.ordering === n.data.ordering - 1);
       old.data.ordering++;
       n.data.ordering--;
+      this.saveNode(old);
+      this.saveNode(n);
     }
     if (dir === "down") {
       const old = arr.find(node => node.data.ordering === n.data.ordering + 1);
       old.data.ordering--;
       n.data.ordering++;
+      this.saveNode(old);
+      this.saveNode(n);
     }
     arr.sort((a, b) => a.data.ordering - b.data.ordering);  
     this.setState({nodes}); 

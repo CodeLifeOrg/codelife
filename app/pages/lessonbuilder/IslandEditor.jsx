@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
@@ -55,6 +56,9 @@ class IslandEditor extends Component {
   saveContent() {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
+    axios.post("/api/builder/lessons/save", data).then(resp => {
+      resp.status === 200 ? console.log("saved") : console.log("error");
+    });
   }
 
   render() {
@@ -118,7 +122,7 @@ class IslandEditor extends Component {
           pt Initial Codeblock State<br/><br/>
           <CodeEditor style={{height: "400px"}} onChangeText={this.pt_onChangeText.bind(this)} initialValue={data.pt_initialcontent} ref={c => this.pt_editor = c}/>       
         </label>
-        <RulePicker rules={data.rulejson} parentID={data.id}/>
+        <RulePicker data={data} parentID={data.id}/>
         <div className="area-block">
           <label className="pt-label">
             Victory Text

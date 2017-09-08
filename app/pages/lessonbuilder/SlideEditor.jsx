@@ -190,7 +190,7 @@ class SlideEditor extends Component {
           : null
         }
         { showQuiz ? <QuizPicker quiz={data.quizjson} parentID={data.id} onChangeQuiz={this.onChangeQuiz.bind(this)} /> : null }
-        { showRules ? <RulePicker rules={data.rulejson} parentID={data.id} onChangeRules={this.onChangeRules.bind(this)} /> : null }
+        { showRules ? <RulePicker rulejson={data.rulejson} parentID={data.id} onChangeRules={this.onChangeRules.bind(this)} /> : null }
         <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
         <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
       </div>

@@ -10,9 +10,33 @@ module.exports = function(app) {
 
   });
 
+  app.post("/api/builder/lessons/save", (req, res) => {
+    
+    db.lessons.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+
+  });  
+
   app.get("/api/builder/minilessons", (req, res) => {
 
     db.minilessons.findAll({where: {lid: req.query.lid}}).then(u => {
+      res.json(u).end();
+    });
+
+  });
+
+  app.post("/api/builder/minilessons/save", (req, res) => {
+    
+    db.minilessons.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+
+  });
+
+  app.post("/api/builder/minilessons/new", (req, res) => {
+    
+    db.minilessons.create(req.body).then(u => {
       res.json(u).end();
     });
 

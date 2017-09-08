@@ -19,8 +19,19 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+.input-block {
+  width:100%;
+  display:flex;
+}
+
+.area-block {
+  width:100%;
+  display:flex;
+}
+
 .pt-input {
-  width: 400px;
+  width: 500px;
+  margin-right: 15px;
 }
 
 .pt-select {
@@ -32,7 +43,7 @@
 }
 
 .rule-select {
-  width: 200px;
+  width: 260px;
   margin: 5px;
 }
 
@@ -45,4 +56,3 @@
   width: 350px;
   margin: 5px;
 }
-

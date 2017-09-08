@@ -117,9 +117,8 @@ class RulePicker extends Component {
           <div className="pt-select rule-select">
             <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypes}</select>
           </div>
-          <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} /> 
-          <input className="pt-input rule-error" id={r.id} onChange={this.changeError.bind(this)} type="text" placeholder="Error" dir="auto" value={r.error_msg} /> 
-          <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}>Remove</button>
+          <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
+          <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>          
         </div>
       );
     }

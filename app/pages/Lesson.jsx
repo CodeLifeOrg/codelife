@@ -25,7 +25,7 @@ class Lesson extends Component {
 
     Promise.all([lget, upget, sget]).then(resp => {
       const lessons = resp[0].data;
-      lessons.sort((a, b) => a.index - b.index);
+      lessons.sort((a, b) => a.ordering - b.ordering);
       const userProgress = resp[1].data;
       const snippets = resp[2].data;
       this.setState({lessons, userProgress, snippets});

@@ -21,6 +21,7 @@ class Nav extends Component {
         <div className="links">
           { auth.user
           ? <div>
+              <Link className="link" to="/lessonbuilder"><span className="pt-icon-standard pt-icon-cog" />{ t("Builder") }</Link>
               <Link className="link" to="/lesson"><span className="pt-icon-standard pt-icon-path-search" />{ t("Map") }</Link>
               <Link className="link" to={`/projects/${auth.user.username}`}><span className="pt-icon-standard pt-icon-book" />{ t("Projects") }</Link>
               <Popover

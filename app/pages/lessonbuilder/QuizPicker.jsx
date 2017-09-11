@@ -12,33 +12,32 @@ class QuizPicker extends Component {
     this.state = {
       data: null,
       quiz: null,
-      pt_quiz: null,
       parentID: null
     };
   }
 
   componentDidMount() {
     const {data, parentID} = this.props;
-    const quiz = this.extractQuiz(this.props.data.quizjson);
-    const pt_quiz = this.extractQuiz(this.props.data.pt_quizjson);
-    this.setState({data, quiz, pt_quiz, parentID});   
+    const quiz = this.extractQuiz(this.props.data.quizjson, this.props.data.pt_quizjson);
+    this.setState({data, quiz, parentID});   
   }
 
   componentDidUpdate() {
     if (this.props.parentID !== this.state.parentID) {
       const {data, parentID} = this.props;
-      const quiz = this.extractQuiz(this.props.data.quizjson);
-      const pt_quiz = this.extractQuiz(this.props.data.pt_quizjson);
-      this.setState({data, quiz, pt_quiz, parentID});   
+      const quiz = this.extractQuiz(this.props.data.quizjson, this.props.data.pt_quizjson);
+      this.setState({data, quiz, parentID});   
     }
   }
 
-  extractQuiz(quizjson) {
+  extractQuiz(quizjson, pt_quizjson) {
     let quiz = [];
-    if (quizjson) {
+    if (quizjson && pt_quizjson) {
       quiz = JSON.parse(quizjson);
+      pt_quiz = JSON.parse(pt_quizjson);
       for (let i = 0; i < quiz.length; i++) {
         quiz[i].id = i;
+        quiz[i].pt_text = pt_quizjson[i].text; 
       }
     }
     return quiz;

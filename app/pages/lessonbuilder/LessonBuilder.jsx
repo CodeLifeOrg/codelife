@@ -121,6 +121,18 @@ class LessonBuilder extends Component {
     }
   }
 
+  delNode(node) {
+    let path = null;
+    if (node.itemType === "island") path = "/api/builder/lessons/delete";
+    if (node.itemType === "level") path = "/api/builder/minilessons/delete";
+    if (node.itemType === "slide") path = "/api/builder/slides/delete";
+    if (path) {
+      axios.delete(path, {params: {id: node.data.id}}).then(resp => {
+        resp.status === 200 ? console.log("successfully deleted") : console.log("error");
+      });
+    } 
+  }
+
   moveItem(n, dir) {
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
@@ -259,7 +271,9 @@ class LessonBuilder extends Component {
     const i = n.parent.childNodes.indexOf(n);
     n.parent.childNodes.splice(i, 1);
     n.parent.childNodes.map(node => node.data.ordering > oldLoc ? node.data.ordering-- : null);
-    // n.parent.childNodes.sort((a, b) => a.data.ordering - b.data.ordering);
+    // this sort *should* be unnecessary but I'm running it just in case
+    n.parent.childNodes.sort((a, b) => a.data.ordering - b.data.ordering);
+    this.delNode(n);
     this.setState({nodes});
     if (n.parent.childNodes[0]) this.handleNodeClick(n.parent.childNodes[0]);
   }

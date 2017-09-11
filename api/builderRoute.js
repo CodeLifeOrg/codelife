@@ -26,6 +26,14 @@ module.exports = function(app) {
 
   });
 
+  app.delete("/api/builder/lessons/delete", (req, res) => {
+
+    db.lessons.destroy({where: {id: req.query.id}}).then(() => {
+      db.lessons.findAll({where: {uid: req.user.id}}).then(lessons => res.json(lessons).end());
+    });
+
+  });
+
   app.get("/api/builder/minilessons", (req, res) => {
 
     db.minilessons.findAll({where: {lid: req.query.lid}}).then(u => {
@@ -58,6 +66,14 @@ module.exports = function(app) {
 
   });
 
+  app.delete("/api/builder/minilessons/delete", (req, res) => {
+
+    db.minilessons.destroy({where: {id: req.query.id}}).then(() => {
+      db.minilessons.findAll({where: {uid: req.user.id}}).then(minilessons => res.json(minilessons).end());
+    });
+
+  });
+
   app.get("/api/builder/slides", (req, res) => {
 
     db.slides.findAll({where: {mlid: req.query.mlid}}).then(u => {
@@ -85,6 +101,14 @@ module.exports = function(app) {
   app.post("/api/builder/slides/new", (req, res) => {
     
     db.slides.create(req.body).then(u => {
+      res.json(u).end();
+    });
+
+  });
+
+  app.delete("/api/builder/slides/delete", (req, res) => {
+
+    db.slides.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();
     });
 

@@ -2,7 +2,6 @@ module.exports = function(sequelize, db) {
 
   return sequelize.define("minilessons",
     {
-      index: db.BIGINT,
       id: {
         type: db.TEXT,
         primaryKey: true

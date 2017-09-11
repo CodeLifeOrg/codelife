@@ -29,7 +29,9 @@ module.exports = function(app) {
   app.delete("/api/builder/lessons/delete", (req, res) => {
 
     db.lessons.destroy({where: {id: req.query.id}}).then(() => {
-      db.lessons.findAll({where: {uid: req.user.id}}).then(lessons => res.json(lessons).end());
+      db.minilessons.destroy({where: {lid: req.query.id}}).then(u => {
+        res.json(u).end();
+      });
     });
 
   });
@@ -69,7 +71,7 @@ module.exports = function(app) {
   app.delete("/api/builder/minilessons/delete", (req, res) => {
 
     db.minilessons.destroy({where: {id: req.query.id}}).then(() => {
-      db.minilessons.findAll({where: {uid: req.user.id}}).then(minilessons => res.json(minilessons).end());
+      db.slides.destroy({where: {mlid: req.query.id}}).then(u => res.json(u).end());
     });
 
   });

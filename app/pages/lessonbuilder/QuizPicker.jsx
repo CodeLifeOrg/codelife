@@ -12,6 +12,7 @@ class QuizPicker extends Component {
     this.state = {
       data: null,
       quiz: null,
+      pt_quiz: null,
       parentID: null
     };
   }
@@ -19,14 +20,16 @@ class QuizPicker extends Component {
   componentDidMount() {
     const {data, parentID} = this.props;
     const quiz = this.extractQuiz(this.props.data.quizjson);
-    this.setState({data, quiz, parentID});   
+    const pt_quiz = this.extractQuiz(this.props.data.pt_quizjson);
+    this.setState({data, quiz, pt_quiz, parentID});   
   }
 
   componentDidUpdate() {
     if (this.props.parentID !== this.state.parentID) {
       const {data, parentID} = this.props;
       const quiz = this.extractQuiz(this.props.data.quizjson);
-      this.setState({data, quiz, parentID});   
+      const pt_quiz = this.extractQuiz(this.props.data.pt_quizjson);
+      this.setState({data, quiz, pt_quiz, parentID});   
     }
   }
 

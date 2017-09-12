@@ -30,22 +30,23 @@ class QuizPicker extends Component {
     }
   }
 
-  extractQuiz(quizjson, pt_quizjson) {
+  extractQuiz(quizjson, langjson) {
     let quiz = [];
-    if (quizjson && pt_quizjson) {
+    let langQuiz = [];
+    if (quizjson && langjson) {
       quiz = JSON.parse(quizjson);
-      pt_quiz = JSON.parse(pt_quizjson);
+      langQuiz = JSON.parse(langjson);
       for (let i = 0; i < quiz.length; i++) {
         quiz[i].id = i;
-        quiz[i].pt_text = pt_quizjson[i].text; 
+        quiz[i].pt_text = langQuiz[i].text; 
       }
     }
     return quiz;
   }
 
-  changeQuestion(e) {
+  changeField(field, e) {
     const {quiz} = this.state;
-    quiz[e.target.id].text = e.target.value;
+    quiz[e.target.id][field] = e.target.value;
     this.setState({quiz}, this.updateJSON.bind(this));
   }
 
@@ -61,15 +62,21 @@ class QuizPicker extends Component {
   updateJSON() {
     const {data, quiz} = this.state;
     const json = [];
+    const langjson = [];
     if (quiz) {
-      for (const q of quiz) {
-        json.push({
-          text: q.text,
-          isCorrect: q.isCorrect
-        });
+      for (let i = 0; i < quiz.length; i++) {
+        json[i] = {
+          text: quiz[i].text,
+          isCorrect: quiz[i].isCorrect
+        };
+        langjson[i] = {
+          text: quiz[i].pt_text,
+          isCorrect: quiz[i].isCorrect
+        };
       }
     }
     data.quizjson = JSON.stringify(json);
+    data.pt_quizjson = JSON.stringify(langjson);
     this.setState({data});
   }  
 
@@ -79,6 +86,7 @@ class QuizPicker extends Component {
     quiz.push({
       id: nextID,
       text: "Set Answer Text",
+      pt_text: "",
       isCorrect: false
     });
     this.setState({quiz}, this.updateJSON.bind(this));
@@ -106,7 +114,8 @@ class QuizPicker extends Component {
     if (quiz) {
       quizItems = quiz.map(q => 
         <div className="quiz-section" style={{display: "flex"}}>
-          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeQuestion.bind(this)} type="text" placeholder="Answer" dir="auto" value={q.text} /> 
+          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "text")} type="text" placeholder="Answer" dir="auto" value={q.text} /> 
+          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "pt_text")} type="text" placeholder="Answer" dir="auto" value={q.pt_text} /> 
           <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} style={{margin: "12px"}} />        
           <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={q.id} onClick={this.removeAnswer.bind(this)}>Remove</button>
         </div>

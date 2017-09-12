@@ -22,7 +22,7 @@ class Quiz extends Component {
     if (question.isCorrect) {
       toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
       if (!gemEarned && this.props.updateGems) this.props.updateGems(1);
-      this.props.unblock();
+      if (this.props.unblock) this.props.unblock();
     }
     else {
       toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});

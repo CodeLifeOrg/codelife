@@ -28,11 +28,8 @@ module.exports = function(app) {
 
   app.delete("/api/builder/lessons/delete", (req, res) => {
 
-    db.lessons.destroy({where: {id: req.query.id}}).then(() => {
-      db.minilessons.destroy({where: {lid: req.query.id}}).then(u => {
-        res.json(u).end();
-      });
-    });
+    const q = "delete from lessons where lessons.id = '" + req.query.id + "'";
+    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());
 
   });
 
@@ -70,9 +67,8 @@ module.exports = function(app) {
 
   app.delete("/api/builder/minilessons/delete", (req, res) => {
 
-    db.minilessons.destroy({where: {id: req.query.id}}).then(() => {
-      db.slides.destroy({where: {mlid: req.query.id}}).then(u => res.json(u).end());
-    });
+    const q = "delete from minilessons where minilessons.id = '" + req.query.id + "'";
+    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());
 
   });
 
@@ -110,9 +106,8 @@ module.exports = function(app) {
 
   app.delete("/api/builder/slides/delete", (req, res) => {
 
-    db.slides.destroy({where: {id: req.query.id}}).then(u => {
-      res.json(u).end();
-    });
+    const q = "delete from slides where slides.id = '" + req.query.id + "'";
+    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());
 
   });
 

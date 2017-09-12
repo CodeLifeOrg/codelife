@@ -109,14 +109,36 @@ class LessonBuilder extends Component {
     }
   }
 
-  newNode(node) {
-    let path = null;
-    if (node.itemType === "island") path = "/api/builder/lessons/new";
-    if (node.itemType === "level") path = "/api/builder/minilessons/new";
-    if (node.itemType === "slide") path = "/api/builder/slides/new";
-    if (path) {
-      axios.post(path, node.data).then(resp => {
+  newNode(nodes) {
+    const lpath = "/api/builder/lessons/new";
+    const mpath = "/api/builder/minilessons/new";
+    const spath = "/api/builder/slides/new";
+    console.log(nodes);
+    if (nodes.length === 1) {
+      const snode = nodes[0];
+      axios.post(spath, snode.data).then(resp => {
         resp.status === 200 ? console.log("saved") : console.log("error");
+      });
+    }
+    if (nodes.length === 2) {
+      const mnode = nodes[0];
+      const snode = nodes[1];
+      axios.post(mpath, mnode.data).then(() => {
+        axios.post(spath, snode.data).then(resp => {
+          resp.status === 200 ? console.log("saved") : console.log("error");
+        });
+      });
+    }
+    if (nodes.length === 3) {
+      const lnode = nodes[0];
+      const mnode = nodes[1];
+      const snode = nodes[2];
+      axios.post(lpath, lnode.data).then(() => {
+        axios.post(mpath, mnode.data).then(() => {
+          axios.post(spath, snode.data).then(resp => {
+            resp.status === 200 ? console.log("saved") : console.log("errror");
+          });
+        });
       });
     }
   }
@@ -155,8 +177,10 @@ class LessonBuilder extends Component {
   }
 
   addItem(n, dir) {
+    
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
+    console.log(n, n.parent, dir, arr);
     let loc = n.data.ordering;
     const epoch = Date.now();
     if (dir === "above") {
@@ -235,6 +259,7 @@ class LessonBuilder extends Component {
     };
 
     let obj = null;
+    
     if (n.itemType === "slide") {
       obj = objSlide;
     }
@@ -242,24 +267,27 @@ class LessonBuilder extends Component {
       obj = objLevel;
       objSlide.data.ordering = 0;
       objSlide.data.mlid = obj.data.id;
+      objSlide.parent = obj;
       obj.childNodes = [objSlide];
-      this.newNode(objSlide);
     }
     if (n.itemType === "island") {
       obj = objIsland;
       objLevel.data.ordering = 0;
       objLevel.data.lid = obj.data.id;
+      objLevel.parent = obj;
       objSlide.data.ordering = 0;
       objSlide.data.mlid = objLevel.data.id;
+      objSlide.parent = objLevel;
       objLevel.childNodes = [objSlide];
       obj.childNodes = [objLevel];
-      this.newNode(objLevel);
-      this.newNode(objSlide);
     }
     if (obj) {
       arr.push(obj);
       arr.sort((a, b) => a.data.ordering - b.data.ordering);  
-      this.newNode(obj);
+      // oh boy do i hate this TODO: generalize this array without breaking it
+      if (n.itemType === "slide") this.newNode([obj]);
+      if (n.itemType === "level") this.newNode([obj, objSlide]);
+      if (n.itemType === "island") this.newNode([obj, objLevel, objSlide]);
       this.setState({nodes});
       this.handleNodeClick(obj);
     }

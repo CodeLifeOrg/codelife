@@ -9,6 +9,8 @@ import LevelEditor from "pages/lessonbuilder/LevelEditor";
 import SlideEditor from "pages/lessonbuilder/SlideEditor";
 import CtxMenu from "pages/lessonbuilder/CtxMenu";
 
+import crypto from "crypto";
+
 import "./LessonBuilder.css";
 
 class LessonBuilder extends Component {
@@ -113,7 +115,7 @@ class LessonBuilder extends Component {
     const lpath = "/api/builder/lessons/new";
     const mpath = "/api/builder/minilessons/new";
     const spath = "/api/builder/slides/new";
-    console.log(nodes);
+    
     if (nodes.length === 1) {
       const snode = nodes[0];
       axios.post(spath, snode.data).then(resp => {
@@ -136,7 +138,7 @@ class LessonBuilder extends Component {
       axios.post(lpath, lnode.data).then(() => {
         axios.post(mpath, mnode.data).then(() => {
           axios.post(spath, snode.data).then(resp => {
-            resp.status === 200 ? console.log("saved") : console.log("errror");
+            resp.status === 200 ? console.log("saved") : console.log("error");
           });
         });
       });
@@ -176,13 +178,15 @@ class LessonBuilder extends Component {
     this.setState({nodes}); 
   }
 
+  getUUID() {
+    return crypto.randomBytes(2).toString("hex");
+  }
+
   addItem(n, dir) {
     
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
-    console.log(n, n.parent, dir, arr);
     let loc = n.data.ordering;
-    const epoch = Date.now();
     if (dir === "above") {
       arr.map(node => node.data.ordering >= n.data.ordering ? node.data.ordering++ : null);
     }
@@ -190,15 +194,16 @@ class LessonBuilder extends Component {
       loc++;
       arr.map(node => node.data.ordering >= n.data.ordering + 1 ? node.data.ordering++ : null);
     }
+    const slideUUID = `slide-${this.getUUID()}`;
     const objSlide = {
-      id: `new-slide${epoch}`,
+      id: slideUUID,
       hasCaret: false, 
       iconName: "page-layout", 
       label: "New Slide",
       itemType: "slide",
       parent: n.parent,
       data: {
-        id: `new-slide${epoch}`,
+        id: slideUUID,
         type: "TextImage",
         title: "New Slide",
         htmlcontent1: "New Content 1",
@@ -214,15 +219,16 @@ class LessonBuilder extends Component {
         ordering: loc
       }
     };
+    const levelUUID = `level-${this.getUUID()}`;
     const objLevel = {
-      id: `new-level${epoch}`,
+      id: levelUUID,
       hasCaret: true, 
       iconName: "multi-select", 
       label: "New Level",
       itemType: "level",
       parent: n.parent,
       data: {
-        id: `new-level${epoch}`,
+        id: levelUUID,
         name: "New Level",
         description: "New Description",
         pt_name: "New Level",
@@ -231,15 +237,16 @@ class LessonBuilder extends Component {
         ordering: loc
       }
     };
+    const islandUUID = `island-${this.getUUID()}`;
     const objIsland = {
-      id: `new-island${epoch}`,
+      id: islandUUID,
       hasCaret: true, 
       iconName: "map", 
       label: "New Island",
       itemType: "island",
       parent: n.parent,
       data: {
-        id: `new-island${epoch}`,
+        id: islandUUID,
         name: "New Island",
         description: "New Description",
         prompt: "New Prompt",

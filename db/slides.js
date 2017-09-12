@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("slides",
+  const s = sequelize.define("slides",
     {
       id: {
         type: db.TEXT,
@@ -25,5 +25,9 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  s.associate = models => s.belongsTo(models.minilessons, {foreignKey: "mlid", targetKey: "id", as: "minilessons", foreignKeyConstraint: true});
+
+  return s;
 
 };

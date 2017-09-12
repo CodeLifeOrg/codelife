@@ -71,8 +71,8 @@ class IslandEditor extends Component {
       <div id="island-editor">
         <label className="pt-label">
           id
-          <span className="pt-text-muted"> (unique)</span>
-          <input className="pt-input" onChange={this.changeField.bind(this, "id")} type="text" placeholder="Enter a unique page id e.g. island-1" dir="auto" value={data.id} />
+          <span className="pt-text-muted"> (required, auto-generated)</span>
+          <input className="pt-input" disabled type="text" placeholder="Enter a unique page id e.g. island-1" dir="auto" value={data.id} />
         </label>
         <div className="input-block">
           <label className="pt-label">

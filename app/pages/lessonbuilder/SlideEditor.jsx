@@ -120,8 +120,8 @@ class SlideEditor extends Component {
 
         <label className="pt-label">
           id
-          <span className="pt-text-muted"> (required, unique)</span>
-          <input className="pt-input" onChange={this.changeField.bind(this, "id")} type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
+          <span className="pt-text-muted"> (required, auto-generated)</span>
+          <input className="pt-input" disabled type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
         </label>
         <div className="input-block">
           <label className="pt-label">

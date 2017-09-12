@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("lessons",
+  const l = sequelize.define("lessons",
     {
       id: {
         type: db.TEXT,
@@ -27,5 +27,11 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  l.associate = models => {
+    l.hasMany(models.minilessons, {foreignKey: "id", targetKey: "lid", as: "minilessons", foreignKeyConstraint: true});
+  };
+
+  return l;
 
 };

@@ -28,8 +28,12 @@ module.exports = function(app) {
 
   app.delete("/api/builder/lessons/delete", (req, res) => {
 
-    const q = "delete from lessons where lessons.id = '" + req.query.id + "'";
-    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());
+    /*const q = "delete from lessons where lessons.id = '" + req.query.id + "'";
+    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
+
+    db.lessons.destroy({where: {id: req.query.id}}).then(u => {
+      res.json(u).end();
+    });    
 
   });
 
@@ -67,8 +71,12 @@ module.exports = function(app) {
 
   app.delete("/api/builder/minilessons/delete", (req, res) => {
 
-    const q = "delete from minilessons where minilessons.id = '" + req.query.id + "'";
-    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());
+    /*const q = "delete from minilessons where minilessons.id = '" + req.query.id + "'";
+    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
+
+    db.minilessons.destroy({where: {id: req.query.id}}).then(u => {
+      res.json(u).end();
+    });    
 
   });
 
@@ -106,8 +114,12 @@ module.exports = function(app) {
 
   app.delete("/api/builder/slides/delete", (req, res) => {
 
-    const q = "delete from slides where slides.id = '" + req.query.id + "'";
-    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());
+    /*const q = "delete from slides where slides.id = '" + req.query.id + "'";
+    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
+
+    db.slides.destroy({where: {id: req.query.id}}).then(u => {
+      res.json(u).end();
+    });    
 
   });
 

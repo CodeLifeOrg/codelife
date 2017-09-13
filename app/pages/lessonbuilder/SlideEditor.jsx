@@ -6,7 +6,7 @@ import Loading from "components/Loading";
 import RulePicker from "pages/lessonbuilder/RulePicker";
 import QuizPicker from "pages/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor";
-import {Button, Dialog} from "@blueprintjs/core";
+import {Button, Dialog, Toaster, Position, Intent} from "@blueprintjs/core";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -30,6 +30,7 @@ class SlideEditor extends Component {
     this.state = {
       data: null,
       img: null,
+      pt_img: null,
       isOpen: false
     };
   }
@@ -72,7 +73,30 @@ class SlideEditor extends Component {
   }
 
   onImgUpdate(lang, e) {
-    console.log(lang, e.target.files[0]);
+    /*if (lang === "en") this.setState({img: e.target.files[0]});
+    if (lang === "pt") this.setState({pt_img: e.target.files[0]});*/
+    const img = e.target.files[0];
+    const config = {headers: {"Content-Type": "multipart/form-data"}};
+    const formData = new FormData();
+    formData.append("file", img);
+    if (lang === "pt") {
+      formData.append("title", `pt_${this.state.data.id}`);
+    } 
+    else {
+      formData.append("title", `pt_${this.state.data.id}`);
+    }
+    axios.post("/api/slideImgUpload/", formData, config).then(imgResp => {
+      const imgRespData = imgResp.data;
+      if (imgRespData.error) {
+        const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+        toast.show({message: "Unable to upload image!", intent: Intent.DANGER});
+      }
+      else {
+        const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
+        toast.show({message: "Image Uploaded!", intent: Intent.SUCCESS});
+      }
+      this.forceUpdate();
+    });
   }
 
   previewSlide() {
@@ -197,7 +221,7 @@ class SlideEditor extends Component {
                   pt htmlcontent2
                   {showImg 
                     ? <div>
-                        <img width="400px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                        <img width="400px" src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                         <label className="pt-file-upload">
                           <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
                           <span className="pt-file-upload-input">Upload</span>

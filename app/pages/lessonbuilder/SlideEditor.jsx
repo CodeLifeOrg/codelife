@@ -29,6 +29,7 @@ class SlideEditor extends Component {
     super(props);
     this.state = {
       data: null,
+      img: null,
       isOpen: false
     };
   }
@@ -70,6 +71,10 @@ class SlideEditor extends Component {
     this.setState({data});
   }
 
+  onImgUpdate(lang, e) {
+    console.log(lang, e.target.files[0]);
+  }
+
   previewSlide() {
     this.setState({isOpen: !this.state.isOpen});
   }
@@ -94,8 +99,9 @@ class SlideEditor extends Component {
 
     const showQuiz = data.type === "Quiz";
     const showRules = data.type === "InputCode";
-    const showContent2 = ["TextImage", "Quiz", "CheatSheet"].indexOf(data.type) === -1;
+    const showContent2 = ["Quiz", "CheatSheet"].indexOf(data.type) === -1;
     const showAce2 = ["TextCode", "RenderCode", "InputCode"].indexOf(data.type) !== -1;
+    const showImg = ["TextImage", "ImageText"].indexOf(data.type) !== -1;
     const SlideComponent = compLookup[data.type];
 
     return (
@@ -176,11 +182,29 @@ class SlideEditor extends Component {
             : <div className="area-block">
                 <label className="pt-label">
                   htmlcontent2
-                  <textarea className="pt-input" onChange={this.changeField.bind(this, "htmlcontent2")} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
+                  {showImg 
+                    ? <div style={{marginRight: "20px"}}>
+                        <img width="400px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                        <label className="pt-file-upload">
+                          <input onChange={this.onImgUpdate.bind(this, "en")} type="file" />
+                          <span className="pt-file-upload-input">Upload</span>
+                        </label>
+                      </div>
+                    : <textarea className="pt-input" onChange={this.changeField.bind(this, "htmlcontent2")} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
+                  }
                 </label>
                 <label className="pt-label">
                   pt htmlcontent2
-                  <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_htmlcontent2")} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.pt_htmlcontent2} />
+                  {showImg 
+                    ? <div>
+                        <img width="400px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                        <label className="pt-file-upload">
+                          <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
+                          <span className="pt-file-upload-input">Upload</span>
+                        </label>
+                      </div>
+                    : <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_htmlcontent2")} rows="10" type="text" placeholder="pt_htmlcontent2" dir="auto" value={data.pt_htmlcontent2} />
+                  }
                 </label>
               </div>
           : null

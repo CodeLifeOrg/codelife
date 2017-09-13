@@ -83,7 +83,7 @@ class SlideEditor extends Component {
       formData.append("title", `pt_${this.state.data.id}`);
     } 
     else {
-      formData.append("title", `pt_${this.state.data.id}`);
+      formData.append("title", `${this.state.data.id}`);
     }
     axios.post("/api/slideImgUpload/", formData, config).then(imgResp => {
       const imgRespData = imgResp.data;

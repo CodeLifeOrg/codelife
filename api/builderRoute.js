@@ -131,9 +131,11 @@ module.exports = function(app) {
   // req.files.
   const upload = multer({
     // storage: multer.memoryStorage(),
+    /*
     limits: {
       fileSize: 5 * 1024 * 1024 // no larger than 5mb
     },
+    */
     fileFilter: (req, file, callback) => {
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
         return callback(new Error("Only image files are allowed!"));
@@ -154,7 +156,6 @@ module.exports = function(app) {
 
       const sampleFile = req.file;
       const title = req.body.title;
-      console.log(req);
       // const userId = "test-123";
       const newFileName = `${title}.jpg`;
       const imgPath = path.join(process.cwd(), "/static/slide_images", newFileName);

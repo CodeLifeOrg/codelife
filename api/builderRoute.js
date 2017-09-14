@@ -156,14 +156,12 @@ module.exports = function(app) {
 
       const sampleFile = req.file;
       const title = req.body.title;
-      // const userId = "test-123";
       const newFileName = `${title}.jpg`;
       const imgPath = path.join(process.cwd(), "/static/slide_images", newFileName);
-      // return res.json({f: newFileName, f2: imgPath});
 
       sharp(sampleFile.buffer)
         .toFormat(sharp.format.jpeg)
-        .resize(350, 350)
+        // .resize(350, 350)
         .toFile(imgPath, (uploadErr, info) => {
           if (uploadErr) {
             return res.status(500).send(uploadErr);

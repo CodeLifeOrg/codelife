@@ -60,7 +60,7 @@ class LevelEditor extends Component {
             <input className="pt-input" onChange={this.changeField.bind(this, "name")} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.name}/>
           </label>
           <label className="pt-label">
-            pt Name
+            pt Name  🇧🇷 
             <input className="pt-input" onChange={this.changeField.bind(this, "pt_name")} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.pt_name}/>
           </label>
         </div>
@@ -70,7 +70,7 @@ class LevelEditor extends Component {
             <input className="pt-input" onChange={this.changeField.bind(this, "description")} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.description} />
           </label>
           <label className="pt-label">
-            pt Description
+            pt Description  🇧🇷 
             <input className="pt-input" onChange={this.changeField.bind(this, "pt_description")} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.pt_description} />
           </label>
         </div>

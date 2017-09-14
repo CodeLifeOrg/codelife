@@ -31,7 +31,8 @@ class SlideEditor extends Component {
       data: null,
       img: null,
       pt_img: null,
-      isOpen: false
+      isOpen: false,
+      pt_isOpen: false
     };
   }
 
@@ -73,8 +74,6 @@ class SlideEditor extends Component {
   }
 
   onImgUpdate(lang, e) {
-    /*if (lang === "en") this.setState({img: e.target.files[0]});
-    if (lang === "pt") this.setState({pt_img: e.target.files[0]});*/
     const img = e.target.files[0];
     const config = {headers: {"Content-Type": "multipart/form-data"}};
     const formData = new FormData();
@@ -103,8 +102,12 @@ class SlideEditor extends Component {
     this.setState({isOpen: !this.state.isOpen});
   }
 
+  pt_previewSlide() {
+   this.setState({pt_isOpen: !this.state.pt_isOpen}); 
+  }
+
   closePreview() {
-    this.setState({isOpen: false});
+    this.setState({isOpen: false, pt_isOpen: false});
   }
   
   saveContent() {
@@ -113,6 +116,15 @@ class SlideEditor extends Component {
     axios.post("/api/builder/slides/save", data).then(resp => {
       resp.status === 200 ? console.log("saved") : console.log("error");
     });
+  }
+
+  translateData(lang, data) {
+    const resp = {};
+    resp.id = data.id;
+    for (const k in data) {
+      if (data[`${lang}_${k}`]) resp[k] = data[`${lang}_${k}`];
+    }
+    return resp;
   }
 
   render() {
@@ -127,6 +139,8 @@ class SlideEditor extends Component {
     const showAce2 = ["TextCode", "RenderCode", "InputCode"].indexOf(data.type) !== -1;
     const showImg = ["TextImage", "ImageText"].indexOf(data.type) !== -1;
     const SlideComponent = compLookup[data.type];
+
+    const ptData = this.translateData("pt", data);
 
     return (
       <div id="slide-editor">
@@ -148,6 +162,21 @@ class SlideEditor extends Component {
           </div>
         </Dialog>
 
+        <Dialog
+          isOpen={this.state.pt_isOpen}
+          onClose={this.closePreview.bind(this)}
+          title={ptData.title}
+          style={{
+            height: "80vh",
+            maxHeight: "1000px",
+            width: "90%"
+          }}
+        >
+          <div id="slide" className="pt-dialog-body">
+            <SlideComponent {...ptData} overrideLang="pt" />
+          </div>
+        </Dialog>
+
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
@@ -160,7 +189,7 @@ class SlideEditor extends Component {
             <input className="pt-input" onChange={this.changeField.bind(this, "title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
           </label>
           <label className="pt-label">
-            pt Title
+            pt Title 🇧🇷 
             <span className="pt-text-muted"> (required)</span>
             <input className="pt-input" onChange={this.changeField.bind(this, "pt_title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.pt_title} />
           </label>
@@ -187,7 +216,7 @@ class SlideEditor extends Component {
             <textarea className="pt-input" onChange={this.changeField.bind(this, "htmlcontent1")} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
           </label>
           <label className="pt-label">
-            pt htmlcontent1
+            pt htmlcontent1  🇧🇷 
             <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_htmlcontent1")} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.pt_htmlcontent1} />
           </label>
         </div>
@@ -199,7 +228,7 @@ class SlideEditor extends Component {
                   <CodeEditor style={{height: "400px"}} onChangeText={this.onChangeText.bind(this)} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
                 </label>
                 <label className="pt-label">
-                  pt htmlcontent2
+                  pt htmlcontent2  🇧🇷 
                   <CodeEditor style={{height: "400px"}} onChangeText={this.pt_onChangeText.bind(this)} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/> 
                 </label>
               </div>
@@ -207,8 +236,8 @@ class SlideEditor extends Component {
                 <label className="pt-label">
                   htmlcontent2
                   {showImg 
-                    ? <div style={{marginRight: "20px"}}>
-                        <img width="400px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                    ? <div style={{marginRight: "15px"}}>
+                        <img width="500px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                         <label className="pt-file-upload">
                           <input onChange={this.onImgUpdate.bind(this, "en")} type="file" />
                           <span className="pt-file-upload-input">Upload</span>
@@ -218,10 +247,10 @@ class SlideEditor extends Component {
                   }
                 </label>
                 <label className="pt-label">
-                  pt htmlcontent2
+                  pt htmlcontent2  🇧🇷 
                   {showImg 
                     ? <div>
-                        <img width="400px" src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                        <img width="500px" src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                         <label className="pt-file-upload">
                           <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
                           <span className="pt-file-upload-input">Upload</span>
@@ -236,6 +265,7 @@ class SlideEditor extends Component {
         { showQuiz ? <QuizPicker data={data} parentID={data.id} /> : null }
         { showRules ? <RulePicker data={data} parentID={data.id} /> : null }
         <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
+        <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview PT</Button>&nbsp;
         <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );

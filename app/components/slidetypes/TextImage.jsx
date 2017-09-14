@@ -27,8 +27,10 @@ class TextImage extends Component {
 
     const {id, htmlcontent1} = this.props;
 
-    let path = `/slide_images/${ id }.jpg`;
-    if (this.props.locale === "pt") path = `/slide_images/pt_${ id }.jpg`;
+    let path = `/slide_images/${ id }.jpg?v=${new Date().getTime()}`;
+    if (this.props.locale === "pt" || this.props.overrideLang === "pt") path = `/slide_images/pt_${ id }.jpg?v=${new Date().getTime()}`;
+
+    console.log("loading", path);
 
     return (
       <div id="slide-container" className="textImage flex-row">

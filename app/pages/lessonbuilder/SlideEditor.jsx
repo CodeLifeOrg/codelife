@@ -17,9 +17,10 @@ import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
 import CheatSheet from "components/slidetypes/CheatSheet";
 
-//import RichTextEditor from "react-rte/lib/RichTextEditor";
+import ReactQuill from "react-quill";
 
 import "./SlideEditor.css";
+import "react-quill/dist/quill.snow.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
 
@@ -109,6 +110,18 @@ class SlideEditor extends Component {
   closePreview() {
     this.setState({isOpen: false, pt_isOpen: false});
   }
+
+  handleChange(text) {
+    const {data} = this.state;
+    data.htmlcontent1 = text;
+    this.setState({data});
+  }
+
+  pt_handleChange(text) {
+    const {data} = this.state;
+    data.pt_htmlcontent1 = text;
+    this.setState({data});
+  }
   
   saveContent() {
     const {data} = this.state;
@@ -142,10 +155,18 @@ class SlideEditor extends Component {
 
     const ptData = this.translateData("pt", data);
 
+    const modules = {
+      toolbar: [
+        [{header: [1, 2, false]}],
+        ["bold", "italic", "underline", "code", "blockquote"],
+        [{list: "ordered"}, {list: "bullet"}],
+        ["clean"]
+      ],
+    };
+
+
     return (
       <div id="slide-editor">
-        
-        { /* <RichTextEditor /> */ }
 
         <Dialog
           isOpen={this.state.isOpen}
@@ -213,11 +234,23 @@ class SlideEditor extends Component {
         <div className="area-block">
           <label className="pt-label">
             htmlcontent1
-            <textarea className="pt-input" onChange={this.changeField.bind(this, "htmlcontent1")} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.htmlcontent1} />
+            <ReactQuill
+              theme="snow"
+              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+              modules={modules}
+              value={this.state.data.htmlcontent1}
+              onChange={this.handleChange.bind(this)} 
+            />
           </label>
           <label className="pt-label">
             pt htmlcontent1  🇧🇷 
-            <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_htmlcontent1")} rows="10" type="text" placeholder="htmlcontent1" dir="auto" value={data.pt_htmlcontent1} />
+            <ReactQuill
+              theme="snow"
+              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+              modules={modules}
+              value={this.state.data.pt_htmlcontent1}
+              onChange={this.pt_handleChange.bind(this)} 
+            />
           </label>
         </div>
         { showContent2

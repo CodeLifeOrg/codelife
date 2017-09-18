@@ -6,8 +6,10 @@ import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
 import {Button} from "@blueprintjs/core";
+//import ReactQuill from "react-quill";
 
 import "./IslandEditor.css";
+//import "react-quill/dist/quill.snow.css";
 
 class IslandEditor extends Component {
 
@@ -66,6 +68,15 @@ class IslandEditor extends Component {
     const {data} = this.state;
 
     if (!data) return <Loading />;
+
+    const modules = {
+      toolbar: [
+        [{header: [1, 2, false]}],
+        ["bold", "italic", "underline", "code", "blockquote"],
+        [{list: "ordered"}, {list: "bullet"}],
+        ["clean"]
+      ],
+    };
     
     return (
       <div id="island-editor">

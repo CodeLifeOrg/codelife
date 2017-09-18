@@ -17,10 +17,10 @@ import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
 import CheatSheet from "components/slidetypes/CheatSheet";
 
-import ReactQuill from "react-quill";
+import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
 
 import "./SlideEditor.css";
-import "react-quill/dist/quill.snow.css";
+//import "react-quill/dist/quill.snow.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
 
@@ -155,16 +155,6 @@ class SlideEditor extends Component {
 
     const ptData = this.translateData("pt", data);
 
-    const modules = {
-      toolbar: [
-        [{header: [1, 2, false]}],
-        ["bold", "italic", "underline", "code", "blockquote"],
-        [{list: "ordered"}, {list: "bullet"}],
-        ["clean"]
-      ],
-    };
-
-
     return (
       <div id="slide-editor">
 
@@ -234,20 +224,16 @@ class SlideEditor extends Component {
         <div className="area-block">
           <label className="pt-label">
             htmlcontent1
-            <ReactQuill
-              theme="snow"
+            <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
-              modules={modules}
               value={this.state.data.htmlcontent1}
               onChange={this.handleChange.bind(this)} 
             />
           </label>
           <label className="pt-label">
             pt htmlcontent1  🇧🇷 
-            <ReactQuill
-              theme="snow"
+            <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
-              modules={modules}
               value={this.state.data.pt_htmlcontent1}
               onChange={this.pt_handleChange.bind(this)} 
             />

@@ -20,7 +20,6 @@ import CheatSheet from "components/slidetypes/CheatSheet";
 import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
 
 import "./SlideEditor.css";
-//import "react-quill/dist/quill.snow.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
 

@@ -6,10 +6,9 @@ import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
 import {Button} from "@blueprintjs/core";
-//import ReactQuill from "react-quill";
+import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
 
 import "./IslandEditor.css";
-//import "react-quill/dist/quill.snow.css";
 
 class IslandEditor extends Component {
 
@@ -53,6 +52,13 @@ class IslandEditor extends Component {
     const {data} = this.state;
     data.pt_initialcontent = t;
     this.setState({data});  
+  }
+
+  handleQuill(field, t) {
+    console.log(t);
+    const {data} = this.state;
+    data[field] = t;
+    this.setState({data});
   }
 
   saveContent() {
@@ -108,21 +114,37 @@ class IslandEditor extends Component {
         <div className="area-block">
           <label className="pt-label">
             Cheat Sheet
-            <textarea className="pt-input" onChange={this.changeField.bind(this, "cheatsheet")} type="text" rows="20" placeholder="Enter a summary of the concepts learned in this lesson" dir="auto" value={data.cheatsheet} />
+            <QuillWrapper
+              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+              value={this.state.data.cheatsheet}
+              onChange={this.handleQuill.bind(this, "cheatsheet")} 
+            />
           </label>
           <label className="pt-label">
             pt Cheat Sheet  🇧🇷 
-            <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_cheatsheet")} type="text" rows="20" placeholder="Enter a summary of the concepts learned in this lesson" dir="auto" value={data.pt_cheatsheet} />
+            <QuillWrapper
+              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+              value={this.state.data.pt_cheatsheet}
+              onChange={this.handleQuill.bind(this, "pt_cheatsheet")} 
+            />
           </label>
         </div>
         <div className="area-block">
           <label className="pt-label">
             Final Codeblock Prompt
-            <textarea className="pt-input" onChange={this.changeField.bind(this, "prompt")} type="text" rows="15" placeholder="Enter instructions for this island's final test" dir="auto" value={data.prompt} />
+            <QuillWrapper
+              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+              value={this.state.data.prompt}
+              onChange={this.handleQuill.bind(this, "prompt")} 
+            />
           </label>
           <label className="pt-label">
             pt Final Codeblock Prompt  🇧🇷 
-            <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_prompt")} type="text" rows="15" placeholder="Enter instructions for this island's final test" dir="auto" value={data.pt_prompt} />
+            <QuillWrapper
+              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+              value={this.state.data.pt_prompt}
+              onChange={this.handleQuill.bind(this, "pt_prompt")} 
+            />
           </label>
         </div>
         <label className="pt-label">

@@ -9,10 +9,13 @@ export default class QuillWrapper extends Component {
       const modules = {
         toolbar: [
           [{header: [1, 2, false]}],
-          ["bold", "italic", "underline", "code", "blockquote"],
+          ["bold", "italic", "underline", "code", "blockquote", "code-block"],
           [{list: "ordered"}, {list: "bullet"}],
           ["clean"]
         ],
+        clipboard: {
+          matchVisual: false
+        }
       };
       return <Quill
                 theme="snow"

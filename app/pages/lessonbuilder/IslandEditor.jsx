@@ -7,6 +7,7 @@ import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
 import {Button} from "@blueprintjs/core";
 import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
+import styleyml from "style.yml";
 
 import "./IslandEditor.css";
 
@@ -15,13 +16,15 @@ class IslandEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: null,
+      themes: null
     };
   }
 
   componentDidMount() {
     const {data} = this.props;
-    this.setState({data});   
+    const themes = styleyml.islands;
+    this.setState({data, themes});   
   }
 
   componentDidUpdate() {
@@ -42,23 +45,10 @@ class IslandEditor extends Component {
     this.setState({data});
   }
 
-  onChangeText(t) {
-    const {data} = this.state;
-    data.initialcontent = t;
-    this.setState({data});  
-  }
-
-  pt_onChangeText(t) {
-    const {data} = this.state;
-    data.pt_initialcontent = t;
-    this.setState({data});  
-  }
-
-  handleQuill(field, t) {
-    console.log(t);
+  handleEditor(field, t) {
     const {data} = this.state;
     data[field] = t;
-    this.setState({data});
+    this.setState({data});    
   }
 
   saveContent() {
@@ -71,18 +61,14 @@ class IslandEditor extends Component {
 
   render() {
 
-    const {data} = this.state;
+    const {data, themes} = this.state;
 
-    if (!data) return <Loading />;
+    if (!data || !themes) return <Loading />;
 
-    const modules = {
-      toolbar: [
-        [{header: [1, 2, false]}],
-        ["bold", "italic", "underline", "code", "blockquote"],
-        [{list: "ordered"}, {list: "bullet"}],
-        ["clean"]
-      ],
-    };
+    const themeItems = [];
+    for (const k in themes) {
+      if (themes.hasOwnProperty(k)) themeItems.push(<option key={k} value={k}>{k}</option>);
+    }
     
     return (
       <div id="island-editor">
@@ -90,6 +76,18 @@ class IslandEditor extends Component {
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
           <input className="pt-input" disabled type="text" placeholder="Enter a unique page id e.g. island-1" dir="auto" value={data.id} />
+        </label>
+        <label className="pt-label">
+          <span>
+            Theme&nbsp;&nbsp;
+            <span className="island-swatch" style={{backgroundColor: themes[data.theme].dark}} />
+            <span className="island-swatch" style={{backgroundColor: themes[data.theme].light}} />
+          </span>
+          <div className="pt-select">
+            <select value={data.theme} onChange={this.changeField.bind(this, "theme")}>
+              {themeItems}
+            </select>
+          </div>
         </label>
         <div className="input-block">
           <label className="pt-label">
@@ -117,7 +115,7 @@ class IslandEditor extends Component {
             <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.cheatsheet}
-              onChange={this.handleQuill.bind(this, "cheatsheet")} 
+              onChange={this.handleEditor.bind(this, "cheatsheet")} 
             />
           </label>
           <label className="pt-label">
@@ -125,7 +123,7 @@ class IslandEditor extends Component {
             <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_cheatsheet}
-              onChange={this.handleQuill.bind(this, "pt_cheatsheet")} 
+              onChange={this.handleEditor.bind(this, "pt_cheatsheet")} 
             />
           </label>
         </div>
@@ -135,7 +133,7 @@ class IslandEditor extends Component {
             <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.prompt}
-              onChange={this.handleQuill.bind(this, "prompt")} 
+              onChange={this.handleEditor.bind(this, "prompt")} 
             />
           </label>
           <label className="pt-label">
@@ -143,17 +141,17 @@ class IslandEditor extends Component {
             <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_prompt}
-              onChange={this.handleQuill.bind(this, "pt_prompt")} 
+              onChange={this.handleEditor.bind(this, "pt_prompt")} 
             />
           </label>
         </div>
         <label className="pt-label">
           Initial Codeblock State<br/><br/>
-          <CodeEditor style={{height: "400px"}} onChangeText={this.onChangeText.bind(this)} initialValue={data.initialcontent} ref={c => this.editor = c}/>       
+          <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "initialcontent")} initialValue={data.initialcontent} ref={c => this.editor = c}/>       
         </label>
         <label className="pt-label">
           pt Initial Codeblock State  🇧🇷 <br/><br/>
-          <CodeEditor style={{height: "400px"}} onChangeText={this.pt_onChangeText.bind(this)} initialValue={data.pt_initialcontent} ref={c => this.pt_editor = c}/>       
+          <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_initialcontent")} initialValue={data.pt_initialcontent} ref={c => this.pt_editor = c}/>       
         </label>
         <RulePicker data={data} parentID={data.id}/>
         <div className="area-block">

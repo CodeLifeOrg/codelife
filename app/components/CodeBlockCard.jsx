@@ -69,15 +69,15 @@ class CodeBlockCard extends Component {
 
     if (!codeBlock) return <Loading />;
 
-    const {t, userProgress} = this.props;
+    const {t, userProgress, theme} = this.props;
     const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${lid}`}>
+      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${theme}`}>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
-          <div className="icon" style={{backgroundImage: `url("/islands/${lid}-small.png")`}}>
+          <div className="icon" style={{backgroundImage: `url("/islands/${theme}-small.png")`}}>
           </div>
           <div className="info">
             <div className="card-title">{ ICONS[lid] ? <span className={ `pt-icon-standard pt-icon-${ICONS[lid]}` } /> : null }{snippetname}</div>
@@ -96,7 +96,7 @@ class CodeBlockCard extends Component {
           title={snippetname}
           lazy={false}
           inline={false}
-          className={ lid }
+          className={ theme }
           style={{
             height: "80vh",
             maxHeight: "1000px",
@@ -104,7 +104,7 @@ class CodeBlockCard extends Component {
           }}
         >
           <div className="pt-dialog-body">
-            <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ lid } ref={c => this.editor = c} />
+            <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} />
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>

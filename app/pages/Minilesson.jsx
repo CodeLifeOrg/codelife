@@ -194,11 +194,11 @@ class Minilesson extends Component {
   buildWinPopover() {
 
     const {t} = this.props;
-    const {id, name} = this.state.currentLesson;
+    const {id, name, theme} = this.state.currentLesson;
 
     return (
       <Dialog
-        className={ id }
+        className={ theme }
         isOpen={this.state.winOpen}
         onClose={this.closeOverlay.bind(this)}
         title={ t("{{island}} Complete", {island: name}) }
@@ -244,7 +244,7 @@ class Minilesson extends Component {
 
     return (
       <div className="editor-popover">
-        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentLesson.id }>
+        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentLesson.theme }>
           <div className={ `code-block ${ next ? "next" : "done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
@@ -253,7 +253,7 @@ class Minilesson extends Component {
           </div>
         </Tooltip>
         <Dialog
-          className={ `codeBlock ${ currentLesson.id }` }
+          className={ `codeBlock ${ currentLesson.theme }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
           title={ title }
@@ -300,7 +300,7 @@ class Minilesson extends Component {
     const otherSnippetItemsAfterFold = [];
     let top = 4;
     for (const os of otherSnippets) {
-      const cbc = <CodeBlockCard codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
+      const cbc = <CodeBlockCard theme={currentLesson.theme} codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherSnippetItemsBeforeFold.push(cbc) : otherSnippetItemsAfterFold.push(cbc);
       top--;
     }
@@ -313,7 +313,7 @@ class Minilesson extends Component {
         // const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ lid }` }
+          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentLesson.theme }` }
           position={Position.TOP}
         >
           <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
@@ -327,7 +327,7 @@ class Minilesson extends Component {
         // </Tooltip>;
       }
       else if (minilesson.isNext) {
-        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.theme }>
           <Link className="stop next" to={`/lesson/${lid}/${minilesson.id}`}></Link>
         </Tooltip>;
       }
@@ -335,7 +335,7 @@ class Minilesson extends Component {
     });
 
     return (
-      <div id="island" className={ currentLesson.id }>
+      <div id="island" className={ currentLesson.theme }>
         { this.buildWinPopover() }
         <div className="image">
           <h1 className="title">{ currentLesson.name }</h1>

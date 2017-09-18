@@ -175,20 +175,20 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div id="slide" className={ currentLesson.id }>
+      <div id="slide" className={ currentLesson.theme }>
         <Confetti className="confetti" config={config} active={ this.state.lessonComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
           { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id } position={Position.TOP_RIGHT}>
+          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.theme } position={Position.TOP_RIGHT}>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>
 
         <SlideComponent
           exec={exec}
-          island={lid}
+          island={currentLesson.theme}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />

@@ -61,18 +61,12 @@ class SlideEditor extends Component {
     this.setState({data});
   }
 
-  onChangeText(t) {
+  handleEditor(field, t) {
     const {data} = this.state;
-    data.htmlcontent2 = t;
-    this.setState({data});
+    data[field] = t;
+    this.setState({data});  
   }
-
-  pt_onChangeText(t) {
-    const {data} = this.state;
-    data.pt_htmlcontent2 = t;
-    this.setState({data});
-  }
-
+  
   onImgUpdate(lang, e) {
     const img = e.target.files[0];
     const config = {headers: {"Content-Type": "multipart/form-data"}};
@@ -103,23 +97,11 @@ class SlideEditor extends Component {
   }
 
   pt_previewSlide() {
-   this.setState({pt_isOpen: !this.state.pt_isOpen}); 
+    this.setState({pt_isOpen: !this.state.pt_isOpen}); 
   }
 
   closePreview() {
     this.setState({isOpen: false, pt_isOpen: false});
-  }
-
-  handleChange(text) {
-    const {data} = this.state;
-    data.htmlcontent1 = text;
-    this.setState({data});
-  }
-
-  pt_handleChange(text) {
-    const {data} = this.state;
-    data.pt_htmlcontent1 = text;
-    this.setState({data});
   }
   
   saveContent() {
@@ -226,7 +208,7 @@ class SlideEditor extends Component {
             <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.htmlcontent1}
-              onChange={this.handleChange.bind(this)} 
+              onChange={this.handleEditor.bind(this, "htmlcontent1")} 
             />
           </label>
           <label className="pt-label">
@@ -234,7 +216,7 @@ class SlideEditor extends Component {
             <QuillWrapper
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_htmlcontent1}
-              onChange={this.pt_handleChange.bind(this)} 
+              onChange={this.handleEditor.bind(this, "pt_htmlcontent1")} 
             />
           </label>
         </div>
@@ -243,11 +225,11 @@ class SlideEditor extends Component {
             ? <div>
                 <label className="pt-label">
                   htmlcontent2
-                  <CodeEditor style={{height: "400px"}} onChangeText={this.onChangeText.bind(this)} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
+                  <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
                 </label>
                 <label className="pt-label">
                   pt htmlcontent2  🇧🇷 
-                  <CodeEditor style={{height: "400px"}} onChangeText={this.pt_onChangeText.bind(this)} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/> 
+                  <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/> 
                 </label>
               </div>
             : <div className="area-block">

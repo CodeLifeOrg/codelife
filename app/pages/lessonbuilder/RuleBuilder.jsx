@@ -2,13 +2,8 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Tree} from "@blueprintjs/core";
+import {Button} from "@blueprintjs/core";
 import Loading from "components/Loading";
-import IslandEditor from "pages/lessonbuilder/IslandEditor";
-import LevelEditor from "pages/lessonbuilder/LevelEditor";
-import SlideEditor from "pages/lessonbuilder/SlideEditor";
-import CtxMenu from "pages/lessonbuilder/CtxMenu";
-
 
 class RuleBuilder extends Component {
 
@@ -29,9 +24,20 @@ class RuleBuilder extends Component {
   }
 
   changeField(field, e) {
-    /*const {data} = this.state;
-    data[field] = e.target.value;
-    this.setState({data});*/
+    const {rules} = this.state;
+    console.log(field, e.target);
+    const rule = rules.find(r => r.id === Number(e.target.id));
+    if (rule) rule[field] = e.target.value;
+    this.setState({rules});
+  }
+
+  saveContent() {
+    const {rules} = this.state;
+    for (const r of rules) {
+      axios.post("/api/rules/save", {id: r.id, error_msg: r.error_msg, pt_error_msg: r.pt_error_msg}).then(resp =>{
+        (resp.status === 200) ? console.log("success") : console.log("error");
+      })
+    }
   }
 
   render() {
@@ -43,9 +49,9 @@ class RuleBuilder extends Component {
     const ruleItems = rules.map(r => {
       return (
         <div>
-          <input className="pt-input" style={{width: "200px", margin: "3px"}} id={r.id} disabled type="text" placeholder="Rule Type" dir="auto" value={r.type} />
-          <input className="pt-input" style={{width: "400px", margin: "3px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
-          <input className="pt-input" style={{width: "400px", margin: "3px"}} id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
+          <input className="pt-input" style={{width: "200px", margin: "5px"}} id={r.id} disabled type="text" placeholder="Rule Type" dir="auto" value={r.type} />
+          <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
+          <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
         </div>
       );
     });
@@ -54,6 +60,7 @@ class RuleBuilder extends Component {
     return (
       <div id="rule-builder">
         {ruleItems}
+        <Button type="button" style={{margin: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

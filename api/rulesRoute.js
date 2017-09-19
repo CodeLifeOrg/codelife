@@ -22,4 +22,10 @@ module.exports = function(app) {
 
   });
 
+  app.post("/api/rules/save", (req, res) => {
+
+    db.rules.update(req.body, {where: {id: req.body.id}}).then(u => res.json(u).end());
+
+  });
+
 };

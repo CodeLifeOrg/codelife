@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
@@ -11,14 +12,18 @@ class RulePicker extends Component {
     this.state = {
       data: null,
       rules: null,
+      ruleTypes: null,
       parentID: null
     };
   }
 
   componentDidMount() {
-    const {data, parentID} = this.props;
-    const rules = this.extractRules(data.rulejson);
-    this.setState({data, rules, parentID});
+    axios.get("/api/rules/all").then(resp => {
+      const {data, parentID} = this.props;
+      const rules = this.extractRules(data.rulejson);
+      const ruleTypes = resp.data;
+      this.setState({data, rules, ruleTypes, parentID});
+    });
   }
 
   componentDidUpdate() {
@@ -94,20 +99,18 @@ class RulePicker extends Component {
 
   render() {
 
-    const {rules} = this.state;
+    const {rules, ruleTypes} = this.state;
 
-    const ruleTypes = [
-      <option value="CONTAINS">Contains Tag</option>,
-      <option value="CSS_CONTAINS">Contains CSS</option>,
-      <option value="CONTAINS_SELF_CLOSE">Contains Void Element</option>
-    ];
+    if (!rules || !ruleTypes) return null;
+
+    const ruleTypeList = ruleTypes.map(r => <option key={r.type} value={r.type}>{r.type}</option>);
 
     let ruleItems = [];
     if (rules) {
       ruleItems = rules.map(r => 
         <div className="rule-section">
-          <div className="pt-select rule-select">
-            <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypes}</select>
+          <div className="pt-select rule-select" style={{width: "210px"}}>
+            <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypeList}</select>
           </div>
           <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
           <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>          

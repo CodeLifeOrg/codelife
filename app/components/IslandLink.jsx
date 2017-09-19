@@ -2,8 +2,6 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import "./IslandLink.css";
 
-import {ICONS} from "consts";
-
 class IslandLink extends Component {
 
   render() {
@@ -27,7 +25,7 @@ class IslandLink extends Component {
       </Link>;
     }
     return <div className="islandLink" key={ lesson.id } style={{height: `${width * (small ? 1 : 0.75)}px`, width: `${width}px`}}>
-      <div className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/${ lesson.id }${ small ? "-small" : "" }.png')`, height: `${width * (small ? 1 : 0.75)}px`, width: `${width}px`}}></div>
+      <div className="graphic" to={`/lesson/${lesson.id}`} style={{backgroundImage: `url('/islands/${ lesson.theme }${ small ? "-small" : "" }.png')`, height: `${width * (small ? 1 : 0.75)}px`, width: `${width}px`}}></div>
       <div className={ `pt-popover pt-tooltip ${ lesson.id }` } style={{marginTop: `${width * 0.25}px`}}>
         <div className="pt-popover-content">
           <div className="title"><span className="pt-icon-standard pt-icon-lock" />{ lesson.name }</div>

@@ -5,7 +5,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
-import {Button, Icon} from "@blueprintjs/core";
+import {Button} from "@blueprintjs/core";
 import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 

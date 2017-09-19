@@ -7,8 +7,6 @@ import CodeEditor from "components/CodeEditor";
 import Loading from "components/Loading";
 import "./CodeBlockCard.css";
 
-import {ICONS} from "consts";
-
 class CodeBlockCard extends Component {
 
   constructor(props) {

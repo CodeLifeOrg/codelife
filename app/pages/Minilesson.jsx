@@ -204,7 +204,7 @@ class Minilesson extends Component {
         title={ t("{{island}} Complete", {island: name}) }
       >
         <div className="pt-dialog-body">
-          <div className="island-icon" style={{backgroundImage: `url('/islands/${id}-small.png')`}} />
+          <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} />
           {this.state.winMessage}
         </div>
         <div className="pt-dialog-footer">

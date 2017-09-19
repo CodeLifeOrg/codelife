@@ -18,13 +18,14 @@ class InputCode extends Component {
       currentText: "",
       titleText: "",
       baseText: "",
+      rules: null,
       resetAlert: false,
       gemEarned: false
     };
   }
 
   componentDidMount() {
-    this.setState({mounted: true, baseText: this.props.htmlcontent2 ? this.props.htmlcontent2 : ""});
+    this.setState({mounted: true, rules: this.props.rules, baseText: this.props.htmlcontent2 ? this.props.htmlcontent2 : ""});
   }
 
   componentDidUpdate() {
@@ -32,6 +33,16 @@ class InputCode extends Component {
     if (this.state.baseText !== newText) {
       this.setState({baseText: newText, gemEarned: false});
       this.editor.getWrappedInstance().setEntireContents(newText);
+    }
+  }
+
+  getErrorForRule(rule) {
+    const myrule = this.state.rules.find(r => r.type === rule.type);
+    if (myrule && myrule.error_msg) {
+      return myrule.error_msg.replace("{{tag}}", `<${rule.needle}>`);
+    }
+    else {
+      return "";
     }
   }
 
@@ -47,19 +58,19 @@ class InputCode extends Component {
       if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
         if (!cvContainsTag(r, contents)) {
           errors++;
-          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+          toast.show({message: this.getErrorForRule(r), timeout: 2000, intent: Intent.DANGER});
         }
       }
       if (r.type === "CSS_CONTAINS") {
         if (!cvContainsStyle(r, jsonArray)) {
           errors++;
-          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+          toast.show({message: this.getErrorForRule(r), timeout: 2000, intent: Intent.DANGER});
         }
       }
       if (r.type === "CONTAINS_SELF_CLOSE") {
         if (!cvContainsSelfClosingTag(r, contents)) {
           errors++;
-          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
+          toast.show({message: this.getErrorForRule(r), timeout: 2000, intent: Intent.DANGER});
         }
       }
     }

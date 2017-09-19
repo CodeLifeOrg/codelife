@@ -47,8 +47,7 @@ class RulePicker extends Component {
       for (const r of rules) {
         json.push({
           type: r.type,
-          needle: r.needle,
-          error_msg: r.error_msg
+          needle: r.needle
         });
       }
     }
@@ -68,20 +67,13 @@ class RulePicker extends Component {
     this.setState({rules}, this.updateJSON.bind(this));
   }
 
-  changeError(e) {
-    const {rules} = this.state;
-    rules[e.target.id].error_msg = e.target.value;
-    this.setState({rules}, this.updateJSON.bind(this));
-  }
-
   addRule() {
     const {rules} = this.state;
     const nextID = rules.length;
     rules.push({
       id: nextID,
       type: "CONTAINS",
-      needle: "tag",
-      error_msg: "Error Message"
+      needle: "tag"
     });
     this.setState({rules}, this.updateJSON.bind(this));
   }

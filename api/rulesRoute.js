@@ -10,6 +10,8 @@ module.exports = function(app) {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
 
+    });
+
   });
 
 };

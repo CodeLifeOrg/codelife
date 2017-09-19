@@ -32,6 +32,7 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
+      rules: null,
       currentLesson: null,
       minilessons: null,
       sentProgress: false,
@@ -99,8 +100,9 @@ class Slide extends Component {
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
+    const rget = axios.get("/api/rules");
 
-    Promise.all([sget, lget, mlget, upget]).then(resp => {
+    Promise.all([sget, lget, mlget, upget, rget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
@@ -116,13 +118,15 @@ class Slide extends Component {
       }
       */
 
+      const rules = resp[4].data;
+
       const up = resp[3].data;
       const done = up.find(p => p.level === mlid) !== undefined;
 
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentLesson: resp[1].data[0], minilessons: resp[2].data});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, rules, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
 
     // document.addEventListener("keydown", this.handleKey.bind(this));
@@ -189,6 +193,7 @@ class Slide extends Component {
         <SlideComponent
           exec={exec}
           island={currentLesson.theme}
+          rules={this.state.rules}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />

@@ -23,6 +23,7 @@ class CodeBlock extends Component {
       isOpen: false,
       goodRatio: 0,
       intent: null,
+      rules: null,
       rulejson: null,
       meanings: [],
       timeout: null,
@@ -35,6 +36,8 @@ class CodeBlock extends Component {
   componentDidMount() {
     const meanings = this.getMeanings();
     const rulejson = JSON.parse(this.props.lesson.rulejson);
+    const rules = this.props.rules;
+
     let initialContent = "";
     let filename = "";
     if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
@@ -42,7 +45,7 @@ class CodeBlock extends Component {
       initialContent = this.props.lesson.snippet.studentcontent;
       filename = this.props.lesson.snippet.snippetname;
     }
-    this.setState({mounted: true, initialContent, filename, rulejson, meanings});
+    this.setState({mounted: true, initialContent, filename, rules, rulejson, meanings});
   }
 
   componentWillUnmount() {
@@ -183,6 +186,16 @@ class CodeBlock extends Component {
     }
   }
 
+  getErrorForRule(rule) {
+    const myrule = this.state.rules.find(r => r.type === rule.type);
+    if (myrule && myrule.error_msg) {
+      return myrule.error_msg.replace("{{tag}}", `<${rule.needle}>`);
+    }
+    else {
+      return "";
+    }
+  }
+
   getValidationBox() {
     const {t} = this.props;
     const {goodRatio, intent, rulejson} = this.state;
@@ -221,7 +234,7 @@ class CodeBlock extends Component {
               <span className="rule">{rule.needle}</span>
             </li>
             <div>
-              { this.state.meanings[rule.type][rule.needle] }<br/><br/><div style={{color: "red"}}>{rule.error_msg}</div>
+              { this.state.meanings[rule.type][rule.needle] }<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
             </div>
           </Popover>
         );

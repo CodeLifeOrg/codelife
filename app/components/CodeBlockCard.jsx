@@ -69,7 +69,7 @@ class CodeBlockCard extends Component {
 
     if (!codeBlock) return <Loading />;
 
-    const {t, userProgress, theme} = this.props;
+    const {t, userProgress, theme, icon} = this.props;
     const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
@@ -80,7 +80,7 @@ class CodeBlockCard extends Component {
           <div className="icon" style={{backgroundImage: `url("/islands/${theme}-small.png")`}}>
           </div>
           <div className="info">
-            <div className="card-title">{ ICONS[lid] ? <span className={ `pt-icon-standard pt-icon-${ICONS[lid]}` } /> : null }{snippetname}</div>
+            <div className="card-title">{ icon ? <span className={ `pt-icon-standard ${icon}` } /> : null }{snippetname}</div>
             <div className="card-meta">
               { username ? <div className="card-author">
                 { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }

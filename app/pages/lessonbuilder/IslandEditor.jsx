@@ -5,7 +5,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
-import {Button} from "@blueprintjs/core";
+import {Button, Icon} from "@blueprintjs/core";
 import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 
@@ -75,20 +75,27 @@ class IslandEditor extends Component {
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
-          <input className="pt-input" disabled type="text" placeholder="Enter a unique page id e.g. island-1" dir="auto" value={data.id} />
+          <input className="pt-input" style={{width: "180px"}} disabled type="text" placeholder="Enter a unique page id e.g. island-1" dir="auto" value={data.id} />
         </label>
         <label className="pt-label">
           <span>
-            Theme&nbsp;&nbsp;
+            Theme:&nbsp;&nbsp;
             <span className="island-swatch" style={{backgroundColor: themes[data.theme].dark}} />
             <span className="island-swatch" style={{backgroundColor: themes[data.theme].light}} />
           </span>
-          <div className="pt-select">
-            <select value={data.theme} onChange={this.changeField.bind(this, "theme")}>
+          <div className="pt-select" style={{width: "180px"}}>
+            <select value={data.theme} onChange={this.changeField.bind(this, "theme")} >
               {themeItems}
             </select>
           </div>
         </label>
+        <div className="input-block">
+          <label className="pt-label">
+            Icon:&nbsp;&nbsp;
+            <span className={`pt-icon-standard ${data.icon}`} />
+            <input className="pt-input" style={{width: "180px"}} onChange={this.changeField.bind(this, "icon")} type="text" placeholder="Enter an Icon Name" dir="auto" value={data.icon}/>
+          </label>
+        </div>
         <div className="input-block">
           <label className="pt-label">
             Name

@@ -105,7 +105,7 @@ class AllSnippets extends Component {
       const thisLessonItems = [];
       for (const s of l.mySnippets.concat(l.likedSnippets, l.unlikedSnippets)) {
         thisLessonItems.push(
-          <li><CodeBlockCard theme={l.theme} codeBlock={s} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
+          <li><CodeBlockCard theme={l.theme} icon={l.icon} codeBlock={s} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
         );
       }
       snippetItems.push(<Collapse isOpen={this.state[l.id]}>{thisLessonItems}</Collapse>);

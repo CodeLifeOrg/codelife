@@ -21,7 +21,8 @@ module.exports = function(sequelize, db) {
       pt_victory: db.TEXT,
       pt_rulejson: db.TEXT,
       ordering: db.INTEGER,
-      theme: db.TEXT
+      theme: db.TEXT,
+      icon: db.TEXT
     },
     {
       freezeTableName: true,

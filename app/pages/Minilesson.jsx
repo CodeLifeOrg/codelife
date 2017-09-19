@@ -300,7 +300,7 @@ class Minilesson extends Component {
     const otherSnippetItemsAfterFold = [];
     let top = 4;
     for (const os of otherSnippets) {
-      const cbc = <CodeBlockCard theme={currentLesson.theme} codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
+      const cbc = <CodeBlockCard theme={currentLesson.theme} icon={currentLesson.icon} codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherSnippetItemsBeforeFold.push(cbc) : otherSnippetItemsAfterFold.push(cbc);
       top--;
     }

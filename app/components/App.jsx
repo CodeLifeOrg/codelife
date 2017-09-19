@@ -35,7 +35,6 @@ class App extends Component {
   componentDidMount() {
     axios.get("/api/lessons").then(resp => {
       const lessons = resp.data;
-      console.log(lessons);
       this.props.dispatch({type: "LOAD_ISLANDS", payload: lessons});  
     });
   }

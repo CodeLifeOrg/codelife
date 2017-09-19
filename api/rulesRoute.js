@@ -14,4 +14,12 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/rules/all", (req, res) => {
+
+    db.rules.findAll().then(u => {
+      res.json(u).end();
+    });
+
+  });
+
 };

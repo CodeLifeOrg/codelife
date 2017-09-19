@@ -16,6 +16,7 @@ import Splash from "pages/Splash";
 import Studio from "pages/Studio";
 import Survey from "pages/Survey";
 import LessonBuilder from "pages/lessonbuilder/LessonBuilder";
+import RuleBuilder from "pages/lessonbuilder/RuleBuilder";
 
 export default function RouteCreate() {
 
@@ -48,6 +49,8 @@ export default function RouteCreate() {
       <Route path="snippets/:username/:filename" component={Share} />
 
       <Route path="lessonbuilder" component={LessonBuilder} />
+
+      <Route path="rulebuilder" component={RuleBuilder} />
 
     </Route>
   );

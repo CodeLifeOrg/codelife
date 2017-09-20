@@ -8,7 +8,7 @@ import CodeEditor from "components/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
-import {cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
+import {cvNests, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import Loading from "components/Loading";
 
@@ -95,17 +95,6 @@ class CodeBlock extends Component {
     });
   }
 
-  cvNests(rule, haystack) {
-    const outer = rule.outer;
-    const needle = rule.needle;
-    const outerOpen = haystack.indexOf(`<${outer}>`);
-    const outerClose = haystack.indexOf(`</${outer}>`);
-    const innerOpen = haystack.indexOf(`<${needle}>`);
-    const innerClose = haystack.indexOf(`</${needle}>`);
-    return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
-            outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
-  }
-
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {rulejson} = this.state;
@@ -132,6 +121,15 @@ class CodeBlock extends Component {
       if (r.type === "CONTAINS_SELF_CLOSE") {
         if (!cvContainsSelfClosingTag(r, theText)) {
           errors++;
+          r.passing = false;
+        }
+        else {
+          r.passing = true;
+        }
+      }
+      if (r.type === "NESTS") {
+        if (!cvNests(r, theText)) {
+          errors++
           r.passing = false;
         }
         else {
@@ -200,7 +198,12 @@ class CodeBlock extends Component {
   getErrorForRule(rule) {
     const myrule = this.state.rules.find(r => r.type === rule.type);
     if (myrule && myrule.error_msg) {
-      return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+      if (myrule.type === "NESTS") {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
+      }
+      else {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+      }
     }
     else {
       return "";
@@ -214,6 +217,7 @@ class CodeBlock extends Component {
     iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
 
     const vList = rulejson.map(rule => {
       if (rule.passing) {
@@ -228,7 +232,8 @@ class CodeBlock extends Component {
               <span className="rule">{rule.needle}</span>
             </li>
             <div>
-              { this.state.meanings[rule.type][rule.needle] }
+              TBD Better Help
+              { /* this.state.meanings[rule.type][rule.needle] */ }
             </div>
           </Popover>
         );
@@ -245,7 +250,8 @@ class CodeBlock extends Component {
               <span className="rule">{rule.needle}</span>
             </li>
             <div>
-              { this.state.meanings[rule.type][rule.needle] }<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
+              { /* this.state.meanings[rule.type][rule.needle] */ }
+              TBD Better Help<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
             </div>
           </Popover>
         );

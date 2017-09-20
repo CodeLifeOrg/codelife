@@ -31,6 +31,17 @@ export const cvContainsTag = (rule, haystack) => {
   return open !== -1 && close !== -1 && open < close;
 };
 
+export const cvNests = (rule, haystack) => {
+  const outer = rule.outer;
+  const needle = rule.needle;
+  const outerOpen = haystack.indexOf(`<${outer}>`);
+  const outerClose = haystack.indexOf(`</${outer}>`);
+  const innerOpen = haystack.indexOf(`<${needle}>`);
+  const innerClose = haystack.indexOf(`</${needle}>`);
+  return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
+          outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
+};
+
 export const cvContainsStyle = (rule, haystack) => {
   const needle = rule.needle;
   const property = rule.property;

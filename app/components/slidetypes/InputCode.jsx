@@ -5,7 +5,7 @@ import himalaya from "himalaya";
 
 import CodeEditor from "components/CodeEditor";
 
-import {cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
+import {cvNests, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
@@ -39,7 +39,12 @@ class InputCode extends Component {
   getErrorForRule(rule) {
     const myrule = this.state.rules.find(r => r.type === rule.type);
     if (myrule && myrule.error_msg) {
-      return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+      if (myrule.type === "NESTS") {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
+      }
+      else {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+      }
     }
     else {
       return "";
@@ -71,6 +76,12 @@ class InputCode extends Component {
         if (!cvContainsSelfClosingTag(r, contents)) {
           errors++;
           toast.show({message: this.getErrorForRule(r), timeout: 2000, intent: Intent.DANGER});
+        }
+      }
+      if (r.type === "NESTS") {
+        if (!cvNests(r, contents)) {
+          errors++;
+          toast.show({message: this.getErrorForRule(r), timeout: 2000, intent: Intent.DANGER}); 
         }
       }
     }

@@ -95,6 +95,17 @@ class CodeBlock extends Component {
     });
   }
 
+  cvNests(rule, haystack) {
+    const outer = rule.outer;
+    const needle = rule.needle;
+    const outerOpen = haystack.indexOf(`<${outer}>`);
+    const outerClose = haystack.indexOf(`</${outer}>`);
+    const innerOpen = haystack.indexOf(`<${needle}>`);
+    const innerClose = haystack.indexOf(`</${needle}>`);
+    return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
+            outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
+  }
+
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {rulejson} = this.state;
@@ -189,7 +200,7 @@ class CodeBlock extends Component {
   getErrorForRule(rule) {
     const myrule = this.state.rules.find(r => r.type === rule.type);
     if (myrule && myrule.error_msg) {
-      return myrule.error_msg.replace("{{tag}}", `<${rule.needle}>`);
+      return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
     }
     else {
       return "";

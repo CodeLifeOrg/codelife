@@ -214,7 +214,6 @@ class LessonBuilder extends Component {
         pt_htmlcontent1: "New Content 1",
         pt_htmlcontent2: "New Content 2",
         pt_quizjson: "",
-        pt_rulejson: "",
         mlid: n.data.mlid,
         ordering: loc
       }
@@ -259,7 +258,6 @@ class LessonBuilder extends Component {
         pt_prompt: "New Prompt",
         pt_victory: "New Victory",
         pt_initialcontent: "",
-        pt_rulejson: "",
         pt_cheatsheet: "New Cheatsheet",
         ordering: loc
       }

@@ -50,25 +50,21 @@ class RulePicker extends Component {
     const json = [];
     if (rules) {
       for (const r of rules) {
-        json.push({
+        const obj = {
           type: r.type,
           needle: r.needle
-        });
+        };
+        if (r.outer) obj.outer = r.outer;
+        json.push(obj);
       }
     }
     data.rulejson = JSON.stringify(json);
     this.setState({data});
   }
 
-  changeType(e) {
+  changeField(field, e) {
     const {rules} = this.state;
-    rules[e.target.id].type = e.target.value;
-    this.setState({rules}, this.updateJSON.bind(this));
-  }
-
-  changeValue(e) {
-    const {rules} = this.state;
-    rules[e.target.id].needle = e.target.value;
+    rules[e.target.id][field] = e.target.value;
     this.setState({rules}, this.updateJSON.bind(this));
   }
 
@@ -110,9 +106,10 @@ class RulePicker extends Component {
       ruleItems = rules.map(r => 
         <div className="rule-section">
           <div className="pt-select rule-select" style={{width: "210px"}}>
-            <select value={r.type} id={r.id} onChange={this.changeType.bind(this)}>{ruleTypeList}</select>
+            <select value={r.type} id={r.id} onChange={this.changeField.bind(this, "type")}>{ruleTypeList}</select>
           </div>
-          <input className="pt-input rule-needle" id={r.id} onChange={this.changeValue.bind(this)} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
+          <input className="pt-input rule-needle" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
+          <input className="pt-input rule-outer" id={r.id} onChange={this.changeField.bind(this, "outer")} type="text" placeholder="N/A" dir="auto" value={r.outer} /> 
           <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>          
         </div>
       );

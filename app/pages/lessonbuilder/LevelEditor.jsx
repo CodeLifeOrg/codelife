@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import {Button} from "@blueprintjs/core";
+import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
 
 import "./LevelEditor.css";
 

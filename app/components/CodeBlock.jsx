@@ -25,7 +25,6 @@ class CodeBlock extends Component {
       intent: null,
       rules: null,
       rulejson: null,
-      meanings: [],
       timeout: null,
       timeoutAlert: false,
       resetAlert: false,
@@ -34,10 +33,8 @@ class CodeBlock extends Component {
   }
 
   componentDidMount() {
-    const meanings = this.getMeanings();
     const rulejson = JSON.parse(this.props.lesson.rulejson);
     const rules = this.props.rules;
-
     let initialContent = "";
     let filename = "";
     if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
@@ -45,39 +42,13 @@ class CodeBlock extends Component {
       initialContent = this.props.lesson.snippet.studentcontent;
       filename = this.props.lesson.snippet.snippetname;
     }
-    this.setState({mounted: true, initialContent, filename, rules, rulejson, meanings});
+    this.setState({mounted: true, initialContent, filename, rules, rulejson});
   }
 
   componentWillUnmount() {
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
     }
-  }
-
-  getMeanings() {
-    const {t} = this.props;
-    const meanings = [];
-    meanings.CONTAINS = [];
-    meanings.CSS_CONTAINS = [];
-    meanings.CONTAINS_SELF_CLOSE = [];
-    meanings.CONTAINS.html = t("<html> surrounds your whole codeblock and tells the computer this is a webpage.");
-    meanings.CONTAINS.head = t("<head> is where your metadata is stored, such as your <title>.");
-    meanings.CONTAINS.title = t("<title> is the title of your page! Make sure it's inside a <head> tag.");
-    meanings.CONTAINS.body = t("<body> is where you put the content you want everyone to see.");
-    meanings.CONTAINS.h1 = t("<h1> is a header tag, where you can write large text.");
-    meanings.CONTAINS.h2 = t("<h2> is a header tag, where you can write large text.");
-    meanings.CONTAINS.h3 = t("<h3> is a header tag, where you can write medium text.");
-    meanings.CONTAINS.h4 = t("<h4> is a header tag, where you can write medium text.");
-    meanings.CONTAINS.h5 = t("<h5> is a header tag, where you can write small text.");
-    meanings.CONTAINS.h6 = t("<h6> is a header tag, where you can write small text.");
-    meanings.CONTAINS.style = t("<style> is where you customize your page with cool colors and fonts. Make sure it's inside a <head> tag!");
-    meanings.CONTAINS.script = t("<script> is where you write interactive content with javascript.");
-    meanings.CONTAINS.p = t("<p> is a paragraph tag, you can write words and sentences in here.");
-    meanings.CSS_CONTAINS.h1 = t("h1 within a <style> tag is how you customize your header tags.");
-    meanings.CSS_CONTAINS.p = t("p within a <style> tag is how you customize your <p> tags");
-    meanings.CSS_CONTAINS.body = t("body within a <style> tag is how you customize everything in your webpage's body");
-    meanings.CONTAINS_SELF_CLOSE.img = t("<img> is a self-closing that places an image on your webpage.");
-    return meanings;
   }
 
   askForHelp() {
@@ -129,7 +100,7 @@ class CodeBlock extends Component {
       }
       if (r.type === "NESTS") {
         if (!cvNests(r, theText)) {
-          errors++
+          errors++;
           r.passing = false;
         }
         else {
@@ -186,7 +157,6 @@ class CodeBlock extends Component {
     const {t} = this.props;
     const {username} = this.props.auth.user;
     if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);
       browserHistory.push(`/snippets/${username}/${this.props.lesson.snippet.snippetname}`);
     }
     else {

@@ -1,22 +1,5 @@
 import css from "css";
 
-export const cvTagCountOld = (needle, haystack) => {
-  let count = 0;
-  if (haystack.length === 0) return 0;
-  for (const h of haystack) {
-    if (h.type === "Element") {
-      if (h.tagName === needle) {
-        count++;
-      } if (h.children !== null) {
-        count += cvTagCountOld(needle, h.children);
-      }
-    }
-  }
-  return count;
-};
-
-export const cvContainsTagOld = (rule, haystack) => cvTagCountOld(rule.needle, haystack) > 0;
-
 export const cvContainsSelfClosingTag = (rule, haystack) => {
   const needle = rule.needle;
   const open = haystack.indexOf(`<${needle}`);
@@ -29,6 +12,15 @@ export const cvContainsTag = (rule, haystack) => {
   const open = haystack.indexOf(`<${needle}>`);
   const close = haystack.indexOf(`</${needle}>`);
   return open !== -1 && close !== -1 && open < close;
+};
+
+export const cvContainsOne = (rule, haystack) => {
+  const needle = rule.needle; 
+  const open = haystack.indexOf(`<${needle}>`);
+  const open2 = haystack.indexOf(`<${needle}>`, open + 1);
+  const close = haystack.indexOf(`</${needle}>`);
+  const close2 = haystack.indexOf(`</${needle}>`, close + 2);
+  return open2 === -1 && close2 === -1;
 };
 
 export const cvNests = (rule, haystack) => {

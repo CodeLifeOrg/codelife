@@ -6,7 +6,7 @@ import {translate} from "react-i18next";
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
 
-// import {Popover, PopoverInteractionKind, Position, Intent, Button} from "@blueprintjs/core";
+import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import "./CodeEditor.css";
 
@@ -18,17 +18,39 @@ class CodeEditor extends Component {
       mounted: false,
       currentText: "",
       changesMade: false,
+      baseRules: null,
+      isPassing: false,
+      rules: null,
       titleText: "",
       isOpen: false
     };
   }
 
   componentDidMount() {
-    let init = "";
-    if (this.props.initialValue) init = this.props.initialValue;
-    const titleText = this.getTitleText(init);
-    this.setState({mounted: true, currentText: init, titleText}, this.renderText.bind(this));
+    const currentText = this.props.initialValue ? this.props.initialValue : "";
+    const rules = this.props.rules ? this.props.rules : null;
+    const titleText = this.getTitleText(currentText);
+    const baseRules = this.getBaseRules();
+    this.setState({mounted: true, currentText, baseRules, rules, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+  }
+
+  getBaseRules() {
+    const baseRules = [
+      {type: "CONTAINS", needle: "html"},
+      {type: "CONTAINS", needle: "head"},
+      {type: "CONTAINS", needle: "title"},
+      {type: "CONTAINS", needle: "body"},
+      {type: "CONTAINS_ONE", needle: "html"},
+      {type: "CONTAINS_ONE", needle: "head"},
+      {type: "CONTAINS_ONE", needle: "title"},
+      {type: "CONTAINS_ONE", needle: "body"},
+      {type: "NESTS", needle: "head", outer: "html"},
+      {type: "NESTS", needle: "body", outer: "html"},
+      {type: "NESTS", needle: "head", outer: "html"},
+      {type: "NESTS", needle: "title", outer: "head"}
+    ];
+    return baseRules;
   }
 
   getEditor() {
@@ -76,9 +98,29 @@ class CodeEditor extends Component {
     return arr;
   }
 
+  checkForErrors(theText) {
+    const jsonArray = himalaya.parse(theText);
+    const {baseRules} = this.state;
+    let errors = 0;
+    const cv = [];
+    cv.CONTAINS = cvContainsTag;
+    cv.CONTAINS_ONE = cvContainsOne;
+    cv.CSS_CONTAINS = cvContainsStyle;
+    cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
+    cv.NESTS = cvNests;
+    for (const r of baseRules) {
+      const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
+      r.passing = cv[r.type](r, payload);
+      if (!r.passing) errors++;
+    }
+    console.log(baseRules);
+    this.setState({isPassing: errors === 0});
+  }
+
   renderText() {
     if (this.refs.rc) {
       let theText = this.state.currentText;
+      this.checkForErrors(theText);
       if (theText.includes("script")) {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
@@ -116,6 +158,10 @@ class CodeEditor extends Component {
 
   getEntireContents() {
     return this.state.currentText;
+  }
+
+  isPassing() {
+    return this.state.isPassing;
   }
 
   changesMade() {

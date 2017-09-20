@@ -5,7 +5,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
 import RulePicker from "pages/lessonbuilder/RulePicker";
-import {Button} from "@blueprintjs/core";
+import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
 import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 
@@ -54,8 +54,14 @@ class IslandEditor extends Component {
   saveContent() {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
+    const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
     axios.post("/api/builder/lessons/save", data).then(resp => {
-      resp.status === 200 ? console.log("saved") : console.log("error");
+      if (resp.status === 200) {
+        toast.show({message: "Saved!", intent: Intent.SUCCESS});
+      } 
+      else {
+        toast.show({message: "Error!", intent: Intent.Danger});
+      }
     });
   }
 

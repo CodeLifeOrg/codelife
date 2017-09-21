@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
+import {Intent, Position, Popover, ProgressBar, PopoverInteractionKind} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
 
-// import {Popover, PopoverInteractionKind, Position, Intent, Button} from "@blueprintjs/core";
+import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import "./CodeEditor.css";
 
@@ -18,22 +19,123 @@ class CodeEditor extends Component {
       mounted: false,
       currentText: "",
       changesMade: false,
+      baseRules: null,
+      isPassing: false,
+      rulejson: [],
+      ruleErrors: [],
+      goodRatio: 0,
+      intent: null,
+      embeddedConsole: "",
       titleText: "",
       isOpen: false
     };
   }
 
   componentDidMount() {
-    let init = "";
-    if (this.props.initialValue) init = this.props.initialValue;
-    const titleText = this.getTitleText(init);
-    this.setState({mounted: true, currentText: init, titleText}, this.renderText.bind(this));
+    const currentText = this.props.initialValue ? this.props.initialValue : "";
+    const rulejson = this.props.rulejson ? this.props.rulejson : [];
+    const ruleErrors = this.props.ruleErrors ? this.props.ruleErrors : [];
+    const titleText = this.getTitleText(currentText);
+    const baseRules = this.getBaseRules();
+    this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+
+    /*
+    console["log"] = this.injectConsole.bind(this);
+    console["warning"] = this.injectConsole.bind(this);
+    console["error"] = this.injectConsole.bind(this);
+    */
+
+  }
+
+  getBaseRules() {
+    const baseRules = [
+      {type: "CONTAINS", needle: "html"},
+      {type: "CONTAINS", needle: "head"},
+      {type: "CONTAINS", needle: "title"},
+      {type: "CONTAINS", needle: "body"},
+      {type: "CONTAINS_ONE", needle: "html"},
+      {type: "CONTAINS_ONE", needle: "head"},
+      {type: "CONTAINS_ONE", needle: "title"},
+      {type: "CONTAINS_ONE", needle: "body"},
+      {type: "NESTS", needle: "head", outer: "html"},
+      {type: "NESTS", needle: "body", outer: "html"},
+      {type: "NESTS", needle: "head", outer: "html"},
+      {type: "NESTS", needle: "title", outer: "head"}
+      // {type: "NESTS", needle: "style", outer: "head"} 
+    ];
+    return baseRules;
   }
 
   getEditor() {
     if (this.editor) return this.editor.editor.editor;
     return undefined;
+  }
+
+  /*
+  injectConsole(msg) {
+    let {embeddedConsole} = this.state;
+    embeddedConsole = `${embeddedConsole}\n${msg}`;
+    this.setState({embeddedConsole});
+  } 
+  */
+
+  getValidationBox() {
+    const {t} = this.props;
+    const {goodRatio, intent, rulejson, baseRules} = this.state;
+    const iconList = [];
+    iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
+    iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
+
+    const allRules = baseRules.concat(rulejson);
+
+    const vList = allRules.map(rule => {
+      if (rule.passing) {
+        return (
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP_LEFT}
+          >
+            <li className="validation-item complete">
+              {iconList[rule.type]}
+              <span className="rule">{rule.needle}</span>
+            </li>
+            <div>
+              [inprogress] Help Msg
+              { /* this.state.meanings[rule.type][rule.needle] */ }
+            </div>
+          </Popover>
+        );
+      }
+      else {
+        return (
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP_LEFT}
+          >
+            <li className="validation-item">
+              {iconList[rule.type]}
+              <span className="rule">{rule.needle}</span>
+            </li>
+            <div>
+              [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
+            </div>
+          </Popover>
+        );
+      }
+    });
+    return (
+      <div id="validation-box">
+        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+        { Math.round(goodRatio * 100) }% { t("Complete") }
+        <ul className="validation-list">{vList}</ul>
+        
+      </div>
+    );
   }
 
   getTitleText(theText) {
@@ -76,9 +178,42 @@ class CodeEditor extends Component {
     return arr;
   }
 
+  checkForErrors(theText) {
+    const jsonArray = himalaya.parse(theText);
+    const {baseRules, rulejson} = this.state;
+    let errors = 0;
+    const cv = [];
+    cv.CONTAINS = cvContainsTag;
+    cv.CONTAINS_ONE = cvContainsOne;
+    cv.CSS_CONTAINS = cvContainsStyle;
+    cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
+    cv.NESTS = cvNests;
+    for (const r of baseRules) {
+      const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
+      if (cv[r.type]) r.passing = cv[r.type](r, payload);
+      if (!r.passing) errors++;
+    }
+    for (const r of rulejson) {
+      const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
+      if (cv[r.type]) r.passing = cv[r.type](r, payload);
+      if (!r.passing) errors++;
+    }
+
+    const allRules = rulejson.length + baseRules.length;
+    const goodRatio = (allRules - errors) / allRules;
+    const isPassing = errors === 0;
+    let intent = this.state.intent;
+    if (goodRatio < 0.5) intent = Intent.DANGER;
+    else if (goodRatio < 1) intent = Intent.WARNING;
+    else intent = Intent.SUCCESS;
+
+    this.setState({isPassing, goodRatio, intent});
+  }
+
   renderText() {
     if (this.refs.rc) {
       let theText = this.state.currentText;
+      this.checkForErrors(theText);
       if (theText.includes("script")) {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
@@ -88,6 +223,21 @@ class CodeEditor extends Component {
       doc.open();
       doc.write(theText);
       doc.close();
+    }
+  }
+
+  getErrorForRule(rule) {
+    const myrule = this.state.ruleErrors.find(r => r.type === rule.type);
+    if (myrule && myrule.error_msg) {
+      if (myrule.type === "NESTS") {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
+      }
+      else {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+      }
+    }
+    else {
+      return "";
     }
   }
 
@@ -118,6 +268,10 @@ class CodeEditor extends Component {
     return this.state.currentText;
   }
 
+  isPassing() {
+    return this.state.isPassing;
+  }
+
   changesMade() {
     return this.state.changesMade;
   }
@@ -139,7 +293,7 @@ class CodeEditor extends Component {
 
   render() {
     const {codeTitle, island, t} = this.props;
-    const {titleText, currentText} = this.state;
+    const {titleText, currentText, embeddedConsole} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -149,7 +303,8 @@ class CodeEditor extends Component {
           ? <div className="code">
               <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
               { !this.props.blurred
-                ? <AceWrapper
+                ? 
+                  <AceWrapper
                     className="editor"
                     ref={ comp => this.editor = comp }
                     onChange={this.onChangeText.bind(this)}
@@ -163,6 +318,10 @@ class CodeEditor extends Component {
                     { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
                 </div> : null }
+              <div className="drawer">
+                <div className="title">Validation</div>
+                <div className="contents">{this.getValidationBox()}</div>
+              </div>
             </div>
           : null
         }
@@ -174,6 +333,10 @@ class CodeEditor extends Component {
             { titleText }
           </div>
           <iframe className="iframe" ref="rc" />
+          <div className="drawer">
+            <div className="title">Console</div>
+            <div className="contents">{embeddedConsole}</div>
+          </div>
         </div>
       </div>
     );

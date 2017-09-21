@@ -3,8 +3,7 @@ import React, {Component} from "react";
 export default class TextText extends Component {
 
   componentDidMount() {
-    const {updateGems} = this.props;
-    updateGems(1);
+    if (this.props.updateGems) this.props.updateGems(1);
   }
 
   render() {

@@ -1,8 +1,7 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("lessons",
+  const l = sequelize.define("lessons",
     {
-      index: db.BIGINT,
       id: {
         type: db.TEXT,
         primaryKey: true
@@ -20,12 +19,20 @@ module.exports = function(sequelize, db) {
       pt_prompt: db.TEXT,
       pt_cheatsheet: db.TEXT,
       pt_victory: db.TEXT,
-      pt_rulejson: db.TEXT
+      ordering: db.INTEGER,
+      theme: db.TEXT,
+      icon: db.TEXT
     },
     {
       freezeTableName: true,
       timestamps: false
     }
   );
+
+  l.associate = models => {
+    l.hasMany(models.minilessons, {foreignKey: "id", targetKey: "lid", as: "minilessons", foreignKeyConstraint: true});
+  };
+
+  return l;
 
 };

@@ -1,15 +1,14 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("minilessons",
+  const m = sequelize.define("minilessons",
     {
-      index: db.BIGINT,
       id: {
         type: db.TEXT,
         primaryKey: true
       },
       name: db.TEXT,
       description: db.TEXT,
-      ordering: db.BIGINT,
+      ordering: db.INTEGER,
       lid: db.TEXT,
       pt_name: db.TEXT,
       pt_description: db.TEXT
@@ -19,5 +18,12 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  m.associate = models => {
+    m.belongsTo(models.lessons, {foreignKey: "lid", targetKey: "id", as: "lesson", foreignKeyConstraint: true});
+    m.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
+  };
+
+  return m;
 
 };

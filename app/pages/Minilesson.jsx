@@ -28,6 +28,7 @@ class Minilesson extends Component {
       likedSnippets: null,
       loading: false,
       unlikedSnippets: null,
+      ruleErrors: null,
       testOpen: false,
       winOpen: false,
       winMessage: "",
@@ -40,18 +41,19 @@ class Minilesson extends Component {
     const {params, t} = this.props;
     const {lid} = params;
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
-    // const lget = axios.get(`/api/lessons?id=${lid}`);
     const lget = axios.get("/api/lessons");
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
+    const rget = axios.get("/api/rules");
 
-    Promise.all([mlget, lget, uget, osget, lkget]).then(resp => {
+    Promise.all([mlget, lget, uget, osget, lkget, rget]).then(resp => {
       const minilessons = resp[0].data;
       const lessons = resp[1].data;
       const userProgress = resp[2].data;
       const allSnippets = resp[3].data;
       const likes = resp[4].data;
+      const ruleErrors = resp[5].data;
 
       const currentLesson = lessons.find(l => l.id === lid);
       // TODO: after august test, change this from index to a new ordering field
@@ -92,7 +94,7 @@ class Minilesson extends Component {
         }
       }
 
-      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, loading: false});
+      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, ruleErrors, mySnippets, likedSnippets, unlikedSnippets, loading: false});
     });
   }
 
@@ -194,17 +196,17 @@ class Minilesson extends Component {
   buildWinPopover() {
 
     const {t} = this.props;
-    const {id, name} = this.state.currentLesson;
+    const {id, name, theme} = this.state.currentLesson;
 
     return (
       <Dialog
-        className={ id }
+        className={ theme }
         isOpen={this.state.winOpen}
         onClose={this.closeOverlay.bind(this)}
         title={ t("{{island}} Complete", {island: name}) }
       >
         <div className="pt-dialog-body">
-          <div className="island-icon" style={{backgroundImage: `url('/islands/${id}-small.png')`}} />
+          <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} />
           {this.state.winMessage}
         </div>
         <div className="pt-dialog-footer">
@@ -244,7 +246,7 @@ class Minilesson extends Component {
 
     return (
       <div className="editor-popover">
-        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentLesson.id }>
+        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentLesson.theme }>
           <div className={ `code-block ${ next ? "next" : "done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
@@ -253,7 +255,7 @@ class Minilesson extends Component {
           </div>
         </Tooltip>
         <Dialog
-          className={ `codeBlock ${ currentLesson.id }` }
+          className={ `codeBlock ${ currentLesson.theme }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
           title={ title }
@@ -266,6 +268,7 @@ class Minilesson extends Component {
           <div className="pt-dialog-body">
             <CodeBlock
               lesson={currentLesson}
+              ruleErrors={this.state.ruleErrors}
               handleSave={this.handleSave.bind(this)}
               onFirstCompletion={this.onFirstCompletion.bind(this)}
             />
@@ -300,7 +303,7 @@ class Minilesson extends Component {
     const otherSnippetItemsAfterFold = [];
     let top = 4;
     for (const os of otherSnippets) {
-      const cbc = <CodeBlockCard codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
+      const cbc = <CodeBlockCard theme={currentLesson.theme} icon={currentLesson.icon} codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherSnippetItemsBeforeFold.push(cbc) : otherSnippetItemsAfterFold.push(cbc);
       top--;
     }
@@ -313,7 +316,7 @@ class Minilesson extends Component {
         // const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ lid }` }
+          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentLesson.theme }` }
           position={Position.TOP}
         >
           <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
@@ -327,7 +330,7 @@ class Minilesson extends Component {
         // </Tooltip>;
       }
       else if (minilesson.isNext) {
-        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.id }>
+        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.theme }>
           <Link className="stop next" to={`/lesson/${lid}/${minilesson.id}`}></Link>
         </Tooltip>;
       }
@@ -335,7 +338,7 @@ class Minilesson extends Component {
     });
 
     return (
-      <div id="island" className={ currentLesson.id }>
+      <div id="island" className={ currentLesson.theme }>
         { this.buildWinPopover() }
         <div className="image">
           <h1 className="title">{ currentLesson.name }</h1>

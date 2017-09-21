@@ -172,11 +172,6 @@
       opacity: 1;
     }
   }
-  @for $i from 1 to 20 {
-    &.island-$i .image {
-      background-image: url("/islands/island-$(i).png");
-    }
-  }
 }
 
 @keyframes blockBounce {

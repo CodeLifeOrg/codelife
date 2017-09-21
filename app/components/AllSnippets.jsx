@@ -98,14 +98,14 @@ class AllSnippets extends Component {
     for (const l of lessons) {
       if (l.likedSnippets.length + l.unlikedSnippets.length + l.mySnippets.length === 0) continue;
       snippetItems.push(
-        <li className={`snippet ${l.id}`} key={l.id} onClick={this.handleClick.bind(this, l.id)}>
-          <img className="icon" src={`/islands/${l.id}-small.png`} />{ l.name }
+        <li className={`snippet ${l.theme}`} key={l.id} onClick={this.handleClick.bind(this, l.id)}>
+          <img className="icon" src={`/islands/${l.theme}-small.png`} />{ l.name }
         </li>
       );
       const thisLessonItems = [];
       for (const s of l.mySnippets.concat(l.likedSnippets, l.unlikedSnippets)) {
         thisLessonItems.push(
-          <li><CodeBlockCard codeBlock={s} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
+          <li><CodeBlockCard theme={l.theme} icon={l.icon} codeBlock={s} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
         );
       }
       snippetItems.push(<Collapse isOpen={this.state[l.id]}>{thisLessonItems}</Collapse>);

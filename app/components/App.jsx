@@ -13,6 +13,8 @@ import Footer from "./Footer";
 import Nav from "./Nav";
 import Loading from "./Loading";
 
+import axios from "axios";
+
 class App extends Component {
 
   constructor(props) {
@@ -30,8 +32,15 @@ class App extends Component {
     if (!userInit && auth.loading) this.setState({userInit: true});
   }
 
+  componentDidMount() {
+    axios.get("/api/lessons").then(resp => {
+      const lessons = resp.data;
+      this.props.dispatch({type: "LOAD_ISLANDS", payload: lessons});  
+    });
+  }
+
   render() {
-    const {auth, children, i18n, location} = this.props;
+    const {auth, children, i18n, location, islands} = this.props;
     const {userInit} = this.state;
 
     const routes = location.pathname.split("/");
@@ -45,6 +54,11 @@ class App extends Component {
       meta.find(d => d.property === "og:description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
     }
 
+    let theme = "";
+    const lookup = routes[1] === "lesson" && routes.length > 2 ? routes[2] : false;
+    const currentIsland = islands.find(island => island.id === lookup);
+    if (currentIsland) theme = currentIsland.theme;
+
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
@@ -54,7 +68,7 @@ class App extends Component {
             <Clouds />
             <Nav logo={ !location.pathname.includes("login") } />
             { children }
-            <Footer currentPath={location.pathname} className={ routes[1] === "lesson" && routes.length > 2 ? routes[2] : "" } />
+            <Footer currentPath={location.pathname} className={ theme } />
           </div>
         : <div className="container">
             <Clouds />
@@ -67,9 +81,10 @@ class App extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
+  dispatch: action => dispatch(action),
   isAuthenticated: () => {
     dispatch(isAuthenticated());
   }
 });
 
-export default connect(state => ({auth: state.auth, i18n: state.i18n}), mapDispatchToProps)(App);
+export default connect(state => ({auth: state.auth, i18n: state.i18n, islands: state.islands}), mapDispatchToProps)(App);

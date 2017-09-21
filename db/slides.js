@@ -1,8 +1,7 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("slides",
+  const s = sequelize.define("slides",
     {
-      index: db.BIGINT,
       id: {
         type: db.TEXT,
         primaryKey: true
@@ -18,13 +17,16 @@ module.exports = function(sequelize, db) {
       pt_title: db.TEXT,
       pt_htmlcontent1: db.TEXT,
       pt_htmlcontent2: db.TEXT,
-      pt_quizjson: db.TEXT,
-      pt_rulejson: db.TEXT
+      pt_quizjson: db.TEXT
     }, 
     {
       freezeTableName: true,
       timestamps: false
     }
   );
+
+  s.associate = models => s.belongsTo(models.minilessons, {foreignKey: "mlid", targetKey: "id", as: "minilessons", foreignKeyConstraint: true});
+
+  return s;
 
 };

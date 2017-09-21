@@ -3,12 +3,9 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
-import himalaya from "himalaya";
 import CodeEditor from "components/CodeEditor";
-import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import {Alert, Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
-
-import {cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import Loading from "components/Loading";
 
@@ -23,8 +20,8 @@ class CodeBlock extends Component {
       isOpen: false,
       goodRatio: 0,
       intent: null,
+      ruleErrors: null,
       rulejson: null,
-      meanings: [],
       timeout: null,
       timeoutAlert: false,
       resetAlert: false,
@@ -33,8 +30,8 @@ class CodeBlock extends Component {
   }
 
   componentDidMount() {
-    const meanings = this.getMeanings();
     const rulejson = JSON.parse(this.props.lesson.rulejson);
+    const ruleErrors = this.props.ruleErrors;
     let initialContent = "";
     let filename = "";
     if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
@@ -42,39 +39,13 @@ class CodeBlock extends Component {
       initialContent = this.props.lesson.snippet.studentcontent;
       filename = this.props.lesson.snippet.snippetname;
     }
-    this.setState({mounted: true, initialContent, filename, rulejson, meanings});
+    this.setState({mounted: true, initialContent, filename, ruleErrors, rulejson});
   }
 
   componentWillUnmount() {
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
     }
-  }
-
-  getMeanings() {
-    const {t} = this.props;
-    const meanings = [];
-    meanings.CONTAINS = [];
-    meanings.CSS_CONTAINS = [];
-    meanings.CONTAINS_SELF_CLOSE = [];
-    meanings.CONTAINS.html = t("<html> surrounds your whole codeblock and tells the computer this is a webpage.");
-    meanings.CONTAINS.head = t("<head> is where your metadata is stored, such as your <title>.");
-    meanings.CONTAINS.title = t("<title> is the title of your page! Make sure it's inside a <head> tag.");
-    meanings.CONTAINS.body = t("<body> is where you put the content you want everyone to see.");
-    meanings.CONTAINS.h1 = t("<h1> is a header tag, where you can write large text.");
-    meanings.CONTAINS.h2 = t("<h2> is a header tag, where you can write large text.");
-    meanings.CONTAINS.h3 = t("<h3> is a header tag, where you can write medium text.");
-    meanings.CONTAINS.h4 = t("<h4> is a header tag, where you can write medium text.");
-    meanings.CONTAINS.h5 = t("<h5> is a header tag, where you can write small text.");
-    meanings.CONTAINS.h6 = t("<h6> is a header tag, where you can write small text.");
-    meanings.CONTAINS.style = t("<style> is where you customize your page with cool colors and fonts. Make sure it's inside a <head> tag!");
-    meanings.CONTAINS.script = t("<script> is where you write interactive content with javascript.");
-    meanings.CONTAINS.p = t("<p> is a paragraph tag, you can write words and sentences in here.");
-    meanings.CSS_CONTAINS.h1 = t("h1 within a <style> tag is how you customize your header tags.");
-    meanings.CSS_CONTAINS.p = t("p within a <style> tag is how you customize your <p> tags");
-    meanings.CSS_CONTAINS.body = t("body within a <style> tag is how you customize everything in your webpage's body");
-    meanings.CONTAINS_SELF_CLOSE.img = t("<img> is a self-closing that places an image on your webpage.");
-    return meanings;
   }
 
   askForHelp() {
@@ -92,61 +63,8 @@ class CodeBlock extends Component {
     });
   }
 
-  checkForErrors(theText) {
-    const jsonArray = himalaya.parse(theText);
-    const {rulejson} = this.state;
-    let errors = 0;
-    for (const r of rulejson) {
-      if (r.type === "CONTAINS") {
-        if (!cvContainsTag(r, theText)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-      if (r.type === "CSS_CONTAINS") {
-        if (!cvContainsStyle(r, jsonArray)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-      if (r.type === "CONTAINS_SELF_CLOSE") {
-        if (!cvContainsSelfClosingTag(r, theText)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-    }
-    const goodRatio = (rulejson.length - errors) / rulejson.length;
-    let intent = this.state.intent;
-    if (goodRatio < 0.5) intent = Intent.DANGER;
-    else if (goodRatio < 1) intent = Intent.WARNING;
-    else intent = Intent.SUCCESS;
-    let timeout = this.state.timeout;
-    if (errors === 0) {
-      if (timeout) {
-        clearTimeout(this.state.timeout);
-        timeout = null;
-      }
-    }
-    else {
-      if (!timeout) {
-        timeout = setTimeout(this.askForHelp.bind(this), 120000);
-      }
-    }
-    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson, timeout});
-  }
-
   onChangeText(theText) {
-    this.checkForErrors(theText);
+    // nothing yet
   }
 
   resetSnippet() {
@@ -154,7 +72,7 @@ class CodeBlock extends Component {
     let initialcontent = "";
     if (lesson && lesson.initialcontent) initialcontent = lesson.initialcontent;
     this.editor.getWrappedInstance().setEntireContents(initialcontent);
-    this.checkForErrors(initialcontent);
+    // this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
   }
 
@@ -174,67 +92,12 @@ class CodeBlock extends Component {
     const {t} = this.props;
     const {username} = this.props.auth.user;
     if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/share/snippet/${this.props.lesson.snippet.id}`);
       browserHistory.push(`/snippets/${username}/${this.props.lesson.snippet.snippetname}`);
     }
     else {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
       toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
     }
-  }
-
-  getValidationBox() {
-    const {t} = this.props;
-    const {goodRatio, intent, rulejson} = this.state;
-    const iconList = [];
-    iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
-    iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
-    iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
-
-    const vList = rulejson.map(rule => {
-      if (rule.passing) {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item complete">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              { this.state.meanings[rule.type][rule.needle] }
-            </div>
-          </Popover>
-        );
-      }
-      else {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              { this.state.meanings[rule.type][rule.needle] }<br/><br/><div style={{color: "red"}}>{rule.error_msg}</div>
-            </div>
-          </Popover>
-        );
-      }
-    });
-
-    return (
-      <div id="validation-box">
-        <ul className="validation-list">{vList}</ul>
-        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-        { Math.round(goodRatio * 100) }% { t("Complete") }
-      </div>
-    );
   }
 
   verifyAndSaveCode() {
@@ -246,7 +109,7 @@ class CodeBlock extends Component {
     // let name = `My ${this.props.lesson.name} Codeblock`;
     let name = t("myCodeblock", {islandName: this.props.lesson.name});
 
-    if (!this.state.isPassing) {
+    if (!this.editor.getWrappedInstance().isPassing()) {
       const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
       toast.show({message: t("Can't save non-passing code!"), timeout: 1500, intent: Intent.DANGER});
       return;
@@ -285,11 +148,9 @@ class CodeBlock extends Component {
 
   render() {
     const {t, lesson} = this.props;
-    const {initialContent, timeoutAlert} = this.state;
+    const {initialContent, timeoutAlert, ruleErrors, rulejson} = this.state;
 
     if (!this.state.mounted) return <Loading />;
-
-    const validationBox = this.getValidationBox();
 
     return (
       <div id="codeBlock">
@@ -315,9 +176,8 @@ class CodeBlock extends Component {
         </Alert>
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
-            { validationBox }
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} ruleErrors={ruleErrors} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

@@ -32,6 +32,7 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
+      ruleErrors: null,
       currentLesson: null,
       minilessons: null,
       sentProgress: false,
@@ -99,8 +100,9 @@ class Slide extends Component {
     const lget = axios.get(`/api/lessons?id=${lid}`);
     const mlget = axios.get(`/api/minilessons?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
+    const rget = axios.get("/api/rules");
 
-    Promise.all([sget, lget, mlget, upget]).then(resp => {
+    Promise.all([sget, lget, mlget, upget, rget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
@@ -116,13 +118,15 @@ class Slide extends Component {
       }
       */
 
+      const ruleErrors = resp[4].data;
+
       const up = resp[3].data;
       const done = up.find(p => p.level === mlid) !== undefined;
 
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentLesson: resp[1].data[0], minilessons: resp[2].data});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, ruleErrors, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
 
     // document.addEventListener("keydown", this.handleKey.bind(this));
@@ -144,7 +148,7 @@ class Slide extends Component {
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, currentLesson, gems} = this.state;
+    const {currentSlide, slides, currentLesson, gems, ruleErrors} = this.state;
     const updateGems = this.updateGems.bind(this);
 
     if (!auth.user) browserHistory.push("/login");
@@ -175,20 +179,21 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div id="slide" className={ currentLesson.id }>
+      <div id="slide" className={ currentLesson.theme }>
         <Confetti className="confetti" config={config} active={ this.state.lessonComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
           { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id } position={Position.TOP_RIGHT}>
+          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.theme } position={Position.TOP_RIGHT}>
             <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>
 
         <SlideComponent
           exec={exec}
-          island={lid}
+          island={currentLesson.theme}
+          ruleErrors={ruleErrors}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />

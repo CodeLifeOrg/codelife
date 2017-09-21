@@ -23,7 +23,7 @@ class CodeBlock extends Component {
       isOpen: false,
       goodRatio: 0,
       intent: null,
-      rules: null,
+      ruleErrors: null,
       rulejson: null,
       timeout: null,
       timeoutAlert: false,
@@ -34,7 +34,7 @@ class CodeBlock extends Component {
 
   componentDidMount() {
     const rulejson = JSON.parse(this.props.lesson.rulejson);
-    const rules = this.props.rules;
+    const ruleErrors = this.props.ruleErrors;
     let initialContent = "";
     let filename = "";
     if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
@@ -42,7 +42,7 @@ class CodeBlock extends Component {
       initialContent = this.props.lesson.snippet.studentcontent;
       filename = this.props.lesson.snippet.snippetname;
     }
-    this.setState({mounted: true, initialContent, filename, rules, rulejson});
+    this.setState({mounted: true, initialContent, filename, ruleErrors, rulejson});
   }
 
   componentWillUnmount() {
@@ -67,48 +67,7 @@ class CodeBlock extends Component {
   }
 
   checkForErrors(theText) {
-    const jsonArray = himalaya.parse(theText);
-    const {rulejson} = this.state;
-    let errors = 0;
-    for (const r of rulejson) {
-      if (r.type === "CONTAINS") {
-        if (!cvContainsTag(r, theText)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-      if (r.type === "CSS_CONTAINS") {
-        if (!cvContainsStyle(r, jsonArray)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-      if (r.type === "CONTAINS_SELF_CLOSE") {
-        if (!cvContainsSelfClosingTag(r, theText)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-      if (r.type === "NESTS") {
-        if (!cvNests(r, theText)) {
-          errors++;
-          r.passing = false;
-        }
-        else {
-          r.passing = true;
-        }
-      }
-    }
-    const goodRatio = (rulejson.length - errors) / rulejson.length;
+    /*const goodRatio = (rulejson.length - errors) / rulejson.length;
     let intent = this.state.intent;
     if (goodRatio < 0.5) intent = Intent.DANGER;
     else if (goodRatio < 1) intent = Intent.WARNING;
@@ -125,11 +84,11 @@ class CodeBlock extends Component {
         timeout = setTimeout(this.askForHelp.bind(this), 120000);
       }
     }
-    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson, timeout});
+    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson, timeout});*/
   }
 
   onChangeText(theText) {
-    this.checkForErrors(theText);
+    // nothing yet
   }
 
   resetSnippet() {
@@ -137,7 +96,7 @@ class CodeBlock extends Component {
     let initialcontent = "";
     if (lesson && lesson.initialcontent) initialcontent = lesson.initialcontent;
     this.editor.getWrappedInstance().setEntireContents(initialcontent);
-    this.checkForErrors(initialcontent);
+    // this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
   }
 
@@ -165,21 +124,6 @@ class CodeBlock extends Component {
     }
   }
 
-  getErrorForRule(rule) {
-    const myrule = this.state.rules.find(r => r.type === rule.type);
-    if (myrule && myrule.error_msg) {
-      if (myrule.type === "NESTS") {
-        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
-      }
-      else {
-        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
-      }
-    }
-    else {
-      return "";
-    }
-  }
-
   getValidationBox() {
     const {t} = this.props;
     const {goodRatio, intent, rulejson} = this.state;
@@ -202,7 +146,7 @@ class CodeBlock extends Component {
               <span className="rule">{rule.needle}</span>
             </li>
             <div>
-              TBD Better Help
+              [inprogress] Help Msg
               { /* this.state.meanings[rule.type][rule.needle] */ }
             </div>
           </Popover>
@@ -221,7 +165,7 @@ class CodeBlock extends Component {
             </li>
             <div>
               { /* this.state.meanings[rule.type][rule.needle] */ }
-              TBD Better Help<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
+              [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>[inprogress] Error Msg</div>
             </div>
           </Popover>
         );
@@ -246,7 +190,7 @@ class CodeBlock extends Component {
     // let name = `My ${this.props.lesson.name} Codeblock`;
     let name = t("myCodeblock", {islandName: this.props.lesson.name});
 
-    if (!this.state.isPassing) {
+    if (!this.editor.getWrappedInstance().isPassing()) {
       const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
       toast.show({message: t("Can't save non-passing code!"), timeout: 1500, intent: Intent.DANGER});
       return;
@@ -285,7 +229,7 @@ class CodeBlock extends Component {
 
   render() {
     const {t, lesson} = this.props;
-    const {initialContent, timeoutAlert} = this.state;
+    const {initialContent, timeoutAlert, ruleErrors, rulejson} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -317,7 +261,7 @@ class CodeBlock extends Component {
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
             { validationBox }
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} ruleErrors={ruleErrors} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

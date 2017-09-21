@@ -20,7 +20,8 @@ class CodeEditor extends Component {
       changesMade: false,
       baseRules: null,
       isPassing: false,
-      rules: null,
+      rulejson: [],
+      ruleErrors: [],
       titleText: "",
       isOpen: false
     };
@@ -28,10 +29,11 @@ class CodeEditor extends Component {
 
   componentDidMount() {
     const currentText = this.props.initialValue ? this.props.initialValue : "";
-    const rules = this.props.rules ? this.props.rules : null;
+    const rulejson = this.props.rulejson ? this.props.rulejson : [];
+    const ruleErrors = this.props.ruleErrors ? this.props.ruleErrors : [];
     const titleText = this.getTitleText(currentText);
     const baseRules = this.getBaseRules();
-    this.setState({mounted: true, currentText, baseRules, rules, titleText}, this.renderText.bind(this));
+    this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
   }
 
@@ -100,7 +102,7 @@ class CodeEditor extends Component {
 
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
-    const {baseRules} = this.state;
+    const {baseRules, rulejson} = this.state;
     let errors = 0;
     const cv = [];
     cv.CONTAINS = cvContainsTag;
@@ -110,10 +112,34 @@ class CodeEditor extends Component {
     cv.NESTS = cvNests;
     for (const r of baseRules) {
       const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
-      r.passing = cv[r.type](r, payload);
+      if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
-    console.log(baseRules);
+    for (const r of rulejson) {
+      const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
+      if (cv[r.type]) r.passing = cv[r.type](r, payload);
+      if (!r.passing) errors++;
+    }
+    console.log("---------------------------");
+    console.log("BASE RULES");
+    console.log("---------------------------");
+    for (const r of baseRules) {
+      console.log(r.type, r.needle, r.outer ? r.outer : "", r.passing);
+    }
+    for (const r of baseRules) {
+      if (!r.passing) console.log(this.getErrorForRule(r));
+    }
+    console.log("---------------------------");
+    console.log("CUSTOM RULES");
+    console.log("---------------------------");
+    for (const r of rulejson) {
+      console.log(r.type, r.needle, r.outer ? r.outer : "", r.passing);
+    }
+    for (const r of rulejson) {
+      if (!r.passing) console.log(this.getErrorForRule(r));
+    }
+
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     this.setState({isPassing: errors === 0});
   }
 
@@ -130,6 +156,21 @@ class CodeEditor extends Component {
       doc.open();
       doc.write(theText);
       doc.close();
+    }
+  }
+
+  getErrorForRule(rule) {
+    const myrule = this.state.ruleErrors.find(r => r.type === rule.type);
+    if (myrule && myrule.error_msg) {
+      if (myrule.type === "NESTS") {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
+      }
+      else {
+        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+      }
+    }
+    else {
+      return "";
     }
   }
 
@@ -195,7 +236,8 @@ class CodeEditor extends Component {
           ? <div className="code">
               <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
               { !this.props.blurred
-                ? <AceWrapper
+                ? 
+                  <AceWrapper
                     className="editor"
                     ref={ comp => this.editor = comp }
                     onChange={this.onChangeText.bind(this)}

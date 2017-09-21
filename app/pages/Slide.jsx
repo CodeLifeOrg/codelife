@@ -32,7 +32,7 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
-      rules: null,
+      ruleErrors: null,
       currentLesson: null,
       minilessons: null,
       sentProgress: false,
@@ -118,7 +118,7 @@ class Slide extends Component {
       }
       */
 
-      const rules = resp[4].data;
+      const ruleErrors = resp[4].data;
 
       const up = resp[3].data;
       const done = up.find(p => p.level === mlid) !== undefined;
@@ -126,7 +126,7 @@ class Slide extends Component {
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, rules, currentLesson: resp[1].data[0], minilessons: resp[2].data});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, ruleErrors, currentLesson: resp[1].data[0], minilessons: resp[2].data});
     });
 
     // document.addEventListener("keydown", this.handleKey.bind(this));
@@ -148,7 +148,7 @@ class Slide extends Component {
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, currentLesson, gems} = this.state;
+    const {currentSlide, slides, currentLesson, gems, ruleErrors} = this.state;
     const updateGems = this.updateGems.bind(this);
 
     if (!auth.user) browserHistory.push("/login");
@@ -193,7 +193,7 @@ class Slide extends Component {
         <SlideComponent
           exec={exec}
           island={currentLesson.theme}
-          rules={this.state.rules}
+          ruleErrors={ruleErrors}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />

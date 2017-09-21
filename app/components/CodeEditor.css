@@ -59,12 +59,34 @@
 
 }
 
+.drawer {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+
+  & .title {
+    background-color: #efefef;
+    box-shadow: border-box;
+    padding: 5px;
+  }
+
+  & .contents {
+    background-color: #eee;
+    box-shadow: border-box;
+    height: 200px;
+    overflow-y: scroll;
+  }
+
+}
+
 .render {
   align-self: stretch;
   display: flex;
   flex: 1;
   flex-direction: column;
   margin: 0 10px;
+  position: relative;
 
   & .panel-title {
     align-self: flex-start;

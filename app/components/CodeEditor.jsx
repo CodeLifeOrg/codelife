@@ -37,7 +37,11 @@ class CodeEditor extends Component {
     this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
 
+    /*
     console["log"] = this.injectConsole.bind(this);
+    console["warning"] = this.injectConsole.bind(this);
+    console["error"] = this.injectConsole.bind(this);
+    */
 
   }
 
@@ -65,11 +69,13 @@ class CodeEditor extends Component {
     return undefined;
   }
 
+  /*
   injectConsole(msg) {
     let {embeddedConsole} = this.state;
-    embeddedConsole += msg;
+    embeddedConsole = `${embeddedConsole}\n${msg}`;
     this.setState({embeddedConsole});
-  }
+  } 
+  */
 
   getTitleText(theText) {
     const {t} = this.props;
@@ -149,7 +155,6 @@ class CodeEditor extends Component {
     for (const r of rulejson) {
       if (!r.passing) console.log(this.getErrorForRule(r));
     }
-
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     this.setState({isPassing: errors === 0});
   }
@@ -237,7 +242,7 @@ class CodeEditor extends Component {
 
   render() {
     const {codeTitle, island, t} = this.props;
-    const {titleText, currentText} = this.state;
+    const {titleText, currentText, embeddedConsole} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -262,6 +267,10 @@ class CodeEditor extends Component {
                     { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
                 </div> : null }
+              <div className="drawer">
+                <div className="title">Validation</div>
+                <div className="contents"></div>
+              </div>
             </div>
           : null
         }
@@ -273,6 +282,10 @@ class CodeEditor extends Component {
             { titleText }
           </div>
           <iframe className="iframe" ref="rc" />
+          <div className="drawer">
+            <div className="title">Console</div>
+            <div className="contents">{embeddedConsole}</div>
+          </div>
         </div>
       </div>
     );

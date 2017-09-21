@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
+import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
@@ -22,6 +23,8 @@ class CodeEditor extends Component {
       isPassing: false,
       rulejson: [],
       ruleErrors: [],
+      goodRatio: 0,
+      intent: null,
       embeddedConsole: "",
       titleText: "",
       isOpen: false
@@ -76,6 +79,62 @@ class CodeEditor extends Component {
     this.setState({embeddedConsole});
   } 
   */
+
+  getValidationBox() {
+    const {t} = this.props;
+    const {goodRatio, intent, rulejson} = this.state;
+    const iconList = [];
+    iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
+    iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
+
+    const vList = rulejson.map(rule => {
+      if (rule.passing) {
+        return (
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP_LEFT}
+          >
+            <li className="validation-item complete">
+              {iconList[rule.type]}
+              <span className="rule">{rule.needle}</span>
+            </li>
+            <div>
+              [inprogress] Help Msg
+              { /* this.state.meanings[rule.type][rule.needle] */ }
+            </div>
+          </Popover>
+        );
+      }
+      else {
+        return (
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP_LEFT}
+          >
+            <li className="validation-item">
+              {iconList[rule.type]}
+              <span className="rule">{rule.needle}</span>
+            </li>
+            <div>
+              { /* this.state.meanings[rule.type][rule.needle] */ }
+              [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
+            </div>
+          </Popover>
+        );
+      }
+    });
+    return (
+      <div id="validation-box">
+        <ul className="validation-list">{vList}</ul>
+        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+        { Math.round(goodRatio * 100) }% { t("Complete") }
+      </div>
+    );
+  }
 
   getTitleText(theText) {
     const {t} = this.props;
@@ -156,7 +215,16 @@ class CodeEditor extends Component {
       if (!r.passing) console.log(this.getErrorForRule(r));
     }
     console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    this.setState({isPassing: errors === 0});
+
+    const allRules = rulejson.length + baseRules.length;
+    const goodRatio = (allRules - errors) / allRules;
+    const isPassing = errors === 0;
+    let intent = this.state.intent;
+    if (goodRatio < 0.5) intent = Intent.DANGER;
+    else if (goodRatio < 1) intent = Intent.WARNING;
+    else intent = Intent.SUCCESS;
+
+    this.setState({isPassing, goodRatio, intent});
   }
 
   renderText() {
@@ -269,7 +337,7 @@ class CodeEditor extends Component {
                 </div> : null }
               <div className="drawer">
                 <div className="title">Validation</div>
-                <div className="contents"></div>
+                <div className="contents">{this.getValidationBox()}</div>
               </div>
             </div>
           : null

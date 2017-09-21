@@ -122,7 +122,6 @@ class CodeEditor extends Component {
               <span className="rule">{rule.needle}</span>
             </li>
             <div>
-              { /* this.state.meanings[rule.type][rule.needle] */ }
               [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
             </div>
           </Popover>
@@ -198,18 +197,6 @@ class CodeEditor extends Component {
       const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
-    }
-    for (const r of baseRules) {
-      console.log(r.type, r.needle, r.outer ? r.outer : "", r.passing);
-    }
-    for (const r of baseRules) {
-      if (!r.passing) console.log(this.getErrorForRule(r));
-    }
-    for (const r of rulejson) {
-      console.log(r.type, r.needle, r.outer ? r.outer : "", r.passing);
-    }
-    for (const r of rulejson) {
-      if (!r.passing) console.log(this.getErrorForRule(r));
     }
 
     const allRules = rulejson.length + baseRules.length;

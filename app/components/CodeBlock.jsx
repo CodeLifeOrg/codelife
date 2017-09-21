@@ -3,12 +3,9 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
-import himalaya from "himalaya";
 import CodeEditor from "components/CodeEditor";
-import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import {Alert, Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
-
-import {cvNests, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import Loading from "components/Loading";
 
@@ -66,27 +63,6 @@ class CodeBlock extends Component {
     });
   }
 
-  checkForErrors(theText) {
-    /*const goodRatio = (rulejson.length - errors) / rulejson.length;
-    let intent = this.state.intent;
-    if (goodRatio < 0.5) intent = Intent.DANGER;
-    else if (goodRatio < 1) intent = Intent.WARNING;
-    else intent = Intent.SUCCESS;
-    let timeout = this.state.timeout;
-    if (errors === 0) {
-      if (timeout) {
-        clearTimeout(this.state.timeout);
-        timeout = null;
-      }
-    }
-    else {
-      if (!timeout) {
-        timeout = setTimeout(this.askForHelp.bind(this), 120000);
-      }
-    }
-    this.setState({isPassing: errors === 0, goodRatio, intent, rulejson, timeout});*/
-  }
-
   onChangeText(theText) {
     // nothing yet
   }
@@ -122,63 +98,6 @@ class CodeBlock extends Component {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
       toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
     }
-  }
-
-  getValidationBox() {
-    const {t} = this.props;
-    const {goodRatio, intent, rulejson} = this.state;
-    const iconList = [];
-    iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
-    iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
-    iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
-    iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
-
-    const vList = rulejson.map(rule => {
-      if (rule.passing) {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item complete">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              [inprogress] Help Msg
-              { /* this.state.meanings[rule.type][rule.needle] */ }
-            </div>
-          </Popover>
-        );
-      }
-      else {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              { /* this.state.meanings[rule.type][rule.needle] */ }
-              [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>[inprogress] Error Msg</div>
-            </div>
-          </Popover>
-        );
-      }
-    });
-
-    return (
-      <div id="validation-box">
-        <ul className="validation-list">{vList}</ul>
-        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-        { Math.round(goodRatio * 100) }% { t("Complete") }
-      </div>
-    );
   }
 
   verifyAndSaveCode() {
@@ -233,8 +152,6 @@ class CodeBlock extends Component {
 
     if (!this.state.mounted) return <Loading />;
 
-    const validationBox = this.getValidationBox();
-
     return (
       <div id="codeBlock">
         <div style={{textAlign: "right"}} className="codeblock-filename-form">
@@ -259,7 +176,6 @@ class CodeBlock extends Component {
         </Alert>
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
-            { validationBox }
           </div>
           { this.state.mounted ? <CodeEditor ref={c => this.editor = c} ruleErrors={ruleErrors} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>

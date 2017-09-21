@@ -76,6 +76,39 @@
     box-shadow: border-box;
     height: 200px;
     overflow-y: scroll;
+
+    & .validation-list {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      margin: 10px 0;
+      padding: 0;
+
+      & .validation-item {
+        align-items: center;
+        background-color: white;
+        border: 1px solid #2c2c2c;
+        display: flex;
+        flex: 1;
+        font-size: 14px;
+        margin: 5px;
+        padding: 5px 8px 5px 5px;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+        & .pt-icon-standard {
+          margin-right: 5px;
+          vertical-align: middle;
+        }
+
+        &.complete {
+          background-color: #0f9960;
+          border-color: #0f9960;
+          color: white;
+
+        }
+
+      }
+    }
   }
 
 }

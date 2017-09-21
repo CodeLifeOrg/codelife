@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
-import {Alert, Intent, Position, Toaster, Popover, ProgressBar, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import {Intent, Position, Popover, ProgressBar, PopoverInteractionKind} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
@@ -61,8 +61,8 @@ class CodeEditor extends Component {
       {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "body", outer: "html"},
       {type: "NESTS", needle: "head", outer: "html"},
-      {type: "NESTS", needle: "title", outer: "head"},
-      {type: "NESTS", needle: "style", outer: "head"}
+      {type: "NESTS", needle: "title", outer: "head"}
+      // {type: "NESTS", needle: "style", outer: "head"} 
     ];
     return baseRules;
   }
@@ -82,14 +82,16 @@ class CodeEditor extends Component {
 
   getValidationBox() {
     const {t} = this.props;
-    const {goodRatio, intent, rulejson} = this.state;
+    const {goodRatio, intent, rulejson, baseRules} = this.state;
     const iconList = [];
     iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
 
-    const vList = rulejson.map(rule => {
+    const allRules = baseRules.concat(rulejson);
+
+    const vList = allRules.map(rule => {
       if (rule.passing) {
         return (
           <Popover
@@ -129,9 +131,10 @@ class CodeEditor extends Component {
     });
     return (
       <div id="validation-box">
-        <ul className="validation-list">{vList}</ul>
         <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
         { Math.round(goodRatio * 100) }% { t("Complete") }
+        <ul className="validation-list">{vList}</ul>
+        
       </div>
     );
   }
@@ -196,25 +199,18 @@ class CodeEditor extends Component {
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
-    console.log("---------------------------");
-    console.log("BASE RULES");
-    console.log("---------------------------");
     for (const r of baseRules) {
       console.log(r.type, r.needle, r.outer ? r.outer : "", r.passing);
     }
     for (const r of baseRules) {
       if (!r.passing) console.log(this.getErrorForRule(r));
     }
-    console.log("---------------------------");
-    console.log("CUSTOM RULES");
-    console.log("---------------------------");
     for (const r of rulejson) {
       console.log(r.type, r.needle, r.outer ? r.outer : "", r.passing);
     }
     for (const r of rulejson) {
       if (!r.passing) console.log(this.getErrorForRule(r));
     }
-    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
     const allRules = rulejson.length + baseRules.length;
     const goodRatio = (allRules - errors) / allRules;

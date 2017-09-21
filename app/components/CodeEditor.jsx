@@ -22,6 +22,7 @@ class CodeEditor extends Component {
       isPassing: false,
       rulejson: [],
       ruleErrors: [],
+      embeddedConsole: "",
       titleText: "",
       isOpen: false
     };
@@ -35,6 +36,9 @@ class CodeEditor extends Component {
     const baseRules = this.getBaseRules();
     this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
     if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+
+    console["log"] = this.injectConsole.bind(this);
+
   }
 
   getBaseRules() {
@@ -50,7 +54,8 @@ class CodeEditor extends Component {
       {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "body", outer: "html"},
       {type: "NESTS", needle: "head", outer: "html"},
-      {type: "NESTS", needle: "title", outer: "head"}
+      {type: "NESTS", needle: "title", outer: "head"},
+      {type: "NESTS", needle: "style", outer: "head"}
     ];
     return baseRules;
   }
@@ -58,6 +63,12 @@ class CodeEditor extends Component {
   getEditor() {
     if (this.editor) return this.editor.editor.editor;
     return undefined;
+  }
+
+  injectConsole(msg) {
+    let {embeddedConsole} = this.state;
+    embeddedConsole += msg;
+    this.setState({embeddedConsole});
   }
 
   getTitleText(theText) {

@@ -28,7 +28,6 @@ class Minilesson extends Component {
       likedSnippets: null,
       loading: false,
       unlikedSnippets: null,
-      ruleErrors: null,
       testOpen: false,
       winOpen: false,
       winMessage: "",
@@ -45,15 +44,13 @@ class Minilesson extends Component {
     const uget = axios.get("/api/userprogress");
     const osget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
-    const rget = axios.get("/api/rules");
 
-    Promise.all([mlget, lget, uget, osget, lkget, rget]).then(resp => {
+    Promise.all([mlget, lget, uget, osget, lkget]).then(resp => {
       const minilessons = resp[0].data;
       const lessons = resp[1].data;
       const userProgress = resp[2].data;
       const allSnippets = resp[3].data;
       const likes = resp[4].data;
-      const ruleErrors = resp[5].data;
 
       const currentLesson = lessons.find(l => l.id === lid);
       // TODO: after august test, change this from index to a new ordering field
@@ -94,7 +91,7 @@ class Minilesson extends Component {
         }
       }
 
-      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, ruleErrors, mySnippets, likedSnippets, unlikedSnippets, loading: false});
+      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, loading: false});
     });
   }
 
@@ -268,7 +265,6 @@ class Minilesson extends Component {
           <div className="pt-dialog-body">
             <CodeBlock
               lesson={currentLesson}
-              ruleErrors={this.state.ruleErrors}
               handleSave={this.handleSave.bind(this)}
               onFirstCompletion={this.onFirstCompletion.bind(this)}
             />

@@ -20,7 +20,6 @@ class CodeBlock extends Component {
       isOpen: false,
       goodRatio: 0,
       intent: null,
-      ruleErrors: null,
       rulejson: null,
       timeout: null,
       timeoutAlert: false,
@@ -31,7 +30,6 @@ class CodeBlock extends Component {
 
   componentDidMount() {
     const rulejson = JSON.parse(this.props.lesson.rulejson);
-    const ruleErrors = this.props.ruleErrors;
     let initialContent = "";
     let filename = "";
     if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
@@ -39,7 +37,7 @@ class CodeBlock extends Component {
       initialContent = this.props.lesson.snippet.studentcontent;
       filename = this.props.lesson.snippet.snippetname;
     }
-    this.setState({mounted: true, initialContent, filename, ruleErrors, rulejson});
+    this.setState({mounted: true, initialContent, filename, rulejson});
   }
 
   componentWillUnmount() {
@@ -148,7 +146,7 @@ class CodeBlock extends Component {
 
   render() {
     const {t, lesson} = this.props;
-    const {initialContent, timeoutAlert, ruleErrors, rulejson} = this.state;
+    const {initialContent, timeoutAlert, rulejson} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -177,7 +175,7 @@ class CodeBlock extends Component {
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} ruleErrors={ruleErrors} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
@@ -32,13 +33,18 @@ class CodeEditor extends Component {
   }
 
   componentDidMount() {
-    const currentText = this.props.initialValue ? this.props.initialValue : "";
-    const rulejson = this.props.rulejson ? this.props.rulejson : [];
-    const ruleErrors = this.props.ruleErrors ? this.props.ruleErrors : [];
-    const titleText = this.getTitleText(currentText);
-    const baseRules = this.getBaseRules();
-    this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
-    if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+    axios.get("/api/rules").then(resp => {
+      
+      const ruleErrors = resp.data;
+      
+      const currentText = this.props.initialValue ? this.props.initialValue : "";
+      const rulejson = this.props.rulejson ? this.props.rulejson : [];
+      const titleText = this.getTitleText(currentText);
+      const baseRules = this.getBaseRules();
+      this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
+      if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);  
+    });
+
 
     /*
     console["log"] = this.injectConsole.bind(this);

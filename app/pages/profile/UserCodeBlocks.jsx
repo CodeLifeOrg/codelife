@@ -9,7 +9,7 @@ import "./Profile.css";
  * This is shown on the public profile for a user and requires sending
  * 1 prop: a ref to the user
  */
-class UserSnippets extends Component {
+class UserCodeBlocks extends Component {
 
   /**
    * Creates the UserSnippets component with initial state.
@@ -20,7 +20,7 @@ class UserSnippets extends Component {
     super(props);
     this.state = {
       loading: true,
-      snippets: [],
+      codeBlocks: [],
       likes: null
     };
   }
@@ -31,20 +31,20 @@ class UserSnippets extends Component {
    */
   componentDidMount() {
     const {user} = this.props;
-    const sget = axios.get(`/api/snippets/byuser?uid=${user.id}`);
+    const cbget = axios.get(`/api/snippets/byuser?uid=${user.id}`);
     const lkget = axios.get("/api/likes");
     
-    Promise.all([sget, lkget]).then(resp => {
-      const snippets = resp[0].data;
+    Promise.all([cbget, lkget]).then(resp => {
+      const codeBlocks = resp[0].data;
       const likes = resp[1].data;
-      snippets.sort((a, b) => a.id - b.id);
-      this.setState({loading: false, snippets, likes});
+      codeBlocks.sort((a, b) => a.id - b.id);
+      this.setState({loading: false, codeBlocks, likes});
     });
   }
 
   render() {
     const {t} = this.props;
-    const {loading, snippets, likes} = this.state;
+    const {loading, codeBlocks, likes} = this.state;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 
@@ -52,8 +52,8 @@ class UserSnippets extends Component {
       <div className="user-section">
         <h2>{ t("Code Blocks") }</h2>
         <div className="flex-row">
-          { snippets.length
-            ? snippets.map(cb => {
+          { codeBlocks.length
+            ? codeBlocks.map(cb => {
               if (likes.find(l => l.likeid === cb.id)) cb.liked = true;
               return <CodeBlockCard codeBlock={cb} />;
             })
@@ -64,4 +64,4 @@ class UserSnippets extends Component {
   }
 }
 
-export default translate()(UserSnippets);
+export default translate()(UserCodeBlocks);

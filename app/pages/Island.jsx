@@ -3,32 +3,32 @@ import {connect} from "react-redux";
 import {browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import "./Lesson.css";
+import "./Island.css";
 import IslandLink from "components/IslandLink";
 import Loading from "components/Loading";
 
-class Lesson extends Component {
+class Island extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      lessons: [],
-      snippets: [],
+      islands: [],
+      codeBlocks: [],
       userProgress: null
     };
   }
 
   componentDidMount() {
-    const lget = axios.get("/api/lessons/");
+    const iget = axios.get("/api/lessons/");
     const upget = axios.get("/api/userprogress");
-    const sget = axios.get("/api/snippets");
+    const cbget = axios.get("/api/snippets");
 
-    Promise.all([lget, upget, sget]).then(resp => {
-      const lessons = resp[0].data;
-      lessons.sort((a, b) => a.ordering - b.ordering);
+    Promise.all([iget, upget, cbget]).then(resp => {
+      const islands = resp[0].data;
+      islands.sort((a, b) => a.ordering - b.ordering);
       const userProgress = resp[1].data;
-      const snippets = resp[2].data;
-      this.setState({lessons, userProgress, snippets});
+      const codeBlocks = resp[2].data;
+      this.setState({islands, userProgress, codeBlocks});
     });
   }
 
@@ -38,53 +38,50 @@ class Lesson extends Component {
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 
-  goToEditor(lid) {
-    browserHistory.push(`/editor/${lid}`);
-  }
-
   handleSave(sid, studentcontent) {
     // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
     // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
     // reload all snippets freshly from the database, but I also want to minimize db hits.  revisit this.
-    const {snippets} = this.state;
-    for (const s of snippets) {
-      if (s.id === sid) s.studentcontent = studentcontent;
+    const {codeBlocks} = this.state;
+    for (const cb of codeBlocks) {
+      if (cb.id === sid) cb.studentcontent = studentcontent;
     }
-    this.setState(snippets);
+    this.setState(codeBlocks);
   }
 
   render() {
 
-    const {lessons, snippets, userProgress} = this.state;
+    const {islands, codeBlocks, userProgress} = this.state;
 
     const {auth} = this.props;
 
     if (!auth.user) browserHistory.push("/login");
 
-    if (lessons === [] || !userProgress) return <Loading />;
+    if (islands === [] || !userProgress) return <Loading />;
 
     // clone the array so we don't mess with state
-    const lessonArray = lessons.slice(0);
+    // TODO: i've subsequently learned this is unnecessary, revisit this
+    const islandArray = islands.slice(0);
 
-    for (let l = 0; l < lessonArray.length; l++) {
-      lessonArray[l].snippet = snippets.find(s => s.lid === lessonArray[l].id);
-      const done = this.hasUserCompleted(lessonArray[l].id);
-      lessonArray[l].isDone = done;
-      lessonArray[l].isNext = l === 0 && !done || l > 0 && !done && lessonArray[l - 1].isDone;
+    for (let i = 0; i < islandArray.length; i++) {
+      islandArray[i].codeBlock = codeBlocks.find(s => s.lid === islandArray[i].id);
+      const done = this.hasUserCompleted(islandArray[i].id);
+      islandArray[i].isDone = done;
+      islandArray[i].isNext = i === 0 && !done || i > 0 && !done && islandArray[i - 1].isDone;
     }
 
     return (
       <div className="overworld">
         <div className="map">
-          { lessonArray.map(lesson => <IslandLink lesson={lesson} />) }
+          { islandArray.map(island => <IslandLink island={island} />) }
         </div>
       </div>
     );
   }
 }
 
-Lesson = connect(state => ({
+Island = connect(state => ({
   auth: state.auth
-}))(Lesson);
-Lesson = translate()(Lesson);
-export default Lesson;
+}))(Island);
+Island = translate()(Island);
+export default Island;

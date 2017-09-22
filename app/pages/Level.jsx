@@ -8,26 +8,26 @@ import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
 import IslandLink from "components/IslandLink";
 
-import "./Minilesson.css";
+import "./Level.css";
 
 import gemIcon from "icons/gem.svg";
 
 import Loading from "components/Loading";
 
-class Minilesson extends Component {
+class Level extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      minilessons: null,
-      currentLesson: null,
-      nextLesson: null,
-      prevLesson: null,
+      levels: null,
+      currentIsland: null,
+      nextIsland: null,
+      prevIsland: null,
       userProgress: null,
-      mySnippets: null,
-      likedSnippets: null,
+      myCodeBlocks: null,
+      likedCodeBlocks: null,
+      unlikedCodeBlocks: null,
       loading: false,
-      unlikedSnippets: null,
       testOpen: false,
       winOpen: false,
       winMessage: "",
@@ -39,72 +39,72 @@ class Minilesson extends Component {
   loadFromDB() {
     const {params, t} = this.props;
     const {lid} = params;
-    const mlget = axios.get(`/api/minilessons?lid=${lid}`);
-    const lget = axios.get("/api/lessons");
+    const lget = axios.get(`/api/minilessons?lid=${lid}`);
+    const iget = axios.get("/api/lessons");
     const uget = axios.get("/api/userprogress");
-    const osget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
+    const cbget = axios.get(`/api/snippets/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
 
-    Promise.all([mlget, lget, uget, osget, lkget]).then(resp => {
-      const minilessons = resp[0].data;
-      const lessons = resp[1].data;
+    Promise.all([lget, iget, uget, cbget, lkget]).then(resp => {
+      const levels = resp[0].data;
+      const islands = resp[1].data;
       const userProgress = resp[2].data;
-      const allSnippets = resp[3].data;
+      const allCodeBlocks = resp[3].data;
       const likes = resp[4].data;
 
-      const currentLesson = lessons.find(l => l.id === lid);
+      const currentIsland = islands.find(i => i.id === lid);
       // TODO: after august test, change this from index to a new ordering field
       // ALSO: add an exception for level 10.
-      const nextOrdering = Number(currentLesson.index) + 1;
-      const nextLesson = lessons.find(l => Number(l.index) === Number(nextOrdering));
-      const prevOrdering = Number(currentLesson.index) - 1;
-      const prevLesson = lessons.find(l => Number(l.index) === Number(prevOrdering));
+      const nextOrdering = Number(currentIsland.ordering) + 1;
+      const nextIsland = islands.find(i => Number(i.ordering) === Number(nextOrdering));
+      const prevOrdering = Number(currentIsland.index) - 1;
+      const prevIsland = islands.find(i => Number(i.ordering) === Number(prevOrdering));
 
-      const mySnippets = [];
-      const likedSnippets = [];
-      const unlikedSnippets = [];
+      const myCodeBlocks = [];
+      const likedCodeBlocks = [];
+      const unlikedCodeBlocks = [];
 
-      currentLesson.snippet = null;
+      currentIsland.codeBlock = null;
 
-      minilessons.sort((a, b) => a.ordering - b.ordering);
-      allSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
+      levels.sort((a, b) => a.ordering - b.ordering);
+      allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       // Fold over snippets and separate them into mine and others
-      for (const s of allSnippets) {
-        s.likes = Number(s.likes);
-        if (s.uid === this.props.auth.user.id) {
-          s.username = t("you!");
-          s.mine = true;
-          currentLesson.snippet = s;
-          if (likes.find(l => l.likeid === s.id)) s.liked = true;
-          mySnippets.push(s);
+      for (const cb of allCodeBlocks) {
+        cb.likes = Number(cb.likes);
+        if (cb.uid === this.props.auth.user.id) {
+          cb.username = t("you!");
+          cb.mine = true;
+          currentIsland.codeBlock = cb;
+          if (likes.find(l => l.likeid === cb.id)) cb.liked = true;
+          myCodeBlocks.push(cb);
         }
         else {
           // TODO: do this in a database join, not here.
-          if (likes.find(l => l.likeid === s.id)) {
-            s.liked = true;
-            likedSnippets.push(s);
+          if (likes.find(l => l.likeid === cb.id)) {
+            cb.liked = true;
+            likedCodeBlocks.push(cb);
           }
           else {
-            s.liked = false;
-            unlikedSnippets.push(s);
+            cb.liked = false;
+            unlikedCodeBlocks.push(cb);
           }
         }
       }
 
-      this.setState({minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, loading: false});
+      this.setState({levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
     });
   }
 
   componentDidUpdate() {
     const {location} = this.props;
-    const {currentLesson, loading} = this.state;
-    if (!loading && !currentLesson || currentLesson && currentLesson.id !== location.pathname.split("/")[2]) {
-      this.setState({currentLesson: null, minilessons: null, userProgress: null, loading: true}, this.loadFromDB);
-      // this.loadFromDB();
+    const {currentIsland, loading} = this.state;
+    if (!loading && !currentIsland || currentIsland && currentIsland.id !== location.pathname.split("/")[2]) {
+      this.setState({currentIsland: null, levels: null, userProgress: null, loading: true}, this.loadFromDB);
     }
   }
 
   componentDidMount() {
+    // TODO: why is this here?
     this.forceUpdate();
   }
 
@@ -123,13 +123,13 @@ class Minilesson extends Component {
 
   }
 
-  handleSave(newsnippet) {
+  handleSave(newCodeBlock) {
     // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
     // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
     // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
-    const {currentLesson} = this.state;
-    if (!currentLesson.snippet) currentLesson.snippet = newsnippet;
-    this.setState(currentLesson);
+    const {currentIsland} = this.state;
+    if (!currentIsland.codeBlock) currentIsland.codeBlock = newCodeBlock;
+    this.setState(currentIsland);
   }
 
   onFirstCompletion() {
@@ -137,15 +137,15 @@ class Minilesson extends Component {
     // unlock all codeblocks AND show your brand-new written one at the top of the list.
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
-    const winMessage = this.state.currentLesson.victory;
+    const winMessage = this.state.currentIsland.victory;
     this.setState({firstWin: true, winMessage, testOpen: false, winOpen: true});
   }
 
   closeOverlay() {
     // this.setState({winOpen: false});
     // TODO: take out island 4 catcher after august
-    if (this.state.nextLesson && this.state.nextLesson.id && this.state.nextLesson.id !== "island-4") {
-      window.location = `/lesson/${this.state.nextLesson.id}`;
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-4") {
+      window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
       this.setState({winOpen: false});
@@ -157,33 +157,34 @@ class Minilesson extends Component {
   }
 
   reportLike(codeBlock) {
-    const likedSnippets = this.state.likedSnippets.slice(0);
-    const unlikedSnippets = this.state.unlikedSnippets.slice(0);
+    // TODO: array clone not necessary, fix this
+    const likedCodeBlocks = this.state.likedCodeBlocks.slice(0);
+    const unlikedCodeBlocks = this.state.unlikedCodeBlocks.slice(0);
     if (codeBlock.mine) return;
     if (codeBlock.liked) {
-      likedSnippets.push(codeBlock);
-      unlikedSnippets.splice(unlikedSnippets.map(s => s.id).indexOf(codeBlock.id), 1);
+      likedCodeBlocks.push(codeBlock);
+      unlikedCodeBlocks.splice(unlikedCodeBlocks.map(cb => cb.id).indexOf(codeBlock.id), 1);
     }
     else {
-      unlikedSnippets.push(codeBlock);
-      likedSnippets.splice(likedSnippets.map(s => s.id).indexOf(codeBlock.id), 1);
+      unlikedCodeBlocks.push(codeBlock);
+      likedCodeBlocks.splice(likedCodeBlocks.map(cb => cb.id).indexOf(codeBlock.id), 1);
     }
-    likedSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
-    unlikedSnippets.sort((a, b) => b.likes - a.likes || b.id - a.id);
-    this.setState({likedSnippets, unlikedSnippets});
+    likedCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
+    unlikedCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
+    this.setState({likedCodeBlocks, unlikedCodeBlocks});
   }
 
-  allMinilessonsBeaten() {
-    const {minilessons} = this.state;
-    let missedlessons = 0;
-    for (const m of minilessons) {
-      if (!this.hasUserCompleted(m.id)) missedlessons++;
+  allLevelsBeaten() {
+    const {levels} = this.state;
+    let missedLevels = 0;
+    for (const l of levels) {
+      if (!this.hasUserCompleted(l.id)) missedLevels++;
     }
-    return missedlessons === 0;
+    return missedLevels === 0;
   }
 
   promptFinalTest() {
-    return this.allMinilessonsBeaten() && !this.state.currentLesson.snippet;
+    return this.allLevelsBeaten() && !this.state.currentIsland.codeBlock;
   }
 
   showMore() {
@@ -193,7 +194,7 @@ class Minilesson extends Component {
   buildWinPopover() {
 
     const {t} = this.props;
-    const {id, name, theme} = this.state.currentLesson;
+    const {name, theme} = this.state.currentIsland;
 
     return (
       <Dialog
@@ -222,11 +223,11 @@ class Minilesson extends Component {
 
   buildTestPopover() {
     const {t} = this.props;
-    const {currentLesson} = this.state;
-    let title = t("myCodeblock", {islandName: currentLesson.name});
-    if (currentLesson.snippet) title = currentLesson.snippet.snippetname;
+    const {currentIsland} = this.state;
+    let title = t("myCodeblock", {islandName: currentIsland.name});
+    if (currentIsland.codeBlock) title = currentIsland.codeBlock.snippetname;
 
-    if (!this.allMinilessonsBeaten()) {
+    if (!this.allLevelsBeaten()) {
       return (
         <div className="editor-popover">
           <div className="code-block" onClick={this.toggleTest.bind(this)}>
@@ -243,7 +244,7 @@ class Minilesson extends Component {
 
     return (
       <div className="editor-popover">
-        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentLesson.theme }>
+        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentIsland.theme }>
           <div className={ `code-block ${ next ? "next" : "done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
@@ -252,7 +253,7 @@ class Minilesson extends Component {
           </div>
         </Tooltip>
         <Dialog
-          className={ `codeBlock ${ currentLesson.theme }` }
+          className={ `codeBlock ${ currentIsland.theme }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
           title={ title }
@@ -264,7 +265,7 @@ class Minilesson extends Component {
         >
           <div className="pt-dialog-body">
             <CodeBlock
-              lesson={currentLesson}
+              island={currentIsland}
               handleSave={this.handleSave.bind(this)}
               onFirstCompletion={this.onFirstCompletion.bind(this)}
             />
@@ -277,77 +278,75 @@ class Minilesson extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {minilessons, currentLesson, nextLesson, prevLesson, userProgress, mySnippets, likedSnippets, unlikedSnippets, showMore} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
 
     if (!auth.user) browserHistory.push("/login");
-    if (!currentLesson || !minilessons || !userProgress) return <Loading />;
+    if (!currentIsland || !levels || !userProgress) return <Loading />;
 
     const islandDone = this.hasUserCompleted(this.props.params.lid);
-    const otherSnippets = mySnippets.concat(likedSnippets, unlikedSnippets);
+    const otherCodeBlocks = myCodeBlocks.concat(likedCodeBlocks, unlikedCodeBlocks);
 
     // Clone minilessons as to not mess with state
-    const minilessonStatuses = minilessons.slice(0);
-    for (let m = 0; m < minilessonStatuses.length; m++) {
-      const done = this.hasUserCompleted(minilessonStatuses[m].id);
-      minilessonStatuses[m].isDone = done;
+    // TODO: Clone not needed, fix this
+    const levelStatuses = levels.slice(0);
+    for (let l = 0; l < levelStatuses.length; l++) {
+      const done = this.hasUserCompleted(levelStatuses[l].id);
+      levelStatuses[l].isDone = done;
       // If i'm the first lesson and i'm not done, i'm next lesson
       // If i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson
-      minilessonStatuses[m].isNext = m === 0 && !done || m > 0 && !done && minilessonStatuses[m - 1].isDone;
+      levelStatuses[l].isNext = l === 0 && !done || l > 0 && !done && levelStatuses[l - 1].isDone;
     }
 
-    const otherSnippetItemsBeforeFold = [];
-    const otherSnippetItemsAfterFold = [];
+    const otherCodeBlockItemsBeforeFold = [];
+    const otherCodeBlockItemsAfterFold = [];
     let top = 4;
-    for (const os of otherSnippets) {
-      const cbc = <CodeBlockCard theme={currentLesson.theme} icon={currentLesson.icon} codeBlock={os} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
-      top > 0 ? otherSnippetItemsBeforeFold.push(cbc) : otherSnippetItemsAfterFold.push(cbc);
+    for (const cb of otherCodeBlocks) {
+      const cbc = <CodeBlockCard theme={currentIsland.theme} icon={currentIsland.icon} codeBlock={cb} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
+      top > 0 ? otherCodeBlockItemsBeforeFold.push(cbc) : otherCodeBlockItemsAfterFold.push(cbc);
       top--;
     }
 
-    const minilessonItems = minilessonStatuses.map(minilesson => {
+    const levelItems = levelStatuses.map(level => {
       const {lid} = this.props.params;
-      if (minilesson.isDone) {
-        const up = userProgress.find(p => p.level === minilesson.id);
+      if (level.isDone) {
+        const up = userProgress.find(p => p.level === level.id);
         const gems = up ? up.gems : 0;
         // const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentLesson.theme }` }
+          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
+          <Link className="stop done" to={`/island/${lid}/${level.id}`}></Link>
           <span>
-            {minilesson.name}
+            {level.name}
             <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div>
           </span>
         </Popover>;
-        // return <Tooltip position={ Position.TOP } content={ `${minilesson.name} - ${gemCount} ` } tooltipClassName={ currentLesson.id }>
-        //   <Link className="stop done" to={`/lesson/${lid}/${minilesson.id}`}></Link>
-        // </Tooltip>;
       }
-      else if (minilesson.isNext) {
-        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ minilesson.name } tooltipClassName={ currentLesson.theme }>
-          <Link className="stop next" to={`/lesson/${lid}/${minilesson.id}`}></Link>
+      else if (level.isNext) {
+        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
+          <Link className="stop next" to={`/island/${lid}/${level.id}`}></Link>
         </Tooltip>;
       }
       return <div className="stop"></div>;
     });
 
     return (
-      <div id="island" className={ currentLesson.theme }>
+      <div id="island" className={ currentIsland.theme }>
         { this.buildWinPopover() }
         <div className="image">
-          <h1 className="title">{ currentLesson.name }</h1>
-          <p className="description">{ currentLesson.description }</p>
+          <h1 className="title">{ currentIsland.name }</h1>
+          <p className="description">{ currentIsland.description }</p>
           <div id="path">
-            { minilessonItems }
+            { levelItems }
             { this.buildTestPopover() }
           </div>
         </div>
-        { prevLesson ? <IslandLink done={true} width={250} lesson={prevLesson} description={false} /> : null}
+        { prevIsland ? <IslandLink done={true} width={250} island={prevIsland} description={false} /> : null}
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST */}
-        { nextLesson && Number(nextLesson.index) < 3  && this.hasUserCompleted(currentLesson.id) ? <IslandLink next={true} width={250} lesson={nextLesson} description={false} /> : null}
-        { otherSnippets.length
+        { nextIsland && Number(nextIsland.ordering) < 3  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { otherCodeBlocks.length
         ? <div>
             <h2 className="title">
               {t("Other Students' CodeBlocks")}&nbsp;
@@ -363,13 +362,13 @@ class Minilesson extends Component {
                 </div>
               </Popover> : null }
             </h2>
-            <div className="snippets">{otherSnippetItemsBeforeFold}</div>
-            { otherSnippetItemsAfterFold.length
-            ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherSnippetItemsAfterFold}</div></Collapse>
+            <div className="snippets">{otherCodeBlockItemsBeforeFold}</div>
+            { otherCodeBlockItemsAfterFold.length
+            ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
             : null }
-            { otherSnippetItemsAfterFold.length
+            { otherCodeBlockItemsAfterFold.length
             ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
-                { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherSnippetItemsAfterFold.length}) }
+                { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
               </div>
             : null }
           </div>
@@ -379,8 +378,8 @@ class Minilesson extends Component {
   }
 }
 
-Minilesson = connect(state => ({
+Level = connect(state => ({
   auth: state.auth
-}))(Minilesson);
-Minilesson = translate()(Minilesson);
-export default Minilesson;
+}))(Level);
+Level = translate()(Level);
+export default Level;

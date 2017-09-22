@@ -31,12 +31,10 @@ class Share extends Component {
   componentDidMount() {
     const {username, filename} = this.props.params;
     let type = "";
-    if (this.props.location.pathname.includes("/snippets/")) type = "snippet";
+    if (this.props.location.pathname.includes("/codeBlocks/")) type = "codeBlock";
     if (this.props.location.pathname.includes("/projects/")) type = "project";
-    if (type === "snippet") {
-      console.log(username, filename);
+    if (type === "codeBlock") {
       axios.get(`/api/snippets/byUsernameAndFilename?username=${username}&filename=${filename}`).then(resp => {
-        console.log(resp);
         this.setState({content: resp.data[0]}, this.renderPage.bind(this));
       });
     }

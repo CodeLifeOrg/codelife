@@ -25,53 +25,53 @@ class LessonBuilder extends Component {
   }
 
   componentDidMount() {
-    const lget = axios.get("/api/builder/lessons");
-    const mlget = axios.get("/api/builder/minilessons/all");
+    const iget = axios.get("/api/builder/lessons");
+    const lget = axios.get("/api/builder/minilessons/all");
     const sget = axios.get("/api/builder/slides/all");
-    Promise.all([lget, mlget, sget]).then(resp => {
-      const lessons = resp[0].data;
-      const minilessons = resp[1].data;
+    Promise.all([iget, lget, sget]).then(resp => {
+      const islands = resp[0].data;
+      const levels = resp[1].data;
       const slides = resp[2].data;
-      lessons.sort((a, b) => a.ordering - b.ordering);
-      minilessons.sort((a, b) => a.ordering - b.ordering);
+      islands.sort((a, b) => a.ordering - b.ordering);
+      levels.sort((a, b) => a.ordering - b.ordering);
       slides.sort((a, b) => a.ordering - b.ordering); 
 
       const nodes = [];
 
-      for (let l of lessons) {
-        l = this.fixNulls(l);
+      for (let i of islands) {
+        i = this.fixNulls(i);
         nodes.push({
-          id: l.id,
+          id: i.id,
           hasCaret: true, 
           iconName: "map", 
-          label: l.name,
+          label: i.name,
           itemType: "island",
           parent: {childNodes: nodes},
           childNodes: [],
-          data: l
+          data: i
         });
       }
-      for (let m of minilessons) {
-        m = this.fixNulls(m);
-        const lessonNode = nodes.find(node => node.data.id === m.lid);
-        if (lessonNode) {
-          lessonNode.childNodes.push({
-            id: m.id,
+      for (let l of levels) {
+        l = this.fixNulls(l);
+        const islandNode = nodes.find(node => node.data.id === l.lid);
+        if (islandNode) {
+          islandNode.childNodes.push({
+            id: l.id,
             hasCaret: true, 
             iconName: "multi-select", 
-            label: m.name,
+            label: l.name,
             itemType: "level",
-            parent: lessonNode,
+            parent: islandNode,
             childNodes: [],
-            data: m
+            data: l
           });
         }
       }
       for (let s of slides) {
         s = this.fixNulls(s);
         let levelNode = null;
-        for (const lessonNode of nodes) {
-          levelNode = lessonNode.childNodes.find(cn => cn.data.id === s.mlid);
+        for (const islandNode of nodes) {
+          levelNode = islandNode.childNodes.find(cn => cn.data.id === s.mlid);
           if (levelNode) break;
         }
         if (levelNode) {
@@ -112,8 +112,8 @@ class LessonBuilder extends Component {
   }
 
   newNode(nodes) {
-    const lpath = "/api/builder/lessons/new";
-    const mpath = "/api/builder/minilessons/new";
+    const ipath = "/api/builder/lessons/new";
+    const lpath = "/api/builder/minilessons/new";
     const spath = "/api/builder/slides/new";
     
     if (nodes.length === 1) {
@@ -123,20 +123,20 @@ class LessonBuilder extends Component {
       });
     }
     if (nodes.length === 2) {
-      const mnode = nodes[0];
+      const lnode = nodes[0];
       const snode = nodes[1];
-      axios.post(mpath, mnode.data).then(() => {
+      axios.post(lpath, lnode.data).then(() => {
         axios.post(spath, snode.data).then(resp => {
           resp.status === 200 ? console.log("saved") : console.log("error");
         });
       });
     }
     if (nodes.length === 3) {
-      const lnode = nodes[0];
-      const mnode = nodes[1];
+      const inode = nodes[0];
+      const lnode = nodes[1];
       const snode = nodes[2];
-      axios.post(lpath, lnode.data).then(() => {
-        axios.post(mpath, mnode.data).then(() => {
+      axios.post(ipath, inode.data).then(() => {
+        axios.post(lpath, lnode.data).then(() => {
           axios.post(spath, snode.data).then(resp => {
             resp.status === 200 ? console.log("saved") : console.log("error");
           });

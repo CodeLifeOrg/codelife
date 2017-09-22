@@ -86,8 +86,8 @@ class IslandEditor extends Component {
         <label className="pt-label">
           <span>
             Theme:&nbsp;&nbsp;
-            <span className="island-swatch" style={{backgroundColor: themes[data.theme].dark}} />
-            <span className="island-swatch" style={{backgroundColor: themes[data.theme].light}} />
+            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].dark} : null } />
+            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].light} : null } />
           </span>
           <div className="pt-select" style={{width: "180px"}}>
             <select value={data.theme} onChange={this.changeField.bind(this, "theme")} >

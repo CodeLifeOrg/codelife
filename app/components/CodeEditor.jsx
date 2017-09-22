@@ -111,7 +111,6 @@ class CodeEditor extends Component {
             </li>
             <div>
               [inprogress] Help Msg
-              { /* this.state.meanings[rule.type][rule.needle] */ }
             </div>
           </Popover>
         );
@@ -128,7 +127,8 @@ class CodeEditor extends Component {
               <span className="rule">{rule.needle}</span>
             </li>
             <div>
-              [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
+              [inprogress] Help Msg
+              <br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
             </div>
           </Popover>
         );

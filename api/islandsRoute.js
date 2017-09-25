@@ -4,27 +4,27 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/lessons", (req, res) => {
+  app.get("/api/islands", (req, res) => {
 
-    db.lessons.findAll({where: req.query}).then(u => {
+    db.islands.findAll({where: req.query}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
     });
 
   });
 
-  app.get("/api/minilessons", (req, res) => {
+  app.get("/api/levels", (req, res) => {
 
-    db.minilessons.findAll({where: {lid: req.query.lid}}).then(u => {
+    db.levels.findAll({where: {lid: req.query.lid}}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
     });
 
   });
 
-  app.get("/api/minilessons/all", (req, res) => {
+  app.get("/api/levels/all", (req, res) => {
 
-    db.minilessons.findAll({where: req.query}).then(u => {
+    db.levels.findAll({where: req.query}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
     });

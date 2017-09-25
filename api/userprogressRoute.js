@@ -13,8 +13,11 @@ module.exports = function(app) {
     const {id: uid} = req.user;
     const {level, gems} = req.body;
 
+    // db.userprogress.create({where: {uid, level}}).then(u => res.json(u).end());
+    
     db.userprogress.findOrCreate({where: {uid, level}})
       .then(userprogressRows => {
+        console.log(userprogressRows);
         if (userprogressRows.length) {
           const userprogressRow = userprogressRows[0];
           userprogressRow.gems = gems;

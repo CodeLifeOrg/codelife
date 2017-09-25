@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/lessons").then(resp => {
+    axios.get("/api/islands").then(resp => {
       const islands = resp.data;
       this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});  
     });

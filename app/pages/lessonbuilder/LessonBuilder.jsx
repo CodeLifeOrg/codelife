@@ -25,8 +25,8 @@ class LessonBuilder extends Component {
   }
 
   componentDidMount() {
-    const iget = axios.get("/api/builder/lessons");
-    const lget = axios.get("/api/builder/minilessons/all");
+    const iget = axios.get("/api/builder/islands");
+    const lget = axios.get("/api/builder/levels/all");
     const sget = axios.get("/api/builder/slides/all");
     Promise.all([iget, lget, sget]).then(resp => {
       const islands = resp[0].data;
@@ -101,8 +101,8 @@ class LessonBuilder extends Component {
 
   saveNode(node) {
     let path = null;
-    if (node.itemType === "island") path = "/api/builder/lessons/save";
-    if (node.itemType === "level") path = "/api/builder/minilessons/save";
+    if (node.itemType === "island") path = "/api/builder/islands/save";
+    if (node.itemType === "level") path = "/api/builder/levels/save";
     if (node.itemType === "slide") path = "/api/builder/slides/save";
     if (path) {
       axios.post(path, node.data).then(resp => {
@@ -112,8 +112,8 @@ class LessonBuilder extends Component {
   }
 
   newNode(nodes) {
-    const ipath = "/api/builder/lessons/new";
-    const lpath = "/api/builder/minilessons/new";
+    const ipath = "/api/builder/islands/new";
+    const lpath = "/api/builder/levels/new";
     const spath = "/api/builder/slides/new";
     
     if (nodes.length === 1) {
@@ -147,8 +147,8 @@ class LessonBuilder extends Component {
 
   delNode(node) {
     let path = null;
-    if (node.itemType === "island") path = "/api/builder/lessons/delete";
-    if (node.itemType === "level") path = "/api/builder/minilessons/delete";
+    if (node.itemType === "island") path = "/api/builder/islands/delete";
+    if (node.itemType === "level") path = "/api/builder/levels/delete";
     if (node.itemType === "slide") path = "/api/builder/slides/delete";
     if (path) {
       axios.delete(path, {params: {id: node.data.id}}).then(resp => {

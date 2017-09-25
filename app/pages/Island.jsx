@@ -19,9 +19,9 @@ class Island extends Component {
   }
 
   componentDidMount() {
-    const iget = axios.get("/api/lessons/");
+    const iget = axios.get("/api/islands/");
     const upget = axios.get("/api/userprogress");
-    const cbget = axios.get("/api/snippets");
+    const cbget = axios.get("/api/codeBlocks");
 
     Promise.all([iget, upget, cbget]).then(resp => {
       const islands = resp[0].data;

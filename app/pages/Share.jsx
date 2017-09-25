@@ -34,7 +34,7 @@ class Share extends Component {
     if (this.props.location.pathname.includes("/codeBlocks/")) type = "codeBlock";
     if (this.props.location.pathname.includes("/projects/")) type = "project";
     if (type === "codeBlock") {
-      axios.get(`/api/snippets/byUsernameAndFilename?username=${username}&filename=${filename}`).then(resp => {
+      axios.get(`/api/codeBlocks/byUsernameAndFilename?username=${username}&filename=${filename}`).then(resp => {
         this.setState({content: resp.data[0]}, this.renderPage.bind(this));
       });
     }

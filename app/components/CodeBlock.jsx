@@ -116,7 +116,7 @@ class CodeBlock extends Component {
 
     // todo: maybe replace this with findorupdate from userprogress?
     if (this.state.filename !== "") name = this.state.filename;
-    let endpoint = "/api/snippets/";
+    let endpoint = "/api/codeBlocks/";
     codeBlock ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {

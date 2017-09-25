@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  var s = sequelize.define("snippets",
+  const cb = sequelize.define("codeblocks",
     {
       id: {
         type: db.INTEGER,
@@ -20,6 +20,6 @@ module.exports = function(sequelize, db) {
     }
   );
 
-  return s;
+  return cb;
 
 };

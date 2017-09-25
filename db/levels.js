@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  const m = sequelize.define("minilessons",
+  const l = sequelize.define("levels",
     {
       id: {
         type: db.TEXT,
@@ -19,11 +19,11 @@ module.exports = function(sequelize, db) {
     }
   );
 
-  m.associate = models => {
-    m.belongsTo(models.lessons, {foreignKey: "lid", targetKey: "id", as: "lesson", foreignKeyConstraint: true});
-    m.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
+  l.associate = models => {
+    l.belongsTo(models.islands, {foreignKey: "lid", targetKey: "id", as: "island", foreignKeyConstraint: true});
+    l.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
   };
 
-  return m;
+  return l;
 
 };

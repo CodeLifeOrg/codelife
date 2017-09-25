@@ -96,8 +96,8 @@ class Slide extends Component {
     const {slides, latestSlideCompleted} = this.state;
 
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
-    const iget = axios.get(`/api/lessons?id=${lid}`);
-    const lget = axios.get(`/api/minilessons?lid=${lid}`);
+    const iget = axios.get(`/api/islands?id=${lid}`);
+    const lget = axios.get(`/api/levels?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
 
     Promise.all([sget, iget, lget, upget]).then(resp => {
@@ -125,12 +125,12 @@ class Slide extends Component {
       this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels: resp[2].data});
     });
 
-    // document.addEventListener("keydown", this.handleKey.bind(this));
+    document.addEventListener("keydown", this.handleKey.bind(this));
   }
 
-  // handleKey(e) {
-  //   e.keyCode === 192 ? this.unblock(this) : null;
-  // }
+  handleKey(e) {
+    e.keyCode === 192 ? this.unblock(this) : null;
+  }
 
   updateGems(newGems) {
     const {gems: oldGems, slides, currentSlide, latestSlideOfGemEarned} = this.state;

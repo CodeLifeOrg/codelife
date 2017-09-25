@@ -19,8 +19,8 @@ class CodeBlockList extends Component {
 
   componentDidMount() {
     const {t} = this.props;
-    const cbget = axios.get("/api/snippets/all");
-    const iget = axios.get("/api/lessons");
+    const cbget = axios.get("/api/codeBlocks/all");
+    const iget = axios.get("/api/islands");
     const upget = axios.get("/api/userprogress");
     const lkget = axios.get("/api/likes");
     Promise.all([cbget, iget, upget, lkget]).then(resp => {

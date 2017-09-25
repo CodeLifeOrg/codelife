@@ -25,7 +25,7 @@ module.exports = function(sequelize, db) {
     }
   );
 
-  s.associate = models => s.belongsTo(models.minilessons, {foreignKey: "mlid", targetKey: "id", as: "minilessons", foreignKeyConstraint: true});
+  s.associate = models => s.belongsTo(models.levels, {foreignKey: "mlid", targetKey: "id", as: "levels", foreignKeyConstraint: true});
 
   return s;
 

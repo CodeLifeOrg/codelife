@@ -26,10 +26,14 @@ class CodeEditor extends Component {
       ruleErrors: [],
       goodRatio: 0,
       intent: null,
-      embeddedConsole: "",
+      embeddedConsole: [],
       titleText: "",
       isOpen: false
     };
+    if (window) {
+      window.myCatch = this.myCatch.bind(this);
+      window.myLog = this.myLog.bind(this);
+    }
   }
 
   componentDidMount() {
@@ -286,11 +290,33 @@ class CodeEditor extends Component {
     this.setState({changesMade});
   }
 
+  myCatch(e) {
+    const {embeddedConsole} = this.state;
+    embeddedConsole.push(e.stack);
+    this.setState({embeddedConsole});
+  }
+
+  myLog(t) {
+    const {embeddedConsole} = this.state;
+    embeddedConsole.push(t);
+    this.setState({embeddedConsole});
+  }
+
+  wrapJS(theText) {
+    let resp = theText.replace("<script>", "<script> try {");
+    resp = resp.replace("</script>", "} catch(e) { parent.myCatch(e); } </script>");
+    resp = resp.split("console.log").join("parent.myLog");
+    return resp;
+  }
+
   executeCode() {
+    let {embeddedConsole} = this.state;
+    embeddedConsole = [];
+    this.setState({embeddedConsole});
     if (this.refs.rc) {
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
-      doc.write(this.state.currentText);
+      doc.write(this.wrapJS(this.state.currentText));
       doc.close();
     }
   }
@@ -300,6 +326,8 @@ class CodeEditor extends Component {
   render() {
     const {codeTitle, island, t} = this.props;
     const {titleText, currentText, embeddedConsole} = this.state;
+
+    const consoleText = embeddedConsole.map(ec => <div>{ec}</div>);
 
     if (!this.state.mounted) return <Loading />;
 
@@ -341,7 +369,7 @@ class CodeEditor extends Component {
           <iframe className="iframe" ref="rc" />
           <div className="drawer">
             <div className="title">Console</div>
-            <div className="contents">{embeddedConsole}</div>
+            <div className="contents">{consoleText}</div>
           </div>
         </div>
       </div>

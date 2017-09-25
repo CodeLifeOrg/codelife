@@ -57,7 +57,7 @@ class CodeBlock extends Component {
 
   saveProgress(level) {
     axios.post("/api/userprogress/save", {level}).then(resp => {
-      resp.status === 200 ? console.log("successfully saved") : console.log("error");
+      resp.status === 200 ? console.log("successfully saved progress") : console.log("error");
     });
   }
 

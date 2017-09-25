@@ -39,14 +39,14 @@ module.exports = function(app) {
 
   app.post("/api/codeBlocks/update", (req, res) => {
 
-    db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.lid}})
+    db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.iid}})
       .then(u => res.json(u).end());
 
   });
 
   app.post("/api/codeBlocks/new", (req, res) => {
 
-    db.codeblocks.create({studentcontent: req.body.studentcontent, snippetname: req.body.name, uid: req.body.uid, lid: req.body.lid})
+    db.codeblocks.create({studentcontent: req.body.studentcontent, snippetname: req.body.name, uid: req.body.uid, lid: req.body.iid})
       .then(u => res.json(u).end());
 
   });

@@ -57,7 +57,7 @@ class Level extends Component {
       // ALSO: add an exception for level 10.
       const nextOrdering = Number(currentIsland.ordering) + 1;
       const nextIsland = islands.find(i => Number(i.ordering) === Number(nextOrdering));
-      const prevOrdering = Number(currentIsland.index) - 1;
+      const prevOrdering = Number(currentIsland.ordering) - 1;
       const prevIsland = islands.find(i => Number(i.ordering) === Number(prevOrdering));
 
       const myCodeBlocks = [];
@@ -129,7 +129,7 @@ class Level extends Component {
     // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
     const {currentIsland} = this.state;
     if (!currentIsland.codeBlock) currentIsland.codeBlock = newCodeBlock;
-    this.setState(currentIsland);
+    this.setState({currentIsland});
   }
 
   onFirstCompletion() {

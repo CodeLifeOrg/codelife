@@ -17,7 +17,6 @@ module.exports = function(app) {
     
     db.userprogress.findOrCreate({where: {uid, level}})
       .then(userprogressRows => {
-        console.log(userprogressRows);
         if (userprogressRows.length) {
           const userprogressRow = userprogressRows[0];
           userprogressRow.gems = gems;

@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import axios from "axios";
+import {Intent, Position, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./Share.css";
 
 import Loading from "components/Loading";
@@ -64,6 +65,24 @@ class Share extends Component {
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            popoverClassName="pt-popover-content-sizing"
+            position={Position.TOP}
+          >
+            <div className="flag" style={{cursor: "pointer"}}>
+              { t("Flag as Inappropriate") } <span style={{color: "indianred"}} className="pt-icon-flag" />
+            </div>
+            <div>
+              <ul>
+                <li>bad</li>
+                <li>stuff</li>
+                <li>here</li>
+              </ul>
+            </div>
+          </Popover>
+
+          
         </div>
       </div>
     );

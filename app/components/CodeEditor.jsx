@@ -330,15 +330,17 @@ class CodeEditor extends Component {
     Version 1: Console and Errors but not Runtime Errors
     */
 
+    /*
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
     this.setState({embeddedConsole}, this.jsRender.bind(this));
-
-    /*
-    Version 2: Errors and Runtime Errors but no console.  Uses eval, gross.
+    
+    */
+    
+    // Version 2: Errors and Runtime Errors and Console.  Uses eval, gross.
 
     const js = this.state.currentJS.split("console.log").join("window.myLog");
-
+    const {embeddedConsole} = this.state;
     try {
       eval(js);
     }
@@ -347,7 +349,7 @@ class CodeEditor extends Component {
     }
     this.setState({embeddedConsole});
 
-    */
+    
 
     /*
     Potential Version 3?

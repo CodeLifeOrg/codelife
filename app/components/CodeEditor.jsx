@@ -27,6 +27,7 @@ class CodeEditor extends Component {
       goodRatio: 0,
       intent: null,
       embeddedConsole: [],
+      currentJS: "",
       titleText: "",
       isOpen: false
     };
@@ -184,6 +185,9 @@ class CodeEditor extends Component {
         }
         arr.push(newObj);
       }
+      else {
+        if (n.children && n.children[0] && n.children[0].content) this.setState({currentJS: n.children[0].content});
+      }
     }
     return arr;
   }
@@ -262,6 +266,34 @@ class CodeEditor extends Component {
     // If you want to insert the selected text here, it's available
   }
 
+  myCatch(e) {
+    const {embeddedConsole} = this.state;
+    embeddedConsole.push(e.stack);
+    this.setState({embeddedConsole});
+  }
+
+  myLog(t) {
+    const {embeddedConsole} = this.state;
+    embeddedConsole.push(t);
+    this.setState({embeddedConsole});
+  }
+
+  wrapJS(theText) {
+    let resp = theText.replace("<script>", "<script> try {");
+    resp = resp.replace("</script>", "} catch(e) { parent.myCatch(e); } </script>");
+    resp = resp.split("console.log").join("parent.myLog");
+    return resp;
+  }
+
+  jsRender() {
+    if (this.refs.rc) {
+      const doc = this.refs.rc.contentWindow.document;
+      doc.open();
+      doc.write(this.wrapJS(this.state.currentText));
+      doc.close();
+    }
+  }
+
   /* External Functions for Parent Component to Call */
 
   setEntireContents(theText) {
@@ -290,35 +322,39 @@ class CodeEditor extends Component {
     this.setState({changesMade});
   }
 
-  myCatch(e) {
-    const {embeddedConsole} = this.state;
-    embeddedConsole.push(e.stack);
-    this.setState({embeddedConsole});
-  }
 
-  myLog(t) {
-    const {embeddedConsole} = this.state;
-    embeddedConsole.push(t);
-    this.setState({embeddedConsole});
-  }
-
-  wrapJS(theText) {
-    let resp = theText.replace("<script>", "<script> try {");
-    resp = resp.replace("</script>", "} catch(e) { parent.myCatch(e); } </script>");
-    resp = resp.split("console.log").join("parent.myLog");
-    return resp;
-  }
 
   executeCode() {
+    
+    /* 
+    Version 1: Console and Errors but not Runtime Errors
+    */
+
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
-    this.setState({embeddedConsole});
-    if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(this.wrapJS(this.state.currentText));
-      doc.close();
+    this.setState({embeddedConsole}, this.jsRender.bind(this));
+
+    /*
+    Version 2: Errors and Runtime Errors but no console.  Uses eval, gross.
+
+    const js = this.state.currentJS.split("console.log").join("window.myLog");
+
+    try {
+      eval(js);
     }
+    catch (e) {
+      embeddedConsole.push(e.message);
+    }
+    this.setState({embeddedConsole});
+
+    */
+
+    /*
+    Potential Version 3?
+    - Wrap javascript in try catch (as in wrapJS above)
+    - Pack that into a variable and pass that into the iframe (how?)
+    - In the iframe, eval the variable for runtime errors, and let the embedded try/catch do the rest
+    */
   }
 
   /* End of external functions */
@@ -366,7 +402,7 @@ class CodeEditor extends Component {
             : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" ref="rc" />
+          <iframe className="iframe" id="iframe" ref="rc" />
           <div className="drawer">
             <div className="title">Console</div>
             <div className="contents">{consoleText}</div>

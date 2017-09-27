@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import axios from "axios";
-import {Intent, Position, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
+import ReportBox from "components/ReportBox";
+import {Position, Popover, PopoverInteractionKind} from "@blueprintjs/core";
 import "./Share.css";
 
 import Loading from "components/Loading";
@@ -52,7 +53,11 @@ class Share extends Component {
     if (!content) return <Loading />;
 
     const {t} = this.props;
-    const {name} = content;
+    const {name, id} = content;
+
+    let contentType = "";
+    if (this.props.location.pathname.includes("/codeBlocks/")) contentType = "codeblock";
+    if (this.props.location.pathname.includes("/projects/")) contentType = "project";
 
     return (
       <div id="share">
@@ -68,17 +73,13 @@ class Share extends Component {
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"
-            position={Position.TOP}
+            position={Position.TOP_RIGHT}
           >
             <div className="flag" style={{cursor: "pointer"}}>
               { t("Flag as Inappropriate") } <span style={{color: "indianred"}} className="pt-icon-flag" />
             </div>
             <div>
-              <ul>
-                <li>bad</li>
-                <li>stuff</li>
-                <li>here</li>
-              </ul>
+             <ReportBox reportid={id} contentType={contentType}/>
             </div>
           </Popover>
 

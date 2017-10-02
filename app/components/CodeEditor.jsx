@@ -4,9 +4,12 @@ import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
 import {Intent, Position, Popover, ProgressBar, PopoverInteractionKind} from "@blueprintjs/core";
+import safeEval from "safe-eval";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
+
+
 
 import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
@@ -28,20 +31,20 @@ class CodeEditor extends Component {
       intent: null,
       embeddedConsole: [],
       currentJS: "",
+      jsRules: [],
       titleText: "",
       isOpen: false
     };
     if (window) {
       window.myCatch = this.myCatch.bind(this);
       window.myLog = this.myLog.bind(this);
+      window.myRule = this.myRule.bind(this);
     }
   }
 
   componentDidMount() {
-    axios.get("/api/rules").then(resp => {
-      
+    axios.get("/api/rules").then(resp => {      
       const ruleErrors = resp.data;
-      
       const currentText = this.props.initialValue ? this.props.initialValue : "";
       const rulejson = this.props.rulejson ? this.props.rulejson : [];
       const titleText = this.getTitleText(currentText);
@@ -49,14 +52,6 @@ class CodeEditor extends Component {
       this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
       if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);  
     });
-
-
-    /*
-    console["log"] = this.injectConsole.bind(this);
-    console["warning"] = this.injectConsole.bind(this);
-    console["error"] = this.injectConsole.bind(this);
-    */
-
   }
 
   getBaseRules() {
@@ -99,6 +94,7 @@ class CodeEditor extends Component {
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
+    iconList.JS_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
 
     const allRules = baseRules.concat(rulejson);
 
@@ -192,6 +188,10 @@ class CodeEditor extends Component {
     return arr;
   }
 
+  cvEquals(r) {
+    return this.state.jsRules[r.needle];
+  }
+
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {baseRules, rulejson} = this.state;
@@ -202,6 +202,7 @@ class CodeEditor extends Component {
     cv.CSS_CONTAINS = cvContainsStyle;
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
+    cv.JS_EQUALS = this.cvEquals.bind(this);
     for (const r of baseRules) {
       const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
@@ -246,6 +247,9 @@ class CodeEditor extends Component {
       if (myrule.type === "NESTS") {
         return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
       }
+      else if (myrule.type === "JS_EQUALS") {
+        return myrule.error_msg.replace("{{tag1}}", `${rule.needle}`).replace("{{tag2}}", `${rule.outer}`);
+      }
       else {
         return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
       }
@@ -278,6 +282,12 @@ class CodeEditor extends Component {
     this.setState({embeddedConsole});
   }
 
+  myRule(needle, correct) {
+    const {jsRules} = this.state;
+    jsRules[needle] = correct;
+    this.setState({jsRules});
+  }
+
   wrapJS(theText) {
     let resp = theText.replace("<script>", "<script> try {");
     resp = resp.replace("</script>", "} catch(e) { parent.myCatch(e); } </script>");
@@ -292,6 +302,38 @@ class CodeEditor extends Component {
       doc.write(this.wrapJS(this.state.currentText));
       doc.close();
     }
+  }
+
+  internalRender() {
+    let js = this.state.currentJS.split("console.log").join("parent.myLog");
+    
+    for (const r of this.state.rulejson) {
+      if (r.type === "JS_EQUALS") {
+        js = `${r.needle}=null;\n${js}`;
+        js += `parent.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
+      }
+    }
+
+    const finaljs = `
+      var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
+      try {
+        eval(js);
+      }
+      catch (e) {
+        parent.myCatch(e);
+      }
+    `;
+
+    const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
+
+    if (this.refs.rc) {
+      const doc = this.refs.rc.contentWindow.document;
+      doc.open();
+      doc.write(theText);
+      doc.close();
+    }
+
+    this.checkForErrors(theText);
   }
 
   /* External Functions for Parent Component to Call */
@@ -323,7 +365,6 @@ class CodeEditor extends Component {
   }
 
 
-
   executeCode() {
     
     /* 
@@ -339,7 +380,16 @@ class CodeEditor extends Component {
     
     // Version 2: Errors and Runtime Errors and Console.  Uses eval, gross.
 
-    const js = this.state.currentJS.split("console.log").join("window.myLog");
+    
+    /*
+
+    let js = this.state.currentJS.split("console.log").join("window.myLog");
+    for (const r of this.state.rulejson) {
+      if (r.type === "JS_EQUALS") {
+        js += `window.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
+      }
+    }
+
     const {embeddedConsole} = this.state;
     try {
       eval(js);
@@ -347,9 +397,10 @@ class CodeEditor extends Component {
     catch (e) {
       embeddedConsole.push(e.message);
     }
-    this.setState({embeddedConsole});
+    this.setState({embeddedConsole}, this.checkForErrors(this.state.currentText));
 
-    
+    */
+        
 
     /*
     Potential Version 3?
@@ -357,6 +408,11 @@ class CodeEditor extends Component {
     - Pack that into a variable and pass that into the iframe (how?)
     - In the iframe, eval the variable for runtime errors, and let the embedded try/catch do the rest
     */
+
+    let {embeddedConsole} = this.state;
+    embeddedConsole = [];
+    this.setState({embeddedConsole}, this.internalRender.bind(this));
+    
   }
 
   /* End of external functions */

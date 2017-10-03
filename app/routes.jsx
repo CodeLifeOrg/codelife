@@ -17,6 +17,7 @@ import Studio from "pages/Studio";
 import Survey from "pages/Survey";
 import LessonBuilder from "pages/lessonbuilder/LessonBuilder";
 import RuleBuilder from "pages/lessonbuilder/RuleBuilder";
+import ReportViewer from "pages/admin/ReportViewer";
 
 export default function RouteCreate() {
 
@@ -51,6 +52,8 @@ export default function RouteCreate() {
       <Route path="lessonbuilder" component={LessonBuilder} />
 
       <Route path="rulebuilder" component={RuleBuilder} />
+
+      <Route path="reportviewer" component={ReportViewer} />
 
     </Route>
   );

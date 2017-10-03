@@ -14,6 +14,13 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/reports/all", (req, res) => {
+
+    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.codeblock_id, reports.project_id, users.username as username, users.email, users.name from reports, users where reports.uid = users.id";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+
+  });
+
   app.get("/api/reports", (req, res) => {
 
     db.reports.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());

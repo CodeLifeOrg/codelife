@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
+import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
 
 import CodeEditor from "components/CodeEditor";
+import ReportBox from "components/ReportBox";
 import Loading from "components/Loading";
 import "./CodeBlockCard.css";
 
@@ -68,7 +69,7 @@ class CodeBlockCard extends Component {
     if (!codeBlock) return <Loading />;
 
     const {t, userProgress, theme, icon} = this.props;
-    const {lid, liked, likes, mine, snippetname, studentcontent, username} = codeBlock;
+    const {id, lid, liked, reported, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
@@ -107,6 +108,20 @@ class CodeBlockCard extends Component {
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
             <div className="pt-dialog-footer-actions">
+              <Popover
+                interactionKind={PopoverInteractionKind.CLICK}
+                popoverClassName="pt-popover-content-sizing"
+                position={Position.TOP_RIGHT}
+              >
+                <Button
+                  intent={reported ? "" : Intent.DANGER}
+                  iconName="flag"
+                  text={reported ? "Flagged" : "Flag"}
+                />
+                <div>
+                 <ReportBox reportid={id} contentType="codeblock"/>
+                </div>
+              </Popover>
               <Button
                 intent={ liked ? Intent.WARNING : Intent.DEFAULT }
                 iconName={ `star${ liked ? "" : "-empty"}` }

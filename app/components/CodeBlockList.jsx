@@ -23,11 +23,14 @@ class CodeBlockList extends Component {
     const iget = axios.get("/api/islands");
     const upget = axios.get("/api/userprogress");
     const lkget = axios.get("/api/likes");
-    Promise.all([cbget, iget, upget, lkget]).then(resp => {
+    const rget = axios.get("/api/reports");
+    Promise.all([cbget, iget, upget, lkget, rget]).then(resp => {
       const allCodeBlocks = resp[0].data;
       const islands = resp[1].data;
       const userProgress = resp[2].data;
       const likes = resp[3].data;
+      const reports = resp[4].data;
+      console.log(reports);
       allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       for (const i of islands) {
         i.myCodeBlocks = [];
@@ -35,6 +38,7 @@ class CodeBlockList extends Component {
         i.unlikedCodeBlocks = [];
         for (const s of allCodeBlocks) {
           s.likes = Number(s.likes);
+          if (reports.find(r => r.codeblock_id === s.id)) s.reported = true;
           if (s.uid === this.props.auth.user.id) {
             s.username = t("you!");
             s.mine = true;

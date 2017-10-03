@@ -63,8 +63,9 @@ class ReportBox extends Component {
 
     return (
       <div>
+        <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>Flag Inappropriate Content</div>
         <RadioGroup
-          label={previousReport ? t("Your report was received.") : t("Please select a reason")}
+          label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
           name="group"
           disabled={previousReport}
           onChange={this.handleChangeReason.bind(this)}

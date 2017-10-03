@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
+import {Popover, PopoverInteractionKind, Intent, Position, Button, Dialog} from "@blueprintjs/core";
 import "moment/locale/pt-br";
 import moment from "moment";
+import ReportBox from "components/ReportBox";
 import CodeEditor from "components/CodeEditor";
 
 import "components/ProjectCard.css";
@@ -24,7 +25,7 @@ class ProjectCard extends Component {
   render() {
     const {open} = this.state;
     const {location, project, t, user} = this.props;
-    const {datemodified, id, name, studentcontent, username} = project;
+    const {datemodified, id, name, studentcontent, username, reported} = project;
 
     moment.locale("pt-BR");
 
@@ -59,12 +60,26 @@ class ProjectCard extends Component {
               <CodeEditor initialValue={studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} />
             </div>
           </div>
-          <div className="pt-dialog-footer">
+          <div className="pt-dialog-footer">          
             <div className="pt-dialog-footer-byline">
               { t("Created by") } { username || user.username }
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
             </div>
             <div className="pt-dialog-footer-actions">
+              <Popover
+                interactionKind={PopoverInteractionKind.CLICK}
+                popoverClassName="pt-popover-content-sizing"
+                position={Position.TOP_RIGHT}
+              >
+                <Button
+                  intent={reported ? "" : Intent.DANGER}
+                  iconName="flag"
+                  text={reported ? "Flagged" : "Flag"}
+                />
+                <div>
+                 <ReportBox reportid={id} contentType="project"/>
+                </div>
+              </Popover>
               <Button
                 intent={ Intent.PRIMARY }
                 onClick={ this.toggleDialog.bind(this) }

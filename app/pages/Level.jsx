@@ -36,6 +36,7 @@ class Level extends Component {
     };
   }
 
+  // TODO: Merge this with the one in CodeBlockList, they do the same thing.
   loadFromDB() {
     const {params, t} = this.props;
     const {lid} = params;
@@ -44,13 +45,15 @@ class Level extends Component {
     const uget = axios.get("/api/userprogress");
     const cbget = axios.get(`/api/codeBlocks/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
+    const rget = axios.get("/api/reports");
 
-    Promise.all([lget, iget, uget, cbget, lkget]).then(resp => {
+    Promise.all([lget, iget, uget, cbget, lkget, rget]).then(resp => {
       const levels = resp[0].data;
       const islands = resp[1].data;
       const userProgress = resp[2].data;
       const allCodeBlocks = resp[3].data;
       const likes = resp[4].data;
+      const reports = resp[5].data;
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: after august test, change this from index to a new ordering field
@@ -71,6 +74,7 @@ class Level extends Component {
       // Fold over snippets and separate them into mine and others
       for (const cb of allCodeBlocks) {
         cb.likes = Number(cb.likes);
+        if (reports.find(r => r.codeblock_id === cb.id)) cb.reported = true;
         if (cb.uid === this.props.auth.user.id) {
           cb.username = t("you!");
           cb.mine = true;

@@ -21,7 +21,8 @@ class UserCodeBlocks extends Component {
     this.state = {
       loading: true,
       codeBlocks: [],
-      likes: null
+      likes: null,
+      reports: null
     };
   }
 
@@ -33,18 +34,20 @@ class UserCodeBlocks extends Component {
     const {user} = this.props;
     const cbget = axios.get(`/api/codeBlocks/byuser?uid=${user.id}`);
     const lkget = axios.get("/api/likes");
+    const rget = axios.get("/api/reports");
     
-    Promise.all([cbget, lkget]).then(resp => {
+    Promise.all([cbget, lkget, rget]).then(resp => {
       const codeBlocks = resp[0].data;
       const likes = resp[1].data;
+      const reports = resp[2].data;
       codeBlocks.sort((a, b) => a.id - b.id);
-      this.setState({loading: false, codeBlocks, likes});
+      this.setState({loading: false, codeBlocks, likes, reports});
     });
   }
 
   render() {
     const {t} = this.props;
-    const {loading, codeBlocks, likes} = this.state;
+    const {loading, codeBlocks, likes, reports} = this.state;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 
@@ -55,6 +58,7 @@ class UserCodeBlocks extends Component {
           { codeBlocks.length
             ? codeBlocks.map(cb => {
               if (likes.find(l => l.likeid === cb.id)) cb.liked = true;
+              if (reports.find(r => r.codeblock_id === cb.id)) cb.reported = true;
               return <CodeBlockCard codeBlock={cb} />;
             })
             : <p>{ t("This user doesn't have any code blocks yet.") }</p>}

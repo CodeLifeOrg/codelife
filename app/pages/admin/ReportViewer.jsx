@@ -11,31 +11,28 @@ class ReportViewer extends Component {
     super(props);
     this.state = {
       mounted: false,
-      reports: []
+      projectReports: [],
+      codeblockReports: []
     };
   }
 
   componentDidMount() {
-    axios.get("/api/reports/all").then(resp => {
+    const cbget = axios.get("/api/reports/codeblocks/all");
+    const pget = axios.get("/api/reports/projects/all");
+
+    Promise.all([cbget, pget]).then(resp => {
       const mounted = true;
-      const reports = resp.data;
-      console.log(reports);
-      this.setState({mounted, reports});
+      const codeblockReports = resp[0].data;
+      const projectReports = resp[1].data;
+      this.setState({mounted, codeblockReports, projectReports});
     });
   }
 
   render() {
 
-    const {reports} = this.state;
+    const {mounted, codeblockReports, projectReports} = this.state;
 
-    if (!reports) return <Loading />;
-
-    const projectReports = [];
-    const codeblockReports = [];
-
-    for (const r of reports) {
-      r.codeblock_id ? codeblockReports.push(r) : projectReports.push(r);
-    }
+    if (!mounted) return <Loading />;
 
     const codeblockItems = codeblockReports.map(r => {
       return <li>{`${r.username}, ${r.reason}: ${r.comment}`}</li>

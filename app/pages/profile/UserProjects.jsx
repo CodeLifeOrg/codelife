@@ -33,7 +33,7 @@ class UserProjects extends Component {
   componentDidMount() {
     const {user} = this.props;
     const pget = axios.get(`/api/projects/byuser?uid=${user.id}`);
-    const rget = axios.get("/api/reports");
+    const rget = axios.get("/api/reports/projects");
 
     Promise.all([pget, rget]).then(resp => {
       const projects = resp[0].data;
@@ -53,7 +53,7 @@ class UserProjects extends Component {
         <h2>{ t("Projects") }</h2>
         { projects.length
           ? <div className="flex-row">{ projects.map(p => {
-              if (reports.find(r => r.project_id === p.id)) p.reported = true;
+              if (reports.find(r => r.report_id === p.id)) p.reported = true;
               return <ProjectCard project={ p } />;
             })}</div>
           : <p>{ t("This user doesn't have any projects yet.") }</p>}

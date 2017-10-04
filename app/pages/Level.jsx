@@ -45,7 +45,7 @@ class Level extends Component {
     const uget = axios.get("/api/userprogress");
     const cbget = axios.get(`/api/codeBlocks/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
-    const rget = axios.get("/api/reports");
+    const rget = axios.get("/api/reports/codeblocks");
 
     Promise.all([lget, iget, uget, cbget, lkget, rget]).then(resp => {
       const levels = resp[0].data;
@@ -74,7 +74,7 @@ class Level extends Component {
       // Fold over snippets and separate them into mine and others
       for (const cb of allCodeBlocks) {
         cb.likes = Number(cb.likes);
-        if (reports.find(r => r.codeblock_id === cb.id)) cb.reported = true;
+        if (reports.find(r => r.report_id === cb.id)) cb.reported = true;
         if (cb.uid === this.props.auth.user.id) {
           cb.username = t("you!");
           cb.mine = true;

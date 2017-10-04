@@ -1,10 +1,8 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
 import {connect} from "react-redux";
-import {Button, RadioGroup, Radio, PopoverInteractionKind} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import {Button, RadioGroup, Radio} from "@blueprintjs/core";
 import "./ReportBox.css";
 
 class ReportBox extends Component {
@@ -21,13 +19,10 @@ class ReportBox extends Component {
 
   componentDidMount() {
     const {contentType, reportid} = this.props;
-    const path = (contentType === "codeblock") ? `/api/reports/byCodeBlockid?id=${reportid}` : `/api/reports/byProjectid?id=${reportid}`;
+    const path = contentType === "codeblock" ? `/api/reports/byCodeBlockid?id=${reportid}` : `/api/reports/byProjectid?id=${reportid}`;
     let previousReport = null;
     axios.get(path).then(resp => {
-      if (resp.data[0]) {
-        if (contentType === "codeblock" && resp.data[0].codeblock_id === reportid || 
-            contentType === "project" && resp.data[0].project_id === reportid) previousReport = resp.data[0];
-      }
+      if (resp.data[0] && resp.data[0].type === contentType && resp.data[0].report_id === reportid) previousReport = resp.data[0];
       const reason = previousReport ? previousReport.reason : this.state.reason;
       const comment = previousReport ? previousReport.comment : this.state.comment;
       this.setState({mounted: true, previousReport, reason, comment});
@@ -45,7 +40,7 @@ class ReportBox extends Component {
   submitReport() {
     const {reason, comment} = this.state;
     const {reportid, contentType} = this.props;
-    const payload = (contentType === "codeblock") ? {reason, comment, codeblock_id: reportid} : {reason, comment, project_id: reportid};
+    const payload = {reason, comment, type: contentType, report_id: reportid};
     axios.post("/api/reports/save", payload).then(resp => {
       if (resp.status === 200) {
         this.setState({previousReport: resp.data});

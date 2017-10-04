@@ -309,7 +309,7 @@ class CodeEditor extends Component {
     
     for (const r of this.state.rulejson) {
       if (r.type === "JS_EQUALS") {
-        js = `${r.needle}=null;\n${js}`;
+        js = `${r.needle}=undefined;\n${js}`;
         js += `parent.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
       }
     }

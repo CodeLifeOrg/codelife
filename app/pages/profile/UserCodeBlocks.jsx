@@ -34,7 +34,7 @@ class UserCodeBlocks extends Component {
     const {user} = this.props;
     const cbget = axios.get(`/api/codeBlocks/byuser?uid=${user.id}`);
     const lkget = axios.get("/api/likes");
-    const rget = axios.get("/api/reports");
+    const rget = axios.get("/api/reports/codeblocks");
     
     Promise.all([cbget, lkget, rget]).then(resp => {
       const codeBlocks = resp[0].data;
@@ -58,7 +58,7 @@ class UserCodeBlocks extends Component {
           { codeBlocks.length
             ? codeBlocks.map(cb => {
               if (likes.find(l => l.likeid === cb.id)) cb.liked = true;
-              if (reports.find(r => r.codeblock_id === cb.id)) cb.reported = true;
+              if (reports.find(r => r.report_id === cb.id)) cb.reported = true;
               return <CodeBlockCard codeBlock={cb} />;
             })
             : <p>{ t("This user doesn't have any code blocks yet.") }</p>}

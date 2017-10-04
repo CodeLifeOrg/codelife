@@ -10,8 +10,8 @@ module.exports = function(sequelize, db) {
       uid: db.TEXT,
       reason: db.TEXT,
       comment: db.TEXT,
-      codeblock_id: db.INTEGER,
-      project_id: db.INTEGER
+      report_id: db.INTEGER,
+      type: db.TEXT
     }, 
     {
       freezeTableName: true,

@@ -56,8 +56,7 @@ class Level extends Component {
       const reports = resp[5].data;
 
       const currentIsland = islands.find(i => i.id === lid);
-      // TODO: after august test, change this from index to a new ordering field
-      // ALSO: add an exception for level 10.
+      // TODO: add an exception for level 10.
       const nextOrdering = Number(currentIsland.ordering) + 1;
       const nextIsland = islands.find(i => Number(i.ordering) === Number(nextOrdering));
       const prevOrdering = Number(currentIsland.ordering) - 1;
@@ -146,9 +145,9 @@ class Level extends Component {
   }
 
   closeOverlay() {
-    // this.setState({winOpen: false});
-    // TODO: take out island 4 catcher after august
-    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-4") {
+    // TODO: take out island 4 catcher after august (completed)
+    // if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-4") {
+    if (this.state.nextIsland && this.state.nextIsland.id) {  
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -348,8 +347,9 @@ class Level extends Component {
           </div>
         </div>
         { prevIsland ? <IslandLink done={true} width={250} island={prevIsland} description={false} /> : null}
-        { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST */}
-        { nextIsland && Number(nextIsland.ordering) < 3  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
+        { /* nextIsland && Number(nextIsland.ordering) < 3  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null} */ }
+        { nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { otherCodeBlocks.length
         ? <div>
             <h2 className="title">

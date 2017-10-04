@@ -33,8 +33,8 @@ class Island extends Component {
   }
 
   hasUserCompleted(milestone) {
-    // TODO: this is a blocking short-circuit for August. remove after Beta
-    if (milestone === "island-3") return false;
+    // TODO: this is a blocking short-circuit for August. remove after Beta (done)
+    // if (milestone === "island-3") return false;
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 

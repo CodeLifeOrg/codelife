@@ -94,7 +94,7 @@ class CodeEditor extends Component {
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
-    iconList.JS_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
+    iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
 
     const allRules = baseRules.concat(rulejson);
 
@@ -202,7 +202,7 @@ class CodeEditor extends Component {
     cv.CSS_CONTAINS = cvContainsStyle;
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
-    cv.JS_EQUALS = this.cvEquals.bind(this);
+    cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
     for (const r of baseRules) {
       const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
@@ -247,7 +247,7 @@ class CodeEditor extends Component {
       if (myrule.type === "NESTS") {
         return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
       }
-      else if (myrule.type === "JS_EQUALS") {
+      else if (myrule.type === "JS_VAR_EQUALS") {
         return myrule.error_msg.replace("{{tag1}}", `${rule.needle}`).replace("{{tag2}}", `${rule.outer}`);
       }
       else {
@@ -272,7 +272,8 @@ class CodeEditor extends Component {
 
   myCatch(e) {
     const {embeddedConsole} = this.state;
-    embeddedConsole.push(e.stack);
+    // embeddedConsole.push(e.stack);
+    embeddedConsole.push(e.message);
     this.setState({embeddedConsole});
   }
 
@@ -308,7 +309,7 @@ class CodeEditor extends Component {
     let js = this.state.currentJS.split("console.log").join("parent.myLog");
     
     for (const r of this.state.rulejson) {
-      if (r.type === "JS_EQUALS") {
+      if (r.type === "JS_VAR_EQUALS") {
         js = `${r.needle}=undefined;\n${js}`;
         js += `parent.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
       }
@@ -385,7 +386,7 @@ class CodeEditor extends Component {
 
     let js = this.state.currentJS.split("console.log").join("window.myLog");
     for (const r of this.state.rulejson) {
-      if (r.type === "JS_EQUALS") {
+      if (r.type === "JS_VAR_EQUALS") {
         js += `window.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
       }
     }

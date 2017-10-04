@@ -189,7 +189,9 @@ class CodeEditor extends Component {
   }
 
   cvEquals(r) {
-    return this.state.jsRules[r.needle];
+    // For javascript rules, we test their correctness elsewhere (namely, myRule)
+    // As such, they are already aware of their passing state, and we can just no-op
+    return r.passing;
   }
 
   checkForErrors(theText) {
@@ -242,16 +244,16 @@ class CodeEditor extends Component {
   }
 
   getErrorForRule(rule) {
-    const myrule = this.state.ruleErrors.find(r => r.type === rule.type);
-    if (myrule && myrule.error_msg) {
-      if (myrule.type === "NESTS") {
-        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
+    const thisRule = this.state.ruleErrors.find(r => r.type === rule.type);
+    if (thisRule && thisRule.error_msg) {
+      if (thisRule.type === "NESTS") {
+        return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`).replace("{{p2}}", `<${rule.outer}>`);
       }
-      else if (myrule.type === "JS_VAR_EQUALS") {
-        return myrule.error_msg.replace("{{tag1}}", `${rule.needle}`).replace("{{tag2}}", `${rule.outer}`);
+      else if (thisRule.type === "JS_VAR_EQUALS") {
+        return thisRule.error_msg.replace("{{p1}}", `${rule.needle}`).replace("{{p2}}", `${rule.value}`);
       }
       else {
-        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+        return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`);
       }
     }
     else {
@@ -283,10 +285,25 @@ class CodeEditor extends Component {
     this.setState({embeddedConsole});
   }
 
-  myRule(needle, correct) {
-    const {jsRules} = this.state;
-    jsRules[needle] = correct;
-    this.setState({jsRules});
+  myRule(needle, value) {
+    const {rulejson} = this.state;
+    for (const r of rulejson) {
+      if (r.needle === needle) {
+        // If we have been given type and value, check for both
+        if (r.varType && r.value) {
+          r.passing = typeof value === r.varType && value == r.value;
+        } 
+        // If we have been given type only, check only for that
+        else if (r.varType && !r.value) {
+          r.passing = typeof value === r.varType;
+        }
+        // Otherwise, we are checking only for existence
+        else {
+          r.passing = value !== undefined;
+        }
+      }
+    }
+    this.setState({rulejson});
   }
 
   wrapJS(theText) {
@@ -306,35 +323,41 @@ class CodeEditor extends Component {
   }
 
   internalRender() {
-    let js = this.state.currentJS.split("console.log").join("parent.myLog");
-    
-    for (const r of this.state.rulejson) {
-      if (r.type === "JS_VAR_EQUALS") {
-        js = `${r.needle}=undefined;\n${js}`;
-        js += `parent.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
+
+    // TODO: Establish a reliable way to determine if we should show the execute button
+    if (this.state.currentJS) {
+
+      let js = this.state.currentJS.split("console.log").join("parent.myLog");
+      
+      for (const r of this.state.rulejson) {
+        if (r.type === "JS_VAR_EQUALS") {
+          js = `${r.needle}=undefined;\n${js}`;
+          js += `parent.myRule('${r.needle}', ${r.needle});\n`;
+        }
       }
+
+      const finaljs = `
+        var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
+        try {
+          eval(js);
+        }
+        catch (e) {
+          parent.myCatch(e);
+        }
+      `;
+
+      
+      const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
+
+      if (this.refs.rc) {
+        const doc = this.refs.rc.contentWindow.document;
+        doc.open();
+        doc.write(theText);
+        doc.close();
+      }
+
+      this.checkForErrors(theText);
     }
-
-    const finaljs = `
-      var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
-      try {
-        eval(js);
-      }
-      catch (e) {
-        parent.myCatch(e);
-      }
-    `;
-
-    const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
-
-    if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(theText);
-      doc.close();
-    }
-
-    this.checkForErrors(theText);
   }
 
   /* External Functions for Parent Component to Call */

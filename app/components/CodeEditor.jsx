@@ -9,8 +9,6 @@ import safeEval from "safe-eval";
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
 
-
-
 import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import "./CodeEditor.css";
@@ -93,12 +91,70 @@ class CodeEditor extends Component {
     iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.CONTAINS_ONE = <span className="pt-icon-standard pt-icon-hand-up"></span>;
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
     iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
+    const nameList = [];
+    nameList.CONTAINS = "exists";
+    nameList.CSS_CONTAINS = "css";
+    nameList.CONTAINS_ONE = "unique";
+    nameList.CONTAINS_SELF_CLOSE = "exists";
+    nameList.NESTS = "nests";
+    nameList.JS_VAR_EQUALS = "equal";
 
     const allRules = baseRules.concat(rulejson);
 
-    const vList = allRules.map(rule => {
+    const organizedRules = [];
+
+    for (const ar of allRules) {
+      const or = organizedRules.find(obj => obj.needle === ar.needle);
+      if (!or) {
+        organizedRules.push({needle: ar.needle, ruleArray: [ar]});
+      } 
+      else {
+        or.ruleArray.push(ar);
+      }
+    }
+
+    const vList = [];
+
+    for (const or of organizedRules) {
+      const needleBox = 
+        <Popover
+          interactionKind={PopoverInteractionKind.HOVER}
+          popoverClassName="pt-popover-content-sizing user-popover"
+          position={Position.TOP_LEFT}
+        >
+          <li className="validation-item header">
+            <span className="rule">{or.needle}</span>
+          </li>
+          <div>
+            {`Additional info on ${or.needle}`}
+          </div>
+        </Popover>;
+      vList.push(needleBox);
+
+      for (const rule of or.ruleArray) {
+        const ruleBox = 
+          <Popover
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="pt-popover-content-sizing user-popover"
+            position={Position.TOP_LEFT}
+          >
+            <li className={`validation-item ${rule.passing ? "complete" : ""}`}>
+              {iconList[rule.type]} 
+              <span className="rule">{nameList[rule.type]}</span>
+            </li>
+            <div>
+              { !rule.passing ? <div><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div></div> : "Good job!" }
+            </div>
+          </Popover>;
+        vList.push(ruleBox);
+      }
+    }
+
+      /*
+
       if (rule.passing) {
         return (
           <Popover
@@ -134,7 +190,8 @@ class CodeEditor extends Component {
           </Popover>
         );
       }
-    });
+
+      */
     return <ul className="validation-list">{vList}</ul>;
   }
 

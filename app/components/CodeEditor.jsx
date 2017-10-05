@@ -110,7 +110,7 @@ class CodeEditor extends Component {
       const or = organizedRules.find(obj => obj.needle === ar.needle);
       if (!or) {
         organizedRules.push({needle: ar.needle, ruleArray: [ar]});
-      } 
+      }
       else {
         or.ruleArray.push(ar);
       }
@@ -119,80 +119,25 @@ class CodeEditor extends Component {
     const vList = [];
 
     for (const or of organizedRules) {
-      const needleBox = 
-        <Popover
+
+      vList.push(<div className="rules">
+        <div className="group-name">{or.needle}</div>
+        { or.ruleArray.map((rule, i) => <Popover key={i}
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName="pt-popover-content-sizing user-popover"
           position={Position.TOP_LEFT}
         >
-          <li className="validation-item header">
-            <span className="rule">{or.needle}</span>
-          </li>
+          <span className={`rule ${rule.passing ? "complete" : ""}`}>
+            {iconList[rule.type]}
+            <span className="rule-name">{nameList[rule.type]}</span>
+          </span>
           <div>
-            {`Additional info on ${or.needle}`}
+            { !rule.passing ? <div><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div></div> : "Good job!" }
           </div>
-        </Popover>;
-      vList.push(needleBox);
-
-      for (const rule of or.ruleArray) {
-        const ruleBox = 
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className={`validation-item ${rule.passing ? "complete" : ""}`}>
-              {iconList[rule.type]} 
-              <span className="rule">{nameList[rule.type]}</span>
-            </li>
-            <div>
-              { !rule.passing ? <div><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div></div> : "Good job!" }
-            </div>
-          </Popover>;
-        vList.push(ruleBox);
-      }
+        </Popover>)}
+      </div>);
     }
-
-      /*
-
-      if (rule.passing) {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item complete">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              [inprogress] Help Msg
-            </div>
-          </Popover>
-        );
-      }
-      else {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              [inprogress] Help Msg
-              <br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
-            </div>
-          </Popover>
-        );
-      }
-
-      */
-    return <ul className="validation-list">{vList}</ul>;
+    return <div className="contents">{vList}</div>;
   }
 
   getTitleText(theText) {
@@ -552,7 +497,7 @@ class CodeEditor extends Component {
                   <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
                   <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
                 </div>
-                <div className="contents">{this.getValidationBox()}</div>
+                { this.getValidationBox() }
               </div>
             </div>
           : null

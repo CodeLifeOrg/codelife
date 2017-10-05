@@ -92,21 +92,20 @@
     height: 0;
     overflow-y: scroll;
     transition: height 0.35s;
-    & .validation-list {
-      display: flex;
-      flex-wrap: wrap;
-      list-style: none;
-      margin: 10px 0;
+    & .rules {
+      margin: 20px 10px;
       padding: 0;
-      & .validation-item {
+      & .group-name {
+        display: inline-block;
+        width: 40px;
+      }
+      & .rule {
         align-items: center;
         background-color: white;
         border: 1px solid #2c2c2c;
-        display: flex;
-        flex: 1;
         font-size: 14px;
-        margin: 5px;
-        padding: 5px 8px 5px 5px;
+        margin: 0 3px;
+        padding: 2px 8px 3px 5px;
         transition: background-color 0.2s, border-color 0.2s, color 0.2s;
         & .pt-icon-standard {
           margin-right: 5px;

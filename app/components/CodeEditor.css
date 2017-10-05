@@ -131,9 +131,27 @@
         border-bottom: 0;
         margin-bottom: 2px;
       }
+      & .pt-icon-standard {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: 12px;
+        margin-right: 5px;
+      }
       & .arg {
+        margin-right: 10px;
         &.number {
-          color: blue;
+          color: #2500CA;
+        }
+        &.string {
+          color: #C40000;
+        }
+        &.object {
+          font-style: italic;
+        }
+        &.array {
+          font-style: italic;
+        }
+        &.function {
+          font-style: italic;
         }
       }
     }

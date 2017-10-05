@@ -272,10 +272,18 @@ class CodeEditor extends Component {
     this.setState({embeddedConsole});
   }
 
-  myLog(t) {
+  myLog() {
     const {embeddedConsole} = this.state;
-    embeddedConsole.push(t);
+    embeddedConsole.push(Array.from(arguments));
     this.setState({embeddedConsole});
+  }
+
+  evalType(value) {
+    let t = typeof value;
+    if (t === "object") {
+      if (t instanceof Array) t = "array";
+    }
+    return t;
   }
 
   myRule(needle, value) {
@@ -443,7 +451,17 @@ class CodeEditor extends Component {
     const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules} = this.state;
 
     console.log(embeddedConsole);
-    const consoleText = embeddedConsole.map((ec, i) => <div className="log" key={i}>{ec}</div>);
+    const consoleText = embeddedConsole.map((args, i) => <div className="log" key={i}>
+      <span className="pt-icon-standard pt-icon-double-chevron-right"></span>
+      {args.map((arg, x) => {
+        const t = this.evalType(arg);
+        let v = arg;
+        if (t === "string") v = `"${v}"`;
+        else if (t === "object") v = JSON.stringify(v);
+        else if (v.toString) v = v.toString();
+        return <span className={`arg ${t}`} key={x}>{v}</span>;
+      })}
+    </div>);
 
     if (!this.state.mounted) return <Loading />;
 

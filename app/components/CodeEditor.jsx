@@ -450,7 +450,6 @@ class CodeEditor extends Component {
     const {codeTitle, island, t} = this.props;
     const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules} = this.state;
 
-    console.log(embeddedConsole);
     const consoleText = embeddedConsole.map((args, i) => {
       const t1 = this.evalType(args[0]);
       return <div className={`log ${t1}`} key={i}>

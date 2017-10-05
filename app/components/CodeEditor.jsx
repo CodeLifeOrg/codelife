@@ -100,7 +100,7 @@ class CodeEditor extends Component {
     nameList.CONTAINS_ONE = "unique";
     nameList.CONTAINS_SELF_CLOSE = "exists";
     nameList.NESTS = "nests";
-    nameList.JS_VAR_EQUALS = "equal";
+    nameList.JS_VAR_EQUALS = "equals";
 
     const allRules = baseRules.concat(rulejson);
 
@@ -349,7 +349,6 @@ class CodeEditor extends Component {
         }
       `;
 
-
       const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
 
       if (this.refs.rc) {
@@ -393,53 +392,9 @@ class CodeEditor extends Component {
 
 
   executeCode() {
-
-    /*
-    Version 1: Console and Errors but not Runtime Errors
-    */
-
-    /*
-    let {embeddedConsole} = this.state;
-    embeddedConsole = [];
-    this.setState({embeddedConsole}, this.jsRender.bind(this));
-
-    */
-
-    // Version 2: Errors and Runtime Errors and Console.  Uses eval, gross.
-
-
-    /*
-
-    let js = this.state.currentJS.split("console.log").join("window.myLog");
-    for (const r of this.state.rulejson) {
-      if (r.type === "JS_VAR_EQUALS") {
-        js += `window.myRule('${r.needle}', ${r.needle} == '${r.outer}');\n`;
-      }
-    }
-
-    const {embeddedConsole} = this.state;
-    try {
-      eval(js);
-    }
-    catch (e) {
-      embeddedConsole.push(e.message);
-    }
-    this.setState({embeddedConsole}, this.checkForErrors(this.state.currentText));
-
-    */
-
-
-    /*
-    Potential Version 3?
-    - Wrap javascript in try catch (as in wrapJS above)
-    - Pack that into a variable and pass that into the iframe (how?)
-    - In the iframe, eval the variable for runtime errors, and let the embedded try/catch do the rest
-    */
-
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
     this.setState({embeddedConsole}, this.internalRender.bind(this));
-
   }
 
   toggleDrawer(drawer) {

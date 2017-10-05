@@ -267,8 +267,7 @@ class CodeEditor extends Component {
 
   myCatch(e) {
     const {embeddedConsole} = this.state;
-    // embeddedConsole.push(e.stack);
-    embeddedConsole.push(e.message);
+    embeddedConsole.push([e]);
     this.setState({embeddedConsole});
   }
 
@@ -281,7 +280,8 @@ class CodeEditor extends Component {
   evalType(value) {
     let t = typeof value;
     if (t === "object") {
-      if (t instanceof Array) t = "array";
+      if (["Array"].includes(value.constructor.name)) t = "array";
+      else if (["Error", "EvalError", "ReferenceError", "SyntaxError"].includes(value.constructor.name)) t = "error";
     }
     return t;
   }
@@ -451,17 +451,23 @@ class CodeEditor extends Component {
     const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules} = this.state;
 
     console.log(embeddedConsole);
-    const consoleText = embeddedConsole.map((args, i) => <div className="log" key={i}>
-      <span className="pt-icon-standard pt-icon-double-chevron-right"></span>
-      {args.map((arg, x) => {
-        const t = this.evalType(arg);
-        let v = arg;
-        if (t === "string") v = `"${v}"`;
-        else if (t === "object") v = JSON.stringify(v);
-        else if (v.toString) v = v.toString();
-        return <span className={`arg ${t}`} key={x}>{v}</span>;
-      })}
-    </div>);
+    const consoleText = embeddedConsole.map((args, i) => {
+      const t1 = this.evalType(args[0]);
+      return <div className={`log ${t1}`} key={i}>
+        { args.length === 1 && t1 === "error"
+        ? <span className="pt-icon-standard pt-icon-delete"></span>
+        : <span className="pt-icon-standard pt-icon-double-chevron-right"></span> }
+        {args.map((arg, x) => {
+          const t = this.evalType(arg);
+          let v = arg;
+          if (t === "string") v = `"${v}"`;
+          else if (t === "object") v = JSON.stringify(v);
+          else if (t === "error") v = `Error: ${v.message}`;
+          else if (v.toString) v = v.toString();
+          return <span className={`arg ${t}`} key={x}>{v}</span>;
+        })}
+      </div>;
+    });
 
     if (!this.state.mounted) return <Loading />;
 

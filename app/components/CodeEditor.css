@@ -123,18 +123,24 @@
       border-bottom: 1px solid #eee;
       font-family: monospace;
       font-size: 12px;
-      padding: 2px 5px;
+      padding: 3px 5px 2px;
       &:first-child {
-        margin-top: 2px;
+        padding-top: 4px;
       }
       &:last-child {
         border-bottom: 0;
-        margin-bottom: 2px;
+      }
+      &.error {
+        background-color: #ffeaeb;
+        border-bottom: 1px solid #ffc8cb;
       }
       & .pt-icon-standard {
         color: rgba(0, 0, 0, 0.25);
         font-size: 12px;
         margin-right: 5px;
+        &.pt-icon-delete {
+          color: #ff0000;
+        }
       }
       & .arg {
         margin-right: 10px;
@@ -152,6 +158,9 @@
         }
         &.function {
           font-style: italic;
+        }
+        &.error {
+          color: #ff0000;
         }
       }
     }

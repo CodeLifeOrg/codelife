@@ -16,14 +16,14 @@ module.exports = function(app) {
 
   app.get("/api/reports/codeblocks/all", (req, res) => {
 
-    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.report_id, reports.type, users.username as username, users.email, users.name from reports, users, codeblocks where reports.report_id = codeblocks.id AND codeblocks.uid = users.id AND reports.type = 'codeblock'";
+    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.report_id, reports.type, users.username, users.email, users.name, codeblocks.snippetname from reports, users, codeblocks where reports.report_id = codeblocks.id AND codeblocks.uid = users.id AND reports.type = 'codeblock'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
 
   app.get("/api/reports/projects/all", (req, res) => {
 
-    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.report_id, reports.type, users.username as username, users.email, users.name from reports, users, projects where reports.report_id = projects.id AND projects.uid = users.id AND reports.type = 'project'";
+    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.report_id, reports.type, users.username, users.email, users.name, projects.name from reports, users, projects where reports.report_id = projects.id AND projects.uid = users.id AND reports.type = 'project'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });

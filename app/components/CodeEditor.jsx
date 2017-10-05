@@ -33,7 +33,8 @@ class CodeEditor extends Component {
       currentJS: "",
       jsRules: [],
       titleText: "",
-      isOpen: false
+      openRules: false,
+      openConsole: false
     };
     if (window) {
       window.myCatch = this.myCatch.bind(this);
@@ -43,14 +44,14 @@ class CodeEditor extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/rules").then(resp => {      
+    axios.get("/api/rules").then(resp => {
       const ruleErrors = resp.data;
       const currentText = this.props.initialValue ? this.props.initialValue : "";
       const rulejson = this.props.rulejson ? this.props.rulejson : [];
       const titleText = this.getTitleText(currentText);
       const baseRules = this.getBaseRules();
       this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
-      if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);  
+      if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
     });
   }
 
@@ -68,7 +69,7 @@ class CodeEditor extends Component {
       {type: "NESTS", needle: "body", outer: "html"},
       {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "title", outer: "head"}
-      // {type: "NESTS", needle: "style", outer: "head"} 
+      // {type: "NESTS", needle: "style", outer: "head"}
     ];
     return baseRules;
   }
@@ -83,12 +84,11 @@ class CodeEditor extends Component {
     let {embeddedConsole} = this.state;
     embeddedConsole = `${embeddedConsole}\n${msg}`;
     this.setState({embeddedConsole});
-  } 
+  }
   */
 
   getValidationBox() {
-    const {t} = this.props;
-    const {goodRatio, intent, rulejson, baseRules} = this.state;
+    const {rulejson, baseRules} = this.state;
     const iconList = [];
     iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
@@ -135,14 +135,7 @@ class CodeEditor extends Component {
         );
       }
     });
-    return (
-      <div id="validation-box">
-        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-        { Math.round(goodRatio * 100) }% { t("Complete") }
-        <ul className="validation-list">{vList}</ul>
-        
-      </div>
-    );
+    return <ul className="validation-list">{vList}</ul>;
   }
 
   getTitleText(theText) {
@@ -292,7 +285,7 @@ class CodeEditor extends Component {
         // If we have been given type and value, check for both
         if (r.varType && r.value) {
           r.passing = typeof value === r.varType && value == r.value;
-        } 
+        }
         // If we have been given type only, check only for that
         else if (r.varType && !r.value) {
           r.passing = typeof value === r.varType;
@@ -328,7 +321,7 @@ class CodeEditor extends Component {
     if (this.state.currentJS) {
 
       let js = this.state.currentJS.split("console.log").join("parent.myLog");
-      
+
       for (const r of this.state.rulejson) {
         if (r.type === "JS_VAR_EQUALS") {
           js = `${r.needle}=undefined;\n${js}`;
@@ -346,7 +339,7 @@ class CodeEditor extends Component {
         }
       `;
 
-      
+
       const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
 
       if (this.refs.rc) {
@@ -390,8 +383,8 @@ class CodeEditor extends Component {
 
 
   executeCode() {
-    
-    /* 
+
+    /*
     Version 1: Console and Errors but not Runtime Errors
     */
 
@@ -399,12 +392,12 @@ class CodeEditor extends Component {
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
     this.setState({embeddedConsole}, this.jsRender.bind(this));
-    
+
     */
-    
+
     // Version 2: Errors and Runtime Errors and Console.  Uses eval, gross.
 
-    
+
     /*
 
     let js = this.state.currentJS.split("console.log").join("window.myLog");
@@ -424,7 +417,7 @@ class CodeEditor extends Component {
     this.setState({embeddedConsole}, this.checkForErrors(this.state.currentText));
 
     */
-        
+
 
     /*
     Potential Version 3?
@@ -436,16 +429,21 @@ class CodeEditor extends Component {
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
     this.setState({embeddedConsole}, this.internalRender.bind(this));
-    
+
+  }
+
+  toggleDrawer(drawer) {
+    this.setState({[drawer]: !this.state[drawer]});
   }
 
   /* End of external functions */
 
   render() {
     const {codeTitle, island, t} = this.props;
-    const {titleText, currentText, embeddedConsole} = this.state;
+    const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules} = this.state;
 
-    const consoleText = embeddedConsole.map(ec => <div>{ec}</div>);
+    console.log(embeddedConsole);
+    const consoleText = embeddedConsole.map((ec, i) => <div className="log" key={i}>{ec}</div>);
 
     if (!this.state.mounted) return <Loading />;
 
@@ -455,8 +453,7 @@ class CodeEditor extends Component {
           ? <div className="code">
               <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
               { !this.props.blurred
-                ? 
-                  <AceWrapper
+                ? <AceWrapper
                     className="editor"
                     ref={ comp => this.editor = comp }
                     onChange={this.onChangeText.bind(this)}
@@ -470,8 +467,11 @@ class CodeEditor extends Component {
                     { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
                 </div> : null }
-              <div className="drawer">
-                <div className="title">Validation</div>
+              <div className={ `drawer ${openRules ? "open" : ""}` }>
+                <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
+                  <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+                  <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+                </div>
                 <div className="contents">{this.getValidationBox()}</div>
               </div>
             </div>
@@ -485,8 +485,8 @@ class CodeEditor extends Component {
             { titleText }
           </div>
           <iframe className="iframe" id="iframe" ref="rc" />
-          <div className="drawer">
-            <div className="title">Console</div>
+          <div className={ `drawer ${openConsole ? "open" : ""}` }>
+            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
             <div className="contents">{consoleText}</div>
           </div>
         </div>

@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import axios from "axios";
+import ReportBox from "components/ReportBox";
+import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
 import "./Share.css";
 
 import Loading from "components/Loading";
@@ -31,29 +33,43 @@ class Share extends Component {
   componentDidMount() {
     const {username, filename} = this.props.params;
     let type = "";
-    if (this.props.location.pathname.includes("/snippets/")) type = "snippet";
+    if (this.props.location.pathname.includes("/codeBlocks/")) type = "codeBlock";
     if (this.props.location.pathname.includes("/projects/")) type = "project";
-    if (type === "snippet") {
-      console.log(username, filename);
-      axios.get(`/api/snippets/byUsernameAndFilename?username=${username}&filename=${filename}`).then(resp => {
-        console.log(resp);
-        this.setState({content: resp.data[0]}, this.renderPage.bind(this));
+    if (type === "codeBlock") {
+      const cbget = axios.get(`/api/codeBlocks/byUsernameAndFilename?username=${username}&filename=${filename}`);
+      const rget = axios.get("/api/reports");
+
+      Promise.all([cbget, rget]).then(resp => {
+        const content = resp[0].data[0];
+        const reports = resp[1].data;
+        this.setState({content, reports}, this.renderPage.bind(this));
       });
     }
     if (type === "project") {
-      axios.get(`/api/projects/byUsernameAndFilename?username=${username}&filename=${filename}`).then(resp => {
-        this.setState({content: resp.data[0]}, this.renderPage.bind(this));
+      const pget = axios.get(`/api/projects/byUsernameAndFilename?username=${username}&filename=${filename}`);
+      const rget = axios.get("/api/reports");
+
+      Promise.all([pget, rget]).then(resp => {
+        const content = resp[0].data[0];
+        const reports = resp[1].data;
+        this.setState({content, reports}, this.renderPage.bind(this));
       });
     }
   }
 
   render() {
-    const {content, user} = this.state;
+    const {content, reports, user} = this.state;
 
     if (!content) return <Loading />;
 
     const {t} = this.props;
-    const {name} = content;
+    const {name, id} = content;
+
+    let contentType = "";
+    if (this.props.location.pathname.includes("/codeBlocks/")) contentType = "codeblock";
+    if (this.props.location.pathname.includes("/projects/")) contentType = "project";
+
+    const reported = reports.find(r => r.type === contentType && r.report_id === id); 
 
     return (
       <div id="share">
@@ -66,6 +82,22 @@ class Share extends Component {
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            popoverClassName="pt-popover-content-sizing"
+            position={Position.TOP_RIGHT}
+          >
+            <Button
+              intent={reported ? "" : Intent.DANGER}
+              iconName="flag"
+              text={reported ? "Flagged" : "Flag"}
+            />
+            <div>
+             <ReportBox reportid={id} contentType={contentType}/>
+            </div>
+          </Popover>
+
+          
         </div>
       </div>
     );

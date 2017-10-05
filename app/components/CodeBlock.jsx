@@ -20,7 +20,6 @@ class CodeBlock extends Component {
       isOpen: false,
       goodRatio: 0,
       intent: null,
-      ruleErrors: null,
       rulejson: null,
       timeout: null,
       timeoutAlert: false,
@@ -30,16 +29,15 @@ class CodeBlock extends Component {
   }
 
   componentDidMount() {
-    const rulejson = JSON.parse(this.props.lesson.rulejson);
-    const ruleErrors = this.props.ruleErrors;
+    const rulejson = JSON.parse(this.props.island.rulejson);
     let initialContent = "";
     let filename = "";
-    if (this.props.lesson.initialcontent) initialContent = this.props.lesson.initialcontent;
-    if (this.props.lesson.snippet) {
-      initialContent = this.props.lesson.snippet.studentcontent;
-      filename = this.props.lesson.snippet.snippetname;
+    if (this.props.island.initialcontent) initialContent = this.props.island.initialcontent;
+    if (this.props.island.codeBlock) {
+      initialContent = this.props.island.codeBlock.studentcontent;
+      filename = this.props.island.codeBlock.snippetname;
     }
-    this.setState({mounted: true, initialContent, filename, ruleErrors, rulejson});
+    this.setState({mounted: true, initialContent, filename, rulejson});
   }
 
   componentWillUnmount() {
@@ -59,7 +57,7 @@ class CodeBlock extends Component {
 
   saveProgress(level) {
     axios.post("/api/userprogress/save", {level}).then(resp => {
-      resp.status === 200 ? console.log("successfully saved") : console.log("error");
+      resp.status === 200 ? console.log("successfully saved progress") : console.log("error");
     });
   }
 
@@ -67,10 +65,10 @@ class CodeBlock extends Component {
     // nothing yet
   }
 
-  resetSnippet() {
-    const {lesson} = this.props;
+  resetCodeBlock() {
+    const {island} = this.props;
     let initialcontent = "";
-    if (lesson && lesson.initialcontent) initialcontent = lesson.initialcontent;
+    if (island && island.initialcontent) initialcontent = island.initialcontent;
     this.editor.getWrappedInstance().setEntireContents(initialcontent);
     // this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
@@ -92,7 +90,7 @@ class CodeBlock extends Component {
     const {t} = this.props;
     const {username} = this.props.auth.user;
     if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
-      browserHistory.push(`/snippets/${username}/${this.props.lesson.snippet.snippetname}`);
+      browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
     }
     else {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
@@ -104,10 +102,9 @@ class CodeBlock extends Component {
     const {t} = this.props;
     const {id: uid} = this.props.auth.user;
     const studentcontent = this.editor.getWrappedInstance().getEntireContents();
-    let snippet = this.props.lesson.snippet;
-    const lid = this.props.lesson.id;
-    // let name = `My ${this.props.lesson.name} Codeblock`;
-    let name = t("myCodeblock", {islandName: this.props.lesson.name});
+    let codeBlock = this.props.island.codeBlock;
+    const iid = this.props.island.id;
+    let name = t("myCodeblock", {islandName: this.props.island.name});
 
     if (!this.editor.getWrappedInstance().isPassing()) {
       const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
@@ -115,30 +112,30 @@ class CodeBlock extends Component {
       return;
     }
 
-    this.saveProgress(lid);
+    this.saveProgress(iid);
 
     // todo: maybe replace this with findorupdate from userprogress?
     if (this.state.filename !== "") name = this.state.filename;
-    let endpoint = "/api/snippets/";
-    snippet ? endpoint += "update" : endpoint += "new";
-    axios.post(endpoint, {uid, lid, name, studentcontent}).then(resp => {
+    let endpoint = "/api/codeBlocks/";
+    codeBlock ? endpoint += "update" : endpoint += "new";
+    axios.post(endpoint, {uid, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
         if (this.editor) this.editor.getWrappedInstance().setChangeStatus(false);
-        if (this.props.onFirstCompletion && !snippet) this.props.onFirstCompletion();
-        if (snippet) {
+        if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
+        if (codeBlock) {
           // If there's already a snippet, and we've saved new data down to the
           // database, we need to update our "in-memory" snippet to reflect the
           // db changes.  We then call parent.handleSave to put this updated snippet
           // back into currentLesson.snippet, saving us a db call.
-          snippet.studentcontent = studentcontent;
-          snippet.snippetname = name;
+          codeBlock.studentcontent = studentcontent;
+          codeBlock.snippetname = name;
         }
         else {
-          snippet = resp.data;
+          codeBlock = resp.data;
         }
-        if (this.props.handleSave) this.props.handleSave(snippet);
+        if (this.props.handleSave) this.props.handleSave(codeBlock);
       }
       else {
         alert(t("Error"));
@@ -147,8 +144,8 @@ class CodeBlock extends Component {
   }
 
   render() {
-    const {t, lesson} = this.props;
-    const {initialContent, timeoutAlert, ruleErrors, rulejson} = this.state;
+    const {t, island} = this.props;
+    const {initialContent, timeoutAlert, rulejson} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -171,17 +168,17 @@ class CodeBlock extends Component {
             confirmButtonText={ t("Reset") }
             intent={ Intent.DANGER }
             onCancel={ () => this.setState({resetAlert: false}) }
-            onConfirm={ () => this.resetSnippet() }>
+            onConfirm={ () => this.resetCodeBlock() }>
             <p>{ t("Are you sure you want to reset the code to its original state?") }</p>
         </Alert>
           <div className="codeBlock-text">
-            <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: lesson.prompt}} />
+            <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: island.prompt}} />
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} ruleErrors={ruleErrors} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
-          { lesson.snippet ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
+          { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
           <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
@@ -190,8 +187,8 @@ class CodeBlock extends Component {
           >
             <Button intent={Intent.PRIMARY} iconName="help">{t("Help")}</Button>
             <div>
-              <h5>{lesson.name} - {t("Help")}</h5>
-              <p dangerouslySetInnerHTML={{__html: lesson.cheatsheet}} />
+              <h5>{island.name} - {t("Help")}</h5>
+              <p dangerouslySetInnerHTML={{__html: island.cheatsheet}} />
             </div>
           </Popover>
           <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>

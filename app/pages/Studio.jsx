@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 
-import AllSnippets from "components/AllSnippets";
+import CodeBlockList from "components/CodeBlockList";
 import Projects from "components/Projects";
 import CodeEditor from "components/CodeEditor";
 
@@ -38,9 +38,11 @@ class Studio extends Component {
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
   }
 
+  /*
   onClickSnippet(snippet) {
     if (this.state.currentProject) this.editor.getWrappedInstance().insertTextAtCursor(snippet.studentcontent);
   }
+  */
 
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
@@ -126,7 +128,7 @@ class Studio extends Component {
 
     if (!auth.user) browserHistory.push("/login");
 
-    const allSnippetRef = <AllSnippets onClickSnippet={this.onClickSnippet.bind(this)}/>;
+    const allCodeBlockRef = <CodeBlockList/>;
     const projectRef = <Projects  projectToLoad={filename}
                                   onCreateProject={this.onCreateProject.bind(this)}
                                   onDeleteProject={this.onDeleteProject.bind(this)}
@@ -147,7 +149,7 @@ class Studio extends Component {
         <div id="body">
           <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
             <Tab2 id="projects" title={t("Projects")} panel={ projectRef } />
-            <Tab2 id="code-blocks" title={t("CodeBlocks")} panel={ allSnippetRef } />
+            <Tab2 id="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
           </Tabs2>
           <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } ref={c => this.editor = c} />
         </div>

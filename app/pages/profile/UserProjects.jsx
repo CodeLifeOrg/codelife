@@ -21,7 +21,8 @@ class UserProjects extends Component {
     super(props);
     this.state = {
       loading: true,
-      projects: []
+      projects: [],
+      reports: []
     };
   }
 
@@ -31,14 +32,19 @@ class UserProjects extends Component {
    */
   componentDidMount() {
     const {user} = this.props;
-    axios.get(`/api/projects/byuser?uid=${user.id}`).then(resp => {
-      this.setState({loading: false, projects: resp.data});
+    const pget = axios.get(`/api/projects/byuser?uid=${user.id}`);
+    const rget = axios.get("/api/reports/projects");
+
+    Promise.all([pget, rget]).then(resp => {
+      const projects = resp[0].data;
+      const reports = resp[1].data;
+      this.setState({loading: false, projects, reports});
     });
   }
 
   render() {
     const {t} = this.props;
-    const {loading, projects} = this.state;
+    const {loading, projects, reports} = this.state;
 
     if (loading) return <h2>{ t("Loading projects") }...</h2>;
 
@@ -46,7 +52,10 @@ class UserProjects extends Component {
       <div className="user-section">
         <h2>{ t("Projects") }</h2>
         { projects.length
-          ? <div className="flex-row">{ projects.map(p => <ProjectCard project={ p } />) }</div>
+          ? <div className="flex-row">{ projects.map(p => {
+              if (reports.find(r => r.report_id === p.id)) p.reported = true;
+              return <ProjectCard project={ p } />;
+            })}</div>
           : <p>{ t("This user doesn't have any projects yet.") }</p>}
       </div>
     );

@@ -55,7 +55,7 @@ class IslandEditor extends Component {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
     const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
-    axios.post("/api/builder/lessons/save", data).then(resp => {
+    axios.post("/api/builder/islands/save", data).then(resp => {
       if (resp.status === 200) {
         toast.show({message: "Saved!", intent: Intent.SUCCESS});
       } 
@@ -86,8 +86,8 @@ class IslandEditor extends Component {
         <label className="pt-label">
           <span>
             Theme:&nbsp;&nbsp;
-            <span className="island-swatch" style={{backgroundColor: themes[data.theme].dark}} />
-            <span className="island-swatch" style={{backgroundColor: themes[data.theme].light}} />
+            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].dark} : null } />
+            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].light} : null } />
           </span>
           <div className="pt-select" style={{width: "180px"}}>
             <select value={data.theme} onChange={this.changeField.bind(this, "theme")} >

@@ -6,79 +6,79 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/builder/lessons", (req, res) => {
+  app.get("/api/builder/islands", (req, res) => {
 
-    db.lessons.findAll({where: req.query}).then(u => {
+    db.islands.findAll({where: req.query}).then(u => {
       res.json(u).end();
     });
 
   });
 
-  app.post("/api/builder/lessons/save", (req, res) => {
+  app.post("/api/builder/islands/save", (req, res) => {
     
-    db.lessons.update(req.body, {where: {id: req.body.id}}).then(u => {
+    db.islands.update(req.body, {where: {id: req.body.id}}).then(u => {
       res.json(u).end();
     });
 
   });  
 
-  app.post("/api/builder/lessons/new", (req, res) => {
+  app.post("/api/builder/islands/new", (req, res) => {
     
-    db.lessons.create(req.body).then(u => {
+    db.islands.create(req.body).then(u => {
       res.json(u).end();
     });
 
   });
 
-  app.delete("/api/builder/lessons/delete", (req, res) => {
+  app.delete("/api/builder/islands/delete", (req, res) => {
 
-    /*const q = "delete from lessons where lessons.id = '" + req.query.id + "'";
+    /*const q = "delete from islands where islands.id = '" + req.query.id + "'";
     db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
 
-    db.lessons.destroy({where: {id: req.query.id}}).then(u => {
+    db.islands.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();
     });    
 
   });
 
-  app.get("/api/builder/minilessons", (req, res) => {
+  app.get("/api/builder/levels", (req, res) => {
 
-    db.minilessons.findAll({where: {lid: req.query.lid}}).then(u => {
+    db.levels.findAll({where: {lid: req.query.lid}}).then(u => {
       res.json(u).end();
     });
 
   });
 
-  app.post("/api/builder/minilessons/save", (req, res) => {
+  app.post("/api/builder/levels/save", (req, res) => {
     
-    db.minilessons.update(req.body, {where: {id: req.body.id}}).then(u => {
+    db.levels.update(req.body, {where: {id: req.body.id}}).then(u => {
       res.json(u).end();
     });
 
   });
 
-  app.post("/api/builder/minilessons/new", (req, res) => {
+  app.post("/api/builder/levels/new", (req, res) => {
     
-    db.minilessons.create(req.body).then(u => {
+    db.levels.create(req.body).then(u => {
       res.json(u).end();
     });
 
   });
 
-  app.get("/api/builder/minilessons/all", (req, res) => {
+  app.get("/api/builder/levels/all", (req, res) => {
 
-    db.minilessons.findAll({where: req.query}).then(u => {
+    db.levels.findAll({where: req.query}).then(u => {
       res.json(u).end();
     });
 
   });
 
-  app.delete("/api/builder/minilessons/delete", (req, res) => {
+  app.delete("/api/builder/levels/delete", (req, res) => {
 
-    /*const q = "delete from minilessons where minilessons.id = '" + req.query.id + "'";
+    /*const q = "delete from levels where levels.id = '" + req.query.id + "'";
     db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
 
-    db.minilessons.destroy({where: {id: req.query.id}}).then(u => {
+    db.levels.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();
     });    
 

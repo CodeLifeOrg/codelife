@@ -55,6 +55,10 @@ class RulePicker extends Component {
           needle: r.needle
         };
         if (r.outer) obj.outer = r.outer;
+        if (r.property) obj.property = r.property;
+        if (r.varType) obj.varType = r.varType;
+        if (r.argType) obj.argType = r.argType;
+        if (r.value) obj.value = r.value;
         json.push(obj);
       }
     }
@@ -102,14 +106,32 @@ class RulePicker extends Component {
     const ruleTypeList = ruleTypes.map(r => <option key={r.type} value={r.type}>{r.type}</option>);
 
     let ruleItems = [];
+
+    const param2 = [];
+    param2.CSS_CONTAINS = "property";
+    param2.NESTS = "outer";
+    param2.JS_VAR_EQUALS = "varType";
+    param2.JS_FUNC_EQUALS = "argType";
+    const param3 = [];
+    param3.CSS_CONTAINS = "value";
+    param3.JS_VAR_EQUALS = "value";
+    param3.JS_FUNC_EQUALS = "value";
+    
     if (rules) {
       ruleItems = rules.map(r => 
-        <div className="rule-section">
+        <div key={r.id} className="rule-section">
           <div className="pt-select rule-select" style={{width: "210px"}}>
             <select value={r.type} id={r.id} onChange={this.changeField.bind(this, "type")}>{ruleTypeList}</select>
           </div>
-          <input className="pt-input rule-needle" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
-          <input className="pt-input rule-outer" id={r.id} onChange={this.changeField.bind(this, "outer")} type="text" placeholder="N/A" dir="auto" value={r.outer} /> 
+          <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
+          { param2[r.type] ? 
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} /> : 
+            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          }
+          { param3[r.type] ? 
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> : 
+            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          }  
           <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>          
         </div>
       );

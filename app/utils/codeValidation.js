@@ -48,7 +48,7 @@ export const cvContainsStyle = (rule, haystack) => {
   const obj = css.parse(styleContent, {silent: true});
   let found = 0;
   for (const r of obj.stylesheet.rules) {
-    if (r.selectors.includes(needle)) {
+    if (r.selectors && r.selectors.includes(needle)) {
       if (property) {
         if (r.declarations) {
           for (const d of r.declarations) {

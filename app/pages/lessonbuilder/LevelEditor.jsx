@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
+import {Button} from "@blueprintjs/core";
 
 import "./LevelEditor.css";
 
@@ -36,7 +36,7 @@ class LevelEditor extends Component {
   saveContent() {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
-    axios.post("/api/builder/minilessons/save", data).then(resp => {
+    axios.post("/api/builder/levels/save", data).then(resp => {
       resp.status === 200 ? console.log("saved") : console.log("error");
     });
   }

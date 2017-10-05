@@ -33,9 +33,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/lessons").then(resp => {
-      const lessons = resp.data;
-      this.props.dispatch({type: "LOAD_ISLANDS", payload: lessons});  
+    axios.get("/api/islands").then(resp => {
+      const islands = resp.data;
+      this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});  
     });
   }
 
@@ -55,7 +55,7 @@ class App extends Component {
     }
 
     let theme = "";
-    const lookup = routes[1] === "lesson" && routes.length > 2 ? routes[2] : false;
+    const lookup = routes[1] === "island" && routes.length > 2 ? routes[2] : false;
     const currentIsland = islands.find(island => island.id === lookup);
     if (currentIsland) theme = currentIsland.theme;
 

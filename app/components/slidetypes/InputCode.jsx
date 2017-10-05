@@ -15,7 +15,6 @@ class InputCode extends Component {
       currentText: "",
       titleText: "",
       baseText: "",
-      ruleErrors: [],
       rulejson: null,
       resetAlert: false,
       gemEarned: false
@@ -23,10 +22,9 @@ class InputCode extends Component {
   }
 
   componentDidMount() {
-    const ruleErrors = this.props.ruleErrors ? this.props.ruleErrors : [];
     const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
     const baseText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
-    this.setState({mounted: true, ruleErrors, rulejson, baseText});
+    this.setState({mounted: true, rulejson, baseText});
   }
 
   componentDidUpdate() {
@@ -69,7 +67,7 @@ class InputCode extends Component {
 
   render() {
     const {t, htmlcontent1, htmlcontent2, island} = this.props;
-    const {titleText, ruleErrors, rulejson} = this.state;
+    const {titleText, rulejson} = this.state;
 
     const initialContent = htmlcontent2 ? htmlcontent2 : "";
 
@@ -87,7 +85,7 @@ class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} ruleErrors={ruleErrors} rulejson={rulejson} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} rulejson={rulejson} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

@@ -32,13 +32,12 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
-      ruleErrors: null,
-      currentLesson: null,
-      minilessons: null,
+      currentIsland: null,
+      levels: null,
       sentProgress: false,
       latestSlideCompleted: 0,
       latestSlideOfGemEarned: -1,
-      lessonComplete: false,
+      islandComplete: false,
       mounted: false,
       done: false
     };
@@ -82,7 +81,7 @@ class Slide extends Component {
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
     // if final slide write to DB
     if (user && isFinalSlide && !sentProgress) {
-      this.setState({sentProgress: true, lessonComplete: true});
+      this.setState({sentProgress: true, islandComplete: true});
       // add 1 to gems since the saving happens before the user "finishes"
       // the final slide
       this.saveProgress(mlid, gems);
@@ -97,17 +96,16 @@ class Slide extends Component {
     const {slides, latestSlideCompleted} = this.state;
 
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
-    const lget = axios.get(`/api/lessons?id=${lid}`);
-    const mlget = axios.get(`/api/minilessons?lid=${lid}`);
+    const iget = axios.get(`/api/islands?id=${lid}`);
+    const lget = axios.get(`/api/levels?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
-    const rget = axios.get("/api/rules");
 
-    Promise.all([sget, lget, mlget, upget, rget]).then(resp => {
+    Promise.all([sget, iget, lget, upget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
         sid = slideList[0].id;
-        browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
+        browserHistory.push(`/island/${lid}/${mlid}/${sid}`);
       }
       const cs = slideList.find(slide => slide.id === sid);
 
@@ -118,23 +116,21 @@ class Slide extends Component {
       }
       */
 
-      const ruleErrors = resp[4].data;
-
       const up = resp[3].data;
       const done = up.find(p => p.level === mlid) !== undefined;
 
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, ruleErrors, currentLesson: resp[1].data[0], minilessons: resp[2].data});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels: resp[2].data});
     });
 
-    // document.addEventListener("keydown", this.handleKey.bind(this));
+    document.addEventListener("keydown", this.handleKey.bind(this));
   }
 
-  // handleKey(e) {
-  //   e.keyCode === 192 ? this.unblock(this) : null;
-  // }
+  handleKey(e) {
+    e.keyCode === 192 ? this.unblock(this) : null;
+  }
 
   updateGems(newGems) {
     const {gems: oldGems, slides, currentSlide, latestSlideOfGemEarned} = this.state;
@@ -148,7 +144,7 @@ class Slide extends Component {
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, currentLesson, gems, ruleErrors} = this.state;
+    const {currentSlide, slides, currentIsland, gems} = this.state;
     const updateGems = this.updateGems.bind(this);
 
     if (!auth.user) browserHistory.push("/login");
@@ -167,7 +163,7 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    if (!currentSlide || !currentLesson) return <Loading />;
+    if (!currentSlide || !currentIsland) return <Loading />;
 
     let exec = false;
     let sType = currentSlide.type;
@@ -179,34 +175,33 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div id="slide" className={ currentLesson.theme }>
-        <Confetti className="confetti" config={config} active={ this.state.lessonComplete } />
+      <div id="slide" className={ currentIsland.theme }>
+        <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
           { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.theme } position={Position.TOP_RIGHT}>
-            <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
+          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
+            <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>
 
         <SlideComponent
           exec={exec}
-          island={currentLesson.theme}
-          ruleErrors={ruleErrors}
+          island={currentIsland.theme}
           updateGems={updateGems}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />
 
         <div id="slide-foot">
           { prevSlug
-          ? <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
+          ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
           : <div className="pt-button pt-disabled">{t("Previous")}</div> }
           { nextSlug
           ? this.state.blocked
             ? <div className="pt-button pt-disabled">{t("Next")}</div>
-            : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`${t("Return to")} ${currentLesson.name}!`}</Link> }
+            : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
+          : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> }
         </div>
 
       </div>

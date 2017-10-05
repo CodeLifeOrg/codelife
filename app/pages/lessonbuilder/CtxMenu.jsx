@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
 import {Button, Menu, MenuItem, MenuDivider, Popover, Position} from "@blueprintjs/core";
 
 import "./CtxMenu.css";

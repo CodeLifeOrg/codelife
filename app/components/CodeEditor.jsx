@@ -1,8 +1,10 @@
+import axios from "axios";
 import React, {Component} from "react";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
 import {Intent, Position, Popover, ProgressBar, PopoverInteractionKind} from "@blueprintjs/core";
+import safeEval from "safe-eval";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
@@ -25,27 +27,30 @@ class CodeEditor extends Component {
       ruleErrors: [],
       goodRatio: 0,
       intent: null,
-      embeddedConsole: "",
+      embeddedConsole: [],
+      currentJS: "",
+      jsRules: [],
       titleText: "",
-      isOpen: false
+      openRules: false,
+      openConsole: false
     };
+    if (window) {
+      window.myCatch = this.myCatch.bind(this);
+      window.myLog = this.myLog.bind(this);
+      window.myRule = this.myRule.bind(this);
+    }
   }
 
   componentDidMount() {
-    const currentText = this.props.initialValue ? this.props.initialValue : "";
-    const rulejson = this.props.rulejson ? this.props.rulejson : [];
-    const ruleErrors = this.props.ruleErrors ? this.props.ruleErrors : [];
-    const titleText = this.getTitleText(currentText);
-    const baseRules = this.getBaseRules();
-    this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
-    if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
-
-    /*
-    console["log"] = this.injectConsole.bind(this);
-    console["warning"] = this.injectConsole.bind(this);
-    console["error"] = this.injectConsole.bind(this);
-    */
-
+    axios.get("/api/rules").then(resp => {
+      const ruleErrors = resp.data;
+      const currentText = this.props.initialValue ? this.props.initialValue : "";
+      const rulejson = this.props.rulejson ? this.props.rulejson : [];
+      const titleText = this.getTitleText(currentText);
+      const baseRules = this.getBaseRules();
+      this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
+      if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+    });
   }
 
   getBaseRules() {
@@ -62,7 +67,7 @@ class CodeEditor extends Component {
       {type: "NESTS", needle: "body", outer: "html"},
       {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "title", outer: "head"}
-      // {type: "NESTS", needle: "style", outer: "head"} 
+      // {type: "NESTS", needle: "style", outer: "head"}
     ];
     return baseRules;
   }
@@ -77,65 +82,62 @@ class CodeEditor extends Component {
     let {embeddedConsole} = this.state;
     embeddedConsole = `${embeddedConsole}\n${msg}`;
     this.setState({embeddedConsole});
-  } 
+  }
   */
 
   getValidationBox() {
-    const {t} = this.props;
-    const {goodRatio, intent, rulejson, baseRules} = this.state;
+    const {rulejson, baseRules} = this.state;
     const iconList = [];
     iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
+    iconList.CONTAINS_ONE = <span className="pt-icon-standard pt-icon-hand-up"></span>;
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
+    iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
+    const nameList = [];
+    nameList.CONTAINS = "exists";
+    nameList.CSS_CONTAINS = "css";
+    nameList.CONTAINS_ONE = "unique";
+    nameList.CONTAINS_SELF_CLOSE = "exists";
+    nameList.NESTS = "nests";
+    nameList.JS_VAR_EQUALS = "equals";
 
     const allRules = baseRules.concat(rulejson);
 
-    const vList = allRules.map(rule => {
-      if (rule.passing) {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item complete">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              [inprogress] Help Msg
-              { /* this.state.meanings[rule.type][rule.needle] */ }
-            </div>
-          </Popover>
-        );
+    const organizedRules = [];
+
+    for (const ar of allRules) {
+      const or = organizedRules.find(obj => obj.needle === ar.needle);
+      if (!or) {
+        organizedRules.push({needle: ar.needle, ruleArray: [ar]});
       }
       else {
-        return (
-          <Popover
-            interactionKind={PopoverInteractionKind.HOVER}
-            popoverClassName="pt-popover-content-sizing user-popover"
-            position={Position.TOP_LEFT}
-          >
-            <li className="validation-item">
-              {iconList[rule.type]}
-              <span className="rule">{rule.needle}</span>
-            </li>
-            <div>
-              [inprogress] Help Msg<br/><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div>
-            </div>
-          </Popover>
-        );
+        or.ruleArray.push(ar);
       }
-    });
-    return (
-      <div id="validation-box">
-        <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-        { Math.round(goodRatio * 100) }% { t("Complete") }
-        <ul className="validation-list">{vList}</ul>
-        
-      </div>
-    );
+    }
+
+    const vList = [];
+
+    for (const or of organizedRules) {
+
+      vList.push(<div className="rules">
+        <div className="group-name">{or.needle}</div>
+        { or.ruleArray.map((rule, i) => <Popover key={i}
+          interactionKind={PopoverInteractionKind.HOVER}
+          popoverClassName="pt-popover-content-sizing user-popover"
+          position={Position.TOP_LEFT}
+        >
+          <span className={`rule ${rule.passing ? "complete" : ""}`}>
+            {iconList[rule.type]}
+            <span className="rule-name">{nameList[rule.type]}</span>
+          </span>
+          <div>
+            { !rule.passing ? <div><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div></div> : "Good job!" }
+          </div>
+        </Popover>)}
+      </div>);
+    }
+    return <div className="contents">{vList}</div>;
   }
 
   getTitleText(theText) {
@@ -174,8 +176,17 @@ class CodeEditor extends Component {
         }
         arr.push(newObj);
       }
+      else {
+        if (n.children && n.children[0] && n.children[0].content) this.setState({currentJS: n.children[0].content});
+      }
     }
     return arr;
+  }
+
+  cvEquals(r) {
+    // For javascript rules, we test their correctness elsewhere (namely, myRule)
+    // As such, they are already aware of their passing state, and we can just no-op
+    return r.passing;
   }
 
   checkForErrors(theText) {
@@ -188,6 +199,7 @@ class CodeEditor extends Component {
     cv.CSS_CONTAINS = cvContainsStyle;
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
+    cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
     for (const r of baseRules) {
       const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
@@ -227,13 +239,16 @@ class CodeEditor extends Component {
   }
 
   getErrorForRule(rule) {
-    const myrule = this.state.ruleErrors.find(r => r.type === rule.type);
-    if (myrule && myrule.error_msg) {
-      if (myrule.type === "NESTS") {
-        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`).replace("{{tag2}}", `<${rule.outer}>`);
+    const thisRule = this.state.ruleErrors.find(r => r.type === rule.type);
+    if (thisRule && thisRule.error_msg) {
+      if (thisRule.type === "NESTS") {
+        return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`).replace("{{p2}}", `<${rule.outer}>`);
+      }
+      else if (thisRule.type === "JS_VAR_EQUALS") {
+        return thisRule.error_msg.replace("{{p1}}", `${rule.needle}`).replace("{{p2}}", `${rule.value}`);
       }
       else {
-        return myrule.error_msg.replace("{{tag1}}", `<${rule.needle}>`);
+        return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`);
       }
     }
     else {
@@ -250,6 +265,101 @@ class CodeEditor extends Component {
   showContextMenu(selectionObject) {
     const text = selectionObject.toString();
     // If you want to insert the selected text here, it's available
+  }
+
+  myCatch(e) {
+    const {embeddedConsole} = this.state;
+    embeddedConsole.push([e]);
+    this.setState({embeddedConsole});
+  }
+
+  myLog() {
+    const {embeddedConsole} = this.state;
+    embeddedConsole.push(Array.from(arguments));
+    this.setState({embeddedConsole});
+  }
+
+  evalType(value) {
+    let t = typeof value;
+    if (t === "object") {
+      if (["Array"].includes(value.constructor.name)) t = "array";
+      else if (["Error", "EvalError", "ReferenceError", "SyntaxError"].includes(value.constructor.name)) t = "error";
+    }
+    return t;
+  }
+
+  myRule(needle, value) {
+    const {rulejson} = this.state;
+    for (const r of rulejson) {
+      if (r.needle === needle) {
+        // If we have been given type and value, check for both
+        if (r.varType && r.value) {
+          r.passing = typeof value === r.varType && value == r.value;
+        }
+        // If we have been given type only, check only for that
+        else if (r.varType && !r.value) {
+          r.passing = typeof value === r.varType;
+        }
+        // Otherwise, we are checking only for existence
+        else {
+          r.passing = value !== undefined;
+        }
+      }
+    }
+    this.setState({rulejson});
+  }
+
+  wrapJS(theText) {
+    let resp = theText.replace("<script>", "<script> try {");
+    resp = resp.replace("</script>", "} catch(e) { parent.myCatch(e); } </script>");
+    resp = resp.split("console.log").join("parent.myLog");
+    return resp;
+  }
+
+  jsRender() {
+    if (this.refs.rc) {
+      const doc = this.refs.rc.contentWindow.document;
+      doc.open();
+      doc.write(this.wrapJS(this.state.currentText));
+      doc.close();
+    }
+  }
+
+  internalRender() {
+
+    // TODO: Establish a reliable way to determine if we should show the execute button
+    if (this.state.currentJS) {
+
+      let js = this.state.currentJS.split("console.log").join("parent.myLog");
+
+      for (const r of this.state.rulejson) {
+        if (r.type === "JS_VAR_EQUALS") {
+          js = `${r.needle}=undefined;\n${js}`;
+          js += `parent.myRule('${r.needle}', ${r.needle});\n`;
+        }
+      }
+
+      const finaljs = `
+        var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
+        try {
+          eval(js);
+        }
+        catch (e) {
+          parent.myCatch(e);
+        }
+      `;
+
+      const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
+
+      if (this.refs.rc) {
+        const doc = this.refs.rc.contentWindow.document;
+        doc.open();
+        doc.write(theText);
+        doc.close();
+      }
+
+      this.checkForErrors(theText);
+    }
   }
 
   /* External Functions for Parent Component to Call */
@@ -280,20 +390,40 @@ class CodeEditor extends Component {
     this.setState({changesMade});
   }
 
+
   executeCode() {
-    if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(this.state.currentText);
-      doc.close();
-    }
+    let {embeddedConsole} = this.state;
+    embeddedConsole = [];
+    this.setState({embeddedConsole}, this.internalRender.bind(this));
+  }
+
+  toggleDrawer(drawer) {
+    this.setState({[drawer]: !this.state[drawer]});
   }
 
   /* End of external functions */
 
   render() {
     const {codeTitle, island, t} = this.props;
-    const {titleText, currentText, embeddedConsole} = this.state;
+    const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules} = this.state;
+
+    const consoleText = embeddedConsole.map((args, i) => {
+      const t1 = this.evalType(args[0]);
+      return <div className={`log ${t1}`} key={i}>
+        { args.length === 1 && t1 === "error"
+        ? <span className="pt-icon-standard pt-icon-delete"></span>
+        : <span className="pt-icon-standard pt-icon-double-chevron-right"></span> }
+        {args.map((arg, x) => {
+          const t = this.evalType(arg);
+          let v = arg;
+          if (t === "string") v = `"${v}"`;
+          else if (t === "object") v = JSON.stringify(v);
+          else if (t === "error") v = `Error: ${v.message}`;
+          else if (v.toString) v = v.toString();
+          return <span className={`arg ${t}`} key={x}>{v}</span>;
+        })}
+      </div>;
+    });
 
     if (!this.state.mounted) return <Loading />;
 
@@ -303,8 +433,7 @@ class CodeEditor extends Component {
           ? <div className="code">
               <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
               { !this.props.blurred
-                ? 
-                  <AceWrapper
+                ? <AceWrapper
                     className="editor"
                     ref={ comp => this.editor = comp }
                     onChange={this.onChangeText.bind(this)}
@@ -318,9 +447,12 @@ class CodeEditor extends Component {
                     { t("Codeblock's code will be shown after you complete the last level of this island.") }
                   </div>
                 </div> : null }
-              <div className="drawer">
-                <div className="title">Validation</div>
-                <div className="contents">{this.getValidationBox()}</div>
+              <div className={ `drawer ${openRules ? "open" : ""}` }>
+                <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
+                  <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+                  <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+                </div>
+                { this.getValidationBox() }
               </div>
             </div>
           : null
@@ -332,10 +464,10 @@ class CodeEditor extends Component {
             : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" ref="rc" />
-          <div className="drawer">
-            <div className="title">Console</div>
-            <div className="contents">{embeddedConsole}</div>
+          <iframe className="iframe" id="iframe" ref="rc" />
+          <div className={ `drawer ${openConsole ? "open" : ""}` }>
+            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
+            <div className="contents">{consoleText}</div>
           </div>
         </div>
       </div>

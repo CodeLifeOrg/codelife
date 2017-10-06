@@ -37,7 +37,7 @@ class CodeEditor extends Component {
     if (window) {
       window.myCatch = this.myCatch.bind(this);
       window.myLog = this.myLog.bind(this);
-      window.myRule = this.myRule.bind(this);
+      window.checkVarEquals = this.checkVarEquals.bind(this);
     }
   }
 
@@ -77,14 +77,6 @@ class CodeEditor extends Component {
     return undefined;
   }
 
-  /*
-  injectConsole(msg) {
-    let {embeddedConsole} = this.state;
-    embeddedConsole = `${embeddedConsole}\n${msg}`;
-    this.setState({embeddedConsole});
-  }
-  */
-
   getValidationBox() {
     const {rulejson, baseRules} = this.state;
     const iconList = [];
@@ -93,7 +85,9 @@ class CodeEditor extends Component {
     iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
     iconList.CONTAINS_ONE = <span className="pt-icon-standard pt-icon-hand-up"></span>;
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
-    iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
+    iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-variable"></span>;
+    iconList.JS_FUNC_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
+
     const nameList = [];
     nameList.CONTAINS = "exists";
     nameList.CSS_CONTAINS = "css";
@@ -101,6 +95,7 @@ class CodeEditor extends Component {
     nameList.CONTAINS_SELF_CLOSE = "exists";
     nameList.NESTS = "nests";
     nameList.JS_VAR_EQUALS = "equals";
+    nameList.JS_FUNC_EQUALS = "invokes";
 
     const allRules = baseRules.concat(rulejson);
 
@@ -184,7 +179,7 @@ class CodeEditor extends Component {
   }
 
   cvEquals(r) {
-    // For javascript rules, we test their correctness elsewhere (namely, myRule)
+    // For javascript rules, we test their correctness elsewhere (namely, checkVarEquals)
     // As such, they are already aware of their passing state, and we can just no-op
     return r.passing;
   }
@@ -288,7 +283,7 @@ class CodeEditor extends Component {
     return t;
   }
 
-  myRule(needle, value) {
+  checkVarEquals(needle, value) {
     const {rulejson} = this.state;
     for (const r of rulejson) {
       if (r.needle === needle) {
@@ -335,7 +330,7 @@ class CodeEditor extends Component {
       for (const r of this.state.rulejson) {
         if (r.type === "JS_VAR_EQUALS") {
           js = `${r.needle}=undefined;\n${js}`;
-          js += `parent.myRule('${r.needle}', ${r.needle});\n`;
+          js += `parent.checkVarEquals('${r.needle}', ${r.needle});\n`;
         }
       }
 

@@ -2,7 +2,7 @@ import css from "css";
 
 export const cvContainsSelfClosingTag = (rule, haystack) => {
   const needle = rule.needle;
-  const open = haystack.indexOf(`<${needle}`);
+  const open = haystack.indexOf(`<${needle}>`);
   const close = haystack.indexOf("/>");
   return open !== -1 && close !== -1 && open < close;
 };

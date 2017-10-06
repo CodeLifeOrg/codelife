@@ -31,23 +31,37 @@ class ReportViewer extends Component {
     });
   }
 
-  createRow(type, id, username, email, filename, reasons, comments) {
-    const shortFilename = filename.length > 20 ? `${filename.substring(0, 20)}...` : filename;
-    const strReasons = reasons.toString().replace(",", "\n");
-    const strComments = comments.toString().replace(",", "\n");
-    return <tr key={id}>
+  handleOK(report) {
+    console.log("Would set these reports to HANDLED:", report.ids);
+    console.log("Would restore this page:", report.report_id, report.filename);
+  }
+
+  handleEmail(report) {
+    console.log("Would email this address:", report.email);
+  }
+
+  handleBan(report) {
+    console.log("Would set these reports to HANDLED:", report.ids);
+    console.log("Would ban this page:", report.report_id, report.filename);
+  }
+
+  createRow(type, report) {
+    const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
+    const strReasons = report.reasons.toString().replace(",", "\n");
+    const strComments = report.comments.toString().replace(",", "\n");
+    return <tr key={report.id}>
       <td>
-        <a target="_blank" href={`/${type}/${username}/${filename}`}>
+        <a target="_blank" href={`/${type}/${report.username}/${report.filename}`}>
           {shortFilename}
         </a>
       </td>
-      <td>{username}</td>
+      <td>{report.username}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
-        <Button className="mod-button pt-button pt-intent-success pt-icon-tick"></Button>
-        <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox"></Button>
-        <Button className="mod-button pt-button pt-intent-danger pt-icon-delete"></Button>
+        <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, report)}></Button>
+        <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox" onClick={this.handleEmail.bind(this, report)}></Button>
+        <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, report)}></Button>
       </td>
     </tr>;
   }
@@ -57,14 +71,16 @@ class ReportViewer extends Component {
     for (const report of reports) {
       const gr = grouped.find(gr => gr.report_id === report.report_id);
       if (gr) {
+        gr.ids.push(report.id);
         gr.reasons.push(report.reason);
         gr.comments.push(report.comment);
       }
       else {
         const obj = {
+          ids: [report.id],
           report_id: report.report_id,
           username: report.username,
-          email: report.username,
+          email: report.email,
           filename: report.filename,
           reasons: [report.reason],
           comments: [report.comment]
@@ -84,8 +100,8 @@ class ReportViewer extends Component {
     const cbSorted = this.groupReports(codeblockReports);
     const pSorted = this.groupReports(projectReports);
 
-    const codeblockItems = cbSorted.map(r => this.createRow("codeBlocks", r.id, r.username, r.email, r.filename, r.reasons, r.comments));
-    const projectItems = pSorted.map(r => this.createRow("projects", r.id, r.username, r.email, r.filename, r.reasons, r.comments));
+    const codeblockItems = cbSorted.map(r => this.createRow("codeBlocks", r));
+    const projectItems = pSorted.map(r => this.createRow("projects", r));
 
     return (
       <div style={{margin: "15px", padding: "15px", backgroundColor: "white"}}>

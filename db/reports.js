@@ -11,7 +11,8 @@ module.exports = function(sequelize, db) {
       reason: db.TEXT,
       comment: db.TEXT,
       report_id: db.INTEGER,
-      type: db.TEXT
+      type: db.TEXT, 
+      modstatus: db.TEXT
     }, 
     {
       freezeTableName: true,

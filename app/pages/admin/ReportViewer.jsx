@@ -31,8 +31,10 @@ class ReportViewer extends Component {
     });
   }
 
-  createRow(type, id, username, email, filename, reason, comment) {
+  createRow(type, id, username, email, filename, reasons, comments) {
     const shortFilename = filename.length > 20 ? `${filename.substring(0, 20)}...` : filename;
+    const strReasons = reasons.toString().replace(",", "\n");
+    const strComments = comments.toString().replace(",", "\n");
     return <tr key={id}>
       <td>
         <a target="_blank" href={`/${type}/${username}/${filename}`}>
@@ -40,8 +42,8 @@ class ReportViewer extends Component {
         </a>
       </td>
       <td>{username}</td>
-      <td>{reason}</td>
-      <td>{comment}</td>
+      <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
+      <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
         <Button className="mod-button pt-button pt-intent-success pt-icon-tick"></Button>
         <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox"></Button>
@@ -50,14 +52,40 @@ class ReportViewer extends Component {
     </tr>;
   }
 
+  groupReports(reports) {
+    const grouped = [];
+    for (const report of reports) {
+      const gr = grouped.find(gr => gr.report_id === report.report_id);
+      if (gr) {
+        gr.reasons.push(report.reason);
+        gr.comments.push(report.comment);
+      }
+      else {
+        const obj = {
+          report_id: report.report_id,
+          username: report.username,
+          email: report.username,
+          filename: report.filename,
+          reasons: [report.reason],
+          comments: [report.comment]
+        };
+        grouped.push(obj);
+      }
+    }
+    return grouped;
+  }
+
   render() {
 
     const {mounted, codeblockReports, projectReports} = this.state;
 
     if (!mounted) return <Loading />;
 
-    const codeblockItems = codeblockReports.map(r => this.createRow("codeBlocks", r.id, r.username, r.email, r.snippetname, r.reason, r.comment));
-    const projectItems = projectReports.map(r => this.createRow("projects", r.id, r.username, r.email, r.name, r.reason, r.comment));
+    const cbSorted = this.groupReports(codeblockReports);
+    const pSorted = this.groupReports(projectReports);
+
+    const codeblockItems = cbSorted.map(r => this.createRow("codeBlocks", r.id, r.username, r.email, r.filename, r.reasons, r.comments));
+    const projectItems = pSorted.map(r => this.createRow("projects", r.id, r.username, r.email, r.filename, r.reasons, r.comments));
 
     return (
       <div style={{margin: "15px", padding: "15px", backgroundColor: "white"}}>
@@ -68,8 +96,8 @@ class ReportViewer extends Component {
             <thead>
               <th>Page</th>
               <th>Author</th>
-              <th>Reason</th>
-              <th>Comment</th>
+              <th>Reasons</th>
+              <th>Comments</th>
               <th>Action</th>
             </thead>
             <tbody>{codeblockItems}</tbody>
@@ -82,8 +110,8 @@ class ReportViewer extends Component {
               <th>Page</th>
               <th>Author</th>
               <th>Reason</th>
-              <th>Comment</th>
-              <th>Action</th>
+              <th>Comments</th>
+              <th>Actions</th>
             </thead>
             <tbody>{projectItems}</tbody>
           </table>

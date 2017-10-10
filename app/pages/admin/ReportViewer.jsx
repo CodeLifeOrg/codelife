@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Position, Popover, PopoverInteractionKind} from "@blueprintjs/core";
+import {Button, Position, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
 import Loading from "components/Loading";
 
 import "./ReportViewer.css";
@@ -59,9 +59,15 @@ class ReportViewer extends Component {
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
-        <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, report)}></Button>
-        <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox" onClick={this.handleEmail.bind(this, report)}></Button>
-        <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, report)}></Button>
+        <Tooltip content="Allow this Content" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, report)}></Button>
+        </Tooltip>
+        <Tooltip content="Email this User" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox" onClick={this.handleEmail.bind(this, report)}></Button>
+        </Tooltip>  
+        <Tooltip content="Ban this Content" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, report)}></Button>
+        </Tooltip>
       </td>
     </tr>;
   }

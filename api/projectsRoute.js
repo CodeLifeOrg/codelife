@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
 
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified from projects, users where projects.uid = users.id AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, (select count(*) from reports where reports.report_id = projects.id AND reports.type = 'project') as reports from projects, users where projects.uid = users.id AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });

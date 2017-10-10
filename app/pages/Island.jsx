@@ -38,6 +38,7 @@ class Island extends Component {
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 
+  // TODO: I think this is a remnant from when you could see codeblocks at the island level, revisit this
   handleSave(sid, studentcontent) {
     // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
     // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would

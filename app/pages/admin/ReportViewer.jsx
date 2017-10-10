@@ -47,8 +47,10 @@ class ReportViewer extends Component {
 
   createRow(type, report) {
     const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
-    const strReasons = report.reasons.toString().replace(",", "\n");
-    const strComments = report.comments.toString().replace(",", "\n");
+    let strReasons = "";
+    let strComments = "";
+    for (const r of report.reasons) strReasons += `${r}\n`;
+    for (const c of report.comments) strComments += `${c}\n`;
     return <tr key={report.id}>
       <td>
         <a target="_blank" href={`/${type}/${report.username}/${report.filename}`}>

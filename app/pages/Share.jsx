@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
+import Constants from "utils/Constants.js";
 import "./Share.css";
 
 import Loading from "components/Loading";
@@ -19,9 +20,11 @@ class Share extends Component {
 
   renderPage() {
     if (this.refs.rc) {
+      console.log(this.state.content.reports, Constants.FLAG_COUNT_BAN);
+      const content = Number(this.state.content.reports) < Constants.FLAG_COUNT_BAN ? this.state.content.studentcontent : "This content has been disabled.";
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
-      doc.write(this.state.content.studentcontent);
+      doc.write(content);
       doc.close();
       const {uid} = this.state.content;
       axios.get(`/api/user/${uid}/`).then(resp => {

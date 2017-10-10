@@ -32,7 +32,13 @@ class ReportViewer extends Component {
   }
 
   handleOK(report) {
-    console.log("Would set these reports to HANDLED:", report.ids);
+    const reqs = [];
+    for (const id of report.ids) {
+      reqs.push(axios.post("/api/reports/update", {status: "approved", id}));
+    }
+    Promise.all(reqs).then(resp => {
+      console.log(resp);
+    });
     console.log("Would restore this page:", report.report_id, report.filename);
   }
 
@@ -41,7 +47,13 @@ class ReportViewer extends Component {
   }
 
   handleBan(report) {
-    console.log("Would set these reports to HANDLED:", report.ids);
+    const reqs = [];
+    for (const id of report.ids) {
+      reqs.push(axios.post("/api/reports/update", {status: "banned", id}));
+    }
+    Promise.all(reqs).then(resp => {
+      console.log(resp);
+    });
     console.log("Would ban this page:", report.report_id, report.filename);
   }
 

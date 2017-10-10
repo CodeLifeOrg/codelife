@@ -50,7 +50,14 @@ module.exports = function(app) {
     const uid = req.user.id;
     const {reason, comment, report_id, type} = req.body;
       
-    db.reports.create({uid, reason, comment, report_id, type}).then(u => res.json(u).end());
+    db.reports.create({uid, reason, comment, report_id, type, status: "new"}).then(u => res.json(u).end());
+
+  });
+
+  app.post("/api/reports/update", (req, res) => {
+    const {id, status} = req.body;
+
+    db.reports.update({status}, {where: {id}}).then(u => res.json(u).end());
 
   });
 

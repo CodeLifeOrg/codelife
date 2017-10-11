@@ -74,8 +74,6 @@ class Share extends Component {
 
     const reported = reports.find(r => r.type === contentType && r.report_id === id); 
 
-    console.log(content);
-
     return (
       <div id="share">
         <iframe id="iframe" ref="rc" />

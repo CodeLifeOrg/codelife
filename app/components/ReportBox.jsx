@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-import {Button, RadioGroup, Radio} from "@blueprintjs/core";
+import {Button, RadioGroup, Radio, Toaster, Position, Intent} from "@blueprintjs/core";
 import "./ReportBox.css";
 
 class ReportBox extends Component {
@@ -38,9 +38,21 @@ class ReportBox extends Component {
   }
 
   banPage() {
+    const {t} = this.props;
     const type = this.props.contentType === "codeblock" ? "codeBlocks" : "projects";
     axios.post(`/api/${type}/setstatus`, {status: "banned", id: this.props.reportid}).then(resp => {
-      console.log(resp);
+      if (resp.status === 200) {
+        const toast = Toaster.create({className: "BanToast", position: Position.TOP_CENTER});
+        toast.show({  message: t("Content Banned"), 
+                      intent: Intent.DANGER, 
+                      action: {
+                        text: "Refresh",
+                        onClick: () => window.location.reload()
+                      }});
+      }
+      else {
+        console.log("error");
+      }
     });
   }
 

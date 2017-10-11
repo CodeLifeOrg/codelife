@@ -74,6 +74,8 @@ class Share extends Component {
 
     const reported = reports.find(r => r.type === contentType && r.report_id === id); 
 
+    console.log(content);
+
     return (
       <div id="share">
         <iframe id="iframe" ref="rc" />
@@ -85,21 +87,22 @@ class Share extends Component {
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
-          <Popover
-            interactionKind={PopoverInteractionKind.CLICK}
-            popoverClassName="pt-popover-content-sizing"
-            position={Position.TOP_RIGHT}
-          >
-            <Button
-              intent={reported ? "" : Intent.DANGER}
-              iconName="flag"
-              text={reported ? "Flagged" : "Flag"}
-            />
-            <div>
-             <ReportBox reportid={id} contentType={contentType}/>
-            </div>
-          </Popover>
-
+          { content.status === "banned" ? null :
+            <Popover
+              interactionKind={PopoverInteractionKind.CLICK}
+              popoverClassName="pt-popover-content-sizing"
+              position={Position.TOP_RIGHT}
+            >
+              <Button
+                intent={reported ? "" : Intent.DANGER}
+                iconName="flag"
+                text={reported ? "Flagged" : "Flag"}
+              />
+              <div>
+               <ReportBox reportid={id} contentType={contentType}/>
+              </div>
+            </Popover>
+          }
           
         </div>
       </div>

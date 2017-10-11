@@ -2,7 +2,8 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Position, Toaster, Tooltip} from "@blueprintjs/core";
+import {Button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
+import {browserHistory} from "react-router";
 import Loading from "components/Loading";
 
 import "./ReportViewer.css";
@@ -36,25 +37,46 @@ class ReportViewer extends Component {
   }
 
   handleOK(type, report) {
+    const {t} = this.props;
     const reqs = [];
     for (const id of report.ids) {
       reqs.push(axios.post("/api/reports/update", {status: "approved", id}));
     }
     if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "approved", id: report.report_id}));
     Promise.all(reqs).then(resp => {
-      console.log(resp);
+      if (resp.filter(r => r.status !== 200).length === 0) {
+        const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
+        toast.show({message: t("Content Approved"), intent: Intent.SUCCESS});
+      } 
+      else {
+        const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
+        toast.show({message: t("Database Error"), intent: Intent.DANGER});
+      }
       this.loadFromDB();
     });
   }
 
   handleBan(type, report) {
+    const {t} = this.props;
     const reqs = [];
     for (const id of report.ids) {
       reqs.push(axios.post("/api/reports/update", {status: "banned", id}));
     }
     if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}));
     Promise.all(reqs).then(resp => {
-      console.log(resp);
+      if (resp.filter(r => r.status !== 200).length === 0) {
+        const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
+        toast.show({  message: t("Content Banned"), 
+                      intent: Intent.DANGER, 
+                      action: {
+                        text: "View User Page",
+                        onClick: () => browserHistory.push(`/profile/${report.username}`)
+                      }});
+      } 
+      else {
+        const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
+        toast.show({message: t("Database Error"), intent: Intent.DANGER});
+      }
       this.loadFromDB();
     });
     console.log("Would ban this page:", report.report_id, report.filename);

@@ -37,6 +37,13 @@ class ReportBox extends Component {
     this.setState({comment: e.target.value});
   }
 
+  banPage() {
+    const type = this.props.contentType === "codeblock" ? "codeBlocks" : "projects";
+    axios.post(`/api/${type}/setstatus`, {status: "banned", id: this.props.reportid}).then(resp => {
+      console.log(resp);
+    });
+  }
+
   submitReport() {
     const {reason, comment} = this.state;
     const {reportid, contentType} = this.props;
@@ -58,21 +65,29 @@ class ReportBox extends Component {
 
     return (
       <div>
-        <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>Flag Inappropriate Content</div>
-        <RadioGroup
-          label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
-          name="group"
-          disabled={previousReport}
-          onChange={this.handleChangeReason.bind(this)}
-          selectedValue={this.state.reason}
-        >
-          <Radio label="Inappropriate Content" value="inappropriate-content" />
-          <Radio label="Bullying or Abuse" value="bullying-abuse" />
-          <Radio label="Malicious Content" value="malicious-content" /><br/>
-        </RadioGroup>
-        {t("Additional Comments")}
-        <textarea className="pt-input" dir="auto" value={comment} disabled={previousReport} onChange={this.handleChangeComment.bind(this)}></textarea><br/><br/>
-        {!previousReport ? <Button className="pt-button pt-intent-success" key="submit" onClick={this.submitReport.bind(this)}>{t("Submit Report")}</Button> : null } 
+      { this.props.auth.user.role <= 1 ?
+        <div>
+          <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>Flag Inappropriate Content</div>
+          <RadioGroup
+            label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
+            name="group"
+            disabled={previousReport}
+            onChange={this.handleChangeReason.bind(this)}
+            selectedValue={this.state.reason}
+          >
+            <Radio label="Inappropriate Content" value="inappropriate-content" />
+            <Radio label="Bullying or Abuse" value="bullying-abuse" />
+            <Radio label="Malicious Content" value="malicious-content" /><br/>
+          </RadioGroup>
+          {t("Additional Comments")}
+          <textarea className="pt-input" dir="auto" value={comment} disabled={previousReport} onChange={this.handleChangeComment.bind(this)}></textarea><br/><br/>
+          {!previousReport ? <Button className="pt-button pt-intent-success" key="submit" onClick={this.submitReport.bind(this)}>{t("Submit Report")}</Button> : null } 
+        </div>
+        :
+        <div>
+          <Button className="pt-button pt-intent-danger" key="ban" onClick={this.banPage.bind(this)}>{t("Ban this Page")}</Button>
+        </div> 
+      }
       </div>
     );
   }

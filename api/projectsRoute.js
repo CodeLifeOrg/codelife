@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
 
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, (select count(*) from reports where reports.report_id = projects.id AND reports.type = 'project') as reports from projects, users where projects.uid = users.id AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, users where projects.uid = users.id AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
@@ -31,6 +31,13 @@ module.exports = function(app) {
 
     db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {uid: req.body.uid, id: req.body.id}})
       .then(u => res.json(u).end());
+
+  });
+
+  app.post("/api/projects/setstatus", (req, res) => {
+    const {status, id} = req.body;
+
+    db.projects.update({status}, {where: {id}}).then(u => res.json(u).end());
 
   });
 

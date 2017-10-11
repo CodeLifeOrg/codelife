@@ -20,8 +20,8 @@ class Share extends Component {
 
   renderPage() {
     if (this.refs.rc) {
-      console.log(this.state.content.reports, Constants.FLAG_COUNT_BAN);
-      const content = Number(this.state.content.reports) < Constants.FLAG_COUNT_BAN ? this.state.content.studentcontent : "This content has been disabled.";
+      const hideContent = Number(this.state.content.reports >= Constants.FLAG_COUNT_BAN || this.state.content.status === "banned");
+      const content = hideContent ? "This content has been disabled." : this.state.content.studentcontent;
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
       doc.write(content);

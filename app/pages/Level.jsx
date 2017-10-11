@@ -83,7 +83,7 @@ class Level extends Component {
           myCodeBlocks.push(cb);
         }
         else {
-          if (cb.reports >= Constants.FLAG_COUNT_HIDE) cb.hidden = true;
+          if (cb.reports >= Constants.FLAG_COUNT_HIDE || cb.status === "banned") cb.hidden = true;
           // TODO: do this in a database join, not here.
           if (!cb.hidden) {
             if (likes.find(l => l.likeid === cb.id)) {

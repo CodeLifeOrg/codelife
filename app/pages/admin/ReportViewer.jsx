@@ -31,26 +31,27 @@ class ReportViewer extends Component {
     });
   }
 
-  handleOK(report) {
+  handleOK(type, report) {
     const reqs = [];
     for (const id of report.ids) {
       reqs.push(axios.post("/api/reports/update", {status: "approved", id}));
     }
+    if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "approved", id: report.report_id}));
     Promise.all(reqs).then(resp => {
       console.log(resp);
     });
-    console.log("Would restore this page:", report.report_id, report.filename);
   }
 
-  handleEmail(report) {
+  handleEmail(type, report) {
     console.log("Would email this address:", report.email);
   }
 
-  handleBan(report) {
+  handleBan(type, report) {
     const reqs = [];
     for (const id of report.ids) {
       reqs.push(axios.post("/api/reports/update", {status: "banned", id}));
     }
+    if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}));
     Promise.all(reqs).then(resp => {
       console.log(resp);
     });
@@ -74,13 +75,13 @@ class ReportViewer extends Component {
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
         <Tooltip content="Allow this Content" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, report)}></Button>
+          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
         </Tooltip>
         <Tooltip content="Email this User" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox" onClick={this.handleEmail.bind(this, report)}></Button>
+          <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox" onClick={this.handleEmail.bind(this, type, report)}></Button>
         </Tooltip>  
         <Tooltip content="Ban this Content" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, report)}></Button>
+          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
         </Tooltip>
       </td>
     </tr>;

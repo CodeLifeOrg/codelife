@@ -10,7 +10,8 @@ module.exports = function(sequelize, db) {
       name: db.TEXT,
       studentcontent: db.TEXT,
       uid: db.TEXT,
-      datemodified: db.DATE
+      datemodified: db.DATE,
+      status: db.TEXT
     }, 
     {
       freezeTableName: true,

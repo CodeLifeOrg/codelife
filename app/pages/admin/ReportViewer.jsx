@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Position, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Button, Position, Toaster, Tooltip} from "@blueprintjs/core";
 import Loading from "components/Loading";
 
 import "./ReportViewer.css";
@@ -19,7 +19,7 @@ class ReportViewer extends Component {
     };
   }
 
-  componentDidMount() {
+  loadFromDB() {
     const cbget = axios.get("/api/reports/codeblocks/all");
     const pget = axios.get("/api/reports/projects/all");
 
@@ -31,6 +31,10 @@ class ReportViewer extends Component {
     });
   }
 
+  componentDidMount() {
+    this.loadFromDB();
+  }
+
   handleOK(type, report) {
     const reqs = [];
     for (const id of report.ids) {
@@ -39,11 +43,8 @@ class ReportViewer extends Component {
     if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "approved", id: report.report_id}));
     Promise.all(reqs).then(resp => {
       console.log(resp);
+      this.loadFromDB();
     });
-  }
-
-  handleEmail(type, report) {
-    console.log("Would email this address:", report.email);
   }
 
   handleBan(type, report) {
@@ -54,6 +55,7 @@ class ReportViewer extends Component {
     if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}));
     Promise.all(reqs).then(resp => {
       console.log(resp);
+      this.loadFromDB();
     });
     console.log("Would ban this page:", report.report_id, report.filename);
   }
@@ -76,10 +78,7 @@ class ReportViewer extends Component {
       <td>
         <Tooltip content="Allow this Content" position={Position.TOP}>
           <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
-        </Tooltip>
-        <Tooltip content="Email this User" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-warning pt-icon-inbox" onClick={this.handleEmail.bind(this, type, report)}></Button>
-        </Tooltip>  
+        </Tooltip> 
         <Tooltip content="Ban this Content" position={Position.TOP}>
           <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
         </Tooltip>

@@ -29,13 +29,6 @@ module.exports = function(sequelize, db) {
     {
       freezeTableName: true,
       timestamps: false
-    },
-    {
-      classMethods: {
-        associate: models => {
-          up.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user", foreignKeyConstraint: true});
-        }
-      }
     }
   );
 

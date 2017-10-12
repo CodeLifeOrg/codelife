@@ -4,7 +4,9 @@ module.exports = function(app) {
 
   app.get("/api/projects", (req, res) => {
 
-    db.projects.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+    //db.projects.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
 
@@ -16,7 +18,9 @@ module.exports = function(app) {
 
   app.get("/api/projects/byuser", (req, res) => {
 
-    db.projects.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+    //db.projects.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.query.uid + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
 

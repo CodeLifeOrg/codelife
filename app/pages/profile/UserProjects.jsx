@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-
+import Constants from "utils/Constants.js";
 import ProjectCard from "components/ProjectCard";
 import "./Profile.css";
 
@@ -36,7 +36,7 @@ class UserProjects extends Component {
     const rget = axios.get("/api/reports/projects");
 
     Promise.all([pget, rget]).then(resp => {
-      const projects = resp[0].data.filter(p => p.status !== "banned");
+      const projects = resp[0].data.filter(p => p.status !== "banned" && Number(p.reports) < Constants.FLAG_COUNT_HIDE);
       const reports = resp[1].data;
       this.setState({loading: false, projects, reports});
     });

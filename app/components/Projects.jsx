@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
+import Constants from "utils/Constants.js";
 import "./Projects.css";
 
 import {Alert, Intent, Tooltip} from "@blueprintjs/core";
@@ -20,7 +21,9 @@ class Projects extends Component {
 
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
-      const projects = resp.data.filter(p => p.status !== "banned");
+
+      const projects = resp.data.filter(p => p.status !== "banned" && Number(p.reports) < Constants.FLAG_COUNT_HIDE);
+      console.log(resp.data, projects);
       projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
@@ -31,6 +34,7 @@ class Projects extends Component {
       else {
         this.setState({projects});
         if (projects.length === 0) {
+          // TODO: compare this to resp.data to see if we are actually allowed to call this mypage.html, we may have banned it in the past
           this.createNewProject("mypage.html");
         }
         else {

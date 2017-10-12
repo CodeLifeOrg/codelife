@@ -36,7 +36,7 @@ class UserProjects extends Component {
     const rget = axios.get("/api/reports/projects");
 
     Promise.all([pget, rget]).then(resp => {
-      const projects = resp[0].data;
+      const projects = resp[0].data.filter(p => p.status !== "banned");
       const reports = resp[1].data;
       this.setState({loading: false, projects, reports});
     });

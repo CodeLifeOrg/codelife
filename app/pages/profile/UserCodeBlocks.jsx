@@ -37,7 +37,7 @@ class UserCodeBlocks extends Component {
     const rget = axios.get("/api/reports/codeblocks");
     
     Promise.all([cbget, lkget, rget]).then(resp => {
-      const codeBlocks = resp[0].data;
+      const codeBlocks = resp[0].data.filter(cb => cb.status !== "banned");
       const likes = resp[1].data;
       const reports = resp[2].data;
       codeBlocks.sort((a, b) => a.id - b.id);

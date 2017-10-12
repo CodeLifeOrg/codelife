@@ -47,7 +47,14 @@ module.exports = function(app) {
   app.post("/api/codeBlocks/setstatus", (req, res) => {
     const {status, id} = req.body;
 
-    db.codeblocks.update({status}, {where: {id}}).then(u => res.json(u).end());
+    if (status === "banned") {
+      const studentcontent = "";
+      db.codeblocks.update({status, studentcontent}, {where: {id}}).then(u => res.json(u).end());  
+    }
+    else {
+      db.codeblocks.update({status}, {where: {id}}).then(u => res.json(u).end());   
+    }
+    
 
   });
 

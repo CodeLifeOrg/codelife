@@ -20,7 +20,7 @@ class Projects extends Component {
 
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
-      const projects = resp.data;
+      const projects = resp.data.filter(p => p.status !== "banned");
       projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {

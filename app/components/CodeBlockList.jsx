@@ -31,6 +31,7 @@ class CodeBlockList extends Component {
       const userProgress = resp[2].data;
       const likes = resp[3].data;
       const reports = resp[4].data;
+      islands.sort((a, b) => a.ordering - b.ordering);
       allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       for (const i of islands) {
         i.myCodeBlocks = [];

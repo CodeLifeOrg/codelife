@@ -48,7 +48,7 @@ class CodeBlockList extends Component {
           }
           else {
             if (s.lid === i.id) {
-              if (s.reports >= Constants.FLAG_COUNT_HIDE || s.status === "banned") s.hidden = true;
+              if (s.reports >= Constants.FLAG_COUNT_HIDE || s.status === "banned" || s.sharing === "false") s.hidden = true;
               // TODO: move this to db call, don't do this here
               if (!s.hidden) {
                 if (likes.find(l => l.likeid === s.id)) {

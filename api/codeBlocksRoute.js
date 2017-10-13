@@ -23,7 +23,7 @@ module.exports = function(app) {
   app.get("/api/codeBlocks/byuser", (req, res) => {
 
     const id = req.query.uid;
-    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users WHERE users.id = codeblocks.uid AND users.id = '" + id + "'";
+    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, userprofiles.sharing, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users, userprofiles WHERE codeblocks.uid = userprofiles.uid AND users.id = codeblocks.uid AND users.id = '" + id + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
@@ -67,7 +67,7 @@ module.exports = function(app) {
 
   app.get("/api/codeBlocks/allbylid", (req, res) => {
 
-    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users WHERE users.id = codeblocks.uid AND codeblocks.lid = '" + req.query.lid + "'";
+    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, userprofiles.sharing, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users, userprofiles WHERE userprofiles.uid = codeblocks.uid AND users.id = codeblocks.uid AND codeblocks.lid = '" + req.query.lid + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
     // db.codeblocks.findAll({where: {uid: {$not: req.user.id}, lid: req.query.lid}}).then(u => res.json(u).end());
@@ -76,7 +76,7 @@ module.exports = function(app) {
 
   app.get("/api/codeBlocks/all", (req, res) => {
 
-    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users WHERE users.id = codeblocks.uid";
+    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, userprofiles.sharing, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users, userprofiles WHERE userprofiles.uid = codeblocks.uid AND users.id = codeblocks.uid";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });

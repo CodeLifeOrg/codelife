@@ -4,10 +4,10 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
-import IslandEditor from "pages/lessonbuilder/IslandEditor";
-import LevelEditor from "pages/lessonbuilder/LevelEditor";
-import SlideEditor from "pages/lessonbuilder/SlideEditor";
-import CtxMenu from "pages/lessonbuilder/CtxMenu";
+import IslandEditor from "pages/admin/lessonbuilder/IslandEditor";
+import LevelEditor from "pages/admin/lessonbuilder/LevelEditor";
+import SlideEditor from "pages/admin/lessonbuilder/SlideEditor";
+import CtxMenu from "pages/admin/lessonbuilder/CtxMenu";
 
 import crypto from "crypto";
 

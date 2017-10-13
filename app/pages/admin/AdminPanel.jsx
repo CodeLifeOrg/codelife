@@ -4,8 +4,8 @@ import {translate} from "react-i18next";
 import {Tab2, Tabs2} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import {UserAdmin} from "datawheel-canon";
-import LessonBuilder from "pages/lessonbuilder/LessonBuilder";
-import RuleBuilder from "pages/lessonbuilder/RuleBuilder";
+import LessonBuilder from "pages/admin/lessonbuilder/LessonBuilder";
+import RuleBuilder from "pages/admin/lessonbuilder/RuleBuilder";
 import ReportViewer from "pages/admin/ReportViewer";
 import {browserHistory} from "react-router";
 

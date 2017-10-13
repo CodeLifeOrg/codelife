@@ -56,7 +56,7 @@ class CtxMenu extends Component {
         text={`Delete ${node.itemType}`} 
         iconName="delete"
         disabled={node.parent && node.parent.childNodes.length === 1} />
-    </Menu>
+    </Menu>;
 
     return (
       

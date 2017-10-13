@@ -4,9 +4,9 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
-import RulePicker from "pages/lessonbuilder/RulePicker";
+import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
-import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
+import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 
 import "./IslandEditor.css";

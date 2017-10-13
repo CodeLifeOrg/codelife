@@ -59,7 +59,7 @@ class Profile extends Component {
         this.setState({loading: false, error: responseData.error});
       }
       else {
-        const sharing = responseData.sharing;
+        const sharing = responseData.sharing === "true" ? true : false;
         this.setState({loading: false, profileUser: responseData, sharing});
       }
     });

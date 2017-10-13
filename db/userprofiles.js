@@ -24,7 +24,10 @@ module.exports = function(sequelize, db) {
       cpf: db.STRING,
       survey: db.JSONB,
       survey2: db.JSONB,
-      getinvolved: db.JSONB
+      getinvolved: db.JSONB,
+      sharing: db.TEXT,
+      reports: db.INTEGER,
+      last_upped: db.DATE
     },
     {
       freezeTableName: true,

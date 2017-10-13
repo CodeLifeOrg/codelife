@@ -6,6 +6,12 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+  app.post("/api/profile/setsharing", (req, res) => {
+    const {sharing, uid} = req.body;
+    db.userprofiles.update({sharing}, {where: {uid}}).then(u => res.json(u).end());
+
+  });
+
   app.get("/api/profile/:username", (req, res) => {
     const {username} = req.params;
     let dbFields = ["users.id", "users.name", "users.email", "users.username"];

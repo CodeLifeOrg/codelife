@@ -88,24 +88,25 @@ class Share extends Component {
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
-          { content.status === "banned" ? null :
-            <Popover
-              interactionKind={PopoverInteractionKind.CLICK}
-              popoverClassName="pt-popover-content-sizing"
-              position={Position.TOP_RIGHT}
-              inline={true}
-            >
-              <Button
-                intent={reported ? "" : Intent.DANGER}
-                iconName="flag"
-                text={reported ? "Flagged" : "Flag"}
-              />
-              <div>
-               <ReportBox reportid={id} contentType={contentType}/>
-              </div>
-            </Popover>
-          }
-          
+          { 
+            content.status === "banned" 
+              ? null 
+              : <Popover
+                interactionKind={PopoverInteractionKind.CLICK}
+                popoverClassName="pt-popover-content-sizing"
+                position={Position.TOP_RIGHT}
+                inline={true}
+              >
+                <Button
+                  intent={reported ? "" : Intent.DANGER}
+                  iconName="flag"
+                  text={reported ? "Flagged" : "Flag"}
+                />
+                <div>
+                  <ReportBox reportid={id} contentType={contentType}/>
+                </div>
+              </Popover>
+          } 
         </div>
       </div>
     );

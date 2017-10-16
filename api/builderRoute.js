@@ -32,9 +32,6 @@ module.exports = function(app) {
 
   app.delete("/api/builder/islands/delete", (req, res) => {
 
-    /*const q = "delete from islands where islands.id = '" + req.query.id + "'";
-    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
-
     db.islands.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();
     });    
@@ -74,9 +71,6 @@ module.exports = function(app) {
   });
 
   app.delete("/api/builder/levels/delete", (req, res) => {
-
-    /*const q = "delete from levels where levels.id = '" + req.query.id + "'";
-    db.query(q, {type: db.QueryTypes.DELETE}).then(u => res.json(u).end());*/
 
     db.levels.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();

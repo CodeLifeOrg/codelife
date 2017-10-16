@@ -242,6 +242,9 @@ class CodeEditor extends Component {
       else if (thisRule.type === "JS_VAR_EQUALS") {
         return thisRule.error_msg.replace("{{p1}}", `${rule.needle}`).replace("{{p2}}", `${rule.value}`);
       }
+      else if (thisRule.type === "JS_FUNC_EQUALS") {
+        return thisRule.error_msg.replace("{{p1}}", `${rule.needle}`).replace("{{p2}}", `${rule.argType}`); 
+      }
       else {
         return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`);
       }
@@ -332,6 +335,10 @@ class CodeEditor extends Component {
           js = `${r.needle}=undefined;\n${js}`;
           js += `parent.checkVarEquals('${r.needle}', ${r.needle});\n`;
         }
+        /*if (r.type === "JS_FUNC_EQUALS") {
+          js = `${r.needle}=undefined;\n${js}`;
+          js += `parent.checkFuncEquals('${')
+        }*/
       }
 
       const finaljs = `
@@ -424,24 +431,30 @@ class CodeEditor extends Component {
 
     return (
       <div id="codeEditor">
-        { this.props.showEditor
-          ? <div className="code">
+        { 
+          this.props.showEditor
+            ? <div className="code">
               <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
-              { !this.props.blurred
-                ? <AceWrapper
+              { 
+                !this.props.blurred
+                  ? <AceWrapper
                     className="editor"
                     ref={ comp => this.editor = comp }
                     onChange={this.onChangeText.bind(this)}
                     value={currentText}
                     {...this.props}
                   />
-                : <pre className="editor blurry-text">{currentText}</pre>
+                  : <pre className="editor blurry-text">{currentText}</pre>
               }
-              { this.props.blurred ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island ? island : "" }` }>
-                  <div className="pt-popover-content">
-                    { t("Codeblock's code will be shown after you complete the last level of this island.") }
-                  </div>
-                </div> : null }
+              { 
+                this.props.blurred 
+                  ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island ? island : "" }` }>
+                    <div className="pt-popover-content">
+                      { t("Codeblock's code will be shown after you complete the last level of this island.") }
+                    </div>
+                  </div> 
+                  : null 
+              }
               <div className={ `drawer ${openRules ? "open" : ""}` }>
                 <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
                   <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
@@ -450,13 +463,13 @@ class CodeEditor extends Component {
                 { this.getValidationBox() }
               </div>
             </div>
-          : null
+            : null
         }
         <div className="render">
           <div className="panel-title">
             { island
-            ? <img className="favicon" src={ `/islands/${island}-small.png` } />
-            : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
+              ? <img className="favicon" src={ `/islands/${island}-small.png` } />
+              : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
           <iframe className="iframe" id="iframe" ref="rc" />

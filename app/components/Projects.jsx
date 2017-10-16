@@ -22,7 +22,6 @@ class Projects extends Component {
   componentDidMount() {
     axios.get("/api/projects/").then(resp => {
       const projects = resp.data.filter(p => p.status !== "banned" && Number(p.reports) < Constants.FLAG_COUNT_HIDE);
-      console.log(resp.data, projects);
       projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {

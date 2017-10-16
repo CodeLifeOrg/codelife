@@ -6,13 +6,6 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  /*app.post("/api/profile/setsharing", (req, res) => {
-    console.log(req.body);
-    const {sharing, uid} = req.body;
-    db.userprofiles.update({sharing}, {where: {uid}}).then(u => res.json(u).end());
-
-  });*/
-
   app.post("/api/profile/update", (req, res) => {
     const {uid} = req.body;
     db.userprofiles.update(req.body, {where: {uid}}).then(u => res.json(u).end());  

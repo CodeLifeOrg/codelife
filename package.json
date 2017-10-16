@@ -26,7 +26,7 @@
   "homepage": "https://github.com/Datawheel/codelife#readme",
   "dependencies": {
     "@blueprintjs/datetime": "^1.19.0",
-    "@blueprintjs/labs": "^0.4.0",
+    "@blueprintjs/labs": "^0.11.0",
     "bcrypt": "^1.0.2",
     "cpf_cnpj": "^0.2.0",
     "css": "git+https://github.com/Datawheel/css.git",

@@ -70,7 +70,7 @@ class Profile extends Component {
 
     const newSharing = e.target.checked ? "true" : "false";
     const uid = profileUser.uid;
-    axios.post("/api/profile/setsharing", {sharing: newSharing, uid}).then(resp => {
+    axios.post("/api/profile/update", {sharing: newSharing, uid}).then(resp => {
       if (resp.status === 200) {
         console.log("updated");
         this.setState({sharing: !sharing});

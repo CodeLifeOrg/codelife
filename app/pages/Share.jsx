@@ -20,6 +20,7 @@ class Share extends Component {
 
   renderPage() {
     if (this.refs.rc) {
+
       const hideContent = Number(this.state.content.reports >= Constants.FLAG_COUNT_BAN || this.state.content.status === "banned" || this.state.content.sharing === "false");
       const content = hideContent ? "This content has been disabled." : this.state.content.studentcontent;
       const doc = this.refs.rc.contentWindow.document;
@@ -36,6 +37,7 @@ class Share extends Component {
   componentDidMount() {
     const {username, filename} = this.props.params;
     let type = "";
+
     if (this.props.location.pathname.includes("/codeBlocks/")) type = "codeBlock";
     if (this.props.location.pathname.includes("/projects/")) type = "project";
     if (type === "codeBlock") {
@@ -51,10 +53,11 @@ class Share extends Component {
     if (type === "project") {
       const pget = axios.get(`/api/projects/byUsernameAndFilename?username=${username}&filename=${filename}`);
       const rget = axios.get("/api/reports");
-
       Promise.all([pget, rget]).then(resp => {
+        
         const content = resp[0].data[0];
         const reports = resp[1].data;
+        console.log(content, reports);
         this.setState({content, reports}, this.renderPage.bind(this));
       });
     }
@@ -90,6 +93,7 @@ class Share extends Component {
               interactionKind={PopoverInteractionKind.CLICK}
               popoverClassName="pt-popover-content-sizing"
               position={Position.TOP_RIGHT}
+              inline={true}
             >
               <Button
                 intent={reported ? "" : Intent.DANGER}

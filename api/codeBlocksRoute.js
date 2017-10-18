@@ -30,7 +30,7 @@ module.exports = function(app) {
 
   app.get("/api/codeBlocks/byUsernameAndFilename", (req, res) => {
 
-    const q = "select codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.likes, codeblocks.previewblob, codeblocks.lid, codeblocks.uid from codeblocks, users, userprofiles where codeblocks.uid = users.id AND AND users.id = userprofiles.uid AND codeblocks.snippetname = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
+    const q = "select codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.likes, codeblocks.previewblob, codeblocks.lid, codeblocks.uid from codeblocks, users, userprofiles where codeblocks.uid = users.id AND users.id = userprofiles.uid AND codeblocks.snippetname = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });

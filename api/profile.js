@@ -30,7 +30,18 @@ module.exports = function(app) {
       if (!users.length) {
         return res.json({error: "No user matched that username."});
       }
-      return res.json(users[0]).end();
+
+      const oldDate = new Date(users[0].last_upped);
+      const now = new Date();
+      if (now - oldDate > 1000 * 60 * 60 * 24 * 30) {
+        users[0].last_upped = now.toLocaleDateString().replace("/", "-");
+        users[0].reports = 5;
+        const payload = {last_upped: users[0].last_upped, reports: users[0].reports};
+        db.userprofiles.update(payload, {where: {uid: users[0].id}}).then(() => res.json(users[0]).end());  
+      }
+      else {
+        return res.json(users[0]).end();
+      }
     });
   });
 

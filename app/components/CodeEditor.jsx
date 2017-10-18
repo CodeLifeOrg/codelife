@@ -87,6 +87,7 @@ class CodeEditor extends Component {
     iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
     iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-variable"></span>;
     iconList.JS_FUNC_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
+    iconList.JS_MATCHES = <span className="pt-icon-standard pt-icon-search-text"></span>;
 
     const nameList = [];
     nameList.CONTAINS = "exists";
@@ -96,6 +97,7 @@ class CodeEditor extends Component {
     nameList.NESTS = "nests";
     nameList.JS_VAR_EQUALS = "equals";
     nameList.JS_FUNC_EQUALS = "invokes";
+    nameList.JS_MATCHES = "contains";
 
     const allRules = baseRules.concat(rulejson);
 
@@ -184,6 +186,10 @@ class CodeEditor extends Component {
     return r.passing;
   }
 
+  cvMatch(r) {
+
+  }
+
   checkForErrors(theText) {
     const jsonArray = himalaya.parse(theText);
     const {baseRules, rulejson} = this.state;
@@ -195,6 +201,8 @@ class CodeEditor extends Component {
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
+    //cv.JS_FUNC_EQUALS = 
+    //cv.JS_MATCH = this.cvMatch.bind(this);
     for (const r of baseRules) {
       const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);

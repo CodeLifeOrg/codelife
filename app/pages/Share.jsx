@@ -3,7 +3,6 @@ import {translate} from "react-i18next";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
-import {Popover2} from "@blueprintjs/labs";
 import Constants from "utils/Constants.js";
 import "./Share.css";
 

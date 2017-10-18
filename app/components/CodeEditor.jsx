@@ -236,18 +236,16 @@ class CodeEditor extends Component {
   getErrorForRule(rule) {
     const thisRule = this.state.ruleErrors.find(r => r.type === rule.type);
     if (thisRule && thisRule.error_msg) {
-      if (thisRule.type === "NESTS") {
-        return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`).replace("{{p2}}", `<${rule.outer}>`);
-      }
-      else if (thisRule.type === "JS_VAR_EQUALS") {
-        return thisRule.error_msg.replace("{{p1}}", `${rule.needle}`).replace("{{p2}}", `${rule.value}`);
-      }
-      else if (thisRule.type === "JS_FUNC_EQUALS") {
-        return thisRule.error_msg.replace("{{p1}}", `${rule.needle}`).replace("{{p2}}", `${rule.argType}`); 
-      }
-      else {
-        return thisRule.error_msg.replace("{{p1}}", `<${rule.needle}>`);
-      }
+      const param1 = rule.needle;
+      let param2 = null;
+      if (rule.property !== undefined) param2 = rule.property;
+      if (rule.outer !== undefined) param2 = rule.outer;
+      if (rule.argType !== undefined) param2 = rule.argType;
+      if (rule.varType !== undefined) param2 = rule.varType;
+      const param3 = rule.value;
+      if (param3) return thisRule.error_msg_3.replace("{{p1}}", param1).replace("{{p2}}", param2).replace("{{p3}}", param3);
+      if (param2) return thisRule.error_msg_2.replace("{{p1}}", param1).replace("{{p2}}", param2);
+      return thisRule.error_msg.replace("{{p1}}", param1);
     }
     else {
       return "";

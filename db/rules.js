@@ -8,7 +8,11 @@ module.exports = function(sequelize, db) {
       },
       type: db.TEXT,
       error_msg: db.TEXT,
-      pt_error_msg: db.TEXT
+      pt_error_msg: db.TEXT,
+      error_msg_2: db.TEXT,
+      pt_error_msg_2: db.TEXT,
+      error_msg_3: db.TEXT,
+      pt_error_msg_3: db.TEXT
     },
     {
       freezeTableName: true,

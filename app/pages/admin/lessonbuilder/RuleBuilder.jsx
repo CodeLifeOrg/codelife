@@ -34,9 +34,9 @@ class RuleBuilder extends Component {
   saveContent() {
     const {rules} = this.state;
     for (const r of rules) {
-      axios.post("/api/rules/save", {id: r.id, error_msg: r.error_msg, pt_error_msg: r.pt_error_msg}).then(resp =>{
-        (resp.status === 200) ? console.log("success") : console.log("error");
-      })
+      axios.post("/api/rules/save", {id: r.id, error_msg: r.error_msg, pt_error_msg: r.pt_error_msg}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
     }
   }
 
@@ -48,10 +48,26 @@ class RuleBuilder extends Component {
 
     const ruleItems = rules.map(r => {
       return (
-        <div>
-          <input className="pt-input" style={{width: "200px", margin: "5px"}} id={r.id} disabled type="text" placeholder="Rule Type" dir="auto" value={r.type} />
+        <div style={{marginBottom: "10px"}}>
+          <span style={{fontSize: "16px"}}>{r.type}</span><br/>
           <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
           <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
+          { 
+            r.error_msg_2 
+              ? <div>
+                <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
+                <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} /> 
+              </div>
+              : null  
+          }
+          { 
+            r.error_msg_3 
+              ? <div>
+                <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
+                <input className="pt-input" style={{width: "400px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} /> 
+              </div>
+              : null  
+          }   
         </div>
       );
     });

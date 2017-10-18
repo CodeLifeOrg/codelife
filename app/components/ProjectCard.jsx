@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Popover, PopoverInteractionKind, Intent, Position, Button, Dialog} from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/labs";
+import {Popper} from "popper.js";
 import "moment/locale/pt-br";
 import moment from "moment";
 import ReportBox from "components/ReportBox";
@@ -66,10 +68,10 @@ class ProjectCard extends Component {
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
             </div>
             <div className="pt-dialog-footer-actions">
-              <Popover
+              <Popover2
                 interactionKind={PopoverInteractionKind.CLICK}
                 popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
+                placement="top-right"
               >
                 <Button
                   intent={reported ? "" : Intent.DANGER}
@@ -79,7 +81,7 @@ class ProjectCard extends Component {
                 <div>
                  <ReportBox reportid={id} contentType="project"/>
                 </div>
-              </Popover>
+              </Popover2>
               <Button
                 intent={ Intent.PRIMARY }
                 onClick={ this.toggleDialog.bind(this) }

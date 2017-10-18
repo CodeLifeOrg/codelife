@@ -89,64 +89,38 @@ class ReportBox extends Component {
     const {t} = this.props;
     const {mounted, previousReport, comment, userProfile} = this.state;
 
-    /* Due to a limitation of blueprint's popover library, if you change the content of a Popover
-    after it is opened, it maintains its anchor point.  Therefore, for the split second that we return "Loading"
-    we create a tiny window, then when the DB populates, the Popover fills in off the screen using the original 
-    smaller loading point.  To get around that, we fill the popover here with dummy data when not mounted, 
-    just to get the size right.
-    TODO: Find a better way to do this.  
-      - Blueprint may provide a better positioning switch for this
-      - Get the data outside of this reportBox so it needn't hit the DB on click
-    */
-    if (!mounted) {
-      return <div>
-        <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>Loading...</div>
-        <RadioGroup
-          label={t("Loading History...")}
-          name="group"
-          disabled={true}
-          selectedValue={this.state.reason}
-        >
-          <Radio label="Inappropriate Content" value="inappropriate-content" />
-          <Radio label="Bullying or Abuse" value="bullying-abuse" />
-          <Radio label="Malicious Content" value="malicious-content" /><br/>
-        </RadioGroup>
-        {t("Additional Comments")}
-        <textarea className="pt-input" dir="auto" value={comment} disabled={true}></textarea><br/><br/>
-        <Button className="pt-button pt-intent-warning" key="submit" >{t("Loading...")}</Button>
-      </div>;
-    }
+    const disabled = previousReport || !userProfile || userProfile.reports <= 0;
+    const isAdmin = this.props.auth.user.role === 2;
 
     return (
       <div style={{color: "black"}}>
-        { 
-          this.props.auth.user.role <= 1 
-            ? userProfile.reports > 0 
-              ? <div>
-                <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>Flag Inappropriate Content</div>
-                <RadioGroup
-                  label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
-                  name="group"
-                  disabled={previousReport}
-                  onChange={this.handleChangeReason.bind(this)}
-                  selectedValue={this.state.reason}
-                >
-                  <Radio label="Inappropriate Content" value="inappropriate-content" />
-                  <Radio label="Bullying or Abuse" value="bullying-abuse" />
-                  <Radio label="Malicious Content" value="malicious-content" /><br/>
-                </RadioGroup>
-                {t("Additional Comments")}
-                <textarea className="pt-input" dir="auto" value={comment} disabled={previousReport} onChange={this.handleChangeComment.bind(this)}></textarea><br/><br/>
-                {!previousReport ? <Button className="pt-button pt-intent-success" key="submit" onClick={this.submitReport.bind(this)}>{t("Submit Report")}</Button> : null } 
-              </div>
-              : <div>
-                { t("You have reached your flag limit for this month.") }
-              </div>
-            : <div>
-              <Button className="pt-button pt-intent-danger" key="ban" onClick={this.banPage.bind(this)}>{t("Ban this Page")}</Button>
-            </div>       
-        }
-      </div>
+        <div>
+          <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>
+            {
+              userProfile 
+                ? userProfile.reports > 0 
+                  ? t("Flag Inappropriate Content") 
+                  : t("Monthly Flag Limit Reached")
+                : t("Loading")
+            }
+          </div>
+          <RadioGroup
+            label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
+            name="group"
+            disabled={disabled}
+            onChange={this.handleChangeReason.bind(this)}
+            selectedValue={this.state.reason}
+          >
+            <Radio label="Inappropriate Content" value="inappropriate-content" />
+            <Radio label="Bullying or Abuse" value="bullying-abuse" />
+            <Radio label="Malicious Content" value="malicious-content" /><br/>
+          </RadioGroup>
+          {t("Additional Comments")}
+          <textarea className="pt-input" dir="auto" value={comment} disabled={disabled} onChange={this.handleChangeComment.bind(this)}></textarea><br/><br/>
+          <Button style={{marginRight: "10px"}}className="pt-button pt-intent-success" disabled={disabled} key="submit" onClick={this.submitReport.bind(this)}>{t("Submit Report")}</Button>
+          {isAdmin ? <Button className="pt-button pt-intent-danger" key="ban" onClick={this.banPage.bind(this)}>{t("Ban this Page")}</Button> : null }
+        </div>
+      </div>  
     );
   }
 }

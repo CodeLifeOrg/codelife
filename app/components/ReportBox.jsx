@@ -89,7 +89,33 @@ class ReportBox extends Component {
     const {t} = this.props;
     const {mounted, previousReport, comment, userProfile} = this.state;
 
-    if (!mounted) return <div>Loading</div>;
+    /* Due to a limitation of blueprint's popover library, if you change the content of a Popover
+    after it is opened, it maintains its anchor point.  Therefore, for the split second that we return "Loading"
+    we create a tiny window, then when the DB populates, the Popover fills in off the screen using the original 
+    smaller loading point.  To get around that, we fill the popover here with dummy data when not mounted, 
+    just to get the size right.
+    TODO: Find a better way to do this.  
+      - Blueprint may provide a better positioning switch for this
+      - Get the data outside of this reportBox so it needn't hit the DB on click
+    */
+    if (!mounted) {
+      return <div>
+        <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>Loading...</div>
+        <RadioGroup
+          label={t("Loading History...")}
+          name="group"
+          disabled={true}
+          selectedValue={this.state.reason}
+        >
+          <Radio label="Inappropriate Content" value="inappropriate-content" />
+          <Radio label="Bullying or Abuse" value="bullying-abuse" />
+          <Radio label="Malicious Content" value="malicious-content" /><br/>
+        </RadioGroup>
+        {t("Additional Comments")}
+        <textarea className="pt-input" dir="auto" value={comment} disabled={true}></textarea><br/><br/>
+        <Button className="pt-button pt-intent-warning" key="submit" >{t("Loading...")}</Button>
+      </div>;
+    }
 
     return (
       <div style={{color: "black"}}>

@@ -152,11 +152,13 @@ class ReportViewer extends Component {
         <div className="report-list" >
           <table className="pt-table pt-striped pt-interactive" style={{width: "1000px"}}>
             <thead>
-              <th>Page</th>
-              <th>Author</th>
-              <th>Reasons</th>
-              <th>Comments</th>
-              <th>Action</th>
+              <tr>
+                <th>Page</th>
+                <th>Author</th>
+                <th>Reasons</th>
+                <th>Comments</th>
+                <th>Action</th>
+              </tr>
             </thead>
             <tbody>{codeblockItems}</tbody>
           </table>
@@ -165,11 +167,13 @@ class ReportViewer extends Component {
         <div className="report-list">
           <table className="pt-table pt-striped pt-interactive" style={{width: "1000px"}}>
              <thead>
-              <th>Page</th>
-              <th>Author</th>
-              <th>Reason</th>
-              <th>Comments</th>
-              <th>Actions</th>
+               <tr>
+                <th>Page</th>
+                <th>Author</th>
+                <th>Reason</th>
+                <th>Comments</th>
+                <th>Actions</th>
+              </tr>
             </thead>
             <tbody>{projectItems}</tbody>
           </table>

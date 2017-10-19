@@ -174,7 +174,7 @@ class CodeEditor extends Component {
         arr.push(newObj);
       }
       else {
-        if (n.children && n.children[0] && n.children[0].content) this.setState({currentJS: n.children[0].content});
+        if (n.children && n.children[0] && n.children[0].content) this.setState({currentJS: n.children[0].content}, this.checkForErrors.bind(this));
       }
     }
     return arr;
@@ -186,12 +186,15 @@ class CodeEditor extends Component {
     return r.passing;
   }
 
-  cvMatch(r) {
-
+  cvMatch(rule, haystack) {
+    console.log(rule.regex);
+    return haystack.search(new RegExp(rule.regex)) !== -1;
   }
 
-  checkForErrors(theText) {
-    const jsonArray = himalaya.parse(theText);
+  checkForErrors() {
+    const theText = this.state.currentText;
+    const theJS = this.state.currentJS;
+    const theJSON = himalaya.parse(theText);
     const {baseRules, rulejson} = this.state;
     let errors = 0;
     const cv = [];
@@ -201,15 +204,17 @@ class CodeEditor extends Component {
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
-    //cv.JS_FUNC_EQUALS = 
-    //cv.JS_MATCH = this.cvMatch.bind(this);
+    cv.JS_MATCHES = this.cvMatch.bind(this);
+    let payload = theText;
     for (const r of baseRules) {
-      const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
+      if (r.type === "CSS_CONTAINS") payload = theJSON;
+      if (r.type === "JS_MATCHES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
     for (const r of rulejson) {
-      const payload = r.type === "CSS_CONTAINS" ? jsonArray : theText;
+      if (r.type === "CSS_CONTAINS") payload = theJSON;
+      if (r.type === "JS_MATCHES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
@@ -228,12 +233,12 @@ class CodeEditor extends Component {
   renderText() {
     if (this.refs.rc) {
       let theText = this.state.currentText;
-      this.checkForErrors(theText);
       if (theText.includes("script")) {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
         theText = toHTML(newJSON);
       }
+      this.checkForErrors();
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
       doc.write(theText);
@@ -341,10 +346,6 @@ class CodeEditor extends Component {
           js = `${r.needle}=undefined;\n${js}`;
           js += `parent.checkVarEquals('${r.needle}', ${r.needle});\n`;
         }
-        /*if (r.type === "JS_FUNC_EQUALS") {
-          js = `${r.needle}=undefined;\n${js}`;
-          js += `parent.checkFuncEquals('${')
-        }*/
       }
 
       const finaljs = `
@@ -366,7 +367,7 @@ class CodeEditor extends Component {
         doc.close();
       }
 
-      this.checkForErrors(theText);
+      this.checkForErrors();
     }
   }
 

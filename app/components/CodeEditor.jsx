@@ -38,6 +38,7 @@ class CodeEditor extends Component {
       window.myCatch = this.myCatch.bind(this);
       window.myLog = this.myLog.bind(this);
       window.checkVarEquals = this.checkVarEquals.bind(this);
+      window.checkFuncEquals = this.checkFuncEquals.bind(this);
     }
   }
 
@@ -186,8 +187,11 @@ class CodeEditor extends Component {
     return r.passing;
   }
 
+  cvFunc(r) {
+    return r.passing;
+  }
+
   cvMatch(rule, haystack) {
-    console.log(rule.regex);
     return haystack.search(new RegExp(rule.regex)) !== -1;
   }
 
@@ -204,6 +208,7 @@ class CodeEditor extends Component {
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
+    cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);
     cv.JS_MATCHES = this.cvMatch.bind(this);
     let payload = theText;
     for (const r of baseRules) {
@@ -297,8 +302,31 @@ class CodeEditor extends Component {
     return t;
   }
 
+  checkFuncEquals(needle, value, matched) {
+    const {rulejson} = this.state;
+    // TODO: Optimization - Change this from a loop to a filter/find?
+    for (const r of rulejson) {
+      if (r.needle === needle) {
+        // If we have been given type and value, check for both
+        if (r.argType && r.value) {
+          r.passing = matched && typeof value === r.argType && value == r.value;
+        }
+        // If we have been given type only, check only for that
+        else if (r.argType && !r.value) {
+          r.passing = matched && typeof value === r.argType;
+        }
+        // Otherwise, we are checking only for existence
+        else {
+          r.passing = matched;
+        }
+      }
+    }
+    this.setState({rulejson});
+  }
+
   checkVarEquals(needle, value) {
     const {rulejson} = this.state;
+    // TODO: Optimization - Change this from a loop to a filter/find?
     for (const r of rulejson) {
       if (r.needle === needle) {
         // If we have been given type and value, check for both
@@ -311,7 +339,7 @@ class CodeEditor extends Component {
         }
         // Otherwise, we are checking only for existence
         else {
-          r.passing = value !== undefined;
+          r.passing = typeof value !== undefined;
         }
       }
     }
@@ -341,10 +369,22 @@ class CodeEditor extends Component {
 
       let js = this.state.currentJS.split("console.log").join("parent.myLog");
 
+      const handled = [];
+
       for (const r of this.state.rulejson) {
         if (r.type === "JS_VAR_EQUALS") {
-          js = `${r.needle}=undefined;\n${js}`;
-          js += `parent.checkVarEquals('${r.needle}', ${r.needle});\n`;
+          if (!handled.includes(r.needle)) {
+            js = `${r.needle}=undefined;\n${js}`;
+            js += `parent.checkVarEquals('${r.needle}', ${r.needle});\n`;
+            handled.push(r.needle);
+          }
+        }
+        if (r.type === "JS_FUNC_EQUALS") {
+          const re = new RegExp(`(${r.needle})\\((\\s*([^)]+?)\\s*)\\)`);
+          const result = re.exec(js);
+          const matched = result !== null;
+          const arg = result ? result[2] : null;          
+          js += `parent.checkFuncEquals('${r.needle}', ${arg}, ${matched});\n`; 
         }
       }
 

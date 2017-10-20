@@ -37,7 +37,7 @@ class CodeEditor extends Component {
     if (window) {
       window.myCatch = this.myCatch.bind(this);
       window.myLog = this.myLog.bind(this);
-      window.checkVarEquals = this.checkVarEquals.bind(this);
+      window.checkJVMState = this.checkJVMState.bind(this);
       window.checkFuncEquals = this.checkFuncEquals.bind(this);
     }
   }
@@ -302,48 +302,26 @@ class CodeEditor extends Component {
     return t;
   }
 
-  checkFuncEquals(needle, value, matched) {
+  checkJVMState(needle, value) {
     const {rulejson} = this.state;
-    // TODO: Optimization - Change this from a loop to a filter/find?
     for (const r of rulejson) {
       if (r.needle === needle) {
-        // If we have been given type and value, check for both
-        if (r.argType && r.value) {
-          r.passing = matched && typeof value === r.argType && value == r.value;
+        let rType = null;
+        if (r.type === "JS_FUNC_EQUALS") rType = r.argType;
+        if (r.type === "JS_VAR_EQUALS") rType = r.varType;
+        const rVal = r.value;
+        if (rType && rVal) {
+          r.passing = typeof value === rType && value == rVal;
         }
-        // If we have been given type only, check only for that
-        else if (r.argType && !r.value) {
-          r.passing = matched && typeof value === r.argType;
+        else if (rType && !rVal) {
+          r.passing = typeof value === rType;
         }
-        // Otherwise, we are checking only for existence
-        else {
-          r.passing = matched;
-        }
-      }
-    }
-    this.setState({rulejson});
-  }
-
-  checkVarEquals(needle, value) {
-    const {rulejson} = this.state;
-    // TODO: Optimization - Change this from a loop to a filter/find?
-    for (const r of rulejson) {
-      if (r.needle === needle) {
-        // If we have been given type and value, check for both
-        if (r.varType && r.value) {
-          r.passing = typeof value === r.varType && value == r.value;
-        }
-        // If we have been given type only, check only for that
-        else if (r.varType && !r.value) {
-          r.passing = typeof value === r.varType;
-        }
-        // Otherwise, we are checking only for existence
-        else {
+        else if (!rType && !rVal && r.type === "JS_VAR_EQUALS") {
           r.passing = typeof value !== undefined;
         }
       }
     }
-    this.setState({rulejson});
+    this.forceUpdate();
   }
 
   wrapJS(theText) {
@@ -373,18 +351,19 @@ class CodeEditor extends Component {
 
       for (const r of this.state.rulejson) {
         if (r.type === "JS_VAR_EQUALS") {
+          r.passing = false;
           if (!handled.includes(r.needle)) {
             js = `${r.needle}=undefined;\n${js}`;
-            js += `parent.checkVarEquals('${r.needle}', ${r.needle});\n`;
+            js += `parent.checkJVMState('${r.needle}', ${r.needle});\n`;
             handled.push(r.needle);
           }
         }
-        if (r.type === "JS_FUNC_EQUALS") {
+        else if (r.type === "JS_FUNC_EQUALS") {
           const re = new RegExp(`(${r.needle})\\((\\s*([^)]+?)\\s*)\\)`);
           const result = re.exec(js);
-          const matched = result !== null;
+          r.passing = result !== null;
           const arg = result ? result[2] : null;          
-          js += `parent.checkFuncEquals('${r.needle}', ${arg}, ${matched});\n`; 
+          js += `parent.checkJVMState('${r.needle}', ${arg});\n`; 
         }
       }
 

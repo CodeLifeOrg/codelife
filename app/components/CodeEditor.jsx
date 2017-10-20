@@ -88,6 +88,7 @@ class CodeEditor extends Component {
     iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-variable"></span>;
     iconList.JS_FUNC_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
     iconList.JS_MATCHES = <span className="pt-icon-standard pt-icon-search-text"></span>;
+    iconList.JS_USES = <span className="pt-icon-standard pt-icon-derive-column"></span>;
 
     const nameList = [];
     nameList.CONTAINS = "exists";
@@ -98,6 +99,7 @@ class CodeEditor extends Component {
     nameList.JS_VAR_EQUALS = "equals";
     nameList.JS_FUNC_EQUALS = "invokes";
     nameList.JS_MATCHES = "contains";
+    nameList.JS_USES = "implements";
 
     const allRules = baseRules.concat(rulejson);
 
@@ -191,7 +193,17 @@ class CodeEditor extends Component {
   }
 
   cvMatch(rule, haystack) {
-    return haystack.search(new RegExp(rule.regex)) !== -1;
+    return haystack.search(new RegExp(rule.regex)) >= 0;
+  }
+
+  cvUses(rule, haystack) {
+    const res = [];
+    res.while = new RegExp("while\\s*\\([^\\)]*\\)\\s*{[^}]*}", "g");
+    res.for = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
+    res.if = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
+    console.log(res[rule.needle]);
+    console.log(res[rule.needle] && haystack.search(res[rule.needle]) >= 0);
+    return res[rule.needle] && haystack.search(res[rule.needle]) >= 0;
   }
 
   checkForErrors() {
@@ -209,16 +221,17 @@ class CodeEditor extends Component {
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
     cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);
     cv.JS_MATCHES = this.cvMatch.bind(this);
+    cv.JS_USES = this.cvUses.bind(this);
     let payload = theText;
     for (const r of baseRules) {
       if (r.type === "CSS_CONTAINS") payload = theJSON;
-      if (r.type === "JS_MATCHES") payload = theJS;
+      if (r.type === "JS_MATCHES" || r.type === "JS_USES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
     for (const r of rulejson) {
       if (r.type === "CSS_CONTAINS") payload = theJSON;
-      if (r.type === "JS_MATCHES") payload = theJS;
+      if (r.type === "JS_MATCHES" || r.type === "JS_USES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
@@ -367,7 +380,6 @@ class CodeEditor extends Component {
           if (result) result = result.map(this.reverse);
           r.passing = result !== null;
           const arg = result ? result[1] : null;
-
           js += `parent.checkJVMState('${r.needle}', ${arg});\n`; 
         }
       }

@@ -13,6 +13,11 @@ import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfCl
 
 import "./CodeEditor.css";
 
+function receiveMessage(event) {
+  if (event.origin !== "http://jimmymullen.com") return;
+  this.myPost(...event.data);
+}
+
 class CodeEditor extends Component {
 
   constructor(props) {
@@ -34,10 +39,9 @@ class CodeEditor extends Component {
       openRules: false,
       openConsole: false
     };
+    
     if (window) {
-      window.myCatch = this.myCatch.bind(this);
-      window.myLog = this.myLog.bind(this);
-      window.checkJVMState = this.checkJVMState.bind(this);
+      window.addEventListener("message", receiveMessage.bind(this), false);
     }
   }
 
@@ -50,6 +54,7 @@ class CodeEditor extends Component {
       const baseRules = this.getBaseRules();
       this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
       if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+
     });
   }
 
@@ -67,7 +72,6 @@ class CodeEditor extends Component {
       {type: "NESTS", needle: "body", outer: "html"},
       {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "title", outer: "head"}
-      // {type: "NESTS", needle: "style", outer: "head"}
     ];
     return baseRules;
   }
@@ -201,8 +205,6 @@ class CodeEditor extends Component {
     res.while = new RegExp("while\\s*\\([^\\)]*\\)\\s*{[^}]*}", "g");
     res.for = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
     res.if = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
-    console.log(res[rule.needle]);
-    console.log(res[rule.needle] && haystack.search(res[rule.needle]) >= 0);
     return res[rule.needle] && haystack.search(res[rule.needle]) >= 0;
   }
 
@@ -247,6 +249,18 @@ class CodeEditor extends Component {
     this.setState({isPassing, goodRatio, intent});
   }
 
+  writeToIFrame(theText) {
+    /*if (this.refs.rc) {
+      const doc = this.refs.rc.contentWindow.document;
+      doc.open();
+      doc.write(theText);
+      doc.close();
+    }*/
+    if (this.refs.rc) {
+      this.refs.rc.contentWindow.postMessage(theText, "http://jimmymullen.com");
+    }
+  }
+
   renderText() {
     if (this.refs.rc) {
       let theText = this.state.currentText;
@@ -256,10 +270,7 @@ class CodeEditor extends Component {
         theText = toHTML(newJSON);
       }
       this.checkForErrors();
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(theText);
-      doc.close();
+      this.writeToIFrame(theText);
     }
   }
 
@@ -314,6 +325,20 @@ class CodeEditor extends Component {
     return t;
   }
 
+  myPost() {
+    const type = arguments[0];
+    if (type === "console") {
+      this.myLog(arguments[1]);
+    }
+    else if (type === "catch") {
+      this.myCatch(arguments[1]);
+    }
+    else if (type === "rule") {
+      this.checkJVMState(arguments[1], arguments[2]);
+    }
+    this.checkForErrors();
+  }
+
   checkJVMState(needle, value) {
     const {rulejson} = this.state;
     for (const r of rulejson) {
@@ -333,23 +358,6 @@ class CodeEditor extends Component {
         }
       }
     }
-    this.forceUpdate();
-  }
-
-  wrapJS(theText) {
-    let resp = theText.replace("<script>", "<script> try {");
-    resp = resp.replace("</script>", "} catch(e) { parent.myCatch(e); } </script>");
-    resp = resp.split("console.log").join("parent.myLog");
-    return resp;
-  }
-
-  jsRender() {
-    if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(this.wrapJS(this.state.currentText));
-      doc.close();
-    }
   }
 
   reverse(s) { 
@@ -358,10 +366,9 @@ class CodeEditor extends Component {
 
   internalRender() {
 
-    // TODO: Establish a reliable way to determine if we should show the execute button
     if (this.state.currentJS) {
 
-      let js = this.state.currentJS.split("console.log").join("parent.myLog");
+      let js = this.state.currentJS.split("console.log(").join("parent.myPost(\"console\",");
 
       const handled = [];
 
@@ -370,7 +377,7 @@ class CodeEditor extends Component {
           r.passing = false;
           if (!handled.includes(r.needle)) {
             js = `${r.needle}=undefined;\n${js}`;
-            js += `parent.checkJVMState('${r.needle}', ${r.needle});\n`;
+            js += `parent.myPost('rule', '${r.needle}', ${r.needle});\n`;
             handled.push(r.needle);
           }
         }
@@ -380,7 +387,7 @@ class CodeEditor extends Component {
           if (result) result = result.map(this.reverse);
           r.passing = result !== null;
           const arg = result ? result[1] : null;
-          js += `parent.checkJVMState('${r.needle}', ${arg});\n`; 
+          js += `parent.myPost('rule', '${r.needle}', ${arg});\n`; 
         }
       }
 
@@ -390,20 +397,13 @@ class CodeEditor extends Component {
           eval(js);
         }
         catch (e) {
-          parent.myCatch(e);
+          parent.myPost("catch", e);
         }
       `;
 
       const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
 
-      if (this.refs.rc) {
-        const doc = this.refs.rc.contentWindow.document;
-        doc.open();
-        doc.write(theText);
-        doc.close();
-      }
-
-      this.checkForErrors();
+      this.writeToIFrame(theText);
     }
   }
 
@@ -456,8 +456,8 @@ class CodeEditor extends Component {
       const t1 = this.evalType(args[0]);
       return <div className={`log ${t1}`} key={i}>
         { args.length === 1 && t1 === "error"
-        ? <span className="pt-icon-standard pt-icon-delete"></span>
-        : <span className="pt-icon-standard pt-icon-double-chevron-right"></span> }
+          ? <span className="pt-icon-standard pt-icon-delete"></span>
+          : <span className="pt-icon-standard pt-icon-double-chevron-right"></span> }
         {args.map((arg, x) => {
           const t = this.evalType(arg);
           let v = arg;
@@ -515,7 +515,7 @@ class CodeEditor extends Component {
               : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" id="iframe" ref="rc" />
+          <iframe className="iframe" id="iframe" ref="rc" src="http://secure.codelife.com/blank.html"/>
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
             <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
             <div className="contents">{consoleText}</div>

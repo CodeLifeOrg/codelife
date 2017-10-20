@@ -38,7 +38,6 @@ class CodeEditor extends Component {
       window.myCatch = this.myCatch.bind(this);
       window.myLog = this.myLog.bind(this);
       window.checkJVMState = this.checkJVMState.bind(this);
-      window.checkFuncEquals = this.checkFuncEquals.bind(this);
     }
   }
 
@@ -340,6 +339,10 @@ class CodeEditor extends Component {
     }
   }
 
+  reverse(s) { 
+    return s.split("").reverse().join("");
+  }
+
   internalRender() {
 
     // TODO: Establish a reliable way to determine if we should show the execute button
@@ -359,10 +362,12 @@ class CodeEditor extends Component {
           }
         }
         else if (r.type === "JS_FUNC_EQUALS") {
-          const re = new RegExp(`(${r.needle})\\((\\s*([^)]+?)\\s*)\\)`);
-          const result = re.exec(js);
+          const re = new RegExp(`\\)\\s*([^(]*?)\\s*\\(${this.reverse(r.needle)}(?!\\s*noitcnuf)`, "g");
+          let result = re.exec(this.reverse(js));
+          if (result) result = result.map(this.reverse);
           r.passing = result !== null;
-          const arg = result ? result[2] : null;          
+          const arg = result ? result[1] : null;
+
           js += `parent.checkJVMState('${r.needle}', ${arg});\n`; 
         }
       }

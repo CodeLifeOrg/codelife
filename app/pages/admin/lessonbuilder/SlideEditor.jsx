@@ -45,10 +45,10 @@ class SlideEditor extends Component {
     if (this.props.data.id !== this.state.data.id) {
       if (["TextCode", "RenderCode", "InputCode"].indexOf(this.props.data.type) !== -1) {
         if (this.editor) {
-          this.editor.getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
+          this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
         }
         if (this.pt_editor) {
-          this.pt_editor.getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
+          this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
         }
       }
       this.setState({data: this.props.data});

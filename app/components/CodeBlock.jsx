@@ -69,7 +69,7 @@ class CodeBlock extends Component {
     const {island} = this.props;
     let initialcontent = "";
     if (island && island.initialcontent) initialcontent = island.initialcontent;
-    this.editor.getWrappedInstance().setEntireContents(initialcontent);
+    this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(initialcontent);
     // this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
   }
@@ -79,7 +79,7 @@ class CodeBlock extends Component {
   }
 
   executeCode() {
-    this.editor.getWrappedInstance().executeCode();
+    this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
   changeFilename(e) {
@@ -89,7 +89,7 @@ class CodeBlock extends Component {
   shareCodeblock() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
-    if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
+    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
     }
     else {
@@ -101,12 +101,12 @@ class CodeBlock extends Component {
   verifyAndSaveCode() {
     const {t} = this.props;
     const {id: uid} = this.props.auth.user;
-    const studentcontent = this.editor.getWrappedInstance().getEntireContents();
+    const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
     let codeBlock = this.props.island.codeBlock;
     const iid = this.props.island.id;
     let name = t("myCodeblock", {islandName: this.props.island.name});
 
-    if (!this.editor.getWrappedInstance().isPassing()) {
+    if (!this.editor.getWrappedInstance().getWrappedInstance().isPassing()) {
       const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
       toast.show({message: t("Can't save non-passing code!"), timeout: 1500, intent: Intent.DANGER});
       return;
@@ -122,7 +122,7 @@ class CodeBlock extends Component {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
-        if (this.editor) this.editor.getWrappedInstance().setChangeStatus(false);
+        if (this.editor) this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
         if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
         if (codeBlock) {
           // If there's already a snippet, and we've saved new data down to the

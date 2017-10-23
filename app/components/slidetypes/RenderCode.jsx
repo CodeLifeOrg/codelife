@@ -20,13 +20,13 @@ class RenderCode extends Component {
   componentDidUpdate() {
     let content = "";
     if (this.props.htmlcontent2) content = this.props.htmlcontent2;
-    if (this.editor.getWrappedInstance().getEntireContents() !== content) {
-      this.editor.getWrappedInstance().setEntireContents(content);
+    if (this.editor.getWrappedInstance().getWrappedInstance().getEntireContents() !== content) {
+      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(content);
     }
   }
 
   executeCode() {
-    this.editor.getWrappedInstance().executeCode();
+    this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
   render() {

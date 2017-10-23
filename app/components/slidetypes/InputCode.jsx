@@ -31,7 +31,7 @@ class InputCode extends Component {
     const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
     if (this.state.baseText !== newText) {
       this.setState({baseText: newText, gemEarned: false});
-      this.editor.getWrappedInstance().setEntireContents(newText);
+      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newText);
     }
   }
 
@@ -39,7 +39,7 @@ class InputCode extends Component {
     const {t} = this.props;
     const {gemEarned} = this.state;
     const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
-    if (this.editor.getWrappedInstance().isPassing()) {
+    if (this.editor.getWrappedInstance().getWrappedInstance().isPassing()) {
       toast.show({message: t("You got it right!"), timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
       if (!gemEarned && this.props.updateGems) this.props.updateGems(1);
@@ -53,7 +53,7 @@ class InputCode extends Component {
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
   resetAnswer() {
-    this.editor.getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
+    this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
     this.setState({resetAlert: false});
   }
 
@@ -62,7 +62,7 @@ class InputCode extends Component {
   }
 
   executeCode() {
-    this.editor.getWrappedInstance().executeCode();
+    this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
   render() {

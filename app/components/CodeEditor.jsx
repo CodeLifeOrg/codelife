@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
@@ -13,7 +14,7 @@ import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfCl
 import "./CodeEditor.css";
 
 function receiveMessage(event) {
-  if (event.origin !== "https://sandbox.codelife.com") return;
+  if (event.origin !== this.state.sandbox.root) return;
   this.myPost(...event.data);
 }
 
@@ -35,6 +36,7 @@ class CodeEditor extends Component {
       currentJS: "",
       jsRules: [],
       titleText: "",
+      sandbox: "",
       openRules: false,
       openConsole: false
     };
@@ -45,13 +47,19 @@ class CodeEditor extends Component {
   }
 
   componentDidMount() {
+    const sandbox = {
+      root: "https://codelife.tech",
+      page: "page.html"
+    };
+    if (this.props.location.hostname === "localhost") sandbox.page = "page_local.html";
+
     axios.get("/api/rules").then(resp => {
       const ruleErrors = resp.data;
       const currentText = this.props.initialValue ? this.props.initialValue : "";
       const rulejson = this.props.rulejson ? this.props.rulejson : [];
       const titleText = this.getTitleText(currentText);
       const baseRules = this.props.lax ? [] : this.getBaseRules();
-      this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
+      this.setState({mounted: true, currentText, sandbox, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
       if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
 
     });
@@ -256,7 +264,7 @@ class CodeEditor extends Component {
       doc.close();
     }*/
     if (this.refs.rc) {
-      this.refs.rc.contentWindow.postMessage(theText, "https://sandbox.codelife.com");
+      this.refs.rc.contentWindow.postMessage(theText, this.state.sandbox.root);
     }
   }
 
@@ -449,7 +457,7 @@ class CodeEditor extends Component {
 
   render() {
     const {codeTitle, island, t} = this.props;
-    const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules} = this.state;
+    const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
       const t1 = this.evalType(args[0]);
@@ -514,7 +522,7 @@ class CodeEditor extends Component {
               : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" id="iframe" ref="rc" src="https://sandbox.codelife.com/page_local.html"/>
+          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`}/>
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
             <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
             <div className="contents">{consoleText}</div>
@@ -533,5 +541,8 @@ CodeEditor.defaultProps = {
 };
 
 
+CodeEditor = connect(state => ({
+  location: state.location
+}), null, null, {withRef: true})(CodeEditor);
 CodeEditor = translate(undefined, {withRef: true})(CodeEditor);
 export default CodeEditor;

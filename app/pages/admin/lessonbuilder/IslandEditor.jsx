@@ -30,10 +30,10 @@ class IslandEditor extends Component {
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
       if (this.editor) {
-        this.editor.getWrappedInstance().setEntireContents(this.props.data.initialcontent);
+        this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.initialcontent);
       }
       if (this.pt_editor) {
-        this.pt_editor.getWrappedInstance().setEntireContents(this.props.data.pt_initialcontent); 
+        this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_initialcontent); 
       }
       this.setState({data: this.props.data});
     }

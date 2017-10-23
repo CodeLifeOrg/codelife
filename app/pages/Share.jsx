@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
@@ -45,8 +46,10 @@ class Share extends Component {
       const rget = axios.get("/api/reports");
 
       Promise.all([cbget, rget]).then(resp => {
+        
         const content = resp[0].data[0];
         const reports = resp[1].data;
+
         this.setState({content, reports}, this.renderPage.bind(this));
       });
     }
@@ -89,7 +92,7 @@ class Share extends Component {
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
           { 
-            content.status === "banned" 
+            content.status === "banned" || !this.props.auth.user
               ? null 
               : <Popover
                 interactionKind={PopoverInteractionKind.CLICK}
@@ -113,4 +116,9 @@ class Share extends Component {
   }
 }
 
-export default translate()(Share);
+Share = connect(state => ({
+  auth: state.auth
+}))(Share);
+Share = translate()(Share);
+export default Share;
+//export default translate()(Share);

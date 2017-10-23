@@ -30,7 +30,13 @@ module.exports = function(app) {
 
   app.get("/api/reports", (req, res) => {
 
-    db.reports.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+    if (req.user) {
+      db.reports.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());  
+    }
+    else {
+      res.json([]).end();
+    }
+    
 
   });
 

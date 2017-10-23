@@ -4,7 +4,6 @@ import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
 import {Intent, Position, Popover, ProgressBar, PopoverInteractionKind} from "@blueprintjs/core";
-import safeEval from "safe-eval";
 
 import AceWrapper from "components/AceWrapper";
 import Loading from "components/Loading";
@@ -14,7 +13,7 @@ import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfCl
 import "./CodeEditor.css";
 
 function receiveMessage(event) {
-  if (event.origin !== "http://jimmymullen.com") return;
+  if (event.origin !== "https://sandbox.codelife.com") return;
   this.myPost(...event.data);
 }
 
@@ -51,7 +50,7 @@ class CodeEditor extends Component {
       const currentText = this.props.initialValue ? this.props.initialValue : "";
       const rulejson = this.props.rulejson ? this.props.rulejson : [];
       const titleText = this.getTitleText(currentText);
-      const baseRules = this.getBaseRules();
+      const baseRules = this.props.lax ? [] : this.getBaseRules();
       this.setState({mounted: true, currentText, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
       if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
 
@@ -257,7 +256,7 @@ class CodeEditor extends Component {
       doc.close();
     }*/
     if (this.refs.rc) {
-      this.refs.rc.contentWindow.postMessage(theText, "http://jimmymullen.com");
+      this.refs.rc.contentWindow.postMessage(theText, "https://sandbox.codelife.com");
     }
   }
 
@@ -515,7 +514,7 @@ class CodeEditor extends Component {
               : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" id="iframe" ref="rc" src="http://secure.codelife.com/blank.html"/>
+          <iframe className="iframe" id="iframe" ref="rc" src="https://sandbox.codelife.com/page_local.html"/>
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
             <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
             <div className="contents">{consoleText}</div>

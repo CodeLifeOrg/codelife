@@ -28,26 +28,20 @@ class Studio extends Component {
 
   onCreateProject(project) {
     this.setState({currentProject: project});
-    if (this.editor.getWrappedInstance()) this.editor.getWrappedInstance().setEntireContents("");
+    if (this.editor.getWrappedInstance().getWrappedInstance()) this.editor.getWrappedInstance().getWrappedInstance().setEntireContents("");
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}/edit`);
   }
 
   onDeleteProject(newproject) {
-    if (newproject.id !== this.state.currentProject.id) this.editor.getWrappedInstance().setEntireContents(newproject.studentcontent);
+    if (newproject.id !== this.state.currentProject.id) this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
   }
 
-  /*
-  onClickSnippet(snippet) {
-    if (this.state.currentProject) this.editor.getWrappedInstance().insertTextAtCursor(snippet.studentcontent);
-  }
-  */
-
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
-      this.editor.getWrappedInstance().setEntireContents(resp.data[0].studentcontent);
+      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(resp.data[0].studentcontent);
       browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}/edit`);
     });
   }
@@ -55,7 +49,7 @@ class Studio extends Component {
   shareProject() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
-    if (this.editor && !this.editor.getWrappedInstance().changesMade()) {
+    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       // browserHistory.push(`/share/project/${this.state.currentProject.id}`);  
       browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);  
     }
@@ -75,7 +69,7 @@ class Studio extends Component {
     const {t} = this.props;
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
-      if (this.editor.getWrappedInstance().changesMade()) {
+      if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
         toast.show({message: t("Save your changes before opening a new webpage."), timeout: 1500, intent: Intent.WARNING});  
         return false;
       } 
@@ -98,12 +92,12 @@ class Studio extends Component {
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
-      const studentcontent = this.editor.getWrappedInstance().getEntireContents();
+      const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
       axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
-          this.editor.getWrappedInstance().setChangeStatus(false);
+          this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
         }
       });
     }
@@ -117,7 +111,7 @@ class Studio extends Component {
   }
 
   executeCode() {
-    this.editor.getWrappedInstance().executeCode();
+    this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
   render() {

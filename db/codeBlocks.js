@@ -12,7 +12,8 @@ module.exports = function(sequelize, db) {
       likes: db.INTEGER,
       previewblob: db.BLOB,
       lid: db.TEXT,
-      uid: db.TEXT
+      uid: db.TEXT,
+      status: db.TEXT
     }, 
     {
       freezeTableName: true,

@@ -59,6 +59,7 @@ class RulePicker extends Component {
         if (r.varType) obj.varType = r.varType;
         if (r.argType) obj.argType = r.argType;
         if (r.value) obj.value = r.value;
+        if (r.regex) obj.regex = r.regex;
         json.push(obj);
       }
     }
@@ -112,6 +113,7 @@ class RulePicker extends Component {
     param2.NESTS = "outer";
     param2.JS_VAR_EQUALS = "varType";
     param2.JS_FUNC_EQUALS = "argType";
+    param2.JS_MATCHES = "regex";
     const param3 = [];
     param3.CSS_CONTAINS = "value";
     param3.JS_VAR_EQUALS = "value";

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-
+import {Switch} from "@blueprintjs/core";
 import Loading from "components/Loading";
 
 import UserInfo from "./UserInfo";
@@ -30,7 +30,8 @@ class Profile extends Component {
     this.state = {
       loading: true,
       error: null,
-      profileUser: null
+      profileUser: null,
+      sharing: true
     };
   }
 
@@ -58,8 +59,25 @@ class Profile extends Component {
         this.setState({loading: false, error: responseData.error});
       }
       else {
-        this.setState({loading: false, profileUser: responseData});
+        const sharing = responseData.sharing === "true" ? true : false;
+        this.setState({loading: false, profileUser: responseData, sharing});
       }
+    });
+  }
+
+  handleChangeSharing(e) {
+    const {sharing, profileUser} = this.state;
+
+    const newSharing = e.target.checked ? "true" : "false";
+    const uid = profileUser.uid;
+    axios.post("/api/profile/update", {sharing: newSharing, uid}).then(resp => {
+      if (resp.status === 200) {
+        console.log("updated");
+        this.setState({sharing: !sharing});
+      }
+      else {
+        console.log("error");
+      }  
     });
   }
 
@@ -83,7 +101,9 @@ class Profile extends Component {
     return (
       <div id="profile">
         <aside className="profile-side">
+          
           <UserInfo user={profileUser} loggedInUser={loggedInUser} />
+          { this.props.user.role > 1 ? <Switch checked={this.state.sharing} label="Sharing Enabled" onChange={this.handleChangeSharing.bind(this)} /> : null }
           {/* <skillsList /> */}
         </aside>
         <content className="profile-info">

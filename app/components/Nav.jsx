@@ -21,7 +21,6 @@ class Nav extends Component {
         <div className="links">
           { auth.user
           ? <div>
-              <Link className="link" to="/lessonbuilder"><span className="pt-icon-standard pt-icon-cog" />{ t("Builder") }</Link>
               <Link className="link" to="/island"><span className="pt-icon-standard pt-icon-path-search" />{ t("Map") }</Link>
               <Link className="link" to={`/projects/${auth.user.username}`}><span className="pt-icon-standard pt-icon-book" />{ t("Projects") }</Link>
               <Popover
@@ -32,6 +31,7 @@ class Nav extends Component {
                 <Link className="link" to={ `/profile/${ auth.user.username }` }><span className="pt-icon-standard pt-icon-user" />{ auth.user.username }</Link>
                 <div>
                   <Link className="pt-button pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
+                  { auth.user.role > 0 ? <Link className="pt-button pt-fill" to="/admin">{ t("Admin") }</Link> : null }
                   <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>
                 </div>
               </Popover>

@@ -29,7 +29,7 @@ class ProjectCard extends Component {
 
     moment.locale("pt-BR");
 
-    const embedLink = `${ location.origin }/projects/${ username || user.username }/${ project.name }`;
+    const embedLink = `${ location.origin }/projects/${ username }/${ project.name }`;
 
     return (
       <div className="projectCard pt-card pt-elevation-0 pt-interactive" key={id}>
@@ -62,7 +62,7 @@ class ProjectCard extends Component {
           </div>
           <div className="pt-dialog-footer">          
             <div className="pt-dialog-footer-byline">
-              { t("Created by") } { username || user.username }
+              { t("Created by") } { username }
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
             </div>
             <div className="pt-dialog-footer-actions">

@@ -4,7 +4,9 @@ module.exports = function(app) {
 
   app.get("/api/projects", (req, res) => {
 
-    db.projects.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+    //db.projects.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
 
@@ -16,13 +18,15 @@ module.exports = function(app) {
 
   app.get("/api/projects/byuser", (req, res) => {
 
-    db.projects.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+    //db.projects.findAll({where: {uid: req.query.uid}}).then(u => res.json(u).end());
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, users.username, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, userprofiles, users where users.id = projects.uid AND projects.uid = userprofiles.uid AND projects.uid = '" + req.query.uid + "'";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
 
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
 
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified from projects, users where projects.uid = users.id AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, users, userprofiles where projects.uid = users.id AND users.id = userprofiles.uid AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
 
   });
@@ -31,6 +35,13 @@ module.exports = function(app) {
 
     db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {uid: req.body.uid, id: req.body.id}})
       .then(u => res.json(u).end());
+
+  });
+
+  app.post("/api/projects/setstatus", (req, res) => {
+    const {status, id} = req.body;
+
+    db.projects.update({status}, {where: {id}}).then(u => res.json(u).end());
 
   });
 

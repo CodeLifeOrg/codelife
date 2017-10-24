@@ -7,6 +7,7 @@ import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInt
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
 import IslandLink from "components/IslandLink";
+import Constants from "utils/Constants.js";
 
 import "./Level.css";
 
@@ -82,14 +83,17 @@ class Level extends Component {
           myCodeBlocks.push(cb);
         }
         else {
+          if (cb.reports >= Constants.FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false") cb.hidden = true;
           // TODO: do this in a database join, not here.
-          if (likes.find(l => l.likeid === cb.id)) {
-            cb.liked = true;
-            likedCodeBlocks.push(cb);
-          }
-          else {
-            cb.liked = false;
-            unlikedCodeBlocks.push(cb);
+          if (!cb.hidden) {
+            if (likes.find(l => l.likeid === cb.id)) {
+              cb.liked = true;
+              likedCodeBlocks.push(cb);
+            }
+            else {
+              cb.liked = false;
+              unlikedCodeBlocks.push(cb);
+            }
           }
         }
       }

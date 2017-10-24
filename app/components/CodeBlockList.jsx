@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import axios from "axios";
 import {Collapse} from "@blueprintjs/core";
 import CodeBlockCard from "components/CodeBlockCard";
+import Constants from "utils/Constants.js";
 import "./CodeBlockList.css";
 
 class CodeBlockList extends Component {
@@ -30,7 +31,7 @@ class CodeBlockList extends Component {
       const userProgress = resp[2].data;
       const likes = resp[3].data;
       const reports = resp[4].data;
-      console.log(reports);
+      islands.sort((a, b) => a.ordering - b.ordering);
       allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       for (const i of islands) {
         i.myCodeBlocks = [];
@@ -47,14 +48,17 @@ class CodeBlockList extends Component {
           }
           else {
             if (s.lid === i.id) {
+              if (s.reports >= Constants.FLAG_COUNT_HIDE || s.status === "banned" || s.sharing === "false") s.hidden = true;
               // TODO: move this to db call, don't do this here
-              if (likes.find(l => l.likeid === s.id)) {
-                s.liked = true;
-                i.likedCodeBlocks.push(s);
-              }
-              else {
-                s.liked = false;
-                i.unlikedCodeBlocks.push(s);
+              if (!s.hidden) {
+                if (likes.find(l => l.likeid === s.id)) {
+                  s.liked = true;
+                  i.likedCodeBlocks.push(s);
+                }
+                else {
+                  s.liked = false;
+                  i.unlikedCodeBlocks.push(s);
+                }
               }
             }
           }

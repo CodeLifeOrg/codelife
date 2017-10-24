@@ -3,8 +3,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import RulePicker from "pages/lessonbuilder/RulePicker";
-import QuizPicker from "pages/lessonbuilder/QuizPicker";
+import RulePicker from "pages/admin/lessonbuilder/RulePicker";
+import QuizPicker from "pages/admin/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor";
 import {Button, Dialog, Toaster, Position, Intent} from "@blueprintjs/core";
 
@@ -17,7 +17,7 @@ import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
 import CheatSheet from "components/slidetypes/CheatSheet";
 
-import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
+import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import "./SlideEditor.css";
 
@@ -45,10 +45,10 @@ class SlideEditor extends Component {
     if (this.props.data.id !== this.state.data.id) {
       if (["TextCode", "RenderCode", "InputCode"].indexOf(this.props.data.type) !== -1) {
         if (this.editor) {
-          this.editor.getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
+          this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
         }
         if (this.pt_editor) {
-          this.pt_editor.getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
+          this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
         }
       }
       this.setState({data: this.props.data});

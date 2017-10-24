@@ -4,9 +4,9 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor";
-import RulePicker from "pages/lessonbuilder/RulePicker";
+import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
-import QuillWrapper from "pages/lessonbuilder/QuillWrapper";
+import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 
 import "./IslandEditor.css";
@@ -30,10 +30,10 @@ class IslandEditor extends Component {
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
       if (this.editor) {
-        this.editor.getWrappedInstance().setEntireContents(this.props.data.initialcontent);
+        this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.initialcontent);
       }
       if (this.pt_editor) {
-        this.pt_editor.getWrappedInstance().setEntireContents(this.props.data.pt_initialcontent); 
+        this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_initialcontent); 
       }
       this.setState({data: this.props.data});
     }

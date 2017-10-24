@@ -257,12 +257,6 @@ class CodeEditor extends Component {
   }
 
   writeToIFrame(theText) {
-    /*if (this.refs.rc) {
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(theText);
-      doc.close();
-    }*/
     if (this.refs.rc) {
       this.refs.rc.contentWindow.postMessage(theText, this.state.sandbox.root);
     }
@@ -415,6 +409,14 @@ class CodeEditor extends Component {
   }
 
   /* External Functions for Parent Component to Call */
+
+  /* Additional Note on calling these external functions:
+    - CodeEditor is wrapped in two classes, connect (redux) and translate (i18n).  See bottom of file.
+    - This wrapping has the side effect of hiding public methods, such as the ones below.
+    - The solution to this is to provide the withRef:true flag, which exposes the component via getWrappedInstance()
+    - Because we are wrapping it twice, we have to call the wrap method twice to access these public methods.
+    - This is why you see this.editor.getWrappedInstance().getWrappedInstance().method() in several other files.
+  */
 
   setEntireContents(theText) {
     const titleText = this.getTitleText(theText);

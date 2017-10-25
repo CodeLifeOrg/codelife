@@ -14,8 +14,15 @@ import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfCl
 import "./CodeEditor.css";
 
 function receiveMessage(event) {
-  if (event.origin !== this.state.sandbox.root) return;
-  this.myPost(...event.data);
+  if (event.origin !== this.state.sandbox.root) {
+    return;
+  } 
+  if (event.data === "ready") {
+    this.setState({remoteReady: true});
+  } 
+  else {
+    this.myPost(...event.data);
+  }
 }
 
 class CodeEditor extends Component {
@@ -36,6 +43,7 @@ class CodeEditor extends Component {
       currentJS: "",
       jsRules: [],
       titleText: "",
+      remoteReady: false,
       sandbox: "",
       openRules: false,
       openConsole: false
@@ -294,6 +302,10 @@ class CodeEditor extends Component {
     }
   }
 
+  iFrameLoaded() {
+    this.writeToIFrame(this.state.currentText);
+  }
+
   onChangeText(theText) {
     const titleText = this.getTitleText(theText);
     this.setState({currentText: theText, changesMade: true, titleText}, this.renderText.bind(this));
@@ -524,7 +536,7 @@ class CodeEditor extends Component {
               : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`}/>
+          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} onLoad={this.iFrameLoaded.bind(this)}/>
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
             <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
             <div className="contents">{consoleText}</div>

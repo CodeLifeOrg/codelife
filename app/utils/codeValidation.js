@@ -1,20 +1,23 @@
 import css from "css";
 
-export const cvContainsSelfClosingTag = (rule, haystack) => {
+export const cvContainsSelfClosingTag = (rule, payload) => {
+  const haystack = payload.theText;
   const needle = rule.needle;
-  const open = haystack.indexOf(`<${needle}>`);
+  const open = haystack.indexOf(`<${needle}`);
   const close = haystack.indexOf("/>");
   return open !== -1 && close !== -1 && open < close;
 };
 
-export const cvContainsTag = (rule, haystack) => {
+export const cvContainsTag = (rule, payload) => {
+  const haystack = payload.theText;
   const needle = rule.needle;
   const open = haystack.indexOf(`<${needle}>`);
   const close = haystack.indexOf(`</${needle}>`);
   return open !== -1 && close !== -1 && open < close;
 };
 
-export const cvContainsOne = (rule, haystack) => {
+export const cvContainsOne = (rule, payload) => {
+  const haystack = payload.theText;
   const needle = rule.needle; 
   const open = haystack.indexOf(`<${needle}>`);
   const open2 = haystack.indexOf(`<${needle}>`, open + 1);
@@ -23,7 +26,8 @@ export const cvContainsOne = (rule, haystack) => {
   return open2 === -1 && close2 === -1;
 };
 
-export const cvNests = (rule, haystack) => {
+export const cvNests = (rule, payload) => {
+  const haystack = payload.theText;
   const outer = rule.outer;
   const needle = rule.needle;
   const outerOpen = haystack.indexOf(`<${outer}>`);
@@ -34,7 +38,8 @@ export const cvNests = (rule, haystack) => {
           outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
 };
 
-export const cvContainsStyle = (rule, haystack) => {
+export const cvContainsStyle = (rule, payload) => {
+  const haystack = payload.theJSON;
   const needle = rule.needle;
   const property = rule.property;
   const value = rule.value;

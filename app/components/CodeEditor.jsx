@@ -211,11 +211,13 @@ class CodeEditor extends Component {
     return r.passing;
   }
 
-  cvMatch(rule, haystack) {
+  cvMatch(rule, payload) {
+    const haystack = payload.theJS;
     return haystack.search(new RegExp(rule.regex)) >= 0;
   }
 
-  cvUses(rule, haystack) {
+  cvUses(rule, payload) {
+    const haystack = payload.theJS;
     const res = [];
     res.while = new RegExp("while\\s*\\([^\\)]*\\)\\s*{[^}]*}", "g");
     res.for = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
@@ -239,16 +241,12 @@ class CodeEditor extends Component {
     cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);
     cv.JS_MATCHES = this.cvMatch.bind(this);
     cv.JS_USES = this.cvUses.bind(this);
-    let payload = theText;
+    const payload = {theText, theJS, theJSON};
     for (const r of baseRules) {
-      if (r.type === "CSS_CONTAINS") payload = theJSON;
-      if (r.type === "JS_MATCHES" || r.type === "JS_USES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
     for (const r of rulejson) {
-      if (r.type === "CSS_CONTAINS") payload = theJSON;
-      if (r.type === "JS_MATCHES" || r.type === "JS_USES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }

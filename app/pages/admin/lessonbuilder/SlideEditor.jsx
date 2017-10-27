@@ -51,6 +51,9 @@ class SlideEditor extends Component {
           this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
         }
       }
+      for (const q of this.quills) {
+        if (q) q.quillRef.getEditor().setSelection(0);
+      }
       this.setState({data: this.props.data});
     }
   }
@@ -126,6 +129,8 @@ class SlideEditor extends Component {
     const {data} = this.state;
 
     if (!data) return <Loading />;
+
+    this.quills = [];
 
     const showQuiz = data.type === "Quiz";
     const showRules = data.type === "InputCode";
@@ -209,6 +214,7 @@ class SlideEditor extends Component {
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.htmlcontent1}
               onChange={this.handleEditor.bind(this, "htmlcontent1")} 
+              ref={c => this.quills.push(c) }
             />
           </label>
           <label className="pt-label">
@@ -217,6 +223,7 @@ class SlideEditor extends Component {
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_htmlcontent1}
               onChange={this.handleEditor.bind(this, "pt_htmlcontent1")} 
+              ref={c => this.quills.push(c) }
             />
           </label>
         </div>
@@ -247,6 +254,7 @@ class SlideEditor extends Component {
                     style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
                     value={this.state.data.htmlcontent2}
                     onChange={this.handleEditor.bind(this, "htmlcontent2")} 
+                    ref={c => this.quills.push(c) }
                   /> 
                 }
               </label>
@@ -264,6 +272,7 @@ class SlideEditor extends Component {
                     style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
                     value={this.state.data.pt_htmlcontent2}
                     onChange={this.handleEditor.bind(this, "pt_htmlcontent2")} 
+                    ref={c => this.quills.push(c) }
                   /> 
                 }
               </label>

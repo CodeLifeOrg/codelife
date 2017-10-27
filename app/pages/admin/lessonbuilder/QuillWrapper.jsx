@@ -18,10 +18,11 @@ export default class QuillWrapper extends Component {
         }
       };
       return <Quill
-                theme="snow"
-                modules={modules}
-                {...this.props} 
-              />;
+        theme="snow"
+        modules={modules}
+        ref={c => this.quillRef = c}
+        {...this.props} 
+      />;
     }
     return null;
   }

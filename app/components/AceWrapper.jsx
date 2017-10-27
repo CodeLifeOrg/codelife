@@ -11,7 +11,7 @@ export default class AceWrapper extends Component {
         ref={editor => this.editor = editor}
         showGutter={false} 
         wrapEnabled={false}
-        tabSize = "2"
+        tabSize = {2}
         mode="html" 
         setOptions={{behavioursEnabled: false}}
         editorProps={{

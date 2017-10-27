@@ -9,7 +9,7 @@ export default class QuillWrapper extends Component {
       const modules = {
         toolbar: [
           [{header: [1, 2, false]}],
-          ["bold", "italic", "underline", "code", "blockquote", "code-block"],
+          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
           [{list: "ordered"}, {list: "bullet"}],
           ["clean"]
         ],

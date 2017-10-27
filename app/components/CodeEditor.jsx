@@ -225,6 +225,21 @@ class CodeEditor extends Component {
     return res[rule.needle] && haystack.search(res[rule.needle]) >= 0;
   }
 
+  cvContainsTag(rule, payload) {
+    const html = payload.theText;
+    const needle = rule.needle;
+    const open = html.indexOf(`<${needle}>`);
+    const close = html.indexOf(`</${needle}>`);
+    const tagClosed = open !== -1 && close !== -1 && open < close;
+    
+    const json = payload.theJSON;
+    /* recursively check the children for attributes and values and check them
+    against the needles we get in the rule, and return based on that */
+
+    return tagClosed;
+
+  }
+
   checkForErrors() {
     const theText = this.state.currentText;
     const theJS = this.state.currentJS;
@@ -232,7 +247,8 @@ class CodeEditor extends Component {
     const {baseRules, rulejson} = this.state;
     let errors = 0;
     const cv = [];
-    cv.CONTAINS = cvContainsTag;
+    // cv.CONTAINS = cvContainsTag;
+    cv.CONTAINS = this.cvContainsTag.bind(this);
     cv.CONTAINS_ONE = cvContainsOne;
     cv.CSS_CONTAINS = cvContainsStyle;
     cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;

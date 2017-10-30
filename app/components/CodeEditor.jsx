@@ -232,6 +232,7 @@ class CodeEditor extends Component {
   attrCount(needle, attribute, value, json) {
     let count = 0;
     if (json.length === 0) return 0;
+    if (attribute === "class") attribute = "className";
     for (const node of json) {
       if (node.type === "Element" && node.tagName === needle && node.attributes[attribute]) {
         // if we have been provided a value, we must compare against it for a match

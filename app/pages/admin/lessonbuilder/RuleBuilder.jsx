@@ -34,7 +34,16 @@ class RuleBuilder extends Component {
   saveContent() {
     const {rules} = this.state;
     for (const r of rules) {
-      axios.post("/api/rules/save", {id: r.id, error_msg: r.error_msg, pt_error_msg: r.pt_error_msg}).then(resp => {
+      const payload = {
+        id: r.id,
+        error_msg: r.error_msg,
+        pt_error_msg: r.pt_error_msg,
+        error_msg_2: r.error_msg_2,
+        pt_error_msg_2: r.pt_error_msg_2,
+        error_msg_3: r.error_msg_3,
+        pt_error_msg_3: r.pt_error_msg_3
+      };
+      axios.post("/api/rules/save", payload).then(resp => {
         resp.status === 200 ? console.log("success") : console.log("error");
       });
     }

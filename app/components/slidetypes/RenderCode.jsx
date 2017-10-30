@@ -26,7 +26,9 @@ class RenderCode extends Component {
   }
 
   executeCode() {
-    this.editor.getWrappedInstance().getWrappedInstance().executeCode();
+    if (this.editor) {
+      this.editor.getWrappedInstance().getWrappedInstance().executeCode();
+    }
   }
 
   render() {

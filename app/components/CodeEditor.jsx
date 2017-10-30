@@ -13,18 +13,6 @@ import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfCl
 
 import "./CodeEditor.css";
 
-function receiveMessage(event) {
-  if (event.origin !== this.state.sandbox.root) {
-    return;
-  } 
-  if (event.data === "ready") {
-    this.setState({remoteReady: true});
-  } 
-  else {
-    this.myPost(...event.data);
-  }
-}
-
 class CodeEditor extends Component {
 
   constructor(props) {
@@ -48,13 +36,20 @@ class CodeEditor extends Component {
       openRules: false,
       openConsole: false
     };
-    
+    this.recRef = this.receiveMessage.bind(this);
+  }
+
+  componentWillUnmount() {
     if (window) {
-      window.addEventListener("message", receiveMessage.bind(this), false);
+      window.removeEventListener("message", this.recRef, false);
     }
   }
 
   componentDidMount() {
+    if (window) {
+      window.addEventListener("message", this.recRef, false);
+    }
+
     const sandbox = {
       root: "https://codelife.tech",
       page: "page.html"
@@ -94,6 +89,15 @@ class CodeEditor extends Component {
   getEditor() {
     if (this.editor) return this.editor.editor.editor;
     return undefined;
+  }
+
+  receiveMessage(event) {
+    if (event.origin !== this.state.sandbox.root) {
+      return;
+    } 
+    else if (this.state.mounted) {
+      this.handlePost.bind(this)(...event.data);
+    }
   }
 
   getValidationBox() {
@@ -225,19 +229,41 @@ class CodeEditor extends Component {
     return res[rule.needle] && haystack.search(res[rule.needle]) >= 0;
   }
 
+  attrCount(needle, attribute, value, json) {
+    let count = 0;
+    if (json.length === 0) return 0;
+    for (const node of json) {
+      if (node.type === "Element" && node.tagName === needle && node.attributes[attribute]) {
+        // if we have been provided a value, we must compare against it for a match
+        if (value) {
+          if (attribute === "className") {
+            if (node.attributes.className && node.attributes.className.includes(value)) count++;
+          }
+          else if (node.attributes[attribute] === value) count++;
+        }
+        // if we were not provided a value, then this is checking for attribute only, and we can pass
+        else {
+          count++;
+        }
+      }
+      if (node.children !== undefined) {
+        count += this.attrCount(needle, attribute, value, node.children);
+      }
+    }
+    return count;
+  }
+
   cvContainsTag(rule, payload) {
     const html = payload.theText;
-    const needle = rule.needle;
-    const open = html.indexOf(`<${needle}>`);
-    const close = html.indexOf(`</${needle}>`);
-    const tagClosed = open !== -1 && close !== -1 && open < close;
-    
     const json = payload.theJSON;
-    /* recursively check the children for attributes and values and check them
-    against the needles we get in the rule, and return based on that */
+    const open = html.indexOf(`<${rule.needle}`);
+    const close = html.indexOf(`</${rule.needle}>`);
+    const tagClosed = open !== -1 && close !== -1 && open < close;
 
-    return tagClosed;
+    let hasAttr = true;
+    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
 
+    return tagClosed && hasAttr;
   }
 
   checkForErrors() {
@@ -291,9 +317,11 @@ class CodeEditor extends Component {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
         theText = toHTML(newJSON);
+      } 
+      else {
+        this.checkForErrors.bind(this)();
       }
-      this.checkForErrors();
-      this.writeToIFrame(theText);
+      this.writeToIFrame.bind(this)(theText);
     }
   }
 
@@ -304,6 +332,7 @@ class CodeEditor extends Component {
       let param2 = null;
       if (rule.property !== undefined) param2 = rule.property;
       if (rule.outer !== undefined) param2 = rule.outer;
+      if (rule.attribute !== undefined) param2 = rule.attribute;
       if (rule.argType !== undefined) param2 = rule.argType;
       if (rule.varType !== undefined) param2 = rule.varType;
       const param3 = rule.value;
@@ -317,7 +346,7 @@ class CodeEditor extends Component {
   }
 
   iFrameLoaded() {
-    this.writeToIFrame(this.state.currentText);
+    this.writeToIFrame.bind(this)(this.state.currentText);
   }
 
   onChangeText(theText) {
@@ -334,13 +363,13 @@ class CodeEditor extends Component {
   myCatch(e) {
     const {embeddedConsole} = this.state;
     embeddedConsole.push([e]);
-    this.setState({embeddedConsole});
+    // this.setState({embeddedConsole});
   }
 
   myLog() {
     const {embeddedConsole} = this.state;
     embeddedConsole.push(Array.from(arguments));
-    this.setState({embeddedConsole});
+    // this.setState({embeddedConsole});
   }
 
   evalType(value) {
@@ -352,18 +381,20 @@ class CodeEditor extends Component {
     return t;
   }
 
-  myPost() {
+  handlePost() {
     const type = arguments[0];
     if (type === "console") {
-      this.myLog(arguments[1]);
+      this.myLog.bind(this)(arguments[1]);
     }
     else if (type === "catch") {
-      this.myCatch(arguments[1]);
+      this.myCatch.bind(this)(arguments[1]);
     }
     else if (type === "rule") {
-      this.checkJVMState(arguments[1], arguments[2]);
+      this.checkJVMState.bind(this)(arguments[1], arguments[2]);
+    } 
+    else if (type === "completed") {
+      this.checkForErrors.bind(this)();
     }
-    this.checkForErrors();
   }
 
   checkJVMState(needle, value) {
@@ -418,6 +449,8 @@ class CodeEditor extends Component {
         }
       }
 
+      js += "parent.myPost('completed');\n";
+
       const finaljs = `
         var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
         try {
@@ -425,12 +458,13 @@ class CodeEditor extends Component {
         }
         catch (e) {
           parent.myPost("catch", e);
+          parent.myPost("completed");
         }
       `;
 
       const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
 
-      this.writeToIFrame(theText);
+      this.writeToIFrame.bind(this)(theText);
     }
   }
 
@@ -469,7 +503,6 @@ class CodeEditor extends Component {
   setChangeStatus(changesMade) {
     this.setState({changesMade});
   }
-
 
   executeCode() {
     let {embeddedConsole} = this.state;

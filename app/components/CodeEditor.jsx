@@ -453,9 +453,10 @@ class CodeEditor extends Component {
       js += "parent.myPost('completed');\n";
 
       const finaljs = `
-        var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
+        var js=${JSON.stringify(js)};
+        var protected = parent.loopProtect(js);
         try {
-          eval(js);
+          eval(protected);
         }
         catch (e) {
           parent.myPost("catch", e);

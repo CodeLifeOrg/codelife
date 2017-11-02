@@ -196,7 +196,13 @@ class CodeEditor extends Component {
         arr.push(newObj);
       }
       else {
-        if (n.children && n.children[0] && n.children[0].content) this.setState({currentJS: n.children[0].content}, this.checkForErrors.bind(this));
+        if (n.children && n.children[0] && n.children[0].content) {
+          const js = n.children[0].content;
+          const stripped = js.replace(/\n/g, "").replace(/\s/g, "");
+          if (stripped.length > 0) {
+            this.setState({currentJS: js}, this.checkForErrors.bind(this));
+          }
+        }
       }
     }
     return arr;

@@ -40,20 +40,17 @@ class CodeEditor extends Component {
   }
 
   componentWillUnmount() {
-    if (window) {
-      window.removeEventListener("message", this.recRef, false);
-    }
+    if (window) window.removeEventListener("message", this.recRef, false);
   }
 
   componentDidMount() {
-    if (window) {
-      window.addEventListener("message", this.recRef, false);
-    }
+    if (window) window.addEventListener("message", this.recRef, false);
 
     const sandbox = {
       root: "https://codelife.tech",
       page: "page.html"
     };
+
     if (this.props.location.hostname === "localhost") sandbox.page = "page_local.html";
 
     axios.get("/api/rules").then(resp => {
@@ -206,7 +203,7 @@ class CodeEditor extends Component {
   }
 
   cvEquals(r) {
-    // For javascript rules, we test their correctness elsewhere (namely, checkVarEquals)
+    // For javascript rules, we test their correctness elsewhere (namely, checkVMState)
     // As such, they are already aware of their passing state, and we can just no-op
     return r.passing;
   }
@@ -323,6 +320,15 @@ class CodeEditor extends Component {
         this.checkForErrors.bind(this)();
       }
       this.writeToIFrame.bind(this)(theText);
+      
+      /* 
+      This execution is for when we change slides but DON'T Remount the component. When this happens, the external
+      component calls setEntireContents to change the code, and sets changesMade to false as it's in an intialized
+      state. Getting to a renderText with changesMade false means we have changed slides and need to run execute again
+      */
+      if (!this.state.changesMade) {
+        this.executeCode.bind(this)();
+      }
     }
   }
 
@@ -348,6 +354,7 @@ class CodeEditor extends Component {
 
   iFrameLoaded() {
     this.writeToIFrame.bind(this)(this.state.currentText);
+    this.executeCode.bind(this)();
   }
 
   onChangeText(theText) {

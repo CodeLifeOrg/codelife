@@ -15,7 +15,8 @@ class Share extends Component {
     super(props);
     this.state = {
       content: null,
-      user: null
+      user: null,
+      reports: []
     };
   }
 
@@ -66,6 +67,13 @@ class Share extends Component {
     }
   }
 
+  handleReport(report) {
+    console.log(report);
+    const {reports} = this.state;
+    reports.push(report);
+    this.setState({reports});
+  }
+
   render() {
     const {content, reports, user} = this.state;
 
@@ -106,7 +114,7 @@ class Share extends Component {
                   text={reported ? "Flagged" : "Flag"}
                 />
                 <div>
-                  <ReportBox reportid={id} contentType={contentType}/>
+                  <ReportBox reportid={id} contentType={contentType} handleReport={this.handleReport.bind(this)}/>
                 </div>
               </Popover>
           } 

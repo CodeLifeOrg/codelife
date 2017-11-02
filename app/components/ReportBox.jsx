@@ -76,6 +76,7 @@ class ReportBox extends Component {
     Promise.all([rpost, upost]).then(resp => {
       if (resp.filter(r => r.status !== 200).length === 0) {
         const previousReport = resp[0].data;
+        if (this.props.handleReport) this.props.handleReport(previousReport);
         this.setState({previousReport});
       } 
       else {

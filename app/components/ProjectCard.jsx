@@ -22,6 +22,12 @@ class ProjectCard extends Component {
     this.setState({open: !this.state.open});
   }
 
+  handleReport(report) {
+    const {project} = this.props;
+    project.reported = true;
+    this.forceUpdate();
+  }
+
   render() {
     const {open} = this.state;
     const {location, project, t, user} = this.props;
@@ -77,7 +83,7 @@ class ProjectCard extends Component {
                   text={reported ? "Flagged" : "Flag"}
                 />
                 <div>
-                 <ReportBox reportid={id} contentType="project"/>
+                 <ReportBox reportid={id} contentType="project" handleReport={this.handleReport.bind(this)}/>
                 </div>
               </Popover>
               <Button

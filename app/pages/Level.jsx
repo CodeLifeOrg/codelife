@@ -51,7 +51,7 @@ class Level extends Component {
     Promise.all([lget, iget, uget, cbget, lkget, rget]).then(resp => {
       const levels = resp[0].data;
       const islands = resp[1].data;
-      const userProgress = resp[2].data;
+      const userProgress = resp[2].data.progress;
       const allCodeBlocks = resp[3].data;
       const likes = resp[4].data;
       const reports = resp[5].data;

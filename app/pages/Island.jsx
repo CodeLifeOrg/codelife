@@ -26,7 +26,8 @@ class Island extends Component {
     Promise.all([iget, upget, cbget]).then(resp => {
       const islands = resp[0].data;
       islands.sort((a, b) => a.ordering - b.ordering);
-      const userProgress = resp[1].data;
+      const userProgress = resp[1].data.progress;
+      console.log("Latest Island: ", resp[1].data.current);
       const codeBlocks = resp[2].data;
       this.setState({islands, userProgress, codeBlocks});
     });

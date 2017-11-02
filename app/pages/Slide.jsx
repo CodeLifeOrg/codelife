@@ -116,7 +116,7 @@ class Slide extends Component {
       }
       */
 
-      const up = resp[3].data;
+      const up = resp[3].data.progress;
       const done = up.find(p => p.level === mlid) !== undefined;
 
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;

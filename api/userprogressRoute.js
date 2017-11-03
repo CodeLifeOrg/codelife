@@ -10,7 +10,7 @@ module.exports = function(app) {
         const returnObj = {progress};
         db.islands.findAll()
           .then(islands => {
-            let latestIsland = 0;
+            let latestIsland = -1;
             for (const up of progress) {
               const i = islands.find(i => i.id === up.level);
               if (i && i.ordering > latestIsland) {

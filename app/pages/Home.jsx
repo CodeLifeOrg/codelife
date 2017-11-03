@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {Login, SignUp} from "datawheel-canon";
 import {Intent, Spinner} from "@blueprintjs/core";
@@ -16,6 +17,7 @@ class Home extends Component {
       codeBlocks: false,
       current: false,
       islands: false,
+      progress: [],
       projects: false,
       signup: true
     };
@@ -29,7 +31,10 @@ class Home extends Component {
     const {user} = this.props;
     if (user) {
       axios.get("/api/userprogress")
-        .then(resp => this.setState({current: resp.data.current}));
+        .then(resp => {
+          const {current, progress} = resp.data;
+          this.setState({current, progress});
+        });
     }
     const codeBlocks = axios.get("/api/codeBlocks/featured");
     const projects = axios.get("/api/projects/featured");
@@ -45,17 +50,14 @@ class Home extends Component {
   render() {
 
     const {t, user} = this.props;
-    const {codeBlocks, current, islands, projects, signup} = this.state;
-
-    console.log(current);
-    console.log(user);
+    const {codeBlocks, current, islands, progress, projects, signup} = this.state;
 
     return (
       <div id="Home">
         <div id="island" className={ current ? current.theme : "island-jungle" }>
           <div className="image">
             <h1 className="title">{ user ? t("home.welcome", {name: user.name || user.username}) : t("home.tagline") }</h1>
-            { current ? <button className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ t("home.continue", {island: current.name}) }</button> : null }
+            { current ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ t(progress.length ? "home.continue" : "home.start", {island: current.name}) }</Link> : null }
             <div className="video">
               <div className="play">
                 <span className="pt-icon-large pt-icon-play"></span>

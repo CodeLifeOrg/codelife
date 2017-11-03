@@ -22,15 +22,13 @@ class Island extends Component {
     const iget = axios.get("/api/islands/");
     const upget = axios.get("/api/userprogress");
     const cbget = axios.get("/api/codeBlocks");
-    const fget = axios.get("/api/codeBlocks/featured");
 
-    Promise.all([iget, upget, cbget, fget]).then(resp => {
+    Promise.all([iget, upget, cbget]).then(resp => {
       const islands = resp[0].data;
       islands.sort((a, b) => a.ordering - b.ordering);
       const userProgress = resp[1].data.progress;
       console.log("Latest Island: ", resp[1].data.current);
       const codeBlocks = resp[2].data;
-      console.log(resp[3].data);
       this.setState({islands, userProgress, codeBlocks});
     });
   }

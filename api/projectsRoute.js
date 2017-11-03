@@ -10,6 +10,13 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/projects/featured", (req, res) => {
+
+    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, users.username, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, userprofiles, users where users.id = projects.uid AND projects.uid = userprofiles.uid AND (projects.id = 1026 OR projects.id = 982 OR projects.id = 1020 OR projects.id = 1009)";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+
+  });
+
   app.get("/api/projects/byid", (req, res) => {
 
     db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());

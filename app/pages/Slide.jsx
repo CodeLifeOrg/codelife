@@ -125,11 +125,11 @@ class Slide extends Component {
       this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels: resp[2].data});
     });
 
-    document.addEventListener("keydown", this.handleKey.bind(this));
+    document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
   handleKey(e) {
-    e.keyCode === 192 ? this.unblock(this) : null;
+    e.keyCode === 192 && this.props.auth.user.role > 0 ? this.unblock(this) : null;
   }
 
   updateGems(newGems) {

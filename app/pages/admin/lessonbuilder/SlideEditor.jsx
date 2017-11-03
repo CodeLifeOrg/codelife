@@ -111,7 +111,14 @@ class SlideEditor extends Component {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
     axios.post("/api/builder/slides/save", data).then(resp => {
-      resp.status === 200 ? console.log("saved") : console.log("error");
+      if (resp.status === 200) {
+        const toast = Toaster.create({className: "slideSave", position: Position.TOP_CENTER});
+        toast.show({message: "Slide saved.", intent: Intent.SUCCESS});
+      } 
+      else {
+        const toast = Toaster.create({className: "slideFail", position: Position.TOP_CENTER});
+        toast.show({message: "Save Error.", intent: Intent.DANGER});
+      }
     });
   }
 

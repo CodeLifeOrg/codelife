@@ -257,10 +257,23 @@ class CodeEditor extends Component {
     return count;
   }
 
+  cvContainsSelfClosingTag(rule, payload) {
+    const html = payload.theText;
+    const json = payload.theJSON;
+    const re = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
+    const open = html.search(re);
+
+    let hasAttr = true;
+    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+    return open !== -1 && hasAttr;
+  }
+
   cvContainsTag(rule, payload) {
     const html = payload.theText;
     const json = payload.theJSON;
-    const open = html.indexOf(`<${rule.needle}`);
+    const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+    const open = html.search(re);
     const close = html.indexOf(`</${rule.needle}>`);
     const tagClosed = open !== -1 && close !== -1 && open < close;
 
@@ -281,7 +294,7 @@ class CodeEditor extends Component {
     cv.CONTAINS = this.cvContainsTag.bind(this);
     cv.CONTAINS_ONE = cvContainsOne;
     cv.CSS_CONTAINS = cvContainsStyle;
-    cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
+    cv.CONTAINS_SELF_CLOSE = this.cvContainsSelfClosingTag.bind(this);
     cv.NESTS = cvNests;
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
     cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);

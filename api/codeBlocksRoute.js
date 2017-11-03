@@ -8,6 +8,13 @@ module.exports = function(app) {
 
   });
 
+  app.get("/api/codeBlocks/featured", (req, res) => {
+
+    const q = "SELECT codeblocks.id, codeblocks.snippetname, codeblocks.studentcontent, codeblocks.status, userprofiles.sharing, (select count(*) FROM likes where likes.likeid = codeblocks.id) AS likes, (select count(*) from reports where reports.status = 'new' AND reports.report_id = codeblocks.id AND reports.type = 'codeblock') as reports, codeblocks.previewblob, codeblocks.lid, codeblocks.uid, users.username FROM codeblocks, users, userprofiles WHERE userprofiles.uid = codeblocks.uid AND users.id = codeblocks.uid AND (codeblocks.id = 863 OR codeblocks.id = 834 OR codeblocks.id = 921 OR codeblocks.id = 30)";
+    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());   
+
+  });
+
   app.get("/api/codeBlocks/bylid", (req, res) => {
 
     db.codeblocks.findAll({where: {uid: req.user.id, lid: req.query.lid}}).then(u => res.json(u).end());
@@ -47,6 +54,7 @@ module.exports = function(app) {
   app.post("/api/codeBlocks/setstatus", (req, res) => {
     const {status, id} = req.body;
 
+    /*
     if (status === "banned") {
       const studentcontent = "";
       db.codeblocks.update({status, studentcontent}, {where: {id}}).then(u => res.json(u).end());  
@@ -54,7 +62,9 @@ module.exports = function(app) {
     else {
       db.codeblocks.update({status}, {where: {id}}).then(u => res.json(u).end());   
     }
-    
+    */
+
+    db.codeblocks.update({status}, {where: {id}}).then(u => res.json(u).end());       
 
   });
 

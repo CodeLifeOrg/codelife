@@ -112,6 +112,7 @@ class RulePicker extends Component {
 
     const param2 = [];
     param2.CONTAINS = "attribute";
+    param2.CONTAINS_SELF_CLOSE = "attribute";
     param2.CSS_CONTAINS = "property";
     param2.NESTS = "outer";
     param2.JS_VAR_EQUALS = "varType";
@@ -119,6 +120,7 @@ class RulePicker extends Component {
     param2.JS_MATCHES = "regex";
     const param3 = [];
     param3.CONTAINS = "value";
+    param3.CONTAINS_SELF_CLOSE = "value";
     param3.CSS_CONTAINS = "value";
     param3.JS_VAR_EQUALS = "value";
     param3.JS_FUNC_EQUALS = "value";

@@ -4,29 +4,37 @@
   justify-content: space-between;
   height: var(--nav-height);
   padding: 0 25px;
-
   & .logo {
-    width: 125px;
+    width: 150px;
+    & .tag {
+      color: #d74645;
+      font-size: 16px;
+      font-weight: 800;
+      margin-top: -8px;
+      text-align: right;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    & .text {
+      width: 148px;
+    }
+    &:hover {
+      text-decoration: none;
+    }
   }
-
   & .link {
     color: white;
     letter-spacing: 1px;
     padding: 0 15px;
     text-transform: uppercase;
-
     & .pt-icon-standard {
       margin-right: 5px;
     }
-
   }
-
 }
 
 .user-popover {
-
   & .pt-button {
     margin-bottom: 10px;
   }
-
 }

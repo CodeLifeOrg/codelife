@@ -17,7 +17,12 @@ class Nav extends Component {
 
     return (
       <div id="nav">
-        { logo ? <Link to={"/"}><img className="logo" src="/logo/logo-sm.png" /></Link> : <div></div> }
+        { logo
+          ? <Link className="logo" to={"/"}>
+            <div className="tag">Beta</div>
+            <img className="text" src="/logo/logo-sm.png" />
+          </Link>
+          : <div></div> }
         { auth.user
           ? <div className="links">
             <Link className="link" to="/island"><span className="pt-icon-standard pt-icon-path-search" />{ t("Map") }</Link>

@@ -17,6 +17,20 @@ export const cvContainsTag = (rule, payload) => {
 };
 
 export const cvContainsOne = (rule, payload) => {
+  /* 
+  TODO: REPLACE THIS:
+
+  const html = payload.theText;
+  const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const open = html.search(re);
+  const open2 = html.indexOf(`<${rule.needle}>`, open + 1);
+  const reClose = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const close = html.search(reClose);
+  const close2 = html.indexOf(`</${rule.needle}>`, close + 2);
+
+  */
+
+
   const haystack = payload.theText;
   const needle = rule.needle; 
   const open = haystack.indexOf(`<${needle}>`);

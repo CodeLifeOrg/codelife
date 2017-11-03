@@ -267,7 +267,7 @@ class CodeEditor extends Component {
     if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
 
     return open !== -1 && hasAttr;
-  };
+  }
 
   cvContainsTag(rule, payload) {
     const html = payload.theText;

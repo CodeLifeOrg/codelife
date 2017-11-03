@@ -57,7 +57,7 @@ class Island extends Component {
 
     const {auth} = this.props;
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
 
     if (islands === [] || !userProgress) return <Loading />;
 

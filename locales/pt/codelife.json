@@ -241,11 +241,6 @@
       "def": "Esse é um termo usado em CSS para indicar como você deseja adicionar estilo ao seu conteúdo."
     }
   },
-  "home": {
-    "body": "corpo",
-    "sub": "sub",
-    "title": "título"
-  },
   "myCodeblock": "Meu {{ islandName }} Desafio",
   "privacy": {
     "access": {

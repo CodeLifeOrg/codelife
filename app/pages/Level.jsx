@@ -287,7 +287,7 @@ class Level extends Component {
     const {auth, t} = this.props;
     const {levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <Loading />;
 
     const islandDone = this.hasUserCompleted(this.props.params.lid);

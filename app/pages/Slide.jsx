@@ -147,7 +147,7 @@ class Slide extends Component {
     const {currentSlide, slides, currentIsland, gems} = this.state;
     const updateGems = this.updateGems.bind(this);
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;

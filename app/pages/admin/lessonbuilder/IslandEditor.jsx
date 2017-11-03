@@ -60,7 +60,7 @@ class IslandEditor extends Component {
         toast.show({message: "Saved!", intent: Intent.SUCCESS});
       } 
       else {
-        toast.show({message: "Error!", intent: Intent.Danger});
+        toast.show({message: "Error!", intent: Intent.DANGER});
       }
     });
   }

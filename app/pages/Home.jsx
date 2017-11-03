@@ -2,7 +2,10 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Login, SignUp} from "datawheel-canon";
+import {Intent, Spinner} from "@blueprintjs/core";
 import axios from "axios";
+import CodeBlockCard from "components/CodeBlockCard";
+import ProjectCard from "components/ProjectCard";
 import "./Home.css";
 
 class Home extends Component {
@@ -12,6 +15,7 @@ class Home extends Component {
     this.state = {
       codeBlocks: false,
       current: false,
+      islands: false,
       projects: false,
       signup: true
     };
@@ -24,33 +28,41 @@ class Home extends Component {
   componentDidMount() {
     const {user} = this.props;
     if (user) {
-      axios.get("/api/userprogress").then(resp => this.setState({current: resp.data.current}));
+      axios.get("/api/userprogress")
+        .then(resp => this.setState({current: resp.data.current}));
     }
     const codeBlocks = axios.get("/api/codeBlocks/featured");
     const projects = axios.get("/api/projects/featured");
-    Promise.all([codeBlocks, projects])
-      .then(resp => {
-        console.log(resp);
-      });
+    const islands = axios.get("/api/islands");
+    Promise.all([codeBlocks, projects, islands])
+      .then(resp => this.setState({
+        codeBlocks: resp[0].data,
+        islands: resp[2].data,
+        projects: resp[1].data
+      }));
   }
 
   render() {
 
     const {t, user} = this.props;
-    const {current, signup} = this.state;
+    const {codeBlocks, current, islands, projects, signup} = this.state;
 
     console.log(current);
+    console.log(user);
 
     return (
       <div id="Home">
-        <div className="video-container">
-          <div className="video">
-            <div className="play">
-              <span className="pt-icon-large pt-icon-play"></span>
-              <div className="title">Welcome to CodeLife</div>
+        <div id="island" className={ current ? current.theme : "island-jungle" }>
+          <div className="image">
+            <h1 className="title">{ user ? t("home.welcome", {name: user.name || user.username}) : t("home.tagline") }</h1>
+            { current ? <button className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ t("home.continue", {island: current.name}) }</button> : null }
+            <div className="video">
+              <div className="play">
+                <span className="pt-icon-large pt-icon-play"></span>
+                <div className="title">Welcome to CodeLife</div>
+              </div>
             </div>
           </div>
-          <div className="tagline">{ t("home.tagline") }</div>
         </div>
         { !user
           ? <div className="enter-container">
@@ -70,6 +82,17 @@ class Home extends Component {
             }
           </div>
           : null }
+        <h2>{ t("Featured Projects") }</h2>
+        <div className="projects">
+          { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
+        </div>
+        <h2>{ t("Featured CodeBlocks") }</h2>
+        <div className="codeBlocks">
+          { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
+            const {theme, icon} = islands.find(i => i.id === c.lid);
+            return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;
+          }) }
+        </div>
       </div>
     );
   }

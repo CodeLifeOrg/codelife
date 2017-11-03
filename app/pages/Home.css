@@ -1,15 +1,19 @@
 #Home {
   text-align: center;
+  padding: 0 25px;
   width: 100%;
-  & .video-container {
-    align-items: center;
-    display: flex;
-    margin: 50px auto;
-    max-width: 900px;
-    width: 100%;
-    @media only screen and (max-width: 768px) {
-      flex-direction: column;
-      flex-wrap: nowrap;
+  & #island {
+    & .pt-button {
+      margin-top: 10px;
+    }
+    & .tagline {
+      color: white;
+      flex: 1;
+      font-size: 24px;
+      margin: 0 25px;
+      position: relative;
+      text-align: center;
+      text-shadow: 0 2px 5px #444;
     }
     & .video {
       align-items: center;
@@ -17,13 +21,13 @@
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
+      cursor: pointer;
       display: flex;
-      height: 225px;
-      max-width: 400px;
-      min-width: 400px;
+      height: 281px;
       justify-content: center;
+      margin: 75px auto 50px;
       position: relative;
-      width: 400px;
+      width: 500px;
       & .play {
         background-color: rgba(0, 0, 0, 0.5);
         border-bottom-left-radius: 25% 15%;
@@ -59,16 +63,7 @@
       }
       &:hover .play {
         background-color: red;
-        cursor: pointer;
       }
-    }
-    & .tagline {
-      color: white;
-      flex: 1;
-      font-size: 24px;
-      margin: 0 25px;
-      text-align: center;
-      text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     }
   }
   & .enter-container {
@@ -83,7 +78,7 @@
     text-align: left;
     width: 100%;
     @media only screen and (max-width: 768px) {
-      flex-direction: column-reverse;
+      flex-direction: column;
       flex-wrap: nowrap;
     }
     & .avatar {
@@ -122,5 +117,18 @@
         }
       }
     }
+  }
+  & h2 {
+    color: white;
+    text-shadow: 0 2px 5px #444;
+  }
+  & .projects, & .codeBlocks {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+    min-height: 150px;
+    justify-content: center;
+    width: 100%;
   }
 }

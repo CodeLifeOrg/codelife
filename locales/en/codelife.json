@@ -36,8 +36,11 @@
   "Having trouble? Check with a neighbor and ask for help!": "Having trouble? Check with a neighbor and ask for help!",
   "Help": "Help",
   "home": {
+    "continue": "Continue learning on {{island}}",
     "tagline": "CodeLife is a free online tool that teaches Brazilian teenagers information technology and web skills.",
-    "prompt": "Join the revolution, and start your adventure today!"
+    "prompt": "Join the revolution, and start your adventure today!",
+    "start": "Begin your adventure on {{island}}",
+    "welcome": "Welcome back {{name}}!"
   },
   "Hosted by": "Hosted by",
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",

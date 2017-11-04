@@ -91,7 +91,7 @@ class CodeEditor extends Component {
   receiveMessage(event) {
     if (event.origin !== this.state.sandbox.root) {
       return;
-    } 
+    }
     else if (this.state.mounted) {
       this.handlePost.bind(this)(...event.data);
     }
@@ -334,13 +334,13 @@ class CodeEditor extends Component {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS(oldJSON);
         theText = toHTML(newJSON);
-      } 
+      }
       else {
         this.checkForErrors.bind(this)();
       }
       this.writeToIFrame.bind(this)(theText);
-      
-      /* 
+
+      /*
       This execution is for when we change slides but DON'T Remount the component. When this happens, the external
       component calls setEntireContents to change the code, and sets changesMade to false as it's in an intialized
       state. Getting to a renderText with changesMade false means we have changed slides and need to run execute again
@@ -418,7 +418,7 @@ class CodeEditor extends Component {
     }
     else if (type === "rule") {
       this.checkJVMState.bind(this)(arguments[1], arguments[2]);
-    } 
+    }
     else if (type === "completed") {
       this.checkForErrors.bind(this)();
     }
@@ -445,7 +445,7 @@ class CodeEditor extends Component {
     }
   }
 
-  reverse(s) { 
+  reverse(s) {
     return s.split("").reverse().join("");
   }
 
@@ -472,7 +472,7 @@ class CodeEditor extends Component {
           if (result) result = result.map(this.reverse);
           r.passing = result !== null;
           const arg = result ? result[1] : null;
-          js += `parent.myPost('rule', '${r.needle}', ${arg});\n`; 
+          js += `parent.myPost('rule', '${r.needle}', ${arg});\n`;
         }
       }
 
@@ -545,7 +545,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, island, t} = this.props;
+    const {codeTitle, island, readOnly, t} = this.props;
     const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
@@ -570,11 +570,11 @@ class CodeEditor extends Component {
 
     return (
       <div id="codeEditor">
-        { 
+        {
           this.props.showEditor
-            ? <div className="code">
-              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
-              { 
+            ? <div className={ `code ${readOnly ? "readOnly" : ""}` }>
+              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || (readOnly ? t("Code Example") : t("Code Editor")) }</div>
+              {
                 !this.props.blurred
                   ? <AceWrapper
                     className="editor"
@@ -585,22 +585,24 @@ class CodeEditor extends Component {
                   />
                   : <pre className="editor blurry-text">{currentText}</pre>
               }
-              { 
-                this.props.blurred 
+              {
+                this.props.blurred
                   ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island ? island : "" }` }>
                     <div className="pt-popover-content">
                       { t("Codeblock's code will be shown after you complete the last level of this island.") }
                     </div>
-                  </div> 
-                  : null 
+                  </div>
+                  : null
               }
-              <div className={ `drawer ${openRules ? "open" : ""}` }>
-                <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
-                  <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-                  <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+              { !readOnly
+                ? <div className={ `drawer ${openRules ? "open" : ""}` }>
+                  <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
+                    <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+                    <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+                  </div>
+                  { this.getValidationBox() }
                 </div>
-                { this.getValidationBox() }
-              </div>
+                : null }
             </div>
             : null
         }

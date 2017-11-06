@@ -223,6 +223,18 @@ class CodeEditor extends Component {
     return haystack.search(new RegExp(rule.regex)) >= 0;
   }
 
+  cvNests(rule, payload) {
+    const haystack = payload.theText;
+    const reOuter = new RegExp(`<${rule.outer}[^>]*\/>`, "g");
+    const outerOpen = haystack.search(reOuter);
+    const outerClose = haystack.indexOf(`</${rule.outer}>`);
+    const reInner = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
+    const innerOpen = haystack.search(reInner);
+    const innerClose = haystack.indexOf(`</${rule.needle}>`);
+    return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
+            outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
+  }
+
   cvUses(rule, payload) {
     const haystack = payload.theJS;
     const res = [];
@@ -270,18 +282,11 @@ class CodeEditor extends Component {
   }
 
   cvContainsOne(rule, payload) {
-    /*const html = payload.theText;
-    const json = payload.theJSON;
+    const html = payload.theText;
     const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
-    const open = html.search(re);
-    const close = html.indexOf(`</${rule.needle}>`);
-    const tagClosed = open !== -1 && close !== -1 && open < close;
-
-    let exactlyOne = true;
-    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
-
-    return tagClosed && hasAttr;*/
-    return true;
+    const match = html.match(re);
+    const count = match ? match.length : -1;
+    return count === 1;
   }
 
   cvContainsTag(rule, payload) {
@@ -307,7 +312,7 @@ class CodeEditor extends Component {
     const cv = [];
     // cv.CONTAINS = cvContainsTag;
     cv.CONTAINS = this.cvContainsTag.bind(this);
-    cv.CONTAINS_ONE = cvContainsOne;
+    cv.CONTAINS_ONE = this.cvContainsOne.bind(this);
     cv.CSS_CONTAINS = cvContainsStyle;
     cv.CONTAINS_SELF_CLOSE = this.cvContainsSelfClosingTag.bind(this);
     cv.NESTS = cvNests;

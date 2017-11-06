@@ -269,6 +269,21 @@ class CodeEditor extends Component {
     return open !== -1 && hasAttr;
   }
 
+  cvContainsOne(rule, payload) {
+    /*const html = payload.theText;
+    const json = payload.theJSON;
+    const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+    const open = html.search(re);
+    const close = html.indexOf(`</${rule.needle}>`);
+    const tagClosed = open !== -1 && close !== -1 && open < close;
+
+    let exactlyOne = true;
+    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+    return tagClosed && hasAttr;*/
+    return true;
+  }
+
   cvContainsTag(rule, payload) {
     const html = payload.theText;
     const json = payload.theJSON;
@@ -615,7 +630,7 @@ class CodeEditor extends Component {
           </div>
           <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} onLoad={this.iFrameLoaded.bind(this)}/>
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
-            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
+            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }</div>
             <div className="contents">{consoleText}</div>
           </div>
         </div>

@@ -18,7 +18,7 @@ export const cvContainsTag = (rule, payload) => {
 
 export const cvContainsOne = (rule, payload) => {
   /* 
-  TODO: REPLACE THIS:
+  TODO: REPLACE WITH THIS:
 
   const html = payload.theText;
   const re = new RegExp(`<${rule.needle}[^>]*>`, "g");

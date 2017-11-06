@@ -11,8 +11,6 @@ import Constants from "utils/Constants.js";
 
 import "./Level.css";
 
-import gemIcon from "icons/gem.svg";
-
 import Loading from "components/Loading";
 
 class Level extends Component {
@@ -317,8 +315,6 @@ class Level extends Component {
       const {lid} = this.props.params;
       if (level.isDone) {
         const up = userProgress.find(p => p.level === level.id);
-        const gems = up ? up.gems : 0;
-        // const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
@@ -327,7 +323,6 @@ class Level extends Component {
           <Link className="stop done" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {level.name}
-            <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div>
           </span>
         </Popover>;
       }
@@ -355,32 +350,32 @@ class Level extends Component {
         { /* nextIsland && Number(nextIsland.ordering) < 3  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null} */ }
         { nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { otherCodeBlocks.length
-        ? <div>
+          ? <div>
             <h2 className="title">
               {t("Other Students' CodeBlocks")}&nbsp;
               { !islandDone
-              ? <Popover
-                interactionKind={PopoverInteractionKind.HOVER}
-                popoverClassName="pt-popover-content-sizing user-popover"
-                position={Position.TOP}
-              >
-              <span className="pt-icon pt-icon-lock"></span>
-                <div>
-                  { t("Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!") }
-                </div>
-              </Popover> : null }
+                ? <Popover
+                  interactionKind={PopoverInteractionKind.HOVER}
+                  popoverClassName="pt-popover-content-sizing user-popover"
+                  position={Position.TOP}
+                >
+                  <span className="pt-icon pt-icon-lock"></span>
+                  <div>
+                    { t("Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!") }
+                  </div>
+                </Popover> : null }
             </h2>
             <div className="snippets">{otherCodeBlockItemsBeforeFold}</div>
             { otherCodeBlockItemsAfterFold.length
-            ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
-            : null }
+              ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
+              : null }
             { otherCodeBlockItemsAfterFold.length
-            ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
               </div>
-            : null }
+              : null }
           </div>
-        : null }
+          : null }
       </div>
     );
   }

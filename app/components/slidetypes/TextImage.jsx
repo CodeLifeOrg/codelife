@@ -12,13 +12,11 @@ class TextImage extends Component {
   }
 
   componentDidMount() {
-    if (this.props.updateGems) this.props.updateGems(1);
     this.setState({slideId: this.props.id});
   }
 
   componentDidUpdate() {
     if (this.state.slideId !== this.props.id) {
-      if (this.props.updateGems) this.props.updateGems(1);
       this.setState({slideId: this.props.id});
     }
   }

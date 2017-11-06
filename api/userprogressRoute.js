@@ -27,7 +27,7 @@ module.exports = function(app) {
 
   app.post("/api/userprogress/save", (req, res) => {
     const {id: uid} = req.user;
-    const {level, gems} = req.body;
+    const {level} = req.body;
 
     // db.userprogress.create({where: {uid, level}}).then(u => res.json(u).end());
     
@@ -35,7 +35,6 @@ module.exports = function(app) {
       .then(userprogressRows => {
         if (userprogressRows.length) {
           const userprogressRow = userprogressRows[0];
-          userprogressRow.gems = gems;
           userprogressRow.datecompleted = db.fn("NOW");
           return userprogressRow.save().then(() => res.json(userprogressRows).end());
         }

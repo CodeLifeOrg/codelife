@@ -16,8 +16,7 @@ class InputCode extends Component {
       titleText: "",
       baseText: "",
       rulejson: null,
-      resetAlert: false,
-      gemEarned: false
+      resetAlert: false
     };
   }
 
@@ -30,25 +29,21 @@ class InputCode extends Component {
   componentDidUpdate() {
     const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
     if (this.state.baseText !== newText) {
-      this.setState({baseText: newText, gemEarned: false});
+      this.setState({baseText: newText});
       this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newText);
     }
   }
 
   submitAnswer() {
     const {t} = this.props;
-    const {gemEarned} = this.state;
     const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
     if (this.editor.getWrappedInstance().getWrappedInstance().isPassing()) {
       toast.show({message: t("You got it right!"), timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
-      if (!gemEarned && this.props.updateGems) this.props.updateGems(1);
     }
     else {
       toast.show({message: t("Sorry, try again!"), timeout: 2000, intent: Intent.DANGER});
-      if (!gemEarned && this.props.updateGems) this.props.updateGems(-1);
     }
-    this.setState({gemEarned: true});
   }
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
@@ -74,13 +69,13 @@ class InputCode extends Component {
     return (
       <div id="slide-container" className="renderCode flex-column">
         <Alert
-            isOpen={ this.state.resetAlert }
-            cancelButtonText={ t("Cancel") }
-            confirmButtonText={ t("Reset") }
-            intent={ Intent.DANGER }
-            onCancel={ () => this.setState({resetAlert: false}) }
-            onConfirm={ () => this.resetAnswer() }>
-            <p>{t("Are you sure you want to reset the code to its original state?")}</p>
+          isOpen={ this.state.resetAlert }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Reset") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({resetAlert: false}) }
+          onConfirm={ () => this.resetAnswer() }>
+          <p>{t("Are you sure you want to reset the code to its original state?")}</p>
         </Alert>
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">

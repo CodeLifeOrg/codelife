@@ -13,7 +13,6 @@ export default class TextCode extends Component {
 
   componentDidMount() {
     this.setState({mounted: true});
-    if (this.props.updateGems) this.props.updateGems(1);
   }
 
   render() {

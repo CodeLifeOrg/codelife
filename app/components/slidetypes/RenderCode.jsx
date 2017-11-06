@@ -14,7 +14,6 @@ class RenderCode extends Component {
 
   componentDidMount() {
     this.setState({mounted: true});
-    if (this.props.updateGems) this.props.updateGems(1);
   }
 
   componentDidUpdate() {

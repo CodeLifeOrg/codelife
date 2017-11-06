@@ -30,6 +30,9 @@
   }
   & .title {
     color: white;
+    line-height: 1.25em;
+    margin: 0 auto 10px;
+    max-width: 800px;
     text-shadow: 0 2px 2px #444;
   }
   & .title:first-child {

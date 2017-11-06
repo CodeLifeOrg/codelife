@@ -28,7 +28,7 @@ class CodeBlockList extends Component {
     Promise.all([cbget, iget, upget, lkget, rget]).then(resp => {
       const allCodeBlocks = resp[0].data;
       const islands = resp[1].data;
-      const userProgress = resp[2].data;
+      const userProgress = resp[2].data.progress;
       const likes = resp[3].data;
       const reports = resp[4].data;
       islands.sort((a, b) => a.ordering - b.ordering);

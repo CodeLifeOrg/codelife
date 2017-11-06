@@ -89,7 +89,7 @@ class InputCode extends Component {
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
-          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null}
+          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>
         </div>
       </div>

@@ -1,0 +1,134 @@
+#Home {
+  text-align: center;
+  padding: 0 25px;
+  width: 100%;
+  & #island {
+    & .pt-button {
+      margin-top: 10px;
+    }
+    & .tagline {
+      color: white;
+      flex: 1;
+      font-size: 24px;
+      margin: 0 25px;
+      position: relative;
+      text-align: center;
+      text-shadow: 0 2px 5px #444;
+    }
+    & .video {
+      align-items: center;
+      background-image: url("/home/students.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      cursor: pointer;
+      display: flex;
+      height: 281px;
+      justify-content: center;
+      margin: 75px auto 50px;
+      position: relative;
+      width: 500px;
+      & .play {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-bottom-left-radius: 25% 15%;
+        border-bottom-right-radius: 25% 15%;
+        border-top-left-radius: 25% 15%;
+        border-top-right-radius: 25% 15%;
+        color: white;
+        display: block;
+        height: 50px;
+        transition: background-color 0.2s;
+        width: 70px;
+        & .pt-icon-play {
+          font-size: 30px;
+          margin-top: 10px;
+        }
+        &:before {
+          background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+          content: "";
+          height: 50px;
+          left: 0;
+          position: absolute;
+          top: 0;
+          width: 100%;
+        }
+        & .title {
+          color: white;
+          font-family: "YouTube Noto", "Roboto", Arial, Helvetica, sans-serif;
+          font-size: 18px;
+          left: 10px;
+          position: absolute;
+          top: 10px;
+        }
+      }
+      &:hover .play {
+        background-color: red;
+      }
+    }
+  }
+  & .enter-container {
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    margin: 50px auto;
+    max-width: 950px;
+    padding: 25px;
+    text-align: left;
+    width: 100%;
+    @media only screen and (max-width: 768px) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+    & .avatar {
+      max-width: 400px;
+      min-width: 400px;
+      width: 400px;
+      & img {
+        width: 100%;
+      }
+      & .prompt {
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+      }
+      @media only screen and (max-width: 768px) {
+        margin-top: 25px;
+        max-width: none;
+        min-width: inherit;
+        width: 100%;
+      }
+    }
+    & .form {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: center;
+      height: 300px;
+      padding: 0 25px;
+      & .callToAction {
+        margin: 10px auto;
+        opacity: 0.5;
+        text-align: center;
+        width: 100%;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  & h2 {
+    color: white;
+    text-shadow: 0 2px 5px #444;
+  }
+  & .projects, & .codeBlocks {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+    min-height: 150px;
+    justify-content: center;
+    width: 100%;
+  }
+}

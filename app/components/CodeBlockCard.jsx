@@ -63,6 +63,12 @@ class CodeBlockCard extends Component {
     }
   }
 
+  handleReport() {
+    const {codeBlock} = this.state;
+    codeBlock.reported = true;
+    this.forceUpdate();
+  }
+
   render() {
     const {codeBlock, open} = this.state;
 
@@ -119,7 +125,7 @@ class CodeBlockCard extends Component {
                   text={reported ? "Flagged" : "Flag"}
                 />
                 <div>
-                 <ReportBox reportid={id} contentType="codeblock"/>
+                 <ReportBox reportid={id} contentType="codeblock" handleReport={this.handleReport.bind(this)}/>
                 </div>
               </Popover>
               <Button

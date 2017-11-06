@@ -13,11 +13,6 @@ import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfCl
 
 import "./CodeEditor.css";
 
-function receiveMessage(event) {
-  if (event.origin !== this.state.sandbox.root) return;
-  this.myPost(...event.data);
-}
-
 class CodeEditor extends Component {
 
   constructor(props) {
@@ -36,21 +31,26 @@ class CodeEditor extends Component {
       currentJS: "",
       jsRules: [],
       titleText: "",
+      remoteReady: false,
       sandbox: "",
       openRules: false,
       openConsole: false
     };
-    
-    if (window) {
-      window.addEventListener("message", receiveMessage.bind(this), false);
-    }
+    this.recRef = this.receiveMessage.bind(this);
+  }
+
+  componentWillUnmount() {
+    if (window) window.removeEventListener("message", this.recRef, false);
   }
 
   componentDidMount() {
+    if (window) window.addEventListener("message", this.recRef, false);
+
     const sandbox = {
       root: "https://codelife.tech",
       page: "page.html"
     };
+
     if (this.props.location.hostname === "localhost") sandbox.page = "page_local.html";
 
     axios.get("/api/rules").then(resp => {
@@ -86,6 +86,15 @@ class CodeEditor extends Component {
   getEditor() {
     if (this.editor) return this.editor.editor.editor;
     return undefined;
+  }
+
+  receiveMessage(event) {
+    if (event.origin !== this.state.sandbox.root) {
+      return;
+    }
+    else if (this.state.mounted) {
+      this.handlePost.bind(this)(...event.data);
+    }
   }
 
   getValidationBox() {
@@ -187,14 +196,20 @@ class CodeEditor extends Component {
         arr.push(newObj);
       }
       else {
-        if (n.children && n.children[0] && n.children[0].content) this.setState({currentJS: n.children[0].content}, this.checkForErrors.bind(this));
+        if (n.children && n.children[0] && n.children[0].content) {
+          const js = n.children[0].content;
+          const stripped = js.replace(/\n/g, "").replace(/\s/g, "");
+          if (stripped.length > 0) {
+            this.setState({currentJS: js}, this.checkForErrors.bind(this));
+          }
+        }
       }
     }
     return arr;
   }
 
   cvEquals(r) {
-    // For javascript rules, we test their correctness elsewhere (namely, checkVarEquals)
+    // For javascript rules, we test their correctness elsewhere (namely, checkVMState)
     // As such, they are already aware of their passing state, and we can just no-op
     return r.passing;
   }
@@ -203,16 +218,84 @@ class CodeEditor extends Component {
     return r.passing;
   }
 
-  cvMatch(rule, haystack) {
+  cvMatch(rule, payload) {
+    const haystack = payload.theJS;
     return haystack.search(new RegExp(rule.regex)) >= 0;
   }
 
-  cvUses(rule, haystack) {
+  cvUses(rule, payload) {
+    const haystack = payload.theJS;
     const res = [];
     res.while = new RegExp("while\\s*\\([^\\)]*\\)\\s*{[^}]*}", "g");
     res.for = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
     res.if = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
     return res[rule.needle] && haystack.search(res[rule.needle]) >= 0;
+  }
+
+  attrCount(needle, attribute, value, json) {
+    let count = 0;
+    if (json.length === 0) return 0;
+    if (attribute === "class") attribute = "className";
+    for (const node of json) {
+      if (node.type === "Element" && node.tagName === needle && node.attributes[attribute]) {
+        // if we have been provided a value, we must compare against it for a match
+        if (value) {
+          if (attribute === "className") {
+            if (node.attributes.className && node.attributes.className.includes(value)) count++;
+          }
+          else if (node.attributes[attribute] === value) count++;
+        }
+        // if we were not provided a value, then this is checking for attribute only, and we can pass
+        else {
+          count++;
+        }
+      }
+      if (node.children !== undefined) {
+        count += this.attrCount(needle, attribute, value, node.children);
+      }
+    }
+    return count;
+  }
+
+  cvContainsSelfClosingTag(rule, payload) {
+    const html = payload.theText;
+    const json = payload.theJSON;
+    const re = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
+    const open = html.search(re);
+
+    let hasAttr = true;
+    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+    return open !== -1 && hasAttr;
+  }
+
+  cvContainsOne(rule, payload) {
+    /*const html = payload.theText;
+    const json = payload.theJSON;
+    const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+    const open = html.search(re);
+    const close = html.indexOf(`</${rule.needle}>`);
+    const tagClosed = open !== -1 && close !== -1 && open < close;
+
+    let exactlyOne = true;
+    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+    return tagClosed && hasAttr;*/
+    return true;
+  }
+
+  cvContainsTag(rule, payload) {
+    const html = payload.theText;
+    const json = payload.theJSON;
+    const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+    const open = html.search(re);
+    const close = html.indexOf(`</${rule.needle}>`);
+    const tagClosed = open !== -1 && close !== -1 && open < close;
+
+    let hasAttr = true;
+    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+    return tagClosed && hasAttr;
   }
 
   checkForErrors() {
@@ -222,25 +305,22 @@ class CodeEditor extends Component {
     const {baseRules, rulejson} = this.state;
     let errors = 0;
     const cv = [];
-    cv.CONTAINS = cvContainsTag;
+    // cv.CONTAINS = cvContainsTag;
+    cv.CONTAINS = this.cvContainsTag.bind(this);
     cv.CONTAINS_ONE = cvContainsOne;
     cv.CSS_CONTAINS = cvContainsStyle;
-    cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
+    cv.CONTAINS_SELF_CLOSE = this.cvContainsSelfClosingTag.bind(this);
     cv.NESTS = cvNests;
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
     cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);
     cv.JS_MATCHES = this.cvMatch.bind(this);
     cv.JS_USES = this.cvUses.bind(this);
-    let payload = theText;
+    const payload = {theText, theJS, theJSON};
     for (const r of baseRules) {
-      if (r.type === "CSS_CONTAINS") payload = theJSON;
-      if (r.type === "JS_MATCHES" || r.type === "JS_USES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
     for (const r of rulejson) {
-      if (r.type === "CSS_CONTAINS") payload = theJSON;
-      if (r.type === "JS_MATCHES" || r.type === "JS_USES") payload = theJS;
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
       if (!r.passing) errors++;
     }
@@ -270,8 +350,19 @@ class CodeEditor extends Component {
         const newJSON = this.stripJS(oldJSON);
         theText = toHTML(newJSON);
       }
-      this.checkForErrors();
-      this.writeToIFrame(theText);
+      else {
+        this.checkForErrors.bind(this)();
+      }
+      this.writeToIFrame.bind(this)(theText);
+
+      /*
+      This execution is for when we change slides but DON'T Remount the component. When this happens, the external
+      component calls setEntireContents to change the code, and sets changesMade to false as it's in an intialized
+      state. Getting to a renderText with changesMade false means we have changed slides and need to run execute again
+      */
+      if (!this.state.changesMade) {
+        this.executeCode.bind(this)();
+      }
     }
   }
 
@@ -282,6 +373,7 @@ class CodeEditor extends Component {
       let param2 = null;
       if (rule.property !== undefined) param2 = rule.property;
       if (rule.outer !== undefined) param2 = rule.outer;
+      if (rule.attribute !== undefined) param2 = rule.attribute;
       if (rule.argType !== undefined) param2 = rule.argType;
       if (rule.varType !== undefined) param2 = rule.varType;
       const param3 = rule.value;
@@ -292,6 +384,11 @@ class CodeEditor extends Component {
     else {
       return "";
     }
+  }
+
+  iFrameLoaded() {
+    this.writeToIFrame.bind(this)(this.state.currentText);
+    this.executeCode.bind(this)();
   }
 
   onChangeText(theText) {
@@ -308,13 +405,13 @@ class CodeEditor extends Component {
   myCatch(e) {
     const {embeddedConsole} = this.state;
     embeddedConsole.push([e]);
-    this.setState({embeddedConsole});
+    // this.setState({embeddedConsole});
   }
 
   myLog() {
     const {embeddedConsole} = this.state;
     embeddedConsole.push(Array.from(arguments));
-    this.setState({embeddedConsole});
+    // this.setState({embeddedConsole});
   }
 
   evalType(value) {
@@ -326,18 +423,20 @@ class CodeEditor extends Component {
     return t;
   }
 
-  myPost() {
+  handlePost() {
     const type = arguments[0];
     if (type === "console") {
-      this.myLog(arguments[1]);
+      this.myLog.bind(this)(arguments[1]);
     }
     else if (type === "catch") {
-      this.myCatch(arguments[1]);
+      this.myCatch.bind(this)(arguments[1]);
     }
     else if (type === "rule") {
-      this.checkJVMState(arguments[1], arguments[2]);
+      this.checkJVMState.bind(this)(arguments[1], arguments[2]);
     }
-    this.checkForErrors();
+    else if (type === "completed") {
+      this.checkForErrors.bind(this)();
+    }
   }
 
   checkJVMState(needle, value) {
@@ -361,7 +460,7 @@ class CodeEditor extends Component {
     }
   }
 
-  reverse(s) { 
+  reverse(s) {
     return s.split("").reverse().join("");
   }
 
@@ -388,23 +487,27 @@ class CodeEditor extends Component {
           if (result) result = result.map(this.reverse);
           r.passing = result !== null;
           const arg = result ? result[1] : null;
-          js += `parent.myPost('rule', '${r.needle}', ${arg});\n`; 
+          js += `parent.myPost('rule', '${r.needle}', ${arg});\n`;
         }
       }
 
+      js += "parent.myPost('completed');\n";
+
       const finaljs = `
-        var js=${JSON.stringify(js.replace(/(?:\r\n|\r|\n)/g, ""))};
+        var js=${JSON.stringify(js)};
+        var protected = parent.loopProtect(js);
         try {
-          eval(js);
+          eval(protected);
         }
         catch (e) {
           parent.myPost("catch", e);
+          parent.myPost("completed");
         }
       `;
 
       const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
 
-      this.writeToIFrame(theText);
+      this.writeToIFrame.bind(this)(theText);
     }
   }
 
@@ -444,7 +547,6 @@ class CodeEditor extends Component {
     this.setState({changesMade});
   }
 
-
   executeCode() {
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
@@ -458,7 +560,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, island, t} = this.props;
+    const {codeTitle, island, readOnly, t} = this.props;
     const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
@@ -483,11 +585,11 @@ class CodeEditor extends Component {
 
     return (
       <div id="codeEditor">
-        { 
+        {
           this.props.showEditor
-            ? <div className="code">
-              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || "Code" }</div>
-              { 
+            ? <div className={ `code ${readOnly ? "readOnly" : ""}` }>
+              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || (readOnly ? t("Code Example") : t("Code Editor")) }</div>
+              {
                 !this.props.blurred
                   ? <AceWrapper
                     className="editor"
@@ -498,22 +600,24 @@ class CodeEditor extends Component {
                   />
                   : <pre className="editor blurry-text">{currentText}</pre>
               }
-              { 
-                this.props.blurred 
+              {
+                this.props.blurred
                   ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island ? island : "" }` }>
                     <div className="pt-popover-content">
                       { t("Codeblock's code will be shown after you complete the last level of this island.") }
                     </div>
-                  </div> 
-                  : null 
+                  </div>
+                  : null
               }
-              <div className={ `drawer ${openRules ? "open" : ""}` }>
-                <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
-                  <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-                  <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+              { !readOnly
+                ? <div className={ `drawer ${openRules ? "open" : ""}` }>
+                  <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
+                    <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
+                    <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+                  </div>
+                  { this.getValidationBox() }
                 </div>
-                { this.getValidationBox() }
-              </div>
+                : null }
             </div>
             : null
         }
@@ -524,9 +628,9 @@ class CodeEditor extends Component {
               : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`}/>
+          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} onLoad={this.iFrameLoaded.bind(this)}/>
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
-            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("Javascript Console") }</div>
+            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }</div>
             <div className="contents">{consoleText}</div>
           </div>
         </div>

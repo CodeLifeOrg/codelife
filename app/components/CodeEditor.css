@@ -21,11 +21,12 @@
         margin-right: 5px;
       }
     }
+    & .slide-editor {
+      border-radius: 0 5px 0 0;
+    }
     & .editor {
       align-self: stretch;
-      background-color: #323232;
       border-radius: 0 5px 0 0;
-      color: white;
       flex: 1;
       font-size: 12px;
       margin: 0;
@@ -33,6 +34,7 @@
       padding: 10px 15px;
       white-space: pre-wrap;
       &.blurry-text {
+        background-color: #323232;
         color: transparent;
         pointer-events: none;
         text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
@@ -45,6 +47,16 @@
       text-align: center;
       top: 45%;
       width: 300px;
+    }
+    &.readOnly {
+      & .panel-title {
+        background-color: #ddd;
+        color: black;
+      }
+      & .slide-editor {
+        border: 1px solid #ddd;
+        border-radius: 0 5px 5px 5px;
+      }
     }
   }
 }

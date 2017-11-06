@@ -33,11 +33,11 @@ class Splash extends Component {
             <img className="island" src="/islands/splash.png" />
             <img className="logo" src="/logo/logo.png" />
             { signup
-            ? <div className="form">
+              ? <div className="form">
                 <button className="pt-button pt-minimal pt-intent-danger pt-fill" onClick={ this.toggleSignup.bind(this) }><span className="pt-icon-standard pt-icon-double-chevron-left pt-align-left" />{ t("Login.Login") }</button>
                 <SignUp />
               </div>
-            : <div className="form">
+              : <div className="form">
                 <Login />
                 <button className="pt-button pt-minimal pt-intent-danger pt-fill" onClick={ this.toggleSignup.bind(this) }>{ t("Sign Up") }<span className="pt-icon-standard pt-icon-double-chevron-right pt-align-right" /></button>
               </div>

@@ -35,7 +35,7 @@ class App extends Component {
   componentDidMount() {
     axios.get("/api/islands").then(resp => {
       const islands = resp.data;
-      this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});  
+      this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});
     });
   }
 
@@ -63,14 +63,15 @@ class App extends Component {
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
         { userInit && !auth.loading || authRoute
-        ? bareRoute ? children
-        : <div className="container">
-            <Clouds />
-            <Nav logo={ !location.pathname.includes("login") } />
-            { children }
-            <Footer currentPath={location.pathname} className={ theme } />
-          </div>
-        : <div className="container">
+          ? bareRoute
+            ? children
+            : <div className="container">
+              <Clouds />
+              <Nav logo={ !location.pathname.includes("login") } />
+              { children }
+              <Footer currentPath={location.pathname} className={ theme } />
+            </div>
+          : <div className="container">
             <Clouds />
             <Loading />
           </div> }

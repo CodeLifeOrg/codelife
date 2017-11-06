@@ -17,27 +17,32 @@ class Nav extends Component {
 
     return (
       <div id="nav">
-        { logo ? <Link to={"/"}><img className="logo" src="/logo/logo-sm.png" /></Link> : <div></div> }
-        <div className="links">
-          { auth.user
-          ? <div>
-              <Link className="link" to="/island"><span className="pt-icon-standard pt-icon-path-search" />{ t("Map") }</Link>
-              <Link className="link" to={`/projects/${auth.user.username}`}><span className="pt-icon-standard pt-icon-book" />{ t("Projects") }</Link>
-              <Popover
-                interactionKind={PopoverInteractionKind.HOVER}
-                popoverClassName="pt-popover-content-sizing user-popover"
-                position={Position.BOTTOM_RIGHT}
-              >
-                <Link className="link" to={ `/profile/${ auth.user.username }` }><span className="pt-icon-standard pt-icon-user" />{ auth.user.username }</Link>
-                <div>
-                  <Link className="pt-button pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
-                  { auth.user.role > 0 ? <Link className="pt-button pt-fill" to="/admin">{ t("Admin") }</Link> : null }
-                  <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>
-                </div>
-              </Popover>
-            </div>
-          : null }
-        </div>
+        { logo
+          ? <Link className="logo" to={"/"}>
+            <div className="tag">Beta</div>
+            <img className="text" src="/logo/logo-sm.png" />
+          </Link>
+          : <div></div> }
+        { auth.user
+          ? <div className="links">
+            <Link className="link" to="/island"><span className="pt-icon-standard pt-icon-path-search" />{ t("Map") }</Link>
+            <Link className="link" to={`/projects/${auth.user.username}`}><span className="pt-icon-standard pt-icon-book" />{ t("Projects") }</Link>
+            <Popover
+              interactionKind={PopoverInteractionKind.HOVER}
+              popoverClassName="pt-popover-content-sizing user-popover"
+              position={Position.BOTTOM_RIGHT}
+            >
+              <Link className="link" to={ `/profile/${ auth.user.username }` }><span className="pt-icon-standard pt-icon-user" />{ auth.user.username }</Link>
+              <div>
+                <Link className="pt-button pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
+                { auth.user.role > 0 ? <Link className="pt-button pt-fill" to="/admin">{ t("Admin") }</Link> : null }
+                <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>
+              </div>
+            </Popover>
+          </div>
+          : <div className="links">
+            <Link className="link" to="/about"><span className="pt-icon-standard pt-icon-help" />{ t("About") }</Link>
+          </div> }
       </div>
     );
   }

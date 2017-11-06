@@ -5,7 +5,23 @@ module.exports = function(app) {
 
   app.get("/api/userprogress/", (req, res) => {
 
-    db.userprogress.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+    db.userprogress.findAll({where: {uid: req.user.id}})
+      .then(progress => {
+        const returnObj = {progress};
+        db.islands.findAll()
+          .then(islands => {
+            let latestIsland = -1;
+            for (const up of progress) {
+              const i = islands.find(i => i.id === up.level);
+              if (i && i.ordering > latestIsland) {
+                latestIsland = i.ordering;
+              }
+            }
+            const island = islands.find(i => i.ordering === latestIsland + 1);
+            returnObj.current = island;
+            res.json(returnObj).end();
+          });
+      });
 
   });
 

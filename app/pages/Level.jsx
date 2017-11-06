@@ -51,7 +51,7 @@ class Level extends Component {
     Promise.all([lget, iget, uget, cbget, lkget, rget]).then(resp => {
       const levels = resp[0].data;
       const islands = resp[1].data;
-      const userProgress = resp[2].data;
+      const userProgress = resp[2].data.progress;
       const allCodeBlocks = resp[3].data;
       const likes = resp[4].data;
       const reports = resp[5].data;
@@ -287,7 +287,7 @@ class Level extends Component {
     const {auth, t} = this.props;
     const {levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <Loading />;
 
     const islandDone = this.hasUserCompleted(this.props.params.lid);

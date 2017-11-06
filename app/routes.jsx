@@ -6,13 +6,13 @@ import App from "components/App";
 import About from "pages/About";
 import EditProfile from "pages/profile/EditProfile";
 import Glossary from "pages/Glossary";
+import Home from "pages/Home";
 import Island from "pages/Island";
 import Level from "pages/Level";
 import Privacy from "pages/Privacy";
 import Profile from "pages/profile/Profile";
 import Share from "pages/Share";
 import Slide from "pages/Slide";
-import Splash from "pages/Splash";
 import Studio from "pages/Studio";
 import Survey from "pages/Survey";
 import AdminPanel from "pages/admin/AdminPanel";
@@ -22,9 +22,7 @@ export default function RouteCreate() {
   return (
     <Route path="/" component={App} history={browserHistory}>
 
-      <IndexRoute component={Island} />
-
-      <Route path="login" component={Splash} />
+      <IndexRoute component={Home} />
 
       <Route path="island" component={Island} />
       <Route path="island/:lid" component={Level} />

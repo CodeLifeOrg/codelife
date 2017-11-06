@@ -120,7 +120,7 @@ class Studio extends Component {
     const {activeTabId, currentProject, titleText} = this.state;
     const {filename} = this.props.params;
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
 
     const allCodeBlockRef = <CodeBlockList/>;
     const projectRef = <Projects  projectToLoad={filename}

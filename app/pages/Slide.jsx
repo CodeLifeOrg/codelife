@@ -116,7 +116,7 @@ class Slide extends Component {
       }
       */
 
-      const up = resp[3].data;
+      const up = resp[3].data.progress;
       const done = up.find(p => p.level === mlid) !== undefined;
 
       let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
@@ -125,11 +125,11 @@ class Slide extends Component {
       this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels: resp[2].data});
     });
 
-    document.addEventListener("keydown", this.handleKey.bind(this));
+    document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
   handleKey(e) {
-    e.keyCode === 192 ? this.unblock(this) : null;
+    e.keyCode === 192 && this.props.auth.user.role > 0 ? this.unblock(this) : null;
   }
 
   updateGems(newGems) {
@@ -147,7 +147,7 @@ class Slide extends Component {
     const {currentSlide, slides, currentIsland, gems} = this.state;
     const updateGems = this.updateGems.bind(this);
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;

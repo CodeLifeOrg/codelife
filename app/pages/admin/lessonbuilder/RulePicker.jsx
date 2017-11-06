@@ -54,10 +54,12 @@ class RulePicker extends Component {
           type: r.type,
           needle: r.needle
         };
+        // TODO: this should probably be a case statement
         if (r.outer) obj.outer = r.outer;
         if (r.property) obj.property = r.property;
         if (r.varType) obj.varType = r.varType;
         if (r.argType) obj.argType = r.argType;
+        if (r.attribute) obj.attribute = r.attribute;
         if (r.value) obj.value = r.value;
         if (r.regex) obj.regex = r.regex;
         json.push(obj);
@@ -109,15 +111,20 @@ class RulePicker extends Component {
     let ruleItems = [];
 
     const param2 = [];
+    param2.CONTAINS = "attribute";
+    param2.CONTAINS_SELF_CLOSE = "attribute";
     param2.CSS_CONTAINS = "property";
     param2.NESTS = "outer";
     param2.JS_VAR_EQUALS = "varType";
     param2.JS_FUNC_EQUALS = "argType";
     param2.JS_MATCHES = "regex";
     const param3 = [];
+    param3.CONTAINS = "value";
+    param3.CONTAINS_SELF_CLOSE = "value";
     param3.CSS_CONTAINS = "value";
     param3.JS_VAR_EQUALS = "value";
     param3.JS_FUNC_EQUALS = "value";
+
     
     if (rules) {
       ruleItems = rules.map(r => 

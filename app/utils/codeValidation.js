@@ -1,20 +1,37 @@
 import css from "css";
 
-export const cvContainsSelfClosingTag = (rule, haystack) => {
+export const cvContainsSelfClosingTag = (rule, payload) => {
+  const haystack = payload.theText;
   const needle = rule.needle;
-  const open = haystack.indexOf(`<${needle}>`);
+  const open = haystack.indexOf(`<${needle}`);
   const close = haystack.indexOf("/>");
   return open !== -1 && close !== -1 && open < close;
 };
 
-export const cvContainsTag = (rule, haystack) => {
+export const cvContainsTag = (rule, payload) => {
+  const haystack = payload.theText;
   const needle = rule.needle;
   const open = haystack.indexOf(`<${needle}>`);
   const close = haystack.indexOf(`</${needle}>`);
   return open !== -1 && close !== -1 && open < close;
 };
 
-export const cvContainsOne = (rule, haystack) => {
+export const cvContainsOne = (rule, payload) => {
+  /* 
+  TODO: REPLACE WITH THIS:
+
+  const html = payload.theText;
+  const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const open = html.search(re);
+  const open2 = html.indexOf(`<${rule.needle}>`, open + 1);
+  const reClose = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const close = html.search(reClose);
+  const close2 = html.indexOf(`</${rule.needle}>`, close + 2);
+
+  */
+
+
+  const haystack = payload.theText;
   const needle = rule.needle; 
   const open = haystack.indexOf(`<${needle}>`);
   const open2 = haystack.indexOf(`<${needle}>`, open + 1);
@@ -23,18 +40,20 @@ export const cvContainsOne = (rule, haystack) => {
   return open2 === -1 && close2 === -1;
 };
 
-export const cvNests = (rule, haystack) => {
+export const cvNests = (rule, payload) => {
+  const haystack = payload.theText;
   const outer = rule.outer;
   const needle = rule.needle;
-  const outerOpen = haystack.indexOf(`<${outer}>`);
+  const outerOpen = haystack.indexOf(`<${outer}`);
   const outerClose = haystack.indexOf(`</${outer}>`);
-  const innerOpen = haystack.indexOf(`<${needle}>`);
+  const innerOpen = haystack.indexOf(`<${needle}`);
   const innerClose = haystack.indexOf(`</${needle}>`);
   return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
           outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
 };
 
-export const cvContainsStyle = (rule, haystack) => {
+export const cvContainsStyle = (rule, payload) => {
+  const haystack = payload.theJSON;
   const needle = rule.needle;
   const property = rule.property;
   const value = rule.value;

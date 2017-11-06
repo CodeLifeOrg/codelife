@@ -51,6 +51,9 @@ class SlideEditor extends Component {
           this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
         }
       }
+      for (const q of this.quills) {
+        if (q) q.quillRef.getEditor().setSelection(0);
+      }
       this.setState({data: this.props.data});
     }
   }
@@ -108,7 +111,14 @@ class SlideEditor extends Component {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
     axios.post("/api/builder/slides/save", data).then(resp => {
-      resp.status === 200 ? console.log("saved") : console.log("error");
+      if (resp.status === 200) {
+        const toast = Toaster.create({className: "slideSave", position: Position.TOP_CENTER});
+        toast.show({message: "Slide saved.", intent: Intent.SUCCESS});
+      } 
+      else {
+        const toast = Toaster.create({className: "slideFail", position: Position.TOP_CENTER});
+        toast.show({message: "Save Error.", intent: Intent.DANGER});
+      }
     });
   }
 
@@ -126,6 +136,8 @@ class SlideEditor extends Component {
     const {data} = this.state;
 
     if (!data) return <Loading />;
+
+    this.quills = [];
 
     const showQuiz = data.type === "Quiz";
     const showRules = data.type === "InputCode";
@@ -209,6 +221,7 @@ class SlideEditor extends Component {
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.htmlcontent1}
               onChange={this.handleEditor.bind(this, "htmlcontent1")} 
+              ref={c => this.quills.push(c) }
             />
           </label>
           <label className="pt-label">
@@ -217,49 +230,60 @@ class SlideEditor extends Component {
               style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_htmlcontent1}
               onChange={this.handleEditor.bind(this, "pt_htmlcontent1")} 
+              ref={c => this.quills.push(c) }
             />
           </label>
         </div>
         { showContent2
           ? showAce2 
             ? <div>
-                <label className="pt-label">
-                  htmlcontent2
-                  <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
-                </label>
-                <label className="pt-label">
-                  pt htmlcontent2  🇧🇷 
-                  <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/> 
-                </label>
-              </div>
+              <label className="pt-label">
+                htmlcontent2
+                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
+              </label>
+              <label className="pt-label">
+                pt htmlcontent2  🇧🇷 
+                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/> 
+              </label>
+            </div>
             : <div className="area-block">
-                <label className="pt-label">
-                  htmlcontent2
-                  {showImg 
-                    ? <div style={{marginRight: "15px"}}>
-                        <img width="500px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
-                        <label className="pt-file-upload">
-                          <input onChange={this.onImgUpdate.bind(this, "en")} type="file" />
-                          <span className="pt-file-upload-input">Upload</span>
-                        </label>
-                      </div>
-                    : <textarea className="pt-input" onChange={this.changeField.bind(this, "htmlcontent2")} rows="10" type="text" placeholder="htmlcontent2" dir="auto" value={data.htmlcontent2} />
-                  }
-                </label>
-                <label className="pt-label">
-                  pt htmlcontent2  🇧🇷 
-                  {showImg 
-                    ? <div>
-                        <img width="500px" src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
-                        <label className="pt-file-upload">
-                          <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
-                          <span className="pt-file-upload-input">Upload</span>
-                        </label>
-                      </div>
-                    : <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_htmlcontent2")} rows="10" type="text" placeholder="pt_htmlcontent2" dir="auto" value={data.pt_htmlcontent2} />
-                  }
-                </label>
-              </div>
+              <label className="pt-label">
+                htmlcontent2
+                { showImg 
+                  ? <div style={{marginRight: "15px"}}>
+                    <img width="500px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                    <label className="pt-file-upload">
+                      <input onChange={this.onImgUpdate.bind(this, "en")} type="file" />
+                      <span className="pt-file-upload-input">Upload</span>
+                    </label>
+                  </div>
+                  : <QuillWrapper
+                    style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+                    value={this.state.data.htmlcontent2}
+                    onChange={this.handleEditor.bind(this, "htmlcontent2")} 
+                    ref={c => this.quills.push(c) }
+                  /> 
+                }
+              </label>
+              <label className="pt-label">
+                pt htmlcontent2  🇧🇷 
+                {showImg 
+                  ? <div>
+                    <img width="500px" src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                    <label className="pt-file-upload">
+                      <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
+                      <span className="pt-file-upload-input">Upload</span>
+                    </label>
+                  </div>
+                  : <QuillWrapper
+                    style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
+                    value={this.state.data.pt_htmlcontent2}
+                    onChange={this.handleEditor.bind(this, "pt_htmlcontent2")} 
+                    ref={c => this.quills.push(c) }
+                  /> 
+                }
+              </label>
+            </div>
           : null
         }
         { showQuiz ? <QuizPicker data={data} parentID={data.id} /> : null }

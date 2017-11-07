@@ -59,6 +59,24 @@ class Slide extends Component {
     const {user} = this.props.auth;
     const {currentSlide, currentLevel, slides, sentProgress, latestSlideCompleted} = this.state;
 
+    // going to new level
+    if (currentLevel && currentLevel.id !== mlid) {
+      this.setState({
+        slides: [],
+        currentSlide: null,
+        blocked: true,
+        currentLevel: null,
+        currentIsland: null,
+        levels: null,
+        sentProgress: false,
+        latestSlideCompleted: 0,
+        islandComplete: false,
+        mounted: false,
+        done: false
+      }, this.hitDB.bind(this));
+      return;
+    }
+
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
@@ -193,7 +211,7 @@ class Slide extends Component {
               ? <div className="pt-button pt-disabled">{t("Next")}</div>
               : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
             : nextLevel
-              ? <div className="pt-button pt-intent-success" onClick={this.advanceLevel.bind(this, nextLevel.id)}>{t("Next Level")}</div> 
+              ? <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link> 
               : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
           }
         </div>

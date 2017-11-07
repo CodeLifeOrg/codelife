@@ -129,4 +129,3 @@ Share = connect(state => ({
 }))(Share);
 Share = translate()(Share);
 export default Share;
-//export default translate()(Share);

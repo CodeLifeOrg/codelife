@@ -366,7 +366,8 @@ class CodeEditor extends Component {
       state. Getting to a renderText with changesMade false means we have changed slides and need to run execute again
       */
       if (!this.state.changesMade) {
-        this.executeCode.bind(this)();
+        this.executeCode.bind(this);
+        //setTimeout(this.executeCode.bind(this), 1000);
       }
     }
   }
@@ -392,8 +393,7 @@ class CodeEditor extends Component {
   }
 
   iFrameLoaded() {
-    this.writeToIFrame.bind(this)(this.state.currentText);
-    this.executeCode.bind(this)();
+    this.renderText.bind(this)();
   }
 
   onChangeText(theText) {

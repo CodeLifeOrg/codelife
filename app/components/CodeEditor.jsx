@@ -416,7 +416,7 @@ class CodeEditor extends Component {
   myLog() {
     const {embeddedConsole} = this.state;
     embeddedConsole.push(Array.from(arguments));
-    // this.setState({embeddedConsole});
+    this.setState({openConsole: true});
   }
 
   evalType(value) {

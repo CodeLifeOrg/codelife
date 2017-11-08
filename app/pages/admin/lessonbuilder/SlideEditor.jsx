@@ -43,14 +43,6 @@ class SlideEditor extends Component {
 
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
-      if (["TextCode", "RenderCode", "InputCode"].indexOf(this.props.data.type) !== -1) {
-        if (this.editor) {
-          this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
-        }
-        if (this.pt_editor) {
-          this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
-        }
-      }
       for (const q of this.quills) {
         if (q) q.quillRef.getEditor().setSelection(0);
       }

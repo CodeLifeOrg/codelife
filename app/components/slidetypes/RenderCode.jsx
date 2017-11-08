@@ -16,14 +16,6 @@ class RenderCode extends Component {
     this.setState({mounted: true});
   }
 
-  componentDidUpdate() {
-    let content = "";
-    if (this.props.htmlcontent2) content = this.props.htmlcontent2;
-    if (this.editor.getWrappedInstance().getWrappedInstance().getEntireContents() !== content) {
-      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(content);
-    }
-  }
-
   executeCode() {
     if (this.editor) {
       this.editor.getWrappedInstance().getWrappedInstance().executeCode();

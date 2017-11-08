@@ -33,3 +33,6 @@ islands:
   island-beach:
     dark: "#6f3100"
     light: "#ddf1eb"
+  island-clock:
+    dark: "#5a0d00"
+    light: "#faac8c"

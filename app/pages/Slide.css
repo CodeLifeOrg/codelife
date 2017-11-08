@@ -62,7 +62,6 @@
     & pre {
       break-inside: avoid-column;
       column-break-inside: avoid;
-      display: table;
       font-size: 12px;
       overflow-x: auto;
       margin: 0;

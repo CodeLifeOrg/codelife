@@ -62,7 +62,6 @@ class CodeEditor extends Component {
     const {iFrameLoaded, initialContent} = this.state;
     const {initialValue} = this.props;
     if (iFrameLoaded && initialContent !== initialValue) {
-      console.log("UPDATE", initialContent.length, initialValue.length);
       clearTimeout(this.myTimeout);
       this.setState({initialContent: initialValue, currentText: initialValue}, this.renderText.bind(this, true));
     }
@@ -353,7 +352,6 @@ class CodeEditor extends Component {
 
   writeToIFrame(theText) {
     if (this.state.iFrameLoaded) {
-      console.log("writeToIFrame", theText.length);
       this.refs.rc.contentWindow.postMessage(theText, this.state.sandbox.root);
     }
   }
@@ -372,7 +370,6 @@ class CodeEditor extends Component {
       this.writeToIFrame.bind(this)(theText);
 
       if (executeJS) {
-        // this.executeCode.bind(this)();
         this.myTimeout = setTimeout(this.executeCode.bind(this), 1000);
       }
     }
@@ -399,7 +396,6 @@ class CodeEditor extends Component {
   }
 
   iFrameLoaded() {
-    console.log("iFrameLoaded", this.state.iFrameLoaded);
     if (!this.state.iFrameLoaded) {
 
       axios.get("/api/rules").then(resp => {
@@ -407,7 +403,7 @@ class CodeEditor extends Component {
         const currentText = this.props.initialValue || "";
         const rulejson = this.props.rulejson || [];
         const titleText = this.getTitleText(currentText);
-        const baseRules = this.props.lax ? [] : this.getBaseRules();
+        const baseRules = ["island-jungle", "island-themepark", "island-blizzard"].includes(this.props.island) ? [] : this.getBaseRules();
         this.setState({mounted: true, iFrameLoaded: true, currentText, baseRules, rulejson, ruleErrors, titleText});
         if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
       });

@@ -70,7 +70,6 @@ class CodeBlock extends Component {
     let initialcontent = "";
     if (island && island.initialcontent) initialcontent = island.initialcontent;
     this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(initialcontent);
-    // this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
   }
 

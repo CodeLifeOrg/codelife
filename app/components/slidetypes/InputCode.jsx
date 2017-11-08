@@ -26,14 +26,6 @@ class InputCode extends Component {
     this.setState({mounted: true, rulejson, baseText});
   }
 
-  /*componentDidUpdate() {
-    const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
-    if (this.state.baseText !== newText) {
-      this.setState({baseText: newText});
-      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newText);
-    }
-  }*/
-
   submitAnswer() {
     const {t} = this.props;
     const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});

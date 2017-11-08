@@ -69,12 +69,6 @@
       page-break-inside: avoid;
       padding: 5px 10px;
       width: 100%;
-      &:not(:first-child) {
-        margin-top: -15px;
-      }
-      &:not(:last-child) {
-        margin-bottom: -15px;
-      }
     }
     & .slide-text {
       font-size: 16px;

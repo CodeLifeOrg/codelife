@@ -271,10 +271,12 @@
   },
   "home": {
     "body": "",
+    "continue": "Continue learning on {{island}}",
     "prompt": "Join the revolution, and start your adventure today!",
     "sub": "",
     "tagline": "CodeLife is a free online tool that teaches Brazilian teenagers information technology and web skills.",
     "title": "",
+    "start": "Begin your adventure on {{island}}",
     "welcome": "Welcome back {{name}}!"
   },
   "myCodeblock": "My {{ islandName }} CodeBlock",

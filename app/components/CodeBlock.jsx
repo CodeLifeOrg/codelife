@@ -17,6 +17,7 @@ class CodeBlock extends Component {
       mounted: false,
       initialContent: "",
       isPassing: false,
+      execState: false, 
       isOpen: false,
       goodRatio: 0,
       intent: null,
@@ -53,6 +54,10 @@ class CodeBlock extends Component {
 
   onFirstCompletion(winMessage) {
     this.props.onFirstCompletion(winMessage);
+  }
+
+  setExecState(execState) {
+    this.setState({execState});
   }
 
   saveProgress(level) {
@@ -144,7 +149,7 @@ class CodeBlock extends Component {
 
   render() {
     const {t, island} = this.props;
-    const {initialContent, timeoutAlert, rulejson} = this.state;
+    const {initialContent, timeoutAlert, rulejson, execState} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -173,12 +178,12 @@ class CodeBlock extends Component {
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: island.prompt}} />
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
           { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
-          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
+          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"

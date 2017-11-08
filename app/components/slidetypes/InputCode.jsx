@@ -15,6 +15,7 @@ class InputCode extends Component {
       currentText: "",
       titleText: "",
       baseText: "",
+      execState: false,
       rulejson: null,
       resetAlert: false
     };
@@ -24,6 +25,10 @@ class InputCode extends Component {
     const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
     const baseText = this.props.htmlcontent2 || "";
     this.setState({mounted: true, rulejson, baseText});
+  }
+
+  setExecState(execState) {
+    this.setState({execState});
   }
 
   submitAnswer() {
@@ -54,7 +59,7 @@ class InputCode extends Component {
 
   render() {
     const {lax, t, htmlcontent1, htmlcontent2, island} = this.props;
-    const {titleText, rulejson} = this.state;
+    const {titleText, rulejson, execState} = this.state;
 
     return (
       <div id="slide-container" className="renderCode flex-column">
@@ -70,11 +75,11 @@ class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
-          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
+          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>
         </div>
       </div>

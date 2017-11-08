@@ -58,8 +58,17 @@ class CodeEditor extends Component {
     if (this.refs.rc) this.refs.rc.contentWindow.postMessage("wakeup", this.state.sandbox.root);
   }
 
-  componentDidUpdate() {
-    const {iFrameLoaded, initialContent} = this.state;
+  componentDidUpdate(prevProps, prevState) {
+    const {iFrameLoaded, initialContent, currentJS} = this.state;
+    if (this.props.setExecState) {
+      if (!prevState.currentJS && currentJS) {
+        this.props.setExecState(true);  
+      } 
+      else if (prevState.currentJS && !currentJS) {
+        this.props.setExecState(false);
+      }
+    }
+    
     const {initialValue} = this.props;
     if (iFrameLoaded && initialContent !== initialValue) {
       clearTimeout(this.myTimeout);
@@ -356,15 +365,23 @@ class CodeEditor extends Component {
     }
   }
 
+  hasJS(theText) {
+    const re = new RegExp(`<script[^>]*>`, "g");
+    const open = theText.search(re);
+    const close = theText.indexOf("</script>");
+    return open !== -1 && close !== -1 && open < close;
+  }
+
   renderText(executeJS) {
     if (this.refs.rc) {
       let theText = this.state.currentText;
-      if (theText.includes("script")) {
+      if (this.hasJS(theText)) {
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS.bind(this)(oldJSON);
         theText = toHTML(newJSON);
       }
       else {
+        this.setState({currentJS: ""});
         this.checkForErrors.bind(this)();
       }
       this.writeToIFrame.bind(this)(theText);

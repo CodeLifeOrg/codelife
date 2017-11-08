@@ -53,7 +53,7 @@ class InputCode extends Component {
   }
 
   render() {
-    const {t, htmlcontent1, htmlcontent2, island} = this.props;
+    const {lax, t, htmlcontent1, htmlcontent2, island} = this.props;
     const {titleText, rulejson} = this.state;
 
     return (
@@ -70,7 +70,7 @@ class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} rulejson={rulejson} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

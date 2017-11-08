@@ -80,7 +80,7 @@ class Slide extends Component {
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (this.state.done) blocked = false;
       this.setState({currentSlide: cs, blocked});
@@ -88,7 +88,7 @@ class Slide extends Component {
 
     const i = slides.indexOf(currentSlide);
     if (this.state.mounted && currentSlide &&
-      ["InputCode", "InputCodeExec", "Quiz"].indexOf(currentSlide.type) === -1 &&
+      ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i});
     }
@@ -134,7 +134,7 @@ class Slide extends Component {
       const levels = resp[2].data;
       const currentLevel = levels.find(l => l.id === mlid);
 
-      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
       this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels, currentLevel});
@@ -176,12 +176,7 @@ class Slide extends Component {
 
     const nextLevel = levels.find(l => l.ordering === currentLevel.ordering + 1);
 
-    let exec = false;
-    let sType = currentSlide.type;
-    if (sType.includes("Exec")) {
-      exec = true;
-      sType = sType.replace("Exec", "");
-    }
+    const sType = currentSlide.type;
 
     SlideComponent = compLookup[sType];
 
@@ -197,7 +192,6 @@ class Slide extends Component {
         </div>
 
         <SlideComponent
-          exec={exec}
           island={currentIsland.theme}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />

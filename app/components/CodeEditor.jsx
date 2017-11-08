@@ -403,7 +403,7 @@ class CodeEditor extends Component {
         const currentText = this.props.initialValue || "";
         const rulejson = this.props.rulejson || [];
         const titleText = this.getTitleText(currentText);
-        const baseRules = ["island-jungle", "island-themepark", "island-blizzard"].includes(this.props.island) ? [] : this.getBaseRules();
+        const baseRules = this.props.lax ? [] : this.getBaseRules();
         this.setState({mounted: true, iFrameLoaded: true, currentText, baseRules, rulejson, ruleErrors, titleText});
         if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
       });

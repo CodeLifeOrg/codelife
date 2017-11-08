@@ -28,12 +28,10 @@ class Studio extends Component {
 
   onCreateProject(project) {
     this.setState({currentProject: project});
-    if (this.editor.getWrappedInstance().getWrappedInstance()) this.editor.getWrappedInstance().getWrappedInstance().setEntireContents("");
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}/edit`);
   }
 
   onDeleteProject(newproject) {
-    if (newproject.id !== this.state.currentProject.id) this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
   }
@@ -41,7 +39,6 @@ class Studio extends Component {
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
-      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(resp.data[0].studentcontent);
       browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}/edit`);
     });
   }
@@ -145,7 +142,7 @@ class Studio extends Component {
             <Tab2 id="projects" title={t("Projects")} panel={ projectRef } />
             <Tab2 id="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
           </Tabs2>
-          <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } ref={c => this.editor = c} />
+          <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } initialValue={currentProject ? currentProject.studentcontent : ""} ref={c => this.editor = c} />
         </div>
       </div>
     );

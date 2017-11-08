@@ -6,7 +6,7 @@ import Loading from "components/Loading";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import QuizPicker from "pages/admin/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor";
-import {Button, Dialog, Toaster, Position, Intent} from "@blueprintjs/core";
+import {Button, Dialog, Toaster, Position, Intent, Checkbox} from "@blueprintjs/core";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -43,14 +43,6 @@ class SlideEditor extends Component {
 
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
-      if (["TextCode", "RenderCode", "InputCode"].indexOf(this.props.data.type) !== -1) {
-        if (this.editor) {
-          this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.htmlcontent2);
-        }
-        if (this.pt_editor) {
-          this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_htmlcontent2);
-        }
-      }
       for (const q of this.quills) {
         if (q) q.quillRef.getEditor().setSelection(0);
       }
@@ -105,6 +97,12 @@ class SlideEditor extends Component {
 
   closePreview() {
     this.setState({isOpen: false, pt_isOpen: false});
+  }
+
+  handleLax(e) {
+    const {data} = this.state;
+    data.lax = e.target.checked ? true : false;
+    this.setState({data});
   }
   
   saveContent() {
@@ -287,7 +285,12 @@ class SlideEditor extends Component {
           : null
         }
         { showQuiz ? <QuizPicker data={data} parentID={data.id} /> : null }
-        { showRules ? <RulePicker data={data} parentID={data.id} /> : null }
+        { showRules 
+          ? <div>
+            Lax Mode <Checkbox id="lax" checked={data.lax} onChange={this.handleLax.bind(this)} />        
+            <RulePicker data={data} parentID={data.id} />
+          </div> : null 
+        }
         <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
         <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview PT</Button>&nbsp;
         <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>

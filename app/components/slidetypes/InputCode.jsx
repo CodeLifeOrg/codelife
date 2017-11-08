@@ -22,16 +22,8 @@ class InputCode extends Component {
 
   componentDidMount() {
     const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
-    const baseText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
+    const baseText = this.props.htmlcontent2 || "";
     this.setState({mounted: true, rulejson, baseText});
-  }
-
-  componentDidUpdate() {
-    const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
-    if (this.state.baseText !== newText) {
-      this.setState({baseText: newText});
-      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newText);
-    }
   }
 
   submitAnswer() {
@@ -48,7 +40,7 @@ class InputCode extends Component {
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
   resetAnswer() {
-    this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
+    this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.htmlcontent2 || "");
     this.setState({resetAlert: false});
   }
 
@@ -61,10 +53,8 @@ class InputCode extends Component {
   }
 
   render() {
-    const {t, htmlcontent1, htmlcontent2, island} = this.props;
+    const {lax, t, htmlcontent1, htmlcontent2, island} = this.props;
     const {titleText, rulejson} = this.state;
-
-    const initialContent = htmlcontent2 ? htmlcontent2 : "";
 
     return (
       <div id="slide-container" className="renderCode flex-column">
@@ -80,7 +70,7 @@ class InputCode extends Component {
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} rulejson={rulejson} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
@@ -91,6 +81,10 @@ class InputCode extends Component {
     );
   }
 }
+
+InputCode.defaultProps = {
+  htmlcontent2: ""
+};
 
 InputCode = connect(state => ({
   user: state.auth.user

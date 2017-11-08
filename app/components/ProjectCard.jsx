@@ -72,20 +72,23 @@ class ProjectCard extends Component {
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
             </div>
             <div className="pt-dialog-footer-actions">
-              <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
-              >
-                <Button
-                  intent={reported ? "" : Intent.DANGER}
-                  iconName="flag"
-                  text={reported ? "Flagged" : "Flag"}
-                />
-                <div>
-                 <ReportBox reportid={id} contentType="project" handleReport={this.handleReport.bind(this)}/>
-                </div>
-              </Popover>
+              { user
+                ? <Popover
+                  interactionKind={PopoverInteractionKind.CLICK}
+                  popoverClassName="pt-popover-content-sizing"
+                  position={Position.TOP_RIGHT}
+                >
+                  <Button
+                    intent={reported ? "" : Intent.DANGER}
+                    iconName="flag"
+                    text={reported ? "Flagged" : "Flag"}
+                  />
+                  <div>
+                    <ReportBox reportid={id} contentType="project" handleReport={this.handleReport.bind(this)}/>
+                  </div>
+                </Popover>
+                : null 
+              }
               <Button
                 intent={ Intent.PRIMARY }
                 onClick={ this.toggleDialog.bind(this) }

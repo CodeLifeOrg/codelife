@@ -19,9 +19,11 @@ class CodeEditor extends Component {
     super(props);
     this.state = {
       mounted: false,
+      iFrameLoaded: false,
       currentText: "",
+      initialContent: "",
       changesMade: false,
-      baseRules: null,
+      baseRules: [],
       isPassing: false,
       rulejson: [],
       ruleErrors: [],
@@ -32,11 +34,15 @@ class CodeEditor extends Component {
       jsRules: [],
       titleText: "",
       remoteReady: false,
-      sandbox: "",
+      sandbox: {
+        root: "https://codelife.tech",
+        page: props.location.hostname === "localhost" ? "page_local.html" : "page.html"
+      },
       openRules: false,
       openConsole: false
     };
     this.recRef = this.receiveMessage.bind(this);
+    this.pingRemoteRef = this.pingRemote.bind(this);
   }
 
   componentWillUnmount() {
@@ -45,24 +51,20 @@ class CodeEditor extends Component {
 
   componentDidMount() {
     if (window) window.addEventListener("message", this.recRef, false);
+    this.ping = setInterval(this.pingRemoteRef, 50);
+  }
 
-    const sandbox = {
-      root: "https://codelife.tech",
-      page: "page.html"
-    };
+  pingRemote() {
+    if (this.refs.rc) this.refs.rc.contentWindow.postMessage("wakeup", this.state.sandbox.root);
+  }
 
-    if (this.props.location.hostname === "localhost") sandbox.page = "page_local.html";
-
-    axios.get("/api/rules").then(resp => {
-      const ruleErrors = resp.data;
-      const currentText = this.props.initialValue ? this.props.initialValue : "";
-      const rulejson = this.props.rulejson ? this.props.rulejson : [];
-      const titleText = this.getTitleText(currentText);
-      const baseRules = this.props.lax ? [] : this.getBaseRules();
-      this.setState({mounted: true, currentText, sandbox, baseRules, rulejson, ruleErrors, titleText}, this.renderText.bind(this));
-      if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
-
-    });
+  componentDidUpdate() {
+    const {iFrameLoaded, initialContent} = this.state;
+    const {initialValue} = this.props;
+    if (iFrameLoaded && initialContent !== initialValue) {
+      clearTimeout(this.myTimeout);
+      this.setState({initialContent: initialValue, currentText: initialValue}, this.renderText.bind(this, true));
+    }
   }
 
   getBaseRules() {
@@ -92,8 +94,15 @@ class CodeEditor extends Component {
     if (event.origin !== this.state.sandbox.root) {
       return;
     }
-    else if (this.state.mounted) {
-      this.handlePost.bind(this)(...event.data);
+    else {
+      if (event.data === "awake") {
+        clearInterval(this.ping);
+        this.iFrameLoaded.bind(this)();
+      } 
+      else {
+        this.handlePost.bind(this)(...event.data);  
+      }
+      
     }
   }
 
@@ -342,17 +351,17 @@ class CodeEditor extends Component {
   }
 
   writeToIFrame(theText) {
-    if (this.refs.rc) {
+    if (this.state.iFrameLoaded) {
       this.refs.rc.contentWindow.postMessage(theText, this.state.sandbox.root);
     }
   }
 
-  renderText() {
+  renderText(executeJS) {
     if (this.refs.rc) {
       let theText = this.state.currentText;
       if (theText.includes("script")) {
         const oldJSON = himalaya.parse(this.state.currentText);
-        const newJSON = this.stripJS(oldJSON);
+        const newJSON = this.stripJS.bind(this)(oldJSON);
         theText = toHTML(newJSON);
       }
       else {
@@ -360,13 +369,8 @@ class CodeEditor extends Component {
       }
       this.writeToIFrame.bind(this)(theText);
 
-      /*
-      This execution is for when we change slides but DON'T Remount the component. When this happens, the external
-      component calls setEntireContents to change the code, and sets changesMade to false as it's in an intialized
-      state. Getting to a renderText with changesMade false means we have changed slides and need to run execute again
-      */
-      if (!this.state.changesMade) {
-        this.executeCode.bind(this)();
+      if (executeJS) {
+        this.myTimeout = setTimeout(this.executeCode.bind(this), 1000);
       }
     }
   }
@@ -392,8 +396,18 @@ class CodeEditor extends Component {
   }
 
   iFrameLoaded() {
-    this.writeToIFrame.bind(this)(this.state.currentText);
-    this.executeCode.bind(this)();
+    if (!this.state.iFrameLoaded) {
+
+      axios.get("/api/rules").then(resp => {
+        const ruleErrors = resp.data;
+        const currentText = this.props.initialValue || "";
+        const rulejson = this.props.rulejson || [];
+        const titleText = this.getTitleText(currentText);
+        const baseRules = this.props.lax ? [] : this.getBaseRules();
+        this.setState({mounted: true, iFrameLoaded: true, currentText, baseRules, rulejson, ruleErrors, titleText});
+        if (this.props.onChangeText) this.props.onChangeText(this.props.initialValue);
+      });
+    }
   }
 
   onChangeText(theText) {
@@ -416,7 +430,7 @@ class CodeEditor extends Component {
   myLog() {
     const {embeddedConsole} = this.state;
     embeddedConsole.push(Array.from(arguments));
-    // this.setState({embeddedConsole});
+    this.setState({openConsole: true});
   }
 
   evalType(value) {
@@ -470,7 +484,6 @@ class CodeEditor extends Component {
   }
 
   internalRender() {
-
     if (this.state.currentJS) {
 
       let js = this.state.currentJS.split("console.log(").join("parent.myPost(\"console\",");
@@ -586,8 +599,6 @@ class CodeEditor extends Component {
       </div>;
     });
 
-    if (!this.state.mounted) return <Loading />;
-
     return (
       <div id="codeEditor">
         {
@@ -633,7 +644,7 @@ class CodeEditor extends Component {
               : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
             { titleText }
           </div>
-          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} onLoad={this.iFrameLoaded.bind(this)}/>
+          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
           <div className={ `drawer ${openConsole ? "open" : ""}` }>
             <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }</div>
             <div className="contents">{consoleText}</div>

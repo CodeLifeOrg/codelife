@@ -29,6 +29,7 @@ class Slide extends Component {
       slides: [],
       currentSlide: null,
       blocked: true,
+      currentLevel: null,
       currentIsland: null,
       levels: null,
       sentProgress: false,
@@ -56,12 +57,30 @@ class Slide extends Component {
   componentDidUpdate() {
     const {mlid, sid} = this.props.params;
     const {user} = this.props.auth;
-    const {currentSlide, slides, sentProgress, latestSlideCompleted} = this.state;
+    const {currentSlide, currentLevel, slides, sentProgress, latestSlideCompleted} = this.state;
+
+    // going to new level
+    if (currentLevel && currentLevel.id !== mlid) {
+      this.setState({
+        slides: [],
+        currentSlide: null,
+        blocked: true,
+        currentLevel: null,
+        currentIsland: null,
+        levels: null,
+        sentProgress: false,
+        latestSlideCompleted: 0,
+        islandComplete: false,
+        mounted: false,
+        done: false
+      }, this.hitDB.bind(this));
+      return;
+    }
 
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (this.state.done) blocked = false;
       this.setState({currentSlide: cs, blocked});
@@ -69,7 +88,7 @@ class Slide extends Component {
 
     const i = slides.indexOf(currentSlide);
     if (this.state.mounted && currentSlide &&
-      ["InputCode", "InputCodeExec", "Quiz"].indexOf(currentSlide.type) === -1 &&
+      ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i});
     }
@@ -85,6 +104,12 @@ class Slide extends Component {
   componentDidMount() {
     this.setState({mounted: true});
 
+    this.hitDB.bind(this)();
+
+    document.addEventListener("keypress", this.handleKey.bind(this));
+  }
+
+  hitDB() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     const {slides, latestSlideCompleted} = this.state;
@@ -103,33 +128,33 @@ class Slide extends Component {
       }
       const cs = slideList.find(slide => slide.id === sid);
 
-      /*
-      if (cs.ordering !== 0) {
-        browserHistory.push(`/lesson/${lid}/${mlid}`);
-        return;
-      }
-      */
-
       const up = resp[3].data.progress;
       const done = up.find(p => p.level === mlid) !== undefined;
 
-      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
+      const levels = resp[2].data;
+      const currentLevel = levels.find(l => l.id === mlid);
+
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels: resp[2].data});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels, currentLevel});
     });
-
-    document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
   handleKey(e) {
     e.keyCode === 96 && this.props.auth.user.role > 0 ? this.unblock(this) : null;
   }
 
+  advanceLevel(mlid) {
+    const {lid} = this.props.params;
+    browserHistory.push(`/island/${lid}/${mlid}`);
+    if (window) window.location.reload();
+  }
+
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, currentIsland} = this.state;
+    const {currentSlide, slides, levels, currentLevel, currentIsland} = this.state;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -147,14 +172,11 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    if (!currentSlide || !currentIsland) return <Loading />;
+    if (!currentSlide || !currentIsland || !currentLevel) return <Loading />;
 
-    let exec = false;
-    let sType = currentSlide.type;
-    if (sType.includes("Exec")) {
-      exec = true;
-      sType = sType.replace("Exec", "");
-    }
+    const nextLevel = levels.find(l => l.ordering === currentLevel.ordering + 1);
+
+    const sType = currentSlide.type;
 
     SlideComponent = compLookup[sType];
 
@@ -170,7 +192,6 @@ class Slide extends Component {
         </div>
 
         <SlideComponent
-          exec={exec}
           island={currentIsland.theme}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />
@@ -183,7 +204,13 @@ class Slide extends Component {
             ? this.state.blocked
               ? <div className="pt-button pt-disabled">{t("Next")}</div>
               : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-            : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> }
+            : nextLevel
+              ? <div>
+                <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
+                <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link> 
+              </div>
+              : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
+          }
         </div>
 
       </div>

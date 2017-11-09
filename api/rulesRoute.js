@@ -1,3 +1,4 @@
+const {isAuthenticated, isRole} = require("../tools/api.js");
 const translate = require("../tools/translate.js");
 
 module.exports = function(app) {

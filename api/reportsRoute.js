@@ -1,14 +1,16 @@
+const {isAuthenticated, isRole} = require("../tools/api.js");
+
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/reports/byCodeBlockid", (req, res) => {
+  app.get("/api/reports/byCodeBlockid", isAuthenticated, (req, res) => {
 
     db.reports.findAll({where: {type: "codeblock", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
 
   });
 
-  app.get("/api/reports/byProjectid", (req, res) => {
+  app.get("/api/reports/byProjectid", isAuthenticated, (req, res) => {
 
     db.reports.findAll({where: {type: "project", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
 

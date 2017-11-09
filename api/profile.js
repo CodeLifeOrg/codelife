@@ -1,15 +1,23 @@
 const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
+const {isAuthenticated, isRole} = require("../tools/api.js");
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.post("/api/profile/update", (req, res) => {
+  app.post("/api/profile/update", isAuthenticated, (req, res) => {
+    delete req.body.sharing;
+    db.userprofiles.update(req.body, {where: {uid: req.user.id}}).then(u => res.json(u).end());  
+  });
+
+  app.post("/api/profile/setsharing", isRole(2), (req, res) => {
     const {uid} = req.body;
     db.userprofiles.update(req.body, {where: {uid}}).then(u => res.json(u).end());  
   });
+
+
 
   app.get("/api/profile/:username", (req, res) => {
     const {username} = req.params;

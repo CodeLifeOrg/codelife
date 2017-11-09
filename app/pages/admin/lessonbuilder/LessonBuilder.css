@@ -43,6 +43,11 @@
           border-radius: 0 0 5px 5px;
         }
       }
+      & .image-area {
+        & img {
+          width: 100%;
+        }
+      }
     }
   }
 }

@@ -246,8 +246,8 @@ class SlideEditor extends Component {
               <label className="pt-label">
                 htmlcontent2
                 { showImg 
-                  ? <div style={{marginRight: "15px"}}>
-                    <img width="500px" src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                  ? <div className="image-area">
+                    <img src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                     <label className="pt-file-upload">
                       <input onChange={this.onImgUpdate.bind(this, "en")} type="file" />
                       <span className="pt-file-upload-input">Upload</span>
@@ -263,8 +263,8 @@ class SlideEditor extends Component {
               <label className="pt-label">
                 pt htmlcontent2  🇧🇷 
                 {showImg 
-                  ? <div>
-                    <img width="500px" src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
+                  ? <div className="image-area">
+                    <img src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                     <label className="pt-file-upload">
                       <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
                       <span className="pt-file-upload-input">Upload</span>

@@ -255,11 +255,18 @@ class CodeEditor extends Component {
 
   cvUses(rule, payload) {
     const haystack = payload.theJS;
-    const res = [];
-    res.while = new RegExp("while\\s*\\([^\\)]*\\)\\s*{[^}]*}", "g");
-    res.for = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
-    res.if = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
-    return res[rule.needle] && haystack.search(res[rule.needle]) >= 0;
+    let re;
+    if (rule.needle === "for") {
+      re = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
+    } 
+    else if (rule.needle === "if") {
+      re = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
+    } 
+    else {
+       re = new RegExp(`${rule.needle}\\s*\\([^\\)]*\\)\\s*{[^}]*}`, "g");
+    }
+
+    return haystack.search(re) >= 0;
   }
 
   attrCount(needle, attribute, value, json) {
@@ -479,12 +486,10 @@ class CodeEditor extends Component {
     const {rulejson} = this.state;
     for (const r of rulejson) {
       if (r.needle === needle) {
-        console.log(needle, r.needle, value)
         let rType = null;
         if (r.type === "JS_FUNC_EQUALS") rType = r.argType;
         if (r.type === "JS_VAR_EQUALS") rType = r.varType;
         const rVal = r.value;
-        console.log(value, rVal, value == rVal);
         if (rType && rVal) {
           r.passing = typeof value === rType && value == rVal;
         }

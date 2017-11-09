@@ -517,9 +517,20 @@ class CodeEditor extends Component {
           }
         }
         else if (r.type === "JS_FUNC_EQUALS") {
-          const re = new RegExp(`\\)\\s*([^(]*?)\\s*\\(${this.reverse(r.needle)}(?!\\s*noitcnuf)`, "g");
-          let result = re.exec(this.reverse(js));
-          if (result) result = result.map(this.reverse);
+          let result;
+          
+          /* To make the console report out to the parent, I've replaced all console.logs with parent.myPost (see above)
+          Therefore, a rule search for console.log will fail (because I've removed them).  We therefore have to add the 
+          following exception to check for my special myPost as opposed to the console.log provided by the rule */
+          if (r.needle === "console.log") {
+            const re = new RegExp("parent\\.myPost\\(\"console\"\\,\\s*([^)]*)", "g");
+            result = re.exec(js);
+          }
+          else {
+            const re = new RegExp(`\\)\\s*([^(]*?)\\s*\\(${this.reverse(r.needle)}(?!\\s*noitcnuf)`, "g");
+            result = re.exec(this.reverse(js));
+            if (result) result = result.map(this.reverse);
+          }
           r.passing = result !== null;
           const arg = result ? result[1] : null;
           js += `parent.myPost('rule', '${r.needle}', ${arg});\n`;

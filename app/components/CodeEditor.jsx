@@ -273,7 +273,7 @@ class CodeEditor extends Component {
           if (attribute === "className") {
             if (node.attributes.className && node.attributes.className.includes(value)) count++;
           }
-          else if (node.attributes[attribute] === value) count++;
+          else if (String(node.attributes[attribute]) === String(value)) count++;
         }
         // if we were not provided a value, then this is checking for attribute only, and we can pass
         else {

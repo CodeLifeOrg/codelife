@@ -216,7 +216,6 @@ class SlideEditor extends Component {
           <label className="pt-label">
             htmlcontent1
             <QuillWrapper
-              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.htmlcontent1}
               onChange={this.handleEditor.bind(this, "htmlcontent1")} 
               ref={c => this.quills.push(c) }
@@ -225,7 +224,6 @@ class SlideEditor extends Component {
           <label className="pt-label">
             pt htmlcontent1  🇧🇷 
             <QuillWrapper
-              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_htmlcontent1}
               onChange={this.handleEditor.bind(this, "pt_htmlcontent1")} 
               ref={c => this.quills.push(c) }
@@ -256,7 +254,6 @@ class SlideEditor extends Component {
                     </label>
                   </div>
                   : <QuillWrapper
-                    style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
                     value={this.state.data.htmlcontent2}
                     onChange={this.handleEditor.bind(this, "htmlcontent2")} 
                     ref={c => this.quills.push(c) }
@@ -274,7 +271,6 @@ class SlideEditor extends Component {
                     </label>
                   </div>
                   : <QuillWrapper
-                    style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
                     value={this.state.data.pt_htmlcontent2}
                     onChange={this.handleEditor.bind(this, "pt_htmlcontent2")} 
                     ref={c => this.quills.push(c) }

@@ -441,7 +441,7 @@ class CodeEditor extends Component {
   myCatch(e) {
     const {embeddedConsole} = this.state;
     embeddedConsole.push([e]);
-    // this.setState({embeddedConsole});
+    this.setState({openConsole: true});
   }
 
   myLog() {
@@ -479,10 +479,12 @@ class CodeEditor extends Component {
     const {rulejson} = this.state;
     for (const r of rulejson) {
       if (r.needle === needle) {
+        console.log(needle, r.needle, value)
         let rType = null;
         if (r.type === "JS_FUNC_EQUALS") rType = r.argType;
         if (r.type === "JS_VAR_EQUALS") rType = r.varType;
         const rVal = r.value;
+        console.log(value, rVal, value == rVal);
         if (rType && rVal) {
           r.passing = typeof value === rType && value == rVal;
         }
@@ -511,7 +513,9 @@ class CodeEditor extends Component {
         if (r.type === "JS_VAR_EQUALS") {
           r.passing = false;
           if (!handled.includes(r.needle)) {
-            js = `${r.needle}=undefined;\n${js}`;
+            let init = r.needle;
+            if (init.includes(".")) init = init.split(".")[0];
+            js = `${init}=undefined;\n${js}`;
             js += `parent.myPost('rule', '${r.needle}', ${r.needle});\n`;
             handled.push(r.needle);
           }

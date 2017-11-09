@@ -66,12 +66,12 @@ class ReportViewer extends Component {
     Promise.all(reqs).then(resp => {
       if (resp.filter(r => r.status !== 200).length === 0) {
         const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
-        toast.show({  message: t("Content Banned"), 
-                      intent: Intent.DANGER, 
-                      action: {
-                        text: "View User Page",
-                        onClick: () => browserHistory.push(`/profile/${report.username}`)
-                      }});
+        toast.show({message: t("Content Banned"), 
+          intent: Intent.DANGER, 
+          action: {
+            text: "View User Page",
+            onClick: () => browserHistory.push(`/profile/${report.username}`)
+          }});
       } 
       else {
         const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
@@ -136,6 +136,7 @@ class ReportViewer extends Component {
   render() {
 
     const {mounted, codeblockReports, projectReports} = this.state;
+    const {t} = this.props;
 
     if (!mounted) return <Loading />;
 
@@ -150,7 +151,7 @@ class ReportViewer extends Component {
         <div id="report-title" style={{fontSize: "24px", marginBottom: "10px"}}>Flagged Content</div>
         <div className="cb-report-title" style={{fontSize: "20px", fontWeight: "bold"}}>Codeblocks</div>
         <div className="report-list" >
-          <table className="pt-table pt-striped pt-interactive" style={{width: "1000px"}}>
+          <table className="pt-table pt-striped pt-interactive" style={{width: "1000px", marginBottom: "20px"}}>
             <thead>
               <tr>
                 <th>Page</th>
@@ -160,14 +161,14 @@ class ReportViewer extends Component {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>{codeblockItems}</tbody>
+            <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
           </table>
         </div>
         <div className="cb-report-title" style={{fontSize: "20px", fontWeight: "bold"}}>Projects</div>
         <div className="report-list">
           <table className="pt-table pt-striped pt-interactive" style={{width: "1000px"}}>
-             <thead>
-               <tr>
+            <thead>
+              <tr>
                 <th>Page</th>
                 <th>Author</th>
                 <th>Reason</th>
@@ -175,7 +176,7 @@ class ReportViewer extends Component {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>{projectItems}</tbody>
+            <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
           </table>
         </div>
       </div>

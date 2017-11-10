@@ -17,10 +17,11 @@
   margin: 0 25px 25px;
   position: relative;
   & a:not(.pt-button) {
-    opacity: 0.75;
-    transition: opacity 0.2s;
+    opacity: 1;
+    text-decoration: underline;
+    transition: opacity 0.1s;
     &:hover {
-      opacity: 1;
+      opacity: 0.85;
     }
   }
   & #slide-head {

@@ -5,24 +5,27 @@
 
 #tree {
   background-color: #efefef;
-  border-radius: 10px 0 0 10px;
+  border-radius: 0 0 0 10px;
   max-width: 250px;
   min-width: 250px;
-  padding: 25px 5px;
+  padding: 0;
   width: 250px;
+  & .pt-tree-node {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 #item-editor {
   background-color: white;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 0 10px 0;
   box-sizing: border-box;
   flex: 1;
   padding: 25px;
-
   & .input-block, & .area-block {
     width: 100%;
-    display:flex;
-    
+    display: flex;
     & .pt-label {
       flex: 1;
       &:first-child {

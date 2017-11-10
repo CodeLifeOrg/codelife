@@ -47,7 +47,7 @@ class ReportViewer extends Component {
       if (resp.filter(r => r.status !== 200).length === 0) {
         const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
         toast.show({message: t("Content Approved"), intent: Intent.SUCCESS});
-      } 
+      }
       else {
         const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
         toast.show({message: t("Database Error"), intent: Intent.DANGER});
@@ -66,13 +66,13 @@ class ReportViewer extends Component {
     Promise.all(reqs).then(resp => {
       if (resp.filter(r => r.status !== 200).length === 0) {
         const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Content Banned"), 
-          intent: Intent.DANGER, 
+        toast.show({message: t("Content Banned"),
+          intent: Intent.DANGER,
           action: {
             text: "View User Page",
             onClick: () => browserHistory.push(`/profile/${report.username}`)
           }});
-      } 
+      }
       else {
         const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
         toast.show({message: t("Database Error"), intent: Intent.DANGER});
@@ -100,7 +100,7 @@ class ReportViewer extends Component {
       <td>
         <Tooltip content="Allow this Content" position={Position.TOP}>
           <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
-        </Tooltip> 
+        </Tooltip>
         <Tooltip content="Ban this Content" position={Position.TOP}>
           <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
         </Tooltip>
@@ -147,38 +147,33 @@ class ReportViewer extends Component {
     const projectItems = pSorted.map(r => this.createRow("projects", r));
 
     return (
-      <div style={{margin: "15px", padding: "15px", backgroundColor: "white"}}>
-        <div id="report-title" style={{fontSize: "24px", marginBottom: "10px"}}>Flagged Content</div>
-        <div className="cb-report-title" style={{fontSize: "20px", fontWeight: "bold"}}>Codeblocks</div>
-        <div className="report-list" >
-          <table className="pt-table pt-striped pt-interactive" style={{width: "1000px", marginBottom: "20px"}}>
-            <thead>
-              <tr>
-                <th>Page</th>
-                <th>Author</th>
-                <th>Reasons</th>
-                <th>Comments</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
-          </table>
-        </div>
-        <div className="cb-report-title" style={{fontSize: "20px", fontWeight: "bold"}}>Projects</div>
-        <div className="report-list">
-          <table className="pt-table pt-striped pt-interactive" style={{width: "1000px"}}>
-            <thead>
-              <tr>
-                <th>Page</th>
-                <th>Author</th>
-                <th>Reason</th>
-                <th>Comments</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
-          </table>
-        </div>
+      <div id="ReportViewer">
+        <h2 className="report-title">Codeblocks</h2>
+        <table className="pt-table pt-striped pt-interactive">
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Author</th>
+              <th>Reasons</th>
+              <th>Comments</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
+        </table>
+        <h2 className="report-title">Projects</h2>
+        <table className="pt-table pt-striped pt-interactive">
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Author</th>
+              <th>Reason</th>
+              <th>Comments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
+        </table>
       </div>
     );
   }

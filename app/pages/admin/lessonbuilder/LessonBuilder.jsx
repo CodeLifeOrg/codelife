@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Tree} from "@blueprintjs/core";
+import {NonIdealState, Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import IslandEditor from "pages/admin/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/admin/lessonbuilder/LevelEditor";
@@ -12,6 +12,17 @@ import CtxMenu from "pages/admin/lessonbuilder/CtxMenu";
 import crypto from "crypto";
 
 import "./LessonBuilder.css";
+
+const slideIcons = {
+  CheatSheet: "clipboard",
+  ImageText: "media",
+  InputCode: "code-block",
+  Quiz: "help",
+  RenderCode: "application",
+  TextCode: "code",
+  TextImage: "media",
+  TextText: "label"
+};
 
 class LessonBuilder extends Component {
 
@@ -34,7 +45,7 @@ class LessonBuilder extends Component {
       const slides = resp[2].data;
       islands.sort((a, b) => a.ordering - b.ordering);
       levels.sort((a, b) => a.ordering - b.ordering);
-      slides.sort((a, b) => a.ordering - b.ordering); 
+      slides.sort((a, b) => a.ordering - b.ordering);
 
       const nodes = [];
 
@@ -42,8 +53,8 @@ class LessonBuilder extends Component {
         i = this.fixNulls(i);
         nodes.push({
           id: i.id,
-          hasCaret: true, 
-          iconName: "map", 
+          hasCaret: true,
+          iconName: "map",
           label: i.name,
           itemType: "island",
           parent: {childNodes: nodes},
@@ -57,8 +68,8 @@ class LessonBuilder extends Component {
         if (islandNode) {
           islandNode.childNodes.push({
             id: l.id,
-            hasCaret: true, 
-            iconName: "multi-select", 
+            hasCaret: true,
+            iconName: "multi-select",
             label: l.name,
             itemType: "level",
             parent: islandNode,
@@ -77,8 +88,8 @@ class LessonBuilder extends Component {
         if (levelNode) {
           levelNode.childNodes.push({
             id: s.id,
-            hasCaret: false, 
-            iconName: "page-layout", 
+            hasCaret: false,
+            iconName: slideIcons[s.type],
             label: s.title,
             itemType: "slide",
             parent: levelNode,
@@ -115,7 +126,7 @@ class LessonBuilder extends Component {
     const ipath = "/api/builder/islands/new";
     const lpath = "/api/builder/levels/new";
     const spath = "/api/builder/slides/new";
-    
+
     if (nodes.length === 1) {
       const snode = nodes[0];
       axios.post(spath, snode.data).then(resp => {
@@ -154,7 +165,7 @@ class LessonBuilder extends Component {
       axios.delete(path, {params: {id: node.data.id}}).then(resp => {
         resp.status === 200 ? console.log("successfully deleted") : console.log("error");
       });
-    } 
+    }
   }
 
   moveItem(n, dir) {
@@ -174,8 +185,8 @@ class LessonBuilder extends Component {
       this.saveNode(old);
       this.saveNode(n);
     }
-    arr.sort((a, b) => a.data.ordering - b.data.ordering);  
-    this.setState({nodes}); 
+    arr.sort((a, b) => a.data.ordering - b.data.ordering);
+    this.setState({nodes});
   }
 
   getUUID() {
@@ -183,7 +194,7 @@ class LessonBuilder extends Component {
   }
 
   addItem(n, dir) {
-    
+
     const {nodes} = this.state;
     const arr = n.parent.childNodes;
     let loc = n.data.ordering;
@@ -197,8 +208,8 @@ class LessonBuilder extends Component {
     const slideUUID = `slide-${this.getUUID()}`;
     const objSlide = {
       id: slideUUID,
-      hasCaret: false, 
-      iconName: "page-layout", 
+      hasCaret: false,
+      iconName: "page-layout",
       label: "New Slide",
       itemType: "slide",
       parent: n.parent,
@@ -221,8 +232,8 @@ class LessonBuilder extends Component {
     const levelUUID = `level-${this.getUUID()}`;
     const objLevel = {
       id: levelUUID,
-      hasCaret: true, 
-      iconName: "multi-select", 
+      hasCaret: true,
+      iconName: "multi-select",
       label: "New Level",
       itemType: "level",
       parent: n.parent,
@@ -239,8 +250,8 @@ class LessonBuilder extends Component {
     const islandUUID = `island-${this.getUUID()}`;
     const objIsland = {
       id: islandUUID,
-      hasCaret: true, 
-      iconName: "map", 
+      hasCaret: true,
+      iconName: "map",
       label: "New Island",
       itemType: "island",
       parent: n.parent,
@@ -264,7 +275,7 @@ class LessonBuilder extends Component {
     };
 
     let obj = null;
-    
+
     if (n.itemType === "slide") {
       obj = objSlide;
     }
@@ -288,7 +299,7 @@ class LessonBuilder extends Component {
     }
     if (obj) {
       arr.push(obj);
-      arr.sort((a, b) => a.data.ordering - b.data.ordering);  
+      arr.sort((a, b) => a.data.ordering - b.data.ordering);
       // oh boy do i hate this TODO: generalize this array without breaking it
       if (n.itemType === "slide") this.newNode([obj]);
       if (n.itemType === "level") this.newNode([obj, objSlide]);
@@ -323,6 +334,7 @@ class LessonBuilder extends Component {
       node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
       currentNode.secondaryLabel = null;
     }
+    node.isExpanded = !node.isExpanded;
     this.setState({currentNode: node});
   }
 
@@ -348,7 +360,7 @@ class LessonBuilder extends Component {
     const {nodes, currentNode} = this.state;
 
     if (!nodes) return <Loading />;
-    
+
     return (
       <div id="lesson-builder">
         <div id="tree">
@@ -359,14 +371,18 @@ class LessonBuilder extends Component {
             contents={nodes}
           />
         </div>
-        { currentNode 
-          ? <div id="item-editor">
-              {currentNode.itemType === "island" ? <IslandEditor data={currentNode.data} reportSave={this.reportSave.bind(this)} /> : null}
-              {currentNode.itemType === "level" ? <LevelEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/> : null }
-              {currentNode.itemType === "slide" ? <SlideEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/> : null }
-            </div>
-          : null 
-        }
+        <div id="item-editor">
+          { currentNode
+            ? currentNode.itemType === "island"
+              ? <IslandEditor data={currentNode.data} reportSave={this.reportSave.bind(this)} />
+              : currentNode.itemType === "level"
+                ? <LevelEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/>
+                : currentNode.itemType === "slide"
+                  ? <SlideEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/>
+                  : null
+            : <NonIdealState title="No Island Selected" description="Please select an island from the menu on the left." visual="path-search" />
+          }
+        </div>
       </div>
     );
   }

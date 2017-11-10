@@ -107,6 +107,17 @@
   "Return to": "Return to",
   "Role": "Role",
   "Rule Builder": "Rule Builder",
+  "rule": {
+    "exists": "exists",
+    "css": "css",
+    "unique": "unique",
+    "exists": "exists",
+    "nests": "nests",
+    "equals": "equals",
+    "invokes": "invokes",
+    "contains": "contains",
+    "implements": "implements"
+  },
   "Save": "Save",
   "Save & Submit": "Save & Submit",
   "Save your changes before opening a new webpage": "Save your changes before opening a new webpage",

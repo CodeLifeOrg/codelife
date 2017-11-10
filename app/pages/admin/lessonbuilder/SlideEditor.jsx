@@ -5,7 +5,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import QuizPicker from "pages/admin/lessonbuilder/QuizPicker";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Button, Dialog, Toaster, Position, Intent, Checkbox} from "@blueprintjs/core";
 
 import ImageText from "components/slidetypes/ImageText";

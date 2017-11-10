@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 class RenderCode extends Component {
 

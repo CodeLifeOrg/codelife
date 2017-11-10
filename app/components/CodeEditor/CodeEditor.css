@@ -93,8 +93,8 @@
       font-size: 12px;
       padding: 2px 5px;
       position: relative;
-      text-align: left;
-      width: 100%;
+      text-align: center;
+      white-space: nowrap;
       z-index: 2;
     }
   }
@@ -103,37 +103,6 @@
     height: 0;
     overflow-y: scroll;
     transition: height 0.35s;
-    & .rules {
-      margin: 20px 10px;
-      padding: 0;
-      & .group-name {
-        display: inline-block;
-        width: 40px;
-      }
-      & .rule {
-        align-items: center;
-        background-color: white;
-        border: 1px solid #2c2c2c;
-        font-size: 14px;
-        margin: 0 3px;
-        padding: 2px 8px 3px 5px;
-        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-        & .pt-icon-standard {
-          margin-right: 5px;
-          vertical-align: middle;
-        }
-        &.complete {
-          background-color: #0f9960;
-          border-color: #0f9960;
-          color: white;
-        }
-        &.header {
-          background-color: grey;
-          border-color: #0f9960;
-          color: white;
-        }
-      }
-    }
     & .log {
       border-bottom: 1px solid #eee;
       font-family: monospace;
@@ -182,7 +151,7 @@
   }
   &.open {
     & .contents {
-      height: 200px;
+      height: 190px;
     }
   }
 }

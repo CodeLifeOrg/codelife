@@ -4,12 +4,13 @@ import {connect} from "react-redux";
 import himalaya from "himalaya";
 import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
-import {Intent, Position, Popover, ProgressBar, PopoverInteractionKind} from "@blueprintjs/core";
+import {Intent, ProgressBar} from "@blueprintjs/core";
 
 import AceWrapper from "components/AceWrapper";
-import Loading from "components/Loading";
 
 import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
+
+import DrawerValidation from "./DrawerValidation";
 
 import "./CodeEditor.css";
 
@@ -62,13 +63,13 @@ class CodeEditor extends Component {
     const {iFrameLoaded, initialContent, currentJS} = this.state;
     if (this.props.setExecState) {
       if (!prevState.currentJS && currentJS) {
-        this.props.setExecState(true);  
-      } 
+        this.props.setExecState(true);
+      }
       else if (prevState.currentJS && !currentJS) {
         this.props.setExecState(false);
       }
     }
-    
+
     const {initialValue} = this.props;
     if (iFrameLoaded && initialContent !== initialValue) {
       clearTimeout(this.myTimeout);
@@ -88,7 +89,6 @@ class CodeEditor extends Component {
       {type: "CONTAINS_ONE", needle: "body"},
       {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "body", outer: "html"},
-      {type: "NESTS", needle: "head", outer: "html"},
       {type: "NESTS", needle: "title", outer: "head"}
     ];
     return baseRules;
@@ -107,74 +107,12 @@ class CodeEditor extends Component {
       if (event.data === "awake") {
         clearInterval(this.ping);
         this.iFrameLoaded.bind(this)();
-      } 
-      else {
-        this.handlePost.bind(this)(...event.data);  
-      }
-      
-    }
-  }
-
-  getValidationBox() {
-    const {rulejson, baseRules} = this.state;
-    const iconList = [];
-    iconList.CONTAINS = <span className="pt-icon-standard pt-icon-code"></span>;
-    iconList.CSS_CONTAINS = <span className="pt-icon-standard pt-icon-highlight"></span>;
-    iconList.CONTAINS_SELF_CLOSE = <span className="pt-icon-standard pt-icon-code"></span>;
-    iconList.CONTAINS_ONE = <span className="pt-icon-standard pt-icon-hand-up"></span>;
-    iconList.NESTS = <span className="pt-icon-standard pt-icon-property"></span>;
-    iconList.JS_VAR_EQUALS = <span className="pt-icon-standard pt-icon-variable"></span>;
-    iconList.JS_FUNC_EQUALS = <span className="pt-icon-standard pt-icon-function"></span>;
-    iconList.JS_MATCHES = <span className="pt-icon-standard pt-icon-search-text"></span>;
-    iconList.JS_USES = <span className="pt-icon-standard pt-icon-derive-column"></span>;
-
-    const nameList = [];
-    nameList.CONTAINS = "exists";
-    nameList.CSS_CONTAINS = "css";
-    nameList.CONTAINS_ONE = "unique";
-    nameList.CONTAINS_SELF_CLOSE = "exists";
-    nameList.NESTS = "nests";
-    nameList.JS_VAR_EQUALS = "equals";
-    nameList.JS_FUNC_EQUALS = "invokes";
-    nameList.JS_MATCHES = "contains";
-    nameList.JS_USES = "implements";
-
-    const allRules = baseRules.concat(rulejson);
-
-    const organizedRules = [];
-
-    for (const ar of allRules) {
-      const or = organizedRules.find(obj => obj.needle === ar.needle);
-      if (!or) {
-        organizedRules.push({needle: ar.needle, ruleArray: [ar]});
       }
       else {
-        or.ruleArray.push(ar);
+        this.handlePost.bind(this)(...event.data);
       }
+
     }
-
-    const vList = [];
-
-    for (const or of organizedRules) {
-
-      vList.push(<div className="rules">
-        <div className="group-name">{or.needle}</div>
-        { or.ruleArray.map((rule, i) => <Popover key={i}
-          interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName="pt-popover-content-sizing user-popover"
-          position={Position.TOP_LEFT}
-        >
-          <span className={`rule ${rule.passing ? "complete" : ""}`}>
-            {iconList[rule.type]}
-            <span className="rule-name">{nameList[rule.type]}</span>
-          </span>
-          <div>
-            { !rule.passing ? <div><br/><div style={{color: "red"}}>{this.getErrorForRule(rule)}</div></div> : "Good job!" }
-          </div>
-        </Popover>)}
-      </div>);
-    }
-    return <div className="contents">{vList}</div>;
   }
 
   getTitleText(theText) {
@@ -249,7 +187,7 @@ class CodeEditor extends Component {
     const reInner = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
     const innerOpen = haystack.search(reInner);
     const innerClose = haystack.indexOf(`</${rule.needle}>`);
-    return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
+    return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 &&
             outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
   }
 
@@ -258,10 +196,10 @@ class CodeEditor extends Component {
     let re;
     if (rule.needle === "for") {
       re = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
-    } 
+    }
     else if (rule.needle === "if") {
       re = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
-    } 
+    }
     else {
        re = new RegExp(`${rule.needle}\\s*\\([^\\)]*\\)\\s*{[^}]*}`, "g");
     }
@@ -399,26 +337,6 @@ class CodeEditor extends Component {
     }
   }
 
-  getErrorForRule(rule) {
-    const thisRule = this.state.ruleErrors.find(r => r.type === rule.type);
-    if (thisRule && thisRule.error_msg) {
-      const param1 = rule.needle;
-      let param2 = null;
-      if (rule.property !== undefined) param2 = rule.property;
-      if (rule.outer !== undefined) param2 = rule.outer;
-      if (rule.attribute !== undefined) param2 = rule.attribute;
-      if (rule.argType !== undefined) param2 = rule.argType;
-      if (rule.varType !== undefined) param2 = rule.varType;
-      const param3 = rule.value;
-      if (param3) return thisRule.error_msg_3.replace("{{p1}}", param1).replace("{{p2}}", param2).replace("{{p3}}", param3);
-      if (param2) return thisRule.error_msg_2.replace("{{p1}}", param1).replace("{{p2}}", param2);
-      return thisRule.error_msg.replace("{{p1}}", param1);
-    }
-    else {
-      return "";
-    }
-  }
-
   iFrameLoaded() {
     if (!this.state.iFrameLoaded) {
 
@@ -527,9 +445,9 @@ class CodeEditor extends Component {
         }
         else if (r.type === "JS_FUNC_EQUALS") {
           let result;
-          
+
           /* To make the console report out to the parent, I've replaced all console.logs with parent.myPost (see above)
-          Therefore, a rule search for console.log will fail (because I've removed them).  We therefore have to add the 
+          Therefore, a rule search for console.log will fail (because I've removed them).  We therefore have to add the
           following exception to check for my special myPost as opposed to the console.log provided by the rule */
           if (r.needle === "console.log") {
             const re = new RegExp("parent\\.myPost\\(\"console\"\\,\\s*([^)]*)", "g");
@@ -616,7 +534,7 @@ class CodeEditor extends Component {
 
   render() {
     const {codeTitle, island, readOnly, t} = this.props;
-    const {titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, sandbox} = this.state;
+    const {baseRules, titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
       const t1 = this.evalType(args[0]);
@@ -666,9 +584,9 @@ class CodeEditor extends Component {
                 ? <div className={ `drawer ${openRules ? "open" : ""}` }>
                   <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
                     <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-                    <div className="completion">{ Math.round(goodRatio * 100) }% { t("Complete") }</div>
+                    <div className="completion" style={{width: `${ Math.round(goodRatio * 100) }%`}}>{ Math.round(goodRatio * 100) }%</div>
                   </div>
-                  { this.getValidationBox() }
+                  <DrawerValidation rules={ baseRules.concat(rulejson) } errors={ ruleErrors } />
                 </div>
                 : null }
             </div>

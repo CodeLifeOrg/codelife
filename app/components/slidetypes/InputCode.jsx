@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 

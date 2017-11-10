@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
 
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import ReportBox from "components/ReportBox";
 import Loading from "components/Loading";
 import "./CodeBlockCard.css";

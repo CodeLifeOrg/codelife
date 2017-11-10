@@ -7,7 +7,7 @@ import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 
 import CodeBlockList from "components/CodeBlockList";
 import Projects from "components/Projects";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import "./Studio.css";
 

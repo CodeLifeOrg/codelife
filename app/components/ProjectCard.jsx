@@ -5,7 +5,7 @@ import {Popover, PopoverInteractionKind, Intent, Position, Button, Dialog} from 
 import "moment/locale/pt-br";
 import moment from "moment";
 import ReportBox from "components/ReportBox";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import "components/ProjectCard.css";
 

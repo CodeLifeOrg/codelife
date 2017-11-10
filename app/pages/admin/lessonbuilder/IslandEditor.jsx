@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";

@@ -49,8 +49,6 @@ class DrawerValidation extends Component {
       return ruleNames[a.type].localeCompare(ruleNames[b.type]);
     });
 
-    console.log(sortedRules);
-
     return <div id="DrawerValidation" className="contents">
       <table>
         <tbody>

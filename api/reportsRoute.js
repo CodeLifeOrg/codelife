@@ -1,4 +1,12 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const BuildMail = require("buildmail"),
+      Mailgun = require("mailgun-js"),
+      fs = require("fs"),
+      path = require("path");
+
+const mgApiKey = process.env.CANON_MAILGUN_API,
+      mgDomain = process.env.CANON_MAILGUN_DOMAIN,
+      mgEmail = process.env.CANON_MAILGUN_EMAIL;
 
 module.exports = function(app) {
 
@@ -49,8 +57,34 @@ module.exports = function(app) {
   // Used by ReportBox to process/save a report
   app.post("/api/reports/save", isAuthenticated, (req, res) => {
     const uid = req.user.id;
-    const {reason, comment, report_id, type} = req.body;      
-    db.reports.create({uid, reason, comment, report_id, type, status: "new"}).then(u => res.json(u).end());
+    const {reason, comment, report_id, type} = req.body;
+    db.reports.create({uid, reason, comment, report_id, type, status: "new"})
+      .then(u => {
+
+        const mailgun = new Mailgun({apiKey: mgApiKey, domain: mgDomain});
+        const confirmEmailFilepath = path.join(__dirname, "../tools/report.html");
+
+        fs.readFile(confirmEmailFilepath, "utf8", (error, template) => {
+
+          db.users.findAll({where: {role: 2}}).then(admins => {
+            const emails = admins.map(a => a.email).join(", ");
+
+
+            return new BuildMail("text/html")
+            .addHeader({from: mgEmail, subject: "New Flagged Content", to: emails})
+            .setContent(template).build((error, mail) => {
+              return mailgun.messages().sendMime({to: emails, message: mail.toString("ascii")}, () => res.json(u).end());
+            });
+          });
+
+          
+
+        });
+
+
+
+        
+      });
   });
 
   // Used by ReportViewer to actually ban a project.  Admin only.

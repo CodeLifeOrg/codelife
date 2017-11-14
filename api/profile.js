@@ -9,6 +9,8 @@ module.exports = function(app) {
 
   app.post("/api/profile/update", isAuthenticated, (req, res) => {
     delete req.body.sharing;
+    delete req.body.reports;
+    delete req.body.last_upped;
     db.userprofiles.update(req.body, {where: {uid: req.user.id}}).then(u => res.json(u).end());  
   });
 

@@ -38,49 +38,43 @@ class ReportViewer extends Component {
 
   handleOK(type, report) {
     const {t} = this.props;
-    const reqs = [];
-    for (const id of report.ids) {
-      reqs.push(axios.post("/api/reports/update", {status: "approved", id}));
+    if (type) {
+      axios.post(`/api/${type}/setstatus`, {status: "approved", id: report.report_id}).then(resp => {
+        if (resp.status === 200) {
+          const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Content Approved"), intent: Intent.SUCCESS});
+        }
+        else {
+          const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Database Error"), intent: Intent.DANGER});
+        }
+        this.loadFromDB();
+      });
     }
-    if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "approved", id: report.report_id}));
-    Promise.all(reqs).then(resp => {
-      if (resp.filter(r => r.status !== 200).length === 0) {
-        const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Content Approved"), intent: Intent.SUCCESS});
-      }
-      else {
-        const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Database Error"), intent: Intent.DANGER});
-      }
-      this.loadFromDB();
-    });
   }
 
   handleBan(type, report) {
     const {t} = this.props;
-    const reqs = [];
-    for (const id of report.ids) {
-      reqs.push(axios.post("/api/reports/update", {status: "banned", id}));
+    if (type) {
+      axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}).then(resp => {
+        if (resp.status === 200) {
+          const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Content Banned"),
+            intent: Intent.DANGER,
+            action: {
+              text: "View User Page",
+              onClick: () => browserHistory.push(`/profile/${report.username}`)
+            }});
+        }
+        else {
+          const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Database Error"), intent: Intent.DANGER});
+        }
+        this.loadFromDB();
+      });
     }
-    if (type) reqs.push(axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}));
-    Promise.all(reqs).then(resp => {
-      if (resp.filter(r => r.status !== 200).length === 0) {
-        const toast = Toaster.create({className: "OKToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Content Banned"),
-          intent: Intent.DANGER,
-          action: {
-            text: "View User Page",
-            onClick: () => browserHistory.push(`/profile/${report.username}`)
-          }});
-      }
-      else {
-        const toast = Toaster.create({className: "ErrorToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Database Error"), intent: Intent.DANGER});
-      }
-      this.loadFromDB();
-    });
-    console.log("Would ban this page:", report.report_id, report.filename);
   }
+
 
   createRow(type, report) {
     const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;

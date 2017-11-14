@@ -1,9 +1,7 @@
-import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import SelectSchool from "pages/profile/SelectSchool";
-import {Button, RadioGroup, Radio, Toaster, Position, Intent} from "@blueprintjs/core";
 import "./Checkpoint.css";
 
 class Checkpoint extends Component {
@@ -13,10 +11,6 @@ class Checkpoint extends Component {
     this.state = {
       sid: null
     };
-  }
-
-  componentDidMount() {
-    
   }
 
   setSid(sid) {

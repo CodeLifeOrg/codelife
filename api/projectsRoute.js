@@ -42,7 +42,10 @@ module.exports = function(app) {
   // Used by Admins in ReportBox and ReportViewer to Ban pages
   app.post("/api/projects/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
-    db.projects.update({status}, {where: {id}}).then(u => res.json(u).end());
+    db.projects.update({status}, {where: {id}}).then(u => {
+      db.reports.update({status}, {where: {type: "project", report_id: id}}).then(() => res.json(u).end());
+    });
+
   });
 
   // Used by Projects to create a new project

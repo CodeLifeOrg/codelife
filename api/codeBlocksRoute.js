@@ -40,10 +40,12 @@ module.exports = function(app) {
       .then(u => res.json(u).end());
   });
 
-  // Used by ReportBox and ReportViewer to ban codeblocks
+  // Used by ReportBox and ReportViewer to ban codeblocks, Admin Only
   app.post("/api/codeBlocks/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
-    db.codeblocks.update({status}, {where: {id}}).then(u => res.json(u).end());
+    db.codeblocks.update({status}, {where: {id}}).then(u => {
+      db.reports.update({status}, {where: {type: "codeblock", report_id: id}}).then(() => res.json(u).end());
+    });
   });
 
   // Used by Level.jsx to fetch ALL codeblocks for this level (so students can browse)

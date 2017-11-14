@@ -6,6 +6,7 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
+import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
 import Constants from "utils/Constants.js";
 
@@ -28,9 +29,10 @@ class Level extends Component {
       unlikedCodeBlocks: null,
       loading: false,
       testOpen: false,
+      school: null,
+      checkpointOpen: false,
       winOpen: false,
       winMessage: "",
-      firstWin: false,
       showMore: false
     };
   }
@@ -45,14 +47,16 @@ class Level extends Component {
     const cbget = axios.get(`/api/codeBlocks/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
     const rget = axios.get("/api/reports/codeblocks");
+    const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
 
-    Promise.all([lget, iget, uget, cbget, lkget, rget]).then(resp => {
+    Promise.all([lget, iget, uget, cbget, lkget, rget, pget]).then(resp => {
       const levels = resp[0].data;
       const islands = resp[1].data;
       const userProgress = resp[2].data.progress;
       const allCodeBlocks = resp[3].data;
       const likes = resp[4].data;
       const reports = resp[5].data;
+      const profile = resp[6].data;
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: add an exception for level 10.
@@ -60,6 +64,8 @@ class Level extends Component {
       const nextIsland = islands.find(i => Number(i.ordering) === Number(nextOrdering));
       const prevOrdering = Number(currentIsland.ordering) - 1;
       const prevIsland = islands.find(i => Number(i.ordering) === Number(prevOrdering));
+
+      const checkpointOpen = profile.schoolname || currentIsland.id === "island-1" ? false : true;
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -96,7 +102,7 @@ class Level extends Component {
         }
       }
 
-      this.setState({levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
+      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
     });
   }
 
@@ -109,23 +115,11 @@ class Level extends Component {
   }
 
   componentDidMount() {
-    // TODO: why is this here?
     this.forceUpdate();
   }
 
   toggleTest() {
     this.setState({testOpen: !this.state.testOpen});
-
-    /*
-    // If I'm about to close the test successfully for the first time
-    if (this.state.testOpen && this.state.firstWin) {
-      this.setState({winOpen: true, firstWin: false, testOpen: !this.state.testOpen});
-    }
-    else {
-      this.setState({testOpen: !this.state.testOpen});
-    }
-    */
-
   }
 
   handleSave(newCodeBlock) {
@@ -143,7 +137,7 @@ class Level extends Component {
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
-    this.setState({firstWin: true, winMessage, testOpen: false, winOpen: true});
+    this.setState({winMessage, testOpen: false, winOpen: true});
   }
 
   closeOverlay() {
@@ -196,6 +190,62 @@ class Level extends Component {
     this.setState({showMore: !this.state.showMore});
   }
 
+  closeCheckpoint() {
+    this.setState({checkpointOpen: false});
+  }
+
+  saveCheckpoint() {
+    console.log("would save", this.state.school);
+    if (this.state.school && this.state.school.id) {
+      axios.post("/api/profile/update", {sid: this.state.school.id}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
+    }
+    this.setState({checkpointOpen: false});
+  }
+
+  skipCheckpoint() {
+    this.setState({checkpointOpen: false});
+  }
+
+  pickedSchool(school) {
+    this.setState({school});
+  }
+
+  buildCheckpointPopover() {
+    const {t} = this.props;
+    return (
+      <Dialog
+        isOpen={this.state.checkpointOpen}
+        onClose={this.closeCheckpoint.bind(this)}
+        title={ t("Tell us more about yourself") }
+        canEscapeClose={false}
+        canOutsideClickClose={false}
+        isCloseButtonShown={false}
+      >
+        <div className="pt-dialog-body">
+          <Checkpoint completed={this.pickedSchool.bind(this)}/>
+        </div>
+        <div className="pt-dialog-footer">
+          <div className="pt-dialog-footer-actions">
+            <Button
+              intent={Intent.WARNING}
+              onClick={this.skipCheckpoint.bind(this)}
+              text={t("I'd rather not say")}
+            />
+            <Button
+              intent={Intent.PRIMARY}
+              disabled={!this.state.school}
+              onClick={this.saveCheckpoint.bind(this)}
+              text={t("Save")}
+            />
+            
+          </div>
+        </div>
+      </Dialog>
+    );
+  }
+
   buildWinPopover() {
 
     const {t} = this.props;
@@ -213,14 +263,14 @@ class Level extends Component {
           {this.state.winMessage}
         </div>
         <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-actions">
-                <Button
-                    className="pt-fill"
-                    intent={Intent.PRIMARY}
-                    onClick={this.closeOverlay.bind(this)}
-                    text={t("Keep Exploring")}
-                />
-            </div>
+          <div className="pt-dialog-footer-actions">
+            <Button
+              className="pt-fill"
+              intent={Intent.PRIMARY}
+              onClick={this.closeOverlay.bind(this)}
+              text={t("Keep Exploring")}
+            />
+          </div>
         </div>
       </Dialog>
     );
@@ -337,6 +387,7 @@ class Level extends Component {
     return (
       <div id="island" className={ currentIsland.theme }>
         { this.buildWinPopover() }
+        { this.buildCheckpointPopover() }
         <div className="image">
           <h1 className="title">{ currentIsland.name }</h1>
           <p className="description">{ currentIsland.description }</p>

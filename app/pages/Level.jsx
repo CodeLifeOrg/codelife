@@ -65,7 +65,7 @@ class Level extends Component {
       const prevOrdering = Number(currentIsland.ordering) - 1;
       const prevIsland = islands.find(i => Number(i.ordering) === Number(prevOrdering));
 
-      const checkpointOpen = profile.schoolname || currentIsland.id === "island-1" ? false : true;
+      const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -195,7 +195,6 @@ class Level extends Component {
   }
 
   saveCheckpoint() {
-    console.log("would save", this.state.school);
     if (this.state.school && this.state.school.id) {
       axios.post("/api/profile/update", {sid: this.state.school.id}).then(resp => {
         resp.status === 200 ? console.log("success") : console.log("error");
@@ -205,6 +204,11 @@ class Level extends Component {
   }
 
   skipCheckpoint() {
+    if (this.state.school && this.state.school.id) {
+      axios.post("/api/profile/update", {sid: -1}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
+    }
     this.setState({checkpointOpen: false});
   }
 

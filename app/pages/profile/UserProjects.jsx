@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import Constants from "utils/Constants.js";
 import ProjectCard from "components/ProjectCard";
 import "./Profile.css";
 
@@ -34,9 +33,11 @@ class UserProjects extends Component {
     const {user} = this.props;
     const pget = axios.get(`/api/projects/byuser?uid=${user.id}`);
     const rget = axios.get("/api/reports/projects");
+    const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([pget, rget]).then(resp => {
-      const projects = resp[0].data.filter(p => p.status !== "banned" && p.sharing !== "false" && Number(p.reports) < Constants.FLAG_COUNT_HIDE);
+    Promise.all([pget, rget, scget]).then(resp => {
+      const constants = resp[2].data;
+      const projects = resp[0].data.filter(p => p.status !== "banned" && p.sharing !== "false" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
       const reports = resp[1].data;
       this.setState({loading: false, projects, reports});
     });

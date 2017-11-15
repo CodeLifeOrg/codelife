@@ -6,6 +6,8 @@ import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
 import {Intent, ProgressBar} from "@blueprintjs/core";
 
+import crypto from "crypto";
+
 import AceWrapper from "components/AceWrapper";
 
 import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
@@ -37,7 +39,7 @@ class CodeEditor extends Component {
       remoteReady: false,
       sandbox: {
         root: "https://codelife.tech",
-        page: props.location.hostname === "localhost" ? "page_local.html" : "page.html"
+        page: props.location.hostname === "localhost" ? `page_local.html?v=${crypto.randomBytes(2).toString("hex")}` : `page.html?v=${crypto.randomBytes(2).toString("hex")}`
       },
       openRules: false,
       openConsole: false
@@ -535,6 +537,8 @@ class CodeEditor extends Component {
   render() {
     const {codeTitle, island, readOnly, t} = this.props;
     const {baseRules, titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
+
+    console.log(this.state.sandbox);
 
     const consoleText = embeddedConsole.map((args, i) => {
       const t1 = this.evalType(args[0]);

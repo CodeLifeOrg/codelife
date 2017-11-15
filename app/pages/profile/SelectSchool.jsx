@@ -38,8 +38,11 @@ class SelectSchool extends Component {
     }
   }
 
+  componentDidMount() {
+    this.updateSchoolList({id: "4mg000000"});
+  }
+
   updateSchoolList(geo) {
-    // console.log('updateSchoolList', geo)
     const {t} = this.props;
     const {id: gid} = geo;
     this.setState({loading: true});

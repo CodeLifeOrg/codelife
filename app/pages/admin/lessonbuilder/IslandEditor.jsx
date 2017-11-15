@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import Loading from "components/Loading";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
@@ -29,12 +29,6 @@ class IslandEditor extends Component {
 
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
-      if (this.editor) {
-        this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.initialcontent);
-      }
-      if (this.pt_editor) {
-        this.pt_editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.data.pt_initialcontent); 
-      }
       this.setState({data: this.props.data});
     }
   }
@@ -126,7 +120,6 @@ class IslandEditor extends Component {
           <label className="pt-label">
             Cheat Sheet
             <QuillWrapper
-              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.cheatsheet}
               onChange={this.handleEditor.bind(this, "cheatsheet")} 
             />
@@ -134,7 +127,6 @@ class IslandEditor extends Component {
           <label className="pt-label">
             pt Cheat Sheet  🇧🇷 
             <QuillWrapper
-              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_cheatsheet}
               onChange={this.handleEditor.bind(this, "pt_cheatsheet")} 
             />
@@ -144,7 +136,6 @@ class IslandEditor extends Component {
           <label className="pt-label">
             Final Codeblock Prompt
             <QuillWrapper
-              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.prompt}
               onChange={this.handleEditor.bind(this, "prompt")} 
             />
@@ -152,7 +143,6 @@ class IslandEditor extends Component {
           <label className="pt-label">
             pt Final Codeblock Prompt  🇧🇷 
             <QuillWrapper
-              style={{width: "500px", marginRight: "15px", backgroundColor: "white"}}
               value={this.state.data.pt_prompt}
               onChange={this.handleEditor.bind(this, "pt_prompt")} 
             />

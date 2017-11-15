@@ -2,6 +2,13 @@ import React, {Component} from "react";
 
 export default class AceWrapper extends Component {
 
+  componentDidUpdate() {
+    if (this.editor) {
+      clearTimeout(this.resize);
+      this.resize = setTimeout(editor => editor.resize(), 400, this.editor.editor);
+    }
+  }
+
   render() {
     if (typeof window !== "undefined") {
       const Ace = require("react-ace").default;

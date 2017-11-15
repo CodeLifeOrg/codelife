@@ -1,3 +1,54 @@
 .admin-tabs {
-  margin: 10px;
+  margin: 0 50px 20px;
+  & .pt-tab-list {
+    background-color: #323232;
+    border-radius: 10px 10px 0 0;
+    justify-content: center;
+    & .pt-tab {
+      color: rgba(255, 255, 255, 0.75);
+      cursor: pointer;
+      font-weight: bold;
+      padding: 10px 20px;
+      position: relative;
+      margin: 0;
+      transition: color 0.5s;
+      &[aria-expanded=true] {
+        color: rgba(255, 255, 255, 1);
+      }
+      &:before {
+        background-color: rgba(255, 255, 255, 0.65);
+        bottom: 0;
+        content: "";
+        height: 5px;
+        left: 0;
+        position: absolute;
+        transition: background-color 0.5s;
+        width: 100%;
+        z-index: 1;
+      }
+      &[aria-expanded=true]:before {
+        background-color: rgba(255, 255, 255, 0);
+      }
+      &[aria-expanded=false]:hover {
+        color: white;
+        &:before {
+          background-color: white;
+        }
+      }
+    }
+    & .pt-tab-indicator {
+      height: 5px;
+    }
+  }
+  & .pt-tab-panel {
+    margin: 0;
+    &#pt-tab-panel_undefined_user-admin {
+      background-color: white;
+      border-radius: 0 0 10px 10px;
+      padding: 25px;
+      & .pt-table {
+        width: 100%;
+      }
+    }
+  }
 }

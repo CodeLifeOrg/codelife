@@ -10,25 +10,21 @@ class Quiz extends Component {
       slideId: null,
       isOpen: false,
       quizjson: null,
-      activeQ: null,
-      gemEarned: false
+      activeQ: null
     };
   }
 
   onChooseAnswer(question) {
     const {t} = this.props;
-    const {gemEarned} = this.state;
     const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
     if (question.isCorrect) {
       toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
-      if (!gemEarned && this.props.updateGems) this.props.updateGems(1);
       if (this.props.unblock) this.props.unblock();
     }
     else {
       toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});
-      if (!gemEarned && this.props.updateGems) this.props.updateGems(-1);
     }
-    this.setState({activeQ: question.text, firstAttempt: false, gemEarned: true});
+    this.setState({activeQ: question.text});
   }
 
   componentDidMount() {
@@ -36,8 +32,9 @@ class Quiz extends Component {
   }
 
   componentDidUpdate() {
+    // TODO: change update logic from json compare to something better (slideId compare?)
     if (this.state.quizjson !== this.props.quizjson) {
-      this.setState({quizjson: this.props.quizjson, activeQ: null, gemEarned: false});
+      this.setState({quizjson: this.props.quizjson, activeQ: null});
     }
   }
 

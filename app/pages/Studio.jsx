@@ -7,7 +7,7 @@ import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 
 import CodeBlockList from "components/CodeBlockList";
 import Projects from "components/Projects";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import "./Studio.css";
 
@@ -18,6 +18,7 @@ class Studio extends Component {
     this.state = {
       activeTabId: "projects",
       mounted: false,
+      execState: false,
       currentProject: null
     };
   }
@@ -28,12 +29,10 @@ class Studio extends Component {
 
   onCreateProject(project) {
     this.setState({currentProject: project});
-    if (this.editor.getWrappedInstance().getWrappedInstance()) this.editor.getWrappedInstance().getWrappedInstance().setEntireContents("");
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}/edit`);
   }
 
   onDeleteProject(newproject) {
-    if (newproject.id !== this.state.currentProject.id) this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(newproject.studentcontent);
     this.setState({currentProject: newproject});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
   }
@@ -41,9 +40,12 @@ class Studio extends Component {
   openProject(pid) {
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
-      this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(resp.data[0].studentcontent);
       browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}/edit`);
     });
+  }
+
+  setExecState(execState) {
+    this.setState({execState});
   }
 
   shareProject() {
@@ -85,7 +87,6 @@ class Studio extends Component {
   }
 
   saveCodeToDB() {
-    const {id: uid} = this.props.auth.user;
     const {t} = this.props;
     const {currentProject} = this.state;
 
@@ -93,7 +94,7 @@ class Studio extends Component {
       const id = currentProject.id;
       const name = currentProject.name;
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
-      axios.post("/api/projects/update", {id, name, uid, studentcontent}).then (resp => {
+      axios.post("/api/projects/update", {id, name, studentcontent}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
@@ -117,7 +118,7 @@ class Studio extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {activeTabId, currentProject, titleText} = this.state;
+    const {activeTabId, currentProject, titleText, execState} = this.state;
     const {filename} = this.props.params;
 
     if (!auth.user) browserHistory.push("/");
@@ -136,7 +137,7 @@ class Studio extends Component {
           <div className="title-tab">{titleText}</div>
           <div className="buttons">
             { currentProject ? <span className="pt-button" onClick={this.shareProject.bind(this)}>{ t("Share") }</span> : null }
-            <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{ t("Execute") }</button>
+            { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{ t("Execute") }</button> : null }
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>
         </div>
@@ -145,7 +146,7 @@ class Studio extends Component {
             <Tab2 id="projects" title={t("Projects")} panel={ projectRef } />
             <Tab2 id="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
           </Tabs2>
-          <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } ref={c => this.editor = c} />
+          <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)} initialValue={currentProject ? currentProject.studentcontent : ""} ref={c => this.editor = c} />
         </div>
       </div>
     );

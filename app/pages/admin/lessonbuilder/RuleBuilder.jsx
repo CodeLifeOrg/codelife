@@ -5,6 +5,8 @@ import {translate} from "react-i18next";
 import {Button} from "@blueprintjs/core";
 import Loading from "components/Loading";
 
+import "./RuleBuilder.css";
+
 class RuleBuilder extends Component {
 
   constructor(props) {
@@ -55,37 +57,26 @@ class RuleBuilder extends Component {
 
     if (!rules) return <Loading />;
 
-    const ruleItems = rules.map(r => {
-      return (
-        <div style={{marginBottom: "10px"}}>
-          <span style={{fontSize: "16px"}}>{r.type}</span><br/>
-          <input className="pt-input" style={{width: "500px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
-          <input className="pt-input" style={{width: "500px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
-          { 
-            r.error_msg_2 
-              ? <div>
-                <input className="pt-input" style={{width: "500px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
-                <input className="pt-input" style={{width: "500px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} /> 
-              </div>
-              : null  
-          }
-          { 
-            r.error_msg_3 
-              ? <div>
-                <input className="pt-input" style={{width: "500px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
-                <input className="pt-input" style={{width: "500px", margin: "5px"}} id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} /> 
-              </div>
-              : null  
-          }   
-        </div>
-      );
-    });
+    const ruleItems = rules.map(r => <div key={r.id} className="rule">
+      <h3 className="rule-title">{r.type}</h3>
+      <h4 className="translation-title">Portuguese Translation</h4>
+      <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
+      <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
+      <div>
+        <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
+        <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
+      </div>
+      <div>
+        <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
+        <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
+      </div>
+    </div>);
 
-    
+
     return (
-      <div id="rule-builder">
+      <div id="RuleBuilder">
         {ruleItems}
-        <Button type="button" style={{margin: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-fill pt-large pt-intent-success">Save</Button>
       </div>
     );
   }

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
 
@@ -17,6 +17,7 @@ class CodeBlock extends Component {
       mounted: false,
       initialContent: "",
       isPassing: false,
+      execState: false, 
       isOpen: false,
       goodRatio: 0,
       intent: null,
@@ -55,6 +56,10 @@ class CodeBlock extends Component {
     this.props.onFirstCompletion(winMessage);
   }
 
+  setExecState(execState) {
+    this.setState({execState});
+  }
+
   saveProgress(level) {
     axios.post("/api/userprogress/save", {level}).then(resp => {
       resp.status === 200 ? console.log("successfully saved progress") : console.log("error");
@@ -70,7 +75,6 @@ class CodeBlock extends Component {
     let initialcontent = "";
     if (island && island.initialcontent) initialcontent = island.initialcontent;
     this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(initialcontent);
-    // this.checkForErrors(initialcontent);
     this.setState({resetAlert: false});
   }
 
@@ -145,7 +149,7 @@ class CodeBlock extends Component {
 
   render() {
     const {t, island} = this.props;
-    const {initialContent, timeoutAlert, rulejson} = this.state;
+    const {initialContent, timeoutAlert, rulejson, execState} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
@@ -174,12 +178,12 @@ class CodeBlock extends Component {
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: island.prompt}} />
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
           <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
           { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
-          <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button>
+          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             popoverClassName="pt-popover-content-sizing"

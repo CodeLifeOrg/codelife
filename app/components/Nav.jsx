@@ -34,9 +34,9 @@ class Nav extends Component {
             >
               <Link className="link" to={ `/profile/${ auth.user.username }` }><span className="pt-icon-standard pt-icon-user" />{ auth.user.username }</Link>
               <div>
-                <Link className="pt-button pt-fill" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
-                { auth.user.role > 0 ? <Link className="pt-button pt-fill" to="/admin">{ t("Admin") }</Link> : null }
-                <a className="pt-button pt-fill" href="/auth/logout">{ t("Logout") }</a>
+                <Link className="pt-button" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
+                { auth.user.role > 0 ? <Link className="pt-button" to="/admin">{ t("Admin") }</Link> : null }
+                <a className="pt-button" href="/auth/logout">{ t("Logout") }</a>
               </div>
             </Popover>
           </div>

@@ -1,10 +1,11 @@
+const {isAuthenticated, isRole} = require("../tools/api.js");
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/userprogress/", (req, res) => {
-
+  // Used in CodeBlock, CodeblockList, Home, Island, Level, and Slide to determine this user's list of beaten items
+  app.get("/api/userprogress/", isAuthenticated, (req, res) => {
     db.userprogress.findAll({where: {uid: req.user.id}})
       .then(progress => {
         const returnObj = {progress};
@@ -25,17 +26,14 @@ module.exports = function(app) {
 
   });
 
-  app.post("/api/userprogress/save", (req, res) => {
+  // Used in CodeBlock and Slide to report when a user beats an Island or a Level, respectively
+  app.post("/api/userprogress/save", isAuthenticated, (req, res) => {
     const {id: uid} = req.user;
-    const {level, gems} = req.body;
-
-    // db.userprogress.create({where: {uid, level}}).then(u => res.json(u).end());
-    
+    const {level} = req.body;
     db.userprogress.findOrCreate({where: {uid, level}})
       .then(userprogressRows => {
         if (userprogressRows.length) {
           const userprogressRow = userprogressRows[0];
-          userprogressRow.gems = gems;
           userprogressRow.datecompleted = db.fn("NOW");
           return userprogressRow.save().then(() => res.json(userprogressRows).end());
         }
@@ -43,7 +41,5 @@ module.exports = function(app) {
           return res.json({error: "Unable to update user progress."}).end();
         }
       });
-
   });
-
 };

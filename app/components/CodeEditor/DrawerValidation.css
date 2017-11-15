@@ -1,0 +1,52 @@
+#DrawerValidation {
+  & table {
+    border-collapse: collapse;
+    width: 100%;
+    & tr {
+      padding: 0;
+      &:not(:first-child).first {
+        border-top: 1px solid #ccc;
+      }
+      & .needle {
+        background-color: #efefef;
+        border-right: 1px solid #ccc;
+        color: rgba(0, 0, 0, 0.5);
+        font-weight: bold;
+        padding: 5px;
+        text-align: center;
+        vertical-align: middle;
+        & .pt-icon-standard {
+          margin-right: 5px;
+        }
+        & .allpassing {
+          font-size: 12px;
+          margin-top: 5px;
+        }
+      }
+      & .rule {
+        border-top: 1px solid #ccc;
+        font-size: 12px;
+        padding: 3px 5px 5px 5px;
+        & .pt-icon-standard {
+          font-size: 12px;
+          margin: 0 10px 0 5px;
+          transition: color 0.2s;
+          vertical-align: middle;
+        }
+        &.complete {}
+        &.error {
+          background-color: #ffc8cb;
+          color: red;
+          & .rule-name {
+            font-weight: bold;
+          }
+          & .error-text {
+            font-weight: normal;
+            padding-left: 10px;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

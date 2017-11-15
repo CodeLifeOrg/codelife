@@ -8,7 +8,7 @@ export default class QuillWrapper extends Component {
       require("react-quill/dist/quill.snow.css");
       const modules = {
         toolbar: [
-          [{header: [1, 2, false]}],
+          [{}],
           ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
           [{list: "ordered"}, {list: "bullet"}],
           ["clean"]
@@ -21,7 +21,7 @@ export default class QuillWrapper extends Component {
         theme="snow"
         modules={modules}
         ref={c => this.quillRef = c}
-        {...this.props} 
+        {...this.props}
       />;
     }
     return null;

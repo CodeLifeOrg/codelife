@@ -36,7 +36,7 @@ class RulePicker extends Component {
 
   extractRules(rulejson) {
     let rules = [];
-    if (rulejson) { 
+    if (rulejson) {
       rules = JSON.parse(rulejson);
       for (let i = 0; i < rules.length; i++) {
         rules[i].id = i;
@@ -125,27 +125,27 @@ class RulePicker extends Component {
     param3.JS_VAR_EQUALS = "value";
     param3.JS_FUNC_EQUALS = "value";
 
-    
+
     if (rules) {
-      ruleItems = rules.map(r => 
+      ruleItems = rules.map(r =>
         <div key={r.id} className="rule-section">
           <div className="pt-select rule-select" style={{width: "210px"}}>
             <select value={r.type} id={r.id} onChange={this.changeField.bind(this, "type")}>{ruleTypeList}</select>
           </div>
           <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
-          { param2[r.type] ? 
-            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} /> : 
+          { param2[r.type] ?
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} /> :
             <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
           }
-          { param3[r.type] ? 
-            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> : 
+          { param3[r.type] ?
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> :
             <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
-          }  
-          <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>          
+          }
+          <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>
         </div>
       );
     }
-    
+
     return (
       <div id="rule-picker">
         <label className="pt-label">

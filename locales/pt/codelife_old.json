@@ -101,5 +101,12 @@
   "<title> is the title of your page! Make sure it's inside a <head> tag": "<title> é o título da sua página! Não se esqueça de colocá-lo dentro de um tag <head>",
   "body within a <style> tag is how you customize everything in your webpage's body": "body dentro de uma tag <style> é como você adiciona estilo a tudo que está no corpo da sua página web",
   "h1 within a <style> tag is how you customize your header tags": "h1 dentro de um taga <style> é como você adiciona estilo às seus tags de cabeçalho",
-  "p within a <style> tag is how you customize your <p> tags": "p dentro de uma tag <style> é como você adciona estilo aos seus parágrafos (tag <p>) "
+  "p within a <style> tag is how you customize your <p> tags": "p dentro de uma tag <style> é como você adciona estilo aos seus parágrafos (tag <p>) ",
+  "Builder": "",
+  "Flag as Inappropriate": "",
+  "Gems": "Medalhas",
+  "Activate": {
+    "actions": {}
+  },
+  "Complete": "Completo"
 }

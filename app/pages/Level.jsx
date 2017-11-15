@@ -6,12 +6,11 @@ import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
 import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
+import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
 import Constants from "utils/Constants.js";
 
 import "./Level.css";
-
-import gemIcon from "icons/gem.svg";
 
 import Loading from "components/Loading";
 
@@ -30,9 +29,10 @@ class Level extends Component {
       unlikedCodeBlocks: null,
       loading: false,
       testOpen: false,
+      school: null,
+      checkpointOpen: false,
       winOpen: false,
       winMessage: "",
-      firstWin: false,
       showMore: false
     };
   }
@@ -47,14 +47,16 @@ class Level extends Component {
     const cbget = axios.get(`/api/codeBlocks/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
     const rget = axios.get("/api/reports/codeblocks");
+    const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
 
-    Promise.all([lget, iget, uget, cbget, lkget, rget]).then(resp => {
+    Promise.all([lget, iget, uget, cbget, lkget, rget, pget]).then(resp => {
       const levels = resp[0].data;
       const islands = resp[1].data;
       const userProgress = resp[2].data.progress;
       const allCodeBlocks = resp[3].data;
       const likes = resp[4].data;
       const reports = resp[5].data;
+      const profile = resp[6].data;
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: add an exception for level 10.
@@ -62,6 +64,8 @@ class Level extends Component {
       const nextIsland = islands.find(i => Number(i.ordering) === Number(nextOrdering));
       const prevOrdering = Number(currentIsland.ordering) - 1;
       const prevIsland = islands.find(i => Number(i.ordering) === Number(prevOrdering));
+
+      const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -98,7 +102,7 @@ class Level extends Component {
         }
       }
 
-      this.setState({levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
+      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
     });
   }
 
@@ -111,23 +115,11 @@ class Level extends Component {
   }
 
   componentDidMount() {
-    // TODO: why is this here?
     this.forceUpdate();
   }
 
   toggleTest() {
     this.setState({testOpen: !this.state.testOpen});
-
-    /*
-    // If I'm about to close the test successfully for the first time
-    if (this.state.testOpen && this.state.firstWin) {
-      this.setState({winOpen: true, firstWin: false, testOpen: !this.state.testOpen});
-    }
-    else {
-      this.setState({testOpen: !this.state.testOpen});
-    }
-    */
-
   }
 
   handleSave(newCodeBlock) {
@@ -145,7 +137,7 @@ class Level extends Component {
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
-    this.setState({firstWin: true, winMessage, testOpen: false, winOpen: true});
+    this.setState({winMessage, testOpen: false, winOpen: true});
   }
 
   closeOverlay() {
@@ -198,6 +190,66 @@ class Level extends Component {
     this.setState({showMore: !this.state.showMore});
   }
 
+  closeCheckpoint() {
+    this.setState({checkpointOpen: false});
+  }
+
+  saveCheckpoint() {
+    if (this.state.school && this.state.school.id) {
+      axios.post("/api/profile/update", {sid: this.state.school.id}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
+    }
+    this.setState({checkpointOpen: false});
+  }
+
+  skipCheckpoint() {
+    if (this.state.school && this.state.school.id) {
+      axios.post("/api/profile/update", {sid: -1}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
+    }
+    this.setState({checkpointOpen: false});
+  }
+
+  pickedSchool(school) {
+    this.setState({school});
+  }
+
+  buildCheckpointPopover() {
+    const {t} = this.props;
+    return (
+      <Dialog
+        isOpen={this.state.checkpointOpen}
+        onClose={this.closeCheckpoint.bind(this)}
+        title={ t("Tell us more about yourself") }
+        canEscapeClose={false}
+        canOutsideClickClose={false}
+        isCloseButtonShown={false}
+      >
+        <div className="pt-dialog-body">
+          <Checkpoint completed={this.pickedSchool.bind(this)}/>
+        </div>
+        <div className="pt-dialog-footer">
+          <div className="pt-dialog-footer-actions">
+            <Button
+              intent={Intent.WARNING}
+              onClick={this.skipCheckpoint.bind(this)}
+              text={t("I'd rather not say")}
+            />
+            <Button
+              intent={Intent.PRIMARY}
+              disabled={!this.state.school}
+              onClick={this.saveCheckpoint.bind(this)}
+              text={t("Save")}
+            />
+            
+          </div>
+        </div>
+      </Dialog>
+    );
+  }
+
   buildWinPopover() {
 
     const {t} = this.props;
@@ -215,14 +267,14 @@ class Level extends Component {
           {this.state.winMessage}
         </div>
         <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-actions">
-                <Button
-                    className="pt-fill"
-                    intent={Intent.PRIMARY}
-                    onClick={this.closeOverlay.bind(this)}
-                    text={t("Keep Exploring")}
-                />
-            </div>
+          <div className="pt-dialog-footer-actions">
+            <Button
+              className="pt-fill"
+              intent={Intent.PRIMARY}
+              onClick={this.closeOverlay.bind(this)}
+              text={t("Keep Exploring")}
+            />
+          </div>
         </div>
       </Dialog>
     );
@@ -317,8 +369,6 @@ class Level extends Component {
       const {lid} = this.props.params;
       if (level.isDone) {
         const up = userProgress.find(p => p.level === level.id);
-        const gems = up ? up.gems : 0;
-        // const gemCount = gems > 1 ? `${gems} Gems` : `${gems} Gem`;
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
@@ -327,7 +377,6 @@ class Level extends Component {
           <Link className="stop done" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {level.name}
-            <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div>
           </span>
         </Popover>;
       }
@@ -342,6 +391,7 @@ class Level extends Component {
     return (
       <div id="island" className={ currentIsland.theme }>
         { this.buildWinPopover() }
+        { this.buildCheckpointPopover() }
         <div className="image">
           <h1 className="title">{ currentIsland.name }</h1>
           <p className="description">{ currentIsland.description }</p>
@@ -355,32 +405,32 @@ class Level extends Component {
         { /* nextIsland && Number(nextIsland.ordering) < 3  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null} */ }
         { nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { otherCodeBlocks.length
-        ? <div>
+          ? <div>
             <h2 className="title">
               {t("Other Students' CodeBlocks")}&nbsp;
               { !islandDone
-              ? <Popover
-                interactionKind={PopoverInteractionKind.HOVER}
-                popoverClassName="pt-popover-content-sizing user-popover"
-                position={Position.TOP}
-              >
-              <span className="pt-icon pt-icon-lock"></span>
-                <div>
-                  { t("Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!") }
-                </div>
-              </Popover> : null }
+                ? <Popover
+                  interactionKind={PopoverInteractionKind.HOVER}
+                  popoverClassName="pt-popover-content-sizing user-popover"
+                  position={Position.TOP}
+                >
+                  <span className="pt-icon pt-icon-lock"></span>
+                  <div>
+                    { t("Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!") }
+                  </div>
+                </Popover> : null }
             </h2>
             <div className="snippets">{otherCodeBlockItemsBeforeFold}</div>
             { otherCodeBlockItemsAfterFold.length
-            ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
-            : null }
+              ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
+              : null }
             { otherCodeBlockItemsAfterFold.length
-            ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
               </div>
-            : null }
+              : null }
           </div>
-        : null }
+          : null }
       </div>
     );
   }

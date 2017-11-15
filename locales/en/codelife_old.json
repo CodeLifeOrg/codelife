@@ -28,7 +28,10 @@
   "SignUp": {
     "error": {}
   },
-  "home": {},
+  "home": {
+    "continue": "Continue learning on {{island}}",
+    "start": "Begin your adventure on {{island}}"
+  },
   "privacy": {
     "access": {},
     "cookies": {},
@@ -102,5 +105,13 @@
   "<title> is the title of your page! Make sure it's inside a <head> tag": "<title> is the title of your page! Make sure it's inside a <head> tag",
   "body within a <style> tag is how you customize everything in your webpage's body": "body within a <style> tag is how you customize everything in your webpage's body",
   "h1 within a <style> tag is how you customize your header tags": "h1 within a <style> tag is how you customize your header tags",
-  "p within a <style> tag is how you customize your <p> tags": "p within a <style> tag is how you customize your <p> tags"
+  "p within a <style> tag is how you customize your <p> tags": "p within a <style> tag is how you customize your <p> tags",
+  "Builder": "Builder",
+  "Flag as Inappropriate": "Flag as Inappropriate",
+  "Gems": "Gems",
+  "Activate": {
+    "actions": {}
+  },
+  "Complete": "Complete",
+  "rule": {}
 }

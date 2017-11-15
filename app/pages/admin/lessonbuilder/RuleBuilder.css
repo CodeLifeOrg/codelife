@@ -1,0 +1,32 @@
+#RuleBuilder {
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  padding: 25px;
+  & .rule {
+    border-bottom: 1px solid #efefef;
+    padding: 25px 0;
+    width: 100%;
+    &:first-child {
+      padding-top: 0;
+    }
+    & .rule-title {
+      display: inline-block;
+      width: calc(50% - 10px);
+    }
+    & .translation-title {
+      display: inline-block;
+      font-size: 14px;
+      margin-left: 20px;
+      opacity: 0.75;
+      width: calc(50% - 10px);
+    }
+    & .pt-input {
+      box-sizing: border-box;
+      margin: 5px 0;
+      width: calc(50% - 10px);
+      &.translation {
+        margin-left: 20px;
+      }
+    }
+  }
+}

@@ -547,3 +547,58 @@
     background-color: map(islands, island-beach, dark);
   }
 }
+
+.island-clock {
+  &#footer {
+    background-image: url("/islands/island-clock-ground.png");
+  }
+  &#island .image {
+    background-image: url("/islands/island-clock.png");
+  }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-clock, dark);
+  }
+  &#island #path:before {
+    background-color: map(islands, island-clock, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-clock, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-clock, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-clock, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-clock, dark);
+    color: map(islands, island-clock, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-clock, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-clock, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-clock, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-clock, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-clock, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-clock, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-clock, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-clock, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-clock, dark);
+  }
+}

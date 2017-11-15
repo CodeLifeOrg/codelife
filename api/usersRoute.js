@@ -1,3 +1,5 @@
+const {isAuthenticated, isRole} = require("../tools/api.js");
+
 module.exports = function(app) {
 
   const {db} = app.settings;

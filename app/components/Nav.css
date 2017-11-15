@@ -35,6 +35,8 @@
 
 .user-popover {
   & .pt-button {
+    display: block;
     margin-bottom: 10px;
+    width: 130px;
   }
 }

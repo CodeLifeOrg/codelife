@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
 
-import CodeEditor from "components/CodeEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import ReportBox from "components/ReportBox";
 import Loading from "components/Loading";
 import "./CodeBlockCard.css";
@@ -21,7 +22,7 @@ class CodeBlockCard extends Component {
 
   toggleDialog() {
     if (this.state.open) {
-      if (this.state.initialLikeState !== this.state.codeBlock.liked) {
+      if (this.props.user && this.state.initialLikeState !== this.state.codeBlock.liked) {
         axios.post("/api/likes/save", {liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
           if (resp.status === 200) {
             console.log("success");
@@ -74,7 +75,7 @@ class CodeBlockCard extends Component {
 
     if (!codeBlock) return <Loading />;
 
-    const {t, userProgress, theme, icon} = this.props;
+    const {t, userProgress, theme, icon, user} = this.props;
     const {id, lid, liked, reported, likes, mine, snippetname, studentcontent, username} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
@@ -114,26 +115,31 @@ class CodeBlockCard extends Component {
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
             <div className="pt-dialog-footer-actions">
-              <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
-              >
-                <Button
-                  intent={reported ? "" : Intent.DANGER}
-                  iconName="flag"
-                  text={reported ? "Flagged" : "Flag"}
-                />
-                <div>
-                 <ReportBox reportid={id} contentType="codeblock" handleReport={this.handleReport.bind(this)}/>
+              { user
+                ? <div>
+                  <Popover
+                    interactionKind={PopoverInteractionKind.CLICK}
+                    popoverClassName="pt-popover-content-sizing"
+                    position={Position.TOP_RIGHT}
+                  >
+                    <Button
+                      intent={reported ? "" : Intent.DANGER}
+                      iconName="flag"
+                      text={reported ? "Flagged" : "Flag"}
+                    />
+                    <div>
+                      <ReportBox reportid={id} contentType="codeblock" handleReport={this.handleReport.bind(this)}/>
+                    </div>
+                  </Popover>
+                  <Button
+                    intent={ liked ? Intent.WARNING : Intent.DEFAULT }
+                    iconName={ `star${ liked ? "" : "-empty"}` }
+                    onClick={ this.toggleLike.bind(this) }
+                    text={ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+                  />
                 </div>
-              </Popover>
-              <Button
-                intent={ liked ? Intent.WARNING : Intent.DEFAULT }
-                iconName={ `star${ liked ? "" : "-empty"}` }
-                onClick={ this.toggleLike.bind(this) }
-                text={ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
-              />
+                : null 
+              }
               <Button
                 intent={ Intent.PRIMARY }
                 onClick={ this.toggleDialog.bind(this) }
@@ -147,5 +153,8 @@ class CodeBlockCard extends Component {
   }
 }
 
+CodeBlockCard = connect(state => ({
+  user: state.auth.user
+}))(CodeBlockCard);
 CodeBlockCard = translate()(CodeBlockCard);
 export default CodeBlockCard;

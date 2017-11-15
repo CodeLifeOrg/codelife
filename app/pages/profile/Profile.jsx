@@ -70,7 +70,7 @@ class Profile extends Component {
 
     const newSharing = e.target.checked ? "true" : "false";
     const uid = profileUser.uid;
-    axios.post("/api/profile/update", {sharing: newSharing, uid}).then(resp => {
+    axios.post("/api/profile/setsharing", {sharing: newSharing, uid}).then(resp => {
       if (resp.status === 200) {
         console.log("updated");
         this.setState({sharing: !sharing});
@@ -116,7 +116,7 @@ class Profile extends Component {
           <UserCodeBlocks user={profileUser} />
           <UserProjects user={profileUser} />
           {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
-          {profileUser.sid ? <UsersList type="school" user={profileUser} /> : null}
+          {profileUser.sid && profileUser.sid !== -1 ? <UsersList type="school" user={profileUser} /> : null}
         </content>
       </div>
     );

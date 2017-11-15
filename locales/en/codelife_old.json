@@ -28,7 +28,10 @@
   "SignUp": {
     "error": {}
   },
-  "home": {},
+  "home": {
+    "continue": "Continue learning on {{island}}",
+    "start": "Begin your adventure on {{island}}"
+  },
   "privacy": {
     "access": {},
     "cookies": {},
@@ -108,5 +111,7 @@
   "Gems": "Gems",
   "Activate": {
     "actions": {}
-  }
+  },
+  "Complete": "Complete",
+  "rule": {}
 }

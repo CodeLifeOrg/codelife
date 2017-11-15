@@ -199,11 +199,21 @@ class LessonBuilder extends Component {
     const arr = n.parent.childNodes;
     let loc = n.data.ordering;
     if (dir === "above") {
-      arr.map(node => node.data.ordering >= n.data.ordering ? node.data.ordering++ : null);
+      for (const node of arr) {
+        if (node.data.ordering >= n.data.ordering) {
+          node.data.ordering++;
+          this.saveNode(node);
+        }
+      }
     }
     if (dir === "below") {
       loc++;
-      arr.map(node => node.data.ordering >= n.data.ordering + 1 ? node.data.ordering++ : null);
+      for (const node of arr) {
+        if (node.data.ordering >= n.data.ordering + 1) {
+          node.data.ordering++;
+          this.saveNode(node);
+        }
+      }
     }
     const slideUUID = `slide-${this.getUUID()}`;
     const objSlide = {
@@ -314,7 +324,13 @@ class LessonBuilder extends Component {
     const oldLoc = n.data.ordering;
     const i = n.parent.childNodes.indexOf(n);
     n.parent.childNodes.splice(i, 1);
-    n.parent.childNodes.map(node => node.data.ordering > oldLoc ? node.data.ordering-- : null);
+    const arr = n.parent.childNodes;
+    for (const node of arr) {
+      if (node.data.ordering > oldLoc) {
+        node.data.ordering--;
+        this.saveNode(node);
+      }
+    }
     // this sort *should* be unnecessary but I'm running it just in case
     n.parent.childNodes.sort((a, b) => a.data.ordering - b.data.ordering);
     this.delNode(n);

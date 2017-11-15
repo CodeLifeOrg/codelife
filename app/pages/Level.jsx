@@ -8,7 +8,6 @@ import CodeBlock from "components/CodeBlock";
 import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
-import Constants from "utils/Constants.js";
 
 import "./Level.css";
 
@@ -48,8 +47,9 @@ class Level extends Component {
     const lkget = axios.get("/api/likes");
     const rget = axios.get("/api/reports/codeblocks");
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
+    const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([lget, iget, uget, cbget, lkget, rget, pget]).then(resp => {
+    Promise.all([lget, iget, uget, cbget, lkget, rget, pget, scget]).then(resp => {
       const levels = resp[0].data;
       const islands = resp[1].data;
       const userProgress = resp[2].data.progress;
@@ -57,6 +57,7 @@ class Level extends Component {
       const likes = resp[4].data;
       const reports = resp[5].data;
       const profile = resp[6].data;
+      const constants = resp[7].data;
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: add an exception for level 10.
@@ -87,7 +88,7 @@ class Level extends Component {
           myCodeBlocks.push(cb);
         }
         else {
-          if (cb.reports >= Constants.FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false") cb.hidden = true;
+          if (cb.reports >= constants.FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false") cb.hidden = true;
           // TODO: do this in a database join, not here.
           if (!cb.hidden) {
             if (likes.find(l => l.likeid === cb.id)) {
@@ -204,11 +205,9 @@ class Level extends Component {
   }
 
   skipCheckpoint() {
-    if (this.state.school && this.state.school.id) {
-      axios.post("/api/profile/update", {sid: -1}).then(resp => {
-        resp.status === 200 ? console.log("success") : console.log("error");
-      });
-    }
+    axios.post("/api/profile/update", {sid: -1}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
     this.setState({checkpointOpen: false});
   }
 

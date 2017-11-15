@@ -65,6 +65,7 @@ export const cvContainsStyle = (rule, payload) => {
   if (style && style.children && style.children[0]) styleContent = style.children[0].content;
   if (!styleContent) styleContent = "";
   const obj = css.parse(styleContent, {silent: true});
+  console.log(obj);
   let found = 0;
   for (const r of obj.stylesheet.rules) {
     if (r.selectors && r.selectors.includes(needle)) {

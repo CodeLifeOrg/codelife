@@ -4,7 +4,6 @@ import {translate} from "react-i18next";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
-import Constants from "utils/Constants.js";
 import "./Share.css";
 
 import Loading from "components/Loading";
@@ -16,14 +15,15 @@ class Share extends Component {
     this.state = {
       content: null,
       user: null,
-      reports: []
+      reports: [],
+      constants: null
     };
   }
 
   renderPage() {
     if (this.refs.rc) {
-
-      const hideContent = Number(this.state.content.reports >= Constants.FLAG_COUNT_BAN || this.state.content.status === "banned" || this.state.content.sharing === "false");
+      const {constants} = this.state;
+      const hideContent = Number(this.state.content.reports >= constants.FLAG_COUNT_BAN || this.state.content.status === "banned" || this.state.content.sharing === "false");
       const content = hideContent ? "This content has been disabled." : this.state.content.studentcontent;
       const doc = this.refs.rc.contentWindow.document;
       doc.open();
@@ -45,24 +45,29 @@ class Share extends Component {
     if (type === "codeBlock") {
       const cbget = axios.get(`/api/codeBlocks/byUsernameAndFilename?username=${username}&filename=${filename}`);
       const rget = axios.get("/api/reports");
+      const scget = axios.get("/api/siteconfigs");
 
-      Promise.all([cbget, rget]).then(resp => {
+      Promise.all([cbget, rget, scget]).then(resp => {
         
         const content = resp[0].data[0];
         const reports = resp[1].data;
+        const constants = resp[2].data;
 
-        this.setState({content, reports}, this.renderPage.bind(this));
+        this.setState({content, reports, constants}, this.renderPage.bind(this));
       });
     }
     if (type === "project") {
       const pget = axios.get(`/api/projects/byUsernameAndFilename?username=${username}&filename=${filename}`);
       const rget = axios.get("/api/reports");
-      Promise.all([pget, rget]).then(resp => {
+      const scget = axios.get("/api/siteconfigs");
+
+      Promise.all([pget, rget, scget]).then(resp => {
         
         const content = resp[0].data[0];
         const reports = resp[1].data;
-        console.log(content, reports);
-        this.setState({content, reports}, this.renderPage.bind(this));
+        const constants = resp[2].data;
+        
+        this.setState({content, reports, constants}, this.renderPage.bind(this));
       });
     }
   }

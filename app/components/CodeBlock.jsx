@@ -22,8 +22,6 @@ class CodeBlock extends Component {
       goodRatio: 0,
       intent: null,
       rulejson: null,
-      timeout: null,
-      timeoutAlert: false,
       resetAlert: false,
       filename: ""
     };
@@ -39,17 +37,6 @@ class CodeBlock extends Component {
       filename = this.props.island.codeBlock.snippetname;
     }
     this.setState({mounted: true, initialContent, filename, rulejson});
-  }
-
-  componentWillUnmount() {
-    if (this.state.timeout) {
-      clearTimeout(this.state.timeout);
-    }
-  }
-
-  askForHelp() {
-    const {t} = this.props;
-    this.setState({timeoutAlert: t("Having trouble? Check with a neighbor and ask for help!")});
   }
 
   onFirstCompletion(winMessage) {
@@ -149,24 +136,17 @@ class CodeBlock extends Component {
 
   render() {
     const {t, island} = this.props;
-    const {initialContent, timeoutAlert, rulejson, execState} = this.state;
+    const {initialContent, rulejson, execState} = this.state;
 
     if (!this.state.mounted) return <Loading />;
 
     return (
       <div id="codeBlock">
         <div style={{textAlign: "right"}} className="codeblock-filename-form">
-            {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
+          {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
         </div>
         <div className="codeBlock-body">
           <Alert
-            isOpen={ timeoutAlert ? true : false }
-            confirmButtonText={ t("Okay") }
-            intent={ Intent.SUCCESS }
-            onConfirm={ () => this.setState({timeoutAlert: false}) }>
-            <p>{ timeoutAlert ? timeoutAlert : "" }</p>
-        </Alert>
-         <Alert
             isOpen={ this.state.resetAlert }
             cancelButtonText={ t("Cancel") }
             confirmButtonText={ t("Reset") }
@@ -174,7 +154,7 @@ class CodeBlock extends Component {
             onCancel={ () => this.setState({resetAlert: false}) }
             onConfirm={ () => this.resetCodeBlock() }>
             <p>{ t("Are you sure you want to reset the code to its original state?") }</p>
-        </Alert>
+          </Alert>
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: island.prompt}} />
           </div>

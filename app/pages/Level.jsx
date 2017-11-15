@@ -205,11 +205,9 @@ class Level extends Component {
   }
 
   skipCheckpoint() {
-    if (this.state.school && this.state.school.id) {
-      axios.post("/api/profile/update", {sid: -1}).then(resp => {
-        resp.status === 200 ? console.log("success") : console.log("error");
-      });
-    }
+    axios.post("/api/profile/update", {sid: -1}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
     this.setState({checkpointOpen: false});
   }
 

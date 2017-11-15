@@ -62,22 +62,14 @@ class RuleBuilder extends Component {
       <h4 className="translation-title">Portuguese Translation</h4>
       <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
       <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
-      {
-        r.error_msg_2
-          ? <div>
-            <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
-            <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
-          </div>
-          : null
-      }
-      {
-        r.error_msg_3
-          ? <div>
-            <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
-            <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
-          </div>
-          : null
-      }
+      <div>
+        <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
+        <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
+      </div>
+      <div>
+        <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
+        <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
+      </div>
     </div>);
 
 

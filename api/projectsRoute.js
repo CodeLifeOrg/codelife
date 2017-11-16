@@ -51,14 +51,18 @@ module.exports = function(app) {
   // Used by Projects to create a new project
   app.post("/api/projects/new", isAuthenticated, (req, res) => {
     db.projects.create({studentcontent: req.body.studentcontent, name: req.body.name, uid: req.user.id, datemodified: db.fn("NOW")}).then(currentProject => {
-      db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json({currentProject, projects}).end());
+      const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
+      db.query(q, {type: db.QueryTypes.SELECT}).then(projects => res.json({currentProject, projects}).end());
+      //db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json({currentProject, projects}).end());
     });
   });
 
   // Used by Projects to delete a project
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
     db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => {
-      db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json(projects).end());
+      //db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json(projects).end());
+      const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
+      db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
     });
   });
 

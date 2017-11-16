@@ -19,14 +19,14 @@ class QuizPicker extends Component {
   componentDidMount() {
     const {data, parentID} = this.props;
     const quiz = this.extractQuiz(this.props.data.quizjson, this.props.data.pt_quizjson);
-    this.setState({data, quiz, parentID});   
+    this.setState({data, quiz, parentID});
   }
 
   componentDidUpdate() {
     if (this.props.parentID !== this.state.parentID) {
       const {data, parentID} = this.props;
       const quiz = this.extractQuiz(this.props.data.quizjson, this.props.data.pt_quizjson);
-      this.setState({data, quiz, parentID});   
+      this.setState({data, quiz, parentID});
     }
   }
 
@@ -38,7 +38,7 @@ class QuizPicker extends Component {
       langQuiz = JSON.parse(langjson);
       for (let i = 0; i < quiz.length; i++) {
         quiz[i].id = i;
-        quiz[i].pt_text = langQuiz[i].text; 
+        quiz[i].pt_text = langQuiz[i].text;
       }
     }
     return quiz;
@@ -54,7 +54,7 @@ class QuizPicker extends Component {
     const {quiz} = this.state;
     if (e.target.checked) {
       quiz.map(q => q.isCorrect = false);
-      quiz[e.target.id].isCorrect = e.target.checked;  
+      quiz[e.target.id].isCorrect = e.target.checked;
     }
     this.setState({quiz}, this.updateJSON.bind(this));
   }
@@ -78,7 +78,7 @@ class QuizPicker extends Component {
     data.quizjson = JSON.stringify(json);
     data.pt_quizjson = JSON.stringify(langjson);
     this.setState({data});
-  }  
+  }
 
   addAnswer() {
     const {quiz} = this.state;
@@ -112,22 +112,21 @@ class QuizPicker extends Component {
 
     let quizItems = [];
     if (quiz) {
-      quizItems = quiz.map(q => 
-        <div className="quiz-section" style={{display: "flex"}}>
-          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "text")} type="text" placeholder="Answer" dir="auto" value={q.text} /> 
-          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "pt_text")} type="text" placeholder="Answer" dir="auto" value={q.pt_text} /> 
-          <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} style={{margin: "12px"}} />        
-          <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={q.id} onClick={this.removeAnswer.bind(this)}>Remove</button>
+      quizItems = quiz.map(q =>
+        <div key={q.id} className="quiz-section">
+          <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} />
+          <textarea className="pt-input en" id={q.id} rows="3" onChange={this.changeField.bind(this, "text")} type="text" placeholder="Answer" dir="auto" value={q.text} />
+          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "pt_text")} type="text" placeholder="Answer" dir="auto" value={q.pt_text} />
+          <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={q.id} onClick={this.removeAnswer.bind(this)}></button>
         </div>
       );
     }
-    
+
     return (
       <div id="quiz-picker">
         <label className="pt-label">
-          Quiz
           {quizItems}
-          <button className="pt-button pt-intent-success pt-icon-add" type="button" onClick={this.addAnswer.bind(this)}>Add Answer</button>
+          <button className="pt-button pt-icon-add pt-fill" type="button" onClick={this.addAnswer.bind(this)}>Add Another Answer</button>
         </label>
       </div>
     );

@@ -1,0 +1,18 @@
+.quiz-section {
+  align-items: center;
+  display: flex;
+  margin-bottom: 10px;
+  & .pt-input {
+    flex: 1;
+    margin-right: 10px;
+    &.en {
+      margin-right: 20px;
+    }
+  }
+  & .pt-checkbox {
+    margin: 0 10px;
+  }
+  & .pt-button {
+    margin: 0 5px;
+  }
+}

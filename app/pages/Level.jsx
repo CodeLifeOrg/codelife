@@ -144,7 +144,7 @@ class Level extends Component {
   closeOverlay() {
     // TODO: take out island 4 catcher after august (completed)
     // if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-4") {
-    if (this.state.nextIsland && this.state.nextIsland.id) {  
+    if (this.state.nextIsland && this.state.nextIsland.id) {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -217,14 +217,17 @@ class Level extends Component {
 
   buildCheckpointPopover() {
     const {t} = this.props;
+    const {theme} = this.state.currentIsland;
     return (
       <Dialog
+        className={ theme }
         isOpen={this.state.checkpointOpen}
         onClose={this.closeCheckpoint.bind(this)}
-        title={ t("Tell us more about yourself") }
+        title={ t("Survey") }
         canEscapeClose={false}
         canOutsideClickClose={false}
         isCloseButtonShown={false}
+        iconName="clipboard"
       >
         <div className="pt-dialog-body">
           <Checkpoint completed={this.pickedSchool.bind(this)}/>
@@ -232,17 +235,22 @@ class Level extends Component {
         <div className="pt-dialog-footer">
           <div className="pt-dialog-footer-actions">
             <Button
+              intent={Intent.DANGER}
+              onClick={this.skipCheckpoint.bind(this)}
+              text={t("No")}
+            />
+            <Button
               intent={Intent.WARNING}
               onClick={this.skipCheckpoint.bind(this)}
               text={t("I'd rather not say")}
             />
             <Button
-              intent={Intent.PRIMARY}
+              intent={Intent.SUCCESS}
               disabled={!this.state.school}
               onClick={this.saveCheckpoint.bind(this)}
               text={t("Save")}
             />
-            
+
           </div>
         </div>
       </Dialog>
@@ -336,7 +344,7 @@ class Level extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {levels, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
 
     if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <Loading />;
@@ -380,7 +388,7 @@ class Level extends Component {
         </Popover>;
       }
       else if (level.isNext) {
-        return <Tooltip isOpen={true} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
+        return <Tooltip isOpen={!checkpointOpen} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
           <Link className="stop next" to={`/island/${lid}/${level.id}`}></Link>
         </Tooltip>;
       }

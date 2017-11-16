@@ -75,11 +75,8 @@ class SelectGeo extends Component {
   }
 
   render() {
-    const {gid, t} = this.props;
+    const {t} = this.props;
     const {loading, error, geos, filteredGeos, geoQuery, homeGeo} = this.state;
-    const state = gid ? gid.substr(0, 3) : null;
-
-    const changeState = this.changeState.bind(this);
     const filterGeos = this.filterGeos.bind(this);
     const setSelectedGeo = this.setSelectedGeo.bind(this);
 
@@ -88,11 +85,6 @@ class SelectGeo extends Component {
 
     return (
       <div className="pt-form-content">
-        <div className="pt-select">
-          <select onChange={changeState} value={state || ""}>
-            {STATES.map(s => <option key={s.id} value={s.id}>{`${s.name} (${s.id.substr(1, 2).toUpperCase()})`}</option>)}
-          </select>
-        </div>
         { geos.length
           ? <Select
             resetOnSelect={true}
@@ -102,7 +94,7 @@ class SelectGeo extends Component {
             onItemSelect={setSelectedGeo}
             noResults={<MenuItem disabled text={t("No results.")} />}
           >
-            <Button text={homeGeo ? homeGeo.name : ""} rightIconName="caret-down" />
+            <Button text={homeGeo ? homeGeo.name : ""} iconName="map-marker" rightIconName="caret-down" />
           </Select> : null}
       </div>
     );

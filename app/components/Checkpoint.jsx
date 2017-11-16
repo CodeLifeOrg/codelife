@@ -5,7 +5,7 @@ import SelectSchool from "pages/profile/SelectSchool";
 import "./Checkpoint.css";
 
 class Checkpoint extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,10 +24,8 @@ class Checkpoint extends Component {
     const {sid} = this.state;
 
     return (
-      <div className="pt-form-group pt-inline">
-        <label className="pt-label" htmlFor="example-form-group-input-d">
-          {t("What school do you go to?")}
-        </label>
+      <div id="Checkpoint">
+        <h3>{ t("Do you go to school in Minas Gerais?") }</h3>
         <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
       </div>
     );

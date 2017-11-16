@@ -10,7 +10,7 @@ import crypto from "crypto";
 
 import AceWrapper from "components/AceWrapper";
 
-import {cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
+import {cvMatch, cvUses, cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
 
 import DrawerValidation from "./DrawerValidation";
 
@@ -28,6 +28,7 @@ class CodeEditor extends Component {
       changesMade: false,
       baseRules: [],
       isPassing: false,
+      hasJS: false,
       rulejson: [],
       ruleErrors: [],
       goodRatio: 0,
@@ -62,12 +63,13 @@ class CodeEditor extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {iFrameLoaded, initialContent, currentJS} = this.state;
+    const {iFrameLoaded, initialContent, hasJS} = this.state;
+    
     if (this.props.setExecState) {
-      if (!prevState.currentJS && currentJS) {
+      if (!prevState.hasJS && hasJS) {
         this.props.setExecState(true);
       }
-      else if (prevState.currentJS && !currentJS) {
+      else if (prevState.hasJS && !hasJS) {
         this.props.setExecState(false);
       }
     }
@@ -154,118 +156,36 @@ class CodeEditor extends Component {
         arr.push(newObj);
       }
       else {
+        console.log("in");
         if (n.children && n.children[0] && n.children[0].content) {
           const js = n.children[0].content;
           const stripped = js.replace(/\n/g, "").replace(/\s/g, "");
           if (stripped.length > 0) {
             this.setState({currentJS: js}, this.checkForErrors.bind(this));
+          } 
+          else {
+            this.checkForErrors.bind(this)();
           }
+        }
+        else {
+          this.checkForErrors.bind(this)();
         }
       }
     }
     return arr;
   }
 
+  /* 
+    For javascript rules, we test their correctness elsewhere (namely, checkJVMState)
+    As such, they are already aware of their passing state, and we can just no-op
+  */
+
   cvEquals(r) {
-    // For javascript rules, we test their correctness elsewhere (namely, checkVMState)
-    // As such, they are already aware of their passing state, and we can just no-op
     return r.passing;
   }
 
   cvFunc(r) {
     return r.passing;
-  }
-
-  cvMatch(rule, payload) {
-    const haystack = payload.theJS;
-    return haystack.search(new RegExp(rule.regex)) >= 0;
-  }
-
-  cvNests(rule, payload) {
-    const haystack = payload.theText;
-    const reOuter = new RegExp(`<${rule.outer}[^>]*\/>`, "g");
-    const outerOpen = haystack.search(reOuter);
-    const outerClose = haystack.indexOf(`</${rule.outer}>`);
-    const reInner = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
-    const innerOpen = haystack.search(reInner);
-    const innerClose = haystack.indexOf(`</${rule.needle}>`);
-    return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 &&
-            outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
-  }
-
-  cvUses(rule, payload) {
-    const haystack = payload.theJS;
-    let re;
-    if (rule.needle === "for") {
-      re = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
-    }
-    else if (rule.needle === "if") {
-      re = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
-    }
-    else {
-       re = new RegExp(`${rule.needle}\\s*\\([^\\)]*\\)\\s*{[^}]*}`, "g");
-    }
-
-    return haystack.search(re) >= 0;
-  }
-
-  attrCount(needle, attribute, value, json) {
-    let count = 0;
-    if (json.length === 0) return 0;
-    if (attribute === "class") attribute = "className";
-    for (const node of json) {
-      if (node.type === "Element" && node.tagName === needle && node.attributes[attribute]) {
-        // if we have been provided a value, we must compare against it for a match
-        if (value) {
-          if (attribute === "className") {
-            if (node.attributes.className && node.attributes.className.includes(value)) count++;
-          }
-          else if (String(node.attributes[attribute]) === String(value)) count++;
-        }
-        // if we were not provided a value, then this is checking for attribute only, and we can pass
-        else {
-          count++;
-        }
-      }
-      if (node.children !== undefined) {
-        count += this.attrCount(needle, attribute, value, node.children);
-      }
-    }
-    return count;
-  }
-
-  cvContainsSelfClosingTag(rule, payload) {
-    const html = payload.theText;
-    const json = payload.theJSON;
-    const re = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
-    const open = html.search(re);
-
-    let hasAttr = true;
-    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
-
-    return open !== -1 && hasAttr;
-  }
-
-  cvContainsOne(rule, payload) {
-    const html = payload.theText;
-    const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
-    const match = html.match(re);
-    const count = match ? match.length : -1;
-    return count === 1;
-  }
-
-  cvContainsTag(rule, payload) {
-    const html = payload.theText;
-    const json = payload.theJSON;
-    const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
-    const open = html.search(re);
-    const close = html.indexOf(`</${rule.needle}>`);
-    const tagClosed = open !== -1 && close !== -1 && open < close;
-
-    let hasAttr = true;
-    if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
-
-    return tagClosed && hasAttr;
   }
 
   checkForErrors() {
@@ -275,16 +195,15 @@ class CodeEditor extends Component {
     const {baseRules, rulejson} = this.state;
     let errors = 0;
     const cv = [];
-    // cv.CONTAINS = cvContainsTag;
-    cv.CONTAINS = this.cvContainsTag.bind(this);
-    cv.CONTAINS_ONE = this.cvContainsOne.bind(this);
+    cv.CONTAINS = cvContainsTag;
+    cv.CONTAINS_ONE = cvContainsOne;
     cv.CSS_CONTAINS = cvContainsStyle;
-    cv.CONTAINS_SELF_CLOSE = this.cvContainsSelfClosingTag.bind(this);
+    cv.CONTAINS_SELF_CLOSE = cvContainsSelfClosingTag;
     cv.NESTS = cvNests;
+    cv.JS_MATCHES = cvMatch;
+    cv.JS_USES = cvUses;
     cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
     cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);
-    cv.JS_MATCHES = this.cvMatch.bind(this);
-    cv.JS_USES = this.cvUses.bind(this);
     const payload = {theText, theJS, theJSON};
     for (const r of baseRules) {
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
@@ -323,12 +242,13 @@ class CodeEditor extends Component {
     if (this.refs.rc) {
       let theText = this.state.currentText;
       if (this.hasJS(theText)) {
+        this.setState({hasJS: true});
         const oldJSON = himalaya.parse(this.state.currentText);
         const newJSON = this.stripJS.bind(this)(oldJSON);
         theText = toHTML(newJSON);
       }
       else {
-        this.setState({currentJS: ""});
+        this.setState({currentJS: "", hasJS: false});
         this.checkForErrors.bind(this)();
       }
       this.writeToIFrame.bind(this)(theText);
@@ -360,10 +280,13 @@ class CodeEditor extends Component {
     if (this.props.onChangeText) this.props.onChangeText(theText);
   }
 
+  /*
+  This function may be used later - it grabs the contents of your current cursor selection
+  
   showContextMenu(selectionObject) {
     const text = selectionObject.toString();
-    // If you want to insert the selected text here, it's available
   }
+  */
 
   myCatch(e) {
     const {embeddedConsole} = this.state;

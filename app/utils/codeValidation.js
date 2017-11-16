@@ -1,55 +1,95 @@
 import css from "css";
 
-export const cvContainsSelfClosingTag = (rule, payload) => {
-  const haystack = payload.theText;
-  const needle = rule.needle;
-  const open = haystack.indexOf(`<${needle}`);
-  const close = haystack.indexOf("/>");
-  return open !== -1 && close !== -1 && open < close;
-};
-
-export const cvContainsTag = (rule, payload) => {
-  const haystack = payload.theText;
-  const needle = rule.needle;
-  const open = haystack.indexOf(`<${needle}>`);
-  const close = haystack.indexOf(`</${needle}>`);
-  return open !== -1 && close !== -1 && open < close;
-};
-
-export const cvContainsOne = (rule, payload) => {
-  /* 
-  TODO: REPLACE WITH THIS:
-
-  const html = payload.theText;
-  const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
-  const open = html.search(re);
-  const open2 = html.indexOf(`<${rule.needle}>`, open + 1);
-  const reClose = new RegExp(`<${rule.needle}[^>]*>`, "g");
-  const close = html.search(reClose);
-  const close2 = html.indexOf(`</${rule.needle}>`, close + 2);
-
-  */
-
-
-  const haystack = payload.theText;
-  const needle = rule.needle; 
-  const open = haystack.indexOf(`<${needle}>`);
-  const open2 = haystack.indexOf(`<${needle}>`, open + 1);
-  const close = haystack.indexOf(`</${needle}>`);
-  const close2 = haystack.indexOf(`</${needle}>`, close + 2);
-  return open2 === -1 && close2 === -1;
+export const cvMatch = (rule, payload) => {
+  const haystack = payload.theJS;
+  return haystack.search(new RegExp(rule.regex)) >= 0;
 };
 
 export const cvNests = (rule, payload) => {
   const haystack = payload.theText;
-  const outer = rule.outer;
-  const needle = rule.needle;
-  const outerOpen = haystack.indexOf(`<${outer}`);
-  const outerClose = haystack.indexOf(`</${outer}>`);
-  const innerOpen = haystack.indexOf(`<${needle}`);
-  const innerClose = haystack.indexOf(`</${needle}>`);
-  return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 && 
+  const reOuter = new RegExp(`<${rule.outer}[^>]*>`, "g");
+  const outerOpen = haystack.search(reOuter);
+  const outerClose = haystack.indexOf(`</${rule.outer}>`);
+  const reInner = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const innerOpen = haystack.search(reInner);
+  const innerClose = haystack.indexOf(`</${rule.needle}>`);
+  return  outerOpen !== -1 && outerClose !== -1 && innerOpen !== -1 && innerClose !== -1 &&
           outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
+};
+
+export const cvUses = (rule, payload) => {
+  const haystack = payload.theJS;
+  let re;
+  if (rule.needle === "for") {
+    re = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
+  }
+  else if (rule.needle === "if") {
+    re = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
+  }
+  else {
+     re = new RegExp(`${rule.needle}\\s*\\([^\\)]*\\)\\s*{[^}]*}`, "g");
+  }
+
+  return haystack.search(re) >= 0;
+};
+
+export const attrCount = (needle, attribute, value, json) => {
+  let count = 0;
+  if (json.length === 0) return 0;
+  if (attribute === "class") attribute = "className";
+  for (const node of json) {
+    if (node.type === "Element" && node.tagName === needle && node.attributes[attribute]) {
+      // if we have been provided a value, we must compare against it for a match
+      if (value) {
+        if (attribute === "className") {
+          if (node.attributes.className && node.attributes.className.includes(value)) count++;
+        }
+        else if (String(node.attributes[attribute]) === String(value)) count++;
+      }
+      // if we were not provided a value, then this is checking for attribute only, and we can pass
+      else {
+        count++;
+      }
+    }
+    if (node.children !== undefined) {
+      count += this.attrCount(needle, attribute, value, node.children);
+    }
+  }
+  return count;
+};
+
+export const cvContainsSelfClosingTag = (rule, payload) => {
+  const html = payload.theText;
+  const json = payload.theJSON;
+  const re = new RegExp(`<${rule.needle}[^>]*\/>`, "g");
+  const open = html.search(re);
+
+  let hasAttr = true;
+  if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+  return open !== -1 && hasAttr;
+};
+
+export const cvContainsOne = (rule, payload) => {
+  const html = payload.theText;
+  const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const match = html.match(re);
+  const count = match ? match.length : -1;
+  return count === 1;
+};
+
+export const cvContainsTag = (rule, payload) => {
+  const html = payload.theText;
+  const json = payload.theJSON;
+  const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
+  const open = html.search(re);
+  const close = html.indexOf(`</${rule.needle}>`);
+  const tagClosed = open !== -1 && close !== -1 && open < close;
+
+  let hasAttr = true;
+  if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+
+  return tagClosed && hasAttr;
 };
 
 export const cvContainsStyle = (rule, payload) => {
@@ -65,7 +105,6 @@ export const cvContainsStyle = (rule, payload) => {
   if (style && style.children && style.children[0]) styleContent = style.children[0].content;
   if (!styleContent) styleContent = "";
   const obj = css.parse(styleContent, {silent: true});
-  console.log(obj);
   let found = 0;
   for (const r of obj.stylesheet.rules) {
     if (r.selectors && r.selectors.includes(needle)) {

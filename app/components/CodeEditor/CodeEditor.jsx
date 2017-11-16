@@ -6,8 +6,6 @@ import {toHTML} from "himalaya/translate";
 import {translate} from "react-i18next";
 import {Intent, ProgressBar} from "@blueprintjs/core";
 
-import crypto from "crypto";
-
 import AceWrapper from "components/AceWrapper";
 
 import {cvMatch, cvUses, cvNests, cvContainsOne, cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
@@ -40,7 +38,7 @@ class CodeEditor extends Component {
       remoteReady: false,
       sandbox: {
         root: "https://codelife.tech",
-        page: props.location.hostname === "localhost" ? `page_local.html?v=${crypto.randomBytes(2).toString("hex")}` : `page.html?v=${crypto.randomBytes(2).toString("hex")}`
+        page: props.location.hostname === "localhost" ? `page_local.html?v=${new Date().getTime()}` : `page.html?v=${new Date().getTime()}`
       },
       openRules: false,
       openConsole: false
@@ -64,6 +62,7 @@ class CodeEditor extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {iFrameLoaded, initialContent, hasJS} = this.state;
+    console.log(this.state.sandbox);
     
     if (this.props.setExecState) {
       if (!prevState.hasJS && hasJS) {

@@ -53,6 +53,12 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/profileping", isAuthenticated, (req, res) => {
+    db.userprofiles.findOrCreate({where: {uid: req.user.id}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
   app.post("/api/profile/", isAuthenticated, (req, res) => {
     const {bio, cpf, dob, gender, gid, name, sid} = req.body;
     db.users.update(

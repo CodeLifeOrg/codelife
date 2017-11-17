@@ -63,6 +63,7 @@ class Share extends Component {
 
       Promise.all([pget, rget, scget]).then(resp => {
         
+        
         const content = resp[0].data[0];
         const reports = resp[1].data;
         const constants = resp[2].data;
@@ -73,7 +74,6 @@ class Share extends Component {
   }
 
   handleReport(report) {
-    console.log(report);
     const {reports} = this.state;
     reports.push(report);
     this.setState({reports});

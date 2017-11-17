@@ -115,7 +115,7 @@ class CodeBlockList extends Component {
       const thisIslandItems = [];
       for (const s of i.myCodeBlocks.concat(i.likedCodeBlocks, i.unlikedCodeBlocks)) {
         thisIslandItems.push(
-          <li><CodeBlockCard theme={i.theme} icon={i.icon} codeBlock={s} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
+          <li><CodeBlockCard theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
         );
       }
       codeBlockItems.push(<Collapse isOpen={this.state[i.id]}>{thisIslandItems}</Collapse>);

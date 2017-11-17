@@ -105,7 +105,8 @@ class Projects extends Component {
 
   createNewProject(projectName) {
     const {constants} = this.state;
-    projectName = projectName.trim();
+    // Trim leading and trailing whitespace from the project title
+    projectName = projectName.replace(/^\s+|\s+$/gm, "");
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {

@@ -106,7 +106,8 @@ class CodeBlock extends Component {
     this.saveProgress(iid);
 
     // todo: maybe replace this with findorupdate from userprogress?
-    if (this.state.filename !== "") name = this.state.filename;
+    // this regex trims leading and trailing spaces from the filename
+    if (this.state.filename !== "") name = this.state.filename.replace(/^\s+|\s+$/gm, "");
     let endpoint = "/api/codeBlocks/";
     codeBlock ? endpoint += "update" : endpoint += "new";
     axios.post(endpoint, {uid, iid, name, studentcontent}).then(resp => {

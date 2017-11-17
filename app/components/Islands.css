@@ -63,6 +63,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-themepark, dark);
   }
+  &#island #path {
+    top: 330px;
+  }
   &#island #path:before {
     background-color: map(islands, island-themepark, dark);
   }
@@ -117,6 +120,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-blizzard, dark);
+  }
+  &#island #path {
+    top: 345px;
   }
   &#island #path:before {
     background-color: map(islands, island-blizzard, dark);
@@ -228,6 +234,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-industry, dark);
   }
+  &#island #path {
+    top: 340px;
+  }
   &#island #path:before {
     background-color: map(islands, island-industry, dark);
   }
@@ -283,6 +292,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-farm, dark);
   }
+  &#island #path {
+    top: 360px;
+  }
   &#island #path:before {
     background-color: map(islands, island-farm, dark);
   }
@@ -337,6 +349,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-city, dark);
+  }
+  &#island #path {
+    top: 350px;
   }
   &#island #path:before {
     background-color: map(islands, island-city, dark);

@@ -26,10 +26,16 @@ class App extends Component {
     this.props.isAuthenticated();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     const {auth} = this.props;
     const {userInit} = this.state;
     if (!userInit && auth.loading) this.setState({userInit: true});
+    if (!prevProps.auth.user && this.props.auth.user) {
+      axios.get("/api/profileping").then(resp => {
+        // No op.  On Mounting the app, we need to create a blank user in userprofiles that associates
+        // with the user in canon's users.  This calls findOrCreate to make that happen.
+      });
+    }
   }
 
   componentDidMount() {

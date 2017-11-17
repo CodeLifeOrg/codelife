@@ -35,7 +35,7 @@ module.exports = function(app) {
   });
 
   // Used in Share to determine if this user has reported this content before
-  app.get("/api/reports", isAuthenticated, (req, res) => {
+  app.get("/api/reports", (req, res) => {
     if (req.user) {
       db.reports.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());  
     }

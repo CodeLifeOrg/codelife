@@ -105,6 +105,7 @@ class Projects extends Component {
 
   createNewProject(projectName) {
     const {constants} = this.state;
+    projectName = projectName.trim();
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
         if (resp.status === 200) {

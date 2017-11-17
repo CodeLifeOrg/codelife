@@ -57,7 +57,7 @@ class Home extends Component {
         <div id="island" className={ current ? current.theme : "island-jungle" }>
           <div className="image">
             <h1 className="title">{ user ? t("home.welcome", {name: user.name || user.username}) : t("home.tagline") }</h1>
-            { current ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ t(progress.length ? t("home.continue", {island: current.name}) : t("home.start"), {island: current.name}) }</Link> : null }
+            { current ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link> : null }
             <div className="video">
               <div className="play">
                 <span className="pt-icon-large pt-icon-play"></span>

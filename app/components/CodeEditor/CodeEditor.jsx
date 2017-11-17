@@ -62,7 +62,6 @@ class CodeEditor extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {iFrameLoaded, initialContent, hasJS} = this.state;
-    console.log(this.state.sandbox);
     
     if (this.props.setExecState) {
       if (!prevState.hasJS && hasJS) {
@@ -155,7 +154,6 @@ class CodeEditor extends Component {
         arr.push(newObj);
       }
       else {
-        console.log("in");
         if (n.children && n.children[0] && n.children[0].content) {
           const js = n.children[0].content;
           const stripped = js.replace(/\n/g, "").replace(/\s/g, "");

@@ -26,12 +26,10 @@
   "open a new file first": "open a new file first",
   "Login": {},
   "SignUp": {
+    "PolicyText": "By checking this box, you agree to our Privacy Policy",
     "error": {}
   },
-  "home": {
-    "continue": "Continue learning on {{island}}",
-    "start": "Begin your adventure on {{island}}"
-  },
+  "home": {},
   "privacy": {
     "access": {},
     "cookies": {},
@@ -113,5 +111,8 @@
     "actions": {}
   },
   "Complete": "Complete",
-  "rule": {}
+  "rule": {},
+  "Having trouble? Check with a neighbor and ask for help!": "Having trouble? Check with a neighbor and ask for help!",
+  "Okay": "Okay",
+  "Tell us more about yourself": "Tell us more about yourself"
 }

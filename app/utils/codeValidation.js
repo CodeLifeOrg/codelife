@@ -23,7 +23,7 @@ export const cvUses = (rule, payload) => {
   if (rule.needle === "for") {
     re = new RegExp("for\\s*\\([^\\)]*;[^\\)]*;[^\\)]*\\)\\s*{[^}]*}", "g");
   }
-  else if (rule.needle === "if") {
+  else if (rule.needle === "ifelse") {
     re = new RegExp("if\\s*\\([^\\)]*\\)\\s*{[^}]*}[\\n\\s]*else\\s*{[^}]*}", "g");
   }
   else {
@@ -52,7 +52,7 @@ export const attrCount = (needle, attribute, value, json) => {
       }
     }
     if (node.children !== undefined) {
-      count += this.attrCount(needle, attribute, value, node.children);
+      count += attrCount(needle, attribute, value, node.children);
     }
   }
   return count;
@@ -65,7 +65,7 @@ export const cvContainsSelfClosingTag = (rule, payload) => {
   const open = html.search(re);
 
   let hasAttr = true;
-  if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+  if (rule.attribute) hasAttr = attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
 
   return open !== -1 && hasAttr;
 };

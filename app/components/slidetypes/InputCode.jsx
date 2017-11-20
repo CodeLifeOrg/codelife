@@ -27,6 +27,13 @@ class InputCode extends Component {
     this.setState({mounted: true, rulejson, baseText});
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.rulejson !== this.props.rulejson) {
+      const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
+      this.setState({rulejson});
+    }
+  }
+
   setExecState(execState) {
     this.setState({execState});
   }

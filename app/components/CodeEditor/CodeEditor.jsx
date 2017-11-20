@@ -324,6 +324,7 @@ class CodeEditor extends Component {
 
   checkJVMState(needle, value) {
     const {rulejson} = this.state;
+    console.log(needle, typeof value);
     for (const r of rulejson) {
       if (r.needle === needle) {
         let rType = null;
@@ -337,7 +338,7 @@ class CodeEditor extends Component {
           r.passing = typeof value === rType;
         }
         else if (!rType && !rVal && r.type === "JS_VAR_EQUALS") {
-          r.passing = typeof value !== undefined;
+          r.passing = typeof value !== "undefined";
         }
       }
     }

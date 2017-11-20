@@ -71,7 +71,6 @@ class Slide extends Component {
         sentProgress: false,
         latestSlideCompleted: 0,
         islandComplete: false,
-        mounted: false,
         done: false
       }, this.hitDB.bind(this));
       return;

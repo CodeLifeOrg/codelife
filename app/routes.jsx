@@ -15,7 +15,9 @@ import Share from "pages/Share";
 import Slide from "pages/Slide";
 import Studio from "pages/Studio";
 import Survey from "pages/Survey";
+import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
+
 
 export default function RouteCreate() {
 
@@ -46,6 +48,8 @@ export default function RouteCreate() {
       <Route path="codeBlocks/:username/:filename" component={Share} />
 
       <Route path="admin" component={AdminPanel} />
+
+      <Route path="learnmore" component={LearnMore} />
 
     </Route>
   );

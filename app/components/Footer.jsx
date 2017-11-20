@@ -16,6 +16,7 @@ class Footer extends Component {
           <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;
           <Link className="link" to="/about">{ t("About") }</Link>&nbsp;
           <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>&nbsp;
+          <Link className="link" to="/learnmore">{ t("Learn More") }</Link>&nbsp;
           { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
           <a className="link language" href={`${protocol}//en.${hostSansSub}${currentPath}`} >EN</a> | <a className="link language" href={`${protocol}//pt.${hostSansSub}${currentPath}`} >PT</a>
         </div>

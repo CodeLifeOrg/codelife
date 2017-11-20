@@ -17,8 +17,12 @@ class DrawerValidation extends Component {
       if (rule.varType !== undefined) param2 = rule.varType;
       const param3 = rule.value;
       let message;
-      if (param3) message = thisRule.error_msg_3.replace("{{p1}}", param1).replace("{{p2}}", param2).replace("{{p3}}", param3);
-      if (param2) message = thisRule.error_msg_2.replace("{{p1}}", param1).replace("{{p2}}", param2);
+      if (param3) {
+        message = thisRule.error_msg_3.replace("{{p1}}", param1).replace("{{p2}}", param2).replace("{{p3}}", param3);
+      }
+      else if (param2) {
+        message = thisRule.error_msg_2.replace("{{p1}}", param1).replace("{{p2}}", param2);
+      }
       else message = thisRule.error_msg.replace("{{p1}}", param1);
       return <span className="error-text">{ message }</span>;
     }

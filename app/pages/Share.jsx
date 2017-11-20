@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
 import "./Share.css";
 
@@ -20,57 +21,35 @@ class Share extends Component {
     };
   }
 
-  renderPage() {
-    if (this.refs.rc) {
-      const {constants} = this.state;
-      const hideContent = Number(this.state.content.reports >= constants.FLAG_COUNT_BAN || this.state.content.status === "banned" || this.state.content.sharing === "false");
-      const content = hideContent ? "This content has been disabled." : this.state.content.studentcontent;
-      const doc = this.refs.rc.contentWindow.document;
-      doc.open();
-      doc.write(content);
-      doc.close();
-      const {uid} = this.state.content;
-      axios.get(`/api/user/${uid}/`).then(resp => {
-        this.setState({user: resp.data});
-      });
-    }
+  getUser() {
+    const {uid} = this.state.content;
+    axios.get(`/api/user/${uid}/`).then(resp => {
+      this.setState({user: resp.data});
+    });
   }
 
   componentDidMount() {
     const {username, filename} = this.props.params;
-    let type = "";
+    let path = "";
 
-    if (this.props.location.pathname.includes("/codeBlocks/")) type = "codeBlock";
-    if (this.props.location.pathname.includes("/projects/")) type = "project";
-    if (type === "codeBlock") {
-      const cbget = axios.get(`/api/codeBlocks/byUsernameAndFilename?username=${username}&filename=${filename}`);
-      const rget = axios.get("/api/reports");
-      const scget = axios.get("/api/siteconfigs");
+    if (this.props.location.pathname.includes("/codeBlocks/")) path = "codeBlocks";
+    if (this.props.location.pathname.includes("/projects/")) path = "projects";
 
-      Promise.all([cbget, rget, scget]).then(resp => {
-        
-        const content = resp[0].data[0];
-        const reports = resp[1].data;
-        const constants = resp[2].data;
+    const cget = axios.get(`/api/${path}/byUsernameAndFilename?username=${username}&filename=${filename}`);
+    const rget = axios.get("/api/reports");
+    const scget = axios.get("/api/siteconfigs");
 
-        this.setState({content, reports, constants}, this.renderPage.bind(this));
-      });
-    }
-    if (type === "project") {
-      const pget = axios.get(`/api/projects/byUsernameAndFilename?username=${username}&filename=${filename}`);
-      const rget = axios.get("/api/reports");
-      const scget = axios.get("/api/siteconfigs");
+    Promise.all([cget, rget, scget]).then(resp => {
+      
+      const content = resp[0].data[0];
+      const reports = resp[1].data;
+      const constants = resp[2].data;
 
-      Promise.all([pget, rget, scget]).then(resp => {
-        
-        
-        const content = resp[0].data[0];
-        const reports = resp[1].data;
-        const constants = resp[2].data;
-        
-        this.setState({content, reports, constants}, this.renderPage.bind(this));
-      });
-    }
+      const hideContent = Number(content.reports) >= constants.FLAG_COUNT_BAN || content.status === "banned" || content.sharing === "false";
+      if (hideContent) content.studentcontent = "This content has been disabled";
+      
+      this.setState({content, reports, constants}, this.getUser.bind(this));
+    });
   }
 
   handleReport(report) {
@@ -95,7 +74,7 @@ class Share extends Component {
 
     return (
       <div id="share">
-        <iframe id="iframe" ref="rc" />
+        <CodeEditor initialValue={this.state.content.studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} />
         <div id="tag">
           <div className="info">
             <span className="pt-icon-standard pt-icon-code"></span>

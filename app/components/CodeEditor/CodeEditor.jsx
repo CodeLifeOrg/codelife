@@ -18,6 +18,8 @@ class CodeEditor extends Component {
 
   constructor(props) {
     super(props);
+    let remotePage = props.location.hostname.includes("localhost") ? `page_local.html?v=${new Date().getTime()}` : `page.html?v=${new Date().getTime()}`;
+    if (props.location.hostname.includes("pt.")) remotePage = `pt_${remotePage}`;
     this.state = {
       mounted: false,
       iFrameLoaded: false,
@@ -38,7 +40,7 @@ class CodeEditor extends Component {
       remoteReady: false,
       sandbox: {
         root: "https://codelife.tech",
-        page: props.location.hostname === "localhost" ? `page_local.html?v=${new Date().getTime()}` : `page.html?v=${new Date().getTime()}`
+        page: remotePage
       },
       openRules: false,
       openConsole: false
@@ -70,6 +72,10 @@ class CodeEditor extends Component {
       else if (prevState.hasJS && !hasJS) {
         this.props.setExecState(false);
       }
+    }
+
+    if (prevProps.rulejson !== this.props.rulejson) {
+      this.setState({rulejson: this.props.rulejson});
     }
 
     const {initialValue} = this.props;
@@ -337,7 +343,7 @@ class CodeEditor extends Component {
           r.passing = typeof value === rType;
         }
         else if (!rType && !rVal && r.type === "JS_VAR_EQUALS") {
-          r.passing = typeof value !== undefined;
+          r.passing = typeof value !== "undefined";
         }
       }
     }

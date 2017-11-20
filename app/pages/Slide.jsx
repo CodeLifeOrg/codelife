@@ -179,6 +179,8 @@ class Slide extends Component {
 
     SlideComponent = compLookup[sType];
 
+    console.log(currentSlide);
+
     return (
       <div id="slide" className={ currentIsland.theme }>
         <Confetti className="confetti" config={config} active={ this.state.islandComplete } />

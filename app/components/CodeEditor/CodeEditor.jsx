@@ -72,6 +72,10 @@ class CodeEditor extends Component {
       }
     }
 
+    if (prevProps.rulejson !== this.props.rulejson) {
+      this.setState({rulejson: this.props.rulejson});
+    }
+
     const {initialValue} = this.props;
     if (iFrameLoaded && initialContent !== initialValue) {
       clearTimeout(this.myTimeout);
@@ -324,7 +328,6 @@ class CodeEditor extends Component {
 
   checkJVMState(needle, value) {
     const {rulejson} = this.state;
-    console.log(needle, typeof value);
     for (const r of rulejson) {
       if (r.needle === needle) {
         let rType = null;

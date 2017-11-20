@@ -8,7 +8,6 @@ class DrawerValidation extends Component {
   getErrorForRule(rule) {
     const thisRule = this.props.errors.find(r => r.type === rule.type);
     if (!rule.passing && thisRule && thisRule.error_msg) {
-      console.log(thisRule, thisRule.error_msg, thisRule.error_msg_2, thisRule.error_msg_3);
       const param1 = rule.needle;
       let param2 = null;
       if (rule.property !== undefined) param2 = rule.property;

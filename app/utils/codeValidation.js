@@ -87,7 +87,7 @@ export const cvContainsTag = (rule, payload) => {
   const tagClosed = open !== -1 && close !== -1 && open < close;
 
   let hasAttr = true;
-  if (rule.attribute) hasAttr = this.attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
+  if (rule.attribute) hasAttr = attrCount(rule.needle, rule.attribute, rule.value, json) > 0;
 
   return tagClosed && hasAttr;
 };

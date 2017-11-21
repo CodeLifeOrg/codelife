@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Overpass:400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Overpass:400,400i,700,700i");
 body {
   font-family: "Overpass", sans-serif;
   letter-spacing: 0.5px;
@@ -15,10 +15,13 @@ body {
   }
 }
 
+h1 {
+  font-style: normal;
+}
+
 :focus {
   outline: 0;
 }
-
 
 /*.pt-overlay-backdrop {
   background-color: rgba(245, 245, 255, 0.7);

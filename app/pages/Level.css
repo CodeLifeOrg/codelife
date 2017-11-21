@@ -31,9 +31,10 @@
   }
   & .title {
     color: white;
-    display: inline-block;
+    display: block;
     line-height: 1.25em;
     margin: 0px auto;
+    max-width: 800px;
     text-shadow: 0 2px 2px #444;
   }
   & #title {

@@ -57,7 +57,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border: 1px solid #cacaca;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     display: flex;
     height: 394px;

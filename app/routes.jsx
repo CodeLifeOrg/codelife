@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, IndexRoute, browserHistory} from "react-router";
+import {Route, Redirect, IndexRoute, browserHistory} from "react-router";
 
 import App from "components/App";
 
@@ -17,6 +17,7 @@ import Studio from "pages/Studio";
 import Survey from "pages/Survey";
 import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
+import ResetPw from "pages/ResetPw";
 
 
 export default function RouteCreate() {
@@ -50,6 +51,9 @@ export default function RouteCreate() {
       <Route path="admin" component={AdminPanel} />
 
       <Route path="learnmore" component={LearnMore} />
+
+      <Route path="reset" component={ResetPw} />
+      <Redirect from="login" to="/" />
 
     </Route>
   );

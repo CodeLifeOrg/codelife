@@ -63,6 +63,9 @@
   "JavaScript Console": "Console do JavaScript",
   "Keep Exploring": "Continue explorando",
   "Learn More": "Saber Mais",
+  "LearnMore": {
+    "intro": "Existem muitas fontes que você pode acessar para aprender mais programação online. Aqui estão algumas!"
+  },
   "Lesson Builder": "Gestão do conteúdo",
   "Like": "Gosto",
   "Likes": "Gost@",
@@ -108,6 +111,7 @@
   "Projects (build your own site)": "Projetos (crie seu site)",
   "Rather not say": "Prefiro não dizer",
   "Reset": "Restabelecer",
+  "Reset Password": "Redefinir senha",
   "Return to": "Voltar para",
   "Role": "Papel",
   "Rule Builder": "Gestão das regras",
@@ -128,6 +132,7 @@
     "Facebook": "Facebook",
     "Instagram": "Instagram",
     "Password": "Senha",
+    "ResetPw": "Esqueceu sua senha?",
     "Sign Up": "Criar uma conta",
     "Twitter": "Twitter",
     "Username": "Nome de usuário",
@@ -151,9 +156,6 @@
   "Submit Report": "Enviar relatório",
   "Submit Survey": "Enviar respostas",
   "Survey": "Pesquisa",
-  "LearnMore": {
-    "intro": "Existem muitas fontes que você pode acessar para aprender mais programação online. Aqui estão algumas!"
-  },
   "This is a full sentence used as the translation key": "Esta é uma frase completa usada como chave de tradução",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",

@@ -91,6 +91,7 @@ class Home extends Component {
               : <div className="form">
                 <Login />
                 <a className="callToAction" onClick={ this.toggleSignup.bind(this) }>{ t("SignUp.CallToAction") }</a>
+                <a className="callToAction" href="/reset">{ t("SignUp.ResetPw") }</a>
               </div>
             }
           </div>

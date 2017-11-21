@@ -63,6 +63,9 @@
   "JavaScript Console": "JavaScript Console",
   "Keep Exploring": "Keep Exploring",
   "Learn More": "Learn More",
+  "LearnMore": {
+    "intro": "There are many resources you can use to learn about coding online. Here are just a few!"
+  },
   "Lesson Builder": "Lesson Builder",
   "Like": "Like",
   "Likes": "Likes",
@@ -108,6 +111,7 @@
   "Projects (build your own site)": "Projects (build your own site)",
   "Rather not say": "Rather not say",
   "Reset": "Reset",
+  "Reset Password": "Reset Password",
   "Return to": "Return to",
   "Role": "Role",
   "Rule Builder": "Rule Builder",
@@ -128,6 +132,7 @@
     "Facebook": "Facebook",
     "Instagram": "Instagram",
     "Password": "Password",
+    "ResetPw": "Forgot Password?",
     "Sign Up": "Sign Up",
     "Twitter": "Twitter",
     "Username": "Username",
@@ -151,9 +156,6 @@
   "Submit Report": "Submit Report",
   "Submit Survey": "Submit Survey",
   "Survey": "Survey",
-  "LearnMore": {
-    "intro": "There are many resources you can use to learn about coding online. Here are just a few!"
-  },
   "This is a full sentence used as the translation key": "This is a full sentence used as the translation key",
   "This user doesn't have any code blocks yet": "This user doesn't have any code blocks yet",
   "This user doesn't have any projects yet": "This user doesn't have any projects yet",

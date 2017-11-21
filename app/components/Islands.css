@@ -8,6 +8,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-jungle, dark);
   }
+  &#island #title {
+    background-color: map(islands, island-jungle, dark);
+  }
   &#island #path:before {
     background-color: map(islands, island-jungle, dark);
   }
@@ -62,6 +65,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-themepark, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-themepark, dark);
   }
   &#island #path {
     top: 330px;
@@ -121,6 +127,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-blizzard, dark);
   }
+  &#island #title {
+    background-color: map(islands, island-blizzard, dark);
+  }
   &#island #path {
     top: 345px;
   }
@@ -179,6 +188,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-desert, dark);
   }
+  &#island #title {
+    background-color: map(islands, island-desert, dark);
+  }
   &#island #path:before {
     background-color: map(islands, island-desert, dark);
   }
@@ -233,6 +245,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-industry, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-industry, dark);
   }
   &#island #path {
     top: 340px;
@@ -292,6 +307,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-farm, dark);
   }
+  &#island #title {
+    background-color: map(islands, island-farm, dark);
+  }
   &#island #path {
     top: 360px;
   }
@@ -349,6 +367,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-city, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-city, dark);
   }
   &#island #path {
     top: 350px;
@@ -408,6 +429,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-dark, dark);
   }
+  &#island #title {
+    background-color: map(islands, island-dark, dark);
+  }
   &#island #path:before {
     background-color: map(islands, island-dark, dark);
   }
@@ -462,6 +486,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-mountain, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-mountain, dark);
   }
   &#island #path:before {
     background-color: map(islands, island-mountain, dark);
@@ -518,6 +545,9 @@
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-beach, dark);
   }
+  &#island #title {
+    background-color: map(islands, island-beach, dark);
+  }
   &#island #path:before {
     background-color: map(islands, island-beach, dark);
   }
@@ -572,6 +602,9 @@
   }
   &#island .title, & .description, & .toggle-show {
     text-shadow: 0 2px 2px map(islands, island-clock, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-clock, dark);
   }
   &#island #path:before {
     background-color: map(islands, island-clock, dark);

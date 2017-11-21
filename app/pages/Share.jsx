@@ -40,14 +40,14 @@ class Share extends Component {
     const scget = axios.get("/api/siteconfigs");
 
     Promise.all([cget, rget, scget]).then(resp => {
-      
+
       const content = resp[0].data[0];
       const reports = resp[1].data;
       const constants = resp[2].data;
 
       const hideContent = Number(content.reports) >= constants.FLAG_COUNT_BAN || content.status === "banned" || content.sharing === "false";
       if (hideContent) content.studentcontent = "This content has been disabled";
-      
+
       this.setState({content, reports, constants}, this.getUser.bind(this));
     });
   }
@@ -61,20 +61,21 @@ class Share extends Component {
   render() {
     const {content, reports, user} = this.state;
 
-    if (!content) return <Loading />;
+    if (!content) return <Loading dark={true} />;
 
     const {t} = this.props;
-    const {name, id} = content;
+    const {id} = content;
+    const name = content.name || content.snippetname;
 
     let contentType = "";
     if (this.props.location.pathname.includes("/codeBlocks/")) contentType = "codeblock";
     if (this.props.location.pathname.includes("/projects/")) contentType = "project";
 
-    const reported = reports.find(r => r.type === contentType && r.report_id === id); 
+    const reported = reports.find(r => r.type === contentType && r.report_id === id);
 
     return (
       <div id="share">
-        <CodeEditor initialValue={this.state.content.studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} />
+        <CodeEditor initialValue={this.state.content.studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} console={false} />
         <div id="tag">
           <div className="info">
             <span className="pt-icon-standard pt-icon-code"></span>
@@ -83,25 +84,27 @@ class Share extends Component {
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
-          { 
+          {
             content.status === "banned" || !this.props.auth.user
-              ? null 
-              : <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
-                inline={true}
-              >
-                <Button
-                  intent={reported ? "" : Intent.DANGER}
-                  iconName="flag"
-                  text={reported ? "Flagged" : "Flag"}
-                />
-                <div>
-                  <ReportBox reportid={id} contentType={contentType} handleReport={this.handleReport.bind(this)}/>
-                </div>
-              </Popover>
-          } 
+              ? null
+              : <div className="actions">
+                <Popover
+                  interactionKind={PopoverInteractionKind.CLICK}
+                  popoverClassName="pt-popover-content-sizing"
+                  position={Position.TOP_RIGHT}
+                  inline={true}
+                >
+                  <Button
+                    intent={reported ? "" : Intent.DANGER}
+                    iconName="flag"
+                    text={reported ? "Flagged" : "Flag"}
+                  />
+                  <div>
+                    <ReportBox reportid={id} contentType={contentType} handleReport={this.handleReport.bind(this)}/>
+                  </div>
+                </Popover>
+              </div>
+          }
         </div>
       </div>
     );

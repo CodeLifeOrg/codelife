@@ -13,17 +13,17 @@ class Footer extends Component {
     return (
       <footer id="footer" className={ className }>
         <div className="links">
-          <Link className="link" to="/glossary">{ t("Glossary") }</Link>&nbsp;
-          <Link className="link" to="/about">{ t("About") }</Link>&nbsp;
-          <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>&nbsp;
-          <Link className="link" to="/learnmore">{ t("Learn More") }</Link>&nbsp;
+          <Link className="link" to="/glossary">{ t("Glossary") }</Link>
+          <Link className="link" to="/about">{ t("About") }</Link>
+          <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>
+          <Link className="link" to="/learnmore">{ t("Learn More") }</Link>
           { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
           <a className="link language" href={`${protocol}//en.${hostSansSub}${currentPath}`} >EN</a> | <a className="link language" href={`${protocol}//pt.${hostSansSub}${currentPath}`} >PT</a>
         </div>
         <div className="logos">
-          <a target="_blank" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
-          <a target="_blank" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
-          <a target="_blank" href="http://www.governo.mg.gov.br/"><img className="logo" src="/footer/logo-mg.svg" /></a>
+          <a target="_blank" rel="noopener noreferrer" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
+          <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
+          <a target="_blank" rel="noopener noreferrer" href="http://www.governo.mg.gov.br/"><img className="logo" src="/footer/logo-mg.svg" /></a>
         </div>
       </footer>
     );

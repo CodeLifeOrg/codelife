@@ -26,12 +26,12 @@ class App extends Component {
     this.props.isAuthenticated();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {auth} = this.props;
     const {userInit} = this.state;
     if (!userInit && auth.loading) this.setState({userInit: true});
     if (!prevProps.auth.user && this.props.auth.user) {
-      axios.get("/api/profileping").then(resp => {
+      axios.get("/api/profileping").then(() => {
         // No op.  On Mounting the app, we need to create a blank user in userprofiles that associates
         // with the user in canon's users.  This calls findOrCreate to make that happen.
       });
@@ -52,7 +52,7 @@ class App extends Component {
     const routes = location.pathname.split("/");
 
     const authRoute = routes[1] === "login";
-    const bareRoute = routes.includes("projects") && routes.length === 4;
+    const bareRoute = ["projects", "codeBlocks"].includes(routes[1]) && routes.length === 4;
 
     const meta = header.meta.slice();
     if (i18n.locale === "en") {
@@ -73,7 +73,7 @@ class App extends Component {
             ? children
             : <div className="container">
               <Clouds />
-              <Nav logo={ !location.pathname.includes("login") } />
+              <Nav logo={ !location.pathname.includes("login") && location.pathname !== "/" } />
               { children }
               <Footer currentPath={location.pathname} className={ theme } />
             </div>

@@ -56,21 +56,32 @@ class Home extends Component {
       <div id="Home">
         <div id="island" className={ current ? current.theme : "island-jungle" }>
           <div className="image">
-            <h1 className="title">{ user ? t("home.welcome", {name: user.name || user.username}) : t("home.tagline") }</h1>
-            { current ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link> : null }
-            <div className="video">
-              <div className="play">
-                <span className="pt-icon-large pt-icon-play"></span>
-                <div className="title">Welcome to CodeLife</div>
-              </div>
+            <div className="logo">
+              <div className="tag">Beta</div>
+              <img className="text" src="/logo/logo.png" />
             </div>
+            <h2 className="title">{ user ? t("home.welcome", {name: user.name || user.username}) : t("home.tagline") }</h2>
+            { current ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link> : null }
           </div>
         </div>
+        <div className="home-container">
+          <div className="video">
+            <div className="play">
+              <span className="pt-icon-large pt-icon-play"></span>
+              <div className="title">Welcome to CodeLife</div>
+            </div>
+          </div>
+          <div className="text">
+            <div className="prompt">{ t("What is Codelife?") }</div>
+            <p>{ t("aboutP2") }</p>
+          </div>
+        </div>
+        <a id="login"></a>
         { !user
-          ? <div className="enter-container">
+          ? <div className="home-container">
             <div className="avatar">
-              <img src="/avatars/test-group.png" />
               <div className="prompt">{ t("home.prompt") }</div>
+              <img src="/avatars/avatar-default.jpg" />
             </div>
             { signup
               ? <div className="form">
@@ -80,6 +91,7 @@ class Home extends Component {
               : <div className="form">
                 <Login />
                 <a className="callToAction" onClick={ this.toggleSignup.bind(this) }>{ t("SignUp.CallToAction") }</a>
+                <a className="callToAction" href="/reset">{ t("SignUp.ResetPw") }</a>
               </div>
             }
           </div>

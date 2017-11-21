@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import "./LearnMore.css";
 
@@ -7,26 +8,29 @@ class LearnMore extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+
     };
   }
 
   render() {
-    const {t} = this.props;
+    const {locale, t} = this.props;
 
     return (
-      <div id="learnmore-container">
+      <div id="LearnMore">
         <h1>{ t("Learn More") }</h1>
-        <p>{ t("There are many resources you can use to learn about coding online.  Here are just a few!") }</p>
-        <ul>
-          <li><a target="_blank" href="https://scratch.mit.edu/">MIT Scratch</a></li>
-          <li><a target="_blank" href="https://www.khanacademy.org/">Khan Academy</a></li>
-          <li><a target="_blank" href="https://www.codecademy.com/">MIT Scratch</a></li>
-          <li><a target="_blank" href="https://www.datacamp.com/">DataCamp</a></li>
-        </ul>
+        <p>{ t("LearnMore.intro") }</p>
+        <div className="links">
+          <a className="pt-card pt-interactive link" href="https://scratch.mit.edu/" style={{backgroundImage: "url('/partners/scratch.jpg')"}} target="_blank" rel="noopener noreferrer"></a>
+          <a className="pt-card pt-interactive link border" href={ locale === "pt" ? "https://pt.khanacademy.org/" : "https://www.khanacademy.org/" } style={{backgroundImage: "url('/partners/khan.jpg')"}} target="_blank" rel="noopener noreferrer"></a>
+          <a className="pt-card pt-interactive link border" href={ locale === "pt" ? "https://www.codecademy.com/pt" : "https://www.codecademy.com/" } style={{backgroundImage: "url('/partners/codeacademy.jpg')"}} target="_blank" rel="noopener noreferrer"></a>
+          <a className="pt-card pt-interactive link" href="https://www.datacamp.com/" style={{backgroundImage: "url('/partners/datacamp.jpg')"}} target="_blank" rel="noopener noreferrer"></a>
+        </div>
       </div>
     );
   }
 }
 
+LearnMore = connect(state => ({
+  locale: state.i18n.locale
+}))(LearnMore);
 export default translate()(LearnMore);

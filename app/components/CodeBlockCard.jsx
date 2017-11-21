@@ -80,6 +80,8 @@ class CodeBlockCard extends Component {
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
+    const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
+
     return (
       <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${theme}`}>
         <div className="box" onClick={ this.toggleDialog.bind(this) }>
@@ -113,7 +115,10 @@ class CodeBlockCard extends Component {
             <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} />
           </div>
           <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">{ username ? `${t("Created by")} ${username}` : "" }</div>
+            <div className="pt-dialog-footer-byline">
+              { username ? `${t("Created by")} ${username}` : "" }
+              <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
+            </div>
             <div className="pt-dialog-footer-actions">
               { user
                 ? <div>
@@ -138,7 +143,7 @@ class CodeBlockCard extends Component {
                     text={ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
                   />
                 </div>
-                : null 
+                : null
               }
               <Button
                 intent={ Intent.PRIMARY }

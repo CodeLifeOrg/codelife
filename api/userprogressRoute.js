@@ -18,6 +18,8 @@ module.exports = function(app) {
                 latestIsland = i.ordering;
               }
             }
+            // This is a blocker for november's beta.  Increment this with release of each new island
+            if (latestIsland >= 4) latestIsland = 4;
             const island = islands.find(i => i.ordering === latestIsland + 1);
             returnObj.current = island;
             res.json(returnObj).end();

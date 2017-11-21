@@ -143,8 +143,8 @@ class Level extends Component {
 
   closeOverlay() {
     // TODO: take out island 4 catcher after august (completed)
-    // if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-4") {
-    if (this.state.nextIsland && this.state.nextIsland.id) {
+    // TODO2: blocker added back in for november
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-9e30") {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -400,8 +400,10 @@ class Level extends Component {
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
         <div className="image">
-          <h1 className="title">{ currentIsland.name }</h1>
-          <p className="description">{ currentIsland.description }</p>
+          <h1 className="title" id="title">
+            { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }
+            { currentIsland.name }
+          </h1>
           <div id="path">
             { levelItems }
             { this.buildTestPopover() }
@@ -409,8 +411,10 @@ class Level extends Component {
         </div>
         { prevIsland ? <IslandLink done={true} width={250} island={prevIsland} description={false} /> : null}
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
-        { /* nextIsland && Number(nextIsland.ordering) < 3  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null} */ }
-        { nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { /* TODO2: adding blocker back in for November Beta */}
+
+        { nextIsland && Number(nextIsland.ordering) < 6  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div>
             <h2 className="title">

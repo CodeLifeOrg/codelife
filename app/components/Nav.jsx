@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
+import {AnchorLink} from "datawheel-canon";
 import "./Nav.css";
 
 import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
@@ -41,6 +42,7 @@ class Nav extends Component {
             </Popover>
           </div>
           : <div className="links">
+            <AnchorLink className="link" to="login"><span className="pt-icon-standard pt-icon-user" />{ t("Login.Login") }/{ t("SignUp.Sign Up") }</AnchorLink>
             <Link className="link" to="/about"><span className="pt-icon-standard pt-icon-help" />{ t("About") }</Link>
           </div> }
       </div>

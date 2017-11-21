@@ -25,18 +25,33 @@
     background-repeat: no-repeat;
     background-size: contain;
     height: 600px;
+    margin-bottom: 50px;
     position: relative;
     width: 100%;
   }
   & .title {
     color: white;
+    display: block;
     line-height: 1.25em;
-    margin: 0 auto 10px;
+    margin: 0px auto;
     max-width: 800px;
     text-shadow: 0 2px 2px #444;
   }
-  & .title:first-child {
-    padding-top: 50px;
+  & #title {
+    background-color: #444;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    color: white;
+    display: inline-block;
+    line-height: 1.25em;
+    margin: 60px auto 10px;
+    max-width: 600px;
+    padding: 10px 20px 13px;
+    & .pt-icon-large {
+      font-size: 40px;
+      margin-right: 10px;
+      opacity: 0.75;
+    }
   }
   & .description {
     color: white;

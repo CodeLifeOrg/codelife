@@ -27,7 +27,6 @@ class Island extends Component {
       const islands = resp[0].data;
       islands.sort((a, b) => a.ordering - b.ordering);
       const userProgress = resp[1].data.progress;
-      //console.log("Latest Island: ", resp[1].data.current);
       const codeBlocks = resp[2].data;
       this.setState({islands, userProgress, codeBlocks});
     });
@@ -35,7 +34,8 @@ class Island extends Component {
 
   hasUserCompleted(milestone) {
     // TODO: this is a blocking short-circuit for August. remove after Beta (done)
-    // if (milestone === "island-3") return false;
+    // TODO2: adding back in a hard blocker for November Beta.
+    if (milestone === "island-863f") return false;
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 

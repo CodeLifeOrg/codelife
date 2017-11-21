@@ -66,7 +66,7 @@ class ProjectCard extends Component {
               <CodeEditor initialValue={studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} />
             </div>
           </div>
-          <div className="pt-dialog-footer">          
+          <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">
               { t("Created by") } { username }
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
@@ -87,7 +87,7 @@ class ProjectCard extends Component {
                     <ReportBox reportid={id} contentType="project" handleReport={this.handleReport.bind(this)}/>
                   </div>
                 </Popover>
-                : null 
+                : null
               }
               <Button
                 intent={ Intent.PRIMARY }

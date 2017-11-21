@@ -1,9 +1,18 @@
 #loading {
   margin-top: 30vh;
   text-align: center;
-
   & .title {
-    color: white;
+    margin-left: 10px;
     margin-top: 20px;
+  }
+  &.dark {
+    & .title {
+      color: #cacaca;
+    }
+  }
+  &.light {
+    & .title {
+      color: white;
+    }
   }
 }

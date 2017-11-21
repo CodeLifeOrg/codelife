@@ -1,7 +1,6 @@
 #share {
   height: 100vh;
   width: 100%;
-
   & #iframe {
     border: 0;
     display: block;
@@ -10,7 +9,6 @@
     overflow-y: auto;
     width: 100%;
   }
-
   & #tag {
     align-items: center;
     background-color: var(--sky);
@@ -22,31 +20,29 @@
     margin: 0;
     padding: 0 25px;
     position: relative;
-
     & .info {
-
+      flex: 1;
       & .pt-icon-standard {
         margin-right: 5px;
         opacity: 0.75;
       }
-
       & .user-link {
         color: white;
       }
-
     }
-
     & .logo {
       align-items: center;
       display: flex;
-
       & img {
         margin-left: 5px;
         margin-top: 2px;
         width: 80px;
       }
     }
-
+    & .actions {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+    }
   }
-
 }

@@ -64,7 +64,7 @@ class CodeEditor extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {iFrameLoaded, initialContent, hasJS} = this.state;
-    
+
     if (this.props.setExecState) {
       if (!prevState.hasJS && hasJS) {
         this.props.setExecState(true);
@@ -165,7 +165,7 @@ class CodeEditor extends Component {
           const stripped = js.replace(/\n/g, "").replace(/\s/g, "");
           if (stripped.length > 0) {
             this.setState({currentJS: js}, this.checkForErrors.bind(this));
-          } 
+          }
           else {
             this.checkForErrors.bind(this)();
           }
@@ -178,7 +178,7 @@ class CodeEditor extends Component {
     return arr;
   }
 
-  /* 
+  /*
     For javascript rules, we test their correctness elsewhere (namely, checkJVMState)
     As such, they are already aware of their passing state, and we can just no-op
   */
@@ -285,7 +285,7 @@ class CodeEditor extends Component {
 
   /*
   This function may be used later - it grabs the contents of your current cursor selection
-  
+
   showContextMenu(selectionObject) {
     const text = selectionObject.toString();
   }
@@ -461,7 +461,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, island, readOnly, t} = this.props;
+    const {codeTitle, console, island, readOnly, t, tabs} = this.props;
     const {baseRules, titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
@@ -487,7 +487,12 @@ class CodeEditor extends Component {
         {
           this.props.showEditor
             ? <div className={ `code ${readOnly ? "readOnly" : ""}` }>
-              <div className="panel-title"><span className="favicon pt-icon-standard pt-icon-code"></span>{ codeTitle || (readOnly ? t("Code Example") : t("Code Editor")) }</div>
+              { tabs
+                ? <div className="panel-title">
+                  <span className="favicon pt-icon-standard pt-icon-code"></span>
+                  { codeTitle || (readOnly ? t("Code Example") : t("Code Editor")) }
+                </div>
+                : null }
               {
                 !this.props.blurred
                   ? <AceWrapper
@@ -521,17 +526,21 @@ class CodeEditor extends Component {
             : null
         }
         <div className="render">
-          <div className="panel-title">
-            { island
-              ? <img className="favicon" src={ `/islands/${island}-small.png` } />
-              : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
-            { titleText }
-          </div>
+          { tabs
+            ? <div className="panel-title">
+              { island
+                ? <img className="favicon" src={ `/islands/${island}-small.png` } />
+                : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
+              { titleText }
+            </div>
+            : null }
           <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
-          <div className={ `drawer ${openConsole ? "open" : ""}` }>
-            <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }</div>
-            <div className="contents">{consoleText}</div>
-          </div>
+          { console
+            ? <div className={ `drawer ${openConsole ? "open" : ""}` }>
+              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }</div>
+              <div className="contents">{consoleText}</div>
+            </div>
+            : null}
         </div>
       </div>
     );
@@ -539,10 +548,12 @@ class CodeEditor extends Component {
 }
 
 CodeEditor.defaultProps = {
+  blurred: false,
+  console: true,
   island: false,
   readOnly: false,
-  blurred: false,
-  showEditor: true
+  showEditor: true,
+  tabs: true
 };
 
 

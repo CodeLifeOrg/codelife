@@ -18,8 +18,7 @@ class CodeEditor extends Component {
 
   constructor(props) {
     super(props);
-    let remotePage = props.location.hostname.includes("localhost") ? `page_local.html?v=${new Date().getTime()}` : `page.html?v=${new Date().getTime()}`;
-    if (props.location.hostname.includes("pt.")) remotePage = `pt_${remotePage}`;
+    const remotePage = props.location.hostname.replace(/\./g, "-").concat(`.html?v=${new Date().getTime()}`);
     this.state = {
       mounted: false,
       iFrameLoaded: false,

@@ -16,15 +16,15 @@ class Home extends Component {
     this.state = {
       codeBlocks: false,
       current: false,
+      formMode: false,
       islands: false,
       progress: [],
-      projects: false,
-      signup: true
+      projects: false
     };
   }
 
-  toggleSignup() {
-    this.setState({signup: !this.state.signup});
+  toggleSignup(formMode) {
+    this.setState({formMode});
   }
 
   componentDidMount() {
@@ -50,7 +50,7 @@ class Home extends Component {
   render() {
 
     const {t, user} = this.props;
-    const {codeBlocks, current, islands, progress, projects, signup} = this.state;
+    const {codeBlocks, current, formMode, islands, progress, projects} = this.state;
 
     return (
       <div id="Home">
@@ -58,44 +58,38 @@ class Home extends Component {
           <div className="image">
             <div className="logo">
               <div className="tag">Beta</div>
-              <img className="text" src="/logo/logo.png" />
+              <img className="text" src="/logo/logo-shadow.png" />
             </div>
-            <h2 className="title">{ user ? t("home.welcome", {name: user.name || user.username}) : t("home.tagline") }</h2>
-            { current ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link> : null }
+            { current
+              ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link>
+              : <h2 className="title">{ t("home.tagline") }</h2> }
           </div>
         </div>
-        <div className="home-container">
-          <div className="video">
-            <div className="play">
-              <span className="pt-icon-large pt-icon-play"></span>
-              <div className="title">Welcome to CodeLife</div>
-            </div>
-          </div>
-          <div className="text">
-            <div className="prompt">{ t("What is Codelife?") }</div>
-            <p>{ t("aboutP2") }</p>
+        <div className="video">
+          <div className="play">
+            <span className="pt-icon-large pt-icon-play"></span>
+            <div className="title">Welcome to CodeLife</div>
           </div>
         </div>
         <a id="login"></a>
-        { !user
-          ? <div className="home-container">
-            <div className="avatar">
-              <div className="prompt">{ t("home.prompt") }</div>
-              <img src="/avatars/avatar-default.jpg" />
+        { user ? null
+          : formMode === "signup"
+            ? <div className="form">
+              <a className="callToAction" onClick={ this.toggleSignup.bind(this, "login") }>{ t("Login.CallToAction") }</a>
+              <SignUp />
             </div>
-            { signup
+            : formMode === "login"
               ? <div className="form">
-                <a className="callToAction" onClick={ this.toggleSignup.bind(this) }>{ t("Login.CallToAction") }</a>
-                <SignUp />
-              </div>
-              : <div className="form">
+                <a className="callToAction" onClick={ this.toggleSignup.bind(this, "signup") }>{ t("SignUp.CallToAction") }</a>
                 <Login />
-                <a className="callToAction" onClick={ this.toggleSignup.bind(this) }>{ t("SignUp.CallToAction") }</a>
                 <a className="callToAction" href="/reset">{ t("SignUp.ResetPw") }</a>
               </div>
-            }
-          </div>
-          : null }
+              : <div className="form buttons">
+                <h2>{ t("home.prompt") }</h2>
+                <button className="pt-button pt-large" onClick={ this.toggleSignup.bind(this, "signup") }>{ t("SignUp.Sign Up") }</button>
+                <button className="pt-button pt-large pt-intent-primary" onClick={ this.toggleSignup.bind(this, "login") }>{ t("Login.Login") }</button>
+              </div>
+        }
         <h2>{ t("Featured Projects") }</h2>
         <div className="projects">
           { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }

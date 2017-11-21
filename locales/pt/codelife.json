@@ -151,8 +151,8 @@
   "Submit Report": "Enviar relatório",
   "Submit Survey": "Enviar respostas",
   "Survey": "Pesquisa",
-  "There are many resources you can use to learn about coding online": {
-    "  Here are just a few!": ""
+  "LearnMore": {
+    "intro": "Existem muitas fontes que você pode acessar para aprender mais programação online. Aqui estão algumas!"
   },
   "This is a full sentence used as the translation key": "Esta é uma frase completa usada como chave de tradução",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",

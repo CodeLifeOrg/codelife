@@ -1,0 +1,29 @@
+#LearnMore {
+  background-color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin: 50px auto;
+  max-width: 800px;
+  padding: 50px;
+  width: 100%;
+  & p {
+    margin: 25px auto;
+  }
+  & .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    & .link {
+      background-color: white;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 170px;
+      margin: 25px 10px;
+      width: 300px;
+      &.border {
+        background-size: contain;
+      }
+    }
+  }
+}

@@ -62,7 +62,7 @@
   "Islands (lessons)": "Islands (lessons)",
   "JavaScript Console": "JavaScript Console",
   "Keep Exploring": "Keep Exploring",
-  "Learn More": "",
+  "Learn More": "Learn More",
   "Lesson Builder": "Lesson Builder",
   "Like": "Like",
   "Likes": "Likes",
@@ -151,8 +151,8 @@
   "Submit Report": "Submit Report",
   "Submit Survey": "Submit Survey",
   "Survey": "Survey",
-  "There are many resources you can use to learn about coding online": {
-    "  Here are just a few!": ""
+  "LearnMore": {
+    "intro": "There are many resources you can use to learn about coding online. Here are just a few!"
   },
   "This is a full sentence used as the translation key": "This is a full sentence used as the translation key",
   "This user doesn't have any code blocks yet": "This user doesn't have any code blocks yet",

@@ -4,6 +4,8 @@
   justify-content: space-between;
   height: var(--nav-height);
   padding: 0 25px;
+  position: relative;
+  z-index: 20;
   & .logo {
     width: 150px;
     & .tag {

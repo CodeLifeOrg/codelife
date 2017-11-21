@@ -283,7 +283,7 @@
     "sub": "",
     "tagline": "CodeLife is a free online tool that teaches Brazilian teenagers information technology and web skills.",
     "title": "",
-    "welcome": "Welcome back {{name}}!"
+    "welcome": "Welcome {{name}}!"
   },
   "myCodeblock": "Meu {{ islandName }} Desafio",
   "privacy": {

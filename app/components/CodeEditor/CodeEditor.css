@@ -97,6 +97,18 @@
       white-space: nowrap;
       z-index: 2;
     }
+    & .console-count {
+      background-color: #ff0000;
+      border-radius: 10px;
+      color: white;
+      display: inline-block;
+      font-size: 12px;
+      height: 17px;
+      line-height: 17px;
+      margin-left: 5px;
+      text-align: center;
+      width: 17px;
+    }
   }
   & .contents {
     background-color: #fff;

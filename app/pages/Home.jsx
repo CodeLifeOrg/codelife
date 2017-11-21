@@ -63,12 +63,12 @@ class Home extends Component {
             { current
               ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link>
               : <h2 className="title">{ t("home.tagline") }</h2> }
-          </div>
-        </div>
-        <div className="video">
-          <div className="play">
-            <span className="pt-icon-large pt-icon-play"></span>
-            <div className="title">Welcome to CodeLife</div>
+            <div className="video">
+              <div className="play">
+                <span className="pt-icon-large pt-icon-play"></span>
+                <div className="video-title">Welcome to CodeLife</div>
+              </div>
+            </div>
           </div>
         </div>
         <a id="login"></a>

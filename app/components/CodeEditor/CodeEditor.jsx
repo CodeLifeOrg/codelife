@@ -536,7 +536,7 @@ class CodeEditor extends Component {
           <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
           { console
             ? <div className={ `drawer ${openConsole ? "open" : ""}` }>
-              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }</div>
+              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count">{ embeddedConsole.length }</span> : null }</div>
               <div className="contents">{consoleText}</div>
             </div>
             : null}

@@ -3,15 +3,15 @@
   padding: 0 25px;
   width: 100%;
   & #island {
-    margin-bottom: -370px;
+    margin-bottom: -180px;
     & .image {
-      height: 800px;
-      margin-top: -50px;
-      padding-top: 15px;
+      height: 1200px;
+      margin-top: -200px;
+      padding-top: 175px;
     }
     & .logo {
-      margin: 0 auto 15px;
-      width: 350px;
+      margin: 0 auto 10px;
+      width: 450px;
       & .tag {
         color: #d74645;
         font-size: 16px;
@@ -22,7 +22,7 @@
         width: 100%;
       }
       & .text {
-        width: 348px;
+        width: 100%;
       }
       &:hover {
         text-decoration: none;
@@ -43,122 +43,95 @@
       text-shadow: 0 2px 2px #444;
     }
   }
-  & .home-container {
+  & .video {
     align-items: center;
-    background-color: white;
-    border-radius: 10px;
-    box-sizing: border-box;
+    background-image: url("/home/clouds.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
     display: flex;
-    margin: 50px auto;
-    max-width: 950px;
-    padding: 25px;
+    height: 281px;
+    justify-content: center;
+    margin: 100px auto 50px;
+    max-width: 500px;
     position: relative;
-    text-align: left;
     width: 100%;
-    z-index: 20;
-    @media only screen and (max-width: 768px) {
-      flex-direction: column;
-      flex-wrap: nowrap;
-    }
-    & .text {
-      margin-left: 25px;
-      & p {
-        font-size: 15px;
-        margin: 0 0 10px;
-      }
-    }
-    & .video {
-      align-items: center;
-      background-image: url("/home/project.jpg");
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border: 1px solid #cacaca;
-      cursor: pointer;
-      display: flex;
-      height: 281px;
-      justify-content: center;
-      min-width: 500px;
-      position: relative;
-      width: 500px;
-      & .play {
-        background-color: rgba(0, 0, 0, 0.5);
-        border-bottom-left-radius: 25% 15%;
-        border-bottom-right-radius: 25% 15%;
-        border-top-left-radius: 25% 15%;
-        border-top-right-radius: 25% 15%;
-        color: white;
-        display: block;
-        height: 50px;
-        text-align: center;
-        transition: background-color 0.2s;
-        width: 70px;
-        & .pt-icon-play {
-          font-size: 30px;
-          margin-top: 10px;
-        }
-        &:before {
-          background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
-          content: "";
-          height: 50px;
-          left: 0;
-          position: absolute;
-          top: 0;
-          width: 100%;
-        }
-        & .title {
-          color: white;
-          font-family: "YouTube Noto", "Roboto", Arial, Helvetica, sans-serif;
-          font-size: 18px;
-          left: 10px;
-          position: absolute;
-          top: 10px;
-        }
-      }
-      &:hover .play {
-        background-color: red;
-      }
-    }
-    & .prompt {
+    & .play {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-bottom-left-radius: 25% 15%;
+      border-bottom-right-radius: 25% 15%;
+      border-top-left-radius: 25% 15%;
+      border-top-right-radius: 25% 15%;
+      color: white;
+      display: block;
+      height: 50px;
       text-align: center;
-      font-size: 24px;
-      margin-bottom: 10px;
+      transition: background-color 0.2s;
+      width: 70px;
+      & .pt-icon-play {
+        font-size: 30px;
+        margin-top: 10px;
+      }
+      &:before {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+        content: "";
+        height: 50px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+      & .video-title {
+        color: white;
+        font-family: "YouTube Noto", "Roboto", Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        left: 10px;
+        position: absolute;
+        text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+        top: 10px;
+      }
+    }
+    &:hover .play {
+      background-color: red;
+    }
+  }
+  & .form {
+    margin: 50px auto;
+    max-width: 500px;
+    position: relative;
+    z-index: 2;
+    & .callToAction {
+      color: white;
+      display: block;
+      margin: 10px auto;
+      text-align: center;
+      text-shadow: 0 2px 2px #444;
       width: 100%;
     }
-    & .avatar {
-      max-width: 400px;
-      min-width: 400px;
-      width: 400px;
-      & img {
-        width: 100%;
-      }
-      @media only screen and (max-width: 768px) {
-        margin-top: 25px;
-        max-width: none;
-        min-width: inherit;
-        width: 100%;
-      }
+    &.buttons {
+      padding: 25px 0;
     }
-    & .form {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      justify-content: center;
-      height: 300px;
-      padding: 0 25px;
-      & .callToAction {
-        margin: 10px auto;
-        opacity: 0.5;
-        text-align: center;
-        width: 100%;
-        &:hover {
-          opacity: 1;
-        }
+    & .pt-button.pt-large {
+      display: inline-block;
+      height: 60px;
+      margin: 10px;
+      max-width: 200px;
+      min-width: 200px;
+    }
+    & .pt-control.pt-checkbox {
+      color: white;
+      text-align: left;
+      text-shadow: 0 2px 2px #444;
+      & a {
+        color: white;
       }
     }
   }
   & h2 {
     color: white;
+    line-height: 1.2;
     text-shadow: 0 2px 5px #444;
   }
   & .projects, & .codeBlocks {

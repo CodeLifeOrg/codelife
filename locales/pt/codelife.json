@@ -1,4 +1,5 @@
 {
+  "404": "Página Não Encontrada",
   "Abandon changes and open new file?": "Descartar as alterações e abrir um novo arquivo?",
   "About": "Sobre o CodeLife",
   "About Me": "Sobre mim",
@@ -88,6 +89,7 @@
   "Map": "Mapa",
   "Modified on": "Modificado em",
   "Monthly Flag Limit Reached": "Limite mensal atingido",
+  "My Project": "Meu Projeto",
   "Name": "Nome",
   "Next": "Próximo",
   "Next Level": "Próxima fase",
@@ -279,13 +281,13 @@
   },
   "home": {
     "body": "",
-    "continue": "Continue Learning",
-    "prompt": "Join the revolution, and start your adventure today!",
-    "start": "Begin your adventure on {{island}}",
+    "continue": "Continue explorando",
+    "prompt": "Faça parte dessa revolução e comece sua aventura hoje mesmo!",
+    "start": "Comece sua aventura na {{island}}",
     "sub": "",
-    "tagline": "CodeLife is a free online tool that teaches Brazilian teenagers information technology and web skills.",
+    "tagline": "CodeLife é uma plataforma online direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas à linguagem do futuro: a programação.",
     "title": "",
-    "welcome": "Welcome {{name}}!"
+    "welcome": "Bem-vind@ {{name}}!"
   },
   "myCodeblock": "Meu {{ islandName }} Desafio",
   "privacy": {

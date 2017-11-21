@@ -14,7 +14,7 @@ class Projects extends Component {
       deleteAlert: false,
       projects: [],
       projectName: "",
-      currentProject: null, 
+      currentProject: null,
       constants: null
     };
   }
@@ -22,6 +22,7 @@ class Projects extends Component {
   componentDidMount() {
     const pget = axios.get("/api/projects/");
     const scget = axios.get("/api/siteconfigs");
+    const {t} = this.props;
 
     Promise.all([pget, scget]).then(resp => {
       const pjs = resp[0].data;
@@ -37,7 +38,7 @@ class Projects extends Component {
       else {
         this.setState({projects, constants});
         if (projects.length === 0) {
-          this.createNewProject("mypage.html");
+          this.createNewProject(t("My Project"));
         }
         else {
           let latestIndex = 0;
@@ -108,9 +109,10 @@ class Projects extends Component {
     // Trim leading and trailing whitespace from the project title
     projectName = projectName.replace(/^\s+|\s+$/gm, "");
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
-      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
+        console.log(resp);
         if (resp.status === 200) {
-          const projects = resp.data.projects.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);;
+          const projects = resp.data.projects.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
           projects.sort((a, b) => a.name < b.name ? -1 : 1);
           this.setState({projectName: "", currentProject: resp.data.currentProject, projects});
           this.props.onCreateProject(resp.data.currentProject);

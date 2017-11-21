@@ -70,8 +70,7 @@ class ReportBox extends Component {
     const {reportid, contentType} = this.props;
     const rpayload = {reason, comment, type: contentType, report_id: reportid};
     const rpost = axios.post("/api/reports/save", rpayload);
-    const upayload = {reports: userProfile.reports - 1, uid: userProfile.uid};
-    const upost = axios.post("/api/profile/update", upayload);
+    const upost = axios.post("/api/profile/decrement");
 
     Promise.all([rpost, upost]).then(resp => {
       if (resp.filter(r => r.status !== 200).length === 0) {

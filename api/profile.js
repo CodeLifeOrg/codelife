@@ -2,6 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const sequelize = require("sequelize");
 
 module.exports = function(app) {
 
@@ -12,6 +13,10 @@ module.exports = function(app) {
     delete req.body.reports;
     delete req.body.last_upped;
     db.userprofiles.update(req.body, {where: {uid: req.user.id}}).then(u => res.json(u).end());  
+  });
+
+  app.post("/api/profile/decrement", isAuthenticated, (req, res) => {
+    db.userprofiles.update({reports: sequelize.literal("reports -1")}, {where: {uid: req.user.id}}).then(u => res.json(u).end());
   });
 
   app.post("/api/profile/setsharing", isRole(2), (req, res) => {

@@ -400,8 +400,10 @@ class Level extends Component {
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
         <div className="image">
-          <h1 className="title">{ currentIsland.name }</h1>
-          <p className="description">{ currentIsland.description }</p>
+          <h1 className="title" id="title">
+            { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }
+            { currentIsland.name }
+          </h1>
           <div id="path">
             { levelItems }
             { this.buildTestPopover() }
@@ -411,7 +413,7 @@ class Level extends Component {
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
         { /* TODO2: adding blocker back in for November Beta */}
 
-        { nextIsland && Number(nextIsland.ordering) < 6  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null} 
+        { nextIsland && Number(nextIsland.ordering) < 6  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div>

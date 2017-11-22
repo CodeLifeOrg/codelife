@@ -38,8 +38,11 @@ class SelectSchool extends Component {
     }
   }
 
+  componentDidMount() {
+    this.updateSchoolList({id: "4mg000000"});
+  }
+
   updateSchoolList(geo) {
-    // console.log('updateSchoolList', geo)
     const {t} = this.props;
     const {id: gid} = geo;
     this.setState({loading: true});
@@ -97,20 +100,18 @@ class SelectSchool extends Component {
     return (
       <div>
         <SelectGeo gid={gid} callback={updateSchoolList} />
-        <div className="pt-form-content">
-          {error ? <p>{error}</p> : null}
-          {schools.length
-            ? <Select
-              resetOnSelect={true}
-              items={filteredSchools}
-              inputProps={{value: schoolQuery, onChange: filterSchools}}
-              itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
-              onItemSelect={setSelectedSchool}
-              noResults={<MenuItem disabled text={t("No results.")} />}
-            >
-              <Button text={mySchool ? mySchool.name : ""} rightIconName="caret-down" />
-            </Select> : null}
-        </div>
+        {error ? <p>{error}</p> : null}
+        {schools.length
+          ? <Select
+            resetOnSelect={true}
+            items={filteredSchools}
+            inputProps={{value: schoolQuery, onChange: filterSchools}}
+            itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
+            onItemSelect={setSelectedSchool}
+            noResults={<MenuItem disabled text={t("No results.")} />}
+          >
+            <Button text={mySchool ? mySchool.name : ""} iconName="book" rightIconName="caret-down" />
+          </Select> : null}
       </div>
     );
   }

@@ -1,13 +1,12 @@
 .confetti {
   position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
+  margin: 0 auto;
+  top: 0;
+  z-index: 1000;
 }
 
 #slide {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: white;
   border-radius: 10px;
   box-sizing: border-box;
   display: flex;
@@ -16,29 +15,24 @@
   height: 70vh;
   margin: 0 25px 25px;
   position: relative;
-
   & a:not(.pt-button) {
-    opacity: 0.75;
-    transition: opacity 0.2s;
-
+    opacity: 1;
+    text-decoration: underline;
+    transition: opacity 0.1s;
     &:hover {
-      opacity: 1;
+      opacity: 0.85;
     }
-
   }
-
   & #slide-head {
     margin: 25px 25px 10px;
     min-height: 29px;
     position: relative;
     text-align: center;
-
     & .title {
       font-size: 24px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
-
     & .gems {
       font-weight: 600;
       left: 0;
@@ -46,44 +40,45 @@
       position: absolute;
       text-transform: uppercase;
       top: 0;
-
       & img {
         margin-right: 5px;
         vertical-align: top;
         width: 20px;
       }
-
     }
-
     & .return-link {
       position: absolute;
       right: 0;
       top: 0;
     }
-
   }
-
   & #slide-container {
     overflow: visible;
     padding: 0 25px;
-
+    position: relative;
+    & p {
+      margin-bottom: 0;
+    }
     & pre {
+      break-inside: avoid-column;
+      column-break-inside: avoid;
       font-size: 12px;
       overflow-x: auto;
+      margin: 0;
+      page-break-inside: avoid;
       padding: 5px 10px;
+      width: 100%;
     }
-
     & .slide-text {
       font-size: 16px;
       line-height: 20px;
       white-space: pre-wrap;
     }
-
     &.cheatSheet .slide-text {
+      columns: 2;
       max-height: 100%;
       overflow-y: auto;
     }
-
     & .slide-image {
       align-self: stretch;
       background-position: center;
@@ -92,45 +87,38 @@
       flex: 1;
       margin: 25px 0;
     }
-
     & .slide-editor {
       align-self: stretch;
       flex: 1;
     }
-
     & #codeEditor {
       align-self: stretch;
       flex: 2;
     }
-
     & .validation {
-      margin-bottom: -50px;
+      bottom: -45px;
+      position: absolute;
       text-align: center;
-
       & .pt-button {
-        margin: 15px 5px 10px;
+        margin: 0 5px;
       }
     }
-
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
       max-width: 600px;
-
       & .questions {
         list-style: none;
         margin: 10px 0;
         padding: 0;
-
         & .question {
           background-color: transparent;
           counter-increment: item;
           margin: 1px 0;
-          padding:  10px 15px 10px 40px;
+          padding: 10px 15px 10px 40px;
           position: relative;
           text-align: left;
           transition: background-color 0.2s;
-
           &:before {
             background-color: rgba(0, 0, 0, 0.05);
             border-radius: 10px;
@@ -148,40 +136,28 @@
             transition: background-color 0.2s;
             width: 20px;
           }
-
           &.quiz-selected {
             background-color: rgba(0, 0, 0, 0.05);
-
             &:before {
               background-color: transparent;
             }
-
           }
-
           &:hover {
             background-color: rgba(0, 0, 0, 0.15);
             cursor: pointer;
-
             &:before {
               background-color: var(--sky);
             }
-
           }
-
         }
-
       }
-
     }
-
   }
-
   & #slide-foot {
     display: flex;
     justify-content: space-between;
     margin: 15px 25px 20px;
   }
-
   & .flex-row {
     align-items: center;
     display: flex;
@@ -190,41 +166,31 @@
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-
-    & > *:not(.flex-row):not(.flex-column) {
+    &>*:not(.flex-row):not(.flex-column) {
       margin: 0 0 0 25px;
     }
-
-    & > *:not(.flex-row):not(.flex-column):first-child {
+    &>*:not(.flex-row):not(.flex-column):first-child {
       margin-left: 0;
     }
-
     & .slide-text {
       flex: none;
       width: 300px;
-
       &.wide {
         width: 400px;
       }
     }
-
     &.cheatSheet .slide-text {
       flex: 1;
       width: inherit;
     }
-
-    @media only screen and (max-width : 768px) {
+    @media only screen and (max-width: 768px) {
       flex-direction: column;
       flex-wrap: nowrap;
-
       & .slide-text {
         width: auto;
       }
-
     }
-
   }
-
   & .flex-column {
     align-items: center;
     display: flex;
@@ -233,11 +199,8 @@
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-
-    & > *:not(.flex-row):not(.flex-column) {
+    &>*:not(.flex-row):not(.flex-column) {
       margin: 25px 25px 0;
     }
-
   }
-
 }

@@ -38,11 +38,11 @@ class Splash extends Component {
               {t("Official launch in April 2018")}.
             </p>
             { signup
-            ? <div className="form">
+              ? <div className="form">
                 <button className="pt-button pt-minimal pt-intent-danger pt-fill" onClick={ this.toggleSignup.bind(this) }><span className="pt-icon-standard pt-icon-double-chevron-left pt-align-left" />{ t("Login.Login") }</button>
                 <SignUp />
               </div>
-            : <div className="form">
+              : <div className="form">
                 <Login />
                 <button className="pt-button pt-minimal pt-intent-danger pt-fill" onClick={ this.toggleSignup.bind(this) }>{ t("Sign Up") }<span className="pt-icon-standard pt-icon-double-chevron-right pt-align-right" /></button>
               </div>

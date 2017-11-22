@@ -1,12 +1,30 @@
 const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
+const {isAuthenticated, isRole} = require("../tools/api.js");
+const sequelize = require("sequelize");
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/profile/:username", (req, res) => {
+  app.post("/api/profile/update", isAuthenticated, (req, res) => {
+    delete req.body.sharing;
+    delete req.body.reports;
+    delete req.body.last_upped;
+    db.userprofiles.update(req.body, {where: {uid: req.user.id}}).then(u => res.json(u).end());  
+  });
+
+  app.post("/api/profile/decrement", isAuthenticated, (req, res) => {
+    db.userprofiles.update({reports: sequelize.literal("reports -1")}, {where: {uid: req.user.id}}).then(u => res.json(u).end());
+  });
+
+  app.post("/api/profile/setsharing", isRole(2), (req, res) => {
+    const {uid} = req.body;
+    db.userprofiles.update(req.body, {where: {uid}}).then(u => res.json(u).end());  
+  });
+
+  app.get("/api/profile/:username", isAuthenticated, (req, res) => {
     const {username} = req.params;
     let dbFields = ["users.id", "users.name", "users.email", "users.username"];
 
@@ -25,11 +43,28 @@ module.exports = function(app) {
       if (!users.length) {
         return res.json({error: "No user matched that username."});
       }
-      return res.json(users[0]).end();
+
+      const oldDate = new Date(users[0].last_upped);
+      const now = new Date();
+      if (now - oldDate > 1000 * 60 * 60 * 24 * 30) {
+        users[0].last_upped = now.toLocaleDateString().replace("/", "-");
+        users[0].reports = 5;
+        const payload = {last_upped: users[0].last_upped, reports: users[0].reports};
+        db.userprofiles.update(payload, {where: {uid: users[0].id}}).then(() => res.json(users[0]).end());  
+      }
+      else {
+        return res.json(users[0]).end();
+      }
     });
   });
 
-  app.post("/api/profile/", (req, res) => {
+  app.get("/api/profileping", isAuthenticated, (req, res) => {
+    db.userprofiles.findOrCreate({where: {uid: req.user.id}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  app.post("/api/profile/", isAuthenticated, (req, res) => {
     const {bio, cpf, dob, gender, gid, name, sid} = req.body;
     db.users.update(
       {name},
@@ -70,7 +105,7 @@ module.exports = function(app) {
   });
 
   const imgUpload = upload.single("file");
-  app.post("/api/profileImgUpload/", (req, res) => {
+  app.post("/api/profileImgUpload/", isAuthenticated, (req, res) => {
     imgUpload(req, res, err => {
       if (err) return res.json({error: err});
 
@@ -104,27 +139,27 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/api/schools", (req, res) => {
+  app.get("/api/schools", isAuthenticated, (req, res) => {
     db.schools.findAll(
       {where: {gid: {$ilike: "4mg%"}}}
     ).then(schools => res.json(schools));
   });
 
-  app.get("/api/schoolsBySid", (req, res) => {
+  app.get("/api/schoolsBySid", isAuthenticated, (req, res) => {
     const {sid} = req.query;
     const q = `SELECT schools.* FROM schools as s, schools WHERE s.id = '${sid}' AND s.gid = schools.gid;`;
 
     db.query(q, {type: db.QueryTypes.SELECT}).then(schools => res.json(schools));
   });
 
-  app.get("/api/schoolsByGid", (req, res) => {
+  app.get("/api/schoolsByGid", isAuthenticated, (req, res) => {
     const {gid} = req.query;
     db.schools.findAll(
       {where: {gid}}
     ).then(schools => res.json(schools));
   });
 
-  app.get("/api/geos", (req, res) => {
+  app.get("/api/geos", isAuthenticated, (req, res) => {
     const {state} = req.query;
     db.geos.findAll(
       {where: {id: {$ilike: `${state}%`}, sumlevel: "MUNICIPALITY"}}

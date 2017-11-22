@@ -1,33 +1,36 @@
 import React from "react";
-import {Route, IndexRoute, browserHistory} from "react-router";
+import {Route, Redirect, IndexRoute, browserHistory} from "react-router";
 
 import App from "components/App";
 
 import About from "pages/About";
 import EditProfile from "pages/profile/EditProfile";
 import Glossary from "pages/Glossary";
-import Lesson from "pages/Lesson";
-import Minilesson from "pages/Minilesson";
+import Home from "pages/Home";
+import Island from "pages/Island";
+import Level from "pages/Level";
 import Privacy from "pages/Privacy";
 import Profile from "pages/profile/Profile";
 import Share from "pages/Share";
 import Slide from "pages/Slide";
-import Splash from "pages/Splash";
 import Studio from "pages/Studio";
 import Survey from "pages/Survey";
+import LearnMore from "pages/LearnMore";
+import AdminPanel from "pages/admin/AdminPanel";
+import ResetPw from "pages/ResetPw";
+import Error from "pages/Error";
+
 
 export default function RouteCreate() {
 
   return (
     <Route path="/" component={App} history={browserHistory}>
 
-      <IndexRoute component={Lesson} />
+      <IndexRoute component={Home} />
 
-      <Route path="login" component={Splash} />
-
-      <Route path="lesson" component={Lesson} />
-      <Route path="lesson/:lid" component={Minilesson} />
-      <Route path="lesson/:lid/:mlid(/:sid)" component={Slide} />
+      <Route path="island" component={Island} />
+      <Route path="island/:lid" component={Level} />
+      <Route path="island/:lid/:mlid(/:sid)" component={Slide} />
 
       <Route path="projects/:username" component={Studio} />
       <Route path="projects/:username/:filename" component={Share} />
@@ -44,7 +47,16 @@ export default function RouteCreate() {
 
       <Route path="privacy" component={Privacy} />
 
-      <Route path="snippets/:username/:filename" component={Share} />
+      <Route path="codeBlocks/:username/:filename" component={Share} />
+
+      <Route path="admin" component={AdminPanel} />
+
+      <Route path="learnmore" component={LearnMore} />
+
+      <Route path="reset" component={ResetPw} />
+      <Redirect from="login" to="/" />
+
+      <Route path="*" component={Error} />
 
     </Route>
   );

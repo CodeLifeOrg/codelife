@@ -26,18 +26,21 @@
   "homepage": "https://github.com/Datawheel/codelife#readme",
   "dependencies": {
     "@blueprintjs/datetime": "^1.19.0",
-    "@blueprintjs/labs": "^0.4.0",
+    "@blueprintjs/labs": "^0.11.0",
     "bcrypt": "^1.0.2",
     "cpf_cnpj": "^0.2.0",
     "css": "git+https://github.com/Datawheel/css.git",
-    "datawheel-canon": "^0.9.7",
+    "datawheel-canon": "^0.11.6",
     "faker": "^4.1.0",
     "himalaya": "^0.2.10",
     "multer": "^1.3.0",
+    "popper.js": "^1.12.5",
     "react-ace": "^5.0.1",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
     "react-dom-confetti": "0.0.8",
+    "react-quill": "^1.1.0",
+    "safe-eval": "^0.3.0",
     "sharp": "^0.18.2"
   }
 }

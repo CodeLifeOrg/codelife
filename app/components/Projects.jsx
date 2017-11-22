@@ -14,24 +14,30 @@ class Projects extends Component {
       deleteAlert: false,
       projects: [],
       projectName: "",
-      currentProject: null
+      currentProject: null,
+      constants: null
     };
   }
 
   componentDidMount() {
-    axios.get("/api/projects/").then(resp => {
-      const projects = resp.data;
+    const pget = axios.get("/api/projects/");
+    const scget = axios.get("/api/siteconfigs");
+    const {t} = this.props;
+
+    Promise.all([pget, scget]).then(resp => {
+      const pjs = resp[0].data;
+      const constants = resp[1].data;
+      const projects = pjs.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
       projects.sort((a, b) => a.name < b.name ? -1 : 1);
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
         if (!currentProject) currentProject = projects[0];
-        this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
+        this.setState({currentProject, projects, constants}, this.props.openProject.bind(this, currentProject.id));
       }
       else {
-        this.setState({projects});
         if (projects.length === 0) {
-          this.createNewProject("mypage.html");
+          this.setState({constants}, this.createNewProject.bind(this, t("My Project")));
         }
         else {
           let latestIndex = 0;
@@ -44,7 +50,7 @@ class Projects extends Component {
             }
           }
           const currentProject = projects[latestIndex];
-          this.setState({currentProject, projects}, this.props.openProject(currentProject.id));
+          this.setState({currentProject, projects, constants}, this.props.openProject.bind(this, currentProject.id));
         }
       }
     });
@@ -52,12 +58,13 @@ class Projects extends Component {
 
   deleteProject(project) {
     const {t} = this.props;
+    const {constants} = this.state;
 
     if (project === true) {
       const {deleteAlert} = this.state;
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
         if (resp.status === 200) {
-          const projects = resp.data;
+          const projects = resp.data.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
           let newProject = null;
           // if the project i'm trying to delete is the one i'm currently on, pick a new project
           // to open (in this case, the first one in the list)
@@ -97,10 +104,13 @@ class Projects extends Component {
   }
 
   createNewProject(projectName) {
+    const {constants} = this.state;
+    // Trim leading and trailing whitespace from the project title
+    projectName = projectName.replace(/^\s+|\s+$/gm, "");
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
-      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then (resp => {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
         if (resp.status === 200) {
-          const projects = resp.data.projects;
+          const projects = resp.data.projects.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
           projects.sort((a, b) => a.name < b.name ? -1 : 1);
           this.setState({projectName: "", currentProject: resp.data.currentProject, projects});
           this.props.onCreateProject(resp.data.currentProject);
@@ -146,8 +156,8 @@ class Projects extends Component {
         <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
         { showDeleteButton
           ? <Tooltip content={ t("Delete Project") }>
-              <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
-            </Tooltip>
+            <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
+          </Tooltip>
           : null
         }
       </li>);
@@ -165,13 +175,13 @@ class Projects extends Component {
           {projectItems}
         </ul>
         <Alert
-            isOpen={ deleteAlert ? true : false }
-            cancelButtonText={ t("Cancel") }
-            confirmButtonText={ t("Delete") }
-            intent={ Intent.DANGER }
-            onCancel={ () => this.setState({deleteAlert: false}) }
-            onConfirm={ () => this.deleteProject(true) }>
-            <p>{ deleteAlert ? deleteAlert.text : "" }</p>
+          isOpen={ deleteAlert ? true : false }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Delete") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({deleteAlert: false}) }
+          onConfirm={ () => this.deleteProject(true) }>
+          <p>{ deleteAlert ? deleteAlert.text : "" }</p>
         </Alert>
       </div>
     );

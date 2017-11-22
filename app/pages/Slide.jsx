@@ -17,8 +17,6 @@ import TextText from "components/slidetypes/TextText";
 import RenderCode from "components/slidetypes/RenderCode";
 import CheatSheet from "components/slidetypes/CheatSheet";
 
-import gemIcon from "icons/gem.svg";
-
 import "./Slide.css";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
@@ -28,16 +26,15 @@ class Slide extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gems: 0,
       slides: [],
       currentSlide: null,
       blocked: true,
-      currentLesson: null,
-      minilessons: null,
+      currentLevel: null,
+      currentIsland: null,
+      levels: null,
       sentProgress: false,
       latestSlideCompleted: 0,
-      latestSlideOfGemEarned: -1,
-      lessonComplete: false,
+      islandComplete: false,
       mounted: false,
       done: false
     };
@@ -51,8 +48,8 @@ class Slide extends Component {
     if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
   }
 
-  saveProgress(level, gems) {
-    axios.post("/api/userprogress/save", {level, gems}).then(resp => {
+  saveProgress(level) {
+    axios.post("/api/userprogress/save", {level}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
     });
   }
@@ -60,12 +57,29 @@ class Slide extends Component {
   componentDidUpdate() {
     const {mlid, sid} = this.props.params;
     const {user} = this.props.auth;
-    const {currentSlide, slides, sentProgress, latestSlideCompleted, gems} = this.state;
+    const {currentSlide, currentLevel, slides, sentProgress, latestSlideCompleted} = this.state;
+
+    // going to new level
+    if (currentLevel && currentLevel.id !== mlid) {
+      this.setState({
+        slides: [],
+        currentSlide: null,
+        blocked: true,
+        currentLevel: null,
+        currentIsland: null,
+        levels: null,
+        sentProgress: false,
+        latestSlideCompleted: 0,
+        islandComplete: false,
+        done: false
+      }, this.hitDB.bind(this));
+      return;
+    }
 
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (this.state.done) blocked = false;
       this.setState({currentSlide: cs, blocked});
@@ -73,7 +87,7 @@ class Slide extends Component {
 
     const i = slides.indexOf(currentSlide);
     if (this.state.mounted && currentSlide &&
-      ["InputCode", "InputCodeExec", "Quiz"].indexOf(currentSlide.type) === -1 &&
+      ["InputCode", "Quiz"].indexOf(currentSlide.type) === -1 &&
       i !== this.state.latestSlideCompleted && i > this.state.latestSlideCompleted) {
       this.setState({latestSlideCompleted: i});
     }
@@ -81,73 +95,67 @@ class Slide extends Component {
     const isFinalSlide = slides && currentSlide && slides.indexOf(currentSlide) === slides.length - 1;
     // if final slide write to DB
     if (user && isFinalSlide && !sentProgress) {
-      this.setState({sentProgress: true, lessonComplete: true});
-      // add 1 to gems since the saving happens before the user "finishes"
-      // the final slide
-      this.saveProgress(mlid, gems);
+      this.setState({sentProgress: true, islandComplete: true});
+      this.saveProgress(mlid);
     }
   }
 
   componentDidMount() {
     this.setState({mounted: true});
 
+    this.hitDB.bind(this)();
+
+    document.addEventListener("keypress", this.handleKey.bind(this));
+  }
+
+  hitDB() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     const {slides, latestSlideCompleted} = this.state;
 
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
-    const lget = axios.get(`/api/lessons?id=${lid}`);
-    const mlget = axios.get(`/api/minilessons?lid=${lid}`);
+    const iget = axios.get(`/api/islands?id=${lid}`);
+    const lget = axios.get(`/api/levels?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
 
-    Promise.all([sget, lget, mlget, upget]).then(resp => {
+    Promise.all([sget, iget, lget, upget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
         sid = slideList[0].id;
-        browserHistory.push(`/lesson/${lid}/${mlid}/${sid}`);
+        browserHistory.push(`/island/${lid}/${mlid}/${sid}`);
       }
       const cs = slideList.find(slide => slide.id === sid);
 
-      /*
-      if (cs.ordering !== 0) {
-        browserHistory.push(`/lesson/${lid}/${mlid}`);
-        return;
-      }
-      */
-
-      const up = resp[3].data;
+      const up = resp[3].data.progress;
       const done = up.find(p => p.level === mlid) !== undefined;
 
-      let blocked = ["InputCode", "InputCodeExec", "Quiz"].indexOf(cs.type) !== -1;
+      const levels = resp[2].data;
+      const currentLevel = levels.find(l => l.id === mlid);
+
+      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentLesson: resp[1].data[0], minilessons: resp[2].data});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels, currentLevel});
     });
-
-    // document.addEventListener("keydown", this.handleKey.bind(this));
   }
 
-  // handleKey(e) {
-  //   e.keyCode === 192 ? this.unblock(this) : null;
-  // }
+  handleKey(e) {
+    e.keyCode === 96 && this.props.auth.user.role > 0 ? this.unblock(this) : null;
+  }
 
-  updateGems(newGems) {
-    const {gems: oldGems, slides, currentSlide, latestSlideOfGemEarned} = this.state;
-    console.log("latestSlideOfGemEarned", latestSlideOfGemEarned);
-    const indexOfCurrentSlide = slides.indexOf(currentSlide);
-    if (indexOfCurrentSlide > latestSlideOfGemEarned) {
-      this.setState({gems: oldGems + newGems, latestSlideOfGemEarned: indexOfCurrentSlide});
-    }
+  advanceLevel(mlid) {
+    const {lid} = this.props.params;
+    browserHistory.push(`/island/${lid}/${mlid}`);
+    if (window) window.location.reload();
   }
 
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, currentLesson, gems} = this.state;
-    const updateGems = this.updateGems.bind(this);
+    const {currentSlide, slides, levels, currentLevel, currentIsland} = this.state;
 
-    if (!auth.user) browserHistory.push("/login");
+    if (!auth.user) browserHistory.push("/");
 
     const i = slides.indexOf(currentSlide);
     const prevSlug = i > 0 ? slides[i - 1].id : null;
@@ -163,45 +171,45 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    if (!currentSlide || !currentLesson) return <Loading />;
+    if (!currentSlide || !currentIsland || !currentLevel) return <Loading />;
 
-    let exec = false;
-    let sType = currentSlide.type;
-    if (sType.includes("Exec")) {
-      exec = true;
-      sType = sType.replace("Exec", "");
-    }
+    const nextLevel = levels.find(l => l.ordering === currentLevel.ordering + 1);
+
+    const sType = currentSlide.type;
 
     SlideComponent = compLookup[sType];
 
     return (
-      <div id="slide" className={ currentLesson.id }>
-        <Confetti className="confetti" config={config} active={ this.state.lessonComplete } />
+      <div id="slide" className={ currentIsland.theme }>
+        <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
-          { gems ? <div className="gems"><img src={gemIcon} />{t("Gems")}: {gems}</div> : null }
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentLesson.name}` } tooltipClassName={ currentLesson.id } position={Position.TOP_RIGHT}>
-            <Link to={`/lesson/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
+          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
+            <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
           </Tooltip>
         </div>
 
         <SlideComponent
-          exec={exec}
-          island={lid}
-          updateGems={updateGems}
+          island={currentIsland.theme}
           unblock={this.unblock.bind(this)}
           {...currentSlide} />
 
         <div id="slide-foot">
           { prevSlug
-          ? <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
-          : <div className="pt-button pt-disabled">{t("Previous")}</div> }
+            ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
+            : <div className="pt-button pt-disabled">{t("Previous")}</div> }
           { nextSlug
-          ? this.state.blocked
-            ? <div className="pt-button pt-disabled">{t("Next")}</div>
-            : <Link className="pt-button pt-intent-primary" to={`/lesson/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-          : <Link className="pt-button pt-intent-success editor-link" to={`/lesson/${lid}`}>{`${t("Return to")} ${currentLesson.name}!`}</Link> }
+            ? this.state.blocked
+              ? <div className="pt-button pt-disabled">{t("Next")}</div>
+              : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
+            : nextLevel
+              ? <div>
+                <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
+                <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link> 
+              </div>
+              : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
+          }
         </div>
 
       </div>

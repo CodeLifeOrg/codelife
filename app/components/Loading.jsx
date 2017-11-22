@@ -7,10 +7,10 @@ import "./Loading.css";
 class Loading extends Component {
 
   render() {
-    const {t} = this.props;
+    const {dark, t} = this.props;
 
     return (
-      <div id="loading">
+      <div id="loading" className={ dark ? "dark" : "light" }>
         <Spinner intent={Intent.WARNING} />
         <h1 className="title">{ t("Loading") }...</h1>
       </div>
@@ -19,5 +19,9 @@ class Loading extends Component {
   }
 
 }
+
+Loading.defaultProps = {
+  dark: false
+};
 
 export default translate()(Loading);

@@ -2,11 +2,6 @@ import React, {Component} from "react";
 
 export default class ImageText extends Component {
 
-  componentDidMount() {
-    const {updateGems} = this.props;
-    updateGems(1);
-  }
-
   render() {
 
     const {id, htmlcontent1} = this.props;

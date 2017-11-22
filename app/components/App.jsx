@@ -13,6 +13,8 @@ import Footer from "./Footer";
 import Nav from "./Nav";
 import Loading from "./Loading";
 
+import axios from "axios";
+
 class App extends Component {
 
   constructor(props) {
@@ -24,39 +26,61 @@ class App extends Component {
     this.props.isAuthenticated();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const {auth} = this.props;
     const {userInit} = this.state;
     if (!userInit && auth.loading) this.setState({userInit: true});
+    if (!prevProps.auth.user && this.props.auth.user) {
+      axios.get("/api/profileping").then(() => {
+        // No op.  On Mounting the app, we need to create a blank user in userprofiles that associates
+        // with the user in canon's users.  This calls findOrCreate to make that happen.
+      });
+    }
+  }
+
+  componentDidMount() {
+    axios.get("/api/islands").then(resp => {
+      const islands = resp.data;
+      this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});
+    });
   }
 
   render() {
-    const {auth, children, i18n, location} = this.props;
+    const {auth, children, i18n, location, islands} = this.props;
     const {userInit} = this.state;
 
     const routes = location.pathname.split("/");
 
     const authRoute = routes[1] === "login";
-    const bareRoute = routes.includes("projects") && routes.length === 4;
+    const bareRoute = ["projects", "codeBlocks"].includes(routes[1]) && routes.length === 4;
 
     const meta = header.meta.slice();
-    if (i18n.locale === "en") {
+
+    if (i18n.locale === "en" || i18n.locale === "en-US") {
       meta.find(d => d.property === "og:image").content = "https://codelife.com/social/codelife-share-en.jpg";
       meta.find(d => d.property === "og:description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
+      meta.find(d => d.name === "description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
     }
+    meta.push({property: "og:locale", content: i18n.locale});
+
+    let theme = "";
+    const lookup = routes[1] === "island" && routes.length > 2 ? routes[2] : false;
+    const currentIsland = islands.find(island => island.id === lookup);
+    if (currentIsland) theme = currentIsland.theme;
 
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
         { userInit && !auth.loading || authRoute
-        ? bareRoute ? children
-        : <div className="container">
-            <Clouds />
-            <Nav logo={ !location.pathname.includes("login") } />
-            { children }
-            <Footer currentPath={location.pathname} className={ routes[1] === "lesson" && routes.length > 2 ? routes[2] : "" } />
-          </div>
-        : <div className="container">
+          ? bareRoute
+            ? children
+            : <div className="container">
+              <Clouds />
+              <Nav logo={ !location.pathname.includes("login") && location.pathname !== "/" } />
+              { children }
+              <Footer currentPath={location.pathname} className={ theme } />
+            </div>
+          : <div className="container">
             <Clouds />
             <Loading />
           </div> }
@@ -67,9 +91,10 @@ class App extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
+  dispatch: action => dispatch(action),
   isAuthenticated: () => {
     dispatch(isAuthenticated());
   }
 });
 
-export default connect(state => ({auth: state.auth, i18n: state.i18n}), mapDispatchToProps)(App);
+export default connect(state => ({auth: state.auth, i18n: state.i18n, islands: state.islands}), mapDispatchToProps)(App);

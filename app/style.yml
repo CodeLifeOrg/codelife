@@ -3,33 +3,36 @@ nav-height: "86px"
 footer-height: "100px"
 
 islands:
-  island-1:
+  island-jungle:
     dark: "#003E00"
     light: "#90B857"
-  island-2:
+  island-themepark:
     dark: "#560000"
     light: "#f901e6"
-  island-3:
+  island-blizzard:
     dark: "#043f51"
     light: "#afe2e5"
-  island-4:
+  island-desert:
     dark: "#411100"
     light: "#ffb863"
-  island-5:
+  island-industry:
     dark: "#321418"
     light: "#d0acaf"
-  island-6:
+  island-farm:
     dark: "#02291a"
     light: "#ba1c2e"
-  island-7:
+  island-city:
     dark: "#373844"
     light: "#ed8e8a"
-  island-8:
+  island-dark:
     dark: "#13171d"
     light: "#b2bbc4"
-  island-9:
+  island-mountain:
     dark: "#06334c"
     light: "#f9f8b4"
-  island-10:
+  island-beach:
     dark: "#6f3100"
     light: "#ddf1eb"
+  island-clock:
+    dark: "#5a0d00"
+    light: "#faac8c"

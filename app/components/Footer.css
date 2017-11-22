@@ -12,12 +12,6 @@
   position: absolute;
   width: 100%;
 
-  @for $i from 1 to 20 {
-    &.island-$i {
-      background-image: url("/islands/island-$(i)-ground.png");
-    }
-  }
-
   & .links {
 
     & .link {

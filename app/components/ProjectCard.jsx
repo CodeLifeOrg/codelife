@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
+import {Popover, PopoverInteractionKind, Intent, Position, Button, Dialog} from "@blueprintjs/core";
 import "moment/locale/pt-br";
 import moment from "moment";
-import CodeEditor from "components/CodeEditor";
+import ReportBox from "components/ReportBox";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import "components/ProjectCard.css";
 
@@ -21,14 +22,20 @@ class ProjectCard extends Component {
     this.setState({open: !this.state.open});
   }
 
+  handleReport(report) {
+    const {project} = this.props;
+    project.reported = true;
+    this.forceUpdate();
+  }
+
   render() {
     const {open} = this.state;
     const {location, project, t, user} = this.props;
-    const {datemodified, id, name, studentcontent, username} = project;
+    const {datemodified, id, name, studentcontent, username, reported} = project;
 
     moment.locale("pt-BR");
 
-    const embedLink = `${ location.origin }/projects/${ username || user.username }/${ project.name }`;
+    const embedLink = `${ location.origin }/projects/${ username }/${ project.name }`;
 
     return (
       <div className="projectCard pt-card pt-elevation-0 pt-interactive" key={id}>
@@ -61,10 +68,27 @@ class ProjectCard extends Component {
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">
-              { t("Created by") } { username || user.username }
+              { t("Created by") } { username }
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
             </div>
             <div className="pt-dialog-footer-actions">
+              { user
+                ? <Popover
+                  interactionKind={PopoverInteractionKind.CLICK}
+                  popoverClassName="pt-popover-content-sizing"
+                  position={Position.TOP_RIGHT}
+                >
+                  <Button
+                    intent={reported ? "" : Intent.DANGER}
+                    iconName="flag"
+                    text={reported ? "Flagged" : "Flag"}
+                  />
+                  <div>
+                    <ReportBox reportid={id} contentType="project" handleReport={this.handleReport.bind(this)}/>
+                  </div>
+                </Popover>
+                : null
+              }
               <Button
                 intent={ Intent.PRIMARY }
                 onClick={ this.toggleDialog.bind(this) }

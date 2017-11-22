@@ -1,8 +1,6 @@
 import axios from "axios";
 import React, {Component} from "react";
-import {Link} from "react-router";
 import {translate} from "react-i18next";
-import {Button, Dialog, Intent} from "@blueprintjs/core";
 import "./Profile.css";
 
 import UserCard from "components/UserCard";

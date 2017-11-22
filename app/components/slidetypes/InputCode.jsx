@@ -1,11 +1,8 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import himalaya from "himalaya";
 
-import CodeEditor from "components/CodeEditor";
-
-import {cvContainsTag, cvContainsStyle, cvContainsSelfClosingTag} from "utils/codeValidation.js";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
@@ -18,65 +15,44 @@ class InputCode extends Component {
       currentText: "",
       titleText: "",
       baseText: "",
-      resetAlert: false,
-      gemEarned: false
+      execState: false,
+      rulejson: null,
+      resetAlert: false
     };
   }
 
   componentDidMount() {
-    this.setState({mounted: true, baseText: this.props.htmlcontent2 ? this.props.htmlcontent2 : ""});
+    const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
+    const baseText = this.props.htmlcontent2 || "";
+    this.setState({mounted: true, rulejson, baseText});
   }
 
-  componentDidUpdate() {
-    const newText = this.props.htmlcontent2 ? this.props.htmlcontent2 : "";
-    if (this.state.baseText !== newText) {
-      this.setState({baseText: newText, gemEarned: false});
-      this.editor.getWrappedInstance().setEntireContents(newText);
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.rulejson !== this.props.rulejson) {
+      const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
+      this.setState({rulejson});
     }
+  }
+
+  setExecState(execState) {
+    this.setState({execState});
   }
 
   submitAnswer() {
-    const {t, updateGems} = this.props;
-    const {gemEarned} = this.state;
-    const contents = this.editor.getWrappedInstance().getEntireContents();
-    const jsonArray = himalaya.parse(contents);
-    let errors = 0;
-    const rulejson = JSON.parse(this.props.rulejson);
+    const {t} = this.props;
     const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
-    for (const r of rulejson) {
-      if (r.type === "CONTAINS" && r.needle.substring(0, 1) !== "/") {
-        if (!cvContainsTag(r, contents)) {
-          errors++;
-          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
-        }
-      }
-      if (r.type === "CSS_CONTAINS") {
-        if (!cvContainsStyle(r, jsonArray)) {
-          errors++;
-          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
-        }
-      }
-      if (r.type === "CONTAINS_SELF_CLOSE") {
-        if (!cvContainsSelfClosingTag(r, contents)) {
-          errors++;
-          toast.show({message: r.error_msg, timeout: 2000, intent: Intent.DANGER});
-        }
-      }
-    }
-    if (errors === 0) {
+    if (this.editor.getWrappedInstance().getWrappedInstance().isPassing()) {
       toast.show({message: t("You got it right!"), timeout: 2000, intent: Intent.SUCCESS});
       this.props.unblock();
-      if (!gemEarned) updateGems(1);
     }
     else {
-      if (!gemEarned) updateGems(-1);
+      toast.show({message: t("Sorry, try again!"), timeout: 2000, intent: Intent.DANGER});
     }
-    this.setState({gemEarned: true});
   }
 
   // TODO: sanitize htmlcontent to not be null so I don't have to do these tests
   resetAnswer() {
-    this.editor.getWrappedInstance().setEntireContents(this.props.htmlcontent2 ? this.props.htmlcontent2 : "");
+    this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(this.props.htmlcontent2 || "");
     this.setState({resetAlert: false});
   }
 
@@ -85,40 +61,42 @@ class InputCode extends Component {
   }
 
   executeCode() {
-    this.editor.getWrappedInstance().executeCode();
+    this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
   render() {
-    const {t, htmlcontent1, htmlcontent2, island} = this.props;
-    const {titleText} = this.state;
-
-    const initialContent = htmlcontent2 ? htmlcontent2 : "";
+    const {lax, t, htmlcontent1, htmlcontent2, island} = this.props;
+    const {titleText, rulejson, execState} = this.state;
 
     return (
       <div id="slide-container" className="renderCode flex-column">
         <Alert
-            isOpen={ this.state.resetAlert }
-            cancelButtonText={ t("Cancel") }
-            confirmButtonText={ t("Reset") }
-            intent={ Intent.DANGER }
-            onCancel={ () => this.setState({resetAlert: false}) }
-            onConfirm={ () => this.resetAnswer() }>
-            <p>{t("Are you sure you want to reset the code to its original state?")}</p>
+          isOpen={ this.state.resetAlert }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Reset") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({resetAlert: false}) }
+          onConfirm={ () => this.resetAnswer() }>
+          <p>{t("Are you sure you want to reset the code to its original state?")}</p>
         </Alert>
         <div className="title-tab">{titleText}</div>
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} className="slide-editor" ref={c => this.editor = c} initialValue={initialContent} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
-          { this.props.exec ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null}
+          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>
         </div>
       </div>
     );
   }
 }
+
+InputCode.defaultProps = {
+  htmlcontent2: ""
+};
 
 InputCode = connect(state => ({
   user: state.auth.user

@@ -344,9 +344,9 @@
     "nests": "nests",
     "unique": "unique"
   },
-  "splashP1": "Você sabia que a programação é a linguagem do futuro? O mercado de trabalho é muito promissor para todos que sabem se relacionar bem com as novas tecnologias. Você já ouviu falar em carros autônomos e inteligência artificial? Aplicativos de celular? Games? Animações? O que tudo isso tem em comum? Uma lógica que chamamos de linguagem da computação ou pensamento computacional. O CodeLife surgiu da necessidade de permitir que qualquer pessoa possa fazer parte desse mundo novo.",
-  "splashP2": "CodeLife é uma plataforma online e gratuita direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas ao universo da tecnologia. O conteúdo inicial deverá abordar temas como desenvolvimento web e visualização de dados.",
-  "splashP3": "A plataforma está em desenvolvimento e esta página é para que possamos criar uma rede de pessoas e parceiros interessados em testá-la ainda durante o ano de 2017. Queremos sua ajuda para desenvolver a melhor plataforma possível.",
+  "splashP1": "O CodeLife é uma plataforma web, gratuita e de código aberto direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas à linguagem do futuro: a programação.",
+  "splashP2": "O mundo está mudando e a tecnologia tem provocado grandes mudanças no mercado de trabalho. Muitas das profissões que existem hoje em breve deixarão de existir. E outras tantas, que ainda nem conhecemos, serão criadas. Os jovens precisam se preparar para esse novo cenário e o primeiro passo é aprender a programar.",
+  "splashP3": "Por meio do CodeLife, você pode aprender por conta própria, em seu próprio ritmo e de onde quiser, a programar em HTML, CSS e JavaScript, linguagens de programação muito utilizadas no desenvolvimento de webpages, por exemplo. Todo o conteúdo é oferecido em português e inglês.",
   "splashP4": " ",
   "usersByLocation": "Outros usuários de {{municipality}}, {{state}}",
   "usersBySchool": "Outros usuários de {{school}}",

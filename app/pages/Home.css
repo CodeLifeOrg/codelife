@@ -143,4 +143,18 @@
     justify-content: center;
     width: 100%;
   }
+  & .aboutTxt {
+    margin: 0 auto 100px;
+    width: 500px;
+  }
+  & p {
+    color: white;
+    font-size: 18px;
+    line-height: 30px;
+    max-width: 550px;
+    text-align: left;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
 }

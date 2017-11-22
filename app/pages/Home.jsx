@@ -101,6 +101,13 @@ class Home extends Component {
             return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;
           }) }
         </div>
+        <h2>{ t("What is CodeLife?") }</h2>
+        <div className="aboutTxt">
+          <p>{ t("splashP1") }</p>
+          <p>{ t("splashP2") }</p>
+          <p>{ t("splashP3") }</p>
+          <p>{ t("splashP4") }</p>
+        </div>
       </div>
     );
   }

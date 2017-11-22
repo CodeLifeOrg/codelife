@@ -3,11 +3,11 @@
   padding: 0 25px;
   width: 100%;
   & #island {
-    margin-bottom: -180px;
+    margin-left: -50%;
+    width: 200%;
     & .image {
-      height: 1200px;
-      margin-top: -200px;
-      padding-top: 175px;
+      height: 900px;
+      margin-top: -20px;
     }
     & .logo {
       margin: 0 auto 10px;
@@ -142,5 +142,19 @@
     min-height: 150px;
     justify-content: center;
     width: 100%;
+  }
+  & .aboutTxt {
+    margin: 0 auto 100px;
+    width: 500px;
+  }
+  & p {
+    color: white;
+    font-size: 18px;
+    line-height: 30px;
+    max-width: 550px;
+    text-align: left;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    margin: 0 0 20px 0;
   }
 }

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import axios from "axios";
 import {Reset as CanonReset} from "datawheel-canon";
 import "./ResetPw.css";
 
@@ -15,16 +14,7 @@ class ResetPw extends Component {
   }
 
   componentDidMount() {
-    const {token} = this.props.location.query;
-    console.log(this.props.checkResetToken)
-    // if (token) {
-    //   // this.props.checkResetToken(token);
-    //   axios.get(`/api/auth/isResetValid?token=${token}`)
-    //     .then(response => {
-    //       console.log(response.data);
-    //       // dispatch(response.data.success ? resetTokenIsValid() : resetTokenIsNotValid());
-    //     });
-    // }
+    // const {token} = this.props.location.query;
   }
 
   render() {

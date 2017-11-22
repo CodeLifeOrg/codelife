@@ -71,11 +71,11 @@
     &:before {
       content: "";
       height: 10px;
-      left: 20px;
+      left: 38px;
       position: absolute;
       transform: rotateX(50deg);
       top: 16px;
-      width: 360px;
+      width: 314px;
     }
     & .stop {
       background-color: #444;

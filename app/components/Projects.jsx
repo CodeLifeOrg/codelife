@@ -33,12 +33,11 @@ class Projects extends Component {
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
         if (!currentProject) currentProject = projects[0];
-        this.setState({currentProject, projects, constants}, this.props.openProject(currentProject.id));
+        this.setState({currentProject, projects, constants}, this.props.openProject.bind(this, currentProject.id));
       }
       else {
-        this.setState({projects, constants});
         if (projects.length === 0) {
-          this.createNewProject(t("My Project"));
+          this.setState({constants}, this.createNewProject.bind(this, t("My Project")));
         }
         else {
           let latestIndex = 0;
@@ -51,7 +50,7 @@ class Projects extends Component {
             }
           }
           const currentProject = projects[latestIndex];
-          this.setState({currentProject, projects, constants}, this.props.openProject(currentProject.id));
+          this.setState({currentProject, projects, constants}, this.props.openProject.bind(this, currentProject.id));
         }
       }
     });
@@ -110,7 +109,6 @@ class Projects extends Component {
     projectName = projectName.replace(/^\s+|\s+$/gm, "");
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
-        console.log(resp);
         if (resp.status === 200) {
           const projects = resp.data.projects.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
           projects.sort((a, b) => a.name < b.name ? -1 : 1);

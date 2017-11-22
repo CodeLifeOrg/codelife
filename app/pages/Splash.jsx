@@ -32,6 +32,11 @@ class Splash extends Component {
           <div id="entry">
             <img className="island" src="/islands/splash.png" />
             <img className="logo" src="/logo/logo.png" />
+            <div id="beta">Beta</div>
+            <p id="beta-text">
+              {t("Platform currently in development")}.<br />
+              {t("Official launch in April 2018")}.
+            </p>
             { signup
               ? <div className="form">
                 <button className="pt-button pt-minimal pt-intent-danger pt-fill" onClick={ this.toggleSignup.bind(this) }><span className="pt-icon-standard pt-icon-double-chevron-left pt-align-left" />{ t("Login.Login") }</button>

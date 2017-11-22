@@ -39,7 +39,7 @@
     }
 
     & .logo {
-      margin: 0 auto 50px;
+      margin: 0 auto;
       position: relative;
       width: 90%;
       z-index: 1;
@@ -127,4 +127,20 @@
 
   }
 
+}
+
+#beta {
+  color: #d74645;
+  font-size: 20px;
+  font-weight: 800;
+  position: absolute;
+  right: 15px;
+  text-transform: uppercase;
+  top: -25px;
+}
+
+#beta-text {
+  font-size: 16px;
+  margin: 0 auto 50px;
+  position: relative;
 }

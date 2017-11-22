@@ -49,8 +49,13 @@ class Home extends Component {
 
   render() {
 
-    const {t, user} = this.props;
+    const {locale, t, user} = this.props;
     const {codeBlocks, current, formMode, islands, progress, projects} = this.state;
+
+    const videos = {
+      en: "3s2vPV-tRhI",
+      pt: "9ImSvqDDQuc"
+    };
 
     return (
       <div id="Home">
@@ -63,12 +68,7 @@ class Home extends Component {
             { current
               ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link>
               : <h2 className="title">{ t("home.tagline") }</h2> }
-            <div className="video">
-              <div className="play">
-                <span className="pt-icon-large pt-icon-play"></span>
-                <div className="video-title">Welcome to CodeLife</div>
-              </div>
-            </div>
+            <iframe className="video" src={ `https://www.youtube-nocookie.com/embed/${ videos[locale] || videos.en }?rel=0` } frameBorder="0" allowFullScreen></iframe>
           </div>
         </div>
         <a id="login"></a>
@@ -113,5 +113,5 @@ class Home extends Component {
   }
 }
 
-Home = connect(state => ({user: state.auth.user}))(Home);
+Home = connect(state => ({locale: state.i18n.locale, user: state.auth.user}))(Home);
 export default translate()(Home);

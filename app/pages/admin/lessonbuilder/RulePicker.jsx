@@ -20,7 +20,7 @@ class RulePicker extends Component {
   componentDidMount() {
     axios.get("/api/rules/all").then(resp => {
       const {data, parentID} = this.props;
-      const rules = this.extractRules(data.rulejson);
+      const rules = this.extractRules(data.rulejson, data.pt_rulejson);
       const ruleTypes = resp.data;
       this.setState({data, rules, ruleTypes, parentID});
     });
@@ -29,17 +29,27 @@ class RulePicker extends Component {
   componentDidUpdate() {
     if (this.props.parentID !== this.state.parentID) {
       const {data, parentID} = this.props;
-      const rules = this.extractRules(data.rulejson);
+      const rules = this.extractRules(data.rulejson, data.pt_rulejson);
       this.setState({data, rules, parentID});
     }
   }
 
-  extractRules(rulejson) {
+  extractRules(rulejson, langjson) {
     let rules = [];
-    if (rulejson) {
+    let langRules = [];
+    if (rulejson && langjson) {
       rules = JSON.parse(rulejson);
+      langRules = JSON.parse(langjson);
       for (let i = 0; i < rules.length; i++) {
         rules[i].id = i;
+        rules[i].pt_needle = langRules[i].needle;
+        rules[i].pt_outer = langRules[i].outer;
+        rules[i].pt_property = langRules[i].property;
+        rules[i].pt_varType = langRules[i].varType;
+        rules[i].pt_argType = langRules[i].argType;
+        rules[i].pt_attribute = langRules[i].attribute;
+        rules[i].pt_value = langRules[i].value;
+        rules[i].pt_regex = langRules[i].regex;
       }
     }
     return rules;
@@ -48,6 +58,7 @@ class RulePicker extends Component {
   updateJSON() {
     const {data, rules} = this.state;
     const json = [];
+    const langjson = [];
     if (rules) {
       for (const r of rules) {
         const obj = {
@@ -63,9 +74,24 @@ class RulePicker extends Component {
         if (r.value) obj.value = r.value;
         if (r.regex) obj.regex = r.regex;
         json.push(obj);
+
+        const langobj = {
+          type: r.type,
+          needle: r.pt_needle
+        };
+
+        if (r.pt_outer) langobj.outer = r.pt_outer;
+        if (r.pt_property) langobj.property = r.pt_property;
+        if (r.pt_varType) langobj.varType = r.pt_varType;
+        if (r.pt_argType) langobj.argType = r.pt_argType;
+        if (r.pt_attribute) langobj.attribute = r.pt_attribute;
+        if (r.pt_value) langobj.value = r.pt_value;
+        if (r.pt_regex) langobj.regex = r.pt_regex;
+        langjson.push(langobj);
       }
     }
     data.rulejson = JSON.stringify(json);
+    data.pt_rulejson = JSON.stringify(langjson);
     this.setState({data});
   }
 
@@ -81,7 +107,8 @@ class RulePicker extends Component {
     rules.push({
       id: nextID,
       type: "CONTAINS",
-      needle: "tag"
+      needle: "tag",
+      pt_needle: "pt_tag"
     });
     this.setState({rules}, this.updateJSON.bind(this));
   }
@@ -139,6 +166,16 @@ class RulePicker extends Component {
           }
           { param3[r.type] ?
             <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> :
+            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          }
+           🇧🇷 
+          <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "pt_needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.pt_needle} />
+          { param2[r.type] ?
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param2[r.type]}`)} type="text" placeholder={param2[r.type]} dir="auto" value={r[`pt_${param2[r.type]}`]} /> :
+            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          }
+          { param3[r.type] ?
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param3[r.type]}`)} type="text" placeholder={param3[r.type]} dir="auto" value={r[`pt_${param3[r.type]}`]} /> :
             <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
           }
           <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>

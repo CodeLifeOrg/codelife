@@ -160,23 +160,23 @@ class RulePicker extends Component {
             <select value={r.type} id={r.id} onChange={this.changeField.bind(this, "type")}>{ruleTypeList}</select>
           </div>
           <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
-          { param2[r.type] ?
-            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} /> :
-            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          { param2[r.type] 
+            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} /> 
+            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
           }
-          { param3[r.type] ?
-            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> :
-            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          { param3[r.type] 
+            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> 
+            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
           }
            🇧🇷 
           <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "pt_needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.pt_needle} />
-          { param2[r.type] ?
-            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param2[r.type]}`)} type="text" placeholder={param2[r.type]} dir="auto" value={r[`pt_${param2[r.type]}`]} /> :
-            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          { param2[r.type] 
+            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param2[r.type]}`)} type="text" placeholder={param2[r.type]} dir="auto" value={r[`pt_${param2[r.type]}`]} /> 
+            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
           }
-          { param3[r.type] ?
-            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param3[r.type]}`)} type="text" placeholder={param3[r.type]} dir="auto" value={r[`pt_${param3[r.type]}`]} /> :
-            <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+          { param3[r.type] 
+            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param3[r.type]}`)} type="text" placeholder={param3[r.type]} dir="auto" value={r[`pt_${param3[r.type]}`]} /> 
+            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
           }
           <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>
         </div>

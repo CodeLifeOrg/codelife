@@ -63,7 +63,7 @@
   "Islands (lessons)": "Ilhas (lições)",
   "JavaScript Console": "Console do JavaScript",
   "Keep Exploring": "Continue explorando",
-  "Learn More": "Saber Mais",
+  "Learn More": "Saiba Mais",
   "LearnMore": {
     "intro": "Existem muitas fontes que você pode acessar para aprender mais programação online. Aqui estão algumas!"
   },
@@ -74,7 +74,7 @@
   "Loading codeblocks": "Carregando desafios",
   "Loading projects": "Carregando projetos",
   "Login": {
-    "CallToAction": "Already have an account? Click here to Login!",
+    "CallToAction": "Já tem uma conta? Clique aqui para entrar!",
     "E-mail": "Email",
     "Facebook": "Facebook",
     "Instagram": "Instagram",
@@ -128,13 +128,14 @@
   "Show {{x}} More": "Mostre mais {{x}}",
   "Sign Up": "Cadastre-Se",
   "SignUp": {
-    "CallToAction": "Don't have an account? Click here to Sign Up!",
+    "CallToAction": "Ainda não tem uma conta? Clique aqui para se cadastrar!",
     "Confirm Password": "Confirme a senha",
     "E-mail": "Email",
     "Facebook": "Facebook",
     "Instagram": "Instagram",
     "Password": "Senha",
     "ResetPw": "Esqueceu sua senha?",
+    "PrivacyText": "Ao clicar nessa caixa, você concorda com a nossa <a href='{{privacy}}'>Política de Privacidade</a>",
     "Sign Up": "Criar uma conta",
     "Twitter": "Twitter",
     "Username": "Nome de usuário",

@@ -34,6 +34,8 @@ class About extends Component {
     const {t} = this.props;
     const {activeTabId} = this.state;
 
+    const showStudents = false;
+
     return (
       <div id="about-container">
         <h1>{ t("About") } CodeLife</h1>
@@ -42,9 +44,9 @@ class About extends Component {
         <p>{ t("aboutP3") }</p>
         <p>{ t("aboutP4") }</p>
         <p>{ t("aboutP5") }</p>
-        <Tabs2 className="about-photos" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+        { showStudents ? <Tabs2 className="about-photos" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
           { schools.map((s, i) => <Tab2 key={i} id={ s.slug } title={ i + 1 } panel={ <PhotoSlide {...s} /> } />) }
-        </Tabs2>
+        </Tabs2> : null }
       </div>
     );
   }

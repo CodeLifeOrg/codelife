@@ -135,7 +135,10 @@
     "Instagram": "Instagram",
     "Password": "Password",
     "ResetPw": "Forgot Password?",
+    "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a> and <a href='{{privacy}}'>Privacy Policy</a>",
+    "PrivacyText": "By checking this box, you agree to our <a href='{{privacy}}'>Privacy Policy</a>",
     "Sign Up": "Sign Up",
+    "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a>",
     "Twitter": "Twitter",
     "Username": "Username",
     "error": {

@@ -32,7 +32,7 @@
   "Content Approved": "Conteúdo aprovado",
   "Content Banned": "Conteúdo banido",
   "Contributor": "Colaborador",
-  "Create": "Crio",
+  "Create": "Criar",
   "Create a New Project": "Criar Novo Projeto",
   "Created by": "Criado por",
   "Customizing my profile": "Personalizando meu perfil",
@@ -117,7 +117,7 @@
   "Return to": "Voltar para",
   "Role": "Papel",
   "Rule Builder": "Gestão das regras",
-  "Save": "Salve",
+  "Save": "Salvar",
   "Save & Submit": "Salvar e enviar",
   "Save your changes before opening a new webpage": "Salve suas alterações antes de abrir uma nova página",
   "Save your webpage before sharing!": "Salve sua página antes de compartilhar!",
@@ -220,7 +220,7 @@
     "css": {
       "def": "CSS é uma linguagem de programação que permite alterar o estilo de uma página web, modificando sua aparência."
     },
-    "example": "Examplo",
+    "example": "Exemplo",
     "h1": {
       "def": "Esta tag é usada para indicar que o conteúdo  será um título grande, de destaque."
     },

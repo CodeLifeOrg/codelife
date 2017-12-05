@@ -12,23 +12,19 @@ class Island extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      islands: [],
       codeBlocks: [],
       userProgress: null
     };
   }
 
   componentDidMount() {
-    const iget = axios.get("/api/islands/");
     const upget = axios.get("/api/userprogress");
     const cbget = axios.get("/api/codeBlocks");
 
-    Promise.all([iget, upget, cbget]).then(resp => {
-      const islands = resp[0].data;
-      islands.sort((a, b) => a.ordering - b.ordering);
-      const userProgress = resp[1].data.progress;
-      const codeBlocks = resp[2].data;
-      this.setState({islands, userProgress, codeBlocks});
+    Promise.all([upget, cbget]).then(resp => {
+      const userProgress = resp[0].data.progress;
+      const codeBlocks = resp[1].data;
+      this.setState({userProgress, codeBlocks});
     });
   }
 
@@ -53,16 +49,13 @@ class Island extends Component {
 
   render() {
 
-    const {islands, codeBlocks, userProgress} = this.state;
-
-    const {auth} = this.props;
+    const {codeBlocks, userProgress} = this.state;
+    const {auth, islands} = this.props;
 
     if (!auth.user) browserHistory.push("/");
 
     if (islands === [] || !userProgress) return <Loading />;
 
-    // clone the array so we don't mess with state
-    // TODO: i've subsequently learned this is unnecessary, revisit this
     const islandArray = islands.slice(0);
 
     for (let i = 0; i < islandArray.length; i++) {
@@ -82,8 +75,10 @@ class Island extends Component {
   }
 }
 
-Island = connect(state => ({
-  auth: state.auth
-}))(Island);
-Island = translate()(Island);
-export default Island;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  islands: state.islands
+});
+
+Island = connect(mapStateToProps)(Island);
+export default translate()(Island);

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import CodeBlockCard from "components/CodeBlockCard";
 import "./Profile.css";
@@ -21,7 +22,6 @@ class UserCodeBlocks extends Component {
     this.state = {
       loading: true,
       codeBlocks: [],
-      islands: false,
       likes: null,
       reports: null
     };
@@ -36,22 +36,22 @@ class UserCodeBlocks extends Component {
     const cbget = axios.get(`/api/codeBlocks/byuser?uid=${user.id}`);
     const lkget = axios.get("/api/likes");
     const rget = axios.get("/api/reports/codeblocks");
-    const islands = axios.get("/api/islands");
     const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([cbget, lkget, rget, islands, scget]).then(resp => {
-      const constants = resp[4].data;
+    Promise.all([cbget, lkget, rget, scget]).then(resp => {
+      const constants = resp[3].data;
       const codeBlocks = resp[0].data.filter(cb => cb.status !== "banned" && cb.sharing !== "false" && Number(cb.reports) < constants.FLAG_COUNT_HIDE);
       const likes = resp[1].data;
       const reports = resp[2].data;
       codeBlocks.sort((a, b) => a.id - b.id);
-      this.setState({loading: false, codeBlocks, islands: resp[3].data, likes, reports});
+      this.setState({loading: false, codeBlocks, likes, reports});
     });
   }
 
   render() {
     const {t} = this.props;
-    const {loading, codeBlocks, islands, likes, reports} = this.state;
+    const {loading, codeBlocks, likes, reports} = this.state;
+    const {islands} = this.props;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 
@@ -72,5 +72,9 @@ class UserCodeBlocks extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({islands: state.islands});
+
+UserCodeBlocks = connect(mapStateToProps)(UserCodeBlocks);
 
 export default translate()(UserCodeBlocks);

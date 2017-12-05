@@ -17,7 +17,6 @@ class Home extends Component {
       codeBlocks: false,
       current: false,
       formMode: false,
-      islands: false,
       progress: [],
       projects: false
     };
@@ -38,19 +37,17 @@ class Home extends Component {
     }
     const codeBlocks = axios.get("/api/codeBlocks/featured");
     const projects = axios.get("/api/projects/featured");
-    const islands = axios.get("/api/islands");
-    Promise.all([codeBlocks, projects, islands])
+    Promise.all([codeBlocks, projects])
       .then(resp => this.setState({
         codeBlocks: resp[0].data,
-        islands: resp[2].data,
         projects: resp[1].data
       }));
   }
 
   render() {
 
-    const {locale, t, user} = this.props;
-    const {codeBlocks, current, formMode, islands, progress, projects} = this.state;
+    const {locale, t, user, islands} = this.props;
+    const {codeBlocks, current, formMode, progress, projects} = this.state;
 
     const videos = {
       en: "3s2vPV-tRhI",
@@ -113,5 +110,12 @@ class Home extends Component {
   }
 }
 
-Home = connect(state => ({locale: state.i18n.locale, user: state.auth.user}))(Home);
+const mapStateToProps = state => ({
+  locale: state.i18n.locale, 
+  user: state.auth.user,
+  auth: state.auth,
+  islands: state.islands
+});
+
+Home = connect(mapStateToProps)(Home);
 export default translate()(Home);

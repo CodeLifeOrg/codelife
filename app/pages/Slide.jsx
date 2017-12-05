@@ -114,29 +114,31 @@ class Slide extends Component {
     const {slides, latestSlideCompleted} = this.state;
 
     const sget = axios.get(`/api/slides?mlid=${mlid}`);
-    const iget = axios.get(`/api/islands?id=${lid}`);
     const lget = axios.get(`/api/levels?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
 
-    Promise.all([sget, iget, lget, upget]).then(resp => {
+    Promise.all([sget, lget, upget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
         sid = slideList[0].id;
         browserHistory.push(`/island/${lid}/${mlid}/${sid}`);
       }
+
+      const currentIsland = this.props.islands.find(i => i.id === lid);
+
       const cs = slideList.find(slide => slide.id === sid);
 
-      const up = resp[3].data.progress;
+      const up = resp[2].data.progress;
       const done = up.find(p => p.level === mlid) !== undefined;
 
-      const levels = resp[2].data;
+      const levels = resp[1].data;
       const currentLevel = levels.find(l => l.id === mlid);
 
       let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (done) blocked = false;
-      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland: resp[1].data[0], levels, currentLevel});
+      this.setState({currentSlide: cs, slides: slideList, blocked, done, currentIsland, levels, currentLevel});
     });
   }
 
@@ -217,8 +219,10 @@ class Slide extends Component {
   }
 }
 
-Slide = connect(state => ({
-  auth: state.auth
-}))(Slide);
-Slide = translate()(Slide);
-export default Slide;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  islands: state.islands
+});
+
+Slide = connect(mapStateToProps)(Slide);
+export default translate()(Slide);

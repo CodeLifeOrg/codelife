@@ -41,7 +41,6 @@ class Level extends Component {
     const {params, t} = this.props;
     const {lid} = params;
     const lget = axios.get(`/api/levels?lid=${lid}`);
-    const iget = axios.get("/api/islands");
     const uget = axios.get("/api/userprogress");
     const cbget = axios.get(`/api/codeBlocks/allbylid?lid=${lid}`);
     const lkget = axios.get("/api/likes");
@@ -49,15 +48,16 @@ class Level extends Component {
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
     const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([lget, iget, uget, cbget, lkget, rget, pget, scget]).then(resp => {
+    Promise.all([lget, uget, cbget, lkget, rget, pget, scget]).then(resp => {
       const levels = resp[0].data;
-      const islands = resp[1].data;
-      const userProgress = resp[2].data.progress;
-      const allCodeBlocks = resp[3].data;
-      const likes = resp[4].data;
-      const reports = resp[5].data;
-      const profile = resp[6].data;
-      const constants = resp[7].data;
+      const userProgress = resp[1].data.progress;
+      const allCodeBlocks = resp[2].data;
+      const likes = resp[3].data;
+      const reports = resp[4].data;
+      const profile = resp[5].data;
+      const constants = resp[6].data;
+
+      const {islands} = this.props;
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: add an exception for level 10.
@@ -447,8 +447,10 @@ class Level extends Component {
   }
 }
 
-Level = connect(state => ({
-  auth: state.auth
-}))(Level);
-Level = translate()(Level);
-export default Level;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  islands: state.islands
+});
+
+Level = connect(mapStateToProps)(Level);
+export default translate()(Level);

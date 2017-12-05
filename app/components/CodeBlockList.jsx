@@ -11,7 +11,7 @@ class CodeBlockList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      islands: null,
+      islands: [],
       isOpen: false,
       userProgress: null
     };
@@ -20,19 +20,17 @@ class CodeBlockList extends Component {
   componentDidMount() {
     const {t} = this.props;
     const cbget = axios.get("/api/codeBlocks/all");
-    const iget = axios.get("/api/islands");
     const upget = axios.get("/api/userprogress");
     const lkget = axios.get("/api/likes");
     const rget = axios.get("/api/reports/codeblocks");
     const scget = axios.get("/api/siteconfigs");
-    Promise.all([cbget, iget, upget, lkget, rget, scget]).then(resp => {
+    Promise.all([cbget, upget, lkget, rget, scget]).then(resp => {
       const allCodeBlocks = resp[0].data;
-      const islands = resp[1].data;
-      const userProgress = resp[2].data.progress;
-      const likes = resp[3].data;
-      const reports = resp[4].data;
-      const constants = resp[5].data;
-      islands.sort((a, b) => a.ordering - b.ordering);
+      const userProgress = resp[1].data.progress;
+      const likes = resp[2].data;
+      const reports = resp[3].data;
+      const constants = resp[4].data;
+      const islands = this.props.islands.slice(0);
       allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       for (const i of islands) {
         i.myCodeBlocks = [];

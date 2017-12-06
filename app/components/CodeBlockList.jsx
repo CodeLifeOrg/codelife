@@ -26,6 +26,7 @@ class CodeBlockList extends Component {
     const scget = axios.get("/api/siteconfigs");
     Promise.all([cbget, upget, lkget, rget, scget]).then(resp => {
       const allCodeBlocks = resp[0].data;
+      console.log(allCodeBlocks);
       const userProgress = resp[1].data.progress;
       const likes = resp[2].data;
       const reports = resp[3].data;
@@ -40,7 +41,7 @@ class CodeBlockList extends Component {
           s.likes = Number(s.likes);
           if (reports.find(r => r.report_id === s.id)) s.reported = true;
           if (s.uid === this.props.auth.user.id) {
-            s.username = t("you!");
+            s.displayname = t("you!");
             s.mine = true;
             if (likes.find(l => l.likeid === s.id)) s.liked = true;
             if (s.lid === i.id) i.myCodeBlocks.push(s);
@@ -131,6 +132,7 @@ class CodeBlockList extends Component {
 }
 
 CodeBlockList = connect(state => ({
+  islands: state.islands,
   auth: state.auth
 }))(CodeBlockList);
 CodeBlockList = translate()(CodeBlockList);

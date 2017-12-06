@@ -76,7 +76,7 @@ class CodeBlockCard extends Component {
     if (!codeBlock) return <Loading />;
 
     const {t, userProgress, theme, icon, user} = this.props;
-    const {id, lid, liked, reported, likes, mine, snippetname, studentcontent, username} = codeBlock;
+    const {id, lid, liked, reported, likes, mine, snippetname, studentcontent, username, displayname} = codeBlock;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 
@@ -92,7 +92,7 @@ class CodeBlockCard extends Component {
             <div className="card-meta">
               { username ? <div className="card-author">
                 { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }
-                { `${t("Created by")} ${username}` }
+                { `${t("Created by")} ${displayname || username}` }
               </div> : null }
               <div className="card-like"><span className={ `pt-icon-standard pt-icon-star${ liked ? " pt-intent-warning" : "-empty" }` }></span>{ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }</div>
             </div>
@@ -116,7 +116,7 @@ class CodeBlockCard extends Component {
           </div>
           <div className="pt-dialog-footer">
             <div className="pt-dialog-footer-byline">
-              { username ? `${t("Created by")} ${username}` : "" }
+              { username ? `${t("Created by")} ${displayname || username}` : "" }
               <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
             </div>
             <div className="pt-dialog-footer-actions">

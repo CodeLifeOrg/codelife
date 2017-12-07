@@ -6,7 +6,7 @@ module.exports = function(app) {
   const {db} = app.settings;
 
   // Used by Island.jsx to get each codeblock by island
-  app.get("/api/codeBlocks", isAuthenticated, (req, res) => {
+  app.get("/api/codeBlocks/mine", isAuthenticated, (req, res) => {
     db.codeblocks.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
   });
 
@@ -17,8 +17,8 @@ module.exports = function(app) {
         [Op.or]: [{id: 863}, {id: 834}, {id: 921}, {id: 30}]
       },
       include: [
-        {association: "userprofile"}, 
-        {association: "user"}, 
+        {association: "userprofile", attributes: ["sharing"]}, 
+        {association: "user", attributes: ["username"]}, 
         {association: "likelist"}, 
         {association: "reportlist"}
       ]
@@ -40,8 +40,8 @@ module.exports = function(app) {
   app.get("/api/codeBlocks/byuser", isAuthenticated, (req, res) => {
     db.codeblocks.findAll({
       include: [
-        {association: "userprofile"}, 
-        {association: "user", where: {id: req.query.uid}}, 
+        {association: "userprofile", attributes: ["sharing"]}, 
+        {association: "user", where: {id: req.query.uid}, attributes: ["username"]}, 
         {association: "likelist"}, 
         {association: "reportlist"}
       ]
@@ -66,8 +66,8 @@ module.exports = function(app) {
         snippetname: req.query.filename
       },
       include: [
-        {association: "userprofile"}, 
-        {association: "user", where: {username: req.query.username}}, 
+        {association: "userprofile", attributes: ["sharing"]}, 
+        {association: "user", where: {username: req.query.username}, attributes: ["username"]}, 
         {association: "likelist"}, 
         {association: "reportlist"}
       ]
@@ -110,8 +110,8 @@ module.exports = function(app) {
     db.codeblocks.findAll({
       where: req.query,
       include: [
-        {association: "userprofile"}, 
-        {association: "user"}, 
+        {association: "userprofile", attributes: ["sharing"]}, 
+        {association: "user", attributes: ["username"]}, 
         {association: "likelist"}, 
         {association: "reportlist"}
       ]

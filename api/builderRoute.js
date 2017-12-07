@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
-const {isAuthenticated, isRole} = require("../tools/api.js");
+const {isRole} = require("../tools/api.js");
 
 module.exports = function(app) {
 

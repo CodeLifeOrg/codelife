@@ -20,7 +20,7 @@ class Projects extends Component {
   }
 
   componentDidMount() {
-    const pget = axios.get("/api/projects/");
+    const pget = axios.get("/api/projects/mine");
     const scget = axios.get("/api/siteconfigs");
     const {t} = this.props;
 

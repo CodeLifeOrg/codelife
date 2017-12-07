@@ -25,7 +25,6 @@ module.exports = function(sequelize, db) {
     cb.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
     cb.hasMany(models.likes, {foreignKey: "likeid", sourceKey: "id", as: "likelist"});
     cb.hasMany(models.reports, {foreignKey: "report_id", sourceKey: "id", as: "reportlist"});
-    // l.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
   };
 
   return cb;

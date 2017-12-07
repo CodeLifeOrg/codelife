@@ -26,7 +26,6 @@ class CodeBlockList extends Component {
     const scget = axios.get("/api/siteconfigs");
     Promise.all([cbget, upget, lkget, rget, scget]).then(resp => {
       const allCodeBlocks = resp[0].data;
-      console.log(allCodeBlocks);
       const userProgress = resp[1].data.progress;
       const likes = resp[2].data;
       const reports = resp[3].data;

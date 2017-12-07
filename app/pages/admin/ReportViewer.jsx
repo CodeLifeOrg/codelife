@@ -134,6 +134,8 @@ class ReportViewer extends Component {
 
     if (!mounted) return <Loading />;
 
+    console.log(codeblockReports);
+
     const cbSorted = this.groupReports(codeblockReports);
     const pSorted = this.groupReports(projectReports);
 

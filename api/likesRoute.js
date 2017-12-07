@@ -1,14 +1,8 @@
-const {isAuthenticated, isRole} = require("../tools/api.js");
+const {isAuthenticated} = require("../tools/api.js");
 
 module.exports = function(app) {
 
   const {db} = app.settings;
-
-  /*
-  app.get("/api/likes/byid", isAuthenticated, (req, res) => {
-    db.likes.findAll({where: {likeid: req.query.id}}).then(u => res.json(u).end());
-  });
-  */
 
   // Used by Level, CodeBlockList, and UserCodeblocks to get like counts
   app.get("/api/likes", isAuthenticated, (req, res) => {

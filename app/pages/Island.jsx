@@ -19,7 +19,7 @@ class Island extends Component {
 
   componentDidMount() {
     const upget = axios.get("/api/userprogress");
-    const cbget = axios.get("/api/codeBlocks");
+    const cbget = axios.get("/api/codeBlocks/mine");
 
     Promise.all([upget, cbget]).then(resp => {
       const userProgress = resp[0].data.progress;

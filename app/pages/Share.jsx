@@ -63,8 +63,6 @@ class Share extends Component {
 
     if (!content) return <Loading dark={true} />;
 
-    console.log(content);
-
     const {t} = this.props;
     const {id} = content;
     const name = content.name || content.snippetname;

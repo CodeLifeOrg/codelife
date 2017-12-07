@@ -80,17 +80,14 @@ module.exports = function(app) {
 
   // Used by Share to fetch a project.  Public.
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
-    /*const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, users, userprofiles where projects.uid = users.id AND users.id = userprofiles.uid AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());*/
     console.log(req.query.username);
     db.projects.findAll({
       where: {
         name: req.query.filename
       },
-      logging: console.log,
       include: [
         {association: "userprofile", attributes: ["sharing"]}, 
-        {association: "user", where: {username: req.query.username}/*, attributes: ["username"]*/}, 
+        {association: "user", where: {username: req.query.username}, attributes: ["username"]}, 
         {association: "reportlist"}
       ]
     })
@@ -118,7 +115,6 @@ module.exports = function(app) {
     db.projects.update({status}, {where: {id}}).then(u => {
       db.reports.update({status}, {where: {type: "project", report_id: id}}).then(() => res.json(u).end());
     });
-
   });
 
   // Used by Projects to create a new project

@@ -37,9 +37,11 @@ module.exports = function(sequelize, db) {
 
   // up.hasOne(db.user, {foreignKey: "uid"});
 
+  
   up.associate = models => {
-    //up.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofiles"});
-    //up.hasMany(models.codeblocks, {foreignKey: "uid", targetKey: "uid", as: "codeblocks"});
+    up.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
+    up.belongsTo(models.geos, {foreignKey: "gid", targetKey: "id", as: "geo"});
+    up.belongsTo(models.schools, {foreignKey: "sid", targetKey: "id", as: "school"});
   };
 
 

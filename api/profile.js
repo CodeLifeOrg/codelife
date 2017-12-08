@@ -26,36 +26,38 @@ module.exports = function(app) {
 
   app.get("/api/profile/:username", isAuthenticated, (req, res) => {
     const {username} = req.params;
-    let dbFields = ["users.id", "users.name", "users.email", "users.username"];
+  
+    db.userprofiles.findAll({
+      include: [
+        {association: "user", where: {username}, attributes: ["id", "name", "email", "username"]}, 
+        {association: "geo", attributes: [["name", "geoname"]]}, 
+        {association: "school", attributes: [["name", "schoolname"]]}
+      ]
+    })
+      .then(users => {
+        if (!users.length) {
+          return res.json({error: "No user matched that username."});
+        }
+        const user = users[0].toJSON();
+        user.geoname = user.geo ? user.geo.geoname : null;
+        user.schoolname = user.school ? user.school.schoolname : null;
+        user.id = user.user ? user.user.id : "";
+        user.name = user.user ? user.user.name : "";
+        user.email = user.user ? user.user.email : "";
+        user.username = user.user ? user.user.username : "";
 
-    if (req.user.username === username || true === true) {
-      dbFields = dbFields.concat(["userprofiles.*, geos.name as geoname, schools.name as schoolname"]);
-    }
-
-    const q = `SELECT ${dbFields}
-      FROM users
-      FULL JOIN userprofiles on userprofiles.uid = users.id
-      FULL JOIN geos on userprofiles.gid = geos.id
-      FULL JOIN schools on userprofiles.sid = schools.id
-      WHERE users.username = '${username}' LIMIT 1;`;
-
-    db.query(q, {type: db.QueryTypes.SELECT}).then(users => {
-      if (!users.length) {
-        return res.json({error: "No user matched that username."});
-      }
-
-      const oldDate = new Date(users[0].last_upped);
-      const now = new Date();
-      if (now - oldDate > 1000 * 60 * 60 * 24 * 30) {
-        users[0].last_upped = now.toLocaleDateString().replace("/", "-");
-        users[0].reports = 5;
-        const payload = {last_upped: users[0].last_upped, reports: users[0].reports};
-        db.userprofiles.update(payload, {where: {uid: users[0].id}}).then(() => res.json(users[0]).end());  
-      }
-      else {
-        return res.json(users[0]).end();
-      }
-    });
+        const oldDate = new Date(user.last_upped);
+        const now = new Date();
+        if (now - oldDate > 1000 * 60 * 60 * 24 * 30) {
+          user.last_upped = now.toLocaleDateString().replace("/", "-");
+          user.reports = 5;
+          const payload = {last_upped: user.last_upped, reports: user.reports};
+          db.userprofiles.update(payload, {where: {uid: user.id}}).then(() => res.json(user).end());  
+        }
+        else {
+          return res.json(user).end();
+        }
+      });
   });
 
   app.get("/api/profileping", isAuthenticated, (req, res) => {

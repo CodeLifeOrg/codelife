@@ -6,7 +6,7 @@ module.exports = function(app) {
   const {db} = app.settings;
 
   // Used in App to retrieve all islands, then stored in redux
-  app.get("/api/islands", (req, res) => {
+  app.get("/api/islands/all", (req, res) => {
     db.islands.findAll({where: req.query}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
@@ -14,7 +14,7 @@ module.exports = function(app) {
   });
 
   // Used in Level and Slide to get specific level by lid
-  app.get("/api/levels", isAuthenticated, (req, res) => {
+  app.get("/api/levels/all", isAuthenticated, (req, res) => {
     db.levels.findAll({where: {lid: req.query.lid}}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
@@ -22,7 +22,7 @@ module.exports = function(app) {
   });
 
   // Used by Slide to get all slides for a given mlid (level id)
-  app.get("/api/slides", isAuthenticated, (req, res) => {
+  app.get("/api/slides/all", isAuthenticated, (req, res) => {
     db.slides.findAll({where: {mlid: req.query.mlid}}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();

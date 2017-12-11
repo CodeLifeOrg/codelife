@@ -113,8 +113,8 @@ class Slide extends Component {
     let {sid} = this.props.params;
     const {slides, latestSlideCompleted} = this.state;
 
-    const sget = axios.get(`/api/slides?mlid=${mlid}`);
-    const lget = axios.get(`/api/levels?lid=${lid}`);
+    const sget = axios.get(`/api/slides/all?mlid=${mlid}`);
+    const lget = axios.get(`/api/levels/all?lid=${lid}`);
     const upget = axios.get("/api/userprogress");
 
     Promise.all([sget, lget, upget]).then(resp => {

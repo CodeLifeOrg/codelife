@@ -7,7 +7,11 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  app.get("/api/builder/islands", isRole(1), (req, res) => {
+  /*
+  This set of API endpoints are used exclusively by LessonBuilder to allow admins to modify content 
+  */
+
+  app.get("/api/builder/islands/all", isRole(1), (req, res) => {
     db.islands.findAll({where: req.query}).then(u => {
       res.json(u).end();
     });
@@ -29,12 +33,6 @@ module.exports = function(app) {
     db.islands.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();
     });    
-  });
-
-  app.get("/api/builder/levels", isRole(1), (req, res) => {
-    db.levels.findAll({where: {lid: req.query.lid}}).then(u => {
-      res.json(u).end();
-    });
   });
 
   app.post("/api/builder/levels/save", isRole(1), (req, res) => {
@@ -61,12 +59,6 @@ module.exports = function(app) {
     });    
   });
 
-  app.get("/api/builder/slides", isRole(1), (req, res) => {
-    db.slides.findAll({where: {mlid: req.query.mlid}}).then(u => {
-      res.json(u).end();
-    });
-  });
-
   app.get("/api/builder/slides/all", isRole(1), (req, res) => {
     db.slides.findAll({where: req.query}).then(u => {
       res.json(u).end();
@@ -91,15 +83,7 @@ module.exports = function(app) {
     });    
   });
 
-  // Multer is required to process file uploads and make them available via
-  // req.files.
   const upload = multer({
-    // storage: multer.memoryStorage(),
-    /*
-    limits: {
-      fileSize: 5 * 1024 * 1024 // no larger than 5mb
-    },
-    */
     fileFilter: (req, file, callback) => {
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
         return callback(new Error("Only image files are allowed!"));
@@ -125,7 +109,6 @@ module.exports = function(app) {
 
       sharp(sampleFile.buffer)
         .toFormat(sharp.format.jpeg)
-        // .resize(350, 350)
         .toFile(imgPath, (uploadErr, info) => {
           if (uploadErr) {
             return res.status(500).send(uploadErr);

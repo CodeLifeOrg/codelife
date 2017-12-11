@@ -41,7 +41,6 @@ class UserCodeBlocks extends Component {
     Promise.all([cbget, lkget, rget, scget]).then(resp => {
       const constants = resp[3].data;
       const codeBlocks = resp[0].data.filter(cb => cb.status !== "banned" && cb.sharing !== "false" && Number(cb.reports) < constants.FLAG_COUNT_HIDE);
-      console.log(codeBlocks);
       const likes = resp[1].data;
       const reports = resp[2].data;
       codeBlocks.sort((a, b) => a.id - b.id);

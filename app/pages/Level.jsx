@@ -40,7 +40,7 @@ class Level extends Component {
   loadFromDB() {
     const {params, t} = this.props;
     const {lid} = params;
-    const lget = axios.get(`/api/levels?lid=${lid}`);
+    const lget = axios.get(`/api/levels/all?lid=${lid}`);
     const uget = axios.get("/api/userprogress");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
     const lkget = axios.get("/api/likes");

@@ -1,4 +1,6 @@
-# CodeLife
+![](https://github.com/datawheel/codelife/raw/master/static/logo/logo-dark.png)
+
+[![Build Status](https://travis-ci.org/Datawheel/codelife.svg?branch=master)](https://travis-ci.org/Datawheel/codelife)
 
 A React application based on `datawheel-canon` that provides a framework for teaching high school students how to code.
 

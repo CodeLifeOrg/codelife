@@ -107,7 +107,7 @@ module.exports = function(app) {
       const newFileName = `${title}.jpg`;
       const imgPath = path.join(process.cwd(), "/static/slide_images", newFileName);
 
-      sharp(sampleFile.buffer)
+      return sharp(sampleFile.buffer)
         .toFormat(sharp.format.jpeg)
         .toFile(imgPath, (uploadErr, info) => {
           if (uploadErr) {
@@ -117,6 +117,7 @@ module.exports = function(app) {
             return res.json(info);
           }
         });
+
     });
   });
 

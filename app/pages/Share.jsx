@@ -23,7 +23,8 @@ class Share extends Component {
 
   getUser() {
     const {uid} = this.state.content;
-    axios.get(`/api/user/${uid}/`).then(resp => {
+    console.log(this.state.content);
+    axios.get(`/api/profile/share/${uid}/`).then(resp => {
       this.setState({user: resp.data});
     });
   }
@@ -60,6 +61,8 @@ class Share extends Component {
 
   render() {
     const {content, reports, user} = this.state;
+
+    console.log(user);
 
     if (!content) return <Loading dark={true} />;
 

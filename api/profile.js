@@ -52,11 +52,37 @@ module.exports = function(app) {
           user.last_upped = now.toLocaleDateString().replace("/", "-");
           user.reports = 5;
           const payload = {last_upped: user.last_upped, reports: user.reports};
-          db.userprofiles.update(payload, {where: {uid: user.id}}).then(() => res.json(user).end());  
+          return db.userprofiles.update(payload, {where: {uid: user.id}}).then(() => res.json(user).end());  
         }
         else {
           return res.json(user).end();
         }
+      });
+  });
+
+  app.get("/api/profile/share/:uid", (req, res) => {
+    const {uid} = req.params;
+  
+    db.userprofiles.findAll({
+      include: [
+        {association: "user", where: {id: uid}, attributes: ["id", "name", "email", "username"]}, 
+        {association: "geo", attributes: [["name", "geoname"]]}, 
+        {association: "school", attributes: [["name", "schoolname"]]}
+      ]
+    })
+      .then(users => {
+        if (!users.length) {
+          return res.json({error: "No user matched that uid."});
+        }
+        const user = users[0].toJSON();
+        user.geoname = user.geo ? user.geo.geoname : null;
+        user.schoolname = user.school ? user.school.schoolname : null;
+        user.id = user.user ? user.user.id : "";
+        user.name = user.user ? user.user.name : "";
+        user.email = user.user ? user.user.email : "";
+        user.username = user.user ? user.user.username : "";
+
+        return res.json(user).end();
       });
   });
 
@@ -91,6 +117,43 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/profile/byid/all", (req, res) => {
+    const {gid, sid} = req.query;
+    if (!gid && !sid) return res.json({error: "Only gid and sid searches allowed"});
+
+    const params = {
+      include: [
+        {association: "user", attributes: ["id", "name", "email", "username"]}, 
+        {association: "geo", attributes: [["name", "geoname"]]}, 
+        {association: "school", attributes: [["name", "schoolname"]]}
+      ]
+    };
+
+    if (gid) params.include[1].where = {id: gid};
+    if (sid) params.include[2].where = {id: sid};
+    
+    return db.userprofiles.findAll(params)
+      .then(users => {
+        if (!users.length) {
+          return res.json({error: "No users matched that location."});
+        } 
+        else {
+          const flatusers = users.map(u => {
+            const user = u.toJSON();
+            user.geoname = user.geo ? user.geo.geoname : null;
+            user.schoolname = user.school ? user.school.schoolname : null;
+            user.id = user.user ? user.user.id : "";
+            user.name = user.user ? user.user.name : "";
+            user.email = user.user ? user.user.email : "";
+            user.username = user.user ? user.user.username : "";
+            return user;
+          });        
+          return res.json(flatusers).end();  
+        }
+        
+      });
+  });
+
   // Multer is required to process file uploads and make them available via
   // req.files.
   const upload = multer({
@@ -122,7 +185,7 @@ module.exports = function(app) {
       const imgPath = path.join(process.cwd(), "/static/uploads", newFileName);
       // return res.json({f: newFileName, f2: imgPath});
 
-      sharp(sampleFile.buffer)
+      return sharp(sampleFile.buffer)
         .toFormat(sharp.format.jpeg)
         .resize(350, 350)
         .toFile(imgPath, (uploadErr, info) => {
@@ -130,12 +193,10 @@ module.exports = function(app) {
             return res.status(500).send(uploadErr);
           }
           else {
-            db.userprofiles.update(
+            return db.userprofiles.update(
               {img: newFileName},
               {where: {uid}}
-            ).then(() => {
-              return res.json(info);
-            });
+            ).then(() => res.json(info));
           }
         });
     });

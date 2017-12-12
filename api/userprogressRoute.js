@@ -1,4 +1,4 @@
-const {isAuthenticated, isRole} = require("../tools/api.js");
+const {isAuthenticated} = require("../tools/api.js");
 
 module.exports = function(app) {
 

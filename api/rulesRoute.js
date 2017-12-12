@@ -1,11 +1,11 @@
-const {isAuthenticated, isRole} = require("../tools/api.js");
+const {isRole} = require("../tools/api.js");
 const translate = require("../tools/translate.js");
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  // Used by CodeEditor to get rule language
+  // Used by CodeEditor to get rule language.  No restrictions because you can view codeblocks when not logged in.
   app.get("/api/rules", (req, res) => {
     db.rules.findAll().then(u => {
       u = translate(req.headers.host, "pt", u);

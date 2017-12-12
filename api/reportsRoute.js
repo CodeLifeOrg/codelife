@@ -125,21 +125,15 @@ module.exports = function(app) {
           db.users.findAll({where: {role: 2}}).then(admins => {
             const emails = admins.map(a => a.email).join(", ");
 
-
             return new BuildMail("text/html")
-            .addHeader({from: mgEmail, subject: "New Flagged Content", to: emails})
-            .setContent(template).build((error, mail) => {
-              return mailgun.messages().sendMime({to: emails, message: mail.toString("ascii")}, () => res.json(u).end());
-            });
+              .addHeader({from: mgEmail, subject: "New Flagged Content", to: emails})
+              .setContent(template).build((error, mail) => 
+                mailgun.messages().sendMime({to: emails, message: mail.toString("ascii")}, () => res.json(u).end())
+              );
           });
-
-          
-
+    
         });
-
-
-
-        
+    
       });
   });
 

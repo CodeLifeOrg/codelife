@@ -15,27 +15,24 @@ class Island extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      codeBlocks: [],
       userProgress: null
     };
   }
 
   /**
-   * On mount, fetch the codeblocks and progress for the currently logged in user.
+   * On mount, fetch the progress for the currently logged in user.
    */
   componentDidMount() {
     const upget = axios.get("/api/userprogress");
-    const cbget = axios.get("/api/codeBlocks/mine");
 
-    Promise.all([upget, cbget]).then(resp => {
+    Promise.all([upget]).then(resp => {
       const userProgress = resp[0].data.progress;
-      const codeBlocks = resp[1].data;
-      this.setState({userProgress, codeBlocks});
+      this.setState({userProgress});
     });
   }
 
   /**
-   * On mount, fetch the codeblocks and progress for the currently logged in user.
+   * On mount, fetch the progress for the currently logged in user.
    * @param {String} milestone An island ID.
    * @returns {Boolean} Returns a boolean whether or not the user has completed the provided island ID.
    */
@@ -48,7 +45,7 @@ class Island extends Component {
 
   render() {
 
-    const {codeBlocks, userProgress} = this.state;
+    const {userProgress} = this.state;
     const {auth, islands} = this.props;
 
     if (!auth.user) browserHistory.push("/");
@@ -58,7 +55,6 @@ class Island extends Component {
     const islandArray = islands.slice(0);
 
     for (let i = 0; i < islandArray.length; i++) {
-      islandArray[i].codeBlock = codeBlocks.find(s => s.lid === islandArray[i].id);
       const done = this.hasUserCompleted(islandArray[i].id);
       islandArray[i].isDone = done;
       islandArray[i].isNext = i === 0 && !done || i > 0 && !done && islandArray[i - 1].isDone;

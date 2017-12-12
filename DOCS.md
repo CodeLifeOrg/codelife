@@ -1,11 +1,8 @@
 ## Classes
 
 <dl>
-<dt><a href="#Profile">Profile</a></dt>
-<dd><p>Class component for a user profile.
-This is a public page and meant to be shared.
-If a user is logged in AND this is their profile, show an
-edit button allowing them to edit it.</p>
+<dt><a href="#Island">Island</a></dt>
+<dd><p>Displays all available islands</p>
 </dd>
 <dt><a href="#Profile">Profile</a></dt>
 <dd><p>Class component for a user profile.
@@ -30,104 +27,41 @@ This is shown on the public profile for a user and requires sending
 </dd>
 </dl>
 
-<a name="Profile"></a>
+<a name="Island"></a>
 
-## Profile
-Class component for a user profile.
-This is a public page and meant to be shared.
-If a user is logged in AND this is their profile, show an
-edit button allowing them to edit it.
+## Island
+Displays all available islands
 
 **Kind**: global class  
 
-* [Profile](#Profile)
-    * [new Profile(loading, error, profileUser)](#new_Profile_new)
-    * [new Profile(loading, error, profileUser)](#new_Profile_new)
-    * [.componentWillMount()](#Profile+componentWillMount)
-    * [.render()](#Profile+render)
-    * [.componentWillMount()](#Profile+componentWillMount)
-    * [.render()](#Profile+render)
+* [Island](#Island)
+    * [.componentDidMount()](#Island+componentDidMount)
+    * [.hasUserCompleted(milestone)](#Island+hasUserCompleted) ⇒ <code>Boolean</code>
 
 
 * * *
 
-<a name="new_Profile_new"></a>
+<a name="Island+componentDidMount"></a>
 
-### new Profile(loading, error, profileUser)
-Creates the Profile component with its initial state.
+### island.componentDidMount()
+On mount, fetch the codeblocks and progress for the currently logged in user.
 
+**Kind**: instance method of [<code>Island</code>](#Island)  
+
+* * *
+
+<a name="Island+hasUserCompleted"></a>
+
+### island.hasUserCompleted(milestone) ⇒ <code>Boolean</code>
+On mount, fetch the codeblocks and progress for the currently logged in user.
+
+**Kind**: instance method of [<code>Island</code>](#Island)  
+**Returns**: <code>Boolean</code> - Returns a boolean whether or not the user has completed the provided island ID.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| loading | <code>boolean</code> | true by defaults gets flipped post AJAX. |
-| error | <code>string</code> | Gets set if no username matches username URL param. |
-| profileUser | <code>object</code> | Gets set to full user object from DB. |
+| milestone | <code>String</code> | An island ID. |
 
-
-* * *
-
-<a name="new_Profile_new"></a>
-
-### new Profile(loading, error, profileUser)
-Creates the Profile component with its initial state.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| loading | <code>boolean</code> | true by defaults gets flipped post AJAX. |
-| error | <code>string</code> | Gets set if no username matches username URL param. |
-| profileUser | <code>object</code> | Gets set to full user object from DB. |
-
-
-* * *
-
-<a name="Profile+componentWillMount"></a>
-
-### profile.componentWillMount()
-Grabs username from URL param, makes AJAX call to server and sets error
-state (if no user is found) or profileUser (if one is).
-
-**Kind**: instance method of [<code>Profile</code>](#Profile)  
-
-* * *
-
-<a name="Profile+render"></a>
-
-### profile.render()
-3 render states:
-case (loading)
- - show loading
-case (error)
- - show error msg from server
-case (user found)
- - user info
-
-**Kind**: instance method of [<code>Profile</code>](#Profile)  
-
-* * *
-
-<a name="Profile+componentWillMount"></a>
-
-### profile.componentWillMount()
-Grabs username from URL param, makes AJAX call to server and sets error
-state (if no user is found) or profileUser (if one is).
-
-**Kind**: instance method of [<code>Profile</code>](#Profile)  
-
-* * *
-
-<a name="Profile+render"></a>
-
-### profile.render()
-3 render states:
-case (loading)
- - show loading
-case (error)
- - show error msg from server
-case (user found)
- - user info
-
-**Kind**: instance method of [<code>Profile</code>](#Profile)  
 
 * * *
 
@@ -143,9 +77,6 @@ edit button allowing them to edit it.
 
 * [Profile](#Profile)
     * [new Profile(loading, error, profileUser)](#new_Profile_new)
-    * [new Profile(loading, error, profileUser)](#new_Profile_new)
-    * [.componentWillMount()](#Profile+componentWillMount)
-    * [.render()](#Profile+render)
     * [.componentWillMount()](#Profile+componentWillMount)
     * [.render()](#Profile+render)
 
@@ -164,46 +95,6 @@ Creates the Profile component with its initial state.
 | error | <code>string</code> | Gets set if no username matches username URL param. |
 | profileUser | <code>object</code> | Gets set to full user object from DB. |
 
-
-* * *
-
-<a name="new_Profile_new"></a>
-
-### new Profile(loading, error, profileUser)
-Creates the Profile component with its initial state.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| loading | <code>boolean</code> | true by defaults gets flipped post AJAX. |
-| error | <code>string</code> | Gets set if no username matches username URL param. |
-| profileUser | <code>object</code> | Gets set to full user object from DB. |
-
-
-* * *
-
-<a name="Profile+componentWillMount"></a>
-
-### profile.componentWillMount()
-Grabs username from URL param, makes AJAX call to server and sets error
-state (if no user is found) or profileUser (if one is).
-
-**Kind**: instance method of [<code>Profile</code>](#Profile)  
-
-* * *
-
-<a name="Profile+render"></a>
-
-### profile.render()
-3 render states:
-case (loading)
- - show loading
-case (error)
- - show error msg from server
-case (user found)
- - user info
-
-**Kind**: instance method of [<code>Profile</code>](#Profile)  
 
 * * *
 

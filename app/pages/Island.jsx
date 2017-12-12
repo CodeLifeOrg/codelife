@@ -7,6 +7,9 @@ import "./Island.css";
 import IslandLink from "components/IslandLink";
 import Loading from "components/Loading";
 
+/**
+ * Displays all available islands
+ */
 class Island extends Component {
 
   constructor(props) {
@@ -17,6 +20,9 @@ class Island extends Component {
     };
   }
 
+  /**
+   * On mount, fetch the codeblocks and progress for the currently logged in user.
+   */
   componentDidMount() {
     const upget = axios.get("/api/userprogress");
     const cbget = axios.get("/api/codeBlocks/mine");
@@ -28,23 +34,16 @@ class Island extends Component {
     });
   }
 
+  /**
+   * On mount, fetch the codeblocks and progress for the currently logged in user.
+   * @param {String} milestone An island ID.
+   * @returns {Boolean} Returns a boolean whether or not the user has completed the provided island ID.
+   */
   hasUserCompleted(milestone) {
     // TODO: this is a blocking short-circuit for August. remove after Beta (done)
     // TODO2: adding back in a hard blocker for November Beta.
     if (milestone === "island-863f") return false;
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
-  }
-
-  // TODO: I think this is a remnant from when you could see codeblocks at the island level, revisit this
-  handleSave(sid, studentcontent) {
-    // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of Lesson's snippet array
-    // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
-    // reload all snippets freshly from the database, but I also want to minimize db hits.  revisit this.
-    const {codeBlocks} = this.state;
-    for (const cb of codeBlocks) {
-      if (cb.id === sid) cb.studentcontent = studentcontent;
-    }
-    this.setState(codeBlocks);
   }
 
   render() {
@@ -68,7 +67,7 @@ class Island extends Component {
     return (
       <div className="overworld">
         <div className="map">
-          { islandArray.map(island => <IslandLink island={island} />) }
+          { islandArray.map(island => <IslandLink key={island.id} island={island} />) }
         </div>
       </div>
     );

@@ -1,6 +1,15 @@
 ## Classes
 
 <dl>
+<dt><a href="#CodeEditor">CodeEditor</a></dt>
+<dd><p>CodeEditor is a two-panel rendering component for student code.
+It uses AceEditor for the student panel (left), and a remote rendering iframe for the page preview (right).</p>
+</dd>
+<dt><a href="#Profile">Profile</a></dt>
+<dd><p>Class component for a user profile.
+This is a public page and meant to be shared.
+If a user is logged in AND this is their profile, show an
+edit button allowing them to edit it.</p>
 <dt><a href="#Island">Island</a></dt>
 <dd><p>Displays all available islands</p>
 </dd>
@@ -27,6 +36,17 @@ This is shown on the public profile for a user and requires sending
 </dd>
 </dl>
 
+<a name="CodeEditor"></a>
+
+## CodeEditor
+CodeEditor is a two-panel rendering component for student code.
+It uses AceEditor for the student panel (left), and a remote rendering iframe for the page preview (right).
+
+**Kind**: global class  
+
+* * *
+
+<a name="Profile"></a>
 <a name="Island"></a>
 
 ## Island
@@ -242,4 +262,3 @@ the list of snippets.
 **Kind**: instance method of [<code>UsersList</code>](#UsersList)  
 
 * * *
-

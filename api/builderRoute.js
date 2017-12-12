@@ -7,10 +7,6 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  /*
-  This set of API endpoints are used exclusively by LessonBuilder to allow admins to modify content 
-  */
-
   app.get("/api/builder/islands/all", isRole(1), (req, res) => {
     db.islands.findAll({where: req.query}).then(u => {
       res.json(u).end();

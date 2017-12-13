@@ -170,6 +170,13 @@ class CodeEditor extends Component {
     return titleText || t("Webpage");
   }
 
+  /**
+   * Given a parsed JSON representation of the current code, recursively find and remove the contents of anything between <script> tags.
+   * This is important because we re-render the page on each keystroke, so firing JavaScript executions for each key is not ideal.
+   * Save the stripped-out JS into state, so we can determine from its prescence there if we should show an execute button or not.
+   * @param {Object} json A JSON Representation of the current text, as parsed by the himalaya library
+   * @returns {Array} A rebuilt (minus JavaScript) JSON object that himalaya can parse back into HTML.
+   */
   stripJS(json) {
     const arr = [];
     if (json.length === 0) return arr;
@@ -184,8 +191,7 @@ class CodeEditor extends Component {
         }
         // this is a hack for a himalaya bug
         if (!newObj.tagName) newObj.tagName = "";
-        // if the old object had children, set the new object's children
-        // to nothing because we need to make it ourselves
+        // if the old object had children, set the new object's children to nothing because we need to make it ourselves
         if (n.children) newObj.children = [];
         // if the old object had children
         if (n.children && n.children.length > 0) {
@@ -213,19 +219,10 @@ class CodeEditor extends Component {
     return arr;
   }
 
-  /*
-    For javascript rules, we test their correctness elsewhere (namely, checkJVMState)
-    As such, they are already aware of their passing state, and we can just no-op
-  */
-
-  cvEquals(r) {
-    return r.passing;
-  }
-
-  cvFunc(r) {
-    return r.passing;
-  }
-
+  /**
+   * Grabs the current editor text from state, and prepare an array of true/false tests to be applied to it.
+   * Based on the results of those testing rules, set state variables that provide completion % feedback to the student.
+   */
   checkForErrors() {
     const theText = this.state.currentText;
     const theJS = this.state.currentJS;
@@ -240,8 +237,8 @@ class CodeEditor extends Component {
     cv.NESTS = cvNests;
     cv.JS_MATCHES = cvMatch;
     cv.JS_USES = cvUses;
-    cv.JS_VAR_EQUALS = this.cvEquals.bind(this);
-    cv.JS_FUNC_EQUALS = this.cvFunc.bind(this);
+    cv.JS_VAR_EQUALS = r => r.passing;
+    cv.JS_FUNC_EQUALS = r => r.passing;
     const payload = {theText, theJS, theJSON};
     for (const r of baseRules) {
       if (cv[r.type]) r.passing = cv[r.type](r, payload);
@@ -263,12 +260,20 @@ class CodeEditor extends Component {
     this.setState({isPassing, goodRatio, intent});
   }
 
+  /**
+   * Given the text currently in the editor, send a postMessage containing that source to the sandbox for rendering.
+   * @param {String} theText The text to be rendered in the sandbox
+   */
   writeToIFrame(theText) {
     if (this.state.iFrameLoaded) {
       this.refs.rc.contentWindow.postMessage(theText, this.state.sandbox.root);
     }
   }
 
+  /**
+   * Given the text currently in the editor, send a postMessage containing that source to the sandbox for rendering.
+   * @param {String} theText The text to be rendered in the sandbox
+   */
   hasJS(theText) {
     const re = new RegExp(`<script[^>]*>`, "g");
     const open = theText.search(re);
@@ -276,6 +281,12 @@ class CodeEditor extends Component {
     return open !== -1 && close !== -1 && open < close;
   }
 
+  /** 
+   * Called explictly after state updates that change the text. Using the helper function stripJS, this function prepares
+   * the code to be shipped to the sandbox via writeToIFrame. If it is the first time we are rendering, such as in a slide example,
+   * execute the JavaScript after a short delay.
+   * @param {Boolean} executeJS If set to true, this function will execute any included JavaScript after a short delay.
+   */
   renderText(executeJS) {
     if (this.refs.rc) {
       let theText = this.state.currentText;
@@ -297,9 +308,13 @@ class CodeEditor extends Component {
     }
   }
 
+  /** 
+   * Called after "awake" message is received from sandbox, indicating that the iFrame is loaded and ready for postMessage events.
+   * Fetches rule text from API. On completion, set the prop-given initial text in state and invoke the onChangeText callback, so any 
+   * componenent that embeds CodeEdtior may subscribes to this callback may be notified that the text has changed.
+   */
   iFrameLoaded() {
     if (!this.state.iFrameLoaded) {
-
       axios.get("/api/rules").then(resp => {
         const ruleErrors = resp.data;
         const currentText = this.props.initialValue || "";
@@ -312,6 +327,10 @@ class CodeEditor extends Component {
     }
   }
 
+  /** 
+   * Callback for the embedded AceEditor component. Used to bubble up text change events to this object's state and to the parent.
+   * @param {String} theText The current state of the text in the code editor.
+   */
   onChangeText(theText) {
     const titleText = this.getTitleText(theText);
     this.setState({currentText: theText, changesMade: true, titleText}, this.renderText.bind(this));
@@ -326,18 +345,31 @@ class CodeEditor extends Component {
   }
   */
 
+  /** 
+   * Invoked by handlePost when an error is caught by the sandbox. Concatenates the error message to the console.
+   * @param {String} e The error string retrieved from the sandbox
+   */
   myCatch(e) {
     const {embeddedConsole} = this.state;
     embeddedConsole.push([e]);
     this.setState({openConsole: true});
   }
 
+  /** 
+   * Invoked by handlePost when an log message is returned by the sandbox. Concatenates the log message to the console.
+   * Because console.log can take multiple comma-separated arguments, extract the list using Array.from(arguments)
+   */
   myLog() {
     const {embeddedConsole} = this.state;
     embeddedConsole.push(Array.from(arguments));
     this.setState({openConsole: true});
   }
 
+  /** 
+   * Helper function to determine argument type for syntax highlighting in emulated console.
+   * @param {*} value Value of any type
+   * @returns {String} A String representing the type of the provided object
+   */
   evalType(value) {
     let t = typeof value;
     if (t === "object") {
@@ -347,6 +379,11 @@ class CodeEditor extends Component {
     return t;
   }
 
+  /** 
+   * Called by receiveMessage when postMessage events arrive from the sandbox. The first argument will always be a type
+   * designator that describes the following arguments so they can be routed for processing. A type of "completed" means
+   * the JavaScript has completed execution in the remote sandbox and error checking can begin.  
+   */
   handlePost() {
     const type = arguments[0];
     if (type === "console") {

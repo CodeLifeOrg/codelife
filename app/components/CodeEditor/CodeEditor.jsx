@@ -400,6 +400,12 @@ class CodeEditor extends Component {
     }
   }
 
+  /** 
+   * Called by handlePost to process postMessage events of type "rule". Iterates over list of rules in state and sets 
+   * each rule's passing state based on whether the given argument matches type and value restrictions.
+   * @param {String} needle The keyword rulename this value belongs to, typically a variable or function name
+   * @param {*} value The actual, remote-sandbox determined value to check against.
+   */
   checkJVMState(needle, value) {
     const {rulejson} = this.state;
     for (const r of rulejson) {
@@ -421,24 +427,49 @@ class CodeEditor extends Component {
     }
   }
 
+  /** 
+   * Reverses a string.  Used by internalRender() to assist with regex.
+   * @param {String} s The string to be reversed
+   * @return {String} The reversed string
+   */
   reverse(s) {
     return s.split("").reverse().join("");
   }
 
+  /** 
+   * One of the more complex functions in CodeLife, internalRender is invoked when an "execute code" button is pressed. 
+   * This function is responsible for sending a specially prepared version of the student's source code to a remote sandbox for execution.
+   * The remote sandbox has an iFrame of its own, where the code is being injected. References to the "parent" of this iFrame
+   * refer to functions in the sandbox responsible for sending information back to Codelife.com via postMessage.  
+   * To prepare the code for remote execution, several steps must be taken:
+   * - replace console.log with parent.myPost("console"...) to intercept console statements.
+   * - prepend JavaScript code with initialization functions that "zero out" any rule variables the student must set correctly.
+   * - append JavaScript code with parent.myPost("rule"...) methods that send variable state back to Codelife.com
+   * - append further JavaScript code with parent.myPost("completed"...) to indicate that the run has completed.
+   * - take ALL of that code, wrap it into a string literal that eval()s the code and catches any runtime errors.
+   * - replace the student's current code and replaces its JavaScript with the prepared JavaScript
+   * - invoke writeToIFrame, which sends the entire payload to the remote sandbox for execution.
+   * The sandbox then injects the prepared code into the iFrame, which calls its parent functions, and reports back here via postMessage.
+   */
   internalRender() {
+    // If this code has JS at all
     if (this.state.currentJS) {
 
+      // replace console.log calls with a parent function that will send the contents back here
       let js = this.state.currentJS.split("console.log(").join("parent.myPost(\"console\",");
 
       const handled = [];
 
+      // For every given rule
       for (const r of this.state.rulejson) {
         if (r.type === "JS_VAR_EQUALS") {
           r.passing = false;
           if (!handled.includes(r.needle)) {
             let init = r.needle;
             if (init.includes(".")) init = init.split(".")[0];
+            // Prepend the code with initalizers so variables start undefined
             js = `${init}=undefined;\n${js}`;
+            // Append the code with a post that sends the variable state back here 
             js += `parent.myPost('rule', '${r.needle}', ${r.needle});\n`;
             handled.push(r.needle);
           }
@@ -464,8 +495,14 @@ class CodeEditor extends Component {
         }
       }
 
+      // At the very end of the JavaScript, send a final message that the code is done executing
       js += "parent.myPost('completed');\n";
 
+      // Wrap ALL of the code so far into a single "js" variable.
+      // Process that code through a loopProtection script that lives in the sandbox.
+      // In order to catch run-time errors, run a try catch that evals the prepared code and broadcasts errors back here via post.
+      // Remember, "parent" has no meaning here in React, but by the time this payload is executed on the sandbox in an embedded iframe,
+      // these function calls will refer to parent methods living there that use postMessage to send back state info to React.
       const finaljs = `
         var js=${JSON.stringify(js)};
         var protected = parent.loopProtect(js);
@@ -478,8 +515,10 @@ class CodeEditor extends Component {
         }
       `;
 
+      // Finally, replace the student's current vanilla JS with the processed, double-wrapped JS created above
       const theText = this.state.currentText.replace(this.state.currentJS, finaljs);
 
+      // And actually ship it to the sandbox
       this.writeToIFrame.bind(this)(theText);
     }
   }

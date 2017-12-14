@@ -23,7 +23,7 @@ class Island extends Component {
    * On mount, fetch the progress for the currently logged in user.
    */
   componentDidMount() {
-    const upget = axios.get("/api/userprogress");
+    const upget = axios.get("/api/userprogress/mine");
 
     Promise.all([upget]).then(resp => {
       const userProgress = resp[0].data.progress;

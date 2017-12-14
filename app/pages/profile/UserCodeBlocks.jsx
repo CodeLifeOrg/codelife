@@ -34,7 +34,7 @@ class UserCodeBlocks extends Component {
   componentDidMount() {
     const {user} = this.props;
     const cbget = axios.get(`/api/codeBlocks/byuser?uid=${user.id}`);
-    const lkget = axios.get("/api/likes");
+    const lkget = axios.get("/api/likes/mine");
     const rget = axios.get("/api/reports/codeblocks");
     const scget = axios.get("/api/siteconfigs");
 

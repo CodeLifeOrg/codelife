@@ -29,7 +29,7 @@ class Home extends Component {
   componentDidMount() {
     const {user} = this.props;
     if (user) {
-      axios.get("/api/userprogress")
+      axios.get("/api/userprogress/mine")
         .then(resp => {
           const {current, progress} = resp.data;
           this.setState({current, progress});

@@ -41,9 +41,9 @@ class Level extends Component {
     const {params, t} = this.props;
     const {lid} = params;
     const lget = axios.get(`/api/levels/all?lid=${lid}`);
-    const uget = axios.get("/api/userprogress");
+    const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
-    const lkget = axios.get("/api/likes");
+    const lkget = axios.get("/api/likes/mine");
     const rget = axios.get("/api/reports/codeblocks");
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
     const scget = axios.get("/api/siteconfigs");

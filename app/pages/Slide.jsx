@@ -115,7 +115,7 @@ class Slide extends Component {
 
     const sget = axios.get(`/api/slides/all?mlid=${mlid}`);
     const lget = axios.get(`/api/levels/all?lid=${lid}`);
-    const upget = axios.get("/api/userprogress");
+    const upget = axios.get("/api/userprogress/mine");
 
     Promise.all([sget, lget, upget]).then(resp => {
       const slideList = resp[0].data;

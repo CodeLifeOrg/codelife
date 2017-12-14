@@ -114,10 +114,9 @@ class Slide extends Component {
     const {slides, latestSlideCompleted} = this.state;
 
     const sget = axios.get(`/api/slides/all?mlid=${mlid}`);
-    const lget = axios.get(`/api/levels/all?lid=${lid}`);
     const upget = axios.get("/api/userprogress/mine");
 
-    Promise.all([sget, lget, upget]).then(resp => {
+    Promise.all([sget, upget]).then(resp => {
       const slideList = resp[0].data;
       slideList.sort((a, b) => a.ordering - b.ordering);
       if (sid === undefined) {
@@ -129,10 +128,10 @@ class Slide extends Component {
 
       const cs = slideList.find(slide => slide.id === sid);
 
-      const up = resp[2].data.progress;
+      const up = resp[1].data.progress;
       const done = up.find(p => p.level === mlid) !== undefined;
 
-      const levels = resp[1].data;
+      const levels = this.props.levels.filter(l => l.lid === lid);
       const currentLevel = levels.find(l => l.id === mlid);
 
       let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
@@ -221,7 +220,8 @@ class Slide extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  islands: state.islands
+  islands: state.islands,
+  levels: state.levels
 });
 
 Slide = connect(mapStateToProps)(Slide);

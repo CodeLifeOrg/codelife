@@ -14,8 +14,8 @@ module.exports = function(app) {
   });
 
   // Used in Level and Slide to get specific level by lid
-  app.get("/api/levels/all", isAuthenticated, (req, res) => {
-    db.levels.findAll({where: {lid: req.query.lid}}).then(u => {
+  app.get("/api/levels/all", (req, res) => {
+    db.levels.findAll({where: req.query}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
     });

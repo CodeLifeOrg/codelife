@@ -40,7 +40,6 @@ class Level extends Component {
   loadFromDB() {
     const {params, t} = this.props;
     const {lid} = params;
-    const lget = axios.get(`/api/levels/all?lid=${lid}`);
     const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
     const lkget = axios.get("/api/likes/mine");
@@ -48,16 +47,16 @@ class Level extends Component {
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
     const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([lget, uget, cbget, lkget, rget, pget, scget]).then(resp => {
-      const levels = resp[0].data;
-      const userProgress = resp[1].data.progress;
-      const allCodeBlocks = resp[2].data;
-      const likes = resp[3].data;
-      const reports = resp[4].data;
-      const profile = resp[5].data;
-      const constants = resp[6].data;
+    Promise.all([uget, cbget, lkget, rget, pget, scget]).then(resp => {
+      const userProgress = resp[0].data.progress;
+      const allCodeBlocks = resp[1].data;
+      const likes = resp[2].data;
+      const reports = resp[3].data;
+      const profile = resp[4].data;
+      const constants = resp[5].data;
 
-      const {islands} = this.props;
+      const islands = this.props.islands.slice(0);
+      const levels = this.props.levels.filter(l => l.lid === lid);
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: add an exception for level 10.
@@ -449,7 +448,8 @@ class Level extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  islands: state.islands
+  islands: state.islands,
+  levels: state.levels
 });
 
 Level = connect(mapStateToProps)(Level);

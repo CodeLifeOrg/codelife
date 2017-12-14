@@ -53,8 +53,11 @@ module.exports = function(app) {
         {association: "reportlist"}
       ]
     })
-      .then(cbRows =>
-        res.json(cbRows.map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
+      .then(cbRows => 
+        res.json(cbRows
+          .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
+          .filter(cb => !cb.hidden))
+          .end()
       );
   });
 
@@ -72,7 +75,10 @@ module.exports = function(app) {
       ]
     })
       .then(cbRows => 
-        res.json(cbRows.map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
+        res.json(cbRows
+          .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
+          .filter(cb => !cb.hidden))
+          .end()
       );
   });
 

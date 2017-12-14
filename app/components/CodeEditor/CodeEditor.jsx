@@ -445,9 +445,9 @@ class CodeEditor extends Component {
    * - replace console.log with parent.myPost("console"...) to intercept console statements.
    * - prepend JavaScript code with initialization functions that "zero out" any rule variables the student must set correctly.
    * - append JavaScript code with parent.myPost("rule"...) methods that send variable state back to Codelife.com
-   * - append further JavaScript code with parent.myPost("completed"...) to indicate that the run has completed.
+   * - further append JavaScript code with parent.myPost("completed"...) to indicate that the run has completed.
    * - take ALL of that code, wrap it into a string literal that eval()s the code and catches any runtime errors.
-   * - replace the student's current code and replaces its JavaScript with the prepared JavaScript
+   * - take the student's current code and replace its JavaScript with the prepared JavaScript
    * - invoke writeToIFrame, which sends the entire payload to the remote sandbox for execution.
    * The sandbox then injects the prepared code into the iFrame, which calls its parent functions, and reports back here via postMessage.
    */
@@ -533,33 +533,61 @@ class CodeEditor extends Component {
     - This is why you see this.editor.getWrappedInstance().getWrappedInstance().method() in several other files.
   */
 
+  /**
+   * Externally available method that components can use to set the contents of the Code Editor functionally (as opposed to via props)
+   * @param {String} theText The string to set as the editor contents.
+   */
   setEntireContents(theText) {
     const titleText = this.getTitleText(theText);
     this.setState({currentText: theText, changesMade: false, titleText}, this.renderText.bind(this));
   }
 
+  /**
+   * Externally available method that components can use to get the contents of the Code Editor functionally (as opposed to via props)
+   * @returns {String} The current contents of the editor
+   */
   getEntireContents() {
     return this.state.currentText;
   }
 
+  /**
+   * Externally available method that components can use to fetch passing state
+   * @returns {Boolean} Whether the code is in a passing state
+   */
   isPassing() {
     return this.state.isPassing;
   }
 
+  /**
+   * Externally available method that components can use to determine whether the editor is "dirty," i.e., changes made that require saving
+   * @returns {Boolean} Whether changes have been made to the code since its initial state or last save
+   */
   changesMade() {
     return this.state.changesMade;
   }
 
+  /**
+   * Externally available method that components can use to set the editor as "dirty/clean" i.e., changes made.
+   * This is a necessary callback for operations like Saving Content - embedding components need to set changesMade to false.
+   * @param {Boolean} changesMade Boolean value to set "dirty/clean" status in editor.
+   */
   setChangeStatus(changesMade) {
     this.setState({changesMade});
   }
 
+  /**
+   * Externally available method that components can use to execute the JavaScript contents of the editor.
+   */
   executeCode() {
     let {embeddedConsole} = this.state;
     embeddedConsole = [];
     this.setState({embeddedConsole}, this.internalRender.bind(this));
   }
 
+  /**
+   * Externally available method that components can use to set drawer visibility state.
+   * 
+   */
   toggleDrawer(drawer) {
     this.setState({[drawer]: !this.state[drawer]});
   }

@@ -38,32 +38,24 @@ class Level extends Component {
 
   // TODO: Merge this with the one in CodeBlockList, they do the same thing.
   loadFromDB() {
-    const {params, t} = this.props;
+    const {params} = this.props;
     const {lid} = params;
     const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
-    const lkget = axios.get("/api/likes/mine");
-    const rget = axios.get("/api/reports/codeblocks");
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
-    const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([uget, cbget, lkget, rget, pget, scget]).then(resp => {
+    Promise.all([uget, cbget, pget]).then(resp => {
       const userProgress = resp[0].data.progress;
       const allCodeBlocks = resp[1].data;
-      const likes = resp[2].data;
-      const reports = resp[3].data;
-      const profile = resp[4].data;
-      const constants = resp[5].data;
+      const profile = resp[2].data;
 
       const islands = this.props.islands.slice(0);
       const levels = this.props.levels.filter(l => l.lid === lid);
 
       const currentIsland = islands.find(i => i.id === lid);
       // TODO: add an exception for level 10.
-      const nextOrdering = Number(currentIsland.ordering) + 1;
-      const nextIsland = islands.find(i => Number(i.ordering) === Number(nextOrdering));
-      const prevOrdering = Number(currentIsland.ordering) - 1;
-      const prevIsland = islands.find(i => Number(i.ordering) === Number(prevOrdering));
+      const nextIsland = islands.find(i => i.ordering === currentIsland.ordering + 1);
+      const prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1);
 
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
 
@@ -73,32 +65,14 @@ class Level extends Component {
 
       currentIsland.codeBlock = null;
 
-      levels.sort((a, b) => a.ordering - b.ordering);
-      allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       // Fold over snippets and separate them into mine and others
       for (const cb of allCodeBlocks) {
-        cb.likes = Number(cb.likes);
-        if (reports.find(r => r.report_id === cb.id)) cb.reported = true;
         if (cb.uid === this.props.auth.user.id) {
-          cb.username = t("you!");
-          cb.mine = true;
           currentIsland.codeBlock = cb;
-          if (likes.find(l => l.likeid === cb.id)) cb.liked = true;
           myCodeBlocks.push(cb);
         }
         else {
-          if (cb.reports >= constants.FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false") cb.hidden = true;
-          // TODO: do this in a database join, not here.
-          if (!cb.hidden) {
-            if (likes.find(l => l.likeid === cb.id)) {
-              cb.liked = true;
-              likedCodeBlocks.push(cb);
-            }
-            else {
-              cb.liked = false;
-              unlikedCodeBlocks.push(cb);
-            }
-          }
+          cb.liked ? likedCodeBlocks.push(cb) : unlikedCodeBlocks.push(cb);
         }
       }
 
@@ -156,17 +130,16 @@ class Level extends Component {
   }
 
   reportLike(codeBlock) {
-    // TODO: array clone not necessary, fix this
-    const likedCodeBlocks = this.state.likedCodeBlocks.slice(0);
-    const unlikedCodeBlocks = this.state.unlikedCodeBlocks.slice(0);
-    if (codeBlock.mine) return;
+    let likedCodeBlocks = this.state.likedCodeBlocks.slice(0);
+    let unlikedCodeBlocks = this.state.unlikedCodeBlocks.slice(0);
+    if (codeBlock.uid === this.props.auth.user.id) return;
     if (codeBlock.liked) {
       likedCodeBlocks.push(codeBlock);
-      unlikedCodeBlocks.splice(unlikedCodeBlocks.map(cb => cb.id).indexOf(codeBlock.id), 1);
+      unlikedCodeBlocks = unlikedCodeBlocks.filter(cb => cb.id !== codeBlock.id);
     }
     else {
       unlikedCodeBlocks.push(codeBlock);
-      likedCodeBlocks.splice(likedCodeBlocks.map(cb => cb.id).indexOf(codeBlock.id), 1);
+      likedCodeBlocks = likedCodeBlocks.filter(cb => cb.id !== codeBlock.id);
     }
     likedCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
     unlikedCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
@@ -351,8 +324,6 @@ class Level extends Component {
     const islandDone = this.hasUserCompleted(this.props.params.lid);
     const otherCodeBlocks = myCodeBlocks.concat(likedCodeBlocks, unlikedCodeBlocks);
 
-    // Clone minilessons as to not mess with state
-    // TODO: Clone not needed, fix this
     const levelStatuses = levels.slice(0);
     for (let l = 0; l < levelStatuses.length; l++) {
       const done = this.hasUserCompleted(levelStatuses[l].id);
@@ -374,7 +345,6 @@ class Level extends Component {
     const levelItems = levelStatuses.map(level => {
       const {lid} = this.props.params;
       if (level.isDone) {
-        const up = userProgress.find(p => p.level === level.id);
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
@@ -391,7 +361,7 @@ class Level extends Component {
           <Link className="stop next" to={`/island/${lid}/${level.id}`}></Link>
         </Tooltip>;
       }
-      return <div className="stop"></div>;
+      return <div key={level.id} className="stop"></div>;
     });
 
     return (

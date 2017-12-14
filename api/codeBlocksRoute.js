@@ -1,11 +1,26 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
+const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
+// const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
+
+function flattenCodeBlock(user, cb) {
+  cb.username = cb.user ? cb.user.username : "";
+  cb.sharing = cb.userprofile ? cb.userprofile.sharing : "false";
+  cb.likes = cb.likelist.length;
+  cb.reports = cb.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
+  cb.hidden = cb.reports >= FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false";
+  if (user) {
+    cb.reported = Boolean(cb.reportlist.find(r => r.uid === user.id));
+    cb.liked = Boolean(cb.likelist.find(l => l.uid === user.id));
+  }
+  return cb;
+}
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  // Used by Island.jsx to get each codeblock by island
+  // Used by Island.jsx to get this user's codeblocks
   app.get("/api/codeBlocks/mine", isAuthenticated, (req, res) => {
     db.codeblocks.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
   });
@@ -23,17 +38,9 @@ module.exports = function(app) {
         {association: "reportlist"}
       ]
     })
-      .then(cbRows => {
-        const resp = cbRows.map(cb => {
-          const cbj = cb.toJSON();
-          cbj.username = cbj.user ? cbj.user.username : "";
-          cbj.sharing = cbj.userprofile ? cbj.userprofile.sharing : "FALSE";
-          cbj.likes = cbj.likelist.length;
-          cbj.reports = cbj.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
-          return cbj;
-        });
-        res.json(resp).end();
-      });
+      .then(cbRows => 
+        res.json(cbRows.map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
+      );
   });
 
   // Used by UserCodeBlocks.jsx to get codeblock list for profile page
@@ -46,17 +53,9 @@ module.exports = function(app) {
         {association: "reportlist"}
       ]
     })
-      .then(cbRows => {
-        const resp = cbRows.map(cb => {
-          const cbj = cb.toJSON();
-          cbj.username = cbj.user ? cbj.user.username : "";
-          cbj.sharing = cbj.userprofile ? cbj.userprofile.sharing : "FALSE";
-          cbj.likes = cbj.likelist.length;
-          cbj.reports = cbj.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
-          return cbj;
-        });
-        res.json(resp).end();
-      });
+      .then(cbRows =>
+        res.json(cbRows.map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
+      );
   });
 
   // Used by Share.jsx to publicly share code
@@ -72,17 +71,9 @@ module.exports = function(app) {
         {association: "reportlist"}
       ]
     })
-      .then(cbRows => {
-        const resp = cbRows.map(cb => {
-          const cbj = cb.toJSON();
-          cbj.username = cbj.user ? cbj.user.username : "";
-          cbj.sharing = cbj.userprofile ? cbj.userprofile.sharing : "FALSE";
-          cbj.likes = cbj.likelist.length;
-          cbj.reports = cbj.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
-          return cbj;
-        });
-        res.json(resp).end();
-      });
+      .then(cbRows => 
+        res.json(cbRows.map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
+      );
   });
 
   // Used by Codeblock.jsx to save new Codeblocks
@@ -116,17 +107,13 @@ module.exports = function(app) {
         {association: "reportlist"}
       ]
     })
-      .then(cbRows => {
-        const resp = cbRows.map(cb => {
-          const cbj = cb.toJSON();
-          cbj.username = cbj.user ? cbj.user.username : "";
-          cbj.sharing = cbj.userprofile ? cbj.userprofile.sharing : "FALSE";
-          cbj.likes = cbj.likelist.length;
-          cbj.reports = cbj.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
-          return cbj;
-        });
-        res.json(resp).end();
-      });
+      .then(cbRows => 
+        res.json(cbRows
+          .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
+          .filter(cb => !cb.hidden)
+          .sort((a, b) => b.likes - a.likes || b.id - a.id))
+          .end()
+      );
   });
 
 };

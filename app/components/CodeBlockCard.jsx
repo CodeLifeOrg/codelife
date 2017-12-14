@@ -76,7 +76,10 @@ class CodeBlockCard extends Component {
     if (!codeBlock) return <Loading />;
 
     const {t, userProgress, theme, icon, user} = this.props;
-    const {id, lid, liked, reported, likes, mine, snippetname, studentcontent, username, displayname} = codeBlock;
+    const {id, lid, liked, reported, likes, snippetname, studentcontent, username} = codeBlock;
+
+    const mine = this.props.user && codeBlock.uid === this.props.user.id;
+    const displayname = mine ? t("you!") : false;
 
     const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
 

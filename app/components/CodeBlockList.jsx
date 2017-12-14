@@ -18,48 +18,25 @@ class CodeBlockList extends Component {
   }
 
   componentDidMount() {
-    const {t} = this.props;
     const cbget = axios.get("/api/codeBlocks/all");
     const upget = axios.get("/api/userprogress/mine");
-    const lkget = axios.get("/api/likes/mine");
-    const rget = axios.get("/api/reports/codeblocks");
-    const scget = axios.get("/api/siteconfigs");
-    Promise.all([cbget, upget, lkget, rget, scget]).then(resp => {
+    Promise.all([cbget, upget]).then(resp => {
       const allCodeBlocks = resp[0].data;
       const userProgress = resp[1].data.progress;
-      const likes = resp[2].data;
-      const reports = resp[3].data;
-      const constants = resp[4].data;
-      const islands = this.props.islands.slice(0);
-      allCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
-      for (const i of islands) {
+      const islands = this.props.islands.map(i => {
         i.myCodeBlocks = [];
         i.likedCodeBlocks = [];
         i.unlikedCodeBlocks = [];
-        for (const s of allCodeBlocks) {
-          s.likes = Number(s.likes);
-          if (reports.find(r => r.report_id === s.id)) s.reported = true;
-          if (s.uid === this.props.auth.user.id) {
-            s.displayname = t("you!");
-            s.mine = true;
-            if (likes.find(l => l.likeid === s.id)) s.liked = true;
-            if (s.lid === i.id) i.myCodeBlocks.push(s);
+        return i;
+      });
+      for (const cb of allCodeBlocks) {
+        const island = islands.find(i => i.id === cb.lid);
+        if (island) {
+          if (cb.uid === this.props.auth.user.id) {
+            island.myCodeBlocks.push(cb);
           }
           else {
-            if (s.lid === i.id) {
-              if (s.reports >= constants.FLAG_COUNT_HIDE || s.status === "banned" || s.sharing === "false") s.hidden = true;
-              // TODO: move this to db call, don't do this here
-              if (!s.hidden) {
-                if (likes.find(l => l.likeid === s.id)) {
-                  s.liked = true;
-                  i.likedCodeBlocks.push(s);
-                }
-                else {
-                  s.liked = false;
-                  i.unlikedCodeBlocks.push(s);
-                }
-              }
-            }
+            cb.liked ? island.likedCodeBlocks.push(cb) : island.unlikedCodeBlocks.push(cb);
           }
         }
       }
@@ -70,17 +47,16 @@ class CodeBlockList extends Component {
   reportLike(codeBlock) {
     const island = this.state.islands.find(l => l.id === codeBlock.lid);
     if (island) {
-      // TODO: I don't need to clone these arrays after all. come back later and modify them in place and reset state
-      const likedCodeBlocks = island.likedCodeBlocks.slice(0);
-      const unlikedCodeBlocks = island.unlikedCodeBlocks.slice(0);
-      if (codeBlock.mine) return;
+      let likedCodeBlocks = island.likedCodeBlocks.slice(0);
+      let unlikedCodeBlocks = island.unlikedCodeBlocks.slice(0);
+      if (codeBlock.uid === this.props.auth.user.id) return;
       if (codeBlock.liked) {
         likedCodeBlocks.push(codeBlock);
-        unlikedCodeBlocks.splice(unlikedCodeBlocks.map(s => s.id).indexOf(codeBlock.id), 1);
+        unlikedCodeBlocks = unlikedCodeBlocks.filter(cb => cb.id !== codeBlock.id);
       }
       else {
         unlikedCodeBlocks.push(codeBlock);
-        likedCodeBlocks.splice(likedCodeBlocks.map(s => s.id).indexOf(codeBlock.id), 1);
+        likedCodeBlocks = likedCodeBlocks.filter(cb => cb.id !== codeBlock.id);
       }
       likedCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);
       unlikedCodeBlocks.sort((a, b) => b.likes - a.likes || b.id - a.id);

@@ -21,9 +21,7 @@ class UserCodeBlocks extends Component {
     super(props);
     this.state = {
       loading: true,
-      codeBlocks: [],
-      likes: null,
-      reports: null
+      codeBlocks: []
     };
   }
 
@@ -34,23 +32,16 @@ class UserCodeBlocks extends Component {
   componentDidMount() {
     const {user} = this.props;
     const cbget = axios.get(`/api/codeBlocks/byuser?uid=${user.id}`);
-    const lkget = axios.get("/api/likes/mine");
-    const rget = axios.get("/api/reports/codeblocks");
-    const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([cbget, lkget, rget, scget]).then(resp => {
-      const constants = resp[3].data;
-      const codeBlocks = resp[0].data.filter(cb => cb.status !== "banned" && cb.sharing !== "false" && Number(cb.reports) < constants.FLAG_COUNT_HIDE);
-      const likes = resp[1].data;
-      const reports = resp[2].data;
-      codeBlocks.sort((a, b) => a.id - b.id);
-      this.setState({loading: false, codeBlocks, likes, reports});
+    Promise.all([cbget]).then(resp => {
+      const codeBlocks = resp[0].data;
+      this.setState({loading: false, codeBlocks});
     });
   }
 
   render() {
     const {t} = this.props;
-    const {loading, codeBlocks, likes, reports} = this.state;
+    const {loading, codeBlocks} = this.state;
     const {islands} = this.props;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
@@ -61,8 +52,6 @@ class UserCodeBlocks extends Component {
         <div className="flex-row">
           { codeBlocks.length
             ? codeBlocks.map(cb => {
-              if (likes.find(l => l.likeid === cb.id)) cb.liked = true;
-              if (reports.find(r => r.report_id === cb.id)) cb.reported = true;
               const {theme, icon} = islands.find(i => i.id === cb.lid);
               return <CodeBlockCard key={cb.id} codeBlock={cb} theme={theme} icon={icon} />;
             })

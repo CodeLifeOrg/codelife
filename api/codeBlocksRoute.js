@@ -75,7 +75,8 @@ module.exports = function(app) {
       .then(cbRows => 
         res.json(cbRows
           .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
-          .filter(cb => !cb.hidden))
+          .filter(cb => !cb.hidden)
+          .sort((a, b) => a.id - b.id))
           .end()
       );
   });

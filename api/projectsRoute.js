@@ -84,7 +84,7 @@ module.exports = function(app) {
       where: {
         name: req.query.filename
       },
-      include: pInclude.map(i => i.association === "user" ? Object.assign(i, {where: {username: req.query.username}}) : i)
+      include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
     })
       .then(pRows => 
         res.json(pRows

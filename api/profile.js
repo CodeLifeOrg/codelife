@@ -4,6 +4,22 @@ const sharp = require("sharp");
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const sequelize = require("sequelize");
 
+function flattenProfile(user, p) {
+  p.geoname = p.geo ? p.geo.geoname : null;
+  p.schoolname = p.school ? p.school.schoolname : null;
+  p.id = p.user ? p.user.id : "";
+  p.name = p.user ? p.user.name : "";
+  p.email = p.user ? p.user.email : "";
+  p.username = p.user ? p.user.username : "";
+  return p;
+}
+
+const pInclude = [        
+  {association: "user", attributes: ["id", "name", "email", "username"]}, 
+  {association: "geo", attributes: [["name", "geoname"]]}, 
+  {association: "school", attributes: [["name", "schoolname"]]}
+];
+
 module.exports = function(app) {
 
   const {db} = app.settings;
@@ -28,24 +44,14 @@ module.exports = function(app) {
     const {username} = req.params;
   
     db.userprofiles.findAll({
-      include: [
-        {association: "user", where: {username}, attributes: ["id", "name", "email", "username"]}, 
-        {association: "geo", attributes: [["name", "geoname"]]}, 
-        {association: "school", attributes: [["name", "schoolname"]]}
-      ]
+      include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {username}}) : i)
     })
       .then(users => {
         if (!users.length) {
           return res.json({error: "No user matched that username."});
         }
-        const user = users[0].toJSON();
-        user.geoname = user.geo ? user.geo.geoname : null;
-        user.schoolname = user.school ? user.school.schoolname : null;
-        user.id = user.user ? user.user.id : "";
-        user.name = user.user ? user.user.name : "";
-        user.email = user.user ? user.user.email : "";
-        user.username = user.user ? user.user.username : "";
-
+        const user = flattenProfile(req.user, users[0].toJSON());
+  
         const oldDate = new Date(user.last_upped);
         const now = new Date();
         if (now - oldDate > 1000 * 60 * 60 * 24 * 30) {
@@ -64,24 +70,13 @@ module.exports = function(app) {
     const {uid} = req.params;
   
     db.userprofiles.findAll({
-      include: [
-        {association: "user", where: {id: uid}, attributes: ["id", "name", "email", "username"]}, 
-        {association: "geo", attributes: [["name", "geoname"]]}, 
-        {association: "school", attributes: [["name", "schoolname"]]}
-      ]
+      include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {id: uid}}) : i)
     })
       .then(users => {
         if (!users.length) {
           return res.json({error: "No user matched that uid."});
         }
-        const user = users[0].toJSON();
-        user.geoname = user.geo ? user.geo.geoname : null;
-        user.schoolname = user.school ? user.school.schoolname : null;
-        user.id = user.user ? user.user.id : "";
-        user.name = user.user ? user.user.name : "";
-        user.email = user.user ? user.user.email : "";
-        user.username = user.user ? user.user.username : "";
-
+        const user = flattenProfile(req.user, users[0].toJSON());
         return res.json(user).end();
       });
   });

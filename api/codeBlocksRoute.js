@@ -70,7 +70,7 @@ module.exports = function(app) {
   // Used by UserCodeBlocks.jsx to get codeblock list for profile page
   app.get("/api/codeBlocks/byuser", isAuthenticated, (req, res) => {
     db.codeblocks.findAll({
-      include: cbIncludes.map(i => i.association === "user" ? Object.assign(i, {where: {id: req.query.uid}}) : i)
+      include: cbIncludes.map(i => i.association === "user" ? Object.assign({}, i, {where: {id: req.query.uid}}) : i)
     })
       .then(cbRows => 
         res.json(cbRows
@@ -87,7 +87,7 @@ module.exports = function(app) {
       where: {
         snippetname: req.query.filename
       },
-      include: cbIncludes.map(i => i.association === "user" ? Object.assign(i, {where: {username: req.query.username}}) : i)
+      include: cbIncludes.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
     })
       .then(cbRows => 
         res.json(cbRows

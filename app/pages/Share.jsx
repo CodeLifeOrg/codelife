@@ -46,9 +46,6 @@ class Share extends Component {
       const reports = resp[1].data;
       const constants = resp[2].data;
 
-      const hideContent = Number(content.reports) >= constants.FLAG_COUNT_BAN || content.status === "banned" || content.sharing === "false";
-      if (hideContent) content.studentcontent = "This content has been disabled";
-
       this.setState({content, reports, constants}, this.getUser.bind(this));
     });
   }

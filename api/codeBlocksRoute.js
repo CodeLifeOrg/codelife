@@ -1,7 +1,7 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
 const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
-// const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
+const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 
 function flattenCodeBlock(user, cb) {
   cb.username = cb.user ? cb.user.username : "";
@@ -9,6 +9,7 @@ function flattenCodeBlock(user, cb) {
   cb.likes = cb.likelist.length;
   cb.reports = cb.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
   cb.hidden = cb.reports >= FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false";
+  if (cb.reports >= FLAG_COUNT_BAN || cb.status === "banned" || cb.sharing === "false") cb.studentcontent = "This content has been disabled";
   if (user) {
     cb.reported = Boolean(cb.reportlist.find(r => r.uid === user.id));
     cb.liked = Boolean(cb.likelist.find(l => l.uid === user.id));
@@ -61,7 +62,8 @@ module.exports = function(app) {
       include: cbIncludes
     })
       .then(cbRows => 
-        res.json(cbRows.map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
+        res.json(cbRows
+          .map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
       );
   });
 
@@ -88,8 +90,7 @@ module.exports = function(app) {
     })
       .then(cbRows => 
         res.json(cbRows
-          .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
-          .filter(cb => !cb.hidden))
+          .map(cb => flattenCodeBlock(req.user, cb.toJSON())))
           .end()
       );
   });

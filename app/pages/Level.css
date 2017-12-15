@@ -155,12 +155,11 @@
   }
   & .islandLink {
     margin: 0 !important;
+    left: 25px;
     position: absolute;
     top: 475px;
-    &.done {
-      left: 25px;
-    }
     &.next {
+      left: auto;
       right: 25px;
     }
   }

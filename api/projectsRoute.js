@@ -1,5 +1,25 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
+const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
+const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
+
+function flattenProject(user, p) {
+  p.username = p.user ? p.user.username : "";
+  p.sharing = p.userprofile ? p.userprofile.sharing : "false";
+  p.reports = p.reportlist.filter(r => r.status === "new" && r.type === "project").length;
+  p.hidden = p.reports >= FLAG_COUNT_HIDE || p.status === "banned" || p.sharing === "false";
+  if (p.reports >= FLAG_COUNT_BAN || p.status === "banned" || p.sharing === "false") p.studentcontent = "This content has been disabled";
+  if (user) {
+    p.reported = Boolean(p.reportlist.find(r => r.uid === user.id));
+  }
+  return p;
+}
+
+const pInclude = [
+  {association: "userprofile", attributes: ["bio", "sharing"]}, 
+  {association: "user", attributes: ["username"]}, 
+  {association: "reportlist"}
+];
 
 module.exports = function(app) {
 
@@ -11,18 +31,15 @@ module.exports = function(app) {
       where: {
         uid: req.user.id
       },
-      include: [ 
-        {association: "reportlist"}
-      ]
+      include: pInclude
     })
-      .then(pRows => {
-        const resp = pRows.map(p => {
-          const pj = p.toJSON();
-          pj.reports = pj.reportlist.filter(r => r.status === "new" && r.type === "project").length;
-          return pj;
-        });
-        res.json(resp).end();
-      });
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))
+          .filter(p => !p.hidden)
+          .sort((a, b) => a.name < b.name ? -1 : 1))
+          .end()
+      );
   });
 
   // Used by home for feature list.  No Authentication required.
@@ -31,22 +48,12 @@ module.exports = function(app) {
       where: {
         [Op.or]: [{id: 1026}, {id: 982}, {id: 1020}, {id: 1009}]
       },
-      include: [
-        {association: "userprofile", attributes: ["bio", "sharing"]}, 
-        {association: "user", attributes: ["username"]}, 
-        {association: "reportlist"}
-      ]
+      include: pInclude
     })
-      .then(pRows => {
-        const resp = pRows.map(p => {
-          const pj = p.toJSON();
-          pj.username = pj.user ? pj.user.username : "";
-          pj.sharing = pj.userprofile ? pj.userprofile.sharing : "FALSE";
-          pj.reports = pj.reportlist.filter(r => r.status === "new" && r.type === "project").length;
-          return pj;
-        });
-        res.json(resp).end();
-      });
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))).end()
+      );
   });
 
   // Used by Studio to open a project by ID
@@ -60,47 +67,29 @@ module.exports = function(app) {
       where: {
         uid: req.query.uid
       },
-      include: [
-        {association: "userprofile", attributes: ["bio", "sharing"]}, 
-        {association: "user", attributes: ["username"]}, 
-        {association: "reportlist"}
-      ]
+      include: pInclude
     })
-      .then(pRows => {
-        const resp = pRows.map(p => {
-          const pj = p.toJSON();
-          pj.username = pj.user ? pj.user.username : "";
-          pj.sharing = pj.userprofile ? pj.userprofile.sharing : "FALSE";
-          pj.reports = pj.reportlist.filter(r => r.status === "new" && r.type === "project").length;
-          return pj;
-        });
-        res.json(resp).end();
-      });
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))
+          .filter(p => !p.hidden)
+          .sort((a, b) => a.name < b.name ? -1 : 1))
+          .end()
+      );
   });
 
   // Used by Share to fetch a project.  Public.
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
-    console.log(req.query.username);
     db.projects.findAll({
       where: {
         name: req.query.filename
       },
-      include: [
-        {association: "userprofile", attributes: ["sharing"]}, 
-        {association: "user", where: {username: req.query.username}, attributes: ["username"]}, 
-        {association: "reportlist"}
-      ]
+      include: pInclude.map(i => i.association === "user" ? Object.assign(i, {where: {username: req.query.username}}) : i)
     })
-      .then(pRows => {
-        const resp = pRows.map(p => {
-          const pj = p.toJSON();
-          pj.username = pj.user ? pj.user.username : "";
-          pj.sharing = pj.userprofile ? pj.userprofile.sharing : "FALSE";
-          pj.reports = pj.reportlist.filter(r => r.status === "new" && r.type === "project").length;
-          return pj;
-        });
-        res.json(resp).end();
-      });
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))).end()
+      );
   });
 
   // Used by Studio to update a project
@@ -124,16 +113,13 @@ module.exports = function(app) {
         where: {
           uid: req.user.id
         },
-        include: [ 
-          {association: "reportlist"}
-        ]
+        include: pInclude
       })
         .then(pRows => {
-          const resp = pRows.map(p => {
-            const pj = p.toJSON();
-            pj.reports = pj.reportlist.filter(r => r.status === "new" && r.type === "project").length;
-            return pj;
-          });
+          const resp = pRows
+            .map(p => flattenProject(req.user, p.toJSON()))
+            .filter(p => !p.hidden)
+            .sort((a, b) => a.name < b.name ? -1 : 1);
           res.json({currentProject, projects: resp}).end();
         });
     });
@@ -146,18 +132,15 @@ module.exports = function(app) {
         where: {
           uid: req.user.id
         },
-        include: [ 
-          {association: "reportlist"}
-        ]
+        include: pInclude
       })
-        .then(pRows => {
-          const resp = pRows.map(p => {
-            const pj = p.toJSON();
-            pj.reports = pj.reportlist.filter(r => r.status === "new" && r.type === "project").length;
-            return pj;
-          });
-          res.json(resp).end();
-        });
+        .then(pRows => 
+          res.json(pRows
+            .map(p => flattenProject(req.user, p.toJSON()))
+            .filter(p => !p.hidden)
+            .sort((a, b) => a.name < b.name ? -1 : 1))
+            .end()
+        );
     });
   });
 

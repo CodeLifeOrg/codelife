@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("schools",
+  const s = sequelize.define("schools",
     {
       id: {
         type: db.INTEGER,
@@ -20,5 +20,12 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  s.associate = models => {
+    s.belongsTo(models.geos, {foreignKey: "gid", targetKey: "id", as: "geo"});
+  };
+
+
+  return s;
 
 };

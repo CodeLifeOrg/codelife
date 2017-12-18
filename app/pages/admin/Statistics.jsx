@@ -38,7 +38,7 @@ class Statistics extends Component {
 
     const userList = users.map(u => {
       const progressList = u.userprogress.length ? u.userprogress.map(up => <div key={up.id}>{up.level}</div>) : <div>No Progress Yet</div>;
-      const progressPercent = u.userprogress.length / 26 * 100;
+      const progressPercent = u.userprogress.length / 32 * 100;
       let intent = "pt-intent-danger";
       if (progressPercent > 30 && progressPercent <= 60) intent = "pt-intent-warning";
       if (progressPercent > 60) intent = "pt-intent-success";

@@ -3,6 +3,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button, Position, Toaster, Tooltip, Table, Intent, Tab2, Tabs2} from "@blueprintjs/core";
+import {Treemap} from "d3plus-react";
+import {nest} from "d3-collection";
 import Loading from "components/Loading";
 
 import "./Statistics.css";
@@ -45,23 +47,42 @@ class Statistics extends Component {
       </tr>
     );
 
+    const vizData = nest().key(u => u.geoname)
+      .rollup(leaves => leaves.length)
+      .entries(users.filter(u => u.geoname));
+    console.log(vizData);
+
     return (
-      <div id="statistics">
-        <table className="pt-table pt-striped pt-interactive">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>School</th>
-              <th>Geo</th>
-              <th>Joined on</th>
-            </tr>
-          </thead>
-          <tbody>
-            {userList}
-          </tbody>
-        </table>
+      
+      <div>
+        <Treemap config={{
+          height: 400,
+          data: vizData,
+          groupBy: "key",
+          tooltipConfig: {
+            body: v => {
+              const count = v.value;
+              return `Count: ${count}`;
+            }
+          }
+        }} />
+        <div id="statistics">
+          <table className="pt-table pt-striped pt-interactive">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>School</th>
+                <th>Geo</th>
+                <th>Joined on</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userList}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

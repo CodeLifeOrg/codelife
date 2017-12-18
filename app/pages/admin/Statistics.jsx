@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Position, Toaster, Tooltip, Table, Intent, Tab2, Tabs2} from "@blueprintjs/core";
+import {Button, Position, Popover, PopoverInteractionKind, Intent, Toaster, Tooltip, Table, Tab2, Tabs2} from "@blueprintjs/core";
 import {Treemap} from "d3plus-react";
 import {nest} from "d3-collection";
 import Loading from "components/Loading";
@@ -36,21 +36,35 @@ class Statistics extends Component {
 
     if (!mounted) return <Loading />;
 
-    const userList = users.map(u => 
-      <tr key={u.id}>
-        <td>{u.username}</td>
+    const userList = users.map(u => {
+      const progressList = u.userprogress.length ? u.userprogress.map(up => <div key={up.id}>{up.level}</div>) : <div>No Progress Yet</div>;
+      const progressPercent = u.userprogress.length / 26 * 100;
+      let intent = "pt-intent-danger";
+      if (progressPercent > 30 && progressPercent <= 60) intent = "pt-intent-warning";
+      if (progressPercent > 60) intent = "pt-intent-success";
+      return <tr key={u.id}>
+        <td>
+          <Popover interactionKind={PopoverInteractionKind.HOVER}>
+            <div>
+              {u.username}
+              <div className={`pt-progress-bar pt-no-stripes ${intent}`} style={{width: "100px"}}>
+                <div className="pt-progress-meter" style={{width: `${progressPercent}%`}}></div>
+              </div>
+            </div>
+            <div style={{padding: "5px"}}>{progressList}</div>
+          </Popover>
+        </td>
         <td>{u.name}</td>
         <td>{u.email}</td>
         <td>{u.schoolname}</td>
         <td>{u.geoname}</td>
         <td>{new Date(u.createdAt).toDateString()}</td>
-      </tr>
-    );
+      </tr>;
+    });
 
     const vizData = nest().key(u => u.geoname)
       .rollup(leaves => leaves.length)
       .entries(users.filter(u => u.geoname));
-    console.log(vizData);
 
     return (
       

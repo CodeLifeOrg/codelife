@@ -13,7 +13,8 @@ module.exports = function(app) {
     const params = {
       include: [
         {association: "user", where: {createdAt: {[Op.gt]: launch}}, attributes: ["id", "name", "email", "username", "createdAt"]}, 
-        {association: "school", attributes: [["name", "schoolname"]], include: [{association: "geo", attributes: [["name", "geoname"]]}]}
+        {association: "school", attributes: [["name", "schoolname"]], include: [{association: "geo", attributes: [["name", "geoname"]]}]},
+        {association: "userprogress"}
       ],
       order: [[{model: db.users, as: "user"}, "createdAt", "DESC"]]
     };

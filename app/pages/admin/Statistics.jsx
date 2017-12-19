@@ -15,7 +15,9 @@ class Statistics extends Component {
     super(props);
     this.state = {
       mounted: false,
-      users: []
+      users: [],
+      visibleUsers: [],
+      activeTabId: "last-1"
     };
   }
 
@@ -25,18 +27,32 @@ class Statistics extends Component {
     Promise.all([sget]).then(resp => {
       const mounted = true;
       const users = resp[0].data;
-      this.setState({mounted, users});
+      this.setState({mounted, users}, this.handleTabChange.bind(this, "last-1"));
     });
+  }
 
+  daysAgo(days) {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate() - days);
+  }
+
+  handleTabChange(activeTabId) {
+    const since = Number(activeTabId.split("-")[1]);
+    for (const u of this.state.users) {
+      console.log(new Date(u.createdAt), this.daysAgo(since));
+    }
+    const visibleUsers = this.state.users.filter(u => new Date(u.createdAt) > this.daysAgo(since));
+    this.setState({visibleUsers, activeTabId});
   }
 
   render() {
 
-    const {mounted, users} = this.state;
+    const {mounted, visibleUsers, activeTabId} = this.state;
+    const {t} = this.props;
 
     if (!mounted) return <Loading />;
 
-    const userList = users.map(u => {
+    const userList = visibleUsers.map(u => {
       const progressList = u.userprogress.length ? u.userprogress.map(up => <div key={up.id}>{up.level}</div>) : <div>No Progress Yet</div>;
       const progressPercent = u.userprogress.length / 32 * 100;
       let intent = "pt-intent-danger";
@@ -64,10 +80,10 @@ class Statistics extends Component {
 
     const vizData = nest().key(u => u.geoname)
       .rollup(leaves => leaves.length)
-      .entries(users.filter(u => u.geoname));
+      .entries(visibleUsers.filter(u => u.geoname));
 
     return (
-      
+
       <div>
         <Treemap config={{
           height: 400,
@@ -80,6 +96,12 @@ class Statistics extends Component {
             }
           }
         }} />
+        <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+          <Tab2 id="last-1" className="admin-tab" title={t("Last Day")} />
+          <Tab2 id="last-3" className="admin-tab" title={t("Last 3 Days")} />
+          <Tab2 id="last-7" className="admin-tab" title={t("Last 7 Days")} />
+          <Tab2 id="last-999999" className="admin-tab" title={t("Forever")} />
+        </Tabs2>
         <div id="statistics">
           <table className="pt-table pt-striped pt-interactive">
             <thead>
@@ -93,7 +115,7 @@ class Statistics extends Component {
               </tr>
             </thead>
             <tbody>
-              {userList}
+              {userList.length ? userList : "No new users during this time."}
             </tbody>
           </table>
         </div>

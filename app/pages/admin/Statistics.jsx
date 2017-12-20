@@ -29,7 +29,11 @@ class Statistics extends Component {
 
     Promise.all([sget]).then(resp => {
       const mounted = true;
-      const users = resp[0].data;
+      const users = resp[0].data.map(u => {
+        u.progressPercent = u.userprogress.length / 32 * 100;
+        if (u.progressPercent === 0) u.progressPercent = .01;
+        return u;
+      });
       const islands = this.props.islands.map(i => Object.assign({}, i)).sort((a, b) => a.ordering - b.ordering);
       const levels = this.props.levels.map(l => Object.assign({}, l));
       let flatProgress = [];
@@ -65,19 +69,21 @@ class Statistics extends Component {
     if (!mounted) return <Loading />;
 
     const visibleUsers = this.state.visibleUsers.sort((a, b) => {
-      if (a[this.state.sortBy.prop] && !b[this.state.sortBy.prop]) return -1;
-      if (!a[this.state.sortBy.prop] && b[this.state.sortBy.prop]) return 1;
-      if (!a[this.state.sortBy.prop] && !b[this.state.sortBy.prop]) return 0;
+      const prop1 = typeof a[this.state.sortBy.prop] === String ? a[this.state.sortBy.prop].toLowerCase() : a[this.state.sortBy.prop];
+      const prop2 = typeof b[this.state.sortBy.prop] === String ? b[this.state.sortBy.prop].toLowerCase() : b[this.state.sortBy.prop];
+
+      if (prop1 && !prop2) return -1;
+      if (!prop1 && prop2) return 1;
+      if (!prop1 && !prop2) return 0;
       if (this.state.sortBy.desc) {
-        return a[this.state.sortBy.prop].toLowerCase() < b[this.state.sortBy.prop].toLowerCase() ? 1 : -1;
+        return prop1 < prop2 ? 1 : -1;
       }
       else {
-        return a[this.state.sortBy.prop].toLowerCase() > b[this.state.sortBy.prop].toLowerCase() ? 1 : -1;
+        return prop1 > prop2 ? 1 : -1;
       }
     });
 
     const userList = visibleUsers.map(u => {
-      const progressPercent = u.userprogress.length / 32 * 100;
       
       let latestLevel = null;
       let latestTheme = "island-jungle";
@@ -93,15 +99,15 @@ class Statistics extends Component {
       }
 
       let intent = "pt-intent-danger";
-      if (progressPercent > 30 && progressPercent <= 60) intent = "pt-intent-warning";
-      if (progressPercent > 60) intent = "pt-intent-success";
+      if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
+      if (u.progressPercent > 60) intent = "pt-intent-success";
       return <tr key={u.id}>
+        <td>{u.username}</td>
         <td>
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div>
-              {u.username}
               <div className={`pt-progress-bar pt-no-stripes ${intent}`} style={{width: "100px"}}>
-                <div className="pt-progress-meter" style={{width: `${progressPercent}%`}}></div>
+                <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
               </div>
             </div>
             <div style={{padding: "8px"}}>
@@ -128,28 +134,34 @@ class Statistics extends Component {
 
       <div>
 
-        <Treemap config={{
-          height: 400,
-          data: vizData,
-          groupBy: "key",
-          tooltipConfig: {
-            body: v => {
-              const count = v.value;
-              return `Count: ${count}`;
-            }
-          }
-        }} />
         <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
           <Tab2 id="last-1" className="admin-tab" title={t("Last Day")} />
           <Tab2 id="last-3" className="admin-tab" title={t("Last 3 Days")} />
           <Tab2 id="last-7" className="admin-tab" title={t("Last 7 Days")} />
           <Tab2 id="last-999999" className="admin-tab" title={t("Forever")} />
         </Tabs2>
+
+        { vizData.length 
+          ? <Treemap config={{
+            height: 400,
+            data: vizData,
+            groupBy: "key",
+            tooltipConfig: {
+              body: v => {
+                const count = v.value;
+                return `Count: ${count}`;
+              }
+            }
+          }} />
+          : null
+        }
+        
         <div id="statistics">
           <table className="pt-table pt-striped pt-interactive">
             <thead>
               <tr>
                 <th onClick={this.handleHeaderClick.bind(this, "username")}>Username</th>
+                <th onClick={this.handleHeaderClick.bind(this, "progressPercent")}>Progress</th>
                 <th onClick={this.handleHeaderClick.bind(this, "name")}>Name</th>
                 <th onClick={this.handleHeaderClick.bind(this, "email")}>Email</th>
                 <th onClick={this.handleHeaderClick.bind(this, "schoolname")}>School</th>

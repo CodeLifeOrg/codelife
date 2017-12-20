@@ -41,12 +41,15 @@ class App extends Component {
   componentDidMount() {
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
+    const gget = axios.get("/api/glossary/all");
 
-    Promise.all([iget, lget]).then(resp => {
+    Promise.all([iget, lget, gget]).then(resp => {
       const islands = resp[0].data;
       const levels = resp[1].data;
+      const glossary = resp[2].data;
       this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});
       this.props.dispatch({type: "LOAD_LEVELS", payload: levels});
+      this.props.dispatch({type: "LOAD_GLOSSARY", payload: glossary});
     });
   }
 

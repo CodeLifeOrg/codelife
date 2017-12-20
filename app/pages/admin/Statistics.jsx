@@ -19,7 +19,8 @@ class Statistics extends Component {
       users: [],
       visibleUsers: [],
       activeTabId: "last-1",
-      flatProgress: []
+      flatProgress: [],
+      sortBy: {prop: "createdAt", desc: true}
     };
   }
 
@@ -51,12 +52,29 @@ class Statistics extends Component {
     this.setState({visibleUsers, activeTabId});
   }
 
+  handleHeaderClick(sortProp) {
+    const sortBy = {prop: sortProp, desc: sortProp === this.state.sortBy.prop ? !this.state.sortBy.desc : false};
+    this.setState({sortBy}); 
+  }
+
   render() {
 
-    const {mounted, users, visibleUsers, flatProgress, activeTabId} = this.state;
+    const {mounted, users, flatProgress, activeTabId} = this.state;
     const {t} = this.props;
 
     if (!mounted) return <Loading />;
+
+    const visibleUsers = this.state.visibleUsers.sort((a, b) => {
+      if (a[this.state.sortBy.prop] && !b[this.state.sortBy.prop]) return -1;
+      if (!a[this.state.sortBy.prop] && b[this.state.sortBy.prop]) return 1;
+      if (!a[this.state.sortBy.prop] && !b[this.state.sortBy.prop]) return 0;
+      if (this.state.sortBy.desc) {
+        return a[this.state.sortBy.prop].toLowerCase() < b[this.state.sortBy.prop].toLowerCase() ? 1 : -1;
+      }
+      else {
+        return a[this.state.sortBy.prop].toLowerCase() > b[this.state.sortBy.prop].toLowerCase() ? 1 : -1;
+      }
+    });
 
     const userList = visibleUsers.map(u => {
       const progressPercent = u.userprogress.length / 32 * 100;
@@ -86,7 +104,7 @@ class Statistics extends Component {
                 <div className="pt-progress-meter" style={{width: `${progressPercent}%`}}></div>
               </div>
             </div>
-            <div style={{padding: "5px"}}>
+            <div style={{padding: "8px"}}>
               { latestLevel 
                 ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } />{latestLevel.name}</div>
                 : <div>No Progress Yet</div>
@@ -131,12 +149,12 @@ class Statistics extends Component {
           <table className="pt-table pt-striped pt-interactive">
             <thead>
               <tr>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>School</th>
-                <th>Geo</th>
-                <th>Joined on</th>
+                <th onClick={this.handleHeaderClick.bind(this, "username")}>Username</th>
+                <th onClick={this.handleHeaderClick.bind(this, "name")}>Name</th>
+                <th onClick={this.handleHeaderClick.bind(this, "email")}>Email</th>
+                <th onClick={this.handleHeaderClick.bind(this, "schoolname")}>School</th>
+                <th onClick={this.handleHeaderClick.bind(this, "geoname")}>Geo</th>
+                <th onClick={this.handleHeaderClick.bind(this, "createdAt")}>Joined on</th>
               </tr>
             </thead>
             <tbody>

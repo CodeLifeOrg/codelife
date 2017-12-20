@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 
 // Glossary Page
@@ -7,6 +8,10 @@ import {translate} from "react-i18next";
 //  - use this site for help: https://mothereff.in/html-entities
 
 class Glossary extends Component {
+
+  componentDidMount() {
+    console.log(this.props.glossary);
+  }
 
   render() {
 
@@ -132,4 +137,9 @@ class Glossary extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  glossary: state.glossary
+});
+
+Glossary = connect(mapStateToProps)(Glossary);
 export default translate()(Glossary);

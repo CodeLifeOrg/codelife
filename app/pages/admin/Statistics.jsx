@@ -3,8 +3,9 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button, Position, Popover, PopoverInteractionKind, Intent, Toaster, Tooltip, Table, Tab2, Tabs2} from "@blueprintjs/core";
-import {Treemap} from "d3plus-react";
+import {Treemap, LinePlot} from "d3plus-react";
 import {nest} from "d3-collection";
+import {max} from "d3-array";
 import Loading from "components/Loading";
 
 import "./Statistics.css";
@@ -17,7 +18,8 @@ class Statistics extends Component {
       mounted: false,
       users: [],
       visibleUsers: [],
-      activeTabId: "last-1"
+      activeTabId: "last-1",
+      flatProgress: []
     };
   }
 
@@ -27,7 +29,14 @@ class Statistics extends Component {
     Promise.all([sget]).then(resp => {
       const mounted = true;
       const users = resp[0].data;
-      this.setState({mounted, users}, this.handleTabChange.bind(this, "last-1"));
+      const islands = this.props.islands.map(i => Object.assign({}, i)).sort((a, b) => a.ordering - b.ordering);
+      const levels = this.props.levels.map(l => Object.assign({}, l));
+      let flatProgress = [];
+      for (const i of islands) {
+        const myLevels = levels.filter(l => l.lid === i.id).sort((a, b) => a.ordering - b.ordering);
+        flatProgress = flatProgress.concat(myLevels, i);
+      }
+      this.setState({mounted, users, flatProgress}, this.handleTabChange.bind(this, "last-1"));
     });
   }
 
@@ -38,23 +47,33 @@ class Statistics extends Component {
 
   handleTabChange(activeTabId) {
     const since = Number(activeTabId.split("-")[1]);
-    for (const u of this.state.users) {
-      console.log(new Date(u.createdAt), this.daysAgo(since));
-    }
     const visibleUsers = this.state.users.filter(u => new Date(u.createdAt) > this.daysAgo(since));
     this.setState({visibleUsers, activeTabId});
   }
 
   render() {
 
-    const {mounted, visibleUsers, activeTabId} = this.state;
+    const {mounted, users, visibleUsers, flatProgress, activeTabId} = this.state;
     const {t} = this.props;
 
     if (!mounted) return <Loading />;
 
     const userList = visibleUsers.map(u => {
-      const progressList = u.userprogress.length ? u.userprogress.map(up => <div key={up.id}>{up.level}</div>) : <div>No Progress Yet</div>;
       const progressPercent = u.userprogress.length / 32 * 100;
+      
+      let latestLevel = null;
+      let latestTheme = "island-jungle";
+
+      for (const fp of flatProgress) {
+        if (u.userprogress.find(up => up.level === fp.id)) {
+          if (fp.theme) latestTheme = fp.theme;
+          latestLevel = fp;
+        }
+        else {
+          break;
+        }
+      }
+
       let intent = "pt-intent-danger";
       if (progressPercent > 30 && progressPercent <= 60) intent = "pt-intent-warning";
       if (progressPercent > 60) intent = "pt-intent-success";
@@ -67,7 +86,12 @@ class Statistics extends Component {
                 <div className="pt-progress-meter" style={{width: `${progressPercent}%`}}></div>
               </div>
             </div>
-            <div style={{padding: "5px"}}>{progressList}</div>
+            <div style={{padding: "5px"}}>
+              { latestLevel 
+                ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } />{latestLevel.name}</div>
+                : <div>No Progress Yet</div>
+              }
+            </div>
           </Popover>
         </td>
         <td>{u.name}</td>
@@ -85,6 +109,7 @@ class Statistics extends Component {
     return (
 
       <div>
+
         <Treemap config={{
           height: 400,
           data: vizData,
@@ -125,7 +150,9 @@ class Statistics extends Component {
 }
 
 Statistics = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  islands: state.islands,
+  levels: state.levels
 }))(Statistics);
 Statistics = translate()(Statistics);
 export default Statistics;

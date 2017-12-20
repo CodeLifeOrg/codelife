@@ -69,8 +69,8 @@ class Statistics extends Component {
     if (!mounted) return <Loading />;
 
     const visibleUsers = this.state.visibleUsers.sort((a, b) => {
-      const prop1 = typeof a[this.state.sortBy.prop] === String ? a[this.state.sortBy.prop].toLowerCase() : a[this.state.sortBy.prop];
-      const prop2 = typeof b[this.state.sortBy.prop] === String ? b[this.state.sortBy.prop].toLowerCase() : b[this.state.sortBy.prop];
+      const prop1 = typeof a[this.state.sortBy.prop] === "string" ? a[this.state.sortBy.prop].toLowerCase() : a[this.state.sortBy.prop];
+      const prop2 = typeof b[this.state.sortBy.prop] === "string" ? b[this.state.sortBy.prop].toLowerCase() : b[this.state.sortBy.prop];
 
       if (prop1 && !prop2) return -1;
       if (!prop1 && prop2) return 1;

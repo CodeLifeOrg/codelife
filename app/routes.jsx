@@ -18,7 +18,6 @@ import Survey from "pages/Survey";
 import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
 import ResetPw from "pages/ResetPw";
-import Statistics from "pages/admin/Statistics";
 import Error from "pages/Error";
 
 
@@ -56,8 +55,6 @@ export default function RouteCreate() {
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />
-
-      <Route path="stats" component={Statistics} />
 
       <Route path="*" component={Error} />
 

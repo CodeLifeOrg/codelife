@@ -9,7 +9,6 @@ module.exports = function(sequelize, db) {
       },
       snippetname: db.STRING,
       studentcontent: db.TEXT,
-      likes: db.INTEGER,
       previewblob: db.BLOB,
       lid: db.TEXT,
       uid: db.TEXT,
@@ -20,6 +19,13 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  cb.associate = models => {
+    cb.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
+    cb.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
+    cb.hasMany(models.likes, {foreignKey: "likeid", sourceKey: "id", as: "likelist"});
+    cb.hasMany(models.reports, {foreignKey: "report_id", sourceKey: "id", as: "reportlist"});
+  };
 
   return cb;
 

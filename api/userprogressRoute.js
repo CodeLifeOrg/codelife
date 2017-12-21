@@ -1,11 +1,11 @@
-const {isAuthenticated, isRole} = require("../tools/api.js");
+const {isAuthenticated} = require("../tools/api.js");
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
   // Used in CodeBlock, CodeblockList, Home, Island, Level, and Slide to determine this user's list of beaten items
-  app.get("/api/userprogress/", isAuthenticated, (req, res) => {
+  app.get("/api/userprogress/mine", isAuthenticated, (req, res) => {
     db.userprogress.findAll({where: {uid: req.user.id}})
       .then(progress => {
         const returnObj = {progress};

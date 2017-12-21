@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("reports",
+  const r = sequelize.define("reports",
     {
       id: {
         type: db.INTEGER,
@@ -19,5 +19,13 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  r.associate = models => {
+    //r.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
+    r.belongsTo(models.codeblocks, {foreignKey: "report_id", targetKey: "id", as: "codeblock"});
+    r.belongsTo(models.projects, {foreignKey: "report_id", targetKey: "id", as: "project"}); 
+  };
+
+  return r;
 
 };

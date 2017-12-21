@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("likes",
+  const l = sequelize.define("likes",
     {
       id: {
         type: db.INTEGER,
@@ -16,5 +16,12 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  l.associate = models => {
+    l.belongsTo(models.codeblocks, {foreignKey: "likeid", targetKey: "id", as: "codeblock"});
+    // l.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
+  };
+
+  return l;
 
 };

@@ -36,7 +36,7 @@ class LessonBuilder extends Component {
   }
 
   componentDidMount() {
-    const iget = axios.get("/api/builder/islands");
+    const iget = axios.get("/api/builder/islands/all");
     const lget = axios.get("/api/builder/levels/all");
     const sget = axios.get("/api/builder/slides/all");
     Promise.all([iget, lget, sget]).then(resp => {

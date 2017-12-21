@@ -15,20 +15,8 @@ import moment from "moment";
 import {DateInput} from "@blueprintjs/datetime";
 import {CPF} from "cpf_cnpj";
 
-/**
- * Class component for a user profile.
- * This is a public page and meant to be shared.
- * If a user is logged in AND this is their profile, show an
- * edit button allowing them to edit it.
- */
-class Profile extends Component {
+class EditProfile extends Component {
 
-  /**
-   * Creates the Profile component with its initial state.
-   * @param {boolean} loading - true by defaults gets flipped post AJAX.
-   * @param {string} error - Gets set if no username matches username URL param.
-   * @param {object} profileUser - Gets set to full user object from DB.
-   */
   constructor(props) {
     super(props);
     this.state = {
@@ -39,10 +27,6 @@ class Profile extends Component {
     };
   }
 
-  /**
-   * Grabs username from URL param, makes AJAX call to server and sets error
-   * state (if no user is found) or profileUser (if one is).
-   */
   componentWillMount() {
     const {params, t} = this.props;
     const {username} = params;
@@ -90,7 +74,7 @@ class Profile extends Component {
       name: profileUser.name,
       sid: profileUser.sid
     };
-    console.log("userPostData:\n", userPostData);
+    //console.log("userPostData:\n", userPostData);
     axios.post("/api/profile/", userPostData).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {
@@ -302,8 +286,8 @@ class Profile extends Component {
   }
 }
 
-Profile = connect(state => ({
+EditProfile = connect(state => ({
   user: state.auth.user
-}))(Profile);
+}))(EditProfile);
 
-export default translate()(Profile);
+export default translate()(EditProfile);

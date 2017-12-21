@@ -71,11 +71,12 @@
     &:before {
       content: "";
       height: 10px;
-      left: 38px;
+      left: 20px;
       position: absolute;
       transform: rotateX(50deg);
+      transform-style: preserve-3d;
       top: 16px;
-      width: 314px;
+      width: 350px;
     }
     & .stop {
       background-color: #444;
@@ -87,6 +88,7 @@
       height: 40px;
       margin: 0;
       transform: rotateX(50deg);
+      transform-style: preserve-3d;
       transition: margin 0.2s;
       width: 40px;
       &.next {
@@ -155,12 +157,11 @@
   }
   & .islandLink {
     margin: 0 !important;
+    left: 25px;
     position: absolute;
     top: 475px;
-    &.done {
-      left: 25px;
-    }
     &.next {
+      left: auto;
       right: 25px;
     }
   }

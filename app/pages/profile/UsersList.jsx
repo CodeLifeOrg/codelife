@@ -31,7 +31,7 @@ class UsersList extends Component {
    */
   componentDidMount() {
     const {type, user} = this.props;
-    const apiUrl = type === "geo" ? `/api/usersByGid/${user.gid}` : `/api/usersBySid/${user.sid}`;
+    const apiUrl = type === "geo" ? `/api/profile/byid/all?gid=${user.gid}` : `/api/profile/byid/all?sid=${user.sid}`;
     axios.get(apiUrl).then(resp => {
       this.setState({loading: false, users: resp.data});
     });

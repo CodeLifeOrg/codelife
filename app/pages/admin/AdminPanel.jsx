@@ -44,7 +44,7 @@ class AdminPanel extends Component {
         <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
           <Tab2 id="lesson-builder" className="admin-tab" title={t("Lesson Builder")} panel={<LessonBuilder />}/>
           <Tab2 id="rule-builder" className="admin-tab" title={t("Rule Builder")} panel={<RuleBuilder />} />
-          <Tab2 id="statistics" className="admin-tab" title={t("Statistics")} panel={<Statistics />} />
+          { this.props.auth.user.role > 1 ? <Tab2 id="statistics" className="admin-tab" title={t("Statistics")} panel={<Statistics />} /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="report-viewer" className="admin-tab" title={t("Flagged Content")} panel={<ReportViewer />} /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User Admin")} panel={<UserAdmin />} /> : null }
         </Tabs2>

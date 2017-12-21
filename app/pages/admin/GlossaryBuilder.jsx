@@ -18,8 +18,14 @@ class GlossaryBuilder extends Component {
   }
 
   componentDidMount() {
-    const words = this.props.glossary.map(g => Object.assign({}, g));
-    this.setState({words});
+    
+  }
+
+  componentDidUpdate() {
+    if (!this.state.words.length && this.props.glossary) {
+      const words = this.props.glossary.map(g => Object.assign({}, g));
+      this.setState({words})
+    }
   }
 
   changeField(field, e) {
@@ -51,10 +57,9 @@ class GlossaryBuilder extends Component {
   render() {
 
     const {words} = this.state;
+    //const words = this.props.glossary.map(g => Object.assign({}, g));
 
     if (!words) return <Loading />;
-
-    console.log(words);
 
     const wordItems = words.map(w => <div key={w.id} className="word">
       <input className="pt-input" id={w.id} onChange={this.changeField.bind(this, "word")} type="text" placeholder="Term" dir="auto" value={w.word} />

@@ -79,7 +79,7 @@ class App extends Component {
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
-        { userInit && !auth.loading || authRoute
+        { userInit && !auth.loading || authRoute 
           ? bareRoute
             ? children
             : <div className="container">
@@ -98,6 +98,14 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth, 
+  i18n: state.i18n, 
+  islands: state.islands,
+  levels: state.levels,
+  glossary: state.glossary
+});
+
 const mapDispatchToProps = dispatch => ({
   dispatch: action => dispatch(action),
   isAuthenticated: () => {
@@ -105,4 +113,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(state => ({auth: state.auth, i18n: state.i18n, islands: state.islands}), mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

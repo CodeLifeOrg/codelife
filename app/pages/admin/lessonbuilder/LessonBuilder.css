@@ -68,8 +68,9 @@
 }
 
 .rule-param {
-  width: 150px;
+  flex: 1;
   margin: 5px;
+  width: 0;
 }
 
 .rule-error {

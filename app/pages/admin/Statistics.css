@@ -1,11 +1,63 @@
+.stat-tabs .pt-tab-list {
+  background-color: #efefef;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  justify-content: center;
+  margin-bottom: 10px;
+  & .pt-tab {
+    margin: 0;
+    padding: 2px 13px 3px;
+    &[aria-selected="true"] {
+      background-color: #888;
+      color: white;
+    }
+  }
+  & .pt-tab-indicator {
+    display: none;
+  }
+}
+
 #statistics {
-  background-color: white;
-  border-radius: 0 0 10px 10px;
-  padding: 25px;
+  & #totals {
+    margin: 10px 0;
+    text-align: center;
+    & .stat {
+      margin: 0 10px;
+      & .value {
+        font-weight: bold;
+      }
+    }
+  }
+  & .pt-non-ideal-state {
+    height: 300px;
+    max-width: 100%;
+  }
   & .pt-table {
     width: 100%;
-    & .mod-button {
-      margin-right: 5px;
+    & th {
+      cursor: pointer;
+      white-space: nowrap;
+      & .pt-icon-double-caret-vertical {
+        opacity: 0.25;
+      }
+      & .pt-icon-standard {
+        margin-left: -3px;
+      }
+      & .pt-icon-caret-down, & .pt-icon-caret-up {
+        color: #ba1c2e
+      }
+    }
+    & td {
+      vertical-align: middle;
+    }
+    & .username {
+      max-width: 150px;
+    }
+    & .pt-progress-bar {
+      width: 80px;
+    }
+    & .createdAt {
+      min-width: 150px;
     }
   }
 }

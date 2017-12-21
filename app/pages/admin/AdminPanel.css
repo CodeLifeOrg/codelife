@@ -1,6 +1,6 @@
 .admin-tabs {
   margin: 0 50px 20px;
-  & .pt-tab-list {
+  &>.pt-tab-list {
     background-color: #323232;
     border-radius: 10px 10px 0 0;
     justify-content: center;
@@ -40,12 +40,15 @@
       height: 5px;
     }
   }
-  & .pt-tab-panel {
+  &>.pt-tab-panel {
     margin: 0;
-    &#pt-tab-panel_undefined_user-admin {
+    &.pt-tab-panel {
       background-color: white;
       border-radius: 0 0 10px 10px;
       padding: 25px;
+      &#pt-tab-panel_undefined_lesson-builder {
+        padding: 0;
+      }
       & .pt-table {
         width: 100%;
       }

@@ -2,10 +2,10 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Position, Popover, PopoverInteractionKind, Intent, Toaster, Tooltip, Table, Tab2, Tabs2} from "@blueprintjs/core";
-import {Treemap, LinePlot} from "d3plus-react";
+import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2} from "@blueprintjs/core";
+import {merge} from "d3plus-common";
+import {Treemap} from "d3plus-react";
 import {nest} from "d3-collection";
-import {max} from "d3-array";
 import Loading from "components/Loading";
 
 import "./Statistics.css";
@@ -58,24 +58,24 @@ class Statistics extends Component {
 
   handleHeaderClick(sortProp) {
     const sortBy = {prop: sortProp, desc: sortProp === this.state.sortBy.prop ? !this.state.sortBy.desc : false};
-    this.setState({sortBy}); 
+    this.setState({sortBy});
   }
 
   render() {
 
-    const {mounted, users, flatProgress, activeTabId} = this.state;
+    const {mounted, flatProgress, activeTabId, sortBy} = this.state;
     const {t} = this.props;
 
     if (!mounted) return <Loading />;
 
     const visibleUsers = this.state.visibleUsers.sort((a, b) => {
-      const prop1 = typeof a[this.state.sortBy.prop] === "string" ? a[this.state.sortBy.prop].toLowerCase() : a[this.state.sortBy.prop];
-      const prop2 = typeof b[this.state.sortBy.prop] === "string" ? b[this.state.sortBy.prop].toLowerCase() : b[this.state.sortBy.prop];
+      const prop1 = typeof a[sortBy.prop] === "string" ? a[sortBy.prop].toLowerCase() : a[sortBy.prop];
+      const prop2 = typeof b[sortBy.prop] === "string" ? b[sortBy.prop].toLowerCase() : b[sortBy.prop];
 
       if (prop1 && !prop2) return -1;
       if (!prop1 && prop2) return 1;
       if (!prop1 && !prop2) return 0;
-      if (this.state.sortBy.desc) {
+      if (sortBy.desc) {
         return prop1 < prop2 ? 1 : -1;
       }
       else {
@@ -84,7 +84,7 @@ class Statistics extends Component {
     });
 
     const userList = visibleUsers.map(u => {
-      
+
       let latestLevel = null;
       let latestTheme = "island-jungle";
 
@@ -102,77 +102,112 @@ class Statistics extends Component {
       if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
       if (u.progressPercent > 60) intent = "pt-intent-success";
       return <tr key={u.id}>
-        <td>{u.username}</td>
-        <td>
+        <td className="username">{u.username}</td>
+        <td className="progressPercent">
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div>
-              <div className={`pt-progress-bar pt-no-stripes ${intent}`} style={{width: "100px"}}>
+              <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
                 <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
               </div>
             </div>
             <div style={{padding: "8px"}}>
-              { latestLevel 
+              { latestLevel
                 ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } />{latestLevel.name}</div>
                 : <div>No Progress Yet</div>
               }
             </div>
           </Popover>
         </td>
-        <td>{u.name}</td>
-        <td>{u.email}</td>
-        <td>{u.schoolname}</td>
-        <td>{u.geoname}</td>
-        <td>{new Date(u.createdAt).toDateString()}</td>
+        <td className="name">{u.name}</td>
+        <td className="email">{u.email}</td>
+        <td className="schoolname">{u.schoolname}</td>
+        <td className="geoname">{u.geoname}</td>
+        <td className="createdAt">{new Date(u.createdAt).toDateString()}</td>
       </tr>;
     });
 
-    const vizData = nest().key(u => u.geoname)
-      .rollup(leaves => leaves.length)
+    const vizData = [];
+    nest().key(u => u.geoname)
+      .rollup(leaves => {
+        const d = merge(leaves);
+        d.value = leaves.length;
+        vizData.push(d);
+        return leaves.length;
+      })
       .entries(visibleUsers.filter(u => u.geoname));
 
     return (
 
       <div>
 
-        <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-          <Tab2 id="last-1" className="admin-tab" title={t("Last Day")} />
-          <Tab2 id="last-3" className="admin-tab" title={t("Last 3 Days")} />
-          <Tab2 id="last-7" className="admin-tab" title={t("Last 7 Days")} />
-          <Tab2 id="last-999999" className="admin-tab" title={t("Forever")} />
+        <Tabs2 className="stat-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+          <Tab2 id="last-1" className="stat-tab" title={t("Last Day")} />
+          <Tab2 id="last-3" className="stat-tab" title={t("Last 3 Days")} />
+          <Tab2 id="last-7" className="stat-tab" title={t("Last 7 Days")} />
+          <Tab2 id="last-999999" className="stat-tab" title={t("Forever")} />
         </Tabs2>
 
-        { vizData.length 
-          ? <Treemap config={{
-            height: 400,
-            data: vizData,
-            groupBy: "key",
-            tooltipConfig: {
-              body: v => {
-                const count = v.value;
-                return `Count: ${count}`;
-              }
-            }
-          }} />
-          : null
-        }
-        
         <div id="statistics">
-          <table className="pt-table pt-striped pt-interactive">
-            <thead>
-              <tr>
-                <th onClick={this.handleHeaderClick.bind(this, "username")}>Username</th>
-                <th onClick={this.handleHeaderClick.bind(this, "progressPercent")}>Progress</th>
-                <th onClick={this.handleHeaderClick.bind(this, "name")}>Name</th>
-                <th onClick={this.handleHeaderClick.bind(this, "email")}>Email</th>
-                <th onClick={this.handleHeaderClick.bind(this, "schoolname")}>School</th>
-                <th onClick={this.handleHeaderClick.bind(this, "geoname")}>Geo</th>
-                <th onClick={this.handleHeaderClick.bind(this, "createdAt")}>Joined on</th>
-              </tr>
-            </thead>
-            <tbody>
-              {userList.length ? userList : "No new users during this time."}
-            </tbody>
-          </table>
+
+          <div id="totals">
+            <span className="stat">Number of Students: <span className="value">{userList.length}</span></span>
+            <span className="stat">Number of Schools: <span className="value">{vizData.length}</span></span>
+          </div>
+
+          { vizData.length > 1
+            ? <Treemap config={{
+              height: 400,
+              data: vizData,
+              groupBy: "geoname",
+              legend: false,
+              shapeConfig: {
+                fill: () => "#ba1c2e",
+                labelConfig: {
+                  fontFamily: "Overpass"
+                }
+              },
+              tooltipConfig: {
+                background: "white",
+                body: v => {
+                  const students = v.uid instanceof Array ? v.uid.length : 1;
+                  const schools = v.schoolname instanceof Array ? v.schoolname : [v.schoolname];
+                  return `<table class="school-tooltip-table">
+                            <tr><td>School${ schools.length > 1 ? "s" : "" }:</td><td>${schools.length}</tr>
+                            <tr><td>Student${ students > 1 ? "s" : "" }:</td><td>${students}</tr>
+                          </table>`;
+                },
+                bodyStyle: {
+                  "font-family": "Overpass"
+                },
+                borderRadius: "5px",
+                padding: "10px",
+                titleStyle: {
+                  "font-family": "Overpass"
+                }
+              }
+            }} />
+            : null
+          }
+
+          { userList.length
+            ? <table className="pt-table pt-striped pt-interactive">
+              <thead>
+                <tr>
+                  <th className="username" onClick={this.handleHeaderClick.bind(this, "username")}><span className={ `pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Username</th>
+                  <th className="progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}><span className={ `pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Progress</th>
+                  <th className="name" onClick={this.handleHeaderClick.bind(this, "name")}><span className={ `pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Name</th>
+                  <th className="email" onClick={this.handleHeaderClick.bind(this, "email")}><span className={ `pt-icon-standard ${ sortBy.prop === "email" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Email</th>
+                  <th className="schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}><span className={ `pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>School</th>
+                  <th className="geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}><span className={ `pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Municipality</th>
+                  <th className="createdAt" onClick={this.handleHeaderClick.bind(this, "createdAt")}><span className={ `pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Joined on</th>
+                </tr>
+              </thead>
+              <tbody>
+                { userList }
+              </tbody>
+            </table>
+            : <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." /> }
+
         </div>
       </div>
     );

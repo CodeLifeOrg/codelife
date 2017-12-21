@@ -74,7 +74,7 @@ class EditProfile extends Component {
       name: profileUser.name,
       sid: profileUser.sid
     };
-    console.log("userPostData:\n", userPostData);
+    //console.log("userPostData:\n", userPostData);
     axios.post("/api/profile/", userPostData).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {

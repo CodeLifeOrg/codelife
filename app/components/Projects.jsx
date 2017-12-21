@@ -33,7 +33,7 @@ class Projects extends Component {
       }
       else {
         if (projects.length === 0) {
-          this.createNewProject.bind(this, t("My Project"));
+          this.createNewProject.bind(this)(t("My Project"));
         }
         else {
           let latestIndex = 0;

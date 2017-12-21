@@ -39,9 +39,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/islands").then(resp => {
-      const islands = resp.data;
+    const iget = axios.get("/api/islands/all");
+    const lget = axios.get("/api/levels/all");
+
+    Promise.all([iget, lget]).then(resp => {
+      const islands = resp[0].data;
+      const levels = resp[1].data;
       this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});
+      this.props.dispatch({type: "LOAD_LEVELS", payload: levels});
     });
   }
 

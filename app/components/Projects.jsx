@@ -14,30 +14,26 @@ class Projects extends Component {
       deleteAlert: false,
       projects: [],
       projectName: "",
-      currentProject: null,
-      constants: null
+      currentProject: null
     };
   }
 
   componentDidMount() {
-    const pget = axios.get("/api/projects/");
-    const scget = axios.get("/api/siteconfigs");
+    const pget = axios.get("/api/projects/mine");
     const {t} = this.props;
 
-    Promise.all([pget, scget]).then(resp => {
-      const pjs = resp[0].data;
-      const constants = resp[1].data;
-      const projects = pjs.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
-      projects.sort((a, b) => a.name < b.name ? -1 : 1);
+    Promise.all([pget]).then(resp => {
+      const projects = resp[0].data;
+      
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
         if (!currentProject) currentProject = projects[0];
-        this.setState({currentProject, projects, constants}, this.props.openProject.bind(this, currentProject.id));
+        this.setState({currentProject, projects}, this.props.openProject.bind(this, currentProject.id));
       }
       else {
         if (projects.length === 0) {
-          this.setState({constants}, this.createNewProject.bind(this, t("My Project")));
+          this.createNewProject.bind(this)(t("My Project"));
         }
         else {
           let latestIndex = 0;
@@ -50,7 +46,7 @@ class Projects extends Component {
             }
           }
           const currentProject = projects[latestIndex];
-          this.setState({currentProject, projects, constants}, this.props.openProject.bind(this, currentProject.id));
+          this.setState({currentProject, projects}, this.props.openProject.bind(this, currentProject.id));
         }
       }
     });
@@ -58,18 +54,16 @@ class Projects extends Component {
 
   deleteProject(project) {
     const {t} = this.props;
-    const {constants} = this.state;
 
     if (project === true) {
       const {deleteAlert} = this.state;
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
         if (resp.status === 200) {
-          const projects = resp.data.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
+          const projects = resp.data;
           let newProject = null;
           // if the project i'm trying to delete is the one i'm currently on, pick a new project
           // to open (in this case, the first one in the list)
           if (deleteAlert.project.id === this.state.currentProject.id) {
-            projects.sort((a, b) => a.name < b.name ? -1 : 1);
             if (projects.length > 0) newProject = projects[0];
           }
           // if the project i'm trying to delete is a different project, it's fine to stay on
@@ -104,14 +98,12 @@ class Projects extends Component {
   }
 
   createNewProject(projectName) {
-    const {constants} = this.state;
     // Trim leading and trailing whitespace from the project title
     projectName = projectName.replace(/^\s+|\s+$/gm, "");
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
         if (resp.status === 200) {
-          const projects = resp.data.projects.filter(p => p.status !== "banned" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
-          projects.sort((a, b) => a.name < b.name ? -1 : 1);
+          const projects = resp.data.projects;
           this.setState({projectName: "", currentProject: resp.data.currentProject, projects});
           this.props.onCreateProject(resp.data.currentProject);
         }
@@ -150,7 +142,6 @@ class Projects extends Component {
     const showDeleteButton = this.state.projects.length > 1;
 
     const projectArray = this.state.projects;
-    projectArray.sort((a, b) => a.name < b.name ? -1 : 1);
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
         <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>

@@ -1,9 +1,8 @@
-const {isAuthenticated, isRole} = require("../tools/api.js");
-
 module.exports = function(app) {
 
   const {db} = app.settings;
 
+  // Public, as we need site-wide configs for the Homepage
   app.get("/api/siteconfigs", (req, res) => {
     db.siteconfigs.findAll().then(configs => {
       const obj = {};

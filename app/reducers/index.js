@@ -2,9 +2,20 @@ export default {
   islands: (state = [], action) => {
     switch (action.type) {
       case "LOAD_ISLANDS":
-        return action.payload;
+        const sorted = action.payload.sort((a, b) => a.ordering - b.ordering);
+        return sorted;
+      default:
+        return state;
+    }
+  },
+  levels: (state = [], action) => {
+    switch (action.type) {
+      case "LOAD_LEVELS":
+        const sorted = action.payload.sort((a, b) => a.ordering - b.ordering);
+        return sorted;
       default:
         return state;
     }
   }
 };
+

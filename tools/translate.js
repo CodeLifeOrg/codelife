@@ -1,4 +1,4 @@
-module.exports = function (host, lang, resp) {
+module.exports = function(host, lang, resp) {
   if (host.includes(`${lang}.`)) {
     for (const r of resp) {
       const data = r.dataValues;

@@ -1,19 +1,59 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const Op = require("sequelize").Op;
+const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
+const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
+
+function flattenProject(user, p) {
+  p.username = p.user ? p.user.username : "";
+  p.sharing = p.userprofile ? p.userprofile.sharing : "false";
+  p.reports = p.reportlist.filter(r => r.status === "new" && r.type === "project").length;
+  p.hidden = p.reports >= FLAG_COUNT_HIDE || p.status === "banned" || p.sharing === "false";
+  if (p.reports >= FLAG_COUNT_BAN || p.status === "banned" || p.sharing === "false") p.studentcontent = "This content has been disabled";
+  if (user) {
+    p.reported = Boolean(p.reportlist.find(r => r.uid === user.id));
+  }
+  return p;
+}
+
+const pInclude = [
+  {association: "userprofile", attributes: ["bio", "sharing"]}, 
+  {association: "user", attributes: ["username"]}, 
+  {association: "reportlist"}
+];
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
   // Used by Projects to get a list of projects by the logged-in user
-  app.get("/api/projects", isAuthenticated, (req, res) => {
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+  app.get("/api/projects/mine", isAuthenticated, (req, res) => {
+    db.projects.findAll({
+      where: {
+        uid: req.user.id
+      },
+      include: pInclude
+    })
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))
+          .filter(p => !p.hidden)
+          .sort((a, b) => a.name < b.name ? -1 : 1))
+          .end()
+      );
   });
 
   // Used by home for feature list.  No Authentication required.
   app.get("/api/projects/featured", (req, res) => {
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, users.username, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, userprofiles, users where users.id = projects.uid AND projects.uid = userprofiles.uid AND (projects.id = 1026 OR projects.id = 982 OR projects.id = 1020 OR projects.id = 1009)";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+    db.projects.findAll({
+      where: {
+        [Op.or]: [{id: 1026}, {id: 982}, {id: 1020}, {id: 1009}]
+      },
+      include: pInclude
+    })
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))).end()
+      );
   });
 
   // Used by Studio to open a project by ID
@@ -23,14 +63,33 @@ module.exports = function(app) {
 
   // Used by UserProjects to get a project list for their profile
   app.get("/api/projects/byuser", isAuthenticated, (req, res) => {
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, users.username, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, userprofiles, users where users.id = projects.uid AND projects.uid = userprofiles.uid AND projects.uid = '" + req.query.uid + "'";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+    db.projects.findAll({
+      where: {
+        uid: req.query.uid
+      },
+      include: pInclude
+    })
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))
+          .filter(p => !p.hidden)
+          .sort((a, b) => a.name < b.name ? -1 : 1))
+          .end()
+      );
   });
 
   // Used by Share to fetch a project.  Public.
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
-    const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, userprofiles.sharing, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects, users, userprofiles where projects.uid = users.id AND users.id = userprofiles.uid AND projects.name = '" + req.query.filename + "' AND users.username = '" + req.query.username + "'";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+    db.projects.findAll({
+      where: {
+        name: req.query.filename
+      },
+      include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
+    })
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.toJSON()))).end()
+      );
   });
 
   // Used by Studio to update a project
@@ -45,24 +104,43 @@ module.exports = function(app) {
     db.projects.update({status}, {where: {id}}).then(u => {
       db.reports.update({status}, {where: {type: "project", report_id: id}}).then(() => res.json(u).end());
     });
-
   });
 
   // Used by Projects to create a new project
   app.post("/api/projects/new", isAuthenticated, (req, res) => {
     db.projects.create({studentcontent: req.body.studentcontent, name: req.body.name, uid: req.user.id, datemodified: db.fn("NOW")}).then(currentProject => {
-      const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
-      db.query(q, {type: db.QueryTypes.SELECT}).then(projects => res.json({currentProject, projects}).end());
-      //db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json({currentProject, projects}).end());
+      db.projects.findAll({
+        where: {
+          uid: req.user.id
+        },
+        include: pInclude
+      })
+        .then(pRows => {
+          const resp = pRows
+            .map(p => flattenProject(req.user, p.toJSON()))
+            .filter(p => !p.hidden)
+            .sort((a, b) => a.name < b.name ? -1 : 1);
+          res.json({currentProject, projects: resp}).end();
+        });
     });
   });
 
   // Used by Projects to delete a project
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
     db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => {
-      const q = "select projects.id, projects.name, projects.studentcontent, projects.uid, projects.datemodified, projects.status, (select count(*) from reports where reports.status = 'new' AND reports.report_id = projects.id AND reports.type = 'project') as reports from projects where projects.uid = '" + req.user.id + "'";
-      db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
-      //db.projects.findAll({where: {uid: req.user.id}}).then(projects => res.json(projects).end());
+      db.projects.findAll({
+        where: {
+          uid: req.user.id
+        },
+        include: pInclude
+      })
+        .then(pRows => 
+          res.json(pRows
+            .map(p => flattenProject(req.user, p.toJSON()))
+            .filter(p => !p.hidden)
+            .sort((a, b) => a.name < b.name ? -1 : 1))
+            .end()
+        );
     });
   });
 

@@ -7,7 +7,7 @@ module.exports = function(app) {
     db.userprofiles.findOrCreate({where: {uid}})
       .then(userprofiles => {
         if (userprofiles.length) {
-          res.json(userprofiles[0].survey2 || {});
+          return res.json(userprofiles[0].survey2 || {});
         }
         else {
           return res.json({error: "Unable to find a survey associated to that user."}).end();

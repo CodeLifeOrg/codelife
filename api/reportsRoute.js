@@ -22,16 +22,72 @@ module.exports = function(app) {
     db.reports.findAll({where: {type: "project", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
   });
 
+  // Current Problem:  How do I join through a different association?
+
   // Used in ReportViewer to get ALL codeblock reports for admins
   app.get("/api/reports/codeblocks/all", isRole(2), (req, res) => {
-    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.report_id, reports.type, users.username, users.email, users.name, codeblocks.snippetname as filename from reports, users, codeblocks where reports.status = 'new' AND reports.report_id = codeblocks.id AND codeblocks.uid = users.id AND reports.type = 'codeblock'";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+    db.reports.findAll({
+      where: {
+        type: "codeblock",
+        status: "new"
+      },
+      include: [
+        {
+          association: "codeblock", 
+          attributes: ["snippetname"], 
+          include: [
+            {
+              association: "user", 
+              attributes: ["username", "email", "name"]
+            }
+          ]
+        }
+      ]
+    })
+      .then(rRows => {
+        const resp = rRows.map(r => {
+          const rj = r.toJSON();
+          rj.username = rj.codeblock.user ? rj.codeblock.user.username : "";
+          rj.email = rj.codeblock.user ? rj.codeblock.user.email : "";
+          rj.name = rj.codeblock.user ? rj.codeblock.user.name : "";
+          rj.filename = rj.codeblock ? rj.codeblock.snippetname : "";
+          return rj;
+        });
+        res.json(resp).end();
+      });
   });
 
   // Used in ReportViewer to get ALL project reports for admins
   app.get("/api/reports/projects/all", isRole(2), (req, res) => {
-    const q = "select reports.id, reports.uid, reports.reason, reports.comment, reports.report_id, reports.type, users.username, users.email, users.name, projects.name as filename from reports, users, projects where reports.status = 'new' AND reports.report_id = projects.id AND projects.uid = users.id AND reports.type = 'project'";
-    db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+    db.reports.findAll({
+      where: {
+        type: "project",
+        status: "new"
+      },
+      include: [
+        {
+          association: "project", 
+          attributes: ["name"], 
+          include: [
+            {
+              association: "user", 
+              attributes: ["username", "email", "name"]
+            }
+          ]
+        }
+      ]
+    })
+      .then(rRows => {
+        const resp = rRows.map(r => {
+          const rj = r.toJSON();
+          rj.username = rj.project.user ? rj.project.user.username : "";
+          rj.email = rj.project.user ? rj.project.user.email : "";
+          rj.name = rj.project.user ? rj.project.user.name : "";
+          rj.filename = rj.project ? rj.project.name : "";
+          return rj;
+        });
+        res.json(resp).end();
+      });
   });
 
   // Used in Share to determine if this user has reported this content before
@@ -69,21 +125,15 @@ module.exports = function(app) {
           db.users.findAll({where: {role: 2}}).then(admins => {
             const emails = admins.map(a => a.email).join(", ");
 
-
             return new BuildMail("text/html")
-            .addHeader({from: mgEmail, subject: "New Flagged Content", to: emails})
-            .setContent(template).build((error, mail) => {
-              return mailgun.messages().sendMime({to: emails, message: mail.toString("ascii")}, () => res.json(u).end());
-            });
+              .addHeader({from: mgEmail, subject: "New Flagged Content", to: emails})
+              .setContent(template).build((error, mail) => 
+                mailgun.messages().sendMime({to: emails, message: mail.toString("ascii")}, () => res.json(u).end())
+              );
           });
-
-          
-
+    
         });
-
-
-
-        
+    
       });
   });
 

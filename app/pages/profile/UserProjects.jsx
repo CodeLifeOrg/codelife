@@ -32,20 +32,16 @@ class UserProjects extends Component {
   componentDidMount() {
     const {user} = this.props;
     const pget = axios.get(`/api/projects/byuser?uid=${user.id}`);
-    const rget = axios.get("/api/reports/projects");
-    const scget = axios.get("/api/siteconfigs");
 
-    Promise.all([pget, rget, scget]).then(resp => {
-      const constants = resp[2].data;
-      const projects = resp[0].data.filter(p => p.status !== "banned" && p.sharing !== "false" && Number(p.reports) < constants.FLAG_COUNT_HIDE);
-      const reports = resp[1].data;
-      this.setState({loading: false, projects, reports});
+    Promise.all([pget]).then(resp => {
+      const projects = resp[0].data;
+      this.setState({loading: false, projects});
     });
   }
 
   render() {
     const {t} = this.props;
-    const {loading, projects, reports} = this.state;
+    const {loading, projects} = this.state;
 
     if (loading) return <h2>{ t("Loading projects") }...</h2>;
 
@@ -53,11 +49,9 @@ class UserProjects extends Component {
       <div className="user-section">
         <h2>{ t("Projects") }</h2>
         { projects.length
-          ? <div className="flex-row">{ projects.map(p => {
-              if (reports.find(r => r.report_id === p.id)) p.reported = true;
-              return <ProjectCard project={ p } />;
-            })}</div>
-          : <p>{ t("This user doesn't have any projects yet.") }</p>}
+          ? <div className="flex-row">{ projects.map(p => <ProjectCard key={p.id} project={p} />)}</div>
+          : <p>{ t("This user doesn't have any projects yet.") }</p>
+        }
       </div>
     );
   }

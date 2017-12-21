@@ -4,10 +4,12 @@
   "description": "web-based platform to teach Brazilian high school students to code",
   "main": "index.js",
   "scripts": {
-    "dev": "canon-dev",
     "build": "canon-build",
+    "dev": "canon-dev",
+    "docs": "jsdoc2md '+(api|app|db|tools)/**/*.+(js|jsx)' --separators > DOCS.md",
+    "locales": "canon-locales",
     "start": "canon-start",
-    "locales": "canon-locales"
+    "test": "eslint --color api/*.js api/**/*.js app/*.js app/**/*.js db/*.js db/**/*.js tools/*.js tools/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -27,12 +29,14 @@
   "dependencies": {
     "@blueprintjs/datetime": "^1.19.0",
     "@blueprintjs/labs": "^0.11.0",
-    "bcrypt": "^1.0.2",
+    "bcrypt": "^1.0.3",
     "cpf_cnpj": "^0.2.0",
     "css": "git+https://github.com/Datawheel/css.git",
     "datawheel-canon": "^0.11.8",
+    "eslint": "^4.13.1",
     "faker": "^4.1.0",
     "himalaya": "^0.2.10",
+    "jsdoc-to-markdown": "^3.0.2",
     "multer": "^1.3.0",
     "popper.js": "^1.12.5",
     "react-ace": "^5.0.1",

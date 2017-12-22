@@ -1,0 +1,35 @@
+.word {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 3px black solid;
+}
+
+.touched {
+  background-color: pink;
+}
+
+.glossary-button {
+  margin: 3px;
+}
+
+.action-box {
+  text-align: center;
+  margin-top: 40px;
+  width: 10%;
+}
+
+.word-container {
+  width: 45%;
+}
+
+.word-box {
+  width: 200px;
+  margin: 5px;
+}
+
+.definition-box {
+  margin: 5px;
+  background-color: white;
+}
+

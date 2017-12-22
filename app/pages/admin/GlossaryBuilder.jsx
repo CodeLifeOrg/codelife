@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button} from "@blueprintjs/core";
 import Loading from "components/Loading";
+import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import "./GlossaryBuilder.css";
 
@@ -13,66 +14,156 @@ class GlossaryBuilder extends Component {
     super(props);
     this.state = {
       mounted: false,
+      firstInput: false,
       words: []
     };
   }
 
   componentDidMount() {
-    
-  }
+    axios.get("/api/builder/glossary/all").then(resp => {
+      if (resp.status === 200) {
+        const words = resp.data;
+        this.setState({words});  
+      }
+      else {
+        console.log("error");
+      }
+    });
 
-  componentDidUpdate() {
-    if (!this.state.words.length && this.props.glossary) {
-      const words = this.props.glossary.map(g => Object.assign({}, g));
-      this.setState({words})
-    }
+    document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
   changeField(field, e) {
-    /*const {rules} = this.state;
-    console.log(field, e.target);
-    const rule = rules.find(r => r.id === Number(e.target.id));
-    if (rule) rule[field] = e.target.value;
-    this.setState({rules});*/
+    const {words, firstInput} = this.state;
+    const word = words.find(w => w.id.toString() === e.target.id);
+    if (word && firstInput) {
+      word[field] = e.target.value;
+      word.touched = true;
+    }
+    this.setState({words});
   }
 
-  saveContent() {
-    /*const {rules} = this.state;
-    for (const r of rules) {
+  handleEditor(id, field, t) {
+    const {words, firstInput} = this.state;
+    const word = words.find(w => w.id.toString() === id);
+    if (word && firstInput) {
+      word[field] = t;
+      word.touched = true;
+    }
+    this.setState({words});
+  }
+
+  handleKey() {
+    if (!this.state.firstInput) {
+      this.setState({firstInput: true});
+    }
+  }
+
+  addWord() {
+    const payload = {
+      word: "New Term",
+      definition: "New Definition",
+      pt_word: "Nuevo Palavra",
+      pt_definition: "Neuvo Definition"
+    };
+    axios.post("/api/builder/glossary/new", payload).then(resp => {
+      if (resp.status === 200) {
+        const newWord = resp.data;
+        const words = this.state.words.concat(newWord);
+        this.setState({words});  
+      }
+      else {
+        console.log("error");
+      }
+    });
+  }
+
+  saveWord(e) {
+    const {words} = this.state;
+    const word = words.find(w => w.id.toString() === e.target.id);
+    if (word) {
       const payload = {
-        id: r.id,
-        error_msg: r.error_msg,
-        pt_error_msg: r.pt_error_msg,
-        error_msg_2: r.error_msg_2,
-        pt_error_msg_2: r.pt_error_msg_2,
-        error_msg_3: r.error_msg_3,
-        pt_error_msg_3: r.pt_error_msg_3
+        id: word.id,
+        word: word.word,
+        definition: word.definition,
+        pt_word: word.pt_word,
+        pt_definition: word.pt_definition
       };
-      axios.post("/api/rules/save", payload).then(resp => {
+      axios.post("/api/builder/glossary/save", payload).then(resp => {
         resp.status === 200 ? console.log("success") : console.log("error");
       });
-    }*/
+      word.touched = false;
+      this.setState({words});  
+    }
+    
+  }
+
+  deleteWord(e) {
+    const id = e.target.id;
+    const payload = {
+      params: {id}
+    };
+    axios.delete("/api/builder/glossary/delete", payload).then(resp => {
+      if (resp.status === 200) {
+        const words = this.state.words.filter(w => w.id.toString() !== id);
+        this.setState({words});
+      }
+      else {
+        console.log("error");
+      }
+    });
   }
 
   render() {
 
     const {words} = this.state;
-    //const words = this.props.glossary.map(g => Object.assign({}, g));
 
     if (!words) return <Loading />;
 
-    const wordItems = words.map(w => <div key={w.id} className="word">
-      <input className="pt-input" id={w.id} onChange={this.changeField.bind(this, "word")} type="text" placeholder="Term" dir="auto" value={w.word} />
-      <input className="pt-input" id={w.id} onChange={this.changeField.bind(this, "definition")} type="text" placeholder="Definition" dir="auto" value={w.definition} />
-      <input className="pt-input" id={w.id} onChange={this.changeField.bind(this, "pt_word")} type="text" placeholder="Palavra" dir="auto" value={w.pt_word} />
-      <input className="pt-input" id={w.id} onChange={this.changeField.bind(this, "pt_definition")} type="text" placeholder="Definição" dir="auto" value={w.definition} />
+    const wordItems = words.map(w => <div key={w.id} className={`word ${w.touched ? "touched" : ""}`}>
+      <div className="word-container">
+        <input 
+          className="word-box" 
+          id={w.id} 
+          onChange={this.changeField.bind(this, "word")} 
+          type="text" 
+          placeholder="Term" 
+          value={w.word} 
+        />
+        <QuillWrapper
+          className="definition-box"
+          id={w.id.toString()}
+          value={w.definition}
+          onChange={this.handleEditor.bind(this, w.id.toString(), "definition")} 
+        />
+      </div>
+      <div className="word-container">
+        <input 
+          className="word-box" 
+          id={w.id} 
+          onChange={this.changeField.bind(this, "pt_word")} 
+          type="text" 
+          placeholder="Palavra" 
+          value={w.pt_word} 
+        />
+        <QuillWrapper
+          className="definition-box"
+          id={w.id.toString()}
+          value={w.pt_definition}
+          onChange={this.handleEditor.bind(this, w.id.toString(), "pt_definition")} 
+        />
+      </div>      
+      <div className="action-box">
+        <button id={w.id} className="pt-button pt-intent-success glossary-button" onClick={this.saveWord.bind(this)}>Save</button><br/>
+        <button id={w.id} className="pt-button pt-intent-danger glossary-button" onClick={this.deleteWord.bind(this)}>Delete</button>
+      </div>
     </div>);
 
 
     return (
       <div id="GlossaryBuilder">
         {wordItems}
-        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-fill pt-large pt-intent-success">Save</Button>
+        <Button type="pt-button" onClick={this.addWord.bind(this)} className="pt-button pt-fill pt-large pt-intent-success">Add Word</Button>
       </div>
     );
   }

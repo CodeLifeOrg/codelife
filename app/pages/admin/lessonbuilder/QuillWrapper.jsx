@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 
+import "./QuillWrapper.css";
+
 export default class QuillWrapper extends Component {
 
   render() {
@@ -7,22 +9,35 @@ export default class QuillWrapper extends Component {
       const Quill = require("react-quill");
       require("react-quill/dist/quill.snow.css");
       const modules = {
-        toolbar: [
-          [{}],
-          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
-          [{list: "ordered"}, {list: "bullet"}],
-          ["clean"]
-        ],
+        toolbar: {
+          container: [
+            [{}],
+            ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
+            [{list: "ordered"}, {list: "bullet"}],
+            ["clean"]
+          ]/*,
+          handlers: {
+            custom: () => {
+              console.log("hi");
+              const range = this.quillRef.editor.getSelection();
+              if (range) {
+                this.quillRef.editor.insertText(range.index, "Ω");
+              }
+            }
+          }*/
+        },
         clipboard: {
           matchVisual: false
         }
       };
-      return <Quill
-        theme="snow"
-        modules={modules}
-        ref={c => this.quillRef = c}
-        {...this.props}
-      />;
+      return <div>
+        <Quill
+          theme="snow"
+          modules={modules}
+          ref={c => this.quillRef = c}
+          {...this.props}
+        />
+      </div>;
     }
     return null;
   }

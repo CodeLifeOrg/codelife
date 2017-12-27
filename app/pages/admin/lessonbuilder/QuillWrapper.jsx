@@ -2,31 +2,23 @@ import React, {Component} from "react";
 import classnames from "classnames";
 import {Suggest} from "@blueprintjs/labs";
 import {MenuItem, Classes} from "@blueprintjs/core";
+import {connect} from "react-redux";
 
 import "./QuillWrapper.css";
 
-export default class QuillWrapper extends Component {
+class QuillWrapper extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      words: [
-        {
-          word: "aword1",
-          definition: "def1"
-        },
-        {
-          word: "bword2",
-          definition: "def2"
-        },
-        {
-          word: "cword3",
-          definition: "def3"
-        }
-      ],
+      words: null,
       currentWord: null,
       currentRange: 0
     };
+  }
+
+  componentDidMount() {
+    if (this.props.glossary) this.setState({words: this.props.glossary.map(w => Object.assign({}, w))});
   }
 
   handleValueChange(currentWord) {
@@ -48,7 +40,7 @@ export default class QuillWrapper extends Component {
     return (
       <MenuItem
         className={classes}
-        label={`${item.definition}...`}
+        label={`${item.definition.substring(0, 10)}...`}
         key={item.id}
         onClick={handleClick}
         text={item.word}
@@ -56,12 +48,12 @@ export default class QuillWrapper extends Component {
     );
   }
 
-  filterWords(query, film, index) {
-    return `${index + 1}. ${film.word.toLowerCase()} ${film.definition}`.indexOf(query.toLowerCase()) >= 0;
+  filterWords(query, word, index) {
+    return `${index + 1}. ${word.word.toLowerCase()} ${word.definition}`.indexOf(query.toLowerCase()) >= 0;
   }
 
   render() {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && this.state.words) {
       const Quill = require("react-quill");
       require("react-quill/dist/quill.snow.css");
       const modules = {
@@ -118,3 +110,11 @@ export default class QuillWrapper extends Component {
     return null;
   }
 }
+
+
+const mapStateToProps = state => ({
+  glossary: state.glossary
+});
+
+QuillWrapper = connect(mapStateToProps)(QuillWrapper);
+export default QuillWrapper;

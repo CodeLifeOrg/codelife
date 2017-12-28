@@ -6,7 +6,7 @@
 }
 
 .touched {
-  background-color: pink;
+  background-color: #FFE9EC;
 }
 
 .glossary-button {
@@ -21,6 +21,7 @@
 
 .word-container {
   width: 45%;
+  display: inline-block;
 }
 
 .word-box {
@@ -32,4 +33,24 @@
   margin: 5px;
   background-color: white;
 }
+
+.word-container-readonly {
+  width: 45%;
+  display: inline-block;
+}
+
+.word-box-readonly {
+  width: 200px;
+  margin: 5px;
+  background-color:white;
+  padding: 5px;
+}
+
+.definition-box-readonly {
+  margin: 5px;
+  background-color: white;
+  padding: 5px;
+  width: 500px;
+}
+
 

@@ -33,7 +33,7 @@ class Glossary extends Component {
     if (!words) return null;
 
     const wordList = words.map(w => 
-      <div key={w.id}>
+      <div key={w.id} id={w.word}>
         <h2>{w.word}</h2>
         <p>{w.definition}</p>
       </div>
@@ -41,13 +41,13 @@ class Glossary extends Component {
 
     return (
 
-      /*
+      
       <div id="about-container">
         <h1>{ t("glossary.title") }</h1>
         {wordList}
       </div>
-      */
-
+      
+      /*
       <div id="about-container">
         <h1>{ t("glossary.title") }</h1>
 
@@ -163,6 +163,7 @@ class Glossary extends Component {
         <h2 name="p">p tag</h2>
         <p>{ t("glossary.p.def") }</p>
       </div>
+      */
 
     );
   }

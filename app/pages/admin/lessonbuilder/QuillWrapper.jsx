@@ -59,7 +59,6 @@ class QuillWrapper extends Component {
       const modules = {
         toolbar: {
           container: [
-            [{}],
             ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
             [{list: "ordered"}, {list: "bullet"}],
             ["clean"]

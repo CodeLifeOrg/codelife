@@ -39,7 +39,8 @@ class Island extends Component {
   hasUserCompleted(milestone) {
     // TODO: this is a blocking short-circuit for August. remove after Beta (done)
     // TODO2: adding back in a hard blocker for November Beta.
-    if (milestone === "island-863f") return false;
+    // TODO3: blocker incremented for December Island.
+    if (milestone === "island-9e30") return false;
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 

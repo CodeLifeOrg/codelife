@@ -19,7 +19,8 @@ module.exports = function(app) {
               }
             }
             // This is a blocker for november's beta.  Increment this with release of each new island
-            if (latestIsland >= 4) latestIsland = 4;
+            // incremented this for december island.
+            if (latestIsland >= 5) latestIsland = 5;
             const island = islands.find(i => i.ordering === latestIsland + 1);
             returnObj.current = island;
             res.json(returnObj).end();

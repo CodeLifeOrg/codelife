@@ -81,7 +81,8 @@ class CodeBlockList extends Component {
 
     for (const i of islands) {
       // added this ordering blocker for november beta. Need to increment this as levels are unlocked.
-      if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > 5) continue;
+      // incremented this for new december island
+      if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > 6) continue;
       codeBlockItems.push(
         <li className={`snippet ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>
           <img className="icon" src={`/islands/${i.theme}-small.png`} />{ i.name }

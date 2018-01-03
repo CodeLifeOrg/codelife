@@ -145,6 +145,11 @@ class Slide extends Component {
     e.keyCode === 96 && this.props.auth.user.role > 0 ? this.unblock(this) : null;
   }
 
+  editSlide() {
+    const {lid, mlid, sid} = this.props.params;
+    browserHistory.push(`/admin/lesson-builder/${lid}/${mlid}/${sid}`);
+  }
+
   advanceLevel(mlid) {
     const {lid} = this.props.params;
     browserHistory.push(`/island/${lid}/${mlid}`);
@@ -182,6 +187,7 @@ class Slide extends Component {
 
     return (
       <div id="slide" className={ currentIsland.theme }>
+        {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
         <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
         <div id="slide-head">
           { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }

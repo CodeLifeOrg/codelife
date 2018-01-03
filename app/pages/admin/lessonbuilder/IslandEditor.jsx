@@ -72,6 +72,7 @@ class IslandEditor extends Component {
     
     return (
       <div id="island-editor">
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>

@@ -28,7 +28,7 @@ class QuillWrapper extends Component {
   handleGlossaryClick() {
     const {currentRange, currentWord} = this.state;
     if (currentRange && currentWord) {
-      this.quillRef.editor.insertText(currentRange.index, ` {{${currentWord.word}}} `);
+      this.quillRef.editor.insertText(currentRange.index, `${currentWord.word}`, "link", `/glossary#${currentWord.word}`);
     }
   }
 
@@ -59,6 +59,7 @@ class QuillWrapper extends Component {
       const modules = {
         toolbar: {
           container: [
+            [{}],
             ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
             [{list: "ordered"}, {list: "bullet"}],
             ["clean"]

@@ -118,36 +118,36 @@ class IslandEditor extends Component {
           </label>
         </div>
         <div className="area-block">
-          <label className="pt-label">
+          <div className="pt-label">
             Cheat Sheet
             <QuillWrapper
               value={this.state.data.cheatsheet}
               onChange={this.handleEditor.bind(this, "cheatsheet")} 
             />
-          </label>
-          <label className="pt-label">
+          </div>
+          <div className="pt-label">
             pt Cheat Sheet  🇧🇷 
             <QuillWrapper
               value={this.state.data.pt_cheatsheet}
               onChange={this.handleEditor.bind(this, "pt_cheatsheet")} 
             />
-          </label>
+          </div>
         </div>
         <div className="area-block">
-          <label className="pt-label">
+          <div className="pt-label">
             Final Codeblock Prompt
             <QuillWrapper
               value={this.state.data.prompt}
               onChange={this.handleEditor.bind(this, "prompt")} 
             />
-          </label>
-          <label className="pt-label">
+          </div>
+          <div className="pt-label">
             pt Final Codeblock Prompt  🇧🇷 
             <QuillWrapper
               value={this.state.data.pt_prompt}
               onChange={this.handleEditor.bind(this, "pt_prompt")} 
             />
-          </label>
+          </div>
         </div>
         <label className="pt-label">
           Initial Codeblock State<br/><br/>

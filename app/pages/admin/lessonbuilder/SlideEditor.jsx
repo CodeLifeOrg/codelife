@@ -215,22 +215,22 @@ class SlideEditor extends Component {
           </div>
         </label>
         <div className="area-block">
-          <label className="pt-label">
+          <div className="pt-label">
             htmlcontent1
             <QuillWrapper
               value={this.state.data.htmlcontent1}
               onChange={this.handleEditor.bind(this, "htmlcontent1")} 
               ref={c => this.quills.push(c) }
             />
-          </label>
-          <label className="pt-label">
+          </div>
+          <div className="pt-label">
             pt htmlcontent1  🇧🇷 
             <QuillWrapper
               value={this.state.data.pt_htmlcontent1}
               onChange={this.handleEditor.bind(this, "pt_htmlcontent1")} 
               ref={c => this.quills.push(c) }
             />
-          </label>
+          </div>
         </div>
         { showContent2
           ? showAce2 
@@ -245,7 +245,7 @@ class SlideEditor extends Component {
               </label>
             </div>
             : <div className="area-block">
-              <label className="pt-label">
+              <div className="pt-label">
                 htmlcontent2
                 { showImg 
                   ? <div className="image-area">
@@ -261,8 +261,8 @@ class SlideEditor extends Component {
                     ref={c => this.quills.push(c) }
                   /> 
                 }
-              </label>
-              <label className="pt-label">
+              </div>
+              <div className="pt-label">
                 pt htmlcontent2  🇧🇷 
                 {showImg 
                   ? <div className="image-area">
@@ -278,7 +278,7 @@ class SlideEditor extends Component {
                     ref={c => this.quills.push(c) }
                   /> 
                 }
-              </label>
+              </div>
             </div>
           : null
         }

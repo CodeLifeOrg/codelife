@@ -7,6 +7,7 @@ import {UserAdmin} from "datawheel-canon";
 import LessonBuilder from "pages/admin/lessonbuilder/LessonBuilder";
 import RuleBuilder from "pages/admin/lessonbuilder/RuleBuilder";
 import ReportViewer from "pages/admin/ReportViewer";
+import Statistics from "pages/admin/Statistics";
 import {browserHistory} from "react-router";
 
 import "./AdminPanel.css";
@@ -72,6 +73,7 @@ class AdminPanel extends Component {
           <Tab2 id="rule-builder" className="admin-tab" title={t("Rule Builder")} panel={<RuleBuilder />} />
           { this.props.auth.user.role > 1 ? <Tab2 id="report-viewer" className="admin-tab" title={t("Flagged Content")} panel={<ReportViewer />} /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User Admin")} panel={<UserAdmin />} /> : null }
+          { this.props.auth.user.role > 1 ? <Tab2 id="statistics" className="admin-tab" title={t("Statistics")} panel={<Statistics />} /> : null }
         </Tabs2>
       </div>
     );

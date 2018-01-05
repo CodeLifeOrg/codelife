@@ -117,7 +117,8 @@ class Level extends Component {
   closeOverlay() {
     // TODO: take out island 4 catcher after august (completed)
     // TODO2: blocker added back in for november
-    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-9e30") {
+    // TODO3: blocker incremented for december island
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-8b75") {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -381,8 +382,9 @@ class Level extends Component {
         { prevIsland ? <IslandLink done={true} width={250} island={prevIsland} description={false} /> : null}
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
         { /* TODO2: adding blocker back in for November Beta */}
+        { /* TODO3: incremented blocker for December Island */}
 
-        { nextIsland && Number(nextIsland.ordering) < 6  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { nextIsland && Number(nextIsland.ordering) < 7  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div>

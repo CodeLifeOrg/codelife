@@ -57,25 +57,11 @@ class QuillWrapper extends Component {
       const Quill = require("react-quill");
       require("react-quill/dist/quill.snow.css");
       const modules = {
-        toolbar: {
-          container: [
-            [{}],
-            ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
-            [{list: "ordered"}, {list: "bullet"}],
-            ["clean"]
-          ]
-
-          /* ,
-          handlers: {
-            custom: () => {
-              console.log("hi");
-              const range = this.quillRef.editor.getSelection();
-              if (range) {
-                this.quillRef.editor.insertText(range.index, "Ω");
-              }
-            }
-          }*/
-        },
+        toolbar: [
+          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
+          [{list: "ordered"}, {list: "bullet"}],
+          ["clean"]
+        ],
         clipboard: {
           matchVisual: false
         }

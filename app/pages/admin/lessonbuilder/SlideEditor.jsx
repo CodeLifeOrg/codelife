@@ -44,7 +44,7 @@ class SlideEditor extends Component {
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
       for (const q of this.quills) {
-        if (q) q.quillRef.getEditor().setSelection(0);
+        if (q && q.quillRef) q.quillRef.getEditor().setSelection(0);
       }
       this.setState({data: this.props.data});
     }

@@ -79,6 +79,31 @@ module.exports = function(app) {
     });    
   });
 
+  app.get("/api/builder/glossary/all", isRole(1), (req, res) => {
+    db.glossarywords.findAll({where: req.query}).then(u => {
+      res.json(u).end();
+    });
+  });  
+
+  app.post("/api/builder/glossary/save", isRole(1), (req, res) => {
+    db.glossarywords.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  app.post("/api/builder/glossary/new", isRole(1), (req, res) => {
+    db.glossarywords.create(req.body).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  app.delete("/api/builder/glossary/delete", isRole(1), (req, res) => {
+    db.glossarywords.destroy({where: {id: req.query.id}}).then(u => {
+      res.json(u).end();
+    });    
+  });
+
+
   const upload = multer({
     fileFilter: (req, file, callback) => {
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {

@@ -41,12 +41,15 @@ class App extends Component {
   componentDidMount() {
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
+    const gget = axios.get("/api/glossary/all");
 
-    Promise.all([iget, lget]).then(resp => {
+    Promise.all([iget, lget, gget]).then(resp => {
       const islands = resp[0].data;
       const levels = resp[1].data;
+      const glossary = resp[2].data;
       this.props.dispatch({type: "LOAD_ISLANDS", payload: islands});
       this.props.dispatch({type: "LOAD_LEVELS", payload: levels});
+      this.props.dispatch({type: "LOAD_GLOSSARY", payload: glossary});
     });
   }
 
@@ -76,7 +79,7 @@ class App extends Component {
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
-        { userInit && !auth.loading || authRoute
+        { userInit && !auth.loading || authRoute 
           ? bareRoute
             ? children
             : <div className="container">
@@ -95,6 +98,14 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth, 
+  i18n: state.i18n, 
+  islands: state.islands,
+  levels: state.levels,
+  glossary: state.glossary
+});
+
 const mapDispatchToProps = dispatch => ({
   dispatch: action => dispatch(action),
   isAuthenticated: () => {
@@ -102,4 +113,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(state => ({auth: state.auth, i18n: state.i18n, islands: state.islands}), mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

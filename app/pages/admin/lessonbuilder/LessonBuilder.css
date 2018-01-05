@@ -41,9 +41,6 @@
         width: 100%;
         & .ql-toolbar {
           border-radius: 5px 5px 0 0;
-          & .ql-formats:first-child {
-            display: none;
-          }
         }
         & .ql-container {
           border-radius: 0 0 5px 5px;
@@ -68,8 +65,9 @@
 }
 
 .rule-param {
-  width: 150px;
+  flex: 1;
   margin: 5px;
+  width: 0;
 }
 
 .rule-error {

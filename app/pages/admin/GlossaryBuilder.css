@@ -1,0 +1,56 @@
+.word {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 3px black solid;
+}
+
+.touched {
+  background-color: #FFE9EC;
+}
+
+.glossary-button {
+  margin: 3px;
+}
+
+.action-box {
+  text-align: center;
+  margin-top: 40px;
+  width: 10%;
+}
+
+.word-container {
+  width: 45%;
+  display: inline-block;
+}
+
+.word-box {
+  width: 200px;
+  margin: 5px;
+}
+
+.definition-box {
+  margin: 5px;
+  background-color: white;
+}
+
+.word-container-readonly {
+  width: 45%;
+  display: inline-block;
+}
+
+.word-box-readonly {
+  width: 200px;
+  margin: 5px;
+  background-color:white;
+  padding: 5px;
+}
+
+.definition-box-readonly {
+  margin: 5px;
+  background-color: white;
+  padding: 5px;
+  width: 500px;
+}
+
+

@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {translate} from "react-i18next";
 
 // Glossary Page
@@ -8,11 +9,45 @@ import {translate} from "react-i18next";
 
 class Glossary extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      mounted: false,
+      words: []
+    };
+  }
+
+  componentDidUpdate() {
+    if (!this.state.words.length && this.props.glossary) {
+      const mounted = true;
+      const words = this.props.glossary.map(g => Object.assign({}, g));
+      this.setState({mounted, words});
+    }
+  }
+
   render() {
 
     const {t} = this.props;
+    const {words} = this.state;
+
+    if (!words) return null;
+
+    const wordList = words.map(w => 
+      <div key={w.id} id={w.word}>
+        <h2>{w.word}</h2>
+        <p>{w.definition}</p>
+      </div>
+    );
 
     return (
+
+      
+      <div id="about-container">
+        <h1>{ t("glossary.title") }</h1>
+        {wordList}
+      </div>
+      
+      /*
       <div id="about-container">
         <h1>{ t("glossary.title") }</h1>
 
@@ -128,8 +163,15 @@ class Glossary extends Component {
         <h2 name="p">p tag</h2>
         <p>{ t("glossary.p.def") }</p>
       </div>
+      */
+
     );
   }
 }
 
+const mapStateToProps = state => ({
+  glossary: state.glossary
+});
+
+Glossary = connect(mapStateToProps)(Glossary);
 export default translate()(Glossary);

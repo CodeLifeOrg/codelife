@@ -16,6 +16,15 @@ export default {
       default:
         return state;
     }
+  },
+  glossary: (state = [], action) => {
+    switch (action.type) {
+      case "LOAD_GLOSSARY":
+        const sorted = action.payload.sort((a, b) => a.word.toLowerCase() > b.word.toLowerCase() ? 1 : -1);
+        return sorted;
+      default:
+        return state;
+    }
   }
 };
 

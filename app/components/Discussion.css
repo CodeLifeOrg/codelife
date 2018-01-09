@@ -8,3 +8,37 @@
   margin: 0 25px 25px;
   padding: 5px;
 }
+
+.thread-title {
+  font-weight: bold;
+}
+
+.thread-body {
+  padding: 10px;
+}
+
+.view-comments {
+  color: blue;
+  cursor: pointer;
+}
+
+.thread {
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+}
+
+.comment {
+  border: 1px solid black;
+  margin: 5px;
+  margin-left: 20px;
+  padding: 5px;
+}
+
+.comment-title {
+  font-weight: bold;
+}
+
+.comment-body {
+  padding: 10px;
+}

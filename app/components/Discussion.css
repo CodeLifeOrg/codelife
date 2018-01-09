@@ -42,3 +42,20 @@
 .comment-body {
   padding: 10px;
 }
+
+.new-comment {
+  margin-left: 15px;
+  padding: 5px;
+}
+
+.post-button {
+  margin-top: 10px;
+}
+
+.new-thread {
+  padding: 5px;
+}
+
+.new-thread-title {
+  margin: 5px;
+}

@@ -74,23 +74,26 @@ class QuillWrapper extends Component {
           ref={c => this.quillRef = c}
           {...this.props}
         />
-        <div>
-          <Suggest 
-            id="search-box"
-            inputValueRenderer={word => word.word}
-            items={this.state.words}
-            itemRenderer={this.renderWord.bind(this)}
-            itemPredicate={this.filterWords.bind(this)}
-            noResults={<MenuItem disabled={true} text="No results." />}
-            onItemSelect={word => this.setState({currentWord: word})}
-          />
-          <div 
-            id="insert-word"
-            onClick={this.handleGlossaryClick.bind(this)}
-          > 
-            Insert Glossary Word <span className="pt-icon pt-icon-circle-arrow-up" />
+        { this.props.hideGlossary
+          ? null
+          : <div>
+            <Suggest 
+              id="search-box"
+              inputValueRenderer={word => word.word}
+              items={this.state.words}
+              itemRenderer={this.renderWord.bind(this)}
+              itemPredicate={this.filterWords.bind(this)}
+              noResults={<MenuItem disabled={true} text="No results." />}
+              onItemSelect={word => this.setState({currentWord: word})}
+            />
+            <div 
+              id="insert-word"
+              onClick={this.handleGlossaryClick.bind(this)}
+            > 
+              Insert Glossary Word <span className="pt-icon pt-icon-circle-arrow-up" />
+            </div>
           </div>
-        </div>
+        }
       </div>;
     }
     return null;

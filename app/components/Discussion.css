@@ -1,0 +1,10 @@
+#discussion {
+  background-color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 25px 25px;
+  padding: 5px;
+}

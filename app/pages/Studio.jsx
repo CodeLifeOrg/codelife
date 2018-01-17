@@ -52,8 +52,8 @@ class Studio extends Component {
     const {t} = this.props;
     const {username} = this.props.auth.user;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/share/project/${this.state.currentProject.id}`);  
-      browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);  
+      // browserHistory.push(`/share/project/${this.state.currentProject.id}`);
+      browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
     }
     else {
       const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
@@ -72,9 +72,9 @@ class Studio extends Component {
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-        toast.show({message: t("Save your changes before opening a new webpage."), timeout: 1500, intent: Intent.WARNING});  
+        toast.show({message: t("Save your changes before opening a new webpage."), timeout: 1500, intent: Intent.WARNING});
         return false;
-      } 
+      }
       else {
         this.openProject(project.id);
         return true;
@@ -134,7 +134,7 @@ class Studio extends Component {
       <div id="studio">
         <div id="head">
           <h1 className="title">{ t("Projects") }</h1>
-          <div className="title-tab">{titleText}</div>
+          { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
           <div className="buttons">
             { currentProject ? <span className="pt-button" onClick={this.shareProject.bind(this)}>{ t("Share") }</span> : null }
             { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{ t("Execute") }</button> : null }

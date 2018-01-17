@@ -73,6 +73,9 @@
       font-size: 16px;
       line-height: 20px;
       white-space: pre-wrap;
+      & code {
+        overflow-wrap: break-word;
+      }
     }
     &.cheatSheet .slide-text {
       columns: 2;

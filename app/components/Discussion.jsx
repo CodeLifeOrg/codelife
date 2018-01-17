@@ -17,13 +17,14 @@ class Discussion extends Component {
       mounted: false,
       threads: [],
       threadTitle: "",
-      threadContent: ""
+      threadContent: "",
+      commentFields: {}
     };
   }
 
   componentDidMount() {
     const mounted = true;
-    const db_threads = [{
+    const dbThreads = [{
       id: 1,
       title: "why do i have to use brackets",
       content: "what's the deal?"
@@ -38,7 +39,7 @@ class Discussion extends Component {
       title: "i'm stuck, can someone help?",
       content: "how do i make a tag"
     }];
-    const db_comments = [{
+    const dbComments = [{
       id: 1,
       title: "because that's html!",
       content: "this is why you should use [insert framework here].",
@@ -56,15 +57,14 @@ class Discussion extends Component {
       content: "this was helpful",
       thread_id: 2
     }];
-    const threads = db_threads.map(t => {
-      return {...t, comments: db_comments.filter(c => c.thread_id === t.id)}
-    });
-    console.log(threads);
+    const threads = dbThreads.map(t => 
+      ({...t, comments: dbComments.filter(c => c.thread_id === t.id)})
+    );
     this.setState({mounted, threads});
   }
 
   toggleThread(id) {
-    this.setState({[id]: !this.state[id]});
+    this.state[id] !== undefined ? this.setState({[id]: undefined}) : this.setState({[id]: ""});
   }
 
   newComment(thread_id) {
@@ -93,11 +93,12 @@ class Discussion extends Component {
   render() {
 
     const {mounted, threads, threadTitle, threadContent} = this.state;
+    console.log(this.state[1]);
 
     if (!mounted) return <Loading />;
 
-    const threadItems = threads.map(t => {
-      return <div className="thread">
+    const threadItems = threads.map(t =>
+      <div key={t.id} className="thread">
         <div className="thread-title">
           {t.title}
         </div>
@@ -105,13 +106,13 @@ class Discussion extends Component {
           {t.content}
         </div>
         <div className="view-comments" onClick={this.toggleThread.bind(this, t.id)}>
-          {this.state[t.id] ? "Hide Comments" : "Show Comments"}
+          {this.state[t.id] !== undefined ? "Hide Comments" : "Show Comments"}
         </div>
         <div className="comments">
-          <Collapse isOpen={this.state[t.id]}>
+          <Collapse isOpen={this.state[t.id] !== undefined}>
             {
-              t.comments.map(c => {
-                return <div className="comment">
+              t.comments.map(c => 
+                <div key={c.id} className="comment">
                   <div className="comment-title">
                     {c.title}
                   </div>
@@ -119,16 +120,21 @@ class Discussion extends Component {
                     {c.content} 
                   </div>
                 </div>
-              })
+              )
             }
-            <div className="new-comment">
-              <QuillWrapper hideGlossary={true}/>
-              <Button className="pt-intent-success post-button" onClick={this.newComment.bind(this, t.id)}>Post Comment</Button>
-            </div>
+            { 
+              this.state[t.id] !== undefined 
+                ? <div className="new-comment">
+                  Post New Comment
+                  <QuillWrapper hideGlossary={true} value={this.state[t.id]} onChange={tx => this.setState({[t.id]: tx})} />
+                  <Button className="pt-intent-success post-button" onClick={this.newComment.bind(this, t.id)}>Post Comment</Button>
+                </div>
+                : null
+            }
           </Collapse>
         </div>
       </div>
-    });
+    );
 
     return (
       <div id="discussion">
@@ -138,7 +144,7 @@ class Discussion extends Component {
         <div className="new-thread">
           Thead Title: 
           <input className="new-thread-title" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} />
-          <QuillWrapper value={threadContent} onChange={t => this.setState({threadContent: t})}hideGlossary={true}/>
+          <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
           <Button className="pt-intent-success post-button" onClick={this.newThread.bind(this)}>Start New Thread</Button>
         </div>
       </div>

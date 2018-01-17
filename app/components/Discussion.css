@@ -45,6 +45,7 @@
 
 .new-comment {
   margin-left: 15px;
+  margin-top: 20px;
   padding: 5px;
 }
 
@@ -54,6 +55,7 @@
 
 .new-thread {
   padding: 5px;
+
 }
 
 .new-thread-title {

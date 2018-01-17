@@ -15,6 +15,16 @@
   height: 70vh;
   margin: 0 25px 25px;
   position: relative;
+  &.pt-dialog-body {
+    margin: 0;
+    & #slide-container {
+      margin-top: 25px;
+      & .validation {
+        bottom: auto;
+        position: static;
+      }
+    }
+  }
   & a:not(.pt-button) {
     opacity: 1;
     text-decoration: underline;
@@ -176,7 +186,9 @@
       margin-left: 0;
     }
     & .slide-text {
+      align-self: stretch;
       flex: none;
+      overflow: scroll;
       width: 300px;
       &.wide {
         width: 400px;

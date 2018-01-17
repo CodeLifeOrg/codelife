@@ -166,7 +166,7 @@
     display: flex;
     flex: 1;
     flex-direction: row;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     justify-content: center;
     width: 100%;
     &>*:not(.flex-row):not(.flex-column) {

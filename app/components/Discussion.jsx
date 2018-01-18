@@ -21,6 +21,10 @@ class Discussion extends Component {
     };
   }
 
+  componentDidMount() {
+    this.forceUpdate(); // check with dave if we need this
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.subjectId !== this.props.subjectId) {
       const {subjectType, subjectId} = this.props;
@@ -50,7 +54,7 @@ class Discussion extends Component {
   }
 
   newThread() {
-    const threads = this.state.threads.concat({
+    /*const threads = this.state.threads.concat({
       id: new Date().getTime(),
       title: this.state.threadTitle,
       content: this.state.threadContent,
@@ -58,12 +62,23 @@ class Discussion extends Component {
     });
     const threadTitle = "";
     const threadContent = "";
-    this.setState({threads, threadTitle, threadContent});
+    this.setState({threads, threadTitle, threadContent});*/
+    const threadPost = {
+      title: this.state.threadTitle,
+      content: this.state.threadContent,
+      subject_type: this.props.subjectType,
+      subject_id: this.props.subjectId
+    };
+    axios.post("/api/threads/new", threadPost).then(resp => {
+      console.log(resp); 
+    });
   }
 
   render() {
 
     const {threads, threadTitle, threadContent} = this.state;
+
+    console.log(threads);
 
     if (!threads) return <Loading />;
 

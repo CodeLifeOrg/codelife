@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
-import {Collapse, Button} from "@blueprintjs/core";
+import {Collapse, Button, Toaster, Position, Intent} from "@blueprintjs/core";
 import "./Discussion.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
@@ -22,7 +22,8 @@ class Discussion extends Component {
   }
 
   componentDidMount() {
-    this.forceUpdate(); // check with dave if we need this
+    // When Discussion is initalized, it already has props. This one-time call forces an initial update.
+    this.componentDidUpdate({});
   }
 
   componentDidUpdate(prevProps) {
@@ -41,28 +42,25 @@ class Discussion extends Component {
   }
 
   newComment(tid) {
-    const thread = this.state.threads.find(t => t.id === tid);
-    if (this.state[tid]) {
-      const id = new Date().getTime();
-      const title = this.state[tid].title; 
-      const content = this.state[tid].content;
-      if (thread && content) {
-        thread.commentlist.push({id, title, content});
-        this.setState({threads: this.state.threads, [tid]: {title: "", content: ""}});
+    const {t} = this.props;
+    const commentPost = {
+      title: this.state[tid].title,
+      content: this.state[tid].content,
+      subject_type: this.props.subjectType,
+      subject_id: this.props.subjectId,
+      thread_id: tid
+    };
+    axios.post("/api/comments/new", commentPost).then(resp => {
+      if (resp.status === 200) {
+        const toast = Toaster.create({className: "newCommentToast", position: Position.TOP_CENTER});       
+        toast.show({message: t("Comment Posted!"), timeout: 1500, intent: Intent.SUCCESS});
+        this.setState({threads: resp.data, [tid]: {title: "", content: ""}});
       }
-    }
+    });
   }
 
   newThread() {
-    /*const threads = this.state.threads.concat({
-      id: new Date().getTime(),
-      title: this.state.threadTitle,
-      content: this.state.threadContent,
-      commentlist: []
-    });
-    const threadTitle = "";
-    const threadContent = "";
-    this.setState({threads, threadTitle, threadContent});*/
+    const {t} = this.props;
     const threadPost = {
       title: this.state.threadTitle,
       content: this.state.threadContent,
@@ -70,15 +68,17 @@ class Discussion extends Component {
       subject_id: this.props.subjectId
     };
     axios.post("/api/threads/new", threadPost).then(resp => {
-      console.log(resp); 
+      if (resp.status === 200) {
+        const toast = Toaster.create({className: "newThreadToast", position: Position.TOP_CENTER});       
+        toast.show({message: t("Thread Posted!"), timeout: 1500, intent: Intent.SUCCESS});
+        this.setState({threads: resp.data.threads, threadTitle: "", threadContent: ""});
+      }
     });
   }
 
   render() {
 
     const {threads, threadTitle, threadContent} = this.state;
-
-    console.log(threads);
 
     if (!threads) return <Loading />;
 

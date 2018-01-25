@@ -23,6 +23,7 @@ export default class AceWrapper extends Component {
         tabSize = {2}
         mode="html"
         setOptions={{behavioursEnabled: false}}
+        showPrintMargin={false}
         editorProps={{
           $blockScrolling: Infinity
         }}

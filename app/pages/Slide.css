@@ -15,6 +15,16 @@
   height: 70vh;
   margin: 0 25px 25px;
   position: relative;
+  &.pt-dialog-body {
+    margin: 0;
+    & #slide-container {
+      margin-top: 25px;
+      & .validation {
+        bottom: auto;
+        position: static;
+      }
+    }
+  }
   & a:not(.pt-button) {
     opacity: 1;
     text-decoration: underline;
@@ -73,6 +83,9 @@
       font-size: 16px;
       line-height: 20px;
       white-space: pre-wrap;
+      & code {
+        overflow-wrap: break-word;
+      }
     }
     &.cheatSheet .slide-text {
       columns: 2;
@@ -163,7 +176,7 @@
     display: flex;
     flex: 1;
     flex-direction: row;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     justify-content: center;
     width: 100%;
     &>*:not(.flex-row):not(.flex-column) {
@@ -173,7 +186,9 @@
       margin-left: 0;
     }
     & .slide-text {
+      align-self: stretch;
       flex: none;
+      overflow: scroll;
       width: 300px;
       &.wide {
         width: 400px;

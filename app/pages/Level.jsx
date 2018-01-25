@@ -118,6 +118,7 @@ class Level extends Component {
     // TODO: take out island 4 catcher after august (completed)
     // TODO2: blocker added back in for november
     // TODO3: blocker incremented for december island
+    // TODO4: DIDN'T update this blocker for January, because we don't have an island yet.  Update after new island is placed.
     if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-8b75") {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
@@ -383,8 +384,9 @@ class Level extends Component {
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
         { /* TODO2: adding blocker back in for November Beta */}
         { /* TODO3: incremented blocker for December Island */}
+        { /* TODO4: incremented blocker for January Island */}
 
-        { nextIsland && Number(nextIsland.ordering) < 7  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div>

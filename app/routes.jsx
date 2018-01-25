@@ -50,6 +50,10 @@ export default function RouteCreate() {
       <Route path="codeBlocks/:username/:filename" component={Share} />
 
       <Route path="admin" component={AdminPanel} />
+      <Route path="admin/:tab" component={AdminPanel} />
+      <Route path="admin/:tab/:island" component={AdminPanel} />
+      <Route path="admin/:tab/:island/:level" component={AdminPanel} />
+      <Route path="admin/:tab/:island/:level/:slide" component={AdminPanel} />
 
       <Route path="learnmore" component={LearnMore} />
 

@@ -11,9 +11,9 @@ module.exports = function(sequelize, db) {
       reason: db.TEXT,
       comment: db.TEXT,
       report_id: db.INTEGER,
-      type: db.TEXT, 
+      type: db.TEXT,
       status: db.TEXT
-    }, 
+    },
     {
       freezeTableName: true,
       timestamps: false
@@ -21,9 +21,9 @@ module.exports = function(sequelize, db) {
   );
 
   r.associate = models => {
-    //r.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
+    // r.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
     r.belongsTo(models.codeblocks, {foreignKey: "report_id", targetKey: "id", as: "codeblock"});
-    r.belongsTo(models.projects, {foreignKey: "report_id", targetKey: "id", as: "project"}); 
+    r.belongsTo(models.projects, {foreignKey: "report_id", targetKey: "id", as: "project"});
   };
 
   return r;

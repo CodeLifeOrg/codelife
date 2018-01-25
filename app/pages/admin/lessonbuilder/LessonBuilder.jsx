@@ -36,6 +36,8 @@ class LessonBuilder extends Component {
   }
 
   componentDidMount() {
+    const {pathObj} = this.props;
+    let nodeFromProps;
     const iget = axios.get("/api/builder/islands/all");
     const lget = axios.get("/api/builder/levels/all");
     const sget = axios.get("/api/builder/slides/all");
@@ -51,7 +53,7 @@ class LessonBuilder extends Component {
 
       for (let i of islands) {
         i = this.fixNulls(i);
-        nodes.push({
+        const islandObj = {
           id: i.id,
           hasCaret: true,
           iconName: "map",
@@ -60,13 +62,15 @@ class LessonBuilder extends Component {
           parent: {childNodes: nodes},
           childNodes: [],
           data: i
-        });
+        };
+        if (pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+        nodes.push(islandObj);
       }
       for (let l of levels) {
         l = this.fixNulls(l);
         const islandNode = nodes.find(node => node.data.id === l.lid);
         if (islandNode) {
-          islandNode.childNodes.push({
+          const levelObj = {
             id: l.id,
             hasCaret: true,
             iconName: "multi-select",
@@ -75,7 +79,9 @@ class LessonBuilder extends Component {
             parent: islandNode,
             childNodes: [],
             data: l
-          });
+          };
+          if (pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
+          islandNode.childNodes.push(levelObj);
         }
       }
       for (let s of slides) {
@@ -86,7 +92,7 @@ class LessonBuilder extends Component {
           if (levelNode) break;
         }
         if (levelNode) {
-          levelNode.childNodes.push({
+          const slideObj = {
             id: s.id,
             hasCaret: false,
             iconName: slideIcons[s.type],
@@ -94,11 +100,32 @@ class LessonBuilder extends Component {
             itemType: "slide",
             parent: levelNode,
             data: s
-          });
+          };
+          if (pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
+          levelNode.childNodes.push(slideObj);
         }
       }
-      this.setState({mounted: true, nodes});
-    });
+      this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
+    });    
+  }
+
+  initFromProps(nodeFromProps) {
+    if (nodeFromProps) {
+      if (nodeFromProps.itemType === "island") {
+        nodeFromProps.isExpanded = true;
+      }
+      else if (nodeFromProps.itemType === "level") {
+        nodeFromProps.isExpanded = true;
+        nodeFromProps.parent.isExpanded = true;
+      }
+      else if (nodeFromProps.itemType === "slide") {
+        nodeFromProps.isExpanded = true;
+        nodeFromProps.parent.isExpanded = true;
+        nodeFromProps.parent.parent.isExpanded = true;
+      }
+      this.setState({nodes: this.state.nodes});
+      this.handleNodeClick(nodeFromProps);
+    }
   }
 
   fixNulls(obj) {
@@ -351,6 +378,7 @@ class LessonBuilder extends Component {
       currentNode.secondaryLabel = null;
     }
     node.isExpanded = !node.isExpanded;
+    if (this.props.setPath) this.props.setPath(node);
     this.setState({currentNode: node});
   }
 

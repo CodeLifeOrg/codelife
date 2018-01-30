@@ -33,6 +33,7 @@ class Slide extends Component {
       currentLevel: null,
       currentIsland: null,
       levels: null,
+      showDiscussion: false,
       sentProgress: false,
       latestSlideCompleted: 0,
       islandComplete: false,
@@ -69,6 +70,7 @@ class Slide extends Component {
         currentLevel: null,
         currentIsland: null,
         levels: null,
+        showDiscussion: false,
         sentProgress: false,
         latestSlideCompleted: 0,
         islandComplete: false,
@@ -83,7 +85,7 @@ class Slide extends Component {
       let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (this.state.done) blocked = false;
-      this.setState({currentSlide: cs, blocked});
+      this.setState({currentSlide: cs, blocked, showDiscussion: false});
     }
 
     const i = slides.indexOf(currentSlide);
@@ -157,10 +159,14 @@ class Slide extends Component {
     if (window) window.location.reload();
   }
 
+  toggleDiscussion() {
+    this.setState({showDiscussion: !this.state.showDiscussion});
+  }
+
   render() {
     const {auth, t} = this.props;
     const {lid, mlid, sid} = this.props.params;
-    const {currentSlide, slides, levels, currentLevel, currentIsland} = this.state;
+    const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -207,7 +213,13 @@ class Slide extends Component {
           <div id="slide-foot">
             { prevSlug
               ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
-              : <div className="pt-button pt-disabled">{t("Previous")}</div> }
+              : <div className="pt-button pt-disabled">{t("Previous")}</div> 
+            }
+            <div id="show-discussion" style={{cursor: "pointer", marginTop: "10px", color: "blue"}}>
+              <span onClick={this.toggleDiscussion.bind(this)}>
+                { this.state.showDiscussion ? "Hide Discussion ▲" : "Show Discussion ▼" }
+              </span>
+            </div>
             { nextSlug
               ? this.state.blocked
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
@@ -221,7 +233,7 @@ class Slide extends Component {
             }
           </div>
         </div>
-        <Discussion subjectType="slide" subjectId={sid}/>
+        { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null } 
       </div>
     );
   }

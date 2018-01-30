@@ -119,7 +119,8 @@ class Level extends Component {
     // TODO2: blocker added back in for november
     // TODO3: blocker incremented for december island
     // TODO4: DIDN'T update this blocker for January, because we don't have an island yet.  Update after new island is placed.
-    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-8b75") {
+    // TODO5: Just updated this to the new space island now that they are added
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {

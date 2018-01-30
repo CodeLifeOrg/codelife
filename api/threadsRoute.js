@@ -1,5 +1,6 @@
 const {isAuthenticated} = require("../tools/api.js");
-const translate = require("../tools/translate.js");
+const sequelize = require("sequelize");
+// const translate = require("../tools/translate.js");
 
 module.exports = function(app) {
 
@@ -9,10 +10,15 @@ module.exports = function(app) {
   app.get("/api/threads/all", (req, res) => {
     db.threads.findAll({
       where: req.query,
-      include: [{association: "commentlist"}]
+      include: [
+        {association: "commentlist"},
+        {association: "user", attributes: ["name", "username", "id"]},
+        /*{association: "userprofile", attributes: ["img"], include: [{association: "threads", attributes: [[sequelize.fn("COUNT", sequelize.col("threads.id")), "threadCount"]]}, {association: "comments"}]}*/
+        {association: "userprofile", attributes: ["img"], include: [{association: "threads"}, {association: "comments"}]}
+      ]
     }).then(threads => {
       threads.sort((a, b) => b.date < a.date ? 1 : -1);
-      res.json(threads).end()
+      res.json(threads).end();
     });
   });
 
@@ -35,8 +41,8 @@ module.exports = function(app) {
       }).then(threads => {
         threads.sort((a, b) => b.date < a.date ? 1 : -1);
         res.json({newThread, threads}).end();
-      })
-    })
+      });
+    });
   });
 
   app.post("/api/comments/new", isAuthenticated, (req, res) => {
@@ -56,8 +62,8 @@ module.exports = function(app) {
       }).then(threads => {
         threads.sort((a, b) => b.date < a.date ? 1 : -1);
         res.json(threads).end();
-      })
-    })
+      });
+    });
   });
 
 };

@@ -21,9 +21,11 @@ module.exports = function(sequelize, db) {
   );
 
   t.associate = models => {
+    t.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
+    t.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
     t.belongsTo(models.slides, {foreignKey: "subject_id", targetKey: "id", as: "slide"});
     t.hasMany(models.comments, {foreignKey: "thread_id", sourceKey: "id", as: "commentlist"});
-  }
+  };
 
   return t;
 

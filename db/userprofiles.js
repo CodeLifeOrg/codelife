@@ -43,6 +43,8 @@ module.exports = function(sequelize, db) {
     up.belongsTo(models.geos, {foreignKey: "gid", targetKey: "id", as: "geo"});
     up.belongsTo(models.schools, {foreignKey: "sid", targetKey: "id", as: "school"});
     up.hasMany(models.userprogress, {foreignKey: "uid", targetKey: "uid", as: "userprogress"});
+    up.hasMany(models.threads, {foreignKey: "uid", targetKey: "uid", as: "threads"});
+    up.hasMany(models.comments, {foreignKey: "uid", targetKey: "uid", as: "comments"});
   };
 
 

@@ -32,6 +32,7 @@ class Discussion extends Component {
       this.setState({threads: false});
       axios.get(`/api/threads/all?subject_type=${subjectType}&subject_id=${subjectId}`).then(resp => {
         const threads = resp.data;
+        console.log(threads);
         this.setState({threads});
       });  
     }

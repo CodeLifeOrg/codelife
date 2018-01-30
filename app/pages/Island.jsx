@@ -37,6 +37,9 @@ class Island extends Component {
    * @returns {Boolean} Returns a boolean whether or not the user has completed the provided island ID.
    */
   hasUserCompleted(milestone) {
+    // Unlock all islands for admins
+    if (this.props.auth.user.role > 0) return true;
+
     // TODO: this is a blocking short-circuit for August. remove after Beta (done)
     // TODO2: adding back in a hard blocker for November Beta.
     // TODO3: blocker incremented for December Island.

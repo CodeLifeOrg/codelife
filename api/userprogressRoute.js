@@ -5,6 +5,7 @@ module.exports = function(app) {
   const {db} = app.settings;
 
   // Used in CodeBlock, CodeblockList, Home, Island, Level, and Slide to determine this user's list of beaten items
+  // Note: "current" is used only for Home.jsx to fill in a "continue your journey" link
   app.get("/api/userprogress/mine", isAuthenticated, (req, res) => {
     db.userprogress.findAll({where: {uid: req.user.id}})
       .then(progress => {

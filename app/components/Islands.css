@@ -650,3 +650,125 @@
     background-color: map(islands, island-clock, dark);
   }
 }
+
+.island-space {
+  &#footer {
+    background-image: url("/islands/island-space-ground.png");
+  }
+  &#island .image {
+    background-image: url("/islands/island-space.png");
+  }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-space, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-space, dark);
+  }
+  &#island #path {
+    top: 400px;
+  }
+  &#island #path:before {
+    background-color: map(islands, island-space, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-space, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-space, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-space, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-space, dark);
+    color: map(islands, island-space, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-space, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-space, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-space, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-space, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-space, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-space, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-space, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-space, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-space, dark);
+  }
+}
+
+.island-trash {
+  &#footer {
+    background-image: url("/islands/island-trash-ground.png");
+  }
+  &#island .image {
+    background-image: url("/islands/island-trash.png");
+  }
+  &#island .title, & .description, & .toggle-show {
+    text-shadow: 0 2px 2px map(islands, island-trash, dark);
+  }
+  &#island #title {
+    background-color: map(islands, island-trash, dark);
+  }
+  &#island #path {
+    top: 315px;
+  }
+  &#island #path:before {
+    background-color: map(islands, island-trash, dark);
+  }
+  & #path .stop, & .island-icon {
+    border-color: map(islands, island-trash, dark);
+  }
+  &#island #path .stop.done {
+    background-color: map(islands, island-trash, light);
+  }
+  &#island #path .stop:not(.next):not(.done) {
+    background-color: map(islands, island-trash, dark);
+  }
+  &#island #path .code-block .side {
+    border-color: map(islands, island-trash, dark);
+    color: map(islands, island-trash, dark);
+  }
+  &#island #path .code-block:not(.next) .side {
+    background-color: map(islands, island-trash, dark);
+  }
+  &#island #path .code-block.done .side {
+    background-color: map(islands, island-trash, light);
+  }
+  &.codeBlockCard {
+    background-color: map(islands, island-trash, dark);
+  }
+  &.pt-dialog, & .pt-dialog {
+    border-color: map(islands, island-trash, dark);
+  }
+  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
+    background-color: map(islands, island-trash, dark);
+  }
+  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
+    background-color: map(islands, island-trash, dark);
+  }
+  &#slide a:not(.pt-button) {
+    color: map(islands, island-trash, dark);
+  }
+  &.pt-tooltip .pt-popover-arrow-fill {
+    fill: map(islands, island-trash, dark);
+  }
+  &.pt-tooltip .pt-popover-content {
+    background-color: map(islands, island-trash, dark);
+  }
+}

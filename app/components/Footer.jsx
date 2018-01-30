@@ -10,6 +10,8 @@ class Footer extends Component {
     const {protocol, host} = serverLocation;
     const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
 
+    const governmentLogos = false;
+
     return (
       <footer id="footer" className={ className }>
         <div className="links">
@@ -22,8 +24,8 @@ class Footer extends Component {
         </div>
         <div className="logos">
           <a target="_blank" rel="noopener noreferrer" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
-          <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
-          <a target="_blank" rel="noopener noreferrer" href="http://www.governo.mg.gov.br/"><img className="logo" src="/footer/logo-mg.svg" /></a>
+          { governmentLogos ? <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a> : null }
+          { governmentLogos ? <a target="_blank" rel="noopener noreferrer" href="http://www.governo.mg.gov.br/"><img className="logo" src="/footer/logo-mg.svg" /></a> : null }
         </div>
       </footer>
     );

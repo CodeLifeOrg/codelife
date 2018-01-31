@@ -2,6 +2,39 @@ const {isAuthenticated} = require("../tools/api.js");
 const sequelize = require("sequelize");
 // const translate = require("../tools/translate.js");
 
+const threadInclude = [
+  { 
+    association: "commentlist", 
+    include: [
+      {
+        association: "user", 
+        attributes: ["name", "username", "id", "role"]
+      },
+      {
+        association: "userprofile", 
+        attributes: ["img"]/*, 
+        include: [
+          {association: "threads"}, 
+          {association: "comments"}
+        ]*/
+      }
+    ]
+  },
+  {
+    association: "user", 
+    attributes: ["name", "username", "id", "role"]
+  },
+  // {association: "userprofile", attributes: ["img"], include: [{association: "threads", attributes: [[sequelize.fn("COUNT", sequelize.col("threads.id")), "threadCount"]]}, {association: "comments"}]}
+  {
+    association: "userprofile", 
+    attributes: ["img"]/*, 
+    include: [
+      {association: "threads", attributes: [[sequelize.fn("COUNT", sequelize.col("threads.id")), "threadCount"]]}, 
+      {association: "comments"}
+    ]*/
+  }
+];
+
 module.exports = function(app) {
 
   const {db} = app.settings;
@@ -10,12 +43,7 @@ module.exports = function(app) {
   app.get("/api/threads/all", (req, res) => {
     db.threads.findAll({
       where: req.query,
-      include: [
-        {association: "commentlist"},
-        {association: "user", attributes: ["name", "username", "id"]},
-        /*{association: "userprofile", attributes: ["img"], include: [{association: "threads", attributes: [[sequelize.fn("COUNT", sequelize.col("threads.id")), "threadCount"]]}, {association: "comments"}]}*/
-        {association: "userprofile", attributes: ["img"], include: [{association: "threads"}, {association: "comments"}]}
-      ]
+      include: threadInclude
     }).then(threads => {
       threads.sort((a, b) => b.date < a.date ? 1 : -1);
       res.json(threads).end();
@@ -37,7 +65,7 @@ module.exports = function(app) {
           subject_type: req.body.subject_type,
           subject_id: req.body.subject_id
         },
-        include: [{association: "commentlist"}]
+        include: threadInclude
       }).then(threads => {
         threads.sort((a, b) => b.date < a.date ? 1 : -1);
         res.json({newThread, threads}).end();
@@ -58,7 +86,7 @@ module.exports = function(app) {
           subject_type: req.body.subject_type,
           subject_id: req.body.subject_id
         },
-        include: [{association: "commentlist"}]
+        include: threadInclude
       }).then(threads => {
         threads.sort((a, b) => b.date < a.date ? 1 : -1);
         res.json(threads).end();

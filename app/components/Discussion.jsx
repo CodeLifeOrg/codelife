@@ -32,7 +32,6 @@ class Discussion extends Component {
       this.setState({threads: false});
       axios.get(`/api/threads/all?subject_type=${subjectType}&subject_id=${subjectId}`).then(resp => {
         const threads = resp.data;
-        console.log(threads);
         this.setState({threads});
       });  
     }
@@ -83,10 +82,13 @@ class Discussion extends Component {
 
     if (!threads) return <Loading />;
 
+    console.log(threads);
+
     const threadItems = threads.map(t =>
       <div key={t.id} className="thread">
         <div className="thread-title">
-          {t.title}
+          { /* `${t.title} --- [${t.user.username} (${t.userprofile.threads.length + t.userprofile.comments.length} posts)]` */ }
+          { `${t.title} --- [${t.user.username}] ${ t.user.role > 1 ? "(admin)" : ""}` }
         </div>
         <div className="thread-body" dangerouslySetInnerHTML={{__html: t.content}} />
         <div className="view-comments" onClick={this.toggleThread.bind(this, t.id)}>
@@ -98,7 +100,7 @@ class Discussion extends Component {
               t.commentlist.map(c => 
                 <div key={c.id} className="comment">
                   <div className="comment-title">
-                    {c.title}
+                    { `${c.title} --- [${c.user.username}] ${ t.user.role > 1 ? "(admin)" : ""}` }
                   </div>
                   <div className="comment-body" dangerouslySetInnerHTML={{__html: c.content}} />
                 </div>

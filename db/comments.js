@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-  return sequelize.define("comments",
+  const c = sequelize.define("comments",
     {
       id: {
         type: db.INTEGER,
@@ -18,5 +18,13 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
+
+  c.associate = models => {
+    c.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
+    c.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
+    c.hasMany(models.comments, {foreignKey: "thread_id", sourceKey: "id", as: "commentlist"});
+  };
+
+  return c;
 
 };

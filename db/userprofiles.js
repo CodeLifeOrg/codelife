@@ -34,17 +34,14 @@ module.exports = function(sequelize, db) {
       timestamps: false
     }
   );
-
-  // up.hasOne(db.user, {foreignKey: "uid"});
-
   
   up.associate = models => {
     up.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
     up.belongsTo(models.geos, {foreignKey: "gid", targetKey: "id", as: "geo"});
     up.belongsTo(models.schools, {foreignKey: "sid", targetKey: "id", as: "school"});
-    up.hasMany(models.userprogress, {foreignKey: "uid", targetKey: "uid", as: "userprogress"});
-    up.hasMany(models.threads, {foreignKey: "uid", targetKey: "uid", as: "threads"});
-    up.hasMany(models.comments, {foreignKey: "uid", targetKey: "uid", as: "comments"});
+    up.hasMany(models.userprogress, {foreignKey: "uid", sourceKey: "uid", as: "userprogress"});
+    up.hasMany(models.threads, {foreignKey: "uid", sourceKey: "uid", as: "threads"});
+    up.hasMany(models.comments, {foreignKey: "uid", sourceKey: "uid", as: "comments"});
   };
 
 

@@ -22,7 +22,6 @@ module.exports = function(sequelize, db) {
   c.associate = models => {
     c.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
     c.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
-    c.hasMany(models.comments, {foreignKey: "thread_id", sourceKey: "id", as: "commentlist"});
   };
 
   return c;

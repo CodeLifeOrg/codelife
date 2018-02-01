@@ -17,7 +17,8 @@ class Discussion extends Component {
       threads: false,
       threadTitle: "",
       threadContent: "",
-      commentFields: {}
+      commentFields: {},
+      sortType: "date-oldest"
     };
   }
 
@@ -76,23 +77,53 @@ class Discussion extends Component {
     });
   }
 
+  selectSort(method) {
+    const {threads} = this.state;
+    switch (method) {
+      case "date-oldest":
+        threads.sort((a, b) => a.date > b.date ? 1 : -1);
+        break;
+      case "date-newest":
+        threads.sort((a, b) => a.date <= b.date ? 1 : -1);
+        break;
+      case "comments-most": 
+        threads.sort((a, b) => a.commentlist.length < b.commentlist.length);
+        break;
+      case "comments-least":
+        threads.sort((a, b) => a.commentlist.length >= b.commentlist.length);
+        break;
+      default:
+        break;
+    }
+    this.setState({threads});
+  }
+
+  formatDate(datestring) {
+    const date = new Date(datestring);
+    const year = date.getFullYear();
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
+    const hours = `0${date.getHours()}`.slice(-2);
+    const minutes = `0${date.getMinutes()}`.slice(-2);
+    return `${day}/${month}/${year} - ${hours}:${minutes}`;
+  }
+
   render() {
 
     const {threads, threadTitle, threadContent} = this.state;
 
     if (!threads) return <Loading />;
 
-    console.log(threads);
-
     const threadItems = threads.map(t =>
       <div key={t.id} className="thread">
         <div className="thread-title">
           { /* `${t.title} --- [${t.user.username} (${t.userprofile.threads.length + t.userprofile.comments.length} posts)]` */ }
-          { `${t.title} --- [${t.user.username}] ${ t.user.role > 1 ? "(admin)" : ""}` }
+          { `${t.title} --- [${t.user.username}] ${ t.user.role > 0 ? "(admin)" : ""}` }<br/>
+          { `${this.formatDate(t.date)}` }
         </div>
         <div className="thread-body" dangerouslySetInnerHTML={{__html: t.content}} />
         <div className="view-comments" onClick={this.toggleThread.bind(this, t.id)}>
-          {this.state[t.id] ? "Hide Comments" : "Show Comments"}
+          {this.state[t.id] ? `Hide Comments (${t.commentlist.length})` : `Show Comments (${t.commentlist.length})`}
         </div>
         <div className="comments">
           <Collapse isOpen={this.state[t.id]}>
@@ -100,7 +131,8 @@ class Discussion extends Component {
               t.commentlist.map(c => 
                 <div key={c.id} className="comment">
                   <div className="comment-title">
-                    { `${c.title} --- [${c.user.username}] ${ t.user.role > 1 ? "(admin)" : ""}` }
+                    { `${c.title} --- [${c.user.username}] ${ t.user.role > 0 ? "(admin)" : ""}` }<br/>
+                    { `${this.formatDate(c.date)}` }
                   </div>
                   <div className="comment-body" dangerouslySetInnerHTML={{__html: c.content}} />
                 </div>
@@ -124,6 +156,17 @@ class Discussion extends Component {
 
     return (
       <div id="discussion">
+        <div id="sort-bar" style={{textAlign: "right"}}>
+          Sort By 
+          <div className="pt-select" style={{marginLeft: "10px"}}>
+            <select value={this.state.sortBy} onChange={e => this.selectSort.bind(this)(e.target.value)}>
+              <option value="date-oldest">Date: Oldest</option>
+              <option value="date-newest">Date: Newest</option>
+              <option value="comments-most">Comments: Most</option>
+              <option value="comments-least">Comments: Least</option>
+            </select>
+          </div>
+        </div>
         <div id="threads">
           {threadItems}
         </div>

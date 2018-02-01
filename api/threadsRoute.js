@@ -24,7 +24,6 @@ const threadInclude = [
     association: "user", 
     attributes: ["name", "username", "id", "role"]
   },
-  // {association: "userprofile", attributes: ["img"], include: [{association: "threads", attributes: [[sequelize.fn("COUNT", sequelize.col("threads.id")), "threadCount"]]}, {association: "comments"}]}
   {
     association: "userprofile", 
     attributes: ["img"]/*, 

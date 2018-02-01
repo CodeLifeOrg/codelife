@@ -1,4 +1,4 @@
-const {isAuthenticated} = require("../tools/api.js");
+const {isAuthenticated, isRole} = require("../tools/api.js");
 const sequelize = require("sequelize");
 // const translate = require("../tools/translate.js");
 
@@ -46,6 +46,22 @@ module.exports = function(app) {
     }).then(threads => {
       threads.sort((a, b) => b.date < a.date ? 1 : -1);
       res.json(threads).end();
+    });
+  });
+
+  // Used by ReportBox and ReportViewer to ban threads, Admin Only
+  app.post("/api/threads/setstatus", isRole(2), (req, res) => {
+    const {status, id} = req.body;
+    db.threads.update({status}, {where: {id}}).then(u => {
+      db.reports.update({status}, {where: {type: "thread", report_id: id}}).then(() => res.json(u).end());
+    });
+  });
+
+  // Used by ReportBox and ReportViewer to ban comments, Admin Only
+  app.post("/api/comments/setstatus", isRole(2), (req, res) => {
+    const {status, id} = req.body;
+    db.comments.update({status}, {where: {id}}).then(u => {
+      db.reports.update({status}, {where: {type: "comment", report_id: id}}).then(() => res.json(u).end());
     });
   });
 

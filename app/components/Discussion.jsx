@@ -1,9 +1,9 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import React, {Component} from "react";
-import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
-import {Collapse, Button, Toaster, Position, Intent} from "@blueprintjs/core";
+import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind} from "@blueprintjs/core";
+import ReportBox from "components/ReportBox";
 import "./Discussion.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
@@ -17,6 +17,7 @@ class Discussion extends Component {
       threads: false,
       threadTitle: "",
       threadContent: "",
+      reports: [],
       commentFields: {},
       sortType: "date-oldest"
     };
@@ -24,7 +25,10 @@ class Discussion extends Component {
 
   componentDidMount() {
     // When Discussion is initalized, it already has props. This one-time call forces an initial update.
-    this.componentDidUpdate({});
+    axios.get("/api/reports/discussions").then(resp => {
+      const reports = resp.data;
+      this.setState({reports}, this.componentDidUpdate({}));
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -108,9 +112,16 @@ class Discussion extends Component {
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   }
 
+  handleReport(report) {
+    console.log(report);
+    const {reports} = this.state;
+    reports.push(report);
+    this.setState({reports});
+  }
+
   render() {
 
-    const {threads, threadTitle, threadContent} = this.state;
+    const {threads, threadTitle, threadContent, reports} = this.state;
 
     if (!threads) return <Loading />;
 
@@ -125,6 +136,23 @@ class Discussion extends Component {
         <div className="view-comments" onClick={this.toggleThread.bind(this, t.id)}>
           {this.state[t.id] ? `Hide Comments (${t.commentlist.length})` : `Show Comments (${t.commentlist.length})`}
         </div>
+        <div className="report-thread" style={{textAlign: "right"}}>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            popoverClassName="pt-popover-content-sizing"
+            position={Position.TOP_RIGHT}
+            inline={true}
+          >
+            <Button
+              intent={reports.find(r => r.type === "thread" && r.report_id === t.id) ? "" : Intent.DANGER}
+              iconName="flag"
+              text={reports.find(r => r.type === "thread" && r.report_id === t.id) ? "Flagged" : "Flag"}
+            />
+            <div style={{textAlign: "left"}}>
+              <ReportBox reportid={t.id} contentType="thread" handleReport={this.handleReport.bind(this)} />
+            </div>
+          </Popover>  
+        </div>
         <div className="comments">
           <Collapse isOpen={this.state[t.id]}>
             {
@@ -135,6 +163,23 @@ class Discussion extends Component {
                     { `${this.formatDate(c.date)}` }
                   </div>
                   <div className="comment-body" dangerouslySetInnerHTML={{__html: c.content}} />
+                  <div className="report-comment" style={{textAlign: "right"}}>
+                    <Popover
+                      interactionKind={PopoverInteractionKind.CLICK}
+                      popoverClassName="pt-popover-content-sizing"
+                      position={Position.TOP_RIGHT}
+                      inline={true}
+                    >
+                      <Button
+                        intent={reports.find(r => r.type === "comment" && r.report_id === c.id) ? "" : Intent.DANGER}
+                        iconName="flag"
+                        text={reports.find(r => r.type === "comment" && r.report_id === c.id) ? "Flagged" : "Flag"}
+                      />
+                      <div style={{textAlign: "left"}}>
+                        <ReportBox reportid={c.id} contentType="comment" handleReport={this.handleReport.bind(this)} />
+                      </div>
+                    </Popover>  
+                  </div>
                 </div>
               )
             }

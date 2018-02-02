@@ -2,6 +2,7 @@
 body {
   font-family: "Overpass", sans-serif;
   letter-spacing: 0.5px;
+  overflow-x: hidden;
 }
 
 #app {

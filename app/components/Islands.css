@@ -665,7 +665,7 @@
     background-color: map(islands, island-space, dark);
   }
   &#island #path {
-    top: 400px;
+    top: 360px;
   }
   &#island #path:before {
     background-color: map(islands, island-space, dark);
@@ -726,7 +726,7 @@
     background-color: map(islands, island-trash, dark);
   }
   &#island #path {
-    top: 315px;
+    top: 300px;
   }
   &#island #path:before {
     background-color: map(islands, island-trash, dark);

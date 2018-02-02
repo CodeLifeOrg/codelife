@@ -23,9 +23,19 @@ class Footer extends Component {
           <a className="link language" href={`${protocol}//en.${hostSansSub}${currentPath}`} >EN</a> | <a className="link language" href={`${protocol}//pt.${hostSansSub}${currentPath}`} >PT</a>
         </div>
         <div className="logos">
+          { governmentLogos
+            ? null
+            : <div>
+              <a target="_blank" className="text-link" rel="noopener noreferrer" href="http://www.fapemig.br/">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</a>
+              <a target="_blank" className="text-link" rel="noopener noreferrer" href="http://mg.gov.br">Governo do Estado de Minas Gerais</a>
+            </div>}
           <a target="_blank" rel="noopener noreferrer" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
-          { governmentLogos ? <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a> : null }
-          { governmentLogos ? <a target="_blank" rel="noopener noreferrer" href="http://www.governo.mg.gov.br/"><img className="logo" src="/footer/logo-mg.svg" /></a> : null }
+          { governmentLogos
+            ? <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
+            : null }
+          { governmentLogos
+            ? <a target="_blank" rel="noopener noreferrer" href="http://mg.gov.br"><img className="logo" src="/footer/logo-mg.svg" /></a>
+            : null }
         </div>
       </footer>
     );

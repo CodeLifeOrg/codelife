@@ -213,12 +213,11 @@ class Slide extends Component {
           <div id="slide-foot">
             { prevSlug
               ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
-              : <div className="pt-button pt-disabled">{t("Previous")}</div> 
+              : <div className="pt-button pt-disabled">{t("Previous")}</div>
             }
-            <div id="show-discussion" style={{cursor: "pointer", marginTop: "10px", color: "blue"}}>
-              <span onClick={this.toggleDiscussion.bind(this)}>
-                { this.state.showDiscussion ? "Hide Discussion ▲" : "Show Discussion ▼" }
-              </span>
+            <div className={ `pt-button ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
+              { showDiscussion ? t("Hide Discussion") : t("Show Discussion") }
+              { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
             </div>
             { nextSlug
               ? this.state.blocked
@@ -226,14 +225,14 @@ class Slide extends Component {
                 : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
               : nextLevel
                 ? <div>
-                  <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
-                  <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link> 
+                  <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+                  <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
                 </div>
-                : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
+                : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
             }
           </div>
         </div>
-        { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null } 
+        { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null }
       </div>
     );
   }

@@ -1,4 +1,4 @@
-#discussion {
+#Discussion {
   background-color: white;
   border-radius: 10px;
   box-sizing: border-box;
@@ -6,58 +6,125 @@
   flex-direction: column;
   justify-content: space-between;
   margin: 0 25px 25px;
-  padding: 5px;
-}
-
-.thread-title {
-  font-weight: bold;
-}
-
-.thread-body {
-  padding: 10px;
-}
-
-.view-comments {
-  color: blue;
-  cursor: pointer;
-}
-
-.thread {
-  border: 1px solid black;
-  margin: 5px;
-  padding: 5px;
-}
-
-.comment {
-  border: 1px solid black;
-  margin: 5px;
-  margin-left: 20px;
-  padding: 5px;
-}
-
-.comment-title {
-  font-weight: bold;
-}
-
-.comment-body {
-  padding: 10px;
-}
-
-.new-comment {
-  margin-left: 15px;
-  margin-top: 20px;
-  padding: 5px;
-}
-
-.post-button {
-  margin-top: 10px;
-}
-
-.new-thread {
-  padding: 5px;
-
-}
-
-.new-thread-title {
-  margin: 5px;
+  padding: 25px;
+  position: relative;
+  & h3 {
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  & #sort-bar {
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    & .pt-select {
+      margin-left: 10px;
+    }
+  }
+  & #threads {
+    & .thread {
+      padding: 25px;
+      position: relative;
+      width: 100%;
+      &:nth-child(odd) {
+        background-color: #f8f8f8;
+      }
+      & .thread-header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        & .thread-content {
+          & .thread-title {
+            font-size: 18px;
+            font-weight: bold;
+          }
+          & .thread-user {
+            & .pt-icon-standard {
+              margin-right: 5px;
+              opacity: 0.75;
+            }
+            & .thread-date {
+              font-size: 12px;
+              margin-left: 5px;
+              opacity: 0.75;
+            }
+          }
+          & .thread-body {
+            margin: 10px 0 0;
+          }
+        }
+        & .thread-actions {
+          &>* {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: top;
+          }
+        }
+      }
+      & .comments {
+        & .comment {
+          border-bottom: 1px solid #ccc;
+          padding: 10px 25px;
+          position: relative;
+          &:first-child {
+            border-top: 1px solid #ccc;
+            margin-top: 10px;
+          }
+          & .comment-title {
+            font-size: 14px;
+            font-weight: bold;
+          }
+          & .comment-user {
+            font-size: 12px;
+            & .pt-icon-standard {
+              font-size: 14px;
+              margin-right: 5px;
+              opacity: 0.75;
+            }
+            & .comment-date {
+              font-size: 12px;
+              margin-left: 5px;
+              opacity: 0.75;
+            }
+          }
+          & .comment-body {
+            margin: 10px 0 0;
+          }
+          & .report-comment {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+          }
+        }
+      }
+    }
+  }
+  & .new-thread {
+    border-top: 1px solid #ccc;
+  }
+  & .new-comment, & .new-thread {
+    margin: 25px 0 0;
+    & .new-comment-title, & .new-thread-title {
+      font-weight: bold;
+      margin: 10px 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    & .pt-input {
+      margin: 0 0 10px;
+      width: 100%;
+    }
+    & .quill {
+      & .ql-toolbar {
+        border-radius: 10px 10px 0 0;
+      }
+      & .ql-container {
+        border-radius: 0 0 10px 10px;
+        min-height: 100px;
+      }
+    }
+    & .pt-button {
+      margin-top: 10px;
+    }
+  }
 }

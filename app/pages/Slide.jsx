@@ -7,6 +7,7 @@ import {translate} from "react-i18next";
 import {Position, Tooltip} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
+import Discussion from "components/Discussion";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -32,6 +33,7 @@ class Slide extends Component {
       currentLevel: null,
       currentIsland: null,
       levels: null,
+      showDiscussion: false,
       sentProgress: false,
       latestSlideCompleted: 0,
       islandComplete: false,
@@ -68,6 +70,7 @@ class Slide extends Component {
         currentLevel: null,
         currentIsland: null,
         levels: null,
+        showDiscussion: false,
         sentProgress: false,
         latestSlideCompleted: 0,
         islandComplete: false,
@@ -82,7 +85,7 @@ class Slide extends Component {
       let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
       if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
       if (this.state.done) blocked = false;
-      this.setState({currentSlide: cs, blocked});
+      this.setState({currentSlide: cs, blocked, showDiscussion: false});
     }
 
     const i = slides.indexOf(currentSlide);
@@ -156,10 +159,14 @@ class Slide extends Component {
     if (window) window.location.reload();
   }
 
+  toggleDiscussion() {
+    this.setState({showDiscussion: !this.state.showDiscussion});
+  }
+
   render() {
     const {auth, t} = this.props;
-    const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, levels, currentLevel, currentIsland} = this.state;
+    const {lid, mlid, sid} = this.props.params;
+    const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -186,39 +193,46 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div id="slide" className={ currentIsland.theme }>
-        {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
-        <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
-        <div id="slide-head">
-          { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
+      <div>
+        <div id="slide" className={ currentIsland.theme }>
+          {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
+          <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
+          <div id="slide-head">
+            { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
-            <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
-          </Tooltip>
+            <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
+              <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
+            </Tooltip>
+          </div>
+
+          <SlideComponent
+            island={currentIsland.theme}
+            unblock={this.unblock.bind(this)}
+            {...currentSlide} />
+
+          <div id="slide-foot">
+            { prevSlug
+              ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
+              : <div className="pt-button pt-disabled">{t("Previous")}</div>
+            }
+            <div className={ `pt-button ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
+              { showDiscussion ? t("Hide Discussion") : t("Show Discussion") }
+              { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
+            </div>
+            { nextSlug
+              ? this.state.blocked
+                ? <div className="pt-button pt-disabled">{t("Next")}</div>
+                : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
+              : nextLevel
+                ? <div>
+                  <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+                  <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
+                </div>
+                : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+            }
+          </div>
         </div>
-
-        <SlideComponent
-          island={currentIsland.theme}
-          unblock={this.unblock.bind(this)}
-          {...currentSlide} />
-
-        <div id="slide-foot">
-          { prevSlug
-            ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
-            : <div className="pt-button pt-disabled">{t("Previous")}</div> }
-          { nextSlug
-            ? this.state.blocked
-              ? <div className="pt-button pt-disabled">{t("Next")}</div>
-              : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-            : nextLevel
-              ? <div>
-                <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
-                <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link> 
-              </div>
-              : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
-          }
-        </div>
-
+        { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null }
       </div>
     );
   }

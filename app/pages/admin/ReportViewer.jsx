@@ -16,6 +16,8 @@ class ReportViewer extends Component {
       mounted: false,
       projectReports: [],
       codeblockReports: [],
+      threadReports: [],
+      commentReports: [],
       isOpen: false
     };
   }
@@ -23,12 +25,16 @@ class ReportViewer extends Component {
   loadFromDB() {
     const cbget = axios.get("/api/reports/codeblocks/all");
     const pget = axios.get("/api/reports/projects/all");
+    const tget = axios.get("/api/reports/threads/all");
+    const cget = axios.get("/api/reports/comments/all");
 
-    Promise.all([cbget, pget]).then(resp => {
+    Promise.all([cbget, pget, tget, cget]).then(resp => {
       const mounted = true;
       const codeblockReports = resp[0].data;
       const projectReports = resp[1].data;
-      this.setState({mounted, codeblockReports, projectReports});
+      const threadReports = resp[2].data;
+      const commentReports = resp[3].data;
+      this.setState({mounted, codeblockReports, projectReports, threadReports, commentReports});
     });
   }
 
@@ -76,8 +82,36 @@ class ReportViewer extends Component {
   }
 
 
-  createRow(type, report) {
+  createPageRow(type, report) {
     const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
+    let strReasons = "";
+    let strComments = "";
+    for (const r of report.reasons) strReasons += `${r}\n`;
+    for (const c of report.comments) strComments += `${c}\n`;
+    return <tr key={report.id}>
+      <td>
+        <a target="_blank" href={`/${type}/${report.username}/${report.filename}`}>
+          {shortFilename}
+        </a>
+      </td>
+      <td>{report.username}</td>
+      <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
+      <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
+      <td>
+        <Tooltip content="Allow this Content" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
+        </Tooltip>
+        <Tooltip content="Ban this Content" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
+        </Tooltip>
+      </td>
+    </tr>;
+  }
+  
+  createDiscRow(type, report) {
+    //const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
+    const shortFilename = "testshort";
+    report.filename = "test2";
     let strReasons = "";
     let strComments = "";
     for (const r of report.reasons) strReasons += `${r}\n`;
@@ -129,16 +163,20 @@ class ReportViewer extends Component {
 
   render() {
 
-    const {mounted, codeblockReports, projectReports} = this.state;
+    const {mounted, codeblockReports, projectReports, threadReports, commentReports} = this.state;
     const {t} = this.props;
 
     if (!mounted) return <Loading />;
 
     const cbSorted = this.groupReports(codeblockReports);
     const pSorted = this.groupReports(projectReports);
+    const tSorted = this.groupReports(threadReports);
+    const cSorted = this.groupReports(commentReports);
 
-    const codeblockItems = cbSorted.map(r => this.createRow("codeBlocks", r));
-    const projectItems = pSorted.map(r => this.createRow("projects", r));
+    const codeblockItems = cbSorted.map(r => this.createPageRow("codeBlocks", r));
+    const projectItems = pSorted.map(r => this.createPageRow("projects", r));
+    const threadItems = tSorted.map(r => this.createDiscRow("threads", r));
+    const commentItems = cSorted.map(r => this.createDiscRow("comments", r));
 
     return (
       <div id="ReportViewer">
@@ -167,6 +205,32 @@ class ReportViewer extends Component {
             </tr>
           </thead>
           <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
+        </table>
+        <h2 className="report-title">Threads</h2>
+        <table className="pt-table pt-striped pt-interactive">
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Author</th>
+              <th>Reason</th>
+              <th>Comments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{threadItems.length > 0 ? threadItems : t("No items are currently flagged")}</tbody>
+        </table>
+        <h2 className="report-title">Comments</h2>
+        <table className="pt-table pt-striped pt-interactive">
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Author</th>
+              <th>Reason</th>
+              <th>Comments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{commentItems.length > 0 ? commentItems : t("No items are currently flagged")}</tbody>
         </table>
       </div>
     );

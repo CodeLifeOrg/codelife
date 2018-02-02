@@ -79,7 +79,7 @@ class InputCode extends Component {
           onConfirm={ () => this.resetAnswer() }>
           <p>{t("Are you sure you want to reset the code to its original state?")}</p>
         </Alert>
-        <div className="title-tab">{titleText}</div>
+        { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }

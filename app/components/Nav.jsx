@@ -42,7 +42,9 @@ class Nav extends Component {
             </Popover>
           </div>
           : <div className="links">
-            <AnchorLink className="link" to="login"><span className="pt-icon-standard pt-icon-user" />{ t("Login.Login") }/{ t("SignUp.Sign Up") }</AnchorLink>
+            { logo
+              ? <Link className="link" to="/#login"><span className="pt-icon-standard pt-icon-user" />{ t("Login.Login") }/{ t("SignUp.Sign Up") }</Link>
+              : <AnchorLink className="link" to="login"><span className="pt-icon-standard pt-icon-user" />{ t("Login.Login") }/{ t("SignUp.Sign Up") }</AnchorLink> }
             <Link className="link" to="/about"><span className="pt-icon-standard pt-icon-help" />{ t("About") }</Link>
           </div> }
       </div>

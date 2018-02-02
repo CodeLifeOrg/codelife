@@ -86,11 +86,11 @@ module.exports = function(app) {
       },
       include: [
         {
-          association: "codeblock", 
-          attributes: ["snippetname"], 
+          association: "codeblock",
+          attributes: ["snippetname"],
           include: [
             {
-              association: "user", 
+              association: "user",
               attributes: ["username", "email", "name"]
             }
           ]
@@ -119,11 +119,11 @@ module.exports = function(app) {
       },
       include: [
         {
-          association: "project", 
-          attributes: ["name"], 
+          association: "project",
+          attributes: ["name"],
           include: [
             {
-              association: "user", 
+              association: "user",
               attributes: ["username", "email", "name"]
             }
           ]
@@ -188,8 +188,9 @@ module.exports = function(app) {
   // Used by ReportBox to process/save a report
   app.post("/api/reports/save", isAuthenticated, (req, res) => {
     const uid = req.user.id;
-    const {reason, comment, report_id, type} = req.body;
-    db.reports.create({uid, reason, comment, report_id, type, status: "new"})
+    const {reason, comment, type} = req.body;
+    const reportId = req.body.report_id;
+    db.reports.create({uid, reason, comment, report_id: reportId, type, status: "new"})
       .then(u => {
 
         // disabling email server while testing occurs
@@ -207,12 +208,13 @@ module.exports = function(app) {
 
             return new BuildMail("text/html")
               .addHeader({from: mgEmail, subject: "New Flagged Content", to: emails})
-              .setContent(template).build((error, mail) => 
+              .setContent(template).build((error, mail) =>
                 mailgun.messages().sendMime({to: emails, message: mail.toString("ascii")}, () => res.json(u).end())
               );
           });
-    
+
         });
+
         */
     
       });

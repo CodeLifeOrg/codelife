@@ -184,7 +184,7 @@
   "You don't have permission to edit this user's profile": "You don't have permission to edit this user's profile",
   "You got it right!": "You got it right!",
   "Your report was received": "Your report was received",
-  "aboutP1": "CodeLife is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector. The platform’s seed content will focus on teaching basic Javascript.",
+  "aboutP1": "CodeLife is the product of the Code School Brazil Project of the State Funding Agency of Minas Gerais - FAPEMIG. A free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector. The platform’s seed content will focus on teaching basic Javascript.",
   "aboutP2": "CodeLife aims to be a free web platform where students can learn a variety skills useful for work in Brazil’s IT sector (ex. frontend development, UI design, data visualization). Users of CSB will be able to learn independently from physical classrooms, in order to provide a resource for students who may not otherwise have adequate learning opportunities.",
   "aboutP3": "The primary target audience of the platform MVP are students aged 14-18 in Brazilian public school. Testing will initially focus on students in Greater Belo Horizonte. At minimum all content will be created natively in Portuguese and English and the curriculum will be designed to complement the public education in Brazil",
   "aboutP4": "The platform’s seed curriculum will cover dynamic web development and integrate Brazilian data using the DataViva API.",

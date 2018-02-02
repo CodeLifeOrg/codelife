@@ -2,12 +2,14 @@
   align-self: stretch;
   display: flex;
   flex: 1;
+  min-width: 0;
   & .code {
     align-self: stretch;
     display: flex;
     flex: 1;
     flex-direction: column;
     margin: 0 20px 0 0;
+    min-width: 0;
     position: relative;
     & .panel-title {
       align-self: flex-start;
@@ -174,6 +176,7 @@
   flex: 1;
   flex-direction: column;
   margin: 0;
+  min-width: 0;
   position: relative;
   & .panel-title {
     align-self: flex-start;

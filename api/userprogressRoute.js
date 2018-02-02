@@ -5,6 +5,7 @@ module.exports = function(app) {
   const {db} = app.settings;
 
   // Used in CodeBlock, CodeblockList, Home, Island, Level, and Slide to determine this user's list of beaten items
+  // Note: "current" is used only for Home.jsx to fill in a "continue your journey" link
   app.get("/api/userprogress/mine", isAuthenticated, (req, res) => {
     db.userprogress.findAll({where: {uid: req.user.id}})
       .then(progress => {
@@ -20,7 +21,8 @@ module.exports = function(app) {
             }
             // This is a blocker for november's beta.  Increment this with release of each new island
             // incremented this for december island.
-            if (latestIsland >= 5) latestIsland = 5;
+            // incremented this for january island
+            if (latestIsland >= 6) latestIsland = 6;
             const island = islands.find(i => i.ordering === latestIsland + 1);
             returnObj.current = island;
             res.json(returnObj).end();

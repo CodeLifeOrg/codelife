@@ -17,6 +17,10 @@ class Glossary extends Component {
     };
   }
 
+  componentDidMount() {
+    this.componentDidUpdate();
+  }
+
   componentDidUpdate() {
     if (!this.state.words.length && this.props.glossary) {
       const mounted = true;
@@ -35,7 +39,7 @@ class Glossary extends Component {
     const wordList = words.map(w => 
       <div key={w.id} id={w.word}>
         <h2>{w.word}</h2>
-        <p>{w.definition}</p>
+        <div dangerouslySetInnerHTML={{__html: w.definition}}></div>
       </div>
     );
 

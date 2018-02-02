@@ -11,40 +11,45 @@
   padding: 50px 25px 25px;
   position: absolute;
   width: 100%;
-
   & .links {
-
     & .link {
       color: white;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-
     & .link:not(.language) {
       margin-right: 15px;
     }
-
   }
-
   & .logos {
     align-items: center;
     display: flex;
-
+    & .text-link {
+      color: white;
+      display: block;
+      flex: none;
+      font-size: 12px;
+      font-weight: 200;
+      margin-bottom: 2px;
+      opacity: 0.9;
+      text-align: right;
+      width: 100%;
+      &:hover {
+        color: white;
+        opacity: 1;
+      }
+    }
     & .logo {
       height: 30px;
       margin: 0 15px;
       opacity: 0.9;
       transition: opacity 0.2s;
-
       &.datawheel {
         height: 40px;
       }
-
       &:hover {
         opacity: 1;
       }
     }
-
   }
-
 }

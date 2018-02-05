@@ -148,6 +148,9 @@
         &.string {
           color: #C40000;
         }
+        &.undefined {
+          color: #898989;
+        }
         &.object {
           font-style: italic;
         }

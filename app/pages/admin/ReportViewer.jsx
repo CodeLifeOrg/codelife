@@ -109,20 +109,26 @@ class ReportViewer extends Component {
   }
   
   createDiscRow(type, report) {
-    //const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
-    const shortFilename = "testshort";
-    report.filename = "test2";
+    // const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
+    // const shortFilename = "testshort";
+    // report.filename = "test2";
+    let author = "";
+    if (report.commentref) author = report.commentref.user.username;
+    if (report.thread) author = report.thread.user.username;
     let strReasons = "";
     let strComments = "";
     for (const r of report.reasons) strReasons += `${r}\n`;
     for (const c of report.comments) strComments += `${c}\n`;
     return <tr key={report.id}>
       <td>
-        <a target="_blank" href={`/${type}/${report.username}/${report.filename}`}>
-          {shortFilename}
-        </a>
+        {report.permalink ?
+          <a target="_blank" href={report.permalink}>
+            {report.permalink.split("/").slice(-1)[0]}
+          </a>
+          : "404"
+        }
       </td>
-      <td>{report.username}</td>
+      <td>{ author }</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
@@ -150,10 +156,13 @@ class ReportViewer extends Component {
           ids: [report.id],
           report_id: report.report_id,
           username: report.username,
+          commentref: report.commentref,
+          thread: report.thread,
           email: report.email,
           filename: report.filename,
           reasons: [report.reason],
-          comments: [report.comment]
+          comments: [report.comment],
+          permalink: report.permalink
         };
         grouped.push(obj);
       }

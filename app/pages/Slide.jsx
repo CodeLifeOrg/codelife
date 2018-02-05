@@ -232,7 +232,7 @@ class Slide extends Component {
             }
           </div>
         </div>
-        { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null }
+        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" subjectId={sid}/> : null }
       </div>
     );
   }

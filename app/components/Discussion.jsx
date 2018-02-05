@@ -113,7 +113,6 @@ class Discussion extends Component {
   }
 
   handleReport(report) {
-    console.log(report);
     const {reports} = this.state;
     reports.push(report);
     this.setState({reports});
@@ -160,7 +159,7 @@ class Discussion extends Component {
                   text={reports.find(r => r.type === "thread" && r.report_id === t.id) ? "Flagged" : "Flag"}
                 />
                 <div style={{textAlign: "left"}}>
-                  <ReportBox reportid={t.id} contentType="thread" handleReport={this.handleReport.bind(this)} />
+                  <ReportBox reportid={t.id} permalink={this.props.permalink} contentType="thread" handleReport={this.handleReport.bind(this)} />
                 </div>
               </Popover>
             </div>
@@ -202,7 +201,7 @@ class Discussion extends Component {
                         iconName="flag"
                         className={ `${reports.find(r => r.type === "comment" && r.report_id === c.id) ? "" : "pt-minimal"} pt-small` }
                       />
-                      <ReportBox reportid={c.id} contentType="comment" handleReport={this.handleReport.bind(this)} />
+                      <ReportBox reportid={c.id} permalink={this.props.permalink} contentType="comment" handleReport={this.handleReport.bind(this)} />
                     </Popover>
                   </div>
                 </div>
@@ -253,7 +252,8 @@ class Discussion extends Component {
 }
 
 Discussion = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(Discussion);
 Discussion = translate()(Discussion);
 export default Discussion;

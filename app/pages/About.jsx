@@ -38,7 +38,7 @@ class About extends Component {
 
     return (
       <div id="about-container">
-        <h1>{ t("About") } CodeLife</h1>
+        <h1>{ t("About") }</h1>
         <p>{ t("aboutP1") }</p>
         <p>{ t("aboutP2") }</p>
         <p>{ t("aboutP3") }</p>

@@ -1,6 +1,8 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const sequelize = require("sequelize");
 // const translate = require("../tools/translate.js");
+const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
+const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 
 const threadInclude = [
   { 
@@ -9,6 +11,10 @@ const threadInclude = [
       {
         association: "user", 
         attributes: ["name", "username", "id", "role"]
+      },
+      {
+        association: "reportlist",
+        attributes: ["id"]
       },
       {
         association: "userprofile", 
@@ -25,6 +31,10 @@ const threadInclude = [
     attributes: ["name", "username", "id", "role"]
   },
   {
+    association: "reportlist",
+    attributes: ["id"]
+  },
+  {
     association: "userprofile", 
     attributes: ["img"]/*, 
     include: [
@@ -33,6 +43,35 @@ const threadInclude = [
     ]*/
   }
 ];
+
+function pruneThreads(threads) {
+  return threads
+    .map(t => {
+      t.reports = t.reportlist.filter(r => r.status === "new" && r.type === "thread").length;
+      t.hidden = t.reports >= FLAG_COUNT_HIDE;
+      if (t.hidden) {
+        t.title = "[Under Admin Review]";
+        t.content = "This thread is being reviewed by a site adminstrator and may be removed.";
+      }
+      t.banned = t.reports >= FLAG_COUNT_BAN || t.status === "banned" || t.userprofile.sharing === "false";
+      if (!t.banned && t.commentlist) {
+        t.commentlist = t.commentlist.map(c => {
+          c.reports = c.reportlist.filter(r => r.status === "new" && r.type === "comment").length;
+          c.hidden = c.reports >= FLAG_COUNT_HIDE;
+          if (c.hidden) {
+            c.title = "[Under Admin Review";
+            c.content = "This thread is being reviewed by a site adminstrator and may be removed.";
+          }
+          c.banned = c.reports >= FLAG_COUNT_BAN || c.status === "banned" || c.userprofile.sharing === "false";
+          return c;
+        });
+        t.commentlist = t.commentlist.filter(c => !c.banned);
+      }
+      return t;
+    })
+    .filter(t => !t.banned)
+    .sort((a, b) => b.date < a.date ? 1 : -1);
+}
 
 module.exports = function(app) {
 
@@ -44,7 +83,7 @@ module.exports = function(app) {
       where: req.query,
       include: threadInclude
     }).then(threads => {
-      threads.sort((a, b) => b.date < a.date ? 1 : -1);
+      threads = pruneThreads(threads);
       res.json(threads).end();
     });
   });
@@ -82,7 +121,7 @@ module.exports = function(app) {
         },
         include: threadInclude
       }).then(threads => {
-        threads.sort((a, b) => b.date < a.date ? 1 : -1);
+        threads = pruneThreads(threads);
         res.json({newThread, threads}).end();
       });
     });
@@ -103,7 +142,7 @@ module.exports = function(app) {
         },
         include: threadInclude
       }).then(threads => {
-        threads.sort((a, b) => b.date < a.date ? 1 : -1);
+        threads = pruneThreads(threads);
         res.json(threads).end();
       });
     });

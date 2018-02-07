@@ -44,8 +44,24 @@ module.exports = function(app) {
       include: [
         {
           association: "thread",
-          attributes: ["title"],
           include: [
+            { 
+              association: "commentlist", 
+              include: [
+                {
+                  association: "user", 
+                  attributes: ["name", "username", "id", "role"]
+                },
+                {
+                  association: "reportlist",
+                  attributes: ["id"]
+                },
+                {
+                  association: "userprofile", 
+                  attributes: ["img"]
+                }
+              ]
+            },
             {
               association: "user",
               attributes: ["username", "email", "name"]
@@ -65,7 +81,6 @@ module.exports = function(app) {
       include: [
         {
           association: "commentref",
-          attributes: ["title"],
           include: [
             {
               association: "user",

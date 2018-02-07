@@ -18,11 +18,7 @@ const threadInclude = [
       },
       {
         association: "userprofile", 
-        attributes: ["img"]/*, 
-        include: [
-          {association: "threads"}, 
-          {association: "comments"}
-        ]*/
+        attributes: ["img"]
       }
     ]
   },
@@ -36,11 +32,7 @@ const threadInclude = [
   },
   {
     association: "userprofile", 
-    attributes: ["img"]/*, 
-    include: [
-      {association: "threads", attributes: [[sequelize.fn("COUNT", sequelize.col("threads.id")), "threadCount"]]}, 
-      {association: "comments"}
-    ]*/
+    attributes: ["img"]
   }
 ];
 
@@ -141,7 +133,6 @@ module.exports = function(app) {
         },
         include: threadInclude
       }).then(thread => {
-        //threads = pruneThreads(threads);
         res.json(thread).end();
       });
 

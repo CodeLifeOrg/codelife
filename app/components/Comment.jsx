@@ -20,26 +20,7 @@ class Comment extends Component {
   }
 
   componentDidMount() {
-    const {comment_id, comment, reports} = this.props;
-    
-    /*
-
-    // If reports have been provided by the parent, there is no need to fetch them.
-    if (reports !== undefined) {
-      axios.get(`/api/threads/all?id=${thread_id}`).then(resp => {
-        this.setState({thread: resp.data, reports});
-      });
-    }
-    // Otherwise, reports must be fetched.
-    else {
-      Promise.all([
-        axios.get(`/api/threads/all?id=${thread_id}`),
-        axios.get("/api/reports/discussions")
-      ]).then(resp => {
-        this.setState({thread: resp[0].data, reports: resp[1].data});
-      })
-    } */
-
+    const {comment, reports} = this.props;
     this.setState({comment, reports});
   }
 

@@ -24,26 +24,7 @@ class Thread extends Component {
   }
 
   componentDidMount() {
-    const {thread, thread_id, reports} = this.props;
-    
-    /*
-
-    // If reports have been provided by the parent, there is no need to fetch them.
-    if (reports !== undefined) {
-      axios.get(`/api/threads/all?id=${thread_id}`).then(resp => {
-        this.setState({thread: resp.data, reports});
-      });
-    }
-    // Otherwise, reports must be fetched.
-    else {
-      Promise.all([
-        axios.get(`/api/threads/all?id=${thread_id}`),
-        axios.get("/api/reports/discussions")
-      ]).then(resp => {
-        this.setState({thread: resp[0].data, reports: resp[1].data});
-      })
-    } */
-
+    const {thread, reports} = this.props;
     this.setState({thread, reports});
   }
 
@@ -136,7 +117,7 @@ class Thread extends Component {
         </div>
         <div className="comments">
           <Collapse isOpen={this.state.showComments}>
-            { thread.commentlist.map(c => <Comment comment={c} reports={reports} />) }
+            { thread.commentlist.map(c => <Comment key={c.id} comment={c} reports={reports} />) }
             {
               this.state.showComments
                 ? <div className="new-comment">

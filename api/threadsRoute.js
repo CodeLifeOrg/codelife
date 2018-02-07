@@ -134,17 +134,17 @@ module.exports = function(app) {
       date: db.fn("NOW"),
       thread_id: req.body.thread_id,
       uid: req.user.id
-    }).then(newComment => {
-      db.threads.findAll({
+    }).then(newComment => { 
+      db.threads.findOne({
         where: {
-          subject_type: req.body.subject_type,
-          subject_id: req.body.subject_id
+          id: req.body.thread_id
         },
         include: threadInclude
-      }).then(threads => {
-        threads = pruneThreads(threads);
-        res.json(threads).end();
+      }).then(thread => {
+        //threads = pruneThreads(threads);
+        res.json(thread).end();
       });
+
     });
   });
 

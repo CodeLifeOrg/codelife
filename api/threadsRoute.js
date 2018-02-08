@@ -17,6 +17,9 @@ const threadInclude = [
         attributes: ["status", "type"]
       },
       {
+        association: "likelist"
+      },
+      {
         association: "userprofile", 
         attributes: ["img"]
       }
@@ -25,6 +28,9 @@ const threadInclude = [
   {
     association: "user", 
     attributes: ["name", "username", "id", "role"]
+  },
+  {
+    association: "likelist"
   },
   {
     association: "reportlist",
@@ -36,11 +42,14 @@ const threadInclude = [
   }
 ];
 
-function pruneThreads(threads) {
+function pruneThreads(user, threads) {
   return threads
     .map(t => {
       t = t.toJSON();
-      t.reports = t.reportlist.filter(r => r.status === "new" && r.type === "thread").length;
+      t.reportlist = t.reportlist.filter(r => r.status === "new" && r.type === "thread");
+      t.reports = t.reportlist.length;
+      t.likelist = t.likelist.filter(l => l.type === "thread");
+      t.likes = t.likelist.length;
       t.hidden = t.reports >= FLAG_COUNT_HIDE;
       if (t.hidden) {
         t.title = "[Under Admin Review]";
@@ -60,6 +69,10 @@ function pruneThreads(threads) {
         });
         t.commentlist = t.commentlist.filter(c => !c.banned);
       }
+      if (user) {
+        t.reported = Boolean(t.reportlist.find(r => r.uid === user.id));
+        t.liked = Boolean(t.likelist.find(l => l.uid === user.id));
+      }
       return t;
     })
     .filter(t => !t.banned)
@@ -76,7 +89,7 @@ module.exports = function(app) {
       where: req.query,
       include: threadInclude
     }).then(threads => {
-      threads = pruneThreads(threads);
+      threads = pruneThreads(req.user, threads);
       res.json(threads).end();
     });
   });
@@ -114,7 +127,7 @@ module.exports = function(app) {
         },
         include: threadInclude
       }).then(threads => {
-        threads = pruneThreads(threads);
+        threads = pruneThreads(req.user, threads);
         res.json({newThread, threads}).end();
       });
     });

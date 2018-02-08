@@ -42,6 +42,7 @@ class Discussion extends Component {
     }
   }
 
+  /*
   toggleThread(id) {
     this.state[id] ? this.setState({[id]: undefined}) : this.setState({[id]: {title: "", content: ""}});
   }
@@ -63,6 +64,7 @@ class Discussion extends Component {
       }
     });
   }
+    */
 
   newThread() {
     const {t} = this.props;
@@ -80,6 +82,7 @@ class Discussion extends Component {
       }
     });
   }
+
 
   selectSort(method) {
     const {threads} = this.state;
@@ -100,16 +103,6 @@ class Discussion extends Component {
         break;
     }
     this.setState({threads});
-  }
-
-  formatDate(datestring) {
-    const date = new Date(datestring);
-    const year = date.getFullYear();
-    const month = `0${date.getMonth() + 1}`.slice(-2);
-    const day = `0${date.getDate()}`.slice(-2);
-    const hours = `0${date.getHours()}`.slice(-2);
-    const minutes = `0${date.getMinutes()}`.slice(-2);
-    return `${day}/${month}/${year} - ${hours}:${minutes}`;
   }
 
   handleReport(report) {

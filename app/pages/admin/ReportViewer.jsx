@@ -86,7 +86,6 @@ class ReportViewer extends Component {
     }
   }
 
-
   createPageRow(type, report) {
     const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
     let strReasons = "";

@@ -98,6 +98,14 @@ class Thread extends Component {
                 position={Position.TOP_RIGHT}
                 inline={true}
               >
+                { /*
+                <Button
+                  intent={likes.find(l => l.type === "thread" && l.likeid === thread.id) ? Intent.DANGER : Intent.DEFAULT}
+                  iconName="thumbsup"
+                  className={ likes.find(l => l.type === "thread" && l.likeid === thread.id) ? "" : "pt-minimal" }
+                  text={ likes.find(l => l.type === "thread" && l.likeid === thread.id) ? "Unlike" : "Flag"}
+                />
+                */ }
                 <Button
                   intent={reports.find(r => r.type === "thread" && r.report_id === thread.id) ? Intent.DANGER : Intent.DEFAULT}
                   iconName="flag"

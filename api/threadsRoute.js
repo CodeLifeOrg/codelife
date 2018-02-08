@@ -14,7 +14,7 @@ const threadInclude = [
       },
       {
         association: "reportlist",
-        attributes: ["id"]
+        attributes: ["status", "type"]
       },
       {
         association: "userprofile", 
@@ -28,7 +28,7 @@ const threadInclude = [
   },
   {
     association: "reportlist",
-    attributes: ["id"]
+    attributes: ["status", "type"]
   },
   {
     association: "userprofile", 
@@ -39,6 +39,7 @@ const threadInclude = [
 function pruneThreads(threads) {
   return threads
     .map(t => {
+      t = t.toJSON();
       t.reports = t.reportlist.filter(r => r.status === "new" && r.type === "thread").length;
       t.hidden = t.reports >= FLAG_COUNT_HIDE;
       if (t.hidden) {
@@ -51,7 +52,7 @@ function pruneThreads(threads) {
           c.reports = c.reportlist.filter(r => r.status === "new" && r.type === "comment").length;
           c.hidden = c.reports >= FLAG_COUNT_HIDE;
           if (c.hidden) {
-            c.title = "[Under Admin Review";
+            c.title = "[Under Admin Review]";
             c.content = "This thread is being reviewed by a site adminstrator and may be removed.";
           }
           c.banned = c.reports >= FLAG_COUNT_BAN || c.status === "banned" || c.userprofile.sharing === "false";

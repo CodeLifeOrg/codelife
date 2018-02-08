@@ -12,7 +12,8 @@ module.exports = function(sequelize, db) {
       date: db.DATE,
       subject_type: db.TEXT,
       subject_id: db.TEXT,
-      uid: db.STRING
+      uid: db.STRING,
+      status: db.TEXT
     },
     {
       freezeTableName: true,

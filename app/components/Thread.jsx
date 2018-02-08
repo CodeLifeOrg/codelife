@@ -29,15 +29,15 @@ class Thread extends Component {
   }
 
   toggleComments() {
-    this.setState({showComments: !this.state.showComments})
+    this.setState({showComments: !this.state.showComments});
   }
 
   newComment() {
     const {t} = this.props;
     const {thread, commentTitle, commentContent} = this.state;
     const commentPost = {
-      title: this.state.commentTitle,
-      content: this.state.commentContent,
+      title: commentTitle,
+      content: commentContent,
       thread_id: thread.id
     };
     axios.post("/api/comments/new", commentPost).then(resp => {

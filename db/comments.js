@@ -11,7 +11,8 @@ module.exports = function(sequelize, db) {
       date: db.DATE,
       title: db.TEXT,
       content: db.TEXT,
-      thread_id: db.INTEGER      
+      thread_id: db.INTEGER,
+      status: db.TEXT     
     },
     {
       freezeTableName: true,

@@ -54,7 +54,7 @@ module.exports = function(app) {
                 },
                 {
                   association: "reportlist",
-                  attributes: ["id"]
+                  attributes: ["status", "type"]
                 },
                 {
                   association: "userprofile", 

@@ -111,8 +111,6 @@ class ReportViewer extends Component {
       </td>
     </tr>;
   }
-  
-  
 
   createDiscRow(type, report) {
     // if (report.commentref) author = report.commentref.user.username;
@@ -124,8 +122,8 @@ class ReportViewer extends Component {
     return <tr key={report.id}>
       { 
         type === "threads"
-          ? <Thread thread={report.thread} reports={this.state.reports} />
-          : <Comment comment={report.commentref} reports={this.state.reports} />
+          ? <Thread thread={report.thread} />
+          : <Comment comment={report.commentref} />
       }
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>

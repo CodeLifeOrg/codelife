@@ -33,6 +33,27 @@ class Comment extends Component {
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   }
 
+  toggleLike() {
+    const {comment} = this.state;
+    const liked = !comment.liked;
+    axios.post("/api/likes/save", {type: "comment", liked, likeid: comment.id}).then(resp => {
+      if (resp.status === 200) {
+        if (liked) {
+          comment.likes++;
+          comment.liked = true;
+        }
+        else {
+          comment.likes--;
+          comment.liked = false;
+        }
+        this.setState({comment});
+      }
+      else {
+        console.log("error");
+      }
+    });
+  }
+
   handleReport(report) {
     const {comment} = this.state;
     comment.report = report;
@@ -61,6 +82,14 @@ class Comment extends Component {
           </span>
         </div>
         <div className="comment-body" dangerouslySetInnerHTML={{__html: comment.content}} />
+        <div className="like-thread">
+          <Button
+            intent={ comment.liked ? Intent.WARNING : Intent.DEFAULT}
+            iconName={ `star${ comment.liked ? "" : "-empty"}` }
+            onClick={ this.toggleLike.bind(this) }
+            text={ `${ comment.likes } ${ comment.likes === 1 ? translate("Like") : translate("Likes") }` }
+          />
+        </div>
         <div className="report-comment" style={{textAlign: "right"}}>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}

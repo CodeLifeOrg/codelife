@@ -73,6 +73,12 @@ class Discussion extends Component {
       case "comments-least":
         threads.sort((a, b) => a.commentlist.length >= b.commentlist.length);
         break;
+      case "likes-most":
+        threads.sort((a, b) => a.likes < b.likes);
+        break;
+      case "likes-least":
+        threads.sort((a, b) => a.likes >= b.likes);
+        break;
       default:
         break;
     }
@@ -97,6 +103,8 @@ class Discussion extends Component {
               <option value="date-newest">Date: Newest</option>
               <option value="comments-most">Comments: Most</option>
               <option value="comments-least">Comments: Least</option>
+              <option value="likes-most">Likes: Most</option>
+              <option value="likes-least">Likes: Least</option>
             </select>
           </div>
         </div>

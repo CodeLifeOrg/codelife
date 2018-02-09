@@ -31,6 +31,27 @@ class Thread extends Component {
     this.setState({showComments: !this.state.showComments});
   }
 
+  toggleLike() {
+    const {thread} = this.state;
+    const liked = !thread.liked;
+    axios.post("/api/likes/save", {type: "thread", liked, likeid: thread.id}).then(resp => {
+      if (resp.status === 200) {
+        if (liked) {
+          thread.likes++;
+          thread.liked = true;
+        }
+        else {
+          thread.likes--;
+          thread.liked = false;
+        }
+        this.setState({thread});
+      }
+      else {
+        console.log("error");
+      }
+    });
+  }
+
   newComment() {
     const {t} = this.props;
     const {thread, commentTitle, commentContent} = this.state;
@@ -67,7 +88,7 @@ class Thread extends Component {
   render() {
 
     const {t: translate} = this.props;
-    const {thread, reports} = this.state;
+    const {thread} = this.state;
 
     if (!thread) return <Loading />;    
 
@@ -90,6 +111,14 @@ class Thread extends Component {
             <div className="thread-body" dangerouslySetInnerHTML={{__html: thread.content}} />
           </div>
           <div className="thread-actions">
+            <div className="like-thread">
+              <Button
+                intent={thread.liked ? Intent.WARNING : Intent.DEFAULT}
+                iconName={ `star${ thread.liked ? "" : "-empty"}` }
+                onClick={ this.toggleLike.bind(this) }
+                text={ `${ thread.likes } ${ thread.likes === 1 ? translate("Like") : translate("Likes") }` }
+              />
+            </div>
             <div className="report-thread">
               <Popover
                 interactionKind={PopoverInteractionKind.CLICK}
@@ -97,14 +126,6 @@ class Thread extends Component {
                 position={Position.TOP_RIGHT}
                 inline={true}
               >
-                { /*
-                <Button
-                  intent={likes.find(l => l.type === "thread" && l.likeid === thread.id) ? Intent.DANGER : Intent.DEFAULT}
-                  iconName="thumbsup"
-                  className={ likes.find(l => l.type === "thread" && l.likeid === thread.id) ? "" : "pt-minimal" }
-                  text={ likes.find(l => l.type === "thread" && l.likeid === thread.id) ? "Unlike" : "Flag"}
-                />
-                */ }
                 <Button
                   intent={thread.report ? Intent.DANGER : Intent.DEFAULT}
                   iconName="flag"
@@ -124,7 +145,7 @@ class Thread extends Component {
         </div>
         <div className="comments">
           <Collapse isOpen={this.state.showComments}>
-            { thread.commentlist.map(c => <Comment key={c.id} comment={c} reports={reports} />) }
+            { thread.commentlist.map(c => <Comment key={c.id} comment={c} />) }
             {
               this.state.showComments
                 ? <div className="new-comment">

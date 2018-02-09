@@ -17,7 +17,6 @@ class Discussion extends Component {
       threads: false,
       threadTitle: "",
       threadContent: "",
-      reports: [],
       commentFields: {},
       sortType: "date-oldest"
     };
@@ -25,10 +24,7 @@ class Discussion extends Component {
 
   componentDidMount() {
     // When Discussion is initalized, it already has props. This one-time call forces an initial update.
-    axios.get("/api/reports/discussions").then(resp => {
-      const reports = resp.data;
-      this.setState({reports}, this.componentDidUpdate({}));
-    });
+    this.componentDidUpdate({});
   }
 
   componentDidUpdate(prevProps) {
@@ -42,29 +38,7 @@ class Discussion extends Component {
     }
   }
 
-  /*
-  toggleThread(id) {
-    this.state[id] ? this.setState({[id]: undefined}) : this.setState({[id]: {title: "", content: ""}});
-  }
 
-  newComment(tid) {
-    const {t} = this.props;
-    const commentPost = {
-      title: this.state[tid].title,
-      content: this.state[tid].content,
-      subject_type: this.props.subjectType,
-      subject_id: this.props.subjectId,
-      thread_id: tid
-    };
-    axios.post("/api/comments/new", commentPost).then(resp => {
-      if (resp.status === 200) {
-        const toast = Toaster.create({className: "newCommentToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Comment Posted!"), timeout: 1500, intent: Intent.SUCCESS});
-        this.setState({threads: resp.data, [tid]: {title: "", content: ""}});
-      }
-    });
-  }
-    */
 
   newThread() {
     const {t} = this.props;
@@ -105,16 +79,10 @@ class Discussion extends Component {
     this.setState({threads});
   }
 
-  handleReport(report) {
-    const {reports} = this.state;
-    reports.push(report);
-    this.setState({reports});
-  }
-
   render() {
 
     const {t: translate} = this.props;
-    const {threads, threadTitle, threadContent, reports} = this.state;
+    const {threads, threadTitle, threadContent} = this.state;
 
     if (!threads) return <Loading />;
 
@@ -133,7 +101,7 @@ class Discussion extends Component {
           </div>
         </div>
         <div id="threads">
-          { threads.map(t => <Thread key={t.id} thread={t} reports={reports} />) }
+          { threads.map(t => <Thread key={t.id} thread={t} />) }
         </div>
         <div className="new-thread">
           <div className="new-thread-title">{translate("Post New Thread")}</div>

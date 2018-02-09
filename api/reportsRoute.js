@@ -53,8 +53,7 @@ module.exports = function(app) {
                   attributes: ["name", "username", "id", "role"]
                 },
                 {
-                  association: "reportlist",
-                  attributes: ["status", "type"]
+                  association: "reportlist"
                 },
                 {
                   association: "userprofile", 

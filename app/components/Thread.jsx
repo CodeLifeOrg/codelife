@@ -16,7 +16,6 @@ class Thread extends Component {
     super(props);
     this.state = {
       thread: null,
-      reports: [],
       commentTitle: "",
       commentContent: "",
       showComments: false
@@ -24,8 +23,8 @@ class Thread extends Component {
   }
 
   componentDidMount() {
-    const {thread, reports} = this.props;
-    this.setState({thread, reports});
+    const {thread} = this.props;
+    this.setState({thread});
   }
 
   toggleComments() {
@@ -60,9 +59,9 @@ class Thread extends Component {
   }
 
   handleReport(report) {
-    const {reports} = this.state;
-    reports.push(report);
-    this.setState({reports});
+    const {thread} = this.state;
+    thread.report = report;
+    this.setState({thread});
   }
 
   render() {
@@ -107,10 +106,10 @@ class Thread extends Component {
                 />
                 */ }
                 <Button
-                  intent={reports.find(r => r.type === "thread" && r.report_id === thread.id) ? Intent.DANGER : Intent.DEFAULT}
+                  intent={thread.report ? Intent.DANGER : Intent.DEFAULT}
                   iconName="flag"
-                  className={ reports.find(r => r.type === "thread" && r.report_id === thread.id) ? "" : "pt-minimal" }
-                  text={reports.find(r => r.type === "thread" && r.report_id === thread.id) ? "Flagged" : "Flag"}
+                  className={ thread.report ? "" : "pt-minimal" }
+                  text={ thread.report ? "Flagged" : "Flag"}
                 />
                 <div style={{textAlign: "left"}}>
                   <ReportBox reportid={thread.id} permalink={this.props.permalink} contentType="thread" handleReport={this.handleReport.bind(this)} />

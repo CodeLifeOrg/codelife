@@ -14,14 +14,13 @@ class Comment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: null,
-      reports: []
+      comment: null
     };
   }
 
   componentDidMount() {
-    const {comment, reports} = this.props;
-    this.setState({comment, reports});
+    const {comment} = this.props;
+    this.setState({comment});
   }
 
   formatDate(datestring) {
@@ -35,15 +34,15 @@ class Comment extends Component {
   }
 
   handleReport(report) {
-    const {reports} = this.state;
-    reports.push(report);
-    this.setState({reports});
+    const {comment} = this.state;
+    comment.report = report;
+    this.setState({comment});
   }
 
   render() {
 
     const {t: translate} = this.props;
-    const {comment, reports} = this.state;
+    const {comment} = this.state;
 
     if (!comment) return <Loading />;    
 
@@ -70,9 +69,9 @@ class Comment extends Component {
             inline={true}
           >
             <Button
-              intent={reports.find(r => r.type === "comment" && r.report_id === comment.id) ? Intent.DANGER : Intent.DEFAULT}
+              intent={comment.report ? Intent.DANGER : Intent.DEFAULT}
               iconName="flag"
-              className={ `${reports.find(r => r.type === "comment" && r.report_id === comment.id) ? "" : "pt-minimal"} pt-small` }
+              className={ `${comment.report ? "" : "pt-minimal"} pt-small` }
             />
             <ReportBox reportid={comment.id} permalink={this.props.permalink} contentType="comment" handleReport={this.handleReport.bind(this)} />
           </Popover>

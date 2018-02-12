@@ -132,7 +132,7 @@ class Slide extends Component {
       const cs = slideList.find(slide => slide.id === sid);
 
       const up = resp[1].data.progress;
-      const done = up.find(p => p.level === mlid) !== undefined;
+      const done = up.find(p => p.level === mlid && p.status === "completed") !== undefined;
 
       const levels = this.props.levels.filter(l => l.lid === lid);
       const currentLevel = levels.find(l => l.id === mlid);

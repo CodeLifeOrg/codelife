@@ -129,7 +129,7 @@ class Level extends Component {
   }
 
   hasUserCompleted(milestone) {
-    return this.state.userProgress.find(up => up.level === milestone) !== undefined;
+    return this.state.userProgress.find(up => up.level === milestone);
   }
 
   reportLike(codeBlock) {
@@ -324,12 +324,13 @@ class Level extends Component {
     if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <Loading />;
 
-    const islandDone = this.hasUserCompleted(this.props.params.lid);
+    const islandProgress = this.hasUserCompleted(this.props.params.lid);
+    const islandDone = islandProgress && islandProgress.status === "completed";
     const otherCodeBlocks = myCodeBlocks.concat(likedCodeBlocks, unlikedCodeBlocks);
 
     const levelStatuses = levels.slice(0);
     for (let l = 0; l < levelStatuses.length; l++) {
-      const done = this.hasUserCompleted(levelStatuses[l].id);
+      const done = this.hasUserCompleted(levelStatuses[l].id) !== undefined;
       levelStatuses[l].isDone = done;
       // If i'm the first lesson and i'm not done, i'm next lesson
       // If i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson

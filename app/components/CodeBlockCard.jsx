@@ -81,7 +81,7 @@ class CodeBlockCard extends Component {
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
-    const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
+    const done = userProgress ? userProgress.find(p => p.level === lid && p.status === "completed") !== undefined : true;
 
     const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
 

@@ -328,13 +328,16 @@ class Level extends Component {
     const islandDone = islandProgress && islandProgress.status === "completed";
     const otherCodeBlocks = myCodeBlocks.concat(likedCodeBlocks, unlikedCodeBlocks);
 
-    const levelStatuses = levels.slice(0);
+    const levelStatuses = levels;
     for (let l = 0; l < levelStatuses.length; l++) {
-      const done = this.hasUserCompleted(levelStatuses[l].id) !== undefined;
+      const levelProgress = this.hasUserCompleted(levelStatuses[l].id);
+      const skipped = levelProgress && levelProgress.status === "skipped";
+      const done = levelProgress && levelProgress.status === "completed";
       levelStatuses[l].isDone = done;
+      levelStatuses[l].isSkipped = skipped;
       // If i'm the first lesson and i'm not done, i'm next lesson
       // If i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson
-      levelStatuses[l].isNext = l === 0 && !done || l > 0 && !done && levelStatuses[l - 1].isDone;
+      levelStatuses[l].isNext = l === 0 && !done || l > 0 && !done && (levelStatuses[l - 1].isDone || levelStatuses[l - 1].isSkipped);
     }
 
     const otherCodeBlockItemsBeforeFold = [];
@@ -357,6 +360,19 @@ class Level extends Component {
           <Link className="stop done" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {level.name}
+          </span>
+        </Popover>;
+      }
+      else if (level.isSkipped) {
+        // New state incoming - How to visually indicate skip? TODO: DESIGN
+        return <Popover
+          interactionKind={PopoverInteractionKind.HOVER}
+          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
+          position={Position.TOP}
+        >
+          <Link className="stop done" style={{backgroundColor: "orange"}} to={`/island/${lid}/${level.id}`}></Link>
+          <span>
+            {`${level.name} (incomplete)`}
           </span>
         </Popover>;
       }

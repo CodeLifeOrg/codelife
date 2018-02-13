@@ -48,7 +48,8 @@ class CodeBlock extends Component {
   }
 
   saveProgress(level) {
-    axios.post("/api/userprogress/save", {level}).then(resp => {
+    // Status is completed because there is no way to "skip" a codeblock
+    axios.post("/api/userprogress/save", {level, status: "completed"}).then(resp => {
       resp.status === 200 ? console.log("successfully saved progress") : console.log("error");
     });
   }

@@ -31,9 +31,9 @@ class GlossaryBuilder extends Component {
   }
 
   changeField(field, e) {
-    const {words, firstInput} = this.state;
+    const {words} = this.state;
     const word = words.find(w => w.id.toString() === e.target.id);
-    if (word && firstInput) {
+    if (word) {
       word[field] = e.target.value;
       word.touched = true;
     }

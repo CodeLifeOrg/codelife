@@ -12,7 +12,6 @@ import Clouds from "components/Clouds";
 import Footer from "components/Footer";
 import Nav from "components/Nav";
 import Loading from "components/Loading";
-import Browser from "components/Browser";
 
 import axios from "axios";
 
@@ -20,7 +19,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {userInit: false, showBrowser: false};
+    this.state = {userInit: false};
   }
 
   componentWillMount() {
@@ -77,8 +76,6 @@ class App extends Component {
     const currentIsland = islands.find(island => island.id === lookup);
     if (currentIsland) theme = currentIsland.theme;
 
-    console.log("hi", this.state.showBrowser);
-
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
@@ -87,14 +84,6 @@ class App extends Component {
             ? children
             : <div className="container">
               <Clouds />
-              <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
-                <button className="pt-button pt-icon-menu" onClick={() => this.setState({showBrowser: !this.state.showBrowser})}/>
-              </div>
-              {
-                this.state.showBrowser
-                  ? <Browser />
-                  : null
-              }
               <Nav logo={ !location.pathname.includes("login") && location.pathname !== "/" } />
               { children }
               <Footer currentPath={location.pathname} className={ theme } />

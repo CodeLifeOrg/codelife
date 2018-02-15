@@ -30,8 +30,9 @@ class Browser extends Component {
   }
 
   componentDidMount() {
-    const {pathObj} = this.props;
-    let nodeFromProps;
+    /*const {island, level, slide} = this.props.params;
+    const pathObj = {island, level, slide};
+    let nodeFromProps;*/
     const iget = axios.get("/api/builder/islands/all");
     const lget = axios.get("/api/builder/levels/all");
     const sget = axios.get("/api/builder/slides/all");
@@ -57,7 +58,7 @@ class Browser extends Component {
           childNodes: [],
           data: i
         };
-        if (pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+        //if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
         nodes.push(islandObj);
       }
       for (let l of levels) {
@@ -74,7 +75,7 @@ class Browser extends Component {
             childNodes: [],
             data: l
           };
-          if (pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
+          //if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
           islandNode.childNodes.push(levelObj);
         }
       }
@@ -95,11 +96,12 @@ class Browser extends Component {
             parent: levelNode,
             data: s
           };
-          if (pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
+          //if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
           levelNode.childNodes.push(slideObj);
         }
       }
-      this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
+      //this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
+      this.setState({mounted: true, nodes});
     });    
   }
 
@@ -135,16 +137,13 @@ class Browser extends Component {
     const {currentNode} = this.state;
     if (!currentNode) {
       node.isSelected = true;
-      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
     }
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
       currentNode.isSelected = false;
-      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
-      currentNode.secondaryLabel = null;
     }
-    node.isExpanded = !node.isExpanded;
-    if (this.props.setPath) this.props.setPath(node);
+    //node.isExpanded = !node.isExpanded;
+    console.log(node);
     this.setState({currentNode: node});
   }
 
@@ -158,24 +157,14 @@ class Browser extends Component {
     this.setState({nodes: this.state.nodes});
   }
 
-  reportSave(newData) {
-    const {currentNode} = this.state;
-    if (currentNode.itemType === "island" || currentNode.itemType === "level") currentNode.label = newData.name;
-    if (currentNode.itemType === "slide") currentNode.label = newData.title;
-    this.setState({currentNode});
-  }
-
   render() {
 
     const {nodes, currentNode} = this.state;
 
     if (!nodes) return <Loading />;
 
-    console.log("hi", this.state.showBrowser);
-
     return (
       <div id="lesson-builder">
-        asdf
         <div id="tree">
           <Tree
             onNodeClick={this.handleNodeClick.bind(this)}

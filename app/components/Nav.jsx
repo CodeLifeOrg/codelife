@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
 import {AnchorLink} from "datawheel-canon";
+import Browser from "components/Browser";
 import "./Nav.css";
 
 import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
@@ -12,12 +13,31 @@ import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
 
 class Nav extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showBrowser: false
+    };
+  }
+
+  toggleBrowser() {
+    this.setState({showBrowser: !this.state.showBrowser});
+  }
+
   render() {
 
     const {auth, logo, t} = this.props;
 
     return (
       <div id="nav">
+        <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
+          <button className="pt-button pt-icon-menu" onClick={() => this.setState({showBrowser: !this.state.showBrowser})} />
+        </div>
+        {
+          this.state.showBrowser
+            ? <div style={{position: "absolute", top: 14, left: 50, zIndex: 1000}}><Browser /></div>
+            : null
+        }
         { logo
           ? <Link className="logo" to={"/"}>
             <div className="tag">Beta</div>

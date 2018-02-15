@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
+import {browserHistory} from "react-router";
 
 import "./Browser.css";
 
@@ -142,8 +143,15 @@ class Browser extends Component {
       node.isSelected = true;
       currentNode.isSelected = false;
     }
-    //node.isExpanded = !node.isExpanded;
-    console.log(node);
+    if (node.itemType === "island") {
+      browserHistory.push(`/island/${node.data.id}`);
+    }
+    else if (node.itemType === "level") {
+      browserHistory.push(`/island/${node.parent.data.id}/${node.data.id}`)
+    }
+    else if (node.itemType === "slide") {
+      browserHistory.push(`/island/${node.parent.parent.data.id}/${node.parent.data.id}/${node.data.id}`)
+    }
     this.setState({currentNode: node});
   }
 

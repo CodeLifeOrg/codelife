@@ -16,6 +16,16 @@ body {
   }
 }
 
+#devbar {
+  width: 100%;
+  height: 20px;
+  background-color: #eec900;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  text-align:center;
+}
+
 h1 {
   font-style: normal;
 }

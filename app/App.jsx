@@ -79,6 +79,11 @@ class App extends Component {
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
+        {
+          location.href.includes("dev.")
+            ? <div id="devbar">Development Server.  Do not edit content here!</div>
+            : null
+        }
         { userInit && !auth.loading || authRoute
           ? bareRoute
             ? children
@@ -101,6 +106,7 @@ class App extends Component {
 const mapStateToProps = state => ({
   auth: state.auth,
   i18n: state.i18n,
+  location: state.location,
   islands: state.islands,
   levels: state.levels,
   glossary: state.glossary

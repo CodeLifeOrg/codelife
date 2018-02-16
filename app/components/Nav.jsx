@@ -31,16 +31,20 @@ class Nav extends Component {
   render() {
 
     const {auth, logo, t} = this.props;
+    const {showBrowser} = this.state;
 
     return (
       <div id="nav">
-        <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
-          <button className="pt-button pt-icon-menu" onClick={() => this.setState({showBrowser: !this.state.showBrowser})} />
-        </div>
-        {
-          this.state.showBrowser
-            ? <div style={{position: "absolute", top: 14, left: 50, zIndex: 1000}}><Browser reportClick={this.reportClick.bind(this)}/></div>
-            : null
+        { auth.user 
+          ? <div>
+            <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
+              <button className="pt-button pt-icon-menu" onClick={() => this.setState({showBrowser: !this.state.showBrowser})} />
+            </div>
+            <div id="browser" className={showBrowser ? "" : "hide"}>
+              <Browser reportClick={this.reportClick.bind(this)}/>
+            </div>
+          </div>
+          : null
         }
         { logo
           ? <Link className="logo" to={"/"}>

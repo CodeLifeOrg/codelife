@@ -34,9 +34,9 @@ class Browser extends Component {
     /*const {island, level, slide} = this.props.params;
     const pathObj = {island, level, slide};
     let nodeFromProps;*/
-    const iget = axios.get("/api/builder/islands/all");
-    const lget = axios.get("/api/builder/levels/all");
-    const sget = axios.get("/api/builder/slides/all");
+    const iget = axios.get("/api/islands/all");
+    const lget = axios.get("/api/levels/all");
+    const sget = axios.get("/api/slides/all");
     Promise.all([iget, lget, sget]).then(resp => {
       const islands = resp[0].data;
       const levels = resp[1].data;

@@ -35,6 +35,17 @@
   }
 }
 
+#browser {
+  position: absolute;
+  top: 14px;
+  left: 50px;
+  z-index: 1000;
+}
+
+.hide {
+  display: none;
+}
+
 .user-popover {
   & .pt-button {
     display: block;

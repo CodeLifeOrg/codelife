@@ -24,6 +24,10 @@ class Nav extends Component {
     this.setState({showBrowser: !this.state.showBrowser});
   }
 
+  reportClick() {
+    this.setState({showBrowser: false});
+  }
+
   render() {
 
     const {auth, logo, t} = this.props;
@@ -35,7 +39,7 @@ class Nav extends Component {
         </div>
         {
           this.state.showBrowser
-            ? <div style={{position: "absolute", top: 14, left: 50, zIndex: 1000}}><Browser /></div>
+            ? <div style={{position: "absolute", top: 14, left: 50, zIndex: 1000}}><Browser reportClick={this.reportClick.bind(this)}/></div>
             : null
         }
         { logo

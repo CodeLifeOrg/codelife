@@ -152,6 +152,7 @@ class Browser extends Component {
     else if (node.itemType === "slide") {
       browserHistory.push(`/island/${node.parent.parent.data.id}/${node.parent.data.id}/${node.data.id}`)
     }
+    if (this.props.reportClick) this.props.reportClick(node);
     this.setState({currentNode: node});
   }
 

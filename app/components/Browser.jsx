@@ -37,10 +37,13 @@ class Browser extends Component {
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
     const sget = axios.get("/api/slides/all");
-    Promise.all([iget, lget, sget]).then(resp => {
+    const upget = axios.get("/api/userprogress/mine");
+    Promise.all([iget, lget, sget, upget]).then(resp => {
       const islands = resp[0].data;
       const levels = resp[1].data;
       const slides = resp[2].data;
+      const progress = resp[3].data.progress;
+      const current = resp[3].data.current;
       islands.sort((a, b) => a.ordering - b.ordering);
       levels.sort((a, b) => a.ordering - b.ordering);
       slides.sort((a, b) => a.ordering - b.ordering);
@@ -59,8 +62,13 @@ class Browser extends Component {
           childNodes: [],
           data: i
         };
-        //if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
-        nodes.push(islandObj);
+        // if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+        if (progress.find(p => p.level === i.id) || i.id === current.id) {
+          nodes.push(islandObj);
+        }
+        else {
+          continue;
+        }
       }
       for (let l of levels) {
         l = this.fixNulls(l);
@@ -76,8 +84,13 @@ class Browser extends Component {
             childNodes: [],
             data: l
           };
-          //if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
-          islandNode.childNodes.push(levelObj);
+          // if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
+          if (progress.find(p => p.level === l.id)) {
+            islandNode.childNodes.push(levelObj);
+          } 
+          else {
+            continue;
+          }
         }
       }
       for (let s of slides) {

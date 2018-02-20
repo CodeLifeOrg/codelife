@@ -42,6 +42,7 @@ class Browser extends Component {
       const islands = resp[0].data;
       const levels = resp[1].data;
       const slides = resp[2].data;
+      console.log(slides);
       const progress = resp[3].data.progress;
       const current = resp[3].data.current;
       islands.sort((a, b) => a.ordering - b.ordering);
@@ -93,9 +94,12 @@ class Browser extends Component {
           }
         }
       }
+      console.log("pushing");
+      console.log(slides);
       for (let s of slides) {
         s = this.fixNulls(s);
         let levelNode = null;
+        
         for (const islandNode of nodes) {
           levelNode = islandNode.childNodes.find(cn => cn.data.id === s.mlid);
           if (levelNode) break;
@@ -110,11 +114,12 @@ class Browser extends Component {
             parent: levelNode,
             data: s
           };
-          //if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
+          // if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
+          
           levelNode.childNodes.push(slideObj);
         }
       }
-      //this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
+      // this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
       this.setState({mounted: true, nodes});
     });    
   }

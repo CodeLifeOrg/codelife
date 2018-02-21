@@ -69,6 +69,7 @@ class Studio extends Component {
 
   onClickProject(project) {
     const {t} = this.props;
+    console.log(project);
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {

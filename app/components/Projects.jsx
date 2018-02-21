@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Intent, Tooltip} from "@blueprintjs/core";
+import {Alert, Intent, Tooltip, Position, Icon} from "@blueprintjs/core";
 
 class Projects extends Component {
 
@@ -13,6 +13,7 @@ class Projects extends Component {
     this.state = {
       deleteAlert: false,
       projects: [],
+      collabs: [],
       projectName: "",
       currentProject: null
     };
@@ -20,16 +21,18 @@ class Projects extends Component {
 
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
+    const cget = axios.get("/api/projects/collabs");
     const {t} = this.props;
 
-    Promise.all([pget]).then(resp => {
+    Promise.all([pget, cget]).then(resp => {
       const projects = resp[0].data;
+      const collabs = resp[1].data;
       
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
         if (!currentProject) currentProject = projects[0];
-        this.setState({currentProject, projects}, this.props.openProject.bind(this, currentProject.id));
+        this.setState({currentProject, projects, collabs}, this.props.openProject.bind(this, currentProject.id));
       }
       else {
         if (projects.length === 0) {
@@ -46,7 +49,7 @@ class Projects extends Component {
             }
           }
           const currentProject = projects[latestIndex];
-          this.setState({currentProject, projects}, this.props.openProject.bind(this, currentProject.id));
+          this.setState({currentProject, projects, collabs}, this.props.openProject.bind(this, currentProject.id));
         }
       }
     });
@@ -144,13 +147,26 @@ class Projects extends Component {
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
-        <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
+        {
+          project.collaborators.length 
+            ? <Tooltip position={Position.TOP_LEFT} content={ `${t("Collaborators")}: ${project.collaborators.map(c => c.user.username).join(" ")}` }>
+              <div><span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>&nbsp;<Icon iconName="people" /></div>
+            </Tooltip>
+            : <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
+        }
         { showDeleteButton
           ? <Tooltip content={ t("Delete Project") }>
             <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
           </Tooltip>
           : null
         }
+      </li>);
+
+    const collabItems = this.state.collabs.map(collab => 
+      <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>
+        <Tooltip position={Position.TOP_LEFT} content={ `${t("Owner")}: ${collab.username}` }>
+          <div><span className="project-title" onClick={() => this.handleClick(collab)}>{collab.name}</span>&nbsp;<Icon iconName="people" /></div>
+        </Tooltip>
       </li>);
 
     return (
@@ -164,6 +180,8 @@ class Projects extends Component {
         </div>
         <ul className="project-list">
           {projectItems}
+          <li>--------</li>
+          {collabItems}
         </ul>
         <Alert
           isOpen={ deleteAlert ? true : false }

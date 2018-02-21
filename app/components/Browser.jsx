@@ -42,86 +42,87 @@ class Browser extends Component {
       const islands = resp[0].data;
       const levels = resp[1].data;
       const slides = resp[2].data;
-      console.log(slides);
       const progress = resp[3].data.progress;
       const current = resp[3].data.current;
       islands.sort((a, b) => a.ordering - b.ordering);
       levels.sort((a, b) => a.ordering - b.ordering);
       slides.sort((a, b) => a.ordering - b.ordering);
+      this.setState({islands, levels, slides, progress, current}, this.buildTree.bind(this));
+    });    
+  }
 
-      const nodes = [];
+  buildTree() {
+    const {islands, levels, slides, progress, current} = this.state;
+    const nodes = [];
 
-      for (let i of islands) {
-        i = this.fixNulls(i);
-        const islandObj = {
-          id: i.id,
+    for (let i of islands) {
+      i = this.fixNulls(i);
+      const islandObj = {
+        id: i.id,
+        hasCaret: true,
+        iconName: "map",
+        label: i.name,
+        itemType: "island",
+        parent: {childNodes: nodes},
+        childNodes: [],
+        data: i
+      };
+      // if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+      if (progress.find(p => p.level === i.id) || i.id === current.id) {
+        nodes.push(islandObj);
+      }
+      else {
+        continue;
+      }
+    }
+    for (let l of levels) {
+      l = this.fixNulls(l);
+      const islandNode = nodes.find(node => node.data.id === l.lid);
+      if (islandNode) {
+        const levelObj = {
+          id: l.id,
           hasCaret: true,
-          iconName: "map",
-          label: i.name,
-          itemType: "island",
-          parent: {childNodes: nodes},
+          iconName: "multi-select",
+          label: l.name,
+          itemType: "level",
+          parent: islandNode,
           childNodes: [],
-          data: i
+          data: l
         };
-        // if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
-        if (progress.find(p => p.level === i.id) || i.id === current.id) {
-          nodes.push(islandObj);
-        }
+        // if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
+        if (progress.find(p => p.level === l.id)) {
+          islandNode.childNodes.push(levelObj);
+        } 
         else {
           continue;
         }
       }
-      for (let l of levels) {
-        l = this.fixNulls(l);
-        const islandNode = nodes.find(node => node.data.id === l.lid);
-        if (islandNode) {
-          const levelObj = {
-            id: l.id,
-            hasCaret: true,
-            iconName: "multi-select",
-            label: l.name,
-            itemType: "level",
-            parent: islandNode,
-            childNodes: [],
-            data: l
-          };
-          // if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
-          if (progress.find(p => p.level === l.id)) {
-            islandNode.childNodes.push(levelObj);
-          } 
-          else {
-            continue;
-          }
-        }
+    }
+    for (let s of slides) {
+      s = this.fixNulls(s);
+      let levelNode = null;
+      
+      for (const islandNode of nodes) {
+        levelNode = islandNode.childNodes.find(cn => cn.data.id === s.mlid);
+        if (levelNode) break;
       }
-      console.log("pushing");
-      console.log(slides);
-      for (let s of slides) {
-        s = this.fixNulls(s);
-        let levelNode = null;
+      if (levelNode) {
+        const slideObj = {
+          id: s.id,
+          hasCaret: false,
+          iconName: slideIcons[s.type],
+          label: s.title,
+          itemType: "slide",
+          parent: levelNode,
+          data: s
+        };
+        // if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
         
-        for (const islandNode of nodes) {
-          levelNode = islandNode.childNodes.find(cn => cn.data.id === s.mlid);
-          if (levelNode) break;
-        }
-        if (levelNode) {
-          const slideObj = {
-            id: s.id,
-            hasCaret: false,
-            iconName: slideIcons[s.type],
-            label: s.title,
-            itemType: "slide",
-            parent: levelNode,
-            data: s
-          };
-          // if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
-          
-          levelNode.childNodes.push(slideObj);
-        }
+        levelNode.childNodes.push(slideObj);
       }
-      // this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
-      this.setState({mounted: true, nodes});
-    });    
+    }
+    // this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
+    this.setState({mounted: true, nodes});
   }
 
   initFromProps(nodeFromProps) {
@@ -150,6 +151,18 @@ class Browser extends Component {
       }
     }
     return obj;
+  }
+
+  reloadProgress() {
+    axios.get("/api/userprogress/mine").then(resp => {
+      if (resp.status === 200) {
+        this.setState({progress: resp.data.progress, current: resp.data.current}, this.buildTree.bind(this));
+      }
+      else {
+        console.log("error");
+      }
+      
+    });
   }
 
   handleNodeClick(node) {
@@ -186,7 +199,7 @@ class Browser extends Component {
 
   render() {
 
-    const {nodes, currentNode} = this.state;
+    const {nodes} = this.state;
 
     if (!nodes) return <Loading />;
 
@@ -207,6 +220,6 @@ class Browser extends Component {
 
 Browser = connect(state => ({
   auth: state.auth
-}))(Browser);
-Browser = translate()(Browser);
+}), null, null, {withRef: true})(Browser);
+Browser = translate(undefined, {withRef: true})(Browser);
 export default Browser;

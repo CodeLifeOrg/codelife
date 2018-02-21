@@ -54,6 +54,13 @@ class Browser extends Component {
   buildTree() {
     const {islands, levels, slides, progress, current} = this.state;
     const nodes = [];
+    const pathObj = {
+      island: this.props.linkObj.lid,
+      level: this.props.linkObj.mlid,
+      slide: this.props.linkObj.sid
+    };
+    let nodeFromProps;
+
 
     for (let i of islands) {
       i = this.fixNulls(i);
@@ -66,9 +73,9 @@ class Browser extends Component {
         parent: {childNodes: nodes},
         childNodes: [],
         data: i
-      };
-      // if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+      };      
       if (progress.find(p => p.level === i.id) || i.id === current.id) {
+        if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
         nodes.push(islandObj);
       }
       else {
@@ -89,8 +96,8 @@ class Browser extends Component {
           childNodes: [],
           data: l
         };
-        // if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
         if (progress.find(p => p.level === l.id)) {
+          if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
           islandNode.childNodes.push(levelObj);
         } 
         else {
@@ -116,13 +123,13 @@ class Browser extends Component {
           parent: levelNode,
           data: s
         };
-        // if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
+        if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
         
         levelNode.childNodes.push(slideObj);
       }
     }
-    // this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
-    this.setState({mounted: true, nodes});
+    this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
+    //this.setState({mounted: true, nodes});
   }
 
   initFromProps(nodeFromProps) {
@@ -140,7 +147,7 @@ class Browser extends Component {
         nodeFromProps.parent.parent.isExpanded = true;
       }
       this.setState({nodes: this.state.nodes});
-      this.handleNodeClick(nodeFromProps);
+      this.selectNodeFromProps(nodeFromProps);
     }
   }
 
@@ -163,6 +170,18 @@ class Browser extends Component {
       }
       
     });
+  }
+
+  selectNodeFromProps(node) {
+    const {currentNode} = this.state;
+    if (!currentNode) {
+      node.isSelected = true;
+    }
+    else if (node.id !== currentNode.id) {
+      node.isSelected = true;
+      currentNode.isSelected = false;
+    }
+    this.setState({currentNode: node});
   }
 
   handleNodeClick(node) {

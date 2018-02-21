@@ -37,7 +37,7 @@ class Nav extends Component {
 
   render() {
 
-    const {auth, logo, t} = this.props;
+    const {auth, logo, t, linkObj} = this.props;
     const {showBrowser} = this.state;
 
     return (
@@ -48,7 +48,7 @@ class Nav extends Component {
               <button className="pt-button pt-icon-menu" onClick={this.toggleBrowser.bind(this)} />
             </div>
             <div id="browser" className={showBrowser ? "" : "hide"}>
-              <Browser ref={b => this.browser = b} reportClick={this.reportClick.bind(this)}/>
+              <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
             </div>
           </div>
           : null

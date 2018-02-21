@@ -31,9 +31,6 @@ class Browser extends Component {
   }
 
   componentDidMount() {
-    /*const {island, level, slide} = this.props.params;
-    const pathObj = {island, level, slide};
-    let nodeFromProps;*/
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
     const sget = axios.get("/api/slides/all");
@@ -60,8 +57,6 @@ class Browser extends Component {
       slide: this.props.linkObj.sid
     };
     let nodeFromProps;
-
-
     for (let i of islands) {
       i = this.fixNulls(i);
       const islandObj = {
@@ -129,7 +124,6 @@ class Browser extends Component {
       }
     }
     this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
-    //this.setState({mounted: true, nodes});
   }
 
   initFromProps(nodeFromProps) {
@@ -197,10 +191,10 @@ class Browser extends Component {
       browserHistory.push(`/island/${node.data.id}`);
     }
     else if (node.itemType === "level") {
-      browserHistory.push(`/island/${node.parent.data.id}/${node.data.id}`)
+      browserHistory.push(`/island/${node.parent.data.id}/${node.data.id}`);
     }
     else if (node.itemType === "slide") {
-      browserHistory.push(`/island/${node.parent.parent.data.id}/${node.parent.data.id}/${node.data.id}`)
+      browserHistory.push(`/island/${node.parent.parent.data.id}/${node.parent.data.id}/${node.data.id}`);
     }
     if (this.props.reportClick) this.props.reportClick(node);
     this.setState({currentNode: node});

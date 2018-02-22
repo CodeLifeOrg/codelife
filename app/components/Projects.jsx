@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Intent, Tooltip, Position, Icon} from "@blueprintjs/core";
+import {Alert, Intent, Tooltip, Position, Icon, Popover} from "@blueprintjs/core";
+import {ItemRenderer, MultiSelect} from "@blueprintjs/labs";
 
 class Projects extends Component {
 
@@ -14,6 +15,7 @@ class Projects extends Component {
       deleteAlert: false,
       projects: [],
       collabs: [],
+      users: ["jimmy", "dave", "alex"],
       projectName: "",
       currentProject: null
     };
@@ -137,6 +139,10 @@ class Projects extends Component {
     }
   }
 
+  toggleCollab() {
+
+  }
+
   render() {
 
     const {t} = this.props;
@@ -147,6 +153,7 @@ class Projects extends Component {
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
+        
         {
           project.collaborators.length 
             ? <Tooltip position={Position.TOP_LEFT} content={ `${t("Collaborators")}: ${project.collaborators.map(c => c.user.username).join(" ")}` }>
@@ -154,12 +161,20 @@ class Projects extends Component {
             </Tooltip>
             : <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
         }
-        { showDeleteButton
-          ? <Tooltip content={ t("Delete Project") }>
-            <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
-          </Tooltip>
-          : null
-        }
+        <div>
+          <Tooltip content={ "Add Collaborator" }>
+            <Popover>
+              <span className="pt-icon-standard pt-icon-plus" onClick={ () => this.toggleCollab(project) } />
+              Multiselect will go here
+            </Popover>
+          </Tooltip>&nbsp;&nbsp;&nbsp;
+          { showDeleteButton
+            ? <Tooltip content={ t("Delete Project") }>
+              <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
+            </Tooltip>
+            : null
+          }
+        </div>
       </li>);
 
     const collabItems = this.state.collabs.map(collab => 

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Intent, Tooltip, Position, Icon, Popover} from "@blueprintjs/core";
+import {Alert, Classes, Intent, Tooltip, Position, Icon, Popover, MenuItem} from "@blueprintjs/core";
 import {ItemRenderer, MultiSelect} from "@blueprintjs/labs";
 
 class Projects extends Component {
@@ -15,7 +15,17 @@ class Projects extends Component {
       deleteAlert: false,
       projects: [],
       collabs: [],
-      users: ["jimmy", "dave", "alex"],
+      userList: [
+        {id: 1, name: "jimmy"},
+        {id: 2, name: "dave"},
+        {id: 3, name: "alex"},
+        {id: 4, name: "sabrina"},
+        {id: 5, name: "nick"},
+        {id: 6, name: "james"},
+        {id: 7, name: "natalia"},
+        {id: 8, name: "walther"}
+      ],
+      users: [],
       projectName: "",
       currentProject: null
     };
@@ -143,6 +153,48 @@ class Projects extends Component {
 
   }
 
+  // ============================================
+  // BEGIN MULTISELECT 
+  // ============================================
+
+  renderUser(obj) {
+    const {item, handleClick} = obj;
+    return (
+      <MenuItem
+        icon={this.isUserSelected(item) ? "tick" : "blank"}
+        key={item.id}
+        label={item.name}
+        onClick={handleClick}
+        text={item.name}
+        shouldDismissPopover={false}
+      />
+    );
+  }
+
+  isUserSelected(user) { 
+    return this.state.users.indexOf(user) !== -1;
+  } 
+
+  handleUserSelect(user) {
+    !this.isUserSelected(user) ? this.selectUser(user) : this.deselectUser(this.getSelectedUserIndex(user));
+  }
+
+  selectUser(user) {
+    this.setState({users: [...this.state.users, user]});
+  }
+  
+  deselectUser(index) {
+    this.setState({users: this.state.users.filter((_user, i) => i !== index)});
+  }
+
+  filterUser(query, user) {
+    return user.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  }
+
+  // ============================================
+  // END MULTISELECT 
+  // ============================================  
+
   render() {
 
     const {t} = this.props;
@@ -165,7 +217,18 @@ class Projects extends Component {
           <Tooltip content={ "Add Collaborator" }>
             <Popover>
               <span className="pt-icon-standard pt-icon-plus" onClick={ () => this.toggleCollab(project) } />
-              Multiselect will go here
+              <MultiSelect
+                // initialContent={<MenuItem disabled={true} text="test" />} 
+                itemRenderer={this.renderUser.bind(this)}
+                itemPredicate={this.filterUser.bind(this)}
+                items={this.state.userList}
+                noResults={<MenuItem disabled={true} text="No results." />}
+                onItemSelect={this.handleUserSelect.bind(this)}
+                // popoverProps={{ popoverClassName: popoverMinimal ? Classes.MINIMAL : "" }}
+                tagRenderer={u => u.name}
+                // tagInputProps={{ tagProps: getTagProps, onRemove: this.handleTagRemove }}
+                selectedItems={this.state.users}
+              />
             </Popover>
           </Tooltip>&nbsp;&nbsp;&nbsp;
           { showDeleteButton

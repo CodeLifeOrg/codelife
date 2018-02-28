@@ -2,7 +2,6 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  position: relative;
   & .graphic {
     background-position: center;
     background-repeat: no-repeat;
@@ -22,7 +21,7 @@
     transition: height 0.2s, transform 0.2s;
     max-width: 200px;
     & .title {
-      letter-spacing: 0.5px;
+      letter-spacing: 0.25px;
       margin: 0;
       padding: 0 !important;
       text-transform: uppercase;
@@ -32,7 +31,7 @@
       }
     }
     & .description {
-      font-size: 10px;
+      font-size: var(--gutter-xs);
       margin-top: 0;
       max-height: 0;
       opacity: 0;

@@ -193,11 +193,11 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div>
-        <div id="slide" className={ currentIsland.theme }>
+      <div className="slide-outer">
+        <div id="slide" className={ `slide-inner ${currentIsland.theme}` }>
           {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
           <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
-          <div id="slide-head">
+          <div className="slide-header" id="slide-head">
             { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
             <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
@@ -210,15 +210,11 @@ class Slide extends Component {
             unblock={this.unblock.bind(this)}
             {...currentSlide} />
 
-          <div id="slide-foot">
+          <div className="slide-footer">
             { prevSlug
               ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
               : <div className="pt-button pt-disabled">{t("Previous")}</div>
             }
-            <div className={ `pt-button ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
-              { showDiscussion ? t("Hide Discussion") : t("Show Discussion") }
-              { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
-            </div>
             { nextSlug
               ? this.state.blocked
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
@@ -232,6 +228,11 @@ class Slide extends Component {
             }
           </div>
         </div>
+        {/* discussion */}
+        <button className={ `pt-button discussion-toggle ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
+          { showDiscussion ? t("Hide Discussion") : t("Show Discussion") }
+          { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
+        </button>
         { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null }
       </div>
     );

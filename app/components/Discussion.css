@@ -1,33 +1,49 @@
-#Discussion {
-  background-color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
+@import '../mixins.css';
+
+/* discussion toggle button */
+.discussion-toggle {
+  display: block; /* make margin work as intended */
+  margin: var(--gutter-md) auto;
+  min-width: var(--button-double-width);
+  z-index: 1;
+
+  @add-mixin min-md {
+    margin-top: var(--gutter-lg);
+  }
+}
+
+/* main container */
+.discussion-container {
+  @add-mixin slide-theme;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 0 25px 25px;
-  padding: 25px;
-  position: relative;
+  margin: -40px var(--gutter-sm) var(--gutter-md) var(--gutter-sm);
+  padding: var(--gutter-md);
+
+  @add-mixin min-md {
+    margin: -80px var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  }
+
   & h3 {
-    margin-bottom: 25px;
+    margin-bottom: var(--gutter-md);
     letter-spacing: 1px;
     text-transform: uppercase;
   }
   & #sort-bar {
     position: absolute;
-    right: 25px;
-    top: 25px;
+    right: var(--gutter-md);
+    top: var(--gutter-md);
     & .pt-select {
-      margin-left: 10px;
+      margin-left: var(--gutter-xs);
     }
   }
   & #threads {
     & .thread {
-      padding: 25px;
-      position: relative;
+      padding: var(--gutter-md);
       width: 100%;
       &:nth-child(odd) {
-        background-color: #f8f8f8;
+        background-color: var(--light-1);
       }
       & .thread-header {
         display: flex;
@@ -40,35 +56,34 @@
           }
           & .thread-user {
             & .pt-icon-standard {
-              margin-right: 5px;
+              margin-right: var(--gutter-xxs);
               opacity: 0.75;
             }
             & .thread-date {
               font-size: 12px;
-              margin-left: 5px;
+              margin-left: var(--gutter-xxs);
               opacity: 0.75;
             }
           }
           & .thread-body {
-            margin: 10px 0 0;
+            margin: var(--gutter-xs) 0 0;
           }
         }
         & .thread-actions {
           &>* {
             display: inline-block;
-            margin-left: 10px;
+            margin-left: var(--gutter-xs);
             vertical-align: top;
           }
         }
       }
       & .comments {
         & .comment {
-          border-bottom: 1px solid #ccc;
-          padding: 10px 25px;
-          position: relative;
+          border-bottom: 1px solid var(--light-2);
+          padding: var(--gutter-xs) var(--gutter-md);
           &:first-child {
-            border-top: 1px solid #ccc;
-            margin-top: 10px;
+            border-top: 1px solid var(--light-2);
+            margin-top: var(--gutter-xs);
           }
           & .comment-title {
             font-size: 14px;
@@ -78,53 +93,55 @@
             font-size: 12px;
             & .pt-icon-standard {
               font-size: 14px;
-              margin-right: 5px;
+              margin-right: var(--gutter-xxs);
               opacity: 0.75;
             }
             & .comment-date {
               font-size: 12px;
-              margin-left: 5px;
+              margin-left: var(--gutter-xxs);
               opacity: 0.75;
             }
           }
           & .comment-body {
-            margin: 10px 0 0;
+            margin: var(--gutter-xs) 0 0;
           }
           & .report-comment {
             position: absolute;
-            right: 10px;
-            top: 10px;
+            right: var(--gutter-xs);
+            top: var(--gutter-xs);
           }
         }
       }
     }
   }
   & .new-thread {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--light-2);
   }
   & .new-comment, & .new-thread {
-    margin: 25px 0 0;
+    margin: var(--gutter-md) 0 0;
     & .new-comment-title, & .new-thread-title {
       font-weight: bold;
-      margin: 10px 0;
+      margin: var(--gutter-xs) 0;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
     & .pt-input {
-      margin: 0 0 10px;
+      margin: 0 0 var(--gutter-xs);
       width: 100%;
     }
     & .quill {
       & .ql-toolbar {
-        border-radius: 10px 10px 0 0;
+        background: var(--white);
+        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
       }
       & .ql-container {
-        border-radius: 0 0 10px 10px;
+        background: var(--white);
+        border-radius: 0 0 var(--radius-sm) var(--radius-sm);
         min-height: 100px;
       }
     }
     & .pt-button {
-      margin-top: 10px;
+      margin-top: var(--gutter-xs);
     }
   }
 }

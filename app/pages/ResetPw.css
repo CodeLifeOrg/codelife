@@ -1,25 +1,24 @@
 #ResetPw {
-  background-color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
-  margin: 50px auto;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  margin: var(--gutter-lg) auto;
   max-width: 800px;
-  padding: 50px;
+  padding: var(--gutter-lg);
   width: 100%;
   & p {
-    margin: 25px auto;
+    margin: var(--gutter-md) auto;
   }
   & .links {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     & .link {
-      background-color: white;
+      background-color: var(--white);
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
       height: 170px;
-      margin: 25px 10px;
+      margin: var(--gutter-md) var(--gutter-xs);
       width: 300px;
       &.border {
         background-size: contain;

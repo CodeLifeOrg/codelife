@@ -4,8 +4,8 @@
 }
 
 #tree {
-  background-color: #efefef;
-  border-radius: 0 0 0 10px;
+  background-color: var(--light-1);
+  border-bottom-left-radius: var(--radius-lg);
   max-width: 250px;
   min-width: 250px;
   padding: 0;
@@ -18,18 +18,17 @@
 }
 
 #item-editor {
-  background-color: white;
-  border-radius: 0 0 10px 0;
-  box-sizing: border-box;
+  background-color: var(--white);
+  border-top-right-radius: var(--radius-lg);
   flex: 1;
-  padding: 25px;
+  padding: var(--gutter-md);
   & .input-block, & .area-block {
     width: 100%;
     display: flex;
     & .pt-label {
       flex: 1;
       &:first-child {
-        margin-right: 20px;
+        margin-right: var(--gutter-md);
       }
       & .pt-input {
         width: 100%;
@@ -40,10 +39,10 @@
       & .quill {
         width: 100%;
         & .ql-toolbar {
-          border-radius: 5px 5px 0 0;
+          border-radius: var(--radius-md) var(--radius-md) 0 0;
         }
         & .ql-container {
-          border-radius: 0 0 5px 5px;
+          border-radius: 0 0 var(--radius-md) var(--radius-md);
         }
       }
       & .image-area {
@@ -61,16 +60,16 @@
 
 .rule-select {
   width: 260px;
-  margin: 5px;
+  margin: var(--gutter-xxs);
 }
 
 .rule-param {
   flex: 1;
-  margin: 5px;
+  margin: var(--gutter-xxs);
   width: 0;
 }
 
 .rule-error {
   width: 350px;
-  margin: 5px;
+  margin: var(--gutter-xxs);
 }

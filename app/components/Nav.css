@@ -1,21 +1,42 @@
-#nav {
-  align-items: center;
+@import '../mixins.css';
+
+/* main nav bar */
+.nav {
+  /* positioning */
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  height: var(--nav-height);
-  padding: 0 25px;
-  position: relative;
+  padding-left: var(--gutter-sm);
+  padding-right: 0; /* account for var(--gutter-sm) .link padding */
+  /* always on top */
   z-index: 20;
+  /* sizing */
+  height: var(--nav-height);
+  /* theming */
+  /* background-color: rgba(116,195,183, 0.5); sky */
+
+  /* increase padding on bigger screens */
+  @add-mixin min-md {
+    padding-right: var(--gutter-xs); /* account for var(--gutter-sm) .link padding */
+    padding-left: var(--gutter-md);
+  }
+
+  /* logo */
   & .logo {
-    width: 150px;
+    width: 80px;
+    top: -1px; /* fudge into place */
+
+    /* beta */
     & .tag {
-      color: #d74645;
-      font-size: 16px;
-      font-weight: 800;
+      /* positioning */
       margin-top: -8px;
       text-align: right;
+      /* typography */
+      font-size: 0.75em;
+      font-weight: 800;
       text-transform: uppercase;
-      width: 100%;
+      /* theming */
+      color: rgba(0,0,0,0.3);
     }
     & .text {
       width: 148px;
@@ -24,13 +45,41 @@
       text-decoration: none;
     }
   }
-  & .link {
-    color: white;
-    letter-spacing: 1px;
-    padding: 0 15px;
-    text-transform: uppercase;
-    & .pt-icon-standard {
-      margin-right: 5px;
+
+  /* main nav list */
+  & .links {
+    text-align: right; /* keep links on the right */
+    padding-left: var(--gutter-md); /* links will wrap before crowding the logo */
+
+    & .link {
+      display: inline-block;
+      color: var(--white);
+      letter-spacing: 1px;
+      padding: 0.25em var(--gutter-sm);
+      text-transform: uppercase;
+
+      /* tiny screens */
+      @add-mixin max-xs {
+        /* reduce padding */
+        & {
+          padding-left: var(--gutter-xs);
+          padding-right: var(--gutter-xs);
+        }
+        /* increase icon size */
+        & .link-icon {
+          font-size: 22px;
+        }
+        /* hide link text */
+        & .link-text {
+          display: none;
+        }
+      }
+
+      @add-mixin min-xs {
+        & .link-icon {
+          margin-right: var(--gutter-xxs);
+        }
+      }
     }
   }
 }
@@ -38,7 +87,7 @@
 .user-popover {
   & .pt-button {
     display: block;
-    margin-bottom: 10px;
-    width: 130px;
+    margin-bottom: var(--gutter-xs);
+    width: 125px;
   }
 }

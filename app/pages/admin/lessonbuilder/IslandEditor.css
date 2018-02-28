@@ -1,6 +1,6 @@
 .island-swatch {
-  width: 15px;
-  height: 15px;
+  width: var(--gutter-sm);
+  height: var(--gutter-sm);
   display: inline-block;
-  margin-right: 5px;
+  margin-right: var(--gutter-xxs);
 }

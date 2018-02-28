@@ -108,13 +108,8 @@ class CodeBlockCard extends Component {
           lazy={false}
           inline={false}
           className={ theme }
-          style={{
-            height: "80vh",
-            maxHeight: "1000px",
-            width: "90%"
-          }}
         >
-          <div className="pt-dialog-body">
+          <div className="codeblock-inner pt-dialog-body">
             <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} />
           </div>
           <div className="pt-dialog-footer">

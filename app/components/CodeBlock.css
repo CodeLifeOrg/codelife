@@ -1,4 +1,4 @@
-#codeBlock {
+.codeBlock {
   align-self: stretch;
   display: flex;
   flex: 1;
@@ -9,28 +9,24 @@
     display: flex;
     flex: 1;
     min-height: 0;
-    padding: 10px 0;
+    padding: var(--gutter-xs) 0;
     & .codeBlock-text {
       align-self: stretch;
       flex: none;
       font-size: 16px;
-      line-height: 20px;
-      margin: 0 10px 0 0;
+      line-height: var(--gutter-md);
+      margin-top: var(--gutter-xs);
       max-width: 300px;
       overflow-y: auto;
       white-space: pre-wrap;
-      & #validation-box {
-        margin-top: 25px;
-        text-align: center;
-        & .pt-progress-bar {
-          height: 10px;
-          margin: 0 5px 10px;
-          text-align: left;
-          width: calc(100% - 10px);
-        }
+      & .pt-progress-bar {
+        height: var(--gutter-xs);
+        margin: 0 var(--gutter-xxs) var(--gutter-xs);
+        text-align: left;
+        width: calc(100% - var(--gutter-xs));
       }
     }
-    @media only screen and (max-width: 768px) {
+    @add-mixin max-sm {
       flex-direction: column;
       flex-wrap: nowrap;
       & .codeBlock-text {
@@ -41,7 +37,7 @@
   & .codeBlock-foot {
     text-align: center;
     & .pt-button {
-      margin: 0 5px 10px;
+      margin: 0 var(--gutter-xxs) var(--gutter-xs);
     }
     & .pt-callout {
       display: inline-block;

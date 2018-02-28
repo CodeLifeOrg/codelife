@@ -225,7 +225,7 @@ class Discussion extends Component {
     );
 
     return (
-      <div id="Discussion">
+      <div className="discussion-container" id="Discussion">
         <h3>{ translate("Discussion") }</h3>
         <div id="sort-bar">
           Sort By

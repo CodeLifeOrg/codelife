@@ -70,7 +70,7 @@
     background-color: map(islands, island-themepark, dark);
   }
   &#island #path {
-    top: 330px;
+    top: 325px;
   }
   &#island #path:before {
     background-color: map(islands, island-themepark, dark);

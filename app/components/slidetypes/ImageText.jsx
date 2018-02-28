@@ -7,8 +7,9 @@ export default class ImageText extends Component {
     const {id, htmlcontent1} = this.props;
 
     return (
-      <div id="slide-container" className="imageText flex-row">
-        <div className="slide-image" style={{backgroundImage: `url('/slide_images/${ id }.jpg')`}}></div>
+      <div id="slide-content" className="slide-content imageText flex-row">
+        <img src={`/slide_images/${ id }.jpg`} alt="" className="slide-image"/>
+        {/* <div className="slide-image" style={{backgroundImage: `url('/slide_images/${ id }.jpg')`}}></div> */}
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
       </div>
     );

@@ -4,8 +4,8 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Classes, Intent, Tooltip, Position, Icon, Popover, MenuItem} from "@blueprintjs/core";
-import {ItemRenderer, MultiSelect} from "@blueprintjs/labs";
+import {Alert, Intent, Tooltip, Position, Icon, Popover, MenuItem} from "@blueprintjs/core";
+import {MultiSelect} from "@blueprintjs/labs";
 
 class Projects extends Component {
 
@@ -34,11 +34,14 @@ class Projects extends Component {
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
     const cget = axios.get("/api/projects/collabs");
+    const uget = axios.get("/api/projects/users");
     const {t} = this.props;
 
-    Promise.all([pget, cget]).then(resp => {
+    Promise.all([pget, cget, uget]).then(resp => {
       const projects = resp[0].data;
       const collabs = resp[1].data;
+      const users = resp[2].data;
+      console.log(users);
       
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
@@ -179,6 +182,10 @@ class Projects extends Component {
     !this.isUserSelected(user) ? this.selectUser(user) : this.deselectUser(this.getSelectedUserIndex(user));
   }
 
+  getSelectedUserIndex(user) {
+    return this.state.users.indexOf(user);
+  }
+
   selectUser(user) {
     this.setState({users: [...this.state.users, user]});
   }
@@ -189,6 +196,10 @@ class Projects extends Component {
 
   filterUser(query, user) {
     return user.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  }
+
+  handleTagRemove(_tag, index) {
+    this.deselectUser(index);
   }
 
   // ============================================
@@ -219,6 +230,7 @@ class Projects extends Component {
               <span className="pt-icon-standard pt-icon-plus" onClick={ () => this.toggleCollab(project) } />
               <MultiSelect
                 // initialContent={<MenuItem disabled={true} text="test" />} 
+                style={{padding: "30px"}}
                 itemRenderer={this.renderUser.bind(this)}
                 itemPredicate={this.filterUser.bind(this)}
                 items={this.state.userList}
@@ -226,7 +238,7 @@ class Projects extends Component {
                 onItemSelect={this.handleUserSelect.bind(this)}
                 // popoverProps={{ popoverClassName: popoverMinimal ? Classes.MINIMAL : "" }}
                 tagRenderer={u => u.name}
-                // tagInputProps={{ tagProps: getTagProps, onRemove: this.handleTagRemove }}
+                tagInputProps={{onRemove: this.handleTagRemove.bind(this)}}
                 selectedItems={this.state.users}
               />
             </Popover>

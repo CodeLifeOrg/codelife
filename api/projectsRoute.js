@@ -26,6 +26,13 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+  // Used by Projects to get a list of users to collaborate with
+  app.get("/api/projects/users", isAuthenticated, (req, res) => {
+    db.userprofiles.findAll({
+      include: [{association: "user"}]
+    }).then(u => res.json(u).end());
+  });
+
   // Used by Projects to get a list of projects by the logged-in user
   app.get("/api/projects/mine", isAuthenticated, (req, res) => {
     db.projects.findAll({

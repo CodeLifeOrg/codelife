@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
 import {AnchorLink} from "datawheel-canon";
+import Browser from "components/Browser";
 import "./Nav.css";
 
 import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
@@ -12,12 +13,46 @@ import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
 
 class Nav extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showBrowser: false
+    };
+  }
+
+  /* 
+  This progress reloader is not robust. Ideally, userprogress should be loaded once ever, live in redux state,
+  and update each time the user beats a level in parallel with updating the underlying database. However, to 
+  avoid a refactor, the following code manually reaches into the Browser component and reloads userprogress 
+  on each open/close of the panel.  TODO: revisit this 
+  */
+  toggleBrowser() {
+    this.setState({showBrowser: !this.state.showBrowser});
+    if (this.browser) this.browser.getWrappedInstance().getWrappedInstance().reloadProgress();
+  }
+
+  reportClick() {
+    this.setState({showBrowser: false});
+  }
+
   render() {
 
-    const {auth, logo, t} = this.props;
+    const {auth, logo, t, linkObj} = this.props;
+    const {showBrowser} = this.state;
 
     return (
       <div id="nav">
+        { auth.user 
+          ? <div>
+            <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
+              <button className="pt-button pt-icon-menu" onClick={this.toggleBrowser.bind(this)} />
+            </div>
+            <div id="browser" className={showBrowser ? "" : "hide"}>
+              <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
+            </div>
+          </div>
+          : null
+        }
         { logo
           ? <Link className="logo" to={"/"}>
             <div className="tag">Beta</div>

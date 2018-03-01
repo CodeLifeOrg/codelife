@@ -23,7 +23,7 @@ class CodeBlockCard extends Component {
   toggleDialog() {
     if (this.state.open) {
       if (this.props.user && this.state.initialLikeState !== this.state.codeBlock.liked) {
-        axios.post("/api/likes/save", {liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
+        axios.post("/api/likes/save", {type: "codeblock", liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
           if (resp.status === 200) {
             console.log("success");
             if (this.props.reportLike) this.props.reportLike(this.state.codeBlock);
@@ -81,7 +81,7 @@ class CodeBlockCard extends Component {
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
-    const done = userProgress ? userProgress.find(p => p.level === lid) !== undefined : true;
+    const done = userProgress ? userProgress.find(p => p.level === lid && p.status === "completed") !== undefined : true;
 
     const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
 

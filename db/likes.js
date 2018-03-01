@@ -19,7 +19,8 @@ module.exports = function(sequelize, db) {
 
   l.associate = models => {
     l.belongsTo(models.codeblocks, {foreignKey: "likeid", targetKey: "id", as: "codeblock"});
-    // l.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
+    l.belongsTo(models.threads, {foreignKey: "likeid", targetKey: "id", as: "thread"});
+    l.belongsTo(models.comments, {foreignKey: "likeid", targetKey: "id", as: "comment"});
   };
 
   return l;

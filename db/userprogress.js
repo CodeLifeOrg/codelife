@@ -10,7 +10,8 @@ module.exports = function(sequelize, db) {
       uid: db.STRING,
       level: db.TEXT,
       gems: db.INTEGER,
-      datecompleted: db.DATE
+      datecompleted: db.DATE,
+      status: db.STRING
     },
     {
       freezeTableName: true,

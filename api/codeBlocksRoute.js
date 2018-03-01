@@ -6,6 +6,7 @@ const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 function flattenCodeBlock(user, cb) {
   cb.username = cb.user ? cb.user.username : "";
   cb.sharing = cb.userprofile ? cb.userprofile.sharing : "false";
+  cb.likelist = cb.likelist.filter(l => l.type === "codeblock" || l.type === null);
   cb.likes = cb.likelist.length;
   cb.reports = cb.reportlist.filter(r => r.status === "new" && r.type === "codeblock").length;
   cb.hidden = cb.reports >= FLAG_COUNT_HIDE || cb.status === "banned" || cb.sharing === "false";

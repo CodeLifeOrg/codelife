@@ -12,7 +12,8 @@ module.exports = function(sequelize, db) {
       comment: db.TEXT,
       report_id: db.INTEGER,
       type: db.TEXT,
-      status: db.TEXT
+      status: db.TEXT,
+      permalink: db.TEXT
     },
     {
       freezeTableName: true,

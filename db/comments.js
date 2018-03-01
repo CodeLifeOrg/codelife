@@ -11,7 +11,8 @@ module.exports = function(sequelize, db) {
       date: db.DATE,
       title: db.TEXT,
       content: db.TEXT,
-      thread_id: db.INTEGER      
+      thread_id: db.INTEGER,
+      status: db.TEXT     
     },
     {
       freezeTableName: true,
@@ -22,7 +23,8 @@ module.exports = function(sequelize, db) {
   c.associate = models => {
     c.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
     c.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
-    //c.belongsTo(models.slides, {foreignKey: "subject_id", targetKey: "id", as: "slide"});
+    c.hasMany(models.likes, {foreignKey: "likeid", sourceKey: "id", as: "likelist"});
+    c.hasMany(models.reports, {foreignKey: "report_id", sourceKey: "id", as: "reportlist"});
   };
 
   return c;

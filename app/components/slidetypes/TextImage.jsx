@@ -29,9 +29,12 @@ class TextImage extends Component {
     if (this.props.locale === "pt" || this.props.overrideLang === "pt") path = `/slide_images/pt_${ id }.jpg?v=${new Date().getTime()}`;
 
     return (
-      <div id="slide-container" className="textImage flex-row">
+      <div id="slide-content" className="slide-content textImage flex-row">
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-        <div className="slide-image" style={{backgroundImage: `url(${path})`}}></div>
+        {/* <div className="slide-image" style={{backgroundImage: `url('/slide_images/${ id }.jpg')`}}></div> */}
+        <div className="slide-image-container">
+          <img src={`/slide_images/${ id }.jpg`} alt="" className="slide-image"/>
+        </div>
       </div>
     );
   }

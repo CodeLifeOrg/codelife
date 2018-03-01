@@ -618,10 +618,10 @@ class CodeEditor extends Component {
     });
 
     return (
-      <div id="codeEditor">
+      <div className="codeEditor" id="codeEditor">
         {
           this.props.showEditor
-            ? <div className={ `code ${readOnly ? "readOnly" : ""}` }>
+            ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>
               { tabs
                 ? <div className="panel-title">
                   <span className="favicon pt-icon-standard pt-icon-code"></span>
@@ -631,7 +631,7 @@ class CodeEditor extends Component {
               {
                 !this.props.blurred
                   ? <AceWrapper
-                    className="editor"
+                    className="editor panel-content"
                     ref={ comp => this.editor = comp }
                     onChange={this.onChangeText.bind(this)}
                     value={currentText}
@@ -669,7 +669,7 @@ class CodeEditor extends Component {
               { titleText }
             </div>
             : null }
-          <iframe className="iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
+          <iframe className="panel-content iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
           { console
             ? <div className={ `drawer ${openConsole ? "open" : ""}` }>
               <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count">{ embeddedConsole.length }</span> : null }</div>

@@ -1,14 +1,13 @@
 #about-container {
-  background-color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
-  margin: 50px auto;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  margin: var(--gutter-lg) auto;
   max-width: 800px;
-  padding: 50px;
+  padding: var(--gutter-lg);
   width: 100%;
 
   & h1 {
-    margin: 25px 0;
+    margin: var(--gutter-md) 0;
   }
 
   & h1:first-child {
@@ -16,15 +15,20 @@
   }
 
   & h2 {
-    margin: 35px 0 25px;
+    margin-top: var(--gutter-lg);
+    margin-bottom: var(--gutter-md);
   }
 
   & p {
-    margin-bottom: 15px;
+    margin-bottom: var(--gutter-sm);
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 
   & .pt-form-group {
-    margin: 40px 0;
+    margin: var(--gutter-lg) 0;
 
     & textarea {
       width: 100%;
@@ -33,7 +37,7 @@
   }
 
   & .about-photos {
-    margin-top: 25px;
+    margin-top: var(--gutter-md);
 
     & .pt-tab-list {
       display: flex;

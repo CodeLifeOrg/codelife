@@ -69,7 +69,7 @@ class InputCode extends Component {
     const {titleText, rulejson, execState} = this.state;
 
     return (
-      <div id="slide-container" className="renderCode flex-column">
+      <div id="slide-content" className="slide-content renderCode flex-column">
         <Alert
           isOpen={ this.state.resetAlert }
           cancelButtonText={ t("Cancel") }
@@ -82,7 +82,7 @@ class InputCode extends Component {
         { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor panel-content"></div> }
         </div>
         <div className="validation">
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>

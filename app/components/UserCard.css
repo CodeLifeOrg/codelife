@@ -1,7 +1,7 @@
 .userCard {
 
   & .box .icon .pt-icon-standard {
-    font-size: 50px;
+    font-size: var(--gutter-lg);
     line-height: 52px;
   }
 

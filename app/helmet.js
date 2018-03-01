@@ -1,6 +1,7 @@
 module.exports = {
   link: [
-    {rel: "icon", href: "/favicon.ico"}
+    {rel: "icon", href: "/favicon.ico"},
+    {rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Overpass|Roboto:400,400i,700"}
   ],
   meta: [
     {charset: "utf-8"},

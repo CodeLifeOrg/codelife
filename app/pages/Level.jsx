@@ -298,11 +298,6 @@ class Level extends Component {
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
           title={ title }
-          style={{
-            height: "80vh",
-            maxHeight: "1000px",
-            width: "90%"
-          }}
         >
           <div className="pt-dialog-body">
             <CodeBlock

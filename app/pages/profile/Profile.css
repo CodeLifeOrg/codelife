@@ -1,55 +1,54 @@
 #profile {
-  background-color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
   display: flex;
-  margin: 0 25px 25px;
-  width: calc(100% - 50px);
+  margin: 0 var(--gutter-md) var(--gutter-md);
+  width: calc(100% - var(--gutter-lg));
 
   & .user-img {
     background-size: cover;
     background-position: 50% 0;
     background-repeat: no-repeat;
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: var(--gutter-lg);
+    width: var(--gutter-lg);
   }
 
   & .profile-side {
     flex: none;
-    margin: 25px;
+    margin: var(--gutter-md);
     width: 300px;
 
     & .user-info {
       text-align: center;
 
       & .user-img {
-        margin: 0 auto 20px auto;
+        margin: 0 auto var(--gutter-md) auto;
         height: 200px;
         width: 200px;
       }
 
       & .user-name {
         line-height: 40px;
-        margin-bottom: 25px;
+        margin-bottom: var(--gutter-md);
       }
 
       & .edit-link {
-        margin: 10px auto;
+        margin: var(--gutter-xs) auto;
       }
 
       & .pt-icon-large {
         font-size: 128px;
-        margin-bottom: 25px;
+        margin-bottom: var(--gutter-md);
       }
 
       & p {
-        margin: 10px 0;
+        margin: var(--gutter-xs) 0;
         text-align: left;
 
         & .pt-icon-standard {
           opacity: 0.75;
-          width: 25px;
+          width: var(--gutter-md);
         }
 
       }
@@ -60,10 +59,10 @@
 
   & .profile-info {
     flex: 1;
-    margin: 25px;
+    margin: var(--gutter-md);
 
     & .user-section {
-      margin-bottom: 25px;
+      margin-bottom: var(--gutter-md);
 
       & .flex-row {
         display: flex;
@@ -78,7 +77,7 @@
 
     & .pt-form-group {
       align-items: center;
-      margin: 25px 0;
+      margin: var(--gutter-md) 0;
 
       & .pt-label {
         line-height: 16px;
@@ -104,7 +103,7 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 0;
-        margin-top: 5px;
+        margin-top: var(--gutter-xxs);
         padding-right: 7px;
         width: 200px;
       }

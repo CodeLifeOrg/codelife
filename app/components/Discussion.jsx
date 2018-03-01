@@ -93,7 +93,7 @@ class Discussion extends Component {
     if (!threads) return <Loading />;
 
     return (
-      <div id="Discussion">
+      <div className="discussion-container" id="Discussion">
         <h3>{ translate("Discussion") }</h3>
         <div id="sort-bar">
           Sort By

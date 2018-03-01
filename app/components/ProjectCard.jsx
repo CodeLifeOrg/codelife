@@ -55,11 +55,6 @@ class ProjectCard extends Component {
           title={ name }
           lazy={false}
           inline={false}
-          style={{
-            height: "80vh",
-            maxHeight: "1000px",
-            width: "90%"
-          }}
         >
           <div className="pt-dialog-body">
             <div className="render">

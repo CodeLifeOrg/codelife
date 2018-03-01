@@ -7,7 +7,7 @@ export default class CheatSheet extends Component {
     const {htmlcontent1} = this.props;
 
     return (
-      <div id="slide-container" className="cheatSheet flex-row">
+      <div id="slide-content" className="slide-content cheatSheet flex-row">
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
       </div>
     );

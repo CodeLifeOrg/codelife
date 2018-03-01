@@ -3,46 +3,45 @@
     border-collapse: collapse;
     width: 100%;
     & tr {
-      padding: 0;
       &:not(:first-child).first {
-        border-top: 1px solid #ccc;
+        border-top: 1px solid var(--light-2);
       }
       & .needle {
-        background-color: #efefef;
-        border-right: 1px solid #ccc;
+        background-color: var(--light-1);
+        border-right: 1px solid var(--light-2);
         color: rgba(0, 0, 0, 0.5);
         font-weight: bold;
-        padding: 5px;
+        padding: var(--gutter-xxs);
         text-align: center;
         vertical-align: middle;
         & .pt-icon-standard {
-          margin-right: 5px;
+          margin-right: var(--gutter-xxs);
         }
         & .allpassing {
           font-size: 12px;
-          margin-top: 5px;
+          margin-top: var(--gutter-xxs);
         }
       }
       & .rule {
-        border-top: 1px solid #ccc;
+        border-top: 1px solid var(--light-2);
         font-size: 12px;
-        padding: 3px 5px 5px 5px;
+        padding: 3px var(--gutter-xxs) var(--gutter-xxs) var(--gutter-xxs);
         & .pt-icon-standard {
           font-size: 12px;
-          margin: 0 10px 0 5px;
+          margin: 0 var(--gutter-xs) 0 var(--gutter-xxs);
           transition: color 0.2s;
           vertical-align: middle;
         }
         &.complete {}
         &.error {
-          background-color: #ffc8cb;
-          color: red;
+          background-color: var(--danger-light);
+          color: var(--danger);
           & .rule-name {
             font-weight: bold;
           }
           & .error-text {
             font-weight: normal;
-            padding-left: 10px;
+            padding-left: var(--gutter-xs);
             width: 100%;
           }
         }

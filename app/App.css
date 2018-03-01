@@ -1,8 +1,36 @@
-@import url("https://fonts.googleapis.com/css?family=Overpass:300,400,400i,700,700i");
+@import 'mixins.css';
+
+/* quality of life improvements */
+* {
+  margin: 0;
+  padding: 0;
+}
+/* usually necessary for responsive layouts */
+img, svg, textarea {
+  max-width: 100%;
+}
+/* border box default: http:/*www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+/* position:relative by default */
+body * {
+  position: relative;
+}
+
+/* fonts */
 body {
-  font-family: "Overpass", sans-serif;
-  letter-spacing: 0.5px;
+  font-family: var(--body-font);
+  letter-spacing: 0.25px;
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6,
+.heading {
+  font-family: var(--heading-font);
 }
 
 #app {
@@ -12,14 +40,13 @@ body {
   & .container {
     min-height: 100vh;
     padding-bottom: 100px;
-    position: relative;
   }
 }
 
 #devbar {
   width: 100%;
-  height: 20px;
-  background-color: #eec900;
+  height: var(--gutter-md);
+  background-color: var(--caution);
   position: absolute;
   top: 0px;
   left: 0px;
@@ -39,61 +66,85 @@ h1 {
 }*/
 
 .pt-input {
-  border-radius: 10px;
-  font-family: "Overpass", sans-serif;
-  letter-spacing: 0.5px;
+  border-radius: var(--radius-sm);
+  font-family: var(--heading-font);
+  letter-spacing: 0.25px;
 }
 
 .pt-file-upload-input {
-  border-radius: 10px 0 0 10px;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
   &:after {
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   }
 }
 
 .pt-select select {
-  border-radius: 10px;
-  font-family: "Overpass", sans-serif;
-  letter-spacing: 0.5px;
+  border-radius: var(--radius-sm);
+  font-family: var(--heading-font);
+  letter-spacing: 0.25px;
 }
 
 .pt-button {
-  border-radius: 10px;
-  font-family: "Overpass", sans-serif;
-  letter-spacing: 0.5px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  border-radius: 2em;
+  font-family: var(--heading-font);
+  letter-spacing: 0.25px;
 }
 
 .pt-button.pt-intent-primary {
-  background: #328f86;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat #328f86;
-  color: white;
+  background: var(--sky-dark);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--sky-dark);
+  color: var(--white);
   &:hover {
-    background-color: color(#328f86 blackness(50%));
+    background-color: var(--sky-dark);
   }
 }
 
 .pt-popover {
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   & .pt-popover-content {
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     & .pt-button:last-child {
       margin-bottom: 0;
     }
   }
 }
 
+/* fix dialog container bug */
+.pt-dialog-container {
+  width: 100vw;
+  height: 100vh;
+}
+
 .pt-dialog {
-  background-color: #fafffe;
-  border: 1px solid #328F86;
-  border-radius: 10px;
+  background-color: var(--light-1);
+  border: 1px solid var(--sky-dark);
+  border-radius: var(--radius-lg);
   position: fixed !important;
+  /* sizing overrides */
+  width: calc(100% - var(--gutter-lg));
+  /* sizing override for non-alert dialog */
+  /* TODO: find a better solution for this */
+  &:not(.pt-alert) {
+    height: calc(100vh - var(--gutter-lg));
+  }
+
+  /* center align alert contents */
+  & .pt-alert-contents {
+    text-align: center;
+  }
+  & .pt-alert-footer {
+    justify-content: center;
+  }
+
   & .pt-dialog-header {
-    background: #328F86;
-    border-radius: 8px 8px 0 0;
+    background: var(--sky-dark);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
     & h5, & button, & span {
-      color: white;
+      color: var(--white);
       font-weight: 400;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.25px;
       text-transform: uppercase;
     }
   }
@@ -106,23 +157,23 @@ h1 {
       background-size: 75%;
       border-radius: 100px;
       border-style: solid;
-      border-width: 5px;
+      border-width: var(--gutter-xxs);
       flex: none;
       height: 100px;
-      margin-right: 25px;
+      margin-right: var(--gutter-md);
       width: 100px;
     }
   }
   & .pt-dialog-footer {
-    padding: 0 10px;
+    padding: 0 var(--gutter-xs);
     & .pt-dialog-footer-byline {
-      color: #444;
+      color: var(--dark-3);
       float: left;
       opacity: 0.75;
       & .share-link {
         display: block;
         font-size: 12px;
-        margin-top: 5px;
+        margin-top: var(--gutter-xxs);
       }
     }
   }
@@ -135,34 +186,34 @@ h1 {
 .pt-card {
   align-self: stretch;
   background-color: rgba(120, 120, 120, 0.5);
-  border-radius: 10px;
-  color: white;
+  border-radius: var(--radius-lg);
+  color: var(--white);
   display: flex;
   flex: none;
-  margin: 20px;
-  padding: 0;
+  margin: var(--gutter-md);
+  padding: 0; /* blueprint override */
   text-align: left;
   width: 250px;
   &:hover {
-    color: white;
+    color: var(--white);
     text-decoration: inherit;
   }
   & .box {
     align-items: center;
     align-self: stretch;
     display: flex;
-    padding: 10px;
+    padding: var(--gutter-xs);
     & .icon {
-      background-color: white;
+      background-color: var(--white);
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
-      border-radius: 25px;
+      border-radius: var(--gutter-md);
       flex: none;
-      height: 50px;
-      margin-right: 10px;
+      height: var(--gutter-lg);
+      margin-right: var(--gutter-xs);
       text-align: center;
-      width: 50px;
+      width: var(--gutter-lg);
       & .pt-icon-standard {
         font-size: 26px;
         line-height: 48px;
@@ -173,13 +224,13 @@ h1 {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-right: 5px;
+      padding-right: var(--gutter-xxs);
       & .card-title {
         font-size: 16px;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.25px;
         text-transform: uppercase;
         & .pt-icon-standard {
-          margin-right: 5px;
+          margin-right: var(--gutter-xxs);
           opacity: 0.75;
         }
       }
@@ -190,10 +241,10 @@ h1 {
           margin-top: 3px;
         }
         & .pt-icon-standard {
-          margin-right: 5px;
+          margin-right: var(--gutter-xxs);
         }
         & .card-author .pt-icon-standard {
-          color: white;
+          color: var(--white);
         }
       }
     }

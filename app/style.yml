@@ -1,6 +1,69 @@
-sky: "#74c3b7"
-nav-height: "86px"
+#############################
+# MEASUREMENTS
+#############################
+
+# grid
+gutter-xxs: "5px"
+gutter-xs:  "10px"
+gutter-sm:  "15px"
+gutter-md:  "25px"
+gutter-lg:  "50px"
+gutter-xl:  "75px"
+
+# border radius
+radius-lg: "8px"
+radius-md: "4px"
+radius-sm: "2px"
+
+# miscellaneous measurements
+nav-height: "60px"
 footer-height: "100px"
+button-min-width: "7em"
+button-double-width: "14em"
+
+
+#############################
+# TYPOGRAPHY
+#############################
+
+heading-font: "'Overpass', 'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
+body-font: "'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
+
+#############################
+# COLORS
+#############################
+
+# grayscale
+white:   "#ffffff"
+light-1: "#e3e4e4"
+light-2: "#c7caca"
+light-3: "#acb0b0"
+gray:    "#909696"
+dark-1:  "#747b7b"
+dark-2:  "#596161"
+dark-3:  "#2F3A3A"
+black:   "#222d2d"
+
+# UI
+danger: "#d74645"
+danger-light: "#ffc8cb"
+danger-dark: "#C40000"
+
+caution: "#eec900"
+
+success: "#436c31"
+
+rando-blue: "#2500CA"
+
+heylisten: "#f7e944"
+heylisten-light: "#faf085"
+
+
+
+# theming
+sky: "#74c3b7"
+sky-light: "#9BD9D4"
+sky-dark: "#328f86"
 
 islands:
   island-jungle:

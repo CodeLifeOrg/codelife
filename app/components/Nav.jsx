@@ -41,7 +41,7 @@ class Nav extends Component {
     const {showBrowser} = this.state;
 
     return (
-      <div id="nav">
+      <div className="nav" id="nav">
         { auth.user 
           ? <div>
             <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
@@ -56,31 +56,55 @@ class Nav extends Component {
         { logo
           ? <Link className="logo" to={"/"}>
             <div className="tag">Beta</div>
-            <img className="text" src="/logo/logo-sm.png" />
+            <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
           </Link>
           : <div></div> }
         { auth.user
           ? <div className="links">
-            <Link className="link" to="/island"><span className="pt-icon-standard pt-icon-path-search" />{ t("Map") }</Link>
-            <Link className="link" to={`/projects/${auth.user.username}`}><span className="pt-icon-standard pt-icon-book" />{ t("Projects") }</Link>
+            <Link className="link" to="/island">
+              <span className="link-icon pt-icon-standard pt-icon-path-search" />
+              <span className="link-text">{ t("Map") }</span>
+            </Link>
+            <Link className="link" to={`/projects/${auth.user.username}`}>
+              <span className="link-icon pt-icon-standard pt-icon-book" />
+              <span className="link-text">{ t("Projects") }</span>
+            </Link>
             <Popover
               interactionKind={PopoverInteractionKind.HOVER}
               popoverClassName="pt-popover-content-sizing user-popover"
               position={Position.BOTTOM_RIGHT}
             >
-              <Link className="link" to={ `/profile/${ auth.user.username }` }><span className="pt-icon-standard pt-icon-user" />{ auth.user.username }</Link>
+              <Link className="link" to={ `/profile/${ auth.user.username }` }>
+                <span className="link-icon pt-icon-standard pt-icon-user" />
+                <span className="link-text">{ auth.user.username }</span>
+              </Link>
               <div>
-                <Link className="pt-button" to={ `/profile/${ auth.user.username }` }>{ t("Profile") }</Link>
-                { auth.user.role > 0 ? <Link className="pt-button" to="/admin">{ t("Admin") }</Link> : null }
-                <a className="pt-button" href="/auth/logout">{ t("Logout") }</a>
+                <Link className="pt-button" to={ `/profile/${ auth.user.username }` }>
+                  { t("Profile") }
+                </Link>
+                { auth.user.role > 0 ? <Link className="pt-button" to="/admin">
+                  { t("Admin") }
+                </Link> : null }
+                <a className="pt-button" href="/auth/logout">
+                  { t("Logout") }
+                </a>
               </div>
             </Popover>
           </div>
           : <div className="links">
             { logo
-              ? <Link className="link" to="/#login"><span className="pt-icon-standard pt-icon-user" />{ t("Login.Login") }/{ t("SignUp.Sign Up") }</Link>
-              : <AnchorLink className="link" to="login"><span className="pt-icon-standard pt-icon-user" />{ t("Login.Login") }/{ t("SignUp.Sign Up") }</AnchorLink> }
-            <Link className="link" to="/about"><span className="pt-icon-standard pt-icon-help" />{ t("About") }</Link>
+              ? <Link className="link" to="/#login">
+                <span className="link-icon pt-icon-standard pt-icon-user" />
+                <span className="link-text">{ t("Login.Login") }/{ t("SignUp.Sign Up") }</span>
+              </Link>
+              : <AnchorLink className="link" to="login">
+                <span className="link-icon pt-icon-standard pt-icon-user" />
+                <span className="link-text">{ t("Login.Login") }/{ t("SignUp.Sign Up") }</span>
+              </AnchorLink> }
+              <Link className="link" to="/about">
+                <span className="link-icon pt-icon-standard pt-icon-help" />
+                <span className="link-text">{ t("About") }</span>
+              </Link>
           </div> }
       </div>
     );

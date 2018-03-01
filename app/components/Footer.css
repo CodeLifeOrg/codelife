@@ -3,29 +3,29 @@
   background-image: url("/ground.png");
   background-repeat: repeat-x;
   bottom: 0;
-  color: white;
+  color: var(--white);
   display: flex;
   height: var(--footer-height);
   justify-content: space-between;
   left: 0;
-  padding: 50px 25px 25px;
+  padding: var(--gutter-lg) var(--gutter-md) var(--gutter-md);
   position: absolute;
   width: 100%;
   & .links {
     & .link {
-      color: white;
+      color: var(--white);
       letter-spacing: 1px;
       text-transform: uppercase;
     }
     & .link:not(.language) {
-      margin-right: 15px;
+      margin-right: var(--gutter-sm);
     }
   }
   & .logos {
     align-items: center;
     display: flex;
     & .text-link {
-      color: white;
+      color: var(--white);
       display: block;
       flex: none;
       font-size: 12px;
@@ -35,17 +35,17 @@
       text-align: right;
       width: 100%;
       &:hover {
-        color: white;
+        color: var(--white);
         opacity: 1;
       }
     }
     & .logo {
-      height: 30px;
-      margin: 0 15px;
+      height: var(--gutter-md);
+      margin: 0 var(--gutter-sm);
       opacity: 0.9;
       transition: opacity 0.2s;
       &.datawheel {
-        height: 40px;
+        height: var(--gutter-lg);
       }
       &:hover {
         opacity: 1;

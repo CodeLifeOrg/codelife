@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
 import {browserHistory} from "react-router";
+import Thread from "components/Thread";
+import Comment from "components/Comment";
 import Loading from "components/Loading";
 
 import "./ReportViewer.css";
@@ -18,6 +20,7 @@ class ReportViewer extends Component {
       codeblockReports: [],
       threadReports: [],
       commentReports: [],
+      reports: [],
       isOpen: false
     };
   }
@@ -27,14 +30,16 @@ class ReportViewer extends Component {
     const pget = axios.get("/api/reports/projects/all");
     const tget = axios.get("/api/reports/threads/all");
     const cget = axios.get("/api/reports/comments/all");
+    const rget = axios.get("/api/reports/discussions");
 
-    Promise.all([cbget, pget, tget, cget]).then(resp => {
+    Promise.all([cbget, pget, tget, cget, rget]).then(resp => {
       const mounted = true;
       const codeblockReports = resp[0].data;
       const projectReports = resp[1].data;
       const threadReports = resp[2].data;
       const commentReports = resp[3].data;
-      this.setState({mounted, codeblockReports, projectReports, threadReports, commentReports});
+      const reports = resp[4].data;
+      this.setState({mounted, codeblockReports, projectReports, threadReports, commentReports, reports});
     });
   }
 
@@ -81,7 +86,6 @@ class ReportViewer extends Component {
     }
   }
 
-
   createPageRow(type, report) {
     const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
     let strReasons = "";
@@ -107,22 +111,20 @@ class ReportViewer extends Component {
       </td>
     </tr>;
   }
-  
+
   createDiscRow(type, report) {
-    //const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
-    const shortFilename = "testshort";
-    report.filename = "test2";
+    // if (report.commentref) author = report.commentref.user.username;
+    // if (report.thread) author = report.thread.user.username;
     let strReasons = "";
     let strComments = "";
     for (const r of report.reasons) strReasons += `${r}\n`;
     for (const c of report.comments) strComments += `${c}\n`;
     return <tr key={report.id}>
-      <td>
-        <a target="_blank" href={`/${type}/${report.username}/${report.filename}`}>
-          {shortFilename}
-        </a>
-      </td>
-      <td>{report.username}</td>
+      { 
+        type === "threads"
+          ? <Thread thread={report.thread} />
+          : <Comment comment={report.commentref} />
+      }
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
@@ -150,10 +152,13 @@ class ReportViewer extends Component {
           ids: [report.id],
           report_id: report.report_id,
           username: report.username,
+          commentref: report.commentref,
+          thread: report.thread,
           email: report.email,
           filename: report.filename,
           reasons: [report.reason],
-          comments: [report.comment]
+          comments: [report.comment],
+          permalink: report.permalink
         };
         grouped.push(obj);
       }
@@ -210,8 +215,7 @@ class ReportViewer extends Component {
         <table className="pt-table pt-striped pt-interactive">
           <thead>
             <tr>
-              <th>Page</th>
-              <th>Author</th>
+              <th>Thread</th>
               <th>Reason</th>
               <th>Comments</th>
               <th>Actions</th>
@@ -223,8 +227,7 @@ class ReportViewer extends Component {
         <table className="pt-table pt-striped pt-interactive">
           <thead>
             <tr>
-              <th>Page</th>
-              <th>Author</th>
+              <th>Comment</th>
               <th>Reason</th>
               <th>Comments</th>
               <th>Actions</th>

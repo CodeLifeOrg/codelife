@@ -34,12 +34,14 @@ module.exports = function(app) {
   // Used in CodeBlock and Slide to report when a user beats an Island or a Level, respectively
   app.post("/api/userprogress/save", isAuthenticated, (req, res) => {
     const {id: uid} = req.user;
-    const {level} = req.body;
+    const {level, status} = req.body;
     db.userprogress.findOrCreate({where: {uid, level}})
       .then(userprogressRows => {
         if (userprogressRows.length) {
           const userprogressRow = userprogressRows[0];
           userprogressRow.datecompleted = db.fn("NOW");
+          // Don't allow a completed level to become incomplete later.
+          if (userprogressRow.status !== "completed") userprogressRow.status = status;
           return userprogressRow.save().then(() => res.json(userprogressRows).end());
         }
         else {

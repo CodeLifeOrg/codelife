@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
-import ReportBox from "components/ReportBox";
+import Thread from "components/Thread";
 import "./Discussion.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
@@ -17,7 +17,6 @@ class Discussion extends Component {
       threads: false,
       threadTitle: "",
       threadContent: "",
-      reports: [],
       commentFields: {},
       sortType: "date-oldest"
     };
@@ -25,10 +24,7 @@ class Discussion extends Component {
 
   componentDidMount() {
     // When Discussion is initalized, it already has props. This one-time call forces an initial update.
-    axios.get("/api/reports/discussions").then(resp => {
-      const reports = resp.data;
-      this.setState({reports}, this.componentDidUpdate({}));
-    });
+    this.componentDidUpdate({});
   }
 
   componentDidUpdate(prevProps) {
@@ -42,27 +38,7 @@ class Discussion extends Component {
     }
   }
 
-  toggleThread(id) {
-    this.state[id] ? this.setState({[id]: undefined}) : this.setState({[id]: {title: "", content: ""}});
-  }
 
-  newComment(tid) {
-    const {t} = this.props;
-    const commentPost = {
-      title: this.state[tid].title,
-      content: this.state[tid].content,
-      subject_type: this.props.subjectType,
-      subject_id: this.props.subjectId,
-      thread_id: tid
-    };
-    axios.post("/api/comments/new", commentPost).then(resp => {
-      if (resp.status === 200) {
-        const toast = Toaster.create({className: "newCommentToast", position: Position.TOP_CENTER});
-        toast.show({message: t("Comment Posted!"), timeout: 1500, intent: Intent.SUCCESS});
-        this.setState({threads: resp.data, [tid]: {title: "", content: ""}});
-      }
-    });
-  }
 
   newThread() {
     const {t} = this.props;
@@ -81,6 +57,7 @@ class Discussion extends Component {
     });
   }
 
+
   selectSort(method) {
     const {threads} = this.state;
     switch (method) {
@@ -96,133 +73,24 @@ class Discussion extends Component {
       case "comments-least":
         threads.sort((a, b) => a.commentlist.length >= b.commentlist.length);
         break;
+      case "likes-most":
+        threads.sort((a, b) => a.likes < b.likes);
+        break;
+      case "likes-least":
+        threads.sort((a, b) => a.likes >= b.likes);
+        break;
       default:
         break;
     }
     this.setState({threads});
   }
 
-  formatDate(datestring) {
-    const date = new Date(datestring);
-    const year = date.getFullYear();
-    const month = `0${date.getMonth() + 1}`.slice(-2);
-    const day = `0${date.getDate()}`.slice(-2);
-    const hours = `0${date.getHours()}`.slice(-2);
-    const minutes = `0${date.getMinutes()}`.slice(-2);
-    return `${day}/${month}/${year} - ${hours}:${minutes}`;
-  }
-
-  handleReport(report) {
-    console.log(report);
-    const {reports} = this.state;
-    reports.push(report);
-    this.setState({reports});
-  }
-
   render() {
 
     const {t: translate} = this.props;
-    const {threads, threadTitle, threadContent, reports} = this.state;
+    const {threads, threadTitle, threadContent} = this.state;
 
     if (!threads) return <Loading />;
-
-    const threadItems = threads.map(t =>
-      <div key={t.id} className="thread">
-        <div className="thread-header">
-          <div className="thread-content">
-            <div className="thread-title">
-              { t.title }
-            </div>
-            <div className="thread-user">
-              { t.user.role === 1 ? <Tooltip content={ translate("Contributor") }><span className="pt-icon-standard pt-icon-book pt-intent-success"></span></Tooltip>
-                : t.user.role === 2 ? <Tooltip content={ translate("Admin") }><span className="pt-icon-standard pt-icon-star pt-intent-warning"></span></Tooltip>
-                  : null }
-              { t.user.username }
-              { /* `${t.userprofile.threads.length + t.userprofile.comments.length} posts` */ }
-              <span className="thread-date">
-                { translate("posted on") } { `${this.formatDate(t.date)}` }
-              </span>
-            </div>
-            <div className="thread-body" dangerouslySetInnerHTML={{__html: t.content}} />
-          </div>
-          <div className="thread-actions">
-            <div className="report-thread">
-              <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
-                inline={true}
-              >
-                <Button
-                  intent={reports.find(r => r.type === "thread" && r.report_id === t.id) ? Intent.DANGER : Intent.DEFAULT}
-                  iconName="flag"
-                  className={ reports.find(r => r.type === "thread" && r.report_id === t.id) ? "" : "pt-minimal" }
-                  text={reports.find(r => r.type === "thread" && r.report_id === t.id) ? "Flagged" : "Flag"}
-                />
-                <div style={{textAlign: "left"}}>
-                  <ReportBox reportid={t.id} contentType="thread" handleReport={this.handleReport.bind(this)} />
-                </div>
-              </Popover>
-            </div>
-            <div className={ `show-comments pt-button ${ this.state[t.id] ? "pt-active" : "" }` } onClick={this.toggleThread.bind(this, t.id)}>
-              <span>{ t.commentlist.length } { t.commentlist.length === 1 ? translate("Comment") : translate("Comments") }</span>
-              <span className={`pt-icon-standard pt-icon-${this.state[t.id] ? "eye-off" : "comment"} pt-align-right`}></span>
-            </div>
-          </div>
-        </div>
-
-        <div className="comments">
-          <Collapse isOpen={this.state[t.id]}>
-            {
-              t.commentlist.map(c =>
-                <div key={c.id} className="comment">
-                  <div className="comment-title">
-                    { c.title }
-                  </div>
-                  <div className="comment-user">
-                    { c.user.role === 1 ? <Tooltip content={ translate("Contributor") }><span className="pt-icon-standard pt-icon-book pt-intent-success"></span></Tooltip>
-                      : c.user.role === 2 ? <Tooltip content={ translate("Admin") }><span className="pt-icon-standard pt-icon-star pt-intent-warning"></span></Tooltip>
-                        : null }
-                    { c.user.username }
-                    { /* `${c.userprofile.threads.length + c.userprofile.comments.length} posts` */ }
-                    <span className="comment-date">
-                      { translate("posted on") } { `${this.formatDate(c.date)}` }
-                    </span>
-                  </div>
-                  <div className="comment-body" dangerouslySetInnerHTML={{__html: c.content}} />
-                  <div className="report-comment" style={{textAlign: "right"}}>
-                    <Popover
-                      interactionKind={PopoverInteractionKind.CLICK}
-                      popoverClassName="pt-popover-content-sizing"
-                      position={Position.TOP_RIGHT}
-                      inline={true}
-                    >
-                      <Button
-                        intent={reports.find(r => r.type === "comment" && r.report_id === c.id) ? Intent.DANGER : Intent.DEFAULT}
-                        iconName="flag"
-                        className={ `${reports.find(r => r.type === "comment" && r.report_id === c.id) ? "" : "pt-minimal"} pt-small` }
-                      />
-                      <ReportBox reportid={c.id} contentType="comment" handleReport={this.handleReport.bind(this)} />
-                    </Popover>
-                  </div>
-                </div>
-              )
-            }
-            {
-              this.state[t.id]
-                ? <div className="new-comment">
-                  <div className="new-comment-title">{translate("Post New Comment")}</div>
-                  <input className="pt-input" value={this.state[t.id].title} onChange={e => this.setState({[t.id]: {...this.state[t.id], title: e.target.value}})} placeholder={translate("Title")} />
-                  <QuillWrapper hideGlossary={true} value={this.state[t.id].content} onChange={tx => this.setState({[t.id]: {...this.state[t.id], content: tx}})} />
-                  <Button className="pt-intent-success post-button pt-fill" onClick={this.newComment.bind(this, t.id)}>{translate("Post Comment")}</Button>
-                </div>
-                : null
-            }
-          </Collapse>
-        </div>
-
-      </div>
-    );
 
     return (
       <div className="discussion-container" id="Discussion">
@@ -235,11 +103,13 @@ class Discussion extends Component {
               <option value="date-newest">Date: Newest</option>
               <option value="comments-most">Comments: Most</option>
               <option value="comments-least">Comments: Least</option>
+              <option value="likes-most">Likes: Most</option>
+              <option value="likes-least">Likes: Least</option>
             </select>
           </div>
         </div>
         <div id="threads">
-          {threadItems}
+          { threads.map(t => <Thread key={t.id} thread={t} />) }
         </div>
         <div className="new-thread">
           <div className="new-thread-title">{translate("Post New Thread")}</div>
@@ -253,7 +123,8 @@ class Discussion extends Component {
 }
 
 Discussion = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(Discussion);
 Discussion = translate()(Discussion);
 export default Discussion;

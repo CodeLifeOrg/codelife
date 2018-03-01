@@ -1,7 +1,7 @@
 import React from "react";
 import {Route, Redirect, IndexRoute, browserHistory} from "react-router";
 
-import App from "components/App";
+import App from "./App";
 
 import About from "pages/About";
 import EditProfile from "pages/profile/EditProfile";

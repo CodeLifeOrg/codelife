@@ -3,15 +3,15 @@ import {connect} from "react-redux";
 import {isAuthenticated} from "datawheel-canon";
 import Helmet from "react-helmet";
 
-import header from "../helmet.js";
+import header from "./helmet.js";
 
 import "./App.css";
 import "./Islands.css";
 
-import Clouds from "./Clouds";
-import Footer from "./Footer";
-import Nav from "./Nav";
-import Loading from "./Loading";
+import Clouds from "components/Clouds";
+import Footer from "components/Footer";
+import Nav from "components/Nav";
+import Loading from "components/Loading";
 
 import axios from "axios";
 
@@ -79,7 +79,12 @@ class App extends Component {
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
-        { userInit && !auth.loading || authRoute 
+        {
+          location.href.includes("dev.")
+            ? <div id="devbar">Development Server.  Do not edit content here!</div>
+            : null
+        }
+        { userInit && !auth.loading || authRoute
           ? bareRoute
             ? children
             : <div className="container">
@@ -99,8 +104,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth, 
-  i18n: state.i18n, 
+  auth: state.auth,
+  i18n: state.i18n,
+  location: state.location,
   islands: state.islands,
   levels: state.levels,
   glossary: state.glossary

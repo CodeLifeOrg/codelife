@@ -12,8 +12,6 @@
   z-index: 20;
   /* sizing */
   height: var(--nav-height);
-  /* theming */
-  /* background-color: rgba(116,195,183, 0.5); sky */
 
   /* increase padding on bigger screens */
   @add-mixin min-md {
@@ -36,7 +34,7 @@
       font-weight: 800;
       text-transform: uppercase;
       /* theming */
-      color: rgba(0,0,0,0.3);
+      color: var(--sky-dark);
     }
     & .text {
       width: 148px;
@@ -52,11 +50,14 @@
     padding-left: var(--gutter-md); /* links will wrap before crowding the logo */
 
     & .link {
-      display: inline-block;
-      color: var(--white);
-      letter-spacing: 1px;
+      @add-mixin nav-link;
+      /* sizing */
       padding: 0.25em var(--gutter-sm);
-      text-transform: uppercase;
+
+      /* remove right padding from map link, bring in browser toggle */
+      &.map-link {
+        padding-right: 0;
+      }
 
       /* tiny screens */
       @add-mixin max-xs {
@@ -84,17 +85,36 @@
   }
 }
 
-#browser {
-  position: absolute;
-  top: 14px;
-  left: 50px;
-  z-index: 1000;
+/* slide browser */
+.browser {
+  display: inline-block;
+
+  /* chevron toggle button */
+  & .browser-toggle {
+    @add-mixin nav-link;
+    padding: 0.25em;
+  }
 }
 
-.hide {
-  display: none;
+/* browser popover —  not nested within .browser */
+.browser-popover {
+  background-color: var(--white);
+  width: 250px;
+  height: auto;
+
+  & > .pt-popover-content {
+    background-color: var(--white);
+
+    & > .browser-list {
+      /* account for 20px padding on parent,
+      which is necessary to hide the popover arrow shadow */
+      margin: -20px;
+      padding: var(--gutter-xs) 0;
+    }
+  }
 }
 
+/* user popover */
 .user-popover {
   & .pt-button {
     display: block;

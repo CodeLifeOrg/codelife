@@ -39,6 +39,21 @@
   }
 }
 
+/* nav link */
+@define-mixin nav-link {
+  /* positioning */
+  display: inline-block;
+  /* typography */
+  color: var(--sky-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--black);
+  }
+}
+
 /* slide theme */
 @define-mixin slide-theme {
   background-color: var(--white);

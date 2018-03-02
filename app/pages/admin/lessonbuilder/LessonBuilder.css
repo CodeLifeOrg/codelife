@@ -1,53 +1,53 @@
-#lesson-builder {
+.lesson-builder {
   display: flex;
   width: 100%;
-}
 
-#tree {
-  background-color: var(--light-1);
-  border-bottom-left-radius: var(--radius-lg);
-  max-width: 250px;
-  min-width: 250px;
-  padding: 0;
-  width: 250px;
-  & .pt-tree-node {
-    &:hover {
-      cursor: pointer;
+  & .tree {
+    background-color: var(--light-1);
+    border-bottom-left-radius: var(--radius-lg);
+    max-width: 250px;
+    min-width: 250px;
+    padding: 0;
+    width: 250px;
+    & .pt-tree-node {
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
-}
 
-#item-editor {
-  background-color: var(--white);
-  border-top-right-radius: var(--radius-lg);
-  flex: 1;
-  padding: var(--gutter-md);
-  & .input-block, & .area-block {
-    width: 100%;
-    display: flex;
-    & .pt-label {
-      flex: 1;
-      &:first-child {
-        margin-right: var(--gutter-md);
-      }
-      & .pt-input {
-        width: 100%;
-      }
-      & .pt-select {
-        width: 100%;
-      }
-      & .quill {
-        width: 100%;
-        & .ql-toolbar {
-          border-radius: var(--radius-md) var(--radius-md) 0 0;
+  & .item-editor {
+    background-color: var(--white);
+    border-top-right-radius: var(--radius-lg);
+    flex: 1;
+    padding: var(--gutter-md);
+    & .input-block, & .area-block {
+      width: 100%;
+      display: flex;
+      & .pt-label {
+        flex: 1;
+        &:first-child {
+          margin-right: var(--gutter-md);
         }
-        & .ql-container {
-          border-radius: 0 0 var(--radius-md) var(--radius-md);
-        }
-      }
-      & .image-area {
-        & img {
+        & .pt-input {
           width: 100%;
+        }
+        & .pt-select {
+          width: 100%;
+        }
+        & .quill {
+          width: 100%;
+          & .ql-toolbar {
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+          }
+          & .ql-container {
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+          }
+        }
+        & .image-area {
+          & img {
+            width: 100%;
+          }
         }
       }
     }

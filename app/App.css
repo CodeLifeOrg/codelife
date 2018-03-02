@@ -253,3 +253,9 @@ h1 {
     cursor: pointer;
   }
 }
+
+/* utility classes */
+.u-unbutton {
+  border: 0;
+  background: none;
+}

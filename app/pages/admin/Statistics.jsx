@@ -29,11 +29,6 @@ class Statistics extends Component {
 
     Promise.all([sget]).then(resp => {
       const mounted = true;
-      const users = resp[0].data.map(u => {
-        u.progressPercent = u.userprogress.length / 32 * 100;
-        if (u.progressPercent === 0) u.progressPercent = .01;
-        return u;
-      });
       const islands = this.props.islands.map(i => Object.assign({}, i)).sort((a, b) => a.ordering - b.ordering);
       const levels = this.props.levels.map(l => Object.assign({}, l));
       let flatProgress = [];
@@ -41,6 +36,11 @@ class Statistics extends Component {
         const myLevels = levels.filter(l => l.lid === i.id).sort((a, b) => a.ordering - b.ordering);
         flatProgress = flatProgress.concat(myLevels, i);
       }
+      const users = resp[0].data.map(u => {
+        u.progressPercent = u.userprogress.filter(up => up.status === "completed").length / flatProgress.length * 100;
+        if (u.progressPercent === 0) u.progressPercent = .01;
+        return u;
+      });
       this.setState({mounted, users, flatProgress}, this.handleTabChange.bind(this, "last-1"));
     });
   }
@@ -89,7 +89,7 @@ class Statistics extends Component {
       let latestTheme = "island-jungle";
 
       for (const fp of flatProgress) {
-        if (u.userprogress.find(up => up.level === fp.id)) {
+        if (u.userprogress.filter(up => up.status === "completed").find(up => up.level === fp.id)) {
           if (fp.theme) latestTheme = fp.theme;
           latestLevel = fp;
         }

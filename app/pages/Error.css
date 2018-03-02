@@ -1,15 +1,15 @@
 #Error {
   height: 60vh;
-  text-shadow: 0 2px 5px #444;
+  text-shadow: 0 2px var(--gutter-xxs) var(--dark-3);
   & .pt-non-ideal-state-visual img {
     width: 250px;
   }
   & .pt-non-ideal-state-title {
-    color: white;
+    color: var(--white);
     font-size: 32px;
   }
   & .pt-non-ideal-state-description {
-    color: white;
+    color: var(--white);
     font-weight: 700;
     text-transform: uppercase;
   }

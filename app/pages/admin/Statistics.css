@@ -1,15 +1,15 @@
 .stat-tabs .pt-tab-list {
-  background-color: #efefef;
-  border: 1px solid #aaa;
-  border-radius: 5px;
+  background-color: var(--light-1);
+  border: 1px solid var(--light-3);
+  border-radius: var(--radius-md);
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: var(--gutter-xs);
   & .pt-tab {
     margin: 0;
     padding: 2px 13px 3px;
     &[aria-selected="true"] {
-      background-color: #888;
-      color: white;
+      background-color: var(--dark-1);
+      color: var(--white);
     }
   }
   & .pt-tab-indicator {
@@ -19,10 +19,10 @@
 
 #statistics {
   & #totals {
-    margin: 10px 0;
+    margin: var(--gutter-xs) 0;
     text-align: center;
     & .stat {
-      margin: 0 10px;
+      margin: 0 var(--gutter-xs);
       & .value {
         font-weight: bold;
       }
@@ -44,7 +44,7 @@
         margin-left: -3px;
       }
       & .pt-icon-caret-down, & .pt-icon-caret-up {
-        color: #ba1c2e
+        color: var(--danger-dark);
       }
     }
     & td {

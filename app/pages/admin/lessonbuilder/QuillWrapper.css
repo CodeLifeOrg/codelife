@@ -3,6 +3,6 @@
 }
 
 #insert-word {
-  margin: 10px;
+  margin: var(--gutter-xs);
   display:inline-block;
 }

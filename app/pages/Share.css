@@ -4,7 +4,7 @@
   & #iframe {
     border: 0;
     display: block;
-    height: calc(100vh - 50px);
+    height: calc(100vh - var(--gutter-lg));
     margin: 0;
     overflow-y: auto;
     width: 100%;
@@ -12,29 +12,28 @@
   & #tag {
     align-items: center;
     background-color: var(--sky);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    color: white;
+    box-shadow: 0 0 var(--gutter-xxs) rgba(0, 0, 0, 0.1);
+    color: var(--white);
     display: flex;
-    height: 50px;
+    height: var(--gutter-lg);
     justify-content: space-between;
     margin: 0;
-    padding: 0 25px;
-    position: relative;
+    padding: 0 var(--gutter-md);
     & .info {
       flex: 1;
       & .pt-icon-standard {
-        margin-right: 5px;
+        margin-right: var(--gutter-xxs);
         opacity: 0.75;
       }
       & .user-link {
-        color: white;
+        color: var(--white);
       }
     }
     & .logo {
       align-items: center;
       display: flex;
       & img {
-        margin-left: 5px;
+        margin-left: var(--gutter-xxs);
         margin-top: 2px;
         width: 80px;
       }

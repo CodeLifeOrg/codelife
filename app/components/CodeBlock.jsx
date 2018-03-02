@@ -17,7 +17,7 @@ class CodeBlock extends Component {
       mounted: false,
       initialContent: "",
       isPassing: false,
-      execState: false, 
+      execState: false,
       isOpen: false,
       goodRatio: 0,
       intent: null,
@@ -48,7 +48,8 @@ class CodeBlock extends Component {
   }
 
   saveProgress(level) {
-    axios.post("/api/userprogress/save", {level}).then(resp => {
+    // Status is completed because there is no way to "skip" a codeblock
+    axios.post("/api/userprogress/save", {level, status: "completed"}).then(resp => {
       resp.status === 200 ? console.log("successfully saved progress") : console.log("error");
     });
   }
@@ -142,7 +143,7 @@ class CodeBlock extends Component {
     if (!this.state.mounted) return <Loading />;
 
     return (
-      <div id="codeBlock">
+      <div className="codeBlock" id="codeBlock">
         <div style={{textAlign: "right"}} className="codeblock-filename-form">
           {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
         </div>

@@ -44,8 +44,23 @@ module.exports = function(app) {
       include: [
         {
           association: "thread",
-          attributes: ["title"],
           include: [
+            { 
+              association: "commentlist", 
+              include: [
+                {
+                  association: "user", 
+                  attributes: ["name", "username", "id", "role"]
+                },
+                {
+                  association: "reportlist"
+                },
+                {
+                  association: "userprofile", 
+                  attributes: ["img"]
+                }
+              ]
+            },
             {
               association: "user",
               attributes: ["username", "email", "name"]
@@ -65,7 +80,6 @@ module.exports = function(app) {
       include: [
         {
           association: "commentref",
-          attributes: ["title"],
           include: [
             {
               association: "user",
@@ -188,9 +202,9 @@ module.exports = function(app) {
   // Used by ReportBox to process/save a report
   app.post("/api/reports/save", isAuthenticated, (req, res) => {
     const uid = req.user.id;
-    const {reason, comment, type} = req.body;
+    const {reason, comment, type, permalink} = req.body;
     const reportId = req.body.report_id;
-    db.reports.create({uid, reason, comment, report_id: reportId, type, status: "new"})
+    db.reports.create({uid, reason, comment, permalink, report_id: reportId, type, status: "new"})
       .then(u => {
 
         // disabling email server while testing occurs

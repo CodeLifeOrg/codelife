@@ -20,9 +20,9 @@ export default class TextCode extends Component {
     const {htmlcontent1, htmlcontent2} = this.props;
 
     return (
-      <div id="slide-container" className="textCode flex-row">
+      <div id="slide-content" className="slide-content textCode flex-row">
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-        { this.state.mounted ? <AceWrapper className="slide-editor" ref={ comp => this.editor = comp } mode="html" showGutter={false} readOnly={true} value={ htmlcontent2 } setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor"></div> }
+        { this.state.mounted ? <AceWrapper className="slide-editor panel-content" ref={ comp => this.editor = comp } mode="html" showGutter={false} readOnly={true} value={ htmlcontent2 } setOptions={{behavioursEnabled: false}}/> : <div className="slide-editor panel-content"></div> }
       </div>
     );
   }

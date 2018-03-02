@@ -8,14 +8,14 @@
     }
   }
   & .pt-popover-target {
-    margin: 5px 0;
+    margin: var(--gutter-xxs) 0;
     width: 100%;
     & .pt-button {
       align-items: center;
       display: flex;
       justify-content: space-between;
       line-height: 17px;
-      padding: 10px;
+      padding: var(--gutter-xs);
       text-align: left;
       width: 100%;
       & span:not(:last-child) {

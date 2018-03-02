@@ -1,0 +1,48 @@
+/* mixins */
+
+/* mobile first breakpoints */
+@define-mixin min-xl  { @media (min-width: 1800px) { @mixin-content; } }
+@define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
+@define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }
+@define-mixin min-sm  { @media (min-width: 768px)  { @mixin-content; } }
+@define-mixin min-xs  { @media (min-width: 480px)  { @mixin-content; } }
+@define-mixin min-xxs { @media (min-width: 325px)  { @mixin-content; } }
+
+/* max-width first */
+@define-mixin max-xl  { @media (max-width: 1799px) { @mixin-content; } }
+@define-mixin max-lg  { @media (max-width: 1199px) { @mixin-content; } }
+@define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
+@define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
+@define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
+@define-mixin max-xxs { @media (max-width: 319px)  { @mixin-content; } }
+
+/* button group; apply to pt-button, not parent */
+@define-mixin button-groupify {
+  margin: 0; /* smush buttons together */
+  min-width: var(--button-min-width); /* for buttons with small text, this will work nicely */
+
+  /* first button */
+  &:first-of-type {
+    border-radius: 20em 0 0 20em;
+    padding-right: 1.25em;
+  }
+  /* middle buttons */
+  & + .pt-button:not(:last-of-type) {
+    border-radius: 0;
+    margin-left: -1px; /* obscure 1px inset box shadow on previous button */
+  }
+  /* final button */
+  &:last-of-type {
+    border-radius: 0 20em 20em 0;
+    padding-left: 1.25em;
+    margin-left: -1px; /* obscure 1px inset box shadow on previous button */
+  }
+}
+
+/* slide theme */
+@define-mixin slide-theme {
+  background-color: var(--white);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 2em rgba(0, 0, 0, 0.1);
+}

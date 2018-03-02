@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Position, Tooltip} from "@blueprintjs/core";
+import {Position, Intent, Tooltip, Dialog} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
 import Discussion from "components/Discussion";
@@ -33,6 +33,7 @@ class Slide extends Component {
       currentLevel: null,
       currentIsland: null,
       levels: null,
+      skipped: false,
       showDiscussion: false,
       sentProgress: false,
       latestSlideCompleted: 0,
@@ -51,7 +52,8 @@ class Slide extends Component {
   }
 
   saveProgress(level) {
-    axios.post("/api/userprogress/save", {level}).then(resp => {
+    const status = this.state.skipped ? "skipped" : "completed";
+    axios.post("/api/userprogress/save", {level, status}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
     });
   }
@@ -70,6 +72,7 @@ class Slide extends Component {
         currentLevel: null,
         currentIsland: null,
         levels: null,
+        skipped: false,
         showDiscussion: false,
         sentProgress: false,
         latestSlideCompleted: 0,
@@ -132,7 +135,7 @@ class Slide extends Component {
       const cs = slideList.find(slide => slide.id === sid);
 
       const up = resp[1].data.progress;
-      const done = up.find(p => p.level === mlid) !== undefined;
+      const done = up.find(p => p.level === mlid && p.status === "completed") !== undefined;
 
       const levels = this.props.levels.filter(l => l.lid === lid);
       const currentLevel = levels.find(l => l.id === mlid);
@@ -159,8 +162,22 @@ class Slide extends Component {
     if (window) window.location.reload();
   }
 
+  toggleSkip() {
+    if (!this.state.skipped) {
+      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen, showDiscussion: true, skipped: true});  
+    }
+    else {
+      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen}); 
+    }
+  }
+
   toggleDiscussion() {
-    this.setState({showDiscussion: !this.state.showDiscussion});
+    if (!this.state.skipped) {
+      this.setState({confirmSkipOpen: true});
+    }
+    else {
+      this.setState({showDiscussion: !this.state.showDiscussion});
+    }
   }
 
   render() {
@@ -193,11 +210,32 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div>
-        <div id="slide" className={ currentIsland.theme }>
+      <div className="slide-outer">
+        <div id="slide" className={ `slide-inner ${currentIsland.theme}` }>
           {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
           <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
-          <div id="slide-head">
+          <Dialog
+            iconName="warning"
+            isOpen={this.state.confirmSkipOpen}
+            onClose={this.toggleSkip.bind(this)}
+            title="Are you sure?"
+            canOutsideClickClose={false}
+          >
+            <div className="pt-dialog-body">
+              {
+                t(`Viewing user discussion can include some very helpful insights, but will mark this level 
+                as incomplete. Don't forget, you can always come back later and complete the island without
+                any help to get full credit!`)
+              }
+            </div>
+            <div className="pt-dialog-footer">
+              <div className="pt-dialog-footer-actions">
+                <button className="pt-button" onClick={() => this.setState({confirmSkipOpen: false})}>{t("Cancel")}</button>
+                <button className="pt-button pt-intent-primary" onClick={this.toggleSkip.bind(this)}>{t("Show Me")}</button>
+              </div>
+            </div>
+          </Dialog>
+          <div className="slide-header" id="slide-head">
             { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
             <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
@@ -210,15 +248,11 @@ class Slide extends Component {
             unblock={this.unblock.bind(this)}
             {...currentSlide} />
 
-          <div id="slide-foot">
+          <div className="slide-footer">
             { prevSlug
               ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
               : <div className="pt-button pt-disabled">{t("Previous")}</div>
             }
-            <div className={ `pt-button ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
-              { showDiscussion ? t("Hide Discussion") : t("Show Discussion") }
-              { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
-            </div>
             { nextSlug
               ? this.state.blocked
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
@@ -232,7 +266,12 @@ class Slide extends Component {
             }
           </div>
         </div>
-        { showDiscussion ? <Discussion subjectType="slide" subjectId={sid}/> : null }
+        {/* discussion */}
+        <button className={ `pt-button discussion-toggle ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
+          { showDiscussion ? t("Hide Discussion") : t("Show Discussion") }
+          { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
+        </button>
+        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" subjectId={sid}/> : null }
       </div>
     );
   }

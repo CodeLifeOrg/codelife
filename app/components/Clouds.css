@@ -1,5 +1,5 @@
 #clouds {
-  background-image: linear-gradient(#9BD9D4 0, #74c3b7 100%);
+  background-image: linear-gradient(var(--sky-light) 0, var(--sky) 100%);
   bottom: 0;
   height: 100vh;
   left: 0;
@@ -15,7 +15,6 @@
     background-repeat: no-repeat;
     background-size: contain;
     display: block;
-    margin: 0;
     position: fixed;
     z-index: 4;
   }
@@ -58,8 +57,8 @@
     width: 12.82%;
     min-width: 131px;
     height: 312px;
-    top: 3%;
-    left: 27%;
+    top: var(--gutter-xl);
+    left: 10%;
   }
 
   & #cloud5 {

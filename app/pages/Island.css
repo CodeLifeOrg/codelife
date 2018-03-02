@@ -3,20 +3,20 @@
 }
 
 .snippetrender {
-  background-color: white;
-  border: 1px solid #A8ABB1;
+  background-color: var(--white);
+  border: 1px solid var(--light-3);
   width: 100%;
 }
 
 .overworld {
-  padding: 25px;
+  padding: var(--gutter-md);
   text-align: center;
   & .welcome {
-    color: white;
+    color: var(--white);
   }
   & .map {
     display: block;
-    margin: 25px auto 50px;
+    margin: var(--gutter-md) auto var(--gutter-lg);
     max-width: 1000px;
     text-align: center;
     width: 100%;
@@ -31,7 +31,7 @@
         margin: 0 auto;
       }
       &:nth-child(2) {
-        margin: -50px auto 0 0;
+        margin: -var(--gutter-lg) auto 0 0;
       }
     }
   }

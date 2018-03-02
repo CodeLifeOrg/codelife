@@ -1,0 +1,255 @@
+@import 'mixins.css';
+
+/* quality of life improvements */
+* {
+  margin: 0;
+  padding: 0;
+}
+/* usually necessary for responsive layouts */
+img, svg, textarea {
+  max-width: 100%;
+}
+/* border box default: http:/*www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+/* position:relative by default */
+body * {
+  position: relative;
+}
+
+/* fonts */
+body {
+  font-family: var(--body-font);
+  letter-spacing: 0.25px;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6,
+.heading {
+  font-family: var(--heading-font);
+}
+
+#app {
+  min-height: 100vh;
+  position: absolute;
+  width: 100%;
+  & .container {
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+}
+
+#devbar {
+  width: 100%;
+  height: var(--gutter-md);
+  background-color: var(--caution);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  text-align:center;
+}
+
+h1 {
+  font-style: normal;
+}
+
+:focus {
+  outline: 0;
+}
+
+/*.pt-overlay-backdrop {
+  background-color: rgba(245, 245, 255, 0.7);
+}*/
+
+.pt-input {
+  border-radius: var(--radius-sm);
+  font-family: var(--heading-font);
+  letter-spacing: 0.25px;
+}
+
+.pt-file-upload-input {
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  &:after {
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  }
+}
+
+.pt-select select {
+  border-radius: var(--radius-sm);
+  font-family: var(--heading-font);
+  letter-spacing: 0.25px;
+}
+
+.pt-button {
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  border-radius: 2em;
+  font-family: var(--heading-font);
+  letter-spacing: 0.25px;
+}
+
+.pt-button.pt-intent-primary {
+  background: var(--sky-dark);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--sky-dark);
+  color: var(--white);
+  &:hover {
+    background-color: var(--sky-dark);
+  }
+}
+
+.pt-popover {
+  border-radius: var(--radius-lg);
+  & .pt-popover-content {
+    border-radius: var(--radius-lg);
+    & .pt-button:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* fix dialog container bug */
+.pt-dialog-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.pt-dialog {
+  background-color: var(--light-1);
+  border: 1px solid var(--sky-dark);
+  border-radius: var(--radius-lg);
+  position: fixed !important;
+  /* sizing overrides */
+  width: calc(100% - var(--gutter-lg));
+  /* sizing override for non-alert dialog */
+  /* TODO: find a better solution for this */
+  &:not(.pt-alert) {
+    height: calc(100vh - var(--gutter-lg));
+  }
+
+  /* center align alert contents */
+  & .pt-alert-contents {
+    text-align: center;
+  }
+  & .pt-alert-footer {
+    justify-content: center;
+  }
+
+  & .pt-dialog-header {
+    background: var(--sky-dark);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    & h5, & button, & span {
+      color: var(--white);
+      font-weight: 400;
+      letter-spacing: 0.25px;
+      text-transform: uppercase;
+    }
+  }
+  & .pt-dialog-body {
+    align-items: center;
+    display: flex;
+    & .island-icon {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 75%;
+      border-radius: 100px;
+      border-style: solid;
+      border-width: var(--gutter-xxs);
+      flex: none;
+      height: 100px;
+      margin-right: var(--gutter-md);
+      width: 100px;
+    }
+  }
+  & .pt-dialog-footer {
+    padding: 0 var(--gutter-xs);
+    & .pt-dialog-footer-byline {
+      color: var(--dark-3);
+      float: left;
+      opacity: 0.75;
+      & .share-link {
+        display: block;
+        font-size: 12px;
+        margin-top: var(--gutter-xxs);
+      }
+    }
+  }
+}
+
+.pt-toast .pt-button {
+  margin: 0;
+}
+
+.pt-card {
+  align-self: stretch;
+  background-color: rgba(120, 120, 120, 0.5);
+  border-radius: var(--radius-lg);
+  color: var(--white);
+  display: flex;
+  flex: none;
+  margin: var(--gutter-md);
+  padding: 0; /* blueprint override */
+  text-align: left;
+  width: 250px;
+  &:hover {
+    color: var(--white);
+    text-decoration: inherit;
+  }
+  & .box {
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+    padding: var(--gutter-xs);
+    & .icon {
+      background-color: var(--white);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border-radius: var(--gutter-md);
+      flex: none;
+      height: var(--gutter-lg);
+      margin-right: var(--gutter-xs);
+      text-align: center;
+      width: var(--gutter-lg);
+      & .pt-icon-standard {
+        font-size: 26px;
+        line-height: 48px;
+      }
+    }
+    & .info {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: var(--gutter-xxs);
+      & .card-title {
+        font-size: 16px;
+        letter-spacing: 0.25px;
+        text-transform: uppercase;
+        & .pt-icon-standard {
+          margin-right: var(--gutter-xxs);
+          opacity: 0.75;
+        }
+      }
+      & .card-meta {
+        font-size: 12px;
+        opacity: 0.75;
+        &>* {
+          margin-top: 3px;
+        }
+        & .pt-icon-standard {
+          margin-right: var(--gutter-xxs);
+        }
+        & .card-author .pt-icon-standard {
+          color: var(--white);
+        }
+      }
+    }
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}

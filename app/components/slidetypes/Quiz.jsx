@@ -54,7 +54,7 @@ class Quiz extends Component {
     const quizItems = qParse.map(question => <li className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
 
     return (
-      <div id="slide-container" className="quiz flex-row">
+      <div id="slide-content" className="slide-content quiz flex-row">
         <div className="slide-quiz">
           <div dangerouslySetInnerHTML={{__html: qText}} />
           <ol className="questions">

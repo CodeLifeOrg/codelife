@@ -23,6 +23,13 @@
   & .logo {
     width: 80px;
     top: -1px; /* fudge into place */
+    transition: transform 0.2s ease-out;
+
+    /* hide offscreen (home page only) */
+    &.is-hidden {
+      opacity: 0;
+      transform: translateY(-150%);
+    }
 
     /* beta */
     & .tag {

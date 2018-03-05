@@ -42,12 +42,10 @@ class Nav extends Component {
 
     return (
       <div className="nav" id="nav">
-        { logo
-          ? <Link className="logo" to={"/"}>
-            <div className="tag">Beta</div>
-            <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
-          </Link>
-          : <div></div> }
+        <Link className={logo ? "logo" : "logo is-hidden"} to={"/"}>
+          <div className="tag">Beta</div>
+          <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
+        </Link>
         { auth.user
           ? <div className="links">
             <Link className="link map-link" to="/island">

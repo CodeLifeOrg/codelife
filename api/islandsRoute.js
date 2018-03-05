@@ -23,7 +23,7 @@ module.exports = function(app) {
 
   // Used by Slide to get all slides for a given mlid (level id)
   app.get("/api/slides/all", isAuthenticated, (req, res) => {
-    db.slides.findAll({where: req.query}).then(u => {
+    db.slides.findAll({where: req.query, include: {association: "threadlist"}}).then(u => {
       u = translate(req.headers.host, "pt", u);
       res.json(u).end();
     });

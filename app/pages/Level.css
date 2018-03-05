@@ -124,19 +124,19 @@
         &.left {
           border-bottom-width: var(--gutter-xxs);
           border-left-width: var(--gutter-xxs);
-          transform: rotateY(270deg)translateX(-var(--gutter-md));
+          transform: rotateY(270deg)translateX(-20px);
           transform-origin: center left;
         }
         &.top {
-          transform: rotateX(-270deg)translateY(-var(--gutter-md));
+          transform: rotateX(-270deg)translateY(-20px);
           transform-origin: top center;
         }
         &.front {
-          transform: translateZ(var(--gutter-md));
+          transform: translateZ(20px);
         }
         &.bottom {
           box-shadow: 0 2px var(--gutter-sm) rgba(0, 0, 0, 0.75);
-          transform: rotateX(90deg)translateY(var(--gutter-md));
+          transform: rotateX(90deg)translateY(20px);
           transform-origin: bottom center;
         }
       }

@@ -17,6 +17,9 @@
       opacity: .5;
     }
   }
+  & .pt-popover-content {
+    width: 200px;
+  }
   & .pt-tooltip {
     transition: height 0.2s, transform 0.2s;
     max-width: 200px;

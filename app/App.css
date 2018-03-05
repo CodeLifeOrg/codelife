@@ -104,8 +104,15 @@ h1 {
 
 .pt-popover {
   border-radius: var(--radius-lg);
+
+  /* popover sizing defaults */
   & .pt-popover-content {
+    width: max-content; /* acts as min-width, makes the container as wide as the content is */
+    max-width: 320px;
+    padding-top: var(--gutter-sm);
+    padding-bottom: var(--gutter-sm);
     border-radius: var(--radius-lg);
+
     & .pt-button:last-child {
       margin-bottom: 0;
     }

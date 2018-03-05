@@ -103,6 +103,7 @@
   height: auto;
 
   & > .pt-popover-content {
+    width: auto; /* override default width: max-content */
     background-color: var(--white);
 
     & > .browser-list {
@@ -110,6 +111,11 @@
       which is necessary to hide the popover arrow shadow */
       margin: -20px;
       padding: var(--gutter-xs) 0;
+
+      /* active node */
+      & .pt-tree-node-selected > .pt-tree-node-content {
+        background-color: var(--sky-dark);
+      }
     }
   }
 }

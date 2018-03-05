@@ -49,8 +49,3 @@
   display: flex;
   min-height: 0;
 }
-
-.pt-popover.pt-popover-content-sizing .pt-popover-content {
-  max-width: 35vw;
-  white-space: pre-wrap;
-}

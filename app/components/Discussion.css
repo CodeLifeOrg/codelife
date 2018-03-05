@@ -3,13 +3,10 @@
 /* discussion toggle button */
 .discussion-toggle {
   display: block; /* make margin work as intended */
-  margin: var(--gutter-md) auto;
+  margin: var(--gutter-md) auto var(--gutter-xl);
   min-width: var(--button-double-width);
+  top: var(--gutter-md);
   z-index: 1;
-
-  @add-mixin min-md {
-    margin-top: var(--gutter-lg);
-  }
 }
 
 /* main container */
@@ -18,37 +15,61 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: -40px var(--gutter-sm) var(--gutter-md) var(--gutter-sm);
-  padding: var(--gutter-md);
+  margin: -105px var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  padding: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
 
-  @add-mixin min-md {
-    margin: -80px var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  @add-mixin min-sm {
+    padding-top: var(--gutter-md);
   }
 
-  & h3 {
+  & .discussion-inner {
+    @add-mixin min-md {
+      width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* title */
+  & .discussion-heading {
     margin-bottom: var(--gutter-md);
     letter-spacing: 1px;
     text-transform: uppercase;
+    top: 1px; /* fudge into place */
   }
-  & #sort-bar {
-    position: absolute;
-    right: var(--gutter-md);
-    top: var(--gutter-md);
+
+  /* sort by */
+  & .sort-bar {
+    margin-bottom: var(--gutter-md); /* space out content on small screens */
+    top: -var(--gutter-xs);
+
+    /* take button out of the flow and center */
+    @add-mixin min-xs {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
     & .pt-select {
       margin-left: var(--gutter-xs);
     }
   }
-  & #threads {
+  & .threads {
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-md);
+
     & .thread {
-      padding: var(--gutter-md);
-      width: 100%;
-      &:nth-child(odd) {
-        background-color: var(--light-1);
+      padding: var(--gutter-sm) 0;
+
+      & + .thread {
+        border-top: 1px solid var(--light-1);
       }
+
       & .thread-header {
         display: flex;
         justify-content: space-between;
         width: 100%;
+
         & .thread-content {
           & .thread-title {
             font-size: 18px;
@@ -70,7 +91,10 @@
           }
         }
         & .thread-actions {
-          &>* {
+          display: flex;
+          align-items: center;
+
+          & > * {
             display: inline-block;
             margin-left: var(--gutter-xs);
             vertical-align: top;
@@ -114,11 +138,7 @@
       }
     }
   }
-  & .new-thread {
-    border-top: 1px solid var(--light-2);
-  }
   & .new-comment, & .new-thread {
-    margin: var(--gutter-md) 0 0;
     & .new-comment-title, & .new-thread-title {
       font-weight: bold;
       margin: var(--gutter-xs) 0;
@@ -130,6 +150,9 @@
       width: 100%;
     }
     & .quill {
+      margin-top: var(--gutter-xs);
+      margin-bottom: var(--gutter-md);
+
       & .ql-toolbar {
         background: var(--white);
         border-radius: var(--radius-sm) var(--radius-sm) 0 0;
@@ -140,8 +163,12 @@
         min-height: 100px;
       }
     }
-    & .pt-button {
-      margin-top: var(--gutter-xs);
+    & .post-button-container {
+      text-align: left;
+
+      @add-mixin min-sm {
+        text-align: right;
+      }
     }
   }
 }

@@ -123,11 +123,10 @@ h1 {
   border: 1px solid var(--sky-dark);
   border-radius: var(--radius-lg);
   position: fixed !important;
-  /* sizing overrides */
-  width: calc(100% - var(--gutter-lg));
-  /* sizing override for non-alert dialog */
-  /* TODO: find a better solution for this */
-  &:not(.pt-alert) {
+
+  /* fullscreen dialogs */
+  &.is-fullscreen {
+    width: calc(100% - var(--gutter-lg));
     height: calc(100vh - var(--gutter-lg));
   }
 

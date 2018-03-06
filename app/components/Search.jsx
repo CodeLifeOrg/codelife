@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
@@ -22,9 +23,21 @@ class Search extends Component {
 
   search() {
     const {query} = this.state;
+    axios.get(`/api/search/?query=${query}`).then(resp => {
+      if (resp.status === 200) {
+        this.setState({results: resp.data});
+      }
+      else {
+        console.log("error");
+      }
+    })
   }
 
   render() {
+
+    const {results} = this.state;
+
+    console.log(results.map(r => r.name));
 
     return (
       <div id="site-search-box">

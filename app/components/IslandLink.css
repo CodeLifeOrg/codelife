@@ -2,12 +2,15 @@
   align-items: center;
   display: flex;
   justify-content: center;
+  max-width: 100%; /* prevent from breaking out of container on small viewports */
+
   & .graphic {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 90% auto;
     display: block;
     left: 0;
+    max-width: 100%; /* prevent from breaking out of container on small viewports */
     position: absolute;
     top: 0;
     transition: background-size 0.2s;

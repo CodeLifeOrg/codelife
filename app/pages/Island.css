@@ -20,18 +20,28 @@
     max-width: 1000px;
     text-align: center;
     width: 100%;
+
+    /* layout */
     & .islandLink {
-      &:nth-child(even) {
-        margin: -100px auto 0 0;
-      }
-      &:nth-child(odd) {
-        margin: -100px 0 0 auto;
-      }
-      &:nth-child(1) {
-        margin: 0 auto;
-      }
-      &:nth-child(2) {
-        margin: -var(--gutter-lg) auto 0 0;
+      margin: var(--gutter-md) auto;
+
+      /* staggered layout */
+      @add-mixin min-sm {
+        /* offset spacing between first and second islands */
+        &:first-child {
+          margin-bottom: 100px;
+        }
+        /* nudge adjacent islands into place */
+        & ~ .islandLink {
+          margin-top: -125px;
+        }
+        /* stagger left and right islands */
+        &:nth-of-type(even):not(:first-child) {
+          margin-left: 0;
+        }
+        &:nth-of-type(odd):not(:first-child) {
+          margin-right: 0;
+        }
       }
     }
   }

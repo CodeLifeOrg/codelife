@@ -23,7 +23,9 @@
   & .logo {
     width: 80px;
     top: -1px; /* fudge into place */
-    transition: transform 0.2s ease-out;
+    transition:
+      transform 0.25s ease-out,
+      opacity 0.2s;
 
     /* hide offscreen (home page only) */
     &.is-hidden {

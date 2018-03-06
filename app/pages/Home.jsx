@@ -56,8 +56,8 @@ class Home extends Component {
 
     return (
       <div id="Home">
-        <div id="island" className={ current ? current.theme : "island-jungle" }>
-          <div className="image">
+        <div id="island" className={ `island ${current ? current.theme : "island-jungle"}` }>
+          <div className="island-image image">
             <div className="logo">
               <div className="tag">Beta</div>
               <img className="text" src="/logo/logo-shadow.png" />
@@ -111,7 +111,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  locale: state.i18n.locale, 
+  locale: state.i18n.locale,
   user: state.auth.user,
   auth: state.auth,
   islands: state.islands

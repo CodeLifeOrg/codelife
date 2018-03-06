@@ -91,6 +91,11 @@ h1 {
   font-family: var(--heading-font);
   letter-spacing: 0.25px;
   text-align: center; /* center align .pt-button text even when it's a div */
+
+  /* blueprint override — increase specificity */
+  &[class*="pt-button"] {
+    transition: background-color 0.15s ease-out;
+  }
 }
 
 .pt-button.pt-intent-primary {

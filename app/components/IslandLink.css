@@ -12,7 +12,11 @@
     top: 0;
     transition: background-size 0.2s;
   }
+  /* locked state */
   &:not(.done):not(.next) {
+    & .pt-popover-content {
+      background-color: var(--dark-2);
+    }
     & .graphic {
       opacity: .5;
     }

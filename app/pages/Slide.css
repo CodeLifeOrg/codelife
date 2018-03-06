@@ -45,12 +45,7 @@
     }
   }
   & a:not(.pt-button) {
-    opacity: 1;
     text-decoration: underline;
-    transition: opacity 0.1s;
-    &:hover {
-      opacity: 0.85;
-    }
   }
   & .slide-header {
     min-height: 29px;
@@ -238,10 +233,6 @@
 
     & .pt-button {
       min-width: var(--button-min-width);
-
-      &:hover, &:focus {
-        opacity: 0.9;
-      }
     }
 
     @add-mixin max-sm {

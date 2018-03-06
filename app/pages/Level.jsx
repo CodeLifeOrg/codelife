@@ -365,7 +365,7 @@ class Level extends Component {
           popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop done" style={{backgroundColor: "orange"}} to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {`${level.name} (incomplete)`}
           </span>
@@ -380,15 +380,15 @@ class Level extends Component {
     });
 
     return (
-      <div id="island" className={ currentIsland.theme }>
+      <div id="island" className={ `island ${currentIsland.theme}` }>
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
-        <div className="image">
-          <h1 className="title" id="title">
+        <div className="island-image image">
+          <h1 className="island-title title" id="title">
             { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }
             { currentIsland.name }
           </h1>
-          <div id="path">
+          <div id="path" className="island-path path">
             { levelItems }
             { this.buildTestPopover() }
           </div>

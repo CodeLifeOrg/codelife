@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import {connect} from "react-redux";
 import {AnchorLink} from "datawheel-canon";
 import Browser from "components/Browser";
+import Search from "components/Search";
 import "./Nav.css";
 
 import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
@@ -93,6 +94,7 @@ class Nav extends Component {
                 </a>
               </div>
             </Popover>
+            <Search />
           </div>
           : <div className="links">
             { logo

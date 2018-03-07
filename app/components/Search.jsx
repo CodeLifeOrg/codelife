@@ -41,9 +41,8 @@ class Search extends Component {
   }
 
   openResult(r) {
-    if (r.type === "user") {
-      browserHistory.push(`/profile/${r.name}`);
-    }
+    //if (r.type === "user") {
+    browserHistory.push(`/profile/${r.username}`);
     this.setState({showResults: false});
   }
 

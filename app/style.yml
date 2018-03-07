@@ -10,6 +10,19 @@ gutter-md:  "25px"
 gutter-lg:  "50px"
 gutter-xl:  "75px"
 
+# level path elements
+path-xxs: "20px"
+path-xs:  "30px"
+path-sm:  "40px"
+# side translate values — half of path sizes
+side-translate-xxs: "10px"
+side-translate-xs:  "15px"
+side-translate-sm:  "20px"
+# negative values — not ideal, but it complies
+side-translate-xxs-negative: "-10px"
+side-translate-xs-negative:  "-15px"
+side-translate-sm-negative:  "-20px"
+
 # border radius
 radius-lg: "8px"
 radius-md: "4px"

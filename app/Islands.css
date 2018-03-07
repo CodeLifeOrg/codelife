@@ -118,10 +118,6 @@
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-themepark, dark);
   }
-  /* exception */
-  & .island-path {
-    top: 325px;
-  }
 }
 
 .island-blizzard {
@@ -182,10 +178,6 @@
   }
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-blizzard, dark);
-  }
-  /* exception */
-  & .island-path {
-    top: 345px;
   }
 }
 
@@ -309,10 +301,6 @@
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-industry, dark);
   }
-  /* exception */
-  & .island-path {
-    top: 340px;
-  }
 }
 
 .island-farm {
@@ -374,10 +362,6 @@
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-farm, dark);
   }
-  /* exception */
-  & .island-path {
-    top: 360px;
-  }
 }
 
 .island-city {
@@ -438,10 +422,6 @@
   }
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-city, dark);
-  }
-  /* exception */
-  & .island-path {
-    top: 350px;
   }
 }
 
@@ -748,10 +728,6 @@
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-space, dark);
   }
-  /* exception */
-  & .island-path {
-    top: 360px;
-  }
 }
 
 .island-trash {
@@ -813,8 +789,56 @@
   &.pt-tooltip .pt-popover-content {
     background-color: map(islands, island-trash, dark);
   }
-  /* exception */
-  & .island-path {
-    top: 300px;
-  }
+}
+
+
+/* fudge path placement for individual islands */
+
+/* 🌳🌳🌳 */
+.island-jungle .island-path {
+  margin-top: 40px;
+}
+/* ❄️❄️❄️ */
+.island-blizzard .island-path {
+  margin-top: 65px;
+}
+/* 🐪🐪🐪 */
+.island-desert .island-path {
+  margin-top: 20px;
+}
+/* 🚜🐮🍅 */
+.island-farm .island-path {
+  margin-top: 10px;
+}
+/* 🏭 🏗 */
+.island-industry .island-path {
+  margin-top: 10px;
+}
+/* 🏙🏙🏙 */
+.island-city .island-path {
+  margin-top: 25px;
+}
+/* ⚙️🕐⚙️ */
+.island-clock .island-path {
+  margin-top: 40px;
+}
+/* 🗑💩🗑 */
+.island-trash .island-path {
+  margin-top: -20px;
+}
+/* 👾🚀👾 */
+.island-space  .island-path {
+  margin-top: 30px;
+}
+/* ⬛️⬛️⬛️ */
+.island-dark .island-path {
+  margin-top: 30px;
+}
+/* 🏔🏔🏔 */
+.island-mountain .island-path {
+  margin-top: -10px;
+}
+/* 🏖🏖🏖 */
+.island-beach .island-path {
+  margin-top: 35px;
 }

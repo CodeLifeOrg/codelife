@@ -46,6 +46,9 @@ class Search extends Component {
           onChange={this.handleChange.bind(this)}
           value={this.state.query}
         />
+        <div style={{backgroundColor: "white", width: "200px", display:"block"}}>
+          { results.map(r => <span style={{textAlign: "center", width: "200px"}}>{r.name}<br/></span>) }
+        </div>
       </div>
     );
   }

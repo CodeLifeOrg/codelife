@@ -14,8 +14,12 @@ module.exports = function(app) {
     */
 
     
-    db.searches.findAll({
-      where: {name: {[sequelize.Op.iLike]: `%${query}%`}}
+    db.users.findAll({
+      where: {
+        [sequelize.Op.or]: [
+          {username: {[sequelize.Op.iLike]: `%${query}%`}}, 
+          {name: {[sequelize.Op.iLike]: `%${query}%`}}
+        ]}
       //where: { document: { $ts: sequelize.fn('to_tsquery', query) } }
     }).then(u => {
       res.json(u).end();

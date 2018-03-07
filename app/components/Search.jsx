@@ -51,10 +51,12 @@ class Search extends Component {
 
     const {results, showResults} = this.state;
 
+    console.log(results);
+
     const resultList = results.map(r => 
       <li className="search-result-item">
         <div onClick={this.openResult.bind(this, r)}>
-          {r.name}
+          {r.name ? `${r.username} (${r.name})` : r.username}
         </div>
       </li>
     );

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
+import {browserHistory} from "react-router";
 import {connect} from "react-redux";
 import "./Search.css";
 
@@ -11,14 +12,20 @@ class Search extends Component {
     super(props);
     this.state = {
       query: "",
-      results: []
+      results: [],
+      showResults: false
     };
   }
 
   handleChange(e) {
     const query = e.target.value;
-    if (query.length > 2) this.search();
-    this.setState({query});
+    if (query.length > 2) { 
+      this.setState({query});
+      this.search();
+    } 
+    else {
+      this.setState({query, results: []});
+    }
   }
 
   search() {
@@ -33,21 +40,38 @@ class Search extends Component {
     })
   }
 
+  openResult(r) {
+    if (r.type === "user") {
+      browserHistory.push(`/profile/${r.name}`);
+    }
+    this.setState({showResults: false});
+  }
+
   render() {
 
-    const {results} = this.state;
+    const {results, showResults} = this.state;
 
-    console.log(results.map(r => r.name));
+    const resultList = results.map(r => 
+      <li className="search-result-item">
+        <div onClick={this.openResult.bind(this, r)}>
+          {r.name}
+        </div>
+      </li>
+    );
 
     return (
       <div id="site-search-box">
         <input  
           id="site-search"
           onChange={this.handleChange.bind(this)}
+          // onBlur={() => this.setState({showResults: false})}
+          onFocus={() => this.setState({showResults: true})}
           value={this.state.query}
         />
-        <div style={{backgroundColor: "white", width: "200px", display:"block"}}>
-          { results.map(r => <span style={{textAlign: "center", width: "200px"}}>{r.name}<br/></span>) }
+        <div id="search-result-container" className={showResults ? "" : "search-hidden"}>
+          <ul id="search-result-list">
+            {resultList}
+          </ul>
         </div>
       </div>
     );

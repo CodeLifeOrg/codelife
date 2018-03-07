@@ -7,16 +7,19 @@ module.exports = function(app) {
 
   app.get("/api/search", isAuthenticated, (req, res) => {
     const query = req.query.query;
+    
+    /*
     const q = `SELECT * FROM searches WHERE document @@ to_tsquery('${query}')`;
     db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
+    */
 
-    /*
+    
     db.searches.findAll({
-      where: {name: {[sequelize.Op.iLike]: `${query}%`}}
-      where: { document: { $ts: sequelize.fn('to_tsquery', query) } }
+      where: {name: {[sequelize.Op.iLike]: `%${query}%`}}
+      //where: { document: { $ts: sequelize.fn('to_tsquery', query) } }
     }).then(u => {
       res.json(u).end();
-    });*/
+    });
   });
 
 };

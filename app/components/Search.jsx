@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-// import {Link} from "react-router";
 import {Icon} from "@blueprintjs/core";
-import {browserHistory} from "react-router";
+import {Link} from "react-router";
 import {connect} from "react-redux";
 import "./Search.css";
 
@@ -32,6 +31,10 @@ class Search extends Component {
     }
   }
 
+  clearSearch() {
+    this.setState({query: "", showResults: false, results: {users: [], projects: []}});
+  }
+
   search() {
     const {query} = this.state;
     axios.get(`/api/search/?query=${query}`).then(resp => {
@@ -44,35 +47,22 @@ class Search extends Component {
     });
   }
 
-  openResult(r) {
-    console.log(r);
-    if (r.type === "user") {
-      browserHistory.push(`/profile/${r.username}`);
-    }
-    if (r.type === "project") {
-      browserHistory.push(`/projects/${r.user.username}/${r.name}`);
-    }
-    this.setState({showResults: false});
-  }
-
   render() {
 
     const {results, showResults} = this.state;
 
-    console.log(results);
-
     const userList = results.users.map(r => 
       <li key={r.id} className="search-result-item user-result">
-        <div onClick={this.openResult.bind(this, r)}>
+        <Link to={`/profile/${r.username}`} onClick={this.clearSearch.bind(this)}>
           <Icon iconName="user" /> {r.name ? `${r.username} (${r.name})` : r.username}
-        </div>
+        </Link>
       </li>
     );
     const projectList = results.projects.map(r => 
       <li key={r.id} className="search-result-item project-result">
-        <div onClick={this.openResult.bind(this, r)}>
+        <Link to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>     
           <Icon iconName="projects" /> {`${r.name} (${r.user.username})`}
-        </div>
+        </Link>
       </li>
     );
 

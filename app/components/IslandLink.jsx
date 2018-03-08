@@ -13,8 +13,9 @@ class IslandLink extends Component {
     if (island.isNext || next || island.isDone || done) {
 
       { /* unlocked island link */ }
-      let unlockedClasses = `${ island.theme } island-link `;
+      let unlockedClasses = `${ island.theme } island-link`;
       if (small) unlockedClasses += " island-link-small";
+      if (!(island.isNext || next)) unlockedClasses += " is-prev";
       if (island.isNext || next) unlockedClasses += " is-next";
       if (island.isDone || done) unlockedClasses += " is-done";
 

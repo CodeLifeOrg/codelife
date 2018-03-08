@@ -353,7 +353,7 @@ class Level extends Component {
       if (level.isDone) {
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
+          popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
           <Link className="stop is-done" to={`/island/${lid}/${level.id}`}></Link>
@@ -366,7 +366,7 @@ class Level extends Component {
         // New state incoming - How to visually indicate skip? TODO: DESIGN
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
+          popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
           <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
@@ -406,8 +406,8 @@ class Level extends Component {
         { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
-          ? <div>
-            <h2 className="title">
+          ? <div className="student-codeblocks-container">
+            <h2 className="student-codeblocks-title">
               {t("Other Students' CodeBlocks")}&nbsp;
               { !islandDone
                 ? <Popover
@@ -426,9 +426,9 @@ class Level extends Component {
               ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
               : null }
             { otherCodeBlockItemsAfterFold.length
-              ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <button className="pt-button toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
-              </div>
+              </button>
               : null }
           </div>
           : null }

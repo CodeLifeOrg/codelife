@@ -1,4 +1,5 @@
 .codeBlockCard {
+  margin: var(--gutter-sm);
 
   & .box .icon {
     background-size: 75%;

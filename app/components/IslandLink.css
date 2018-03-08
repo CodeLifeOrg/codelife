@@ -39,6 +39,7 @@
   transition: height 0.2s, transform 0.2s;
   max-width: 200px;
   margin-top: 80px;
+  z-index: 1; /* override blueprint */
 
   /* contains title and description; .pt-popover-content */
   & .island-link-label {

@@ -1,31 +1,166 @@
 @import "../mixins.css";
 
-.stepPopover {
+/* -------------------------------
+MAIN LAYOUT
+------------------------------- */
+
+/* main container */
+.island {
+  margin-bottom: var(--gutter-lg);
   text-align: center;
-  & .gems {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.25px;
-    line-height: 13px;
-    margin-top: 6px;
-    text-transform: uppercase;
-    & img {
-      margin-right: var(--gutter-xxs);
-      vertical-align: top;
-      width: var(--gutter-sm);
+
+  /* -------------------------------
+  Next/Prev codeblocks
+  ------------------------------- */
+
+  /* NOTE: nesting these in .island is necessary, since they can appear on their own */
+  & .island-link {
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-md);
+
+    /* center em, but only on tiny viewports */
+    @add-mixin max-xs {
+      width: 100%;
+    }
+
+    /* tweakpoint to stagger them slightly on tiny viewports */
+    @media (min-width: 300px) and (max-width: 479px) {
+      &.is-prev {
+        left: -10%;
+      }
+      &.is-next {
+        right: -10%;
+      }
+      /* pull up the second one */
+      & + .is-next {
+        margin-top: -50px;
+      }
+    }
+
+    /* room for two */
+    @add-mixin min-xs {
+      max-width: 50%; /* make sure there is indeed room for two */
+      /* reset margin */
+      margin-top: 0;
+      margin-bottom: 0;
+
+      /* float them to the corresponding side */
+      &.is-prev {
+        float: left;
+      }
+      &.is-next {
+        float: right;
+      }
+    }
+
+    /* gradually move up around the island on medium screens */
+    @add-mixin min-sm {
+      margin-top: -12.5%;
+      margin-bottom: -1%;
+    }
+
+    /* switch to absolute positioning on large viewports */
+    @add-mixin min-lg {
+      position: absolute;
+      top: 425px;
+      margin-top: 0; /* reset */
+
+      &.is-prev {
+        left: 3%;
+      }
+      &.is-next {
+        left: auto;
+        right: 3%;
+      }
     }
   }
 }
 
-/* container */
-.island {
-  margin-bottom: var(--gutter-lg);
-  text-align: center;
-  width: 100%;
+/* -------------------------------
+STUDENT CODEBLOCKS
+------------------------------- */
+
+.student-codeblocks-container {
+  @add-mixin slide-theme; /* transparent white bg, rounded corners */
+  /* sizing */
+  max-width: 100%; /* don't bleed off tiny screens */
+  /* positioning */
+  display: inline-block; /* honor text-align:center from .island */
+  margin-top: var(--gutter-md);
+  padding: var(--gutter-lg) var(--gutter-sm);
+  /* theming */
+  color: var(--black);
+  /* show in front of .island-link-popovers */
+  /* NOTE: remove this once islands are positioned properly */
+  z-index: 2;
+
+  /* no border radius on smaller viewports */
+  @add-mixin max-md {
+    border-radius: 0;
+  }
+
+  /* sizing and positioning on larger viewports */
+  @add-mixin min-md {
+    max-width: 1200px;
+    padding: var(--gutter-lg) var(--gutter-md);
+    margin: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  }
+
+  /* -------------------------------
+  Student codeblocks
+  ------------------------------- */
+
+  & .snippets {
+    align-items: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--gutter-md);
+
+    & + .pt-collapse {
+      margin-top: -50px;
+
+      /* collapsed */
+      &:not([style=""]) {
+        margin-bottom: -50px;
+      }
+    }
+  }
+
+  /* -------------------------------
+  Student codeblocks toggle button
+  ------------------------------- */
+  & .toggle-show {
+    /* sizing */
+    min-width: var(--button-double-width);
+    /* positioning */
+    display: inline-block; /* honor text-align */
+    margin-top: var(--gutter-md);
+    /* theming */
+    color: var(--sky-dark);
+    /* transitions */
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--black);
+    }
+
+    /* icon */
+    & > .pt-icon-standard {
+      color: inherit;
+      margin-right: 0.25em;
+    }
+  }
 }
 
-/* image */
+/* -------------------------------
+MAIN ISLAND
+------------------------------- */
+
+/* main island image */
 .island-image {
   /* sizing */
   width: 160%;
@@ -92,6 +227,10 @@
   }
 }
 
+/* -------------------------------
+Main island path
+------------------------------- */
+
 /* path container */
 .island-path {
   /* positioning */
@@ -123,7 +262,10 @@
     width: 400px;
   }
 
-  /* line */
+  /* -------------------------------
+  Path - line
+  ------------------------------- */
+
   &:before {
     display: block;
     content: "";
@@ -151,7 +293,10 @@
     }
   }
 
-  /* dots */
+  /* -------------------------------
+  Path - dots
+  ------------------------------- */
+
   & .stop {
     /* sizing */
     display: inline-block;
@@ -181,7 +326,10 @@
     }
   }
 
-  /* cube */
+  /* -------------------------------
+  Path - cube
+  ------------------------------- */
+
   & .code-block {
     /* sizing */
     display: inline-block;
@@ -206,6 +354,10 @@
       height: var(--path-sm);
       top: -2px;
     }
+
+    /* -------------------------------
+    Path - sides
+    ------------------------------- */
 
     /* default side styles */
     & .side {
@@ -313,87 +465,23 @@
         }
       }
     }
-
-    &.is-next {
-      animation: blockBounce 2s infinite;
-      & .side {
-        animation: blockGlow 2s infinite;
-        background-color: var(--caution);
-      }
-    }
-    &.is-next:hover, &.is-done:hover {
-      cursor: pointer;
-      margin-top: -2px;
-      margin-bottom: 2px;
-    }
   }
 }
 
-.island {
-  /* default title style */
-  & .title:not(.island-title) {
-    color: var(--white);
-    display: block;
-    line-height: 1.25em;
-    margin: 0px auto;
-    max-width: 800px;
-  }
-  & .description {
-    color: var(--white);
-    margin: 0 auto;
-    text-shadow: 0 2px 2px var(--dark-3);
-    width: 300px;
-  }
+/* -------------------------------
+STATES & INTERACTIONS
+------------------------------- */
 
-  /* next/prev islands */
-  @add-mixin min-md {
-    & .island-link {
-      position: absolute;
-      left: var(--gutter-md);
-      bottom: 200px;
-
-      &.is-next {
-        left: auto;
-        right: var(--gutter-md);
-      }
-    }
-  }
-
-  & .snippets {
-    align-items: stretch;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: var(--gutter-md) var(--gutter-md) 0;
-    &.snippets-more {
-      margin: 0 var(--gutter-md);
-    }
-  }
-  & .toggle-show {
-    color: var(--white);
-    display: inline-block;
-    letter-spacing: 0.25px;
-    margin: var(--gutter-xs) auto;
-    opacity: 0.75;
-    text-transform: uppercase;
-    transition: opacity 0.2s;
-    & .pt-icon-standard {
-      margin-right: var(--gutter-xxs);
-    }
-    &:hover {
-      cursor: pointer;
-      opacity: 1;
-    }
-  }
-}
-
-/* states and interactions */
+/* Path dot states & interactions */
 .stop {
 
+  /* next up */
   &.is-next {
-    animation: bounce 2s infinite;
-    background-color: var(--heylisten);
+    animation: bounceAndFlash 2s infinite;
+    background-color: var(--heylisten); /* fallback */
   }
+
+  /* done */
   &.is-done {
     background-color: var(--success);
 
@@ -402,42 +490,47 @@
       animation: incompleteFlash 4s infinite;
     }
   }
-  &.is-next:hover, &.is-done:hover {
-    margin-top: -2px;
-    margin-bottom: 2px;
+
+  /* next/finished :hover state */
+  &.is-next,
+  &.is-done {
+    &:hover, &:focus {
+      margin-top: -2px;
+      margin-bottom: 2px;
+    }
   }
 }
 
-/* animations */
-@keyframes blockBounce {
-  0%, 40%, 50%, 65%, 100% {
-    transform: translateY(0)rotateX(-33deg)translateZ(-28px)translateX(2px);
+/* Path codeblock states & interactions */
+.code-block {
+
+  /* next up */
+  &.is-next {
+    animation: blockBounce 2s infinite;
+
+    /* make each side glow */
+    & .side {
+      animation: blockGlow 2s infinite;
+      background-color: var(--heylisten); /* fallback */
+    }
   }
-  45% {
-    transform: translateY(-4px)rotateX(-33deg)translateZ(-28px)translateX(2px);
-  }
-  55% {
-    transform: translateY(-2px)rotateX(-33deg)translateZ(-28px)translateX(2px);
+
+  /* codeblock interactions */
+  &.is-next,
+  &.is-done {
+    &:hover, &:focus {
+      cursor: pointer; /* make this div feel more like a link */
+      margin-top: -2px; /* bounce that box (translate & top already in use) */
+    }
   }
 }
 
-@keyframes blockGlow {
-  0%, 40%, 50%, 65%, 100% {
-    background-color: var(--heylisten);
-  }
-  45%, 55% {
-    background-color: var(--heylisten-light);
-  }
-}
+/* -------------------------------
+ANIMATIONS
+------------------------------- */
 
-@keyframes incompleteFlash {
-  5% {
-    background-color: var(--light-2);
-    border-color: var(--dark-2);
-  }
-}
-
-@keyframes bounce {
+/* stop bounce and flash */
+@keyframes bounceAndFlash {
   0%, 40%, 50%, 65%, 100% {
     background-color: var(--heylisten);
     transform: translateY(0)rotateX(50deg);
@@ -451,3 +544,56 @@
     transform: translateY(-2px)rotateX(50deg);
   }
 }
+
+/* bouncing block */
+@keyframes blockBounce {
+  0%, 40%, 50%, 65%, 100% {
+    transform: translateY(0)rotateX(-33deg)translateZ(-28px)translateX(2px);
+  }
+  45% {
+    transform: translateY(-4px)rotateX(-33deg)translateZ(-28px)translateX(2px);
+  }
+  55% {
+    transform: translateY(-2px)rotateX(-33deg)translateZ(-28px)translateX(2px);
+  }
+}
+
+/* flashing block sides */
+@keyframes blockGlow {
+  0%, 40%, 50%, 65%, 100% {
+    background-color: var(--heylisten);
+  }
+  45%, 55% {
+    background-color: var(--heylisten-light);
+  }
+}
+
+/* gray incomplete notifcation flash */
+@keyframes incompleteFlash {
+  5% {
+    background-color: var(--light-2);
+    border-color: var(--dark-2);
+  }
+}
+
+
+/* NOTE: as far as I can tell, the following is unused */
+/*
+.stop-popover {
+  text-align: center;
+  & .gems {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.25px;
+    line-height: 13px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    & img {
+      margin-right: var(--gutter-xxs);
+      vertical-align: top;
+      width: var(--gutter-sm);
+    }
+  }
+}
+*/

@@ -19,7 +19,14 @@
 .search-result-item {
   margin: 5px;
   padding: 5px;
-  background-color: lightgrey;
+}
+
+.user-result {
+  background-color: lightpink;
+}
+
+.project-result {
+  background-color: lightgreen;
 }
 
 .search-result-item:hover {

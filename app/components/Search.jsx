@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
+// import {Link} from "react-router";
+import {Icon} from "@blueprintjs/core";
 import {browserHistory} from "react-router";
 import {connect} from "react-redux";
 import "./Search.css";
@@ -12,7 +13,10 @@ class Search extends Component {
     super(props);
     this.state = {
       query: "",
-      results: [],
+      results: {
+        users: [],
+        projects: []
+      },
       showResults: false
     };
   }
@@ -24,7 +28,7 @@ class Search extends Component {
       this.search();
     } 
     else {
-      this.setState({query, results: []});
+      this.setState({query, results: {users: [], projects: []}});
     }
   }
 
@@ -37,12 +41,17 @@ class Search extends Component {
       else {
         console.log("error");
       }
-    })
+    });
   }
 
   openResult(r) {
-    //if (r.type === "user") {
-    browserHistory.push(`/profile/${r.username}`);
+    console.log(r);
+    if (r.type === "user") {
+      browserHistory.push(`/profile/${r.username}`);
+    }
+    if (r.type === "project") {
+      browserHistory.push(`/projects/${r.user.username}/${r.name}`);
+    }
     this.setState({showResults: false});
   }
 
@@ -52,10 +61,17 @@ class Search extends Component {
 
     console.log(results);
 
-    const resultList = results.map(r => 
-      <li className="search-result-item">
+    const userList = results.users.map(r => 
+      <li key={r.id} className="search-result-item user-result">
         <div onClick={this.openResult.bind(this, r)}>
-          {r.name ? `${r.username} (${r.name})` : r.username}
+          <Icon iconName="user" /> {r.name ? `${r.username} (${r.name})` : r.username}
+        </div>
+      </li>
+    );
+    const projectList = results.projects.map(r => 
+      <li key={r.id} className="search-result-item project-result">
+        <div onClick={this.openResult.bind(this, r)}>
+          <Icon iconName="projects" /> {`${r.name} (${r.user.username})`}
         </div>
       </li>
     );
@@ -71,7 +87,8 @@ class Search extends Component {
         />
         <div id="search-result-container" className={showResults ? "" : "search-hidden"}>
           <ul id="search-result-list">
-            {resultList}
+            {userList}
+            {projectList}
           </ul>
         </div>
       </div>

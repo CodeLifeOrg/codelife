@@ -314,14 +314,14 @@
       }
     }
 
-    &.next {
+    &.is-next {
       animation: blockBounce 2s infinite;
       & .side {
         animation: blockGlow 2s infinite;
         background-color: var(--caution);
       }
     }
-    &.next:hover, &.done:hover {
+    &.is-next:hover, &.is-done:hover {
       cursor: pointer;
       margin-top: -2px;
       margin-bottom: 2px;
@@ -352,7 +352,7 @@
       left: var(--gutter-md);
       bottom: 200px;
 
-      &.next {
+      &.is-next {
         left: auto;
         right: var(--gutter-md);
       }
@@ -390,11 +390,11 @@
 /* states and interactions */
 .stop {
 
-  &.next {
+  &.is-next {
     animation: bounce 2s infinite;
     background-color: var(--heylisten);
   }
-  &.done {
+  &.is-done {
     background-color: var(--success);
 
     /* cheaty incomplete state */
@@ -402,7 +402,7 @@
       animation: incompleteFlash 4s infinite;
     }
   }
-  &.next:hover, &.done:hover {
+  &.is-next:hover, &.is-done:hover {
     margin-top: -2px;
     margin-bottom: 2px;
   }

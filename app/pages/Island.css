@@ -24,7 +24,7 @@
     width: 100%;
 
     /* layout */
-    & .islandLink {
+    & .island-link {
       margin: var(--gutter-md) auto;
 
       /* staggered layout */
@@ -34,7 +34,7 @@
           margin-bottom: 100px;
         }
         /* nudge adjacent islands into place */
-        & ~ .islandLink {
+        & ~ .island-link {
           margin-top: -125px;
         }
         /* stagger left and right islands */

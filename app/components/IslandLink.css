@@ -1,4 +1,4 @@
-.islandLink {
+.island-link {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -16,7 +16,7 @@
     transition: background-size 0.2s;
   }
   /* locked state */
-  &:not(.done):not(.next) {
+  &:not(.is-done):not(.is-next) {
     & .pt-popover-content {
       background-color: var(--dark-2);
     }
@@ -27,9 +27,11 @@
   & .pt-popover-content {
     width: 200px;
   }
-  & .pt-tooltip {
+  & .island-link-popover {
     transition: height 0.2s, transform 0.2s;
     max-width: 200px;
+    margin-top: 80px;
+
     & .title {
       letter-spacing: 0.25px;
       margin: 0;

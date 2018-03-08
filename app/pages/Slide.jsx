@@ -238,7 +238,11 @@ class Slide extends Component {
           <div className="slide-header" id="slide-head">
             { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
-            <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
+            <Tooltip
+              className="return-link"
+              tooltipClassName={ currentIsland.theme }
+              content={ `${ t("Return to") } ${currentIsland.name}` }
+              position={Position.TOP_RIGHT}>
               <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-layout-linear"></span></Link>
             </Tooltip>
           </div>

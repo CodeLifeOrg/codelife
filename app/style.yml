@@ -78,56 +78,54 @@ sky: "#74c3b7"
 sky-light: "#9BD9D4"
 sky-dark: "#328f86"
 
-islands:
-  island-jungle:
-    dark: "#144800"
-    medium: "#417A09"
-    light: "#90B857"
-  island-themepark:
-    dark: "#5F0001"
-    medium: "#BC2000"
-    light: "#F7931E"
-  island-blizzard:
-    dark: "#043F51"
-    medium: "#1DA1AA"
-    light: "#AFE2E5"
-  island-desert:
-    dark: "#611A00"
-    medium: "#E76B01"
-    light: "#FFB863"
-  island-farm:
-    dark: "#02311E"
-    medium: "#056F4F"
-    light: "#71A96C"
-  island-industry:
-    dark: "#482128"
-    medium: "#804347"
-    light: "#D0ACAF"
-  island-city:
-    dark: "#302745"
-    medium: "#6F6EB8"
-    light: "#A7A3C5"
-  island-clock:
-    dark: "#5a0d00"
-    medium: "#B44201"
-    light: "#FAAC8C"
-  island-trash:
-    dark: "#3A302A"
-    medium: "#917F49"
-    light: "#EBE4BC"
-  island-space:
-    dark: "#1E2B3C"
-    medium: "#50738F"
-    light: "#BAD6E5"
-  island-dark:
-    dark: "#13171d"
-    medium: "#4D5F70"
-    light: "#b2bbc4"
-  island-mountain:
-    dark: "#06334c"
-    medium: "#639466"
-    light: "#f9f8b4"
-  island-beach:
-    dark: "#6f3100"
-    medium: "#A67B42"
-    light: "#ddf1eb"
+jungle-island-dark: "#144800"
+jungle-island-medium: "#417A09"
+jungle-island-light: "#90B857"
+
+themepark-island-dark: "#5F0001"
+themepark-island-medium: "#BC2000"
+themepark-island-light: "#F7931E"
+
+blizzard-island-dark: "#043F51"
+blizzard-island-medium: "#1DA1AA"
+blizzard-island-light: "#AFE2E5"
+
+desert-island-dark: "#611A00"
+desert-island-medium: "#E76B01"
+desert-island-light: "#FFB863"
+
+farm-island-dark: "#02311E"
+farm-island-medium: "#056F4F"
+farm-island-light: "#71A96C"
+
+industry-island-dark: "#482128"
+industry-island-medium: "#804347"
+industry-island-light: "#D0ACAF"
+
+city-island-dark: "#302745"
+city-island-medium: "#6F6EB8"
+city-island-light: "#A7A3C5"
+
+clock-island-dark: "#5a0d00"
+clock-island-medium: "#B44201"
+clock-island-light: "#FAAC8C"
+
+trash-island-dark: "#3A302A"
+trash-island-medium: "#917F49"
+trash-island-light: "#EBE4BC"
+
+space-island-dark: "#1E2B3C"
+space-island-medium: "#50738F"
+space-island-light: "#BAD6E5"
+
+dark-island-dark: "#13171d"
+dark-island-medium: "#4D5F70"
+dark-island-light: "#b2bbc4"
+
+mountain-island-dark: "#06334c"
+mountain-island-medium: "#639466"
+mountain-island-light: "#f9f8b4"
+
+beach-island-dark: "#6f3100"
+beach-island-medium: "#A67B42"
+beach-island-light: "#ddf1eb"

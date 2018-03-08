@@ -285,8 +285,12 @@ class Level extends Component {
 
     return (
       <div className="editor-popover">
-        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentIsland.theme }>
-          <div className={ `code-block ${ next ? "next" : "done" }` } onClick={this.toggleTest.bind(this)}>
+        <Tooltip
+          isOpen={ next ? true : undefined }
+          position={ next ? Position.BOTTOM : Position.TOP }
+          content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
+          tooltipClassName={ currentIsland.theme }>
+          <div className={ `code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
             <div className="side left"></div>
@@ -352,7 +356,7 @@ class Level extends Component {
           popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop done" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-done" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {level.name}
           </span>
@@ -365,7 +369,7 @@ class Level extends Component {
           popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {`${level.name} (incomplete)`}
           </span>

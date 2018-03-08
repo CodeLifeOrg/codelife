@@ -377,7 +377,7 @@ class Level extends Component {
       }
       else if (level.isNext) {
         return <Tooltip isOpen={!checkpointOpen} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
-          <Link className="stop next" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-next" to={`/island/${lid}/${level.id}`}></Link>
         </Tooltip>;
       }
       return <div key={level.id} className="stop"></div>;

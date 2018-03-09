@@ -107,7 +107,7 @@ class CodeBlockCard extends Component {
           title={snippetname}
           lazy={false}
           inline={false}
-          className={ theme }
+          className={`${ theme } is-fullscreen` }
         >
           <div className="codeblock-inner pt-dialog-body">
             <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} />

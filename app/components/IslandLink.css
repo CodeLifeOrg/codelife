@@ -1,53 +1,113 @@
-.islandLink {
+.island-link {
+  /* sizing */
+  width: 400px;
+  height: 300px;
+  max-width: 100%; /* prevent from breaking out of container on small viewports */
+  /* positioning */
   align-items: center;
   display: flex;
   justify-content: center;
-  & .graphic {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 90% auto;
+
+  /* small link, used as next/prev on map page */
+  &.island-link-small {
+    width: 300px;
+    height: 250px;
+  }
+
+  /* image — div with background image set in Islands.css */
+  & .island-link-image {
+    /* sizing */
     display: block;
-    left: 0;
+    width: 100%;
+    height: 100%;
+    /* positioning */
     position: absolute;
     top: 0;
-    transition: background-size 0.2s;
+    left: 0;
+    /* theming */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* transitions */
+    transform: scale(0.9);
+    transition: transform 0.2s;
   }
-  &:not(.done):not(.next) {
-    & .graphic {
-      opacity: .5;
+}
+
+/* popover container */
+.island-link-popover {
+  transition: height 0.2s, transform 0.2s;
+  max-width: 200px;
+  margin-top: 80px;
+  z-index: 1; /* override blueprint */
+
+  /* contains title and description; .pt-popover-content */
+  & .island-link-label {
+    width: 200px;
+  }
+
+  /* title */
+  & .island-link-title {
+    /* typography */
+    letter-spacing: 0.25px;
+    text-transform: uppercase;
+
+    /* icon */
+    & .pt-icon-standard {
+      margin-right: 0.5em;
+      opacity: 0.75;
     }
   }
-  & .pt-tooltip {
-    transition: height 0.2s, transform 0.2s;
-    max-width: 200px;
-    & .title {
-      letter-spacing: 0.25px;
-      margin: 0;
-      padding: 0 !important;
-      text-transform: uppercase;
-      & .pt-icon-standard {
-        margin-right: 8px;
-        opacity: 0.75;
-      }
-    }
-    & .description {
-      font-size: var(--gutter-xs);
-      margin-top: 0;
-      max-height: 0;
-      opacity: 0;
-      transition: margin-top 0.2s, max-height 0.2s, opacity 0.2s;
-    }
+
+  /* description */
+  & .island-link-description {
+    /* typography */
+    font-size: var(--gutter-xs);
+    /* transitions */
+    max-height: 0;
+    opacity: 0;
+    transform: scale(0.75);
+    transition:
+      max-height 0.2s,
+      opacity 0.1s,
+      transform 0.2s;
   }
-  &:hover {
-    text-decoration: none;
-    & .graphic {
-      background-size: 100% auto;
+}
+
+/* locked state */
+.island-link.is-locked {
+  pointer-events: none; /* prevent interactions */
+
+  /* grayed out label */
+  & .island-link-label {
+    background-color: var(--dark-2);
+  }
+  /* transparent image */
+  & .island-link-image {
+    opacity: .5;
+  }
+}
+
+/* interactions */
+.island-link {
+  &:hover, &:focus {
+    text-decoration: none; /* override blueprint style */
+
+    /* scale up image to 100% */
+    & .island-link-image {
+      transform: none; /* reset to default */
     }
-    & .pt-tooltip {
+
+    /* scale up tooltip */
+    & .island-link-popover {
       transform: scale(1.3);
-      & .description {
-        margin-top: 8px;
-        max-height: 1000px;
+
+      /* show description */
+      & .island-link-description {
+        padding-top: 1em; /* messes up label padding if added before :hover */
+        max-height: 10em; /* must be set to a value for transition to work */
+        /* reset to default */
+        transform: none;
         opacity: 1;
       }
     }

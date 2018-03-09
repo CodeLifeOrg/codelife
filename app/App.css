@@ -90,6 +90,12 @@ h1 {
   border-radius: 2em;
   font-family: var(--heading-font);
   letter-spacing: 0.25px;
+  text-align: center; /* center align .pt-button text even when it's a div */
+
+  /* blueprint override — increase specificity */
+  &[class*="pt-button"] {
+    transition: background-color 0.15s ease-out;
+  }
 }
 
 .pt-button.pt-intent-primary {
@@ -103,8 +109,15 @@ h1 {
 
 .pt-popover {
   border-radius: var(--radius-lg);
+
+  /* popover sizing defaults */
   & .pt-popover-content {
+    width: max-content; /* acts as min-width, makes the container as wide as the content is */
+    max-width: 320px;
+    padding-top: var(--gutter-sm);
+    padding-bottom: var(--gutter-sm);
     border-radius: var(--radius-lg);
+
     & .pt-button:last-child {
       margin-bottom: 0;
     }
@@ -122,11 +135,10 @@ h1 {
   border: 1px solid var(--sky-dark);
   border-radius: var(--radius-lg);
   position: fixed !important;
-  /* sizing overrides */
-  width: calc(100% - var(--gutter-lg));
-  /* sizing override for non-alert dialog */
-  /* TODO: find a better solution for this */
-  &:not(.pt-alert) {
+
+  /* fullscreen dialogs */
+  &.is-fullscreen {
+    width: calc(100% - var(--gutter-lg));
     height: calc(100vh - var(--gutter-lg));
   }
 
@@ -252,4 +264,10 @@ h1 {
   &:hover {
     cursor: pointer;
   }
+}
+
+/* utility classes */
+.u-unbutton {
+  border: 0;
+  background: none;
 }

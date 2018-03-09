@@ -45,7 +45,7 @@ class Browser extends Component {
       levels.sort((a, b) => a.ordering - b.ordering);
       slides.sort((a, b) => a.ordering - b.ordering);
       this.setState({islands, levels, slides, progress, current}, this.buildTree.bind(this));
-    });    
+    });
   }
 
   buildTree() {
@@ -61,14 +61,15 @@ class Browser extends Component {
       i = this.fixNulls(i);
       const islandObj = {
         id: i.id,
+        className: i.id,
         hasCaret: true,
-        iconName: "map",
+        iconName: "map-marker",
         label: i.name,
         itemType: "island",
         parent: {childNodes: nodes},
         childNodes: [],
         data: i
-      };      
+      };
       if (progress.find(p => p.level === i.id) || i.id === current.id) {
         if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
         nodes.push(islandObj);
@@ -83,6 +84,7 @@ class Browser extends Component {
       if (islandNode) {
         const levelObj = {
           id: l.id,
+          className: l.id,
           hasCaret: true,
           iconName: "multi-select",
           label: l.name,
@@ -94,7 +96,7 @@ class Browser extends Component {
         if (progress.find(p => p.level === l.id)) {
           if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
           islandNode.childNodes.push(levelObj);
-        } 
+        }
         else {
           continue;
         }
@@ -103,7 +105,7 @@ class Browser extends Component {
     for (let s of slides) {
       s = this.fixNulls(s);
       let levelNode = null;
-      
+
       for (const islandNode of nodes) {
         levelNode = islandNode.childNodes.find(cn => cn.data.id === s.mlid);
         if (levelNode) break;
@@ -111,6 +113,7 @@ class Browser extends Component {
       if (levelNode) {
         const slideObj = {
           id: s.id,
+          className: s.id,
           hasCaret: false,
           iconName: slideIcons[s.type],
           label: s.title,
@@ -119,7 +122,7 @@ class Browser extends Component {
           data: s
         };
         if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
-        
+
         levelNode.childNodes.push(slideObj);
       }
     }
@@ -162,7 +165,7 @@ class Browser extends Component {
       else {
         console.log("error");
       }
-      
+
     });
   }
 
@@ -217,15 +220,13 @@ class Browser extends Component {
     if (!nodes) return <Loading />;
 
     return (
-      <div id="lesson-builder">
-        <div id="tree">
-          <Tree
-            onNodeClick={this.handleNodeClick.bind(this)}
-            onNodeCollapse={this.handleNodeCollapse.bind(this)}
-            onNodeExpand={this.handleNodeExpand.bind(this)}
-            contents={nodes}
-          />
-        </div>
+      <div className="tree" id="tree">
+        <Tree
+          onNodeClick={this.handleNodeClick.bind(this)}
+          onNodeCollapse={this.handleNodeCollapse.bind(this)}
+          onNodeExpand={this.handleNodeExpand.bind(this)}
+          contents={nodes}
+        />
       </div>
     );
   }

@@ -27,7 +27,10 @@ module.exports = function(sequelize, db) {
     }
   );
 
-  s.associate = models => s.belongsTo(models.levels, {foreignKey: "mlid", targetKey: "id", as: "levels", foreignKeyConstraint: true});
+  s.associate = models => {
+    s.belongsTo(models.levels, {foreignKey: "mlid", targetKey: "id", as: "levels", foreignKeyConstraint: true});
+    s.hasMany(models.threads, {foreignKey: "subject_id", sourceKey: "id", as: "threadlist"});
+  }
 
   return s;
 

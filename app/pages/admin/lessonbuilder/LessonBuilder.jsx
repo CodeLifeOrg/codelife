@@ -55,6 +55,7 @@ class LessonBuilder extends Component {
         i = this.fixNulls(i);
         const islandObj = {
           id: i.id,
+          className: i.id,
           hasCaret: true,
           iconName: "map",
           label: i.name,
@@ -72,6 +73,7 @@ class LessonBuilder extends Component {
         if (islandNode) {
           const levelObj = {
             id: l.id,
+            className: l.id,
             hasCaret: true,
             iconName: "multi-select",
             label: l.name,
@@ -94,6 +96,7 @@ class LessonBuilder extends Component {
         if (levelNode) {
           const slideObj = {
             id: s.id,
+            className: s.id,
             hasCaret: false,
             iconName: slideIcons[s.type],
             label: s.title,
@@ -106,7 +109,7 @@ class LessonBuilder extends Component {
         }
       }
       this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
-    });    
+    });
   }
 
   initFromProps(nodeFromProps) {
@@ -406,8 +409,8 @@ class LessonBuilder extends Component {
     if (!nodes) return <Loading />;
 
     return (
-      <div id="lesson-builder">
-        <div id="tree">
+      <div className="lesson-builder" id="lesson-builder">
+        <div className="tree" id="tree">
           <Tree
             onNodeClick={this.handleNodeClick.bind(this)}
             onNodeCollapse={this.handleNodeCollapse.bind(this)}
@@ -415,7 +418,7 @@ class LessonBuilder extends Component {
             contents={nodes}
           />
         </div>
-        <div id="item-editor">
+        <div className="item-editor" id="item-editor">
           { currentNode
             ? currentNode.itemType === "island"
               ? <IslandEditor data={currentNode.data} reportSave={this.reportSave.bind(this)} />

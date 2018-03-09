@@ -89,6 +89,18 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+  // Used by level to get counts of threads and comments for an entity
+  
+  /*
+  app.get("/api/threads/count", (req, res) => {
+    db.threads.count({
+      where: req.query
+    }).then(c => {
+      res.json(c).end();
+    })
+  });
+  */
+
   // Used in Discussion to retrieve threads for a given entity id
   app.get("/api/threads/all", (req, res) => {
     db.threads.findAll({

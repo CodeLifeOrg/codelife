@@ -94,28 +94,32 @@ class Discussion extends Component {
 
     return (
       <div className="discussion-container" id="Discussion">
-        <h3>{ translate("Discussion") }</h3>
-        <div id="sort-bar">
-          Sort By
-          <div className="pt-select">
-            <select value={this.state.sortBy} onChange={e => this.selectSort.bind(this)(e.target.value)}>
-              <option value="date-oldest">Date: Oldest</option>
-              <option value="date-newest">Date: Newest</option>
-              <option value="comments-most">Comments: Most</option>
-              <option value="comments-least">Comments: Least</option>
-              <option value="likes-most">Likes: Most</option>
-              <option value="likes-least">Likes: Least</option>
-            </select>
+        <div className="discussion-inner">
+          <h3 className="discussion-heading">{ translate("Discussion") }</h3>
+          <div className="sort-bar" id="sort-bar">
+            Sort By
+            <div className="pt-select">
+              <select value={this.state.sortBy} onChange={e => this.selectSort.bind(this)(e.target.value)}>
+                <option value="date-oldest">Date: Oldest</option>
+                <option value="date-newest">Date: Newest</option>
+                <option value="comments-most">Comments: Most</option>
+                <option value="comments-least">Comments: Least</option>
+                <option value="likes-most">Likes: Most</option>
+                <option value="likes-least">Likes: Least</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div id="threads">
-          { threads.map(t => <Thread key={t.id} thread={t} />) }
-        </div>
-        <div className="new-thread">
-          <div className="new-thread-title">{translate("Post New Thread")}</div>
-          <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={translate("Title")} />
-          <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
-          <Button className="pt-intent-success post-button pt-fill" onClick={this.newThread.bind(this)}>{translate("Start New Thread")}</Button>
+          <div className="threads" id="threads">
+            { threads.map(t => <Thread key={t.id} thread={t} />) }
+          </div>
+          <div className="new-thread">
+            <div className="new-thread-title">{translate("Post New Thread")}</div>
+            <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={translate("Title")} />
+            <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
+            <div className="post-button-container">
+              <Button className="pt-intent-success post-button" onClick={this.newThread.bind(this)}>{translate("Start New Thread")}</Button>
+            </div>
+          </div>
         </div>
       </div>
     );

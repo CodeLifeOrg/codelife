@@ -45,12 +45,7 @@
     }
   }
   & a:not(.pt-button) {
-    opacity: 1;
     text-decoration: underline;
-    transition: opacity 0.1s;
-    &:hover {
-      opacity: 0.85;
-    }
   }
   & .slide-header {
     min-height: 29px;
@@ -164,11 +159,22 @@
       }
 
       /* make buttons take up 50% width on tiny screens */
-      @add-mixin max-xs {
+      @add-mixin max-sm {
         width: 100%; /* necessary due to pos:ab */
 
+        /* two buttons */
         & .pt-button {
           width: 50%;
+
+          /* one button (both first and last) */
+          &:first-of-type:last-of-type {
+            width: 100%;
+          }
+        }
+
+        /* three buttons */
+        &.three-buttons .pt-button {
+          width: 33.333%;
         }
       }
     }
@@ -227,13 +233,9 @@
 
     & .pt-button {
       min-width: var(--button-min-width);
-
-      &:hover, &:focus {
-        opacity: 0.9;
-      }
     }
 
-    @add-mixin max-xs {
+    @add-mixin max-sm {
       margin-top: var(--gutter-xxs);
       justify-content: center;
 

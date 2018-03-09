@@ -84,7 +84,7 @@ class InputCode extends Component {
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor panel-content"></div> }
         </div>
-        <div className="validation">
+        <div className={execState ? "validation three-buttons" : "validation"} >
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
           { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>

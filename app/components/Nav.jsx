@@ -20,11 +20,11 @@ class Nav extends Component {
     };
   }
 
-  /* 
+  /*
   This progress reloader is not robust. Ideally, userprogress should be loaded once ever, live in redux state,
-  and update each time the user beats a level in parallel with updating the underlying database. However, to 
-  avoid a refactor, the following code manually reaches into the Browser component and reloads userprogress 
-  on each open/close of the panel.  TODO: revisit this 
+  and update each time the user beats a level in parallel with updating the underlying database. However, to
+  avoid a refactor, the following code manually reaches into the Browser component and reloads userprogress
+  on each open/close of the panel.  TODO: revisit this
   */
   toggleBrowser() {
     this.setState({showBrowser: !this.state.showBrowser});
@@ -42,29 +42,32 @@ class Nav extends Component {
 
     return (
       <div className="nav" id="nav">
-        { auth.user 
-          ? <div>
-            <div className="hamburger" style={{position: "absolute", top: 7, left: 7}}>
-              <button className="pt-button pt-icon-menu" onClick={this.toggleBrowser.bind(this)} />
-            </div>
-            <div id="browser" className={showBrowser ? "" : "hide"}>
-              <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
-            </div>
-          </div>
-          : null
-        }
-        { logo
-          ? <Link className="logo" to={"/"}>
-            <div className="tag">Beta</div>
-            <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
-          </Link>
-          : <div></div> }
+        <Link className={logo ? "logo" : "logo is-hidden"} to={"/"}>
+          <div className="tag">Beta</div>
+          <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
+        </Link>
         { auth.user
           ? <div className="links">
-            <Link className="link" to="/island">
-              <span className="link-icon pt-icon-standard pt-icon-path-search" />
+            <Link className="link map-link" to="/island">
+              <span className="link-icon pt-icon-standard pt-icon-map" />
               <span className="link-text">{ t("Map") }</span>
             </Link>
+            { auth.user
+              ? <Popover
+                interactionKind={PopoverInteractionKind.CLICK}
+                className="browser"
+                popoverClassName="pt-popover-content-sizing browser-popover"
+                position={Position.BOTTOM}
+              >
+                <button className="browser-toggle u-unbutton" onClick={this.toggleBrowser.bind(this)} >
+                  <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
+                </button>
+                <div className="browser-list" id="browser">
+                  <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
+                </div>
+              </Popover>
+              : null
+            }
             <Link className="link" to={`/projects/${auth.user.username}`}>
               <span className="link-icon pt-icon-standard pt-icon-book" />
               <span className="link-text">{ t("Projects") }</span>
@@ -72,7 +75,7 @@ class Nav extends Component {
             <Popover
               interactionKind={PopoverInteractionKind.HOVER}
               popoverClassName="pt-popover-content-sizing user-popover"
-              position={Position.BOTTOM_RIGHT}
+              position={Position.BOTTOM}
             >
               <Link className="link" to={ `/profile/${ auth.user.username }` }>
                 <span className="link-icon pt-icon-standard pt-icon-user" />
@@ -101,10 +104,10 @@ class Nav extends Component {
                 <span className="link-icon pt-icon-standard pt-icon-user" />
                 <span className="link-text">{ t("Login.Login") }/{ t("SignUp.Sign Up") }</span>
               </AnchorLink> }
-              <Link className="link" to="/about">
-                <span className="link-icon pt-icon-standard pt-icon-help" />
-                <span className="link-text">{ t("About") }</span>
-              </Link>
+            <Link className="link" to="/about">
+              <span className="link-icon pt-icon-standard pt-icon-help" />
+              <span className="link-text">{ t("About") }</span>
+            </Link>
           </div> }
       </div>
     );

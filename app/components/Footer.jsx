@@ -13,7 +13,7 @@ class Footer extends Component {
     const governmentLogos = false;
 
     return (
-      <footer id="footer" className={ className }>
+      <footer id="footer" className={ `footer ${className}` }>
         <div className="links">
           <Link className="link" to="/glossary">{ t("Glossary") }</Link>
           <Link className="link" to="/about">{ t("About") }</Link>

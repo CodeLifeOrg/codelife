@@ -285,8 +285,12 @@ class Level extends Component {
 
     return (
       <div className="editor-popover">
-        <Tooltip isOpen={ next ? true : undefined } position={ next ? Position.BOTTOM : Position.TOP } content={ next ? t("Earn your CodeBlock") : t("CodeBlock") } tooltipClassName={ currentIsland.theme }>
-          <div className={ `code-block ${ next ? "next" : "done" }` } onClick={this.toggleTest.bind(this)}>
+        <Tooltip
+          isOpen={ next ? true : undefined }
+          position={ next ? Position.BOTTOM : Position.TOP }
+          content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
+          tooltipClassName={ currentIsland.theme }>
+          <div className={ `code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
             <div className="side left"></div>
@@ -349,10 +353,10 @@ class Level extends Component {
       if (level.isDone) {
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
+          popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop done" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-done" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {level.name}
           </span>
@@ -362,10 +366,10 @@ class Level extends Component {
         // New state incoming - How to visually indicate skip? TODO: DESIGN
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
-          popoverClassName={ `stepPopover pt-popover pt-tooltip ${ currentIsland.theme }` }
+          popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop done" style={{backgroundColor: "orange"}} to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
           <span>
             {`${level.name} (incomplete)`}
           </span>
@@ -373,22 +377,22 @@ class Level extends Component {
       }
       else if (level.isNext) {
         return <Tooltip isOpen={!checkpointOpen} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
-          <Link className="stop next" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-next" to={`/island/${lid}/${level.id}`}></Link>
         </Tooltip>;
       }
       return <div key={level.id} className="stop"></div>;
     });
 
     return (
-      <div id="island" className={ currentIsland.theme }>
+      <div id="island" className={ `island ${currentIsland.theme}` }>
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
-        <div className="image">
-          <h1 className="title" id="title">
+        <div className="island-image image">
+          <h1 className="island-title title" id="title">
             { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }
             { currentIsland.name }
           </h1>
-          <div id="path">
+          <div id="path" className="island-path path">
             { levelItems }
             { this.buildTestPopover() }
           </div>
@@ -402,8 +406,8 @@ class Level extends Component {
         { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
-          ? <div>
-            <h2 className="title">
+          ? <div className="student-codeblocks-container">
+            <h2 className="student-codeblocks-title">
               {t("Other Students' CodeBlocks")}&nbsp;
               { !islandDone
                 ? <Popover
@@ -422,9 +426,9 @@ class Level extends Component {
               ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
               : null }
             { otherCodeBlockItemsAfterFold.length
-              ? <div className="toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <button className="pt-button toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
-              </div>
+              </button>
               : null }
           </div>
           : null }

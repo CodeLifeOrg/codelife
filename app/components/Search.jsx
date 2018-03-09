@@ -58,7 +58,7 @@ class Search extends Component {
         </Link>
       </li>
     );
-    const projectList = results.projects.map(r => 
+    const projectList = results.projects.filter(r => r.user).map(r => 
       <li key={r.id} className="search-result-item project-result">
         <Link to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>     
           <Icon iconName="projects" /> {`${r.name} (${r.user.username})`}

@@ -18,6 +18,7 @@ import Survey from "pages/Survey";
 import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
 import ResetPw from "pages/ResetPw";
+import Contest from "pages/Contest";
 import Error from "pages/Error";
 
 
@@ -56,6 +57,8 @@ export default function RouteCreate() {
       <Route path="admin/:tab/:island/:level/:slide" component={AdminPanel} />
 
       <Route path="learnmore" component={LearnMore} />
+
+      <Route path="contest" component={Contest} />
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />

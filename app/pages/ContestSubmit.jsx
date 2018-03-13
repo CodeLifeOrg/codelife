@@ -1,9 +1,8 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
-import "./Contest.css";
+import "./ContestSubmit.css";
 
-class Contest extends Component {
+class ContestSubmit extends Component {
 
   constructor(props) {
     super(props);
@@ -16,12 +15,11 @@ class Contest extends Component {
     // const {t} = this.props;
 
     return (
-      <div id="contest-container">
-        I am a contest stub<br/>
-        <Link to="/contest/submit">submit a project</Link>
+      <div id="contest-submit-container">
+        submit things
       </div>
     );
   }
 }
 
-export default translate()(Contest);
+export default translate()(ContestSubmit);

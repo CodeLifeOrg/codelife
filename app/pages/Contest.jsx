@@ -17,7 +17,14 @@ class Contest extends Component {
 
     return (
       <div id="contest-container">
-        I am a contest stub<br/>
+        <div>
+        Welcome to the Codelife Contest
+        </div>
+        <ul>
+          <li>rules</li>
+          <li>rules</li>
+          <li>rules</li>
+        </ul>
         <Link to="/contest/submit">submit a project</Link>
       </div>
     );

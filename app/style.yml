@@ -78,6 +78,24 @@ sky: "#74c3b7"
 sky-light: "#9BD9D4"
 sky-dark: "#328f86"
 
+# list of islands - necessary for admin menu logic & theming
+islands:
+  array:
+  - jungle
+  - themepark
+  - blizzard
+  - desert
+  - farm
+  - industry
+  - city
+  - clock
+  - trash
+  - space
+  - dark
+  - mountain
+  - beach
+
+# individual island themes
 jungle-island-dark: "#144800"
 jungle-island-medium: "#417A09"
 jungle-island-light: "#90B857"

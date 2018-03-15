@@ -55,7 +55,7 @@ class UserCodeBlocks extends Component {
               const {theme, icon} = islands.find(i => i.id === cb.lid);
               return <CodeBlockCard key={cb.id} codeBlock={cb} theme={theme} icon={icon} />;
             })
-            : <p>{ t("This user doesn't have any code blocks yet.") }</p>}
+            : <p>{ t("noCodeblocks") }</p>}
         </div>
       </div>
     );

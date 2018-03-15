@@ -2,12 +2,13 @@
   "404": "Página Não Encontrada",
   "Abandon changes and open new file?": "Descartar as alterações e abrir um novo arquivo?",
   "About": "Sobre o CodeLife",
+  "About ": "About ",
   "About Me": "Sobre mim",
   "Activate": {
     "actions": {
-      "ACTIVATE_SEND_FAILURE": "",
-      "ACTIVATE_SEND_SUCCESS": "",
-      "ACTIVATE_TOKEN_FAILURE": ""
+      "ACTIVATE_SEND_FAILURE": "Error sending activation to {{email}}.",
+      "ACTIVATE_SEND_SUCCESS": "{{email}} has been sent an activation link. Please check your inbox.",
+      "ACTIVATE_TOKEN_FAILURE": "Activation token is invalid or has expired."
     },
     "button": "botão"
   },
@@ -15,8 +16,10 @@
   "Admin": "Admin",
   "All Rules Passing": "Cumpre todas as regras",
   "Are you sure you want to reset the code to its original state?": "Você tem certeza de que quer voltar o código para sua versão original?",
+  "Ban Content": "Ban Content",
   "Ban this Page": "Banir essa página",
   "Birthday": "Data de nascimento",
+  "Built by ": "Built by ",
   "CPF": "CPF",
   "Can't save non-passing code!": "Não pode salvar o código com erros",
   "Cancel": "Cancelar",
@@ -29,6 +32,7 @@
   "Codeblock Name": "Nome do desafio",
   "Codeblock Title": "Título do desafio",
   "Codeblock's code will be shown after you complete the last level of this island": "O código será mostrado depois de completar o último nível desta ilha",
+  "Comment Posted!": "Comment Posted!",
   "Content Approved": "Conteúdo aprovado",
   "Content Banned": "Conteúdo banido",
   "Contributor": "Colaborador",
@@ -45,14 +49,18 @@
   "Edit Profile": "Editar Perfil",
   "Error": "Erro",
   "Execute": "Executar",
+  "Explore": "Explore",
   "Featured CodeBlocks": "Desafios em destaque",
   "Featured Projects": "Projetos em destaque",
   "Female": "Fêmea",
   "Flag Inappropriate Content": "Denunciar conteúdo inapropriado",
   "Flagged Content": "Conteúdo considerado inapropriado",
+  "Forever": "Forever",
   "Gender": "Gênero",
   "Glossary": "Glossário",
+  "Glossary Builder": "Glossary Builder",
   "Help": "Ajuda",
+  "Hide Discussion": "Hide Discussion",
   "Hosted by": "Hospedado por",
   "How difficult was the material you learned in CodeLife?": "Considerando a escala abaixo, como você classifica a dificuldade do CodeLife?",
   "How likely are you to revisit the site?": "Você pretende voltar a usar o CodeLife? ",
@@ -63,6 +71,10 @@
   "Islands (lessons)": "Ilhas (lições)",
   "JavaScript Console": "Console do JavaScript",
   "Keep Exploring": "Continue explorando",
+  "Language": "Language",
+  "Last 3 Days": "Last 3 Days",
+  "Last 7 Days": "Last 7 Days",
+  "Last Day": "Last Day",
   "Learn More": "Saiba Mais",
   "LearnMore": {
     "intro": "Existem muitas fontes que você pode acessar para aprender mais programação online. Aqui estão algumas!"
@@ -101,7 +113,9 @@
   "Not motivated at all": "Não me motivaria nada",
   "Not sure": "Não sei",
   "Not very motivated": "Não me motivaria",
+  "Official launch in April 2018": "Official launch in April 2018",
   "Other Students' CodeBlocks": "CodeBlocks outros alunos",
+  "Platform currently in development": "Platform currently in development",
   "Please be as detailed as possible with your feedback": "Por favor, seja detalhado com sua resposta",
   "Please select a reason below": "Por favor, escolha um motivo abaixo",
   "Previous": "Anterior",
@@ -112,7 +126,17 @@
   "Projects": "Projetos",
   "Projects (build your own site)": "Projetos (crie seu site)",
   "Rather not say": "Prefiro não dizer",
-  "Reset": "Restabelecer",
+  "Reset": {
+    "Confirm Password": "Confirm New Password",
+    "E-mail": "E-mail",
+    "Password": "New Password",
+    "actions": {
+      "RESET_SEND_FAILURE": "No account associated with {{email}}.",
+      "RESET_SEND_SUCCESS": "{{email}} has been sent a password reset. Please check your inbox.",
+      "RESET_TOKEN_FAILURE": "Password reset token is invalid or has expired."
+    },
+    "button": "Reset Password"
+  },
   "Reset Password": "Redefinir senha",
   "Return to": "Voltar para",
   "Role": "Papel",
@@ -123,8 +147,11 @@
   "Save your webpage before sharing!": "Salve sua página antes de compartilhar!",
   "Saved!": "Salvou!",
   "Schools list for this location is unavailable": "A lista de escolas para este local não está disponível",
+  "Select a project first!": "Select a project first!",
   "Share": "Compartilhar",
+  "Show Discussion": "Show Discussion",
   "Show Less": "Mostre menos",
+  "Show Me": "Show Me",
   "Show {{x}} More": "Mostre mais {{x}}",
   "Sign Up": "Cadastre-Se",
   "SignUp": {
@@ -134,9 +161,11 @@
     "Facebook": "Facebook",
     "Instagram": "Instagram",
     "Password": "Senha",
-    "ResetPw": "Esqueceu sua senha?",
+    "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a> and <a href='{{privacy}}'>Privacy Policy</a>",
     "PrivacyText": "Ao clicar nessa caixa, você concorda com a nossa <a href='{{privacy}}'>Política de Privacidade</a>",
+    "ResetPw": "Esqueceu sua senha?",
     "Sign Up": "Criar uma conta",
+    "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a>",
     "Twitter": "Twitter",
     "Username": "Nome de usuário",
     "error": {
@@ -155,6 +184,7 @@
   "Somewhat unlikely": "Improvável",
   "Sorry, Try again!": "Descuple, tente novamente!",
   "Sorry, try again!": "Descuple, tente novamente!",
+  "Statistics": "Statistics",
   "Submit": "Enviar",
   "Submit Report": "Enviar relatório",
   "Submit Survey": "Enviar respostas",
@@ -162,6 +192,7 @@
   "This is a full sentence used as the translation key": "Esta é uma frase completa usada como chave de tradução",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",
+  "Thread Posted!": "Thread Posted!",
   "Unable to upload image!": "Erro ao fazer upload da imagem",
   "Upload new picture": "Upload de nova imagem",
   "User": "Usuário",
@@ -172,6 +203,9 @@
   "Very likely": "Com certeza voltarei / indicarei",
   "Very motivated": "Muito motivado",
   "Very unlikely": "Com certeza não voltarei / não indicarei ",
+  "Viewing user discussion can include some very helpful insights, but will mark this level\n                as incomplete": {
+    " Don't forget, you can always come back later and complete the island without\n                any help to get full credit!": "Viewing user discussion can include some very helpful insights, but will mark this level\n                as incomplete. Don't forget, you can always come back later and complete the island without\n                any help to get full credit!"
+  },
   "Webpage": "Página web",
   "What is CodeLife?": "O que é o CodeLife?",
   "What part of the site did you enjoy the most?": "Que parte do CodeLife você mais gostou?",
@@ -181,13 +215,16 @@
   "Where are you from?": "De onde?",
   "You don't have permission to edit this user's profile": "Voê não tem permissão para editar este perfil de usuário",
   "You got it right!": "Você acertou!",
+  "Your project has been submitted!": "Your project has been submitted!",
   "Your report was received": "Seu relato foi recebido com sucesso",
   "aboutP1": "CodeLife é uma plataforma online e gratuita desenvolvida pelo Projeto Code School Brazil da Fundação de Amparo à Pesquisa do Estado de Minas Gerais - FAPEMIG, voltada para alunos brasileiros do ensino médio que desejam aprender uma variedade de habilidades relevantes para trabalhar no setor de TI (desenvolvimento frontend, design de UI, visualização de dados etc). O currículo da plataforma abordará temas como desenvolvimento web e visualização de dados.",
   "aboutP2": "Os usuários do CodeLife poderão aprender em seu próprio ritmo e independente de aulas presenciais. Todo o conteúdo será oferecido em português e inglês e será projetado para complementar o currículo de educação no Brasil.",
   "aboutP3": "Além de trabalhar com alunos, gestores de escolas, professores e funcionários do governo, os recursos da plataforma serão projetados para conectar os estudantes com potenciais empregadores.",
-  "aboutP4": "",
-  "aboutP5": "",
+  "aboutP4": "aboutP4",
+  "aboutP5": "aboutP5",
+  "buttonReset": "Restabelecer",
   "by": "por",
+  "codeblockWarn": "O código será mostrado depois de completar o último nível desta ilha",
   "deleteAlert": "Você tem certeza que quer deletar \"{{projectName}}\"? Esta ação não pode ser desfeita",
   "glossary": {
     "CSS": {
@@ -291,6 +328,10 @@
     "welcome": "Bem-vind@ {{name}}!"
   },
   "myCodeblock": "Meu {{ islandName }} Desafio",
+  "noCodeblocks": "Este usuário ainda não possui desafios",
+  "noProjects": "Este usuário ainda não possui nenhum projeto",
+  "noResults": "Sem resultados",
+  "noUsers": "Nenhum outro usuário encontrado",
   "privacy": {
     "access": {
       "li1": "Ver quais os dados que temos sobre você, se houver",
@@ -335,6 +376,7 @@
       "title": "Segurança"
     }
   },
+  "reportReceive": "Seu relato foi recebido com sucesso",
   "rule": {
     "contains": "contains",
     "css": "css",
@@ -345,10 +387,14 @@
     "nests": "nests",
     "unique": "unique"
   },
+  "saveWarning": "Salve suas alterações antes de abrir uma nova página",
+  "schoolListUnavailable": "A lista de escolas para este local não está disponível",
+  "selectReason": "Por favor, escolha um motivo abaixo",
   "splashP1": "O CodeLife é uma plataforma web, gratuita e de código aberto direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas à linguagem do futuro: a programação.",
   "splashP2": "O mundo está mudando e a tecnologia tem provocado grandes mudanças no mercado de trabalho. Muitas das profissões que existem hoje em breve deixarão de existir. E outras tantas, que ainda nem conhecemos, serão criadas. Os jovens precisam se preparar para esse novo cenário e o primeiro passo é aprender a programar.",
   "splashP3": "Por meio do CodeLife, você pode aprender por conta própria, em seu próprio ritmo e de onde quiser, a programar em HTML, CSS e JavaScript, linguagens de programação muito utilizadas no desenvolvimento de webpages, por exemplo. Todo o conteúdo é oferecido em português e inglês.",
   "splashP4": " ",
+  "userPermissionError": "Voê não tem permissão para editar este perfil de usuário",
   "usersByLocation": "Outros usuários de {{municipality}}, {{state}}",
   "usersBySchool": "Outros usuários de {{school}}",
   "you!": "você!",

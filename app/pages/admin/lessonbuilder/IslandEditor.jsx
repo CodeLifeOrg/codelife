@@ -5,7 +5,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
-import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
+import {Toaster, Intent, Position} from "@blueprintjs/core";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 
@@ -73,7 +73,7 @@ class IslandEditor extends Component {
 
     return (
       <div id="island-editor">
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <button style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</button>
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
@@ -170,7 +170,7 @@ class IslandEditor extends Component {
             <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_victory")} type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.pt_victory} />
           </label> 
         </div>
-        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <button onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</button>
       </div>
     );
   }

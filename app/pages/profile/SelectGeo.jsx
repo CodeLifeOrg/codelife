@@ -92,7 +92,7 @@ class SelectGeo extends Component {
             inputProps={{value: geoQuery, onChange: filterGeos}}
             itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={homeGeo.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
             onItemSelect={setSelectedGeo}
-            noResults={<MenuItem disabled text={t("No results.")} />}
+            noResults={<MenuItem disabled text={t("noResults")} />}
           >
             <Button text={homeGeo ? homeGeo.name : ""} iconName="map-marker" rightIconName="caret-down" />
           </Select> : null}

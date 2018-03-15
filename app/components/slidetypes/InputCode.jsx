@@ -73,7 +73,7 @@ class InputCode extends Component {
         <Alert
           isOpen={ this.state.resetAlert }
           cancelButtonText={ t("Cancel") }
-          confirmButtonText={ t("Reset") }
+          confirmButtonText={ t("buttonReset") }
           intent={ Intent.DANGER }
           onCancel={ () => this.setState({resetAlert: false}) }
           onConfirm={ () => this.resetAnswer() }>
@@ -85,7 +85,7 @@ class InputCode extends Component {
           { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor panel-content"></div> }
         </div>
         <div className={execState ? "validation three-buttons" : "validation"} >
-          <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
+          <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
           { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>
         </div>

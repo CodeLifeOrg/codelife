@@ -23,7 +23,7 @@ class IslandEditor extends Component {
 
   componentDidMount() {
     const {data} = this.props;
-    const themes = styleyml.islands;
+    const themes = styleyml.islands.array;
     this.setState({data, themes});   
   }
 
@@ -65,11 +65,12 @@ class IslandEditor extends Component {
 
     if (!data || !themes) return <Loading />;
 
-    const themeItems = [];
-    for (const k in themes) {
-      if (themes.hasOwnProperty(k)) themeItems.push(<option key={k} value={k}>{k}</option>);
-    }
-    
+    const themeItems = themes.map(t => <option key={`island-${t}`} value={`island-${t}`}>{`island-${t}`}</option>);
+
+    const dark = `${data.theme.split("-")[1]}-island-dark`;
+    const medium = `${data.theme.split("-")[1]}-island-medium`;
+    const light = `${data.theme.split("-")[1]}-island-light`;
+
     return (
       <div id="island-editor">
         <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
@@ -81,8 +82,9 @@ class IslandEditor extends Component {
         <label className="pt-label">
           <span>
             Theme:&nbsp;&nbsp;
-            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].dark} : null } />
-            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].light} : null } />
+            <span className="island-swatch" style={{backgroundColor: styleyml[dark]}} />
+            <span className="island-swatch" style={{backgroundColor: styleyml[medium]}} />
+            <span className="island-swatch" style={{backgroundColor: styleyml[light]}} />
           </span>
           <div className="pt-select" style={{width: "180px"}}>
             <select value={data.theme} onChange={this.changeField.bind(this, "theme")} >

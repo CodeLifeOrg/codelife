@@ -24,7 +24,7 @@ then add the theme name to the @each loop below */
     & > .island-link-image-small {
       background-image: url("/islands/island-$(theme)-small.png");
     }
-    &.footer {
+    &.footer:before {
       background-image: url("/islands/island-$(theme)-ground.png");
     }
     /* set background colors */

@@ -63,6 +63,11 @@
       /* sizing */
       padding: 0.25em var(--gutter-sm);
 
+      /* interactions */
+      &:hover, &:focus {
+        color: var(--black);
+      }
+
       /* remove right padding from map link, bring in browser toggle */
       &.map-link {
         padding-right: 0;
@@ -102,6 +107,11 @@
   & .browser-toggle {
     @add-mixin nav-link;
     padding: 0.25em;
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--black);
+    }
   }
 }
 

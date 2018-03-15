@@ -26,12 +26,22 @@ body {
   font-family: var(--body-font);
   letter-spacing: 0.25px;
   overflow-x: hidden;
+  font-size: 100%; /* overrite blueprint */
 }
 
 h1, h2, h3, h4, h5, h6,
 .heading {
   font-family: var(--heading-font);
+  text-transform: uppercase;
 }
+
+/* default font sizing and line-height */
+.font-xxl { @add-mixin font-xxl; }
+h1, .font-xl  { @add-mixin font-xl;  }
+h2, .font-lg  { @add-mixin font-lg;  }
+h3, .font-md  { @add-mixin font-md;  }
+h4, .font-sm  { @add-mixin font-sm;  }
+h5, .font-xs  { @add-mixin font-xs;  }
 
 #app {
   min-height: 100vh;
@@ -39,7 +49,6 @@ h1, h2, h3, h4, h5, h6,
   width: 100%;
   & .container {
     min-height: 100vh;
-    padding-bottom: 100px;
   }
 }
 
@@ -266,8 +275,24 @@ h1 {
   }
 }
 
-/* utility classes */
+/* -----------------------------------
+utility classes
+----------------------------------- */
+/* make buttons not look like buttons */
 .u-unbutton {
   border: 0;
   background: none;
+}
+
+/* screen reader text */
+.u-visually-hidden {
+  @add-mixin visually-hidden;
+}
+
+/* margin */
+.u-margin-top-off {
+  margin-top: 0 !important;
+}
+.u-margin-bottom-off {
+  margin-bottom: 0 !important;
 }

@@ -14,9 +14,9 @@ class Footer extends Component {
 
     // about link array
     const aboutLinks = [
-      {id: 1, title: "About CodeLife", link: "/about"},
+      {id: 1, title: "About", link: "/about"},
       {id: 2, title: "Partners", link: "/learnmore"},
-      {id: 3, title: "Privacy policy", link: "/privacy"}
+      {id: 3, title: "Privacy Policy", link: "/privacy"}
     ];
     const surveyLink = [
       {id: 4, title: "Survey", link: "/survey"}
@@ -60,7 +60,7 @@ class Footer extends Component {
 
             {/* about links */}
             <div className="footer-list-container">
-              <h3 className="footer-heading font-md">{ t("About ") }</h3> {/* space afterward is intentional, as full About Codelife link follows */}
+              <h3 className="footer-heading">{ t("About ") }</h3> {/* space afterward is intentional, as full About Codelife link follows */}
               <ul className="footer-list">
                 { aboutLinkItems }
               </ul>
@@ -68,7 +68,7 @@ class Footer extends Component {
 
             {/* explore links */}
             <div className="footer-list-container">
-              <h3 className="footer-heading font-md">{ t("Explore") }</h3>
+              <h3 className="footer-heading">{ t("Explore") }</h3>
               <ul className="footer-list">
                 { exploreLinkItems }
               </ul>
@@ -76,7 +76,7 @@ class Footer extends Component {
 
             {/* language select */}
             <div className="footer-list-container">
-              <h3 className="footer-heading font-md">{ t("Language") }</h3>
+              <h3 className="footer-heading">{ t("Language") }</h3>
               <ul className="footer-list">
                 <li className="footer-item">
                   <a className="footer-link font-sm" href={`${protocol}//en.${hostSansSub}${currentPath}`}>English</a>

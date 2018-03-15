@@ -258,7 +258,6 @@
     & .slide-text {
       align-self: stretch;
       flex: none;
-      overflow: scroll;
       width: 300px;
       margin-bottom: 1.5em;
 

@@ -1,0 +1,16 @@
+@import "../mixins.css";
+
+/* main container */
+.signup-container {
+  @add-mixin form-layout;
+}
+
+/* divider */
+.signup-divider {
+  @add-mixin form-divider;
+
+  /* fudge divider height on larger screens */
+  @media (min-width: 840px) {
+    height: 27em;
+  }
+}

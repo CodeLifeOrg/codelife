@@ -197,7 +197,7 @@ class SignupForm extends Component {
 
         {/* footer */}
         <p className="form-switcher font-sm u-text-center">
-          { t("SignUp.GotAccount")} <button className="u-unbutton link">{ t("LogIn.Log_in") }</button>
+          { t("SignUp.GotAccount")} <button className="u-unbutton link" onClick={() => this.props.onSwitch ? this.props.onSwitch() : null}>{ t("LogIn.Log_in") }</button>
         </p>
       </div>
     );

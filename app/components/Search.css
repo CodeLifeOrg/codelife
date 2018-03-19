@@ -33,6 +33,10 @@
   background-color: lightblue;
 }
 
+.search-selected {
+  background-color: yellow;
+}
+
 .search-hidden {
   visibility: hidden;
 }

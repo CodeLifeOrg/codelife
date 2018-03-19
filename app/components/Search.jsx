@@ -4,6 +4,7 @@ import {translate} from "react-i18next";
 import {Icon} from "@blueprintjs/core";
 import {Link} from "react-router";
 import {connect} from "react-redux";
+import {browserHistory} from "react-router";
 import "./Search.css";
 
 class Search extends Component {
@@ -16,6 +17,7 @@ class Search extends Component {
         users: [],
         projects: []
       },
+      selectedIndex: null,
       showResults: false
     };
   }
@@ -27,12 +29,38 @@ class Search extends Component {
       this.search();
     } 
     else {
-      this.setState({query, results: {users: [], projects: []}});
+      this.setState({query, showResults: true, results: {users: [], projects: []}});
     }
   }
 
   clearSearch() {
-    this.setState({query: "", showResults: false, results: {users: [], projects: []}});
+    this.setState({selectedIndex: null, query: "", showResults: false, results: {users: [], projects: []}});
+  }
+
+  onKeyDown(e) {
+    const {selectedIndex, results} = this.state;
+    const allResults = results.users.concat(results.projects);
+    if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter") {
+      if (selectedIndex === null) {
+        if (e.key === "ArrowDown") {
+          this.setState({selectedIndex: 0});
+        }
+      }
+      else {
+        if (e.key === "ArrowDown" && selectedIndex < allResults.length) {
+          this.setState({selectedIndex: selectedIndex + 1});
+        } 
+        else if (e.key === "ArrowUp" && selectedIndex > 0) {
+          this.setState({selectedIndex: selectedIndex - 1}); 
+        }
+        else if (e.key === "Enter") {
+          const selectedItem = allResults[selectedIndex];
+          if (selectedItem && selectedItem.type === "user") browserHistory.push(`/profile/${selectedItem.username}`);
+          if (selectedItem && selectedItem.type === "project") browserHistory.push(`/projects/${selectedItem.user.username}/${selectedItem.name}`);
+          this.clearSearch();
+        }
+      }
+    }
   }
 
   search() {
@@ -49,17 +77,25 @@ class Search extends Component {
 
   render() {
 
-    const {results, showResults} = this.state;
+    const {results, showResults, selectedIndex} = this.state;
+
+    const allResults = results.users.concat(results.projects).map(r => {
+      r.selected = false;
+      return r;
+    });
+
+    const selectedItem = allResults && selectedIndex !== null ? allResults[selectedIndex] : null;
+    if (selectedItem) selectedItem.selected = true;
 
     const userList = results.users.map(r => 
-      <li key={r.id} className="search-result-item user-result">
+      <li key={r.id} className={`search-result-item user-result ${r.selected ? "search-selected" : ""}`}>
         <Link to={`/profile/${r.username}`} onClick={this.clearSearch.bind(this)}>
           <Icon iconName="user" /> {r.name ? `${r.username} (${r.name})` : r.username}
         </Link>
       </li>
     );
     const projectList = results.projects.filter(r => r.user).map(r => 
-      <li key={r.id} className="search-result-item project-result">
+      <li key={r.id} className={`search-result-item project-result ${r.selected ? "search-selected" : ""}`}>
         <Link to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>     
           <Icon iconName="projects" /> {`${r.name} (${r.user.username})`}
         </Link>
@@ -71,6 +107,7 @@ class Search extends Component {
         <input  
           id="site-search"
           onChange={this.handleChange.bind(this)}
+          onKeyDown={this.onKeyDown.bind(this)}
           // onBlur={() => this.setState({showResults: false})}
           onFocus={() => this.setState({showResults: true})}
           value={this.state.query}

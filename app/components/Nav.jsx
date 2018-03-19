@@ -98,19 +98,23 @@ class Nav extends Component {
             </Popover>
           </div>
           : <div className="links">
-            <button onClick={this.toggleLoginOpen.bind(this)}>{ t("Login.Login") }</button>
+            <button className="link u-unbutton" onClick={this.toggleLoginOpen.bind(this)}>
+              <span className="link-icon pt-icon-standard pt-icon-log-in" />
+              <span className="link-text">{ t("LogIn.Log_in") }</span>
+            </button>
             <Link className="link" to="/about">
               <span className="link-icon pt-icon-standard pt-icon-help" />
               <span className="link-text">{ t("About") }</span>
             </Link>
           </div> }
         <Dialog
+          className="form-container"
           iconName="inbox"
           isOpen={isLoginOpen}
           onClose={this.toggleLoginOpen.bind(this)}
           title="Dialog header"
         >
-          <AuthForm initialMode="login"/> 
+          <AuthForm initialMode="login"/>
         </Dialog>
       </div>
     );

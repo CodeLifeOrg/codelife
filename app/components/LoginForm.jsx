@@ -82,10 +82,10 @@ class LoginForm extends Component {
     const {email, password} = this.state;
 
     return (
-      <div className="login-container form-container">
+      <div className="login-container">
 
         {/* heading */}
-        <h2 className="signup-heading font-xl u-text-center">{ t("LogIn.Log_In") }</h2>
+        <h2 className="signup-heading font-xl u-text-center">{ t("LogIn.Log_in") }</h2>
 
         {/* login form */}
         <form className="form-inner" onSubmit={this.onSubmit.bind(this)}>
@@ -99,13 +99,12 @@ class LoginForm extends Component {
               type="email"
               name="email"
               onChange={this.onChange}
-              tabIndex="1" />
+              autoFocus />
             <span className="field-icon pt-icon pt-icon-envelope" />
           </div>
 
           {/* password */}
           <div className="field-container font-md has-icon">
-            <a className="reset-password-link link font-xs" href="/reset">{ t("SignUp.ForgotPassword") }</a>
             <label className="font-sm" htmlFor="login-password">{ t("SignUp.Password") }</label>
             <input className="field-input"
               id="login-password"
@@ -114,9 +113,9 @@ class LoginForm extends Component {
               name="password"
               onFocus={this.onChange}
               onChange={this.onChange}
-              autoComplete="Off"
-              tabIndex="2" />
+              autoComplete="Off" />
             <span className="field-icon pt-icon pt-icon-key" />
+            <a className="reset-password-link link font-xs" href="/reset">{ t("SignUp.ForgotPassword") }</a>
           </div>
 
           {/* stay logged in */}
@@ -130,9 +129,9 @@ class LoginForm extends Component {
 
           {/* submit */}
           <div className="field-container">
-            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md" tabIndex="3">
+            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md">
               <span className="pt-icon pt-icon-log-in" />
-              { t("LogIn.Log_In") }
+              { t("LogIn.Log_in") }
             </button>
           </div>
         </form>

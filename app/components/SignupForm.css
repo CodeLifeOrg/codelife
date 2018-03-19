@@ -1,10 +1,5 @@
 @import "../mixins.css";
 
-/* main container */
-.signup-container {
-  @add-mixin form-layout;
-}
-
 /* divider */
 .signup-divider {
   @add-mixin form-divider;

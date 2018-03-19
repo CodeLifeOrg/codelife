@@ -108,8 +108,57 @@
 
 /* layout for login/signup forms */
 @define-mixin form-layout {
+  /* positioning */
+  margin: 1rem;
+  /* sizing */
+  width: 100%;
   max-width: 52rem;
+  max-height: 100vh; /* make it work on shorter screens */
 
+  &[class*=form-container] {
+    position: relative !important; /* thanks, blueprint */
+  }
+
+  /* if you can't remove it, hide it */
+  & .pt-dialog-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* blueprint theming overrides */
+    background: inherit;
+    box-shadow: none;
+
+    /* hide unnecessary elements */
+    & > span,
+    & > .pt-dialog-header-title {
+      display: none;
+    }
+
+    /* close button */
+    & .pt-dialog-close-button {
+      @add-mixin font-lg;
+      color: var(--gray);
+      transition: 0.2s color;
+
+      &:hover, &:focus {
+        color: var(--dark-2);
+      }
+    }
+  }
+
+  /* close button positioning */
+  & .auth-form-close {
+    position: absolute;
+    top: -25px;
+    right: -25px;
+
+    @add-mixin min-sm {
+      top: -50px;
+      right: -50px;
+    }
+  }
+
+  /* horizontal layout on bigger viewports */
   @media (min-width: 840px) {
     & .form-inner,
     & .form-divider,

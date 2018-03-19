@@ -165,7 +165,6 @@ blueprint overrides
 
 .pt-dialog {
   background-color: var(--light-1);
-  border: 1px solid var(--sky-dark);
   border-radius: var(--radius-lg);
   position: fixed !important;
 
@@ -314,6 +313,7 @@ form fields
 
 /* container theming & padding */
 .form-container {
+  @add-mixin form-layout;
   background-color: var(--white);
   border-radius: var(--radius-md);
   padding: var(--gutter-md);
@@ -448,7 +448,7 @@ form fields
 }
 
 /* switch from login to signup */
-.form-container > .form-switcher {
+.form-container .form-switcher {
   margin-top: 2rem;
 
   @add-mixin min-sm {

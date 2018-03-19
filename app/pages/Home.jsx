@@ -74,12 +74,13 @@ class Home extends Component {
         <button className="pt-button pt-button-standard" onClick={this.toggleSignupOpen.bind(this, "signup")}>get started</button>
         <button className="pt-button pt-button-standard" onClick={this.toggleSignupOpen.bind(this, "login")}>login</button>
         <Dialog
+          className="form-container"
           iconName="inbox"
           isOpen={isSignupOpen}
           onClose={this.toggleSignupOpen.bind(this)}
           title="Dialog header"
         >
-          <AuthForm initialMode={this.state.formMode}/> 
+          <AuthForm initialMode={this.state.formMode}/>
         </Dialog>
         <h2>{ t("Featured Projects") }</h2>
         <div className="projects">

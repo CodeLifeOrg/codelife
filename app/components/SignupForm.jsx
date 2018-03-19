@@ -85,7 +85,7 @@ class SignupForm extends Component {
     const email = this.state.email === null ? auth.error && auth.error.email ? auth.error.email : "" : this.state.email;
 
     return (
-      <div className="signup-container form-container">
+      <div className="signup-container">
 
         {/* heading */}
         <h2 className="signup-heading font-xl u-text-center">{ t("SignUp.Sign Up") }</h2>
@@ -102,7 +102,6 @@ class SignupForm extends Component {
               type="email"
               name="email"
               onChange={this.onChange}
-              tabIndex="1"
               autoFocus />
             <span className="field-icon pt-icon pt-icon-envelope" />
           </div>
@@ -116,8 +115,7 @@ class SignupForm extends Component {
               type="text"
               name="username"
               onFocus={this.onChange}
-              onChange={this.onChange}
-              tabIndex="2" />
+              onChange={this.onChange} />
             <span className="field-icon pt-icon pt-icon-id-number" />
           </div>
 
@@ -131,8 +129,7 @@ class SignupForm extends Component {
               name="password"
               onFocus={this.onChange}
               onChange={this.onChange}
-              autoComplete="Off"
-              tabIndex="3" />
+              autoComplete="Off" />
             <span className="field-icon pt-icon pt-icon-key" />
           </div>
 
@@ -146,8 +143,7 @@ class SignupForm extends Component {
               name="passwordAgain"
               onFocus={this.onChange}
               onChange={this.onChange}
-              autoComplete="Off"
-              tabIndex="4" />
+              autoComplete="Off" />
             <span className="field-icon pt-icon pt-icon-key" />
           </div>
 
@@ -161,7 +157,7 @@ class SignupForm extends Component {
 
           {/* submit */}
           <div className="field-container">
-            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md" tabIndex="5">
+            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md">
               <span className="pt-icon pt-icon-user" />
               { t("SignUp.Create account") }
             </button>

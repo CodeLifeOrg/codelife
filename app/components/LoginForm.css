@@ -2,7 +2,6 @@
 
 /* main container */
 .login-container {
-  @add-mixin form-layout;
 
   & .reset-password-link {
     position: absolute;

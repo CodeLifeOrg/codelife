@@ -123,6 +123,17 @@
       width: calc(50% - 60px); /* make room for the line */
     }
   }
+
+  /* make sure social buttons don't break */
+  & .social-button {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+
+    /* account for icon sizing */
+    & .social-svg {
+      margin-left: -0.25em;
+    }
+  }
 }
 
 /* form divider */

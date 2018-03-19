@@ -10,30 +10,48 @@ class Footer extends Component {
     const {protocol, host} = serverLocation;
     const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
 
-    const governmentLogos = false;
 
     // about link array
     const aboutLinks = [
-      {id: 1, title: "About", link: "/about"},
-      {id: 2, title: "Partners", link: "/learnmore"},
-      {id: 3, title: "Privacy Policy", link: "/privacy"}
+      {id: 1, title: t("About"), link: "/about"},
+      {id: 2, title: t("Partners"), link: "/learnmore"},
+      {id: 3, title: t("Privacy Policy"), link: "/privacy"}
     ];
     const surveyLink = [
-      {id: 4, title: "Survey", link: "/survey"}
+      {id: 4, title: t("Survey"), link: "/survey"}
     ];
 
-    // explore link array (to be added as necessary)
-    const exploreLinks = [
-      /* {id: 1, title: "Leaderboard", link: "/leaderboard"},
-      {id: 2, title: "Snippets", link: "/snippets"},
-      {id: 3, title: "Codeblocks", link: "/codeblocks"}, */
-      {id: 4, title: "Glossary", link: "/glossary"}
-    ];
-
-    // if logged in, add the survery to the aboutLinks array
+    // if logged in, add survey to about links
     if (user) {
       aboutLinks.push(surveyLink[0]);
     }
+
+
+    // explore link array (to be added as necessary)
+    const exploreLinks = [
+      /* {id: 1, title: t("Leaderboard"), link: "/leaderboard"},
+      {id: 2, title: t("Snippets"), link: "/snippets"},
+      {id: 3, title: t("Codeblocks"), link: "/codeblocks"}, */
+      {id: 4, title: t("Glossary"), link: "/glossary"}
+    ];
+
+
+    // account link array — must be logged in
+    const username = user ? user.username : "";
+
+    const accountLinks = [
+      {id: 1, title: t("My profile"), link: `/profile/${ username }`},
+      {id: 2, title: t("My projects"), link: `/projects/${ username }`},
+      {id: 3, title: t("Log out"), link: "/auth/logout"}
+    ];
+
+
+    // language select links
+    const languageLinks = [
+      {id: 1, title: "English", link: `${protocol}//en.${hostSansSub}${currentPath}`},
+      {id: 2, title: "Portuguese", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+    ];
+
 
     // loop through arrays and create corresponding list items
     const aboutLinkItems = aboutLinks.map(aboutLink =>
@@ -46,6 +64,22 @@ class Footer extends Component {
         <Link className="footer-link font-sm" to={exploreLink.link}>{t(exploreLink.title)}</Link>
       </li>
     );
+    // logout must be a standard link, not a Link component
+    const accountLinkItems = accountLinks.map(accountLink =>
+      <li className="footer-item" key={accountLink.id}>
+        { accountLink.link === "/auth/logout"
+          ? <a className="footer-link font-sm" href={accountLink.link}>{t(accountLink.title)}</a>
+          : <Link className="footer-link font-sm" to={accountLink.link}>{t(accountLink.title)}</Link>
+        }
+      </li>
+    );
+    // locale subdomain links must be standard links, not Link components
+    const languageLinkItems = languageLinks.map(languageLink =>
+      <li className="footer-item" key={languageLink.id}>
+        <a className="footer-link font-sm" href={languageLink.link}>{t(languageLink.title)}</a>
+      </li>
+    );
+
 
     return (
       <footer id="footer" className={ `footer ${className}` }>{/* :before element used for background image */}
@@ -74,16 +108,19 @@ class Footer extends Component {
               </ul>
             </div>
 
+            {/* account links */}
+            { user ? <div className="footer-list-container">
+              <h3 className="footer-heading">{ t("Account") }</h3>
+              <ul className="footer-list">
+                { accountLinkItems }
+              </ul>
+            </div> : null }
+
             {/* language select */}
             <div className="footer-list-container">
               <h3 className="footer-heading">{ t("Language") }</h3>
               <ul className="footer-list">
-                <li className="footer-item">
-                  <a className="footer-link font-sm" href={`${protocol}//en.${hostSansSub}${currentPath}`}>English</a>
-                </li>
-                <li className="footer-item">
-                  <a className="footer-link font-sm" href={`${protocol}//pt.${hostSansSub}${currentPath}`}>Portuguese</a>
-                </li>
+                { languageLinkItems }
               </ul>
             </div>
           </nav>

@@ -33,9 +33,13 @@
 
   /* space out content on bigger screens */
   @add-mixin min-sm {
+    padding: var(--gutter-lg) var(--gutter-lg) var(--gutter-md) var(--gutter-lg);
+  }
+
+  /* tweakpoint to align links left, credits right on big screens */
+  @media (min-width: 1240px) {
     display: flex;
     justify-content: space-between;
-    padding: var(--gutter-lg) var(--gutter-lg) var(--gutter-md) var(--gutter-lg);
   }
 
   /* align links and credits */
@@ -86,9 +90,15 @@
 .footer-nav {
   display: block;
 
+  /* let flex take over once that makes sense */
+  @add-mixin min-sm {
+    display: flex;
+    justify-content: center;
+  }
+
   & .footer-list-container {
     /* positioning */
-    display: inline-block; /* keep items together */
+    display: inline-block; /* parent flexbox fallback */
     vertical-align: top; /* thanks blueprint */
     margin-bottom: var(--gutter-md);
     /* sizing */
@@ -97,8 +107,13 @@
 
     /* sizing and margin for bigger screens */
     @add-mixin min-xs {
-      width: 11rem; /* 184px */
+      width: 11.5rem; /* 184px */
       margin-right: var(--gutter-md); /* 40px */
+
+      /* reset margin on last item */
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
   }
 }
@@ -109,8 +124,8 @@
   text-align: center;
   width: 100%;
 
-  /* right align on reasonably sized viewports */
-  @add-mixin min-sm {
+  /* right align on big viewports */
+  @media (min-width: 1240px) {
     text-align: right;
     width: auto;
   }
@@ -133,6 +148,7 @@
       vertical-align: middle;
     }
 
+    /* space out "built by" and logo */
     & > .footer-logo-text {
       margin-right: 0.25em;
     }
@@ -161,10 +177,12 @@
   & .footer-credits {
     margin-top: var(--gutter-sm);
 
+    /* positioning adjustment */
     @add-mixin min-sm {
       margin-top: var(--gutter-lg);
     }
 
+    /* make partner links subtle */
     & .footer-credits-link {
       display: block;
       margin-top: 0.25em;

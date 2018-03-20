@@ -16,7 +16,7 @@ class Studio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTabId: "projects",
+      activeTabId: "projects-tab",
       mounted: false,
       execState: false,
       currentProject: null
@@ -109,6 +109,7 @@ class Studio extends Component {
   }
 
   handleTabChange(activeTabId) {
+    console.log(activeTabId)
     this.setState({activeTabId});
   }
 
@@ -125,11 +126,13 @@ class Studio extends Component {
     if (!auth.user) browserHistory.push("/");
 
     const allCodeBlockRef = <CodeBlockList/>;
-    const projectRef = <Projects  projectToLoad={filename}
-                                  onCreateProject={this.onCreateProject.bind(this)}
-                                  onDeleteProject={this.onDeleteProject.bind(this)}
-                                  openProject={this.openProject.bind(this)}
-                                  onClickProject={this.onClickProject.bind(this)}/>;
+    const projectRef = <Projects  
+      projectToLoad={filename}
+      onCreateProject={this.onCreateProject.bind(this)}
+      onDeleteProject={this.onDeleteProject.bind(this)}
+      openProject={this.openProject.bind(this)}
+      onClickProject={this.onClickProject.bind(this)}
+    />;
 
     return (
       <div className="studio">
@@ -144,8 +147,8 @@ class Studio extends Component {
         </div>
         <div className="body">
           <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-            <Tab2 className="projects" title={t("Projects")} panel={ projectRef } />
-            <Tab2 className="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
+            <Tab2 id="projects-tab" key="projects" className="projects" title={t("Projects")} panel={ projectRef } />
+            <Tab2 id="code-blocks-tab" key="code-blocks" className="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
           </Tabs2>
           <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)} initialValue={currentProject ? currentProject.studentcontent : ""} ref={c => this.editor = c} />
         </div>

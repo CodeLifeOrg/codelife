@@ -34,14 +34,11 @@ class Projects extends Component {
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
     const cget = axios.get("/api/projects/collabs");
-    const uget = axios.get("/api/projects/users");
     const {t} = this.props;
 
-    Promise.all([pget, cget, uget]).then(resp => {
+    Promise.all([pget, cget]).then(resp => {
       const projects = resp[0].data;
       const collabs = resp[1].data;
-      const users = resp[2].data;
-      console.log(users);
       
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {

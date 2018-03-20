@@ -3,7 +3,9 @@ import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
 import Browser from "components/Browser";
+import Search from "components/Search";
 import AuthForm from "components/AuthForm";
+
 import "./Nav.css";
 
 import {Popover, PopoverInteractionKind, Position, Dialog} from "@blueprintjs/core";
@@ -96,6 +98,7 @@ class Nav extends Component {
                 </a>
               </div>
             </Popover>
+            <Search />
           </div>
           : <div className="links">
             <button className="link u-unbutton" onClick={this.toggleLoginOpen.bind(this)}>

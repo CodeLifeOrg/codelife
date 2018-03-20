@@ -1,0 +1,42 @@
+#site-search-box {
+  position: absolute;
+  right: 50px;
+  top: 50px;
+}
+
+#search-result-container {
+  background-color: white;
+  text-align: center;
+  padding: 5px;
+}
+
+#search-result-list {
+  list-style: none;
+  padding-left: 0px;
+  cursor: pointer;
+}
+
+.search-result-item {
+  margin: 5px;
+  padding: 5px;
+}
+
+.user-result {
+  background-color: lightpink;
+}
+
+.project-result {
+  background-color: lightgreen;
+}
+
+.search-result-item:hover {
+  background-color: lightblue;
+}
+
+.search-selected {
+  background-color: yellow;
+}
+
+.search-hidden {
+  visibility: hidden;
+}

@@ -49,6 +49,10 @@ class Share extends Component {
     });
   }
 
+  componentDidUpdate() {
+    console.log("updated");
+  }
+
   handleReport(report) {
     const {reports} = this.state;
     reports.push(report);

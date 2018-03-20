@@ -132,8 +132,8 @@ class Studio extends Component {
                                   onClickProject={this.onClickProject.bind(this)}/>;
 
     return (
-      <div id="studio">
-        <div id="head">
+      <div className="studio">
+        <div className="head">
           <h1 className="title">{ t("Projects") }</h1>
           { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
           <div className="buttons">
@@ -142,10 +142,10 @@ class Studio extends Component {
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>
         </div>
-        <div id="body">
+        <div className="body">
           <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-            <Tab2 id="projects" title={t("Projects")} panel={ projectRef } />
-            <Tab2 id="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
+            <Tab2 className="projects" title={t("Projects")} panel={ projectRef } />
+            <Tab2 className="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
           </Tabs2>
           <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)} initialValue={currentProject ? currentProject.studentcontent : ""} ref={c => this.editor = c} />
         </div>

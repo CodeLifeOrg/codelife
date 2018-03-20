@@ -106,6 +106,29 @@
   box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
 }
 
+/* slide sizing */
+@define-mixin slide-sizing {
+  /* positioning */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* sizing */
+  min-height: 85vh; /* fallback */
+  min-height: calc(100vh - 85px); /* fudged — accounts for .slide-inner padding and .nav height */
+  padding: var(--gutter-md) var(--gutter-sm);
+
+  /* no border radius on smaller viewports */
+  @add-mixin max-md {
+    border-radius: 0;
+  }
+
+  /* add margin on larger viewports */
+  @add-mixin min-md {
+    margin: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
+    padding: var(--gutter-md);
+  }
+}
+
 /* layout for login/signup forms */
 @define-mixin form-layout {
   /* positioning */

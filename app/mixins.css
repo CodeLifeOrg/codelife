@@ -26,7 +26,7 @@
   line-height: 1.25;
 }
 @define-mixin font-lg {
-  font-size: 1.75rem; /* 28px */
+  font-size: 1.625rem; /* 26px */
   line-height: 1.25;
 }
 @define-mixin font-md {

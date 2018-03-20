@@ -63,6 +63,12 @@
   "Glossary Builder": "Glossary Builder",
   "Help": "Help",
   "Hide Discussion": "Hide Discussion",
+  "Home": {
+    "GetStarted": "Get started",
+    "Headline": "Learn to code for free",
+    "IntroText": "Home.IntroText",
+    "MadeOnCodelife": "Made on Codelife"
+  },
   "Hosted by": "Hosted by",
   "How difficult was the material you learned in CodeLife?": "How difficult was the material you learned in CodeLife?",
   "How likely are you to revisit the site?": "How likely are you to revisit the site?",

@@ -1,8 +1,7 @@
-#Home {
-  text-align: center;
-  padding: 0 var(--gutter-md);
-  width: 100%;
-  & #island {
+@import "../mixins.css";
+
+.home {
+  & .island {
     margin-left: -50%;
     width: 200%;
     & .image {
@@ -39,7 +38,6 @@
       margin: 0 auto;
       max-width: 400px;
       text-align: center;
-      text-shadow: 0 2px 2px var(--dark-3);
     }
   }
   & .video {
@@ -87,7 +85,6 @@
         font-size: 18px;
         left: var(--gutter-xs);
         position: absolute;
-        text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
         top: var(--gutter-xs);
       }
     }
@@ -95,63 +92,30 @@
       background-color: var(--danger);
     }
   }
-  & .form {
-    margin: var(--gutter-lg) auto;
-    max-width: 500px;
-    z-index: 2;
-    & .callToAction {
-      color: var(--white);
-      display: block;
-      margin: var(--gutter-xs) auto;
-      text-align: center;
-      text-shadow: 0 2px 2px var(--dark-3);
+
+  & .authform-button {
+    @add-mixin max-xs {
       width: 100%;
     }
-    &.buttons {
-      padding: var(--gutter-md) 0;
-    }
-    & .pt-button.pt-large {
-      display: inline-block;
-      height: 60px;
-      margin: var(--gutter-xs);
-      max-width: 200px;
-      min-width: 200px;
-    }
-    & .pt-control.pt-checkbox {
-      color: var(--white);
-      text-align: left;
-      text-shadow: 0 2px 2px var(--dark-3);
-      & a {
-        color: var(--white);
+    @add-mixin min-xs {
+      &:first-of-type {
+        margin-right: 2em;
       }
     }
   }
-  & h2 {
-    color: var(--white);
-    line-height: 1.2;
-    text-shadow: 0 2px var(--gutter-xxs) var(--dark-3);
-  }
-  & .projects, & .codeBlocks {
+
+  & .project-list,
+  & .codeblock-list {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: var(--gutter-lg);
+    /* offset card margin */
+    margin-left: -15px;
+    margin-right: -15px;
     min-height: 150px;
-    justify-content: center;
     width: 100%;
   }
-  & .aboutTxt {
-    margin: 0 auto 100px;
-    width: 500px;
-  }
-  & p {
-    color: var(--white);
-    font-size: 18px;
-    line-height: var(--gutter-md);
-    max-width: 550px;
-    text-align: left;
-    text-shadow: 0 2px var(--gutter-xxs) rgba(0, 0, 0, 0.5);
-    width: 100%;
-    margin: 0 0 var(--gutter-md) 0;
+  & .projectCard {
+    margin: var(--gutter-sm);
   }
 }

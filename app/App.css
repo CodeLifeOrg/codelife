@@ -120,25 +120,37 @@ blueprint overrides
   &[class*="pt-button"] {
     transition: background-color 0.15s ease-out;
   }
-}
 
-.pt-button.pt-intent-primary {
-  background: var(--sky-dark);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--sky-dark);
-  color: var(--white);
-  border: 1px solid var(--sky-dark);
-  box-shadow: none !important; /* blueprint override */
-  transition:
-    background-color 0.2s,
-    border-color 0.2s,
-    opacity 0.2s;
-  will-change: opacity; /* prevents some funkiness */
+  /* more padding on bigger buttons */
+  &.font-md {
+    padding: 0.35em 2em 0.55em 2em;
 
-  &:hover, &:focus {
-    opacity: 0.9; /* make the button seem to light up on hover */
-    background-color: var(--sky-dark); /* blueprint override */
+    & > .pt-icon {
+      margin-right: 0.5em;
+    }
+  }
+
+  /* use sky colors for primary buttons */
+  &.pt-intent-primary {
+    background: var(--sky-dark);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--sky-dark);
+    color: var(--white);
+    border: 1px solid var(--sky-dark);
+    box-shadow: none !important; /* blueprint override */
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      opacity 0.2s;
+    will-change: opacity; /* prevents some funkiness */
+
+    &:hover, &:focus {
+      opacity: 0.9; /* make the button seem to light up on hover */
+      background-color: var(--sky-dark); /* blueprint override */
+    }
   }
 }
+
+
 
 .pt-popover {
   border-radius: var(--radius-lg);
@@ -395,13 +407,7 @@ form fields
   /* buttons */
   & > button,
   & > [class*=button] {
-    padding-top: 0.35em;
-    padding-bottom: 0.55em;
     margin-top: 1.15em;
-
-    & > .pt-icon {
-      margin-right: 0.5em;
-    }
   }
 
   /* social buttons */
@@ -458,6 +464,49 @@ form fields
 
 
 /* -----------------------------------
+layout
+----------------------------------- */
+
+.content {
+  padding: var(--gutter-md);
+  max-width: 1220px; /* TODO: add to style.yml */
+  margin-left: auto;
+  margin-right: auto;
+
+  @add-mixin min-sm {
+    padding: var(--gutter-lg);
+  }
+
+  /* space out sections */
+  & > .content-section {
+    padding-top: var(--gutter-lg);
+    padding-bottom: var(--gutter-lg);
+
+    /* keep line-length in check */
+    &.limited-width {
+      max-width: 600px; /* TODO: add to style.yml */
+    }
+
+    /* no padding on first and last sections */
+    &:first-of-type {
+      padding-top: 0;
+    }
+    &:last-of-type {
+      padding-bottom: 0;
+    }
+  }
+
+  /* space out typography */
+  & h1, & h2, & h3, & h4, & h5, & h6,
+  & p, & li, & a,
+  & .heading, & .link, & [class*=button] {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+}
+
+
+/* -----------------------------------
 utility classes
 ----------------------------------- */
 /* make buttons not look like buttons */
@@ -471,12 +520,25 @@ utility classes
   @add-mixin visually-hidden;
 }
 
-/* margin */
-.u-margin-top-off {
-  margin-top: 0 !important;
-}
-.u-margin-bottom-off {
-  margin-bottom: 0 !important;
+/* vertical margin */
+.u-margin-top-md { margin-top: var(--gutter-md) !important; }
+.u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
+.u-margin-top-off { margin-top: 0 !important; }
+
+.u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
+.u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
+.u-margin-bottom-off { margin-bottom: 0 !important; }
+
+/* horizontal margin */
+.u-margin-left-md { margin-left: var(--gutter-md) !important; }
+.u-margin-left-lg { margin-left: var(--gutter-lg) !important; }
+
+.u-margin-right-md { margin-right: var(--gutter-md) !important; }
+.u-margin-right-lg { margin-right: var(--gutter-lg) !important; }
+
+.u-margin-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* alignment */

@@ -4,6 +4,7 @@
   "About": "Sobre o CodeLife",
   "About ": "About ",
   "About Me": "Sobre mim",
+  "Account": "Account",
   "Activate": {
     "actions": {
       "ACTIVATE_SEND_FAILURE": "Error sending activation to {{email}}.",
@@ -32,6 +33,7 @@
   "Codeblock Name": "Nome do desafio",
   "Codeblock Title": "Título do desafio",
   "Codeblock's code will be shown after you complete the last level of this island": "O código será mostrado depois de completar o último nível desta ilha",
+  "Codeblocks": "Codeblocks",
   "Comment Posted!": "Comment Posted!",
   "Content Approved": "Conteúdo aprovado",
   "Content Banned": "Conteúdo banido",
@@ -61,6 +63,12 @@
   "Glossary Builder": "Glossary Builder",
   "Help": "Ajuda",
   "Hide Discussion": "Hide Discussion",
+  "Home": {
+    "GetStarted": "Home.GetStarted",
+    "Headline": "Home.Headline",
+    "IntroText": "Home.IntroText",
+    "MadeOnCodelife": "Home.MadeOnCodelife"
+  },
   "Hosted by": "Hospedado por",
   "How difficult was the material you learned in CodeLife?": "Considerando a escala abaixo, como você classifica a dificuldade do CodeLife?",
   "How likely are you to revisit the site?": "Você pretende voltar a usar o CodeLife? ",
@@ -75,6 +83,7 @@
   "Last 3 Days": "Last 3 Days",
   "Last 7 Days": "Last 7 Days",
   "Last Day": "Last Day",
+  "Leaderboard": "Leaderboard",
   "Learn More": "Saiba Mais",
   "LearnMore": {
     "intro": "Existem muitas fontes que você pode acessar para aprender mais programação online. Aqui estão algumas!"
@@ -85,6 +94,16 @@
   "Loading": "Carregando",
   "Loading codeblocks": "Carregando desafios",
   "Loading projects": "Carregando projetos",
+  "Log out": "Log out",
+  "LogIn": {
+    "Email": "LogIn.Email",
+    "Log_in": "LogIn.Log_in",
+    "NoAccount": "LogIn.NoAccount",
+    "StayLoggedIn": "LogIn.StayLoggedIn",
+    "WithFacebook": "LogIn.WithFacebook",
+    "WithInstagram": "LogIn.WithInstagram",
+    "WithTwitter": "LogIn.WithTwitter"
+  },
   "Login": {
     "CallToAction": "Já tem uma conta? Clique aqui para entrar!",
     "E-mail": "Email",
@@ -102,6 +121,8 @@
   "Modified on": "Modificado em",
   "Monthly Flag Limit Reached": "Limite mensal atingido",
   "My Project": "Meu Projeto",
+  "My profile": "My profile",
+  "My projects": "My projects",
   "Name": "Nome",
   "Next": "Próximo",
   "Next Level": "Próxima fase",
@@ -114,7 +135,9 @@
   "Not sure": "Não sei",
   "Not very motivated": "Não me motivaria",
   "Official launch in April 2018": "Official launch in April 2018",
+  "Or": "Or",
   "Other Students' CodeBlocks": "CodeBlocks outros alunos",
+  "Partners": "Partners",
   "Platform currently in development": "Platform currently in development",
   "Please be as detailed as possible with your feedback": "Por favor, seja detalhado com sua resposta",
   "Please select a reason below": "Por favor, escolha um motivo abaixo",
@@ -157,10 +180,15 @@
   "SignUp": {
     "CallToAction": "Ainda não tem uma conta? Clique aqui para se cadastrar!",
     "Confirm Password": "Confirme a senha",
+    "Create account": "",
     "E-mail": "Email",
+    "Email": "",
     "Facebook": "Facebook",
+    "ForgotPassword": "",
+    "GotAccount": "",
     "Instagram": "Instagram",
     "Password": "Senha",
+    "PasswordAgain": "",
     "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a> and <a href='{{privacy}}'>Privacy Policy</a>",
     "PrivacyText": "Ao clicar nessa caixa, você concorda com a nossa <a href='{{privacy}}'>Política de Privacidade</a>",
     "ResetPw": "Esqueceu sua senha?",
@@ -168,6 +196,9 @@
     "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a>",
     "Twitter": "Twitter",
     "Username": "Nome de usuário",
+    "WithFacebook": "",
+    "WithInstagram": "",
+    "WithTwitter": "",
     "error": {
       "Exists": "Email ou nome de usuário já existente",
       "IncompleteFields": "Por favor preencha todos os campos",
@@ -176,6 +207,7 @@
     },
     "success": "Conta criada com sucesso"
   },
+  "Snippets": "Snippets",
   "Some Text": "Algum texto",
   "Somewhat difficult": "Um pouco difícil",
   "Somewhat easy": "Um pouco fácil",

@@ -18,12 +18,20 @@ function flattenProject(user, p) {
 const pInclude = [
   {association: "userprofile", attributes: ["bio", "sharing"]}, 
   {association: "user", attributes: ["username"]}, 
-  {association: "reportlist"}
+  {association: "reportlist"},
+  {association: "collaborators", attributes: ["uid", "sid"], include: [{association: "user", attributes: ["username", "email"]}]}
 ];
 
 module.exports = function(app) {
 
   const {db} = app.settings;
+
+  // Used by Projects to get a list of users to collaborate with
+  app.get("/api/projects/users", isAuthenticated, (req, res) => {
+    db.userprofiles.findAll({
+      include: [{association: "user"}]
+    }).then(u => res.json(u).end());
+  });
 
   // Used by Projects to get a list of projects by the logged-in user
   app.get("/api/projects/mine", isAuthenticated, (req, res) => {
@@ -36,6 +44,24 @@ module.exports = function(app) {
       .then(pRows => 
         res.json(pRows
           .map(p => flattenProject(req.user, p.toJSON()))
+          .filter(p => !p.hidden)
+          .sort((a, b) => a.name < b.name ? -1 : 1))
+          .end()
+      );
+  });
+
+  app.get("/api/projects/collabs", isAuthenticated, (req, res) => {
+    db.projects_userprofiles.findAll({
+      where: {
+        uid: req.user.id
+      },
+      include: [
+        {association: "collabproj", include: pInclude}
+      ]
+    })
+      .then(pRows => 
+        res.json(pRows
+          .map(p => flattenProject(req.user, p.collabproj[0].toJSON()))
           .filter(p => !p.hidden)
           .sort((a, b) => a.name < b.name ? -1 : 1))
           .end()
@@ -58,7 +84,14 @@ module.exports = function(app) {
 
   // Used by Studio to open a project by ID
   app.get("/api/projects/byid", isAuthenticated, (req, res) => {
+    
+    /*
+    TODO: work constraint back in so that users can only read their own projects OR THEIR COLLABS
     db.projects.findAll({where: {id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
+    */
+
+    db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
+
   });
 
   // Used by UserProjects to get a project list for their profile
@@ -94,7 +127,7 @@ module.exports = function(app) {
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
-    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {uid: req.user.id, id: req.body.id}})
+    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}})
       .then(u => res.json(u).end());
   });
 

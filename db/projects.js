@@ -23,6 +23,7 @@ module.exports = function(sequelize, db) {
     p.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
     p.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
     p.hasMany(models.reports, {foreignKey: "report_id", sourceKey: "id", as: "reportlist"});
+    p.belongsToMany(models.userprofiles, {through: "projects_userprofiles", foreignKey: "pid", otherKey: "uid", as: "collaborators"});
   };
 
   return p;  

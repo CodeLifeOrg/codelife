@@ -55,6 +55,7 @@ class ProjectCard extends Component {
           title={ name }
           lazy={false}
           inline={false}
+          className="is-fullscreen"
         >
           <div className="pt-dialog-body">
             <div className="render">

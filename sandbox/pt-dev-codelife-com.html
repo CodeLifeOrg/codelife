@@ -1,0 +1,71 @@
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100vh;
+      padding: 0;
+      width: 100%;
+    }
+    iframe {
+      border: 0;
+      height: 100vh;
+      overflow: auto; 
+      width: 100%;
+    }
+  </style>
+  <script src="./scripts/loop-protect.js"></script>
+  <script>
+    var host = "https://pt.dev.codelife.com";
+
+    loopProtect.alias = 'protect';
+
+    window.loopProtect = loopProtect;
+
+    var source = null;
+    
+    loopProtect.hit = function (line) {
+      if (source) source.postMessage(["catch", "Potential Infinite Loop found on line " + line], host);
+    }
+
+    window.addEventListener("message", receiveMessage, false);
+
+    window.myPost = function() {
+      const payload = [];
+      for (const a of arguments) {
+        a && a.message ? payload.push(a.message) : payload.push(a);
+      }
+      source.postMessage(payload, host);
+    }
+
+    function receiveMessage(event) {
+      if (event.origin !== host) return;
+
+      source = event.source;
+
+      if (event.data === "wakeup") {
+        source.postMessage("awake", host); 
+      } 
+      else {
+        var win = document.getElementById('if').contentWindow;
+        var doc = win.document;
+        
+        win.protect = loopProtect;
+
+        doc.open();
+        doc.write(event.data);
+
+        doc.close();
+      }
+      
+    }
+  </script>
+
+</head>
+<body>
+
+<iframe frameBorder="0" className="if" id="if" />
+
+</body>
+
+</html>

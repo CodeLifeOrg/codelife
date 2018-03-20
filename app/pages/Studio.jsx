@@ -72,7 +72,7 @@ class Studio extends Component {
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-        toast.show({message: t("Save your changes before opening a new webpage."), timeout: 1500, intent: Intent.WARNING});
+        toast.show({message: t("saveWarning"), timeout: 1500, intent: Intent.WARNING});
         return false;
       }
       else {

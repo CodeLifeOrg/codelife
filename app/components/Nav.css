@@ -23,7 +23,9 @@
   & .logo {
     width: 80px;
     top: -1px; /* fudge into place */
-    transition: transform 0.2s ease-out;
+    transition:
+      transform 0.25s ease-out,
+      opacity 0.2s;
 
     /* hide offscreen (home page only) */
     &.is-hidden {
@@ -60,6 +62,11 @@
       @add-mixin nav-link;
       /* sizing */
       padding: 0.25em var(--gutter-sm);
+
+      /* interactions */
+      &:hover, &:focus {
+        color: var(--black);
+      }
 
       /* remove right padding from map link, bring in browser toggle */
       &.map-link {
@@ -100,6 +107,11 @@
   & .browser-toggle {
     @add-mixin nav-link;
     padding: 0.25em;
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--black);
+    }
   }
 }
 

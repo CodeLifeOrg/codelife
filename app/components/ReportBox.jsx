@@ -119,7 +119,7 @@ class ReportBox extends Component {
             }
           </div>
           <RadioGroup
-            label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
+            label={previousReport ? t("reportReceive") : t("selectReason")}
             name="group"
             disabled={disabled}
             onChange={this.handleChangeReason.bind(this)}

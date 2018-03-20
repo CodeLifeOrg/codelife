@@ -5,7 +5,7 @@ import {translate} from "react-i18next";
 import Loading from "components/Loading";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
-import {Button, Toaster, Intent, Position} from "@blueprintjs/core";
+import {Toaster, Intent, Position} from "@blueprintjs/core";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 import styleyml from "style.yml";
 
@@ -23,7 +23,7 @@ class IslandEditor extends Component {
 
   componentDidMount() {
     const {data} = this.props;
-    const themes = styleyml.islands;
+    const themes = styleyml.islands.array;
     this.setState({data, themes});   
   }
 
@@ -65,14 +65,15 @@ class IslandEditor extends Component {
 
     if (!data || !themes) return <Loading />;
 
-    const themeItems = [];
-    for (const k in themes) {
-      if (themes.hasOwnProperty(k)) themeItems.push(<option key={k} value={k}>{k}</option>);
-    }
-    
+    const themeItems = themes.map(t => <option key={`island-${t}`} value={`island-${t}`}>{`island-${t}`}</option>);
+
+    const dark = `${data.theme.split("-")[1]}-island-dark`;
+    const medium = `${data.theme.split("-")[1]}-island-medium`;
+    const light = `${data.theme.split("-")[1]}-island-light`;
+
     return (
       <div id="island-editor">
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <button style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</button>
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
@@ -81,8 +82,9 @@ class IslandEditor extends Component {
         <label className="pt-label">
           <span>
             Theme:&nbsp;&nbsp;
-            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].dark} : null } />
-            <span className="island-swatch" style={themes[data.theme] ? {backgroundColor: themes[data.theme].light} : null } />
+            <span className="island-swatch" style={{backgroundColor: styleyml[dark]}} />
+            <span className="island-swatch" style={{backgroundColor: styleyml[medium]}} />
+            <span className="island-swatch" style={{backgroundColor: styleyml[light]}} />
           </span>
           <div className="pt-select" style={{width: "180px"}}>
             <select value={data.theme} onChange={this.changeField.bind(this, "theme")} >
@@ -168,7 +170,7 @@ class IslandEditor extends Component {
             <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_victory")} type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.pt_victory} />
           </label> 
         </div>
-        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <button onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</button>
       </div>
     );
   }

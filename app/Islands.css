@@ -1,774 +1,136 @@
-.island-jungle {
-  &#footer {
-    background-image: url("/islands/island-jungle-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-jungle.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-jungle, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-jungle, dark);
-  }
-  &#island #path:before {
-    background-color: map(islands, island-jungle, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-jungle, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-jungle, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-jungle, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-jungle, dark);
-    color: map(islands, island-jungle, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-jungle, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-jungle, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-jungle, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-jungle, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-jungle, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-jungle, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-jungle, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-jungle, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-jungle, dark);
-  }
-}
-
-.island-themepark {
-  &#footer {
-    background-image: url("/islands/island-themepark-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-themepark.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-themepark, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-themepark, dark);
-  }
-  &#island #path {
-    top: 325px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-themepark, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-themepark, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-themepark, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-themepark, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-themepark, dark);
-    color: map(islands, island-themepark, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-themepark, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-themepark, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-themepark, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-themepark, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-themepark, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-themepark, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-themepark, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-themepark, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-themepark, dark);
+/* ISLAND THEMING
+NOTE: To add a new theme, add the corresponding variables in style.yml,
+then add the theme name to the @each loop below */
+@each $theme in
+  jungle,
+  themepark,
+  blizzard,
+  desert,
+  farm,
+  industry,
+  city,
+  clock,
+  trash,
+  space,
+  dark,
+  mountain,
+  beach {
+  .island-$(theme) {
+    /* set background image paths */
+    & .island-image,
+    & > .island-link-image {
+      background-image: url("/islands/island-$(theme).png");
+    }
+    & > .island-link-image-small {
+      background-image: url("/islands/island-$(theme)-small.png");
+    }
+    &.footer:before {
+      background-image: url("/islands/island-$(theme)-ground.png");
+    }
+    /* set background colors */
+    /* TODO: clean up / refactor */
+    & .island-title,
+    & .island-path:before,
+    & .island-path .stop:not(.is-next):not(.is-done),
+    & .island-path .code-block:not(.is-next) .side,
+    &.codeBlockCard,
+    &.pt-dialog .pt-dialog-header,
+    & .pt-dialog .pt-dialog-header,
+    &.island-link-label,
+    &.pt-tooltip > .pt-popover-content,
+    & .island-path .code-block .side {
+      background-color: var(--$(theme)-island-dark);
+    }
+    & .island-path .stop.is-done,
+    & .island-path .code-block.is-done .side {
+      background-color: var(--$(theme)-island-light);
+    }
+    /* set color */
+    & .island-path .code-block.is-done .side {
+      color: var(--$(theme)-island-dark);
+    }
+    &.slide-inner a:not(.pt-button) {
+      color: var(--$(theme)-island-medium);
+      /* interactions */
+      &:hover, &:focus {
+        color: var(--$(theme)-island-dark);
+      }
+    }
+    /* set border colors */
+    & .island-path .stop,
+    & .island-icon,
+    &.pt-dialog,
+    & .pt-dialog,
+    & .island-path .code-block .side {
+      border-color: var(--$(theme)-island-dark);
+    }
+    /* set background color and border color */
+    &.pt-button.pt-intent-primary,
+    & .pt-button.pt-intent-primary {
+      background-color: var(--$(theme)-island-medium);
+      border-color: var(--$(theme)-island-medium);
+      /* interactions */
+      &:hover, &:focus {
+        background-color: var(--$(theme)-island-dark);
+        border-color: var(--$(theme)-island-dark);
+        opacity: 1;
+      }
+    }
+    /* set svg fill */
+    &.pt-tooltip .pt-popover-arrow-fill {
+      fill: var(--$(theme)-island-dark);
+    }
   }
 }
 
-.island-blizzard {
-  &#footer {
-    background-image: url("/islands/island-blizzard-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-blizzard.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-blizzard, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  &#island #path {
-    top: 345px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-blizzard, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-blizzard, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-blizzard, dark);
-    color: map(islands, island-blizzard, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-blizzard, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-blizzard, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-blizzard, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-blizzard, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-blizzard, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-blizzard, dark);
-  }
-}
 
-.island-desert {
-  &#footer {
-    background-image: url("/islands/island-desert-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-desert.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-desert, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-desert, dark);
-  }
-  &#island #path:before {
-    background-color: map(islands, island-desert, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-desert, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-desert, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-desert, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-desert, dark);
-    color: map(islands, island-desert, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-desert, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-desert, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-desert, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-desert, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-desert, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-desert, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-desert, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-desert, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-desert, dark);
-  }
-}
+/* fudge path placement for individual islands */
 
-.island-industry {
-  &#footer {
-    background-image: url("/islands/island-industry-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-industry.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-industry, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-industry, dark);
-  }
-  &#island #path {
-    top: 340px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-industry, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-industry, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-industry, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-industry, dark);
-    color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-industry, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-industry, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-industry, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-industry, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-industry, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-industry, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-industry, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-industry, dark);
-  }
+/* 🌳🌳🌳 */
+.island-jungle .island-path {
+  margin-top: 40px;
 }
-
-.island-farm {
-  &#footer {
-    background-image: url("/islands/island-farm-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-farm.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-farm, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-farm, dark);
-  }
-  &#island #path {
-    top: 360px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-farm, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-farm, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-farm, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-farm, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-farm, dark);
-    color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-farm, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-farm, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-farm, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-farm, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-farm, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-farm, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-farm, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-farm, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-farm, dark);
-  }
+/* ❄️❄️❄️ */
+.island-blizzard .island-path {
+  margin-top: 65px;
 }
-
-.island-city {
-  &#footer {
-    background-image: url("/islands/island-city-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-city.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-city, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-city, dark);
-  }
-  &#island #path {
-    top: 350px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-city, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-city, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-city, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-city, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-city, dark);
-    color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-city, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-city, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-city, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-city, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-city, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-city, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-city, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-city, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-city, dark);
-  }
+/* 🐪🐪🐪 */
+.island-desert .island-path {
+  margin-top: 20px;
 }
-
-.island-dark {
-  &#footer {
-    background-image: url("/islands/island-dark-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-dark.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-dark, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-dark, dark);
-  }
-  &#island #path:before {
-    background-color: map(islands, island-dark, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-dark, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-dark, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-dark, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-dark, dark);
-    color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-dark, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-dark, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-dark, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-dark, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-dark, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-dark, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-dark, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-dark, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-dark, dark);
-  }
+/* 🚜🐮🍅 */
+.island-farm .island-path {
+  margin-top: 10px;
 }
-
-.island-mountain {
-  &#footer {
-    background-image: url("/islands/island-mountain-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-mountain.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-mountain, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-mountain, dark);
-  }
-  &#island #path:before {
-    background-color: map(islands, island-mountain, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-mountain, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-mountain, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-mountain, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-mountain, dark);
-    color: map(islands, island-industry, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-mountain, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-mountain, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-mountain, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-mountain, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-mountain, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-mountain, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-mountain, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-mountain, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-mountain, dark);
-  }
+/* 🏭 🏗 */
+.island-industry .island-path {
+  margin-top: 10px;
 }
-
-.island-beach {
-  &#footer {
-    background-image: url("/islands/island-beach-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-beach.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-beach, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-beach, dark);
-  }
-  &#island #path:before {
-    background-color: map(islands, island-beach, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-beach, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-beach, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-beach, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-beach, dark);
-    color: map(islands, island-beach, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-beach, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-beach, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-beach, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-beach, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-beach, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-beach, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-beach, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-beach, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-beach, dark);
-  }
+/* 🏙🏙🏙 */
+.island-city .island-path {
+  margin-top: 25px;
 }
-
-.island-clock {
-  &#footer {
-    background-image: url("/islands/island-clock-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-clock.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-clock, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-clock, dark);
-  }
-  &#island #path:before {
-    background-color: map(islands, island-clock, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-clock, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-clock, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-clock, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-clock, dark);
-    color: map(islands, island-clock, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-clock, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-clock, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-clock, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-clock, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-clock, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-clock, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-clock, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-clock, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-clock, dark);
-  }
+/* ⚙️🕐⚙️ */
+.island-clock .island-path {
+  margin-top: 40px;
 }
-
-.island-space {
-  &#footer {
-    background-image: url("/islands/island-space-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-space.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-space, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-space, dark);
-  }
-  &#island #path {
-    top: 360px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-space, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-space, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-space, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-space, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-space, dark);
-    color: map(islands, island-space, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-space, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-space, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-space, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-space, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-space, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-space, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-space, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-space, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-space, dark);
-  }
+/* 🗑💩🗑 */
+.island-trash .island-path {
+  margin-top: -20px;
 }
-
-.island-trash {
-  &#footer {
-    background-image: url("/islands/island-trash-ground.png");
-  }
-  &#island .image {
-    background-image: url("/islands/island-trash.png");
-  }
-  &#island .title, & .description, & .toggle-show {
-    text-shadow: 0 2px 2px map(islands, island-trash, dark);
-  }
-  &#island #title {
-    background-color: map(islands, island-trash, dark);
-  }
-  &#island #path {
-    top: 300px;
-  }
-  &#island #path:before {
-    background-color: map(islands, island-trash, dark);
-  }
-  & #path .stop, & .island-icon {
-    border-color: map(islands, island-trash, dark);
-  }
-  &#island #path .stop.done {
-    background-color: map(islands, island-trash, light);
-  }
-  &#island #path .stop:not(.next):not(.done) {
-    background-color: map(islands, island-trash, dark);
-  }
-  &#island #path .code-block .side {
-    border-color: map(islands, island-trash, dark);
-    color: map(islands, island-trash, dark);
-  }
-  &#island #path .code-block:not(.next) .side {
-    background-color: map(islands, island-trash, dark);
-  }
-  &#island #path .code-block.done .side {
-    background-color: map(islands, island-trash, light);
-  }
-  &.codeBlockCard {
-    background-color: map(islands, island-trash, dark);
-  }
-  &.pt-dialog, & .pt-dialog {
-    border-color: map(islands, island-trash, dark);
-  }
-  &.pt-dialog .pt-dialog-header, & .pt-dialog .pt-dialog-header {
-    background-color: map(islands, island-trash, dark);
-  }
-  &.pt-button.pt-intent-primary, & .pt-button.pt-intent-primary {
-    background-color: map(islands, island-trash, dark);
-  }
-  &#slide a:not(.pt-button) {
-    color: map(islands, island-trash, dark);
-  }
-  &.pt-tooltip .pt-popover-arrow-fill {
-    fill: map(islands, island-trash, dark);
-  }
-  &.pt-tooltip .pt-popover-content {
-    background-color: map(islands, island-trash, dark);
-  }
+/* 👾🚀👾 */
+.island-space  .island-path {
+  margin-top: 30px;
+}
+/* ⬛️⬛️⬛️ */
+.island-dark .island-path {
+  margin-top: 30px;
+}
+/* 🏔🏔🏔 */
+.island-mountain .island-path {
+  margin-top: -10px;
+}
+/* 🏖🏖🏖 */
+.island-beach .island-path {
+  margin-top: 35px;
 }

@@ -62,7 +62,7 @@ class SelectSchool extends Component {
       else {
         this.setState({
           loading: false,
-          error: t("Schools list for this location is unavailable.")
+          error: t("schoolListUnavailable")
         });
       }
     });
@@ -108,7 +108,7 @@ class SelectSchool extends Component {
             inputProps={{value: schoolQuery, onChange: filterSchools}}
             itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
             onItemSelect={setSelectedSchool}
-            noResults={<MenuItem disabled text={t("No results.")} />}
+            noResults={<MenuItem disabled text={t("noResults")} />}
           >
             <Button text={mySchool ? mySchool.name : ""} iconName="book" rightIconName="caret-down" />
           </Select> : null}

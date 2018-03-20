@@ -2,12 +2,13 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import {AnchorLink} from "datawheel-canon";
 import Browser from "components/Browser";
 import Search from "components/Search";
+import AuthForm from "components/AuthForm";
+
 import "./Nav.css";
 
-import {Popover, PopoverInteractionKind, Position} from "@blueprintjs/core";
+import {Popover, PopoverInteractionKind, Position, Dialog} from "@blueprintjs/core";
 
 // Nav Component
 // Contains a list of links in Footer format, inserted at the bottom of each page
@@ -17,7 +18,8 @@ class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showBrowser: false
+      showBrowser: false,
+      isLoginOpen: false
     };
   }
 
@@ -36,13 +38,18 @@ class Nav extends Component {
     this.setState({showBrowser: false});
   }
 
+  toggleLoginOpen() {
+    this.setState({isLoginOpen: !this.state.isLoginOpen});
+  }
+
   render() {
 
     const {auth, logo, t, linkObj} = this.props;
-    const {showBrowser} = this.state;
+    const {isLoginOpen} = this.state;
 
     return (
       <div className="nav" id="nav">
+
         <Link className={logo ? "logo" : "logo is-hidden"} to={"/"}>
           <div className="tag">Beta</div>
           <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
@@ -53,22 +60,19 @@ class Nav extends Component {
               <span className="link-icon pt-icon-standard pt-icon-map" />
               <span className="link-text">{ t("Map") }</span>
             </Link>
-            { auth.user
-              ? <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                className="browser"
-                popoverClassName="pt-popover-content-sizing browser-popover"
-                position={Position.BOTTOM}
-              >
-                <button className="browser-toggle u-unbutton" onClick={this.toggleBrowser.bind(this)} >
-                  <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
-                </button>
-                <div className="browser-list" id="browser">
-                  <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
-                </div>
-              </Popover>
-              : null
-            }
+            <Popover
+              interactionKind={PopoverInteractionKind.CLICK}
+              className="browser"
+              popoverClassName="pt-popover-content-sizing browser-popover"
+              position={Position.BOTTOM}
+            >
+              <button className="browser-toggle u-unbutton" onClick={this.toggleBrowser.bind(this)} >
+                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
+              </button>
+              <div className="browser-list" id="browser">
+                <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
+              </div>
+            </Popover>
             <Link className="link" to={`/projects/${auth.user.username}`}>
               <span className="link-icon pt-icon-standard pt-icon-book" />
               <span className="link-text">{ t("Projects") }</span>
@@ -97,20 +101,24 @@ class Nav extends Component {
             <Search />
           </div>
           : <div className="links">
-            { logo
-              ? <Link className="link" to="/#login">
-                <span className="link-icon pt-icon-standard pt-icon-user" />
-                <span className="link-text">{ t("Login.Login") }/{ t("SignUp.Sign Up") }</span>
-              </Link>
-              : <AnchorLink className="link" to="login">
-                <span className="link-icon pt-icon-standard pt-icon-user" />
-                <span className="link-text">{ t("Login.Login") }/{ t("SignUp.Sign Up") }</span>
-              </AnchorLink> }
+            <button className="link u-unbutton" onClick={this.toggleLoginOpen.bind(this)}>
+              <span className="link-icon pt-icon-standard pt-icon-log-in" />
+              <span className="link-text">{ t("LogIn.Log_in") }</span>
+            </button>
             <Link className="link" to="/about">
               <span className="link-icon pt-icon-standard pt-icon-help" />
               <span className="link-text">{ t("About") }</span>
             </Link>
           </div> }
+        <Dialog
+          className="form-container"
+          iconName="inbox"
+          isOpen={isLoginOpen}
+          onClose={this.toggleLoginOpen.bind(this)}
+          title="Dialog header"
+        >
+          <AuthForm initialMode="login"/>
+        </Dialog>
       </div>
     );
   }

@@ -164,10 +164,10 @@ class Slide extends Component {
 
   toggleSkip() {
     if (!this.state.skipped) {
-      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen, showDiscussion: true, skipped: true});  
+      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen, showDiscussion: true, skipped: true});
     }
     else {
-      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen}); 
+      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen});
     }
   }
 
@@ -223,7 +223,7 @@ class Slide extends Component {
           >
             <div className="pt-dialog-body">
               {
-                t(`Viewing user discussion can include some very helpful insights, but will mark this level 
+                t(`Viewing user discussion can include some very helpful insights, but will mark this level
                 as incomplete. Don't forget, you can always come back later and complete the island without
                 any help to get full credit!`)
               }
@@ -238,8 +238,12 @@ class Slide extends Component {
           <div className="slide-header" id="slide-head">
             { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
 
-            <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
-              <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
+            <Tooltip
+              className="return-link"
+              tooltipClassName={ currentIsland.theme }
+              content={ `${ t("Return to") } ${currentIsland.name}` }
+              position={Position.TOP_RIGHT}>
+              <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-layout-linear"></span></Link>
             </Tooltip>
           </div>
 
@@ -258,10 +262,7 @@ class Slide extends Component {
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
                 : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
               : nextLevel
-                ? <div>
-                  <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
-                  <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
-                </div>
+                ? <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
                 : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
             }
           </div>

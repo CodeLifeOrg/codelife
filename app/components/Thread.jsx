@@ -88,7 +88,7 @@ class Thread extends Component {
   render() {
 
     const {t: translate} = this.props;
-    const {thread} = this.state;
+    const {thread, commentTitle, commentContent} = this.state;
 
     if (!thread) return <Loading />;    
 
@@ -152,7 +152,13 @@ class Thread extends Component {
                   <div className="new-comment-title">{translate("Post New Comment")}</div>
                   <input className="pt-input" value={this.state.commentTitle} onChange={e => this.setState({commentTitle: e.target.value})} placeholder={translate("Title")} />
                   <QuillWrapper hideGlossary={true} value={this.state.commentContent} onChange={tx => this.setState({commentContent: tx})} />
-                  <Button className="pt-intent-success post-button pt-fill" onClick={this.newComment.bind(this)}>{translate("Post Comment")}</Button>
+                  <Button 
+                    className="pt-intent-success post-button pt-fill" 
+                    onClick={this.newComment.bind(this)}
+                    disabled={!commentTitle || !commentContent || commentContent === "<p><br></p>"}
+                  >
+                    {translate("Post Comment")}
+                  </Button>
                 </div>
                 : null
             }

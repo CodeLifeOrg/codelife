@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
-import {Login, SignUp} from "datawheel-canon";
 import {Intent, Spinner} from "@blueprintjs/core";
 import axios from "axios";
 import CodeBlockCard from "components/CodeBlockCard";
 import ProjectCard from "components/ProjectCard";
+import AuthForm from "components/AuthForm";
+import {Dialog} from "@blueprintjs/core";
 import "./Home.css";
 
 class Home extends Component {
@@ -16,14 +17,15 @@ class Home extends Component {
     this.state = {
       codeBlocks: false,
       current: false,
-      formMode: false,
       progress: [],
-      projects: false
+      projects: false,
+      isSignupOpen: false,
+      formMode: "login"
     };
   }
 
-  toggleSignup(formMode) {
-    this.setState({formMode});
+  toggleSignupOpen(modeArg) {
+    this.setState({formMode: modeArg, isSignupOpen: !this.state.isSignupOpen});
   }
 
   componentDidMount() {
@@ -46,8 +48,8 @@ class Home extends Component {
 
   render() {
 
-    const {locale, t, user, islands} = this.props;
-    const {codeBlocks, current, formMode, progress, projects} = this.state;
+    const {locale, t, islands} = this.props;
+    const {codeBlocks, current, isSignupOpen, progress, projects} = this.state;
 
     const videos = {
       en: "3s2vPV-tRhI",
@@ -56,8 +58,8 @@ class Home extends Component {
 
     return (
       <div id="Home">
-        <div id="island" className={ current ? current.theme : "island-jungle" }>
-          <div className="image">
+        <div id="island" className={ `island ${current ? current.theme : "island-jungle"}` }>
+          <div className="island-image image">
             <div className="logo">
               <div className="tag">Beta</div>
               <img className="text" src="/logo/logo-shadow.png" />
@@ -68,25 +70,18 @@ class Home extends Component {
             <iframe className="video" src={ `https://www.youtube-nocookie.com/embed/${ videos[locale] || videos.en }?rel=0` } frameBorder="0" allowFullScreen></iframe>
           </div>
         </div>
-        <a id="login"></a>
-        { user ? null
-          : formMode === "signup"
-            ? <div className="form">
-              <a className="callToAction" onClick={ this.toggleSignup.bind(this, "login") }>{ t("Login.CallToAction") }</a>
-              <SignUp />
-            </div>
-            : formMode === "login"
-              ? <div className="form">
-                <a className="callToAction" onClick={ this.toggleSignup.bind(this, "signup") }>{ t("SignUp.CallToAction") }</a>
-                <Login />
-                <a className="callToAction" href="/reset">{ t("SignUp.ResetPw") }</a>
-              </div>
-              : <div className="form buttons">
-                <h2>{ t("home.prompt") }</h2>
-                <button className="pt-button pt-large" onClick={ this.toggleSignup.bind(this, "signup") }>{ t("SignUp.Sign Up") }</button>
-                <button className="pt-button pt-large pt-intent-primary" onClick={ this.toggleSignup.bind(this, "login") }>{ t("Login.Login") }</button>
-              </div>
-        }
+        <h3>sign up</h3>
+        <button className="pt-button pt-button-standard" onClick={this.toggleSignupOpen.bind(this, "signup")}>get started</button>
+        <button className="pt-button pt-button-standard" onClick={this.toggleSignupOpen.bind(this, "login")}>login</button>
+        <Dialog
+          className="form-container"
+          iconName="inbox"
+          isOpen={isSignupOpen}
+          onClose={this.toggleSignupOpen.bind(this)}
+          title="Dialog header"
+        >
+          <AuthForm initialMode={this.state.formMode}/>
+        </Dialog>
         <h2>{ t("Featured Projects") }</h2>
         <div className="projects">
           { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
@@ -111,7 +106,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  locale: state.i18n.locale, 
+  locale: state.i18n.locale,
   user: state.auth.user,
   auth: state.auth,
   islands: state.islands

@@ -24,13 +24,36 @@ body * {
 /* fonts */
 body {
   font-family: var(--body-font);
-  letter-spacing: 0.25px;
   overflow-x: hidden;
+  font-size: 100%; /* override blueprint */
+  color: var(--dark-3);
 }
 
 h1, h2, h3, h4, h5, h6,
 .heading {
   font-family: var(--heading-font);
+  text-transform: uppercase;
+}
+
+/* default font sizing and line-height */
+.font-xxl { @add-mixin font-xxl; }
+h1, .font-xl  { @add-mixin font-xl;  }
+h2, .font-lg  { @add-mixin font-lg;  }
+h3, .font-md  { @add-mixin font-md;  }
+h4, .font-sm  { @add-mixin font-sm;  }
+h5, .font-xs  { @add-mixin font-xs;  }
+
+/* default link style */
+p > a,
+.link {
+  color: var(--sky-dark);
+  cursor: pointer;
+  font-weight: 700;
+  transform: color 0.2s;
+
+  &:hover, &:focus {
+    color: var(--sky);
+  }
 }
 
 #app {
@@ -39,7 +62,6 @@ h1, h2, h3, h4, h5, h6,
   width: 100%;
   & .container {
     min-height: 100vh;
-    padding-bottom: 100px;
   }
 }
 
@@ -61,6 +83,11 @@ h1 {
   outline: 0;
 }
 
+
+/* -----------------------------------
+blueprint overrides
+----------------------------------- */
+
 /*.pt-overlay-backdrop {
   background-color: rgba(245, 245, 255, 0.7);
 }*/
@@ -68,7 +95,6 @@ h1 {
 .pt-input {
   border-radius: var(--radius-sm);
   font-family: var(--heading-font);
-  letter-spacing: 0.25px;
 }
 
 .pt-file-upload-input {
@@ -81,24 +107,36 @@ h1 {
 .pt-select select {
   border-radius: var(--radius-sm);
   font-family: var(--heading-font);
-  letter-spacing: 0.25px;
 }
 
 .pt-button {
   padding-left: 1.5em;
   padding-right: 1.5em;
   border-radius: 2em;
-  font-family: var(--heading-font);
-  letter-spacing: 0.25px;
+  font-weight: 400;
   text-align: center; /* center align .pt-button text even when it's a div */
+
+  /* blueprint override — increase specificity */
+  &[class*="pt-button"] {
+    transition: background-color 0.15s ease-out;
+  }
 }
 
 .pt-button.pt-intent-primary {
   background: var(--sky-dark);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--sky-dark);
   color: var(--white);
-  &:hover {
-    background-color: var(--sky-dark);
+  border: 1px solid var(--sky-dark);
+  box-shadow: none !important; /* blueprint override */
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+  will-change: opacity; /* prevents some funkiness */
+
+  &:hover, &:focus {
+    opacity: 0.9; /* make the button seem to light up on hover */
+    background-color: var(--sky-dark); /* blueprint override */
   }
 }
 
@@ -127,7 +165,6 @@ h1 {
 
 .pt-dialog {
   background-color: var(--light-1);
-  border: 1px solid var(--sky-dark);
   border-radius: var(--radius-lg);
   position: fixed !important;
 
@@ -151,7 +188,6 @@ h1 {
     & h5, & button, & span {
       color: var(--white);
       font-weight: 400;
-      letter-spacing: 0.25px;
       text-transform: uppercase;
     }
   }
@@ -201,7 +237,7 @@ h1 {
   padding: 0; /* blueprint override */
   text-align: left;
   width: 250px;
-  &:hover {
+  &:hover, &:focus {
     color: var(--white);
     text-decoration: inherit;
   }
@@ -234,7 +270,6 @@ h1 {
       padding-right: var(--gutter-xxs);
       & .card-title {
         font-size: 16px;
-        letter-spacing: 0.25px;
         text-transform: uppercase;
         & .pt-icon-standard {
           margin-right: var(--gutter-xxs);
@@ -261,8 +296,190 @@ h1 {
   }
 }
 
-/* utility classes */
+/* switches */
+.pt-control-indicator {
+  background-color: var(--light-2) !important;
+}
+.pt-control.pt-switch input:checked ~ .pt-control-indicator,
+.pt-control.pt-switch .pt-control.pt-checkbox input:indeterminate ~ .pt-control-indicator,
+.pt-control.pt-checkbox .pt-control.pt-switch input:indeterminate ~ .pt-control-indicator {
+  background-color: var(--sky) !important;
+}
+
+
+/* -----------------------------------
+form fields
+----------------------------------- */
+
+/* container theming & padding */
+.form-container {
+  @add-mixin form-layout;
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  padding: var(--gutter-md);
+  box-shadow: 0 2px 0.75em rgba(8, 26, 24, 0.25);
+
+  @add-mixin min-sm {
+    padding: var(--gutter-lg);
+  }
+}
+
+/* NOTE: font size / placement of .field-icon and inputs depends on font-size inherited from .field-container */
+.field-container {
+
+  /* make label more clickable */
+  & > label {
+    display: inline-block;
+    width: 100%;
+    /* space out label without creating a dead spot */
+    margin-bottom: -0.5em;
+    padding-bottom: 0.8em;
+  }
+
+  /* NOTE: placement requires icons to follow input */
+  & > .field-icon {
+    position: absolute;
+    z-index: 1;
+    bottom: 0.75em;
+    left: 0.6em;
+    color: var(--gray);
+    /* transitions */
+    transition: color 0.2s;
+  }
+
+  /* width of inputs, textareas, and buttons dictated by container */
+  & > input:not([type=submit]):not([type=file]),
+  & > textarea,
+  & > button,
+  & > [class*=button] {
+    width: 100%;
+  }
+
+  /* style inputs & textareas */
+  & > input:not([type=submit]):not([type=file]),
+  & > textarea {
+    padding: 0.35em 0.75em 0.55em;
+    background-color: var(--light-1);
+    border: 1px solid var(--gray);
+    border-radius: var(--radius-sm);
+    /* transitions */
+    transition:
+      background-color 0.2s,
+      border 0.2s;
+
+    /* interactions */
+    &:hover {
+      background-color: var(--white);
+    }
+    &:focus {
+      background-color: var(--sky-light);
+      border-color: var(--sky-dark);
+
+      & + .field-icon {
+        color: var(--sky-dark);
+      }
+    }
+  }
+
+  /* make room in text input for icon, which must follow after input
+  in source order in order to style icon on :focus */
+  &.has-icon > input:not([type=submit]):not([type=file]) {
+    padding-left: 2.1em;
+  }
+
+  /* space out adjacent field containers */
+  & + .field-container {
+    margin-top: 0.5rem;
+  }
+
+  /* buttons */
+  & > button,
+  & > [class*=button] {
+    padding-top: 0.35em;
+    padding-bottom: 0.55em;
+    margin-top: 1.15em;
+
+    & > .pt-icon {
+      margin-right: 0.5em;
+    }
+  }
+
+  /* social buttons */
+  & > .social-button {
+    /* offset bigger svg size with less padding */
+    padding-top: 0.25em;
+    padding-bottom: 0.4em;
+
+    /* social theming */
+    &[href*=twitter] {
+      background-color: #00ACED;
+      border-color: #00ACED;
+    }
+    &[href*=facebook] {
+      background-color: #3B5998;
+      border-color: #3B5998;
+    }
+    &[href*=instagram] {
+      background-color: #E4405F;
+      border-color: #E4405F;
+    }
+
+    /* align buttons */
+    & > .social-svg,
+    & > .social-button-text {
+      vertical-align: middle;
+    }
+
+    /* set icon size and position */
+    & > .social-svg {
+      height: 1.75em;
+      top: 1px; /* fudge into place */
+
+      /* reset icon color */
+      & > path {
+        fill: var(--white);
+      }
+    }
+
+    & > .social-button-text {
+      margin-left: 0.2em;
+    }
+  }
+}
+
+/* switch from login to signup */
+.form-container .form-switcher {
+  margin-top: 2rem;
+
+  @add-mixin min-sm {
+    margin-bottom: 0; /* blueprint override */
+  }
+}
+
+
+/* -----------------------------------
+utility classes
+----------------------------------- */
+/* make buttons not look like buttons */
 .u-unbutton {
   border: 0;
   background: none;
+}
+
+/* screen reader text */
+.u-visually-hidden {
+  @add-mixin visually-hidden;
+}
+
+/* margin */
+.u-margin-top-off {
+  margin-top: 0 !important;
+}
+.u-margin-bottom-off {
+  margin-bottom: 0 !important;
+}
+
+/* alignment */
+.u-text-center {
+  text-align: center;
 }

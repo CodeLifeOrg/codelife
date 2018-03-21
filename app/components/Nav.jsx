@@ -50,10 +50,17 @@ class Nav extends Component {
     return (
       <div className="nav" id="nav">
 
-        <Link className={logo ? "logo" : "logo is-hidden"} to={"/"}>
-          <div className="tag">Beta</div>
-          <img className="text" src="/logo/logo-sm.png" alt="Codelife" />
-        </Link>
+        {/* logo */}
+        <div className="logo">
+          <Link className={logo ? "logo-link" : "logo-link is-huge"} to={"/"}>
+            <span className="logo-tag font-xs">Beta</span>
+            <img className="logo-text" src="/logo/logo-sm.png" alt="Codelife" />
+          </Link>
+        </div>
+
+        {/* site-wide search */}
+        { auth.user ? <Search scope="sitewide" /> : null }
+
         { auth.user
           ? <div className="links">
             <Link className="link map-link" to="/island">
@@ -98,7 +105,6 @@ class Nav extends Component {
                 </a>
               </div>
             </Popover>
-            <Search />
           </div>
           : <div className="links">
             <button className="link u-unbutton" onClick={this.toggleLoginOpen.bind(this)}>

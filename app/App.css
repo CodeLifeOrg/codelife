@@ -318,6 +318,19 @@ blueprint overrides
   background-color: var(--sky) !important;
 }
 
+/* close button */
+.pt-dialog-close-button,
+.pt-dialog .pt-dialog-header .pt-dialog-close-button {
+  @add-mixin font-lg;
+  color: var(--gray);
+  transition: 0.2s color;
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--sky-dark);
+  }
+}
+
 
 /* -----------------------------------
 form fields

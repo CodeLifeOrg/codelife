@@ -24,10 +24,10 @@ class Search extends Component {
 
   handleChange(e) {
     const query = e.target.value;
-    if (query.length > 2) { 
+    if (query.length > 2) {
       this.setState({query});
       this.search();
-    } 
+    }
     else {
       this.setState({query, showResults: true, results: {users: [], projects: []}});
     }
@@ -49,9 +49,9 @@ class Search extends Component {
       else {
         if (e.key === "ArrowDown" && selectedIndex < allResults.length) {
           this.setState({selectedIndex: selectedIndex + 1});
-        } 
+        }
         else if (e.key === "ArrowUp" && selectedIndex > 0) {
-          this.setState({selectedIndex: selectedIndex - 1}); 
+          this.setState({selectedIndex: selectedIndex - 1});
         }
         else if (e.key === "Enter") {
           const selectedItem = allResults[selectedIndex];
@@ -60,6 +60,9 @@ class Search extends Component {
           this.clearSearch();
         }
       }
+    }
+    else if (e.key === "Escape") {
+      this.clearSearch();
     }
   }
 
@@ -77,7 +80,9 @@ class Search extends Component {
 
   render() {
 
-    const {results, showResults, selectedIndex} = this.state;
+    const {t, scope} = this.props;
+    const {results, showResults, selectedIndex, query} = this.state;
+    const inputID = `${scope}-search-input`;
 
     const allResults = results.users.concat(results.projects).map(r => {
       r.selected = false;
@@ -87,36 +92,78 @@ class Search extends Component {
     const selectedItem = allResults && selectedIndex !== null ? allResults[selectedIndex] : null;
     if (selectedItem) selectedItem.selected = true;
 
-    const userList = results.users.map(r => 
-      <li key={r.id} className={`search-result-item user-result ${r.selected ? "search-selected" : ""}`}>
-        <Link to={`/profile/${r.username}`} onClick={this.clearSearch.bind(this)}>
-          <Icon iconName="user" /> {r.name ? `${r.username} (${r.name})` : r.username}
+    const userList = results.users.map(r =>
+      <li key={r.id} className="search-results-item user-result">
+        <Link className={`search-results-link ${r.selected ? "search-selected" : ""}`} to={`/profile/${r.username}`} onClick={this.clearSearch.bind(this)}>
+          <span className="search-results-text primary-search-results-text font-sm">{r.username}</span>
+          {r.name ? <span className="search-results-text secondary-search-results-text font-xs">{r.name}</span> : "" }
         </Link>
       </li>
     );
-    const projectList = results.projects.filter(r => r.user).map(r => 
-      <li key={r.id} className={`search-result-item project-result ${r.selected ? "search-selected" : ""}`}>
-        <Link to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>     
-          <Icon iconName="projects" /> {`${r.name} (${r.user.username})`}
-        </Link>
+    const projectList = results.projects.filter(r => r.user).map(r =>
+      <li key={r.id} className="search-results-item project-result">
+        <a className={`search-results-link ${r.selected ? "search-selected" : ""}`} href={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>
+          <span className="search-results-text primary-search-results-text font-sm">{r.name}</span>
+          <span className="search-results-text secondary-search-results-text font-xs">
+            {t("by")} {r.user.username}
+          </span>
+        </a>
       </li>
     );
 
     return (
-      <div id="site-search-box">
-        <input  
-          id="site-search"
+      <div className="search-container">
+
+        {/* icon as label */}
+        <label className="search-label" htmlFor={inputID}>
+          <span className="search-label-icon pt-icon pt-icon-search" />
+          <span className="u-visually-hidden">{t("Search.Site")}</span>
+        </label>
+
+        {/* text input */}
+        <input
+          id={inputID}
+          className="search-input font-sm"
           onChange={this.handleChange.bind(this)}
           onKeyDown={this.onKeyDown.bind(this)}
           // onBlur={() => this.setState({showResults: false})}
-          onFocus={() => this.setState({showResults: true})}
-          value={this.state.query}
-        />
-        <div id="search-result-container" className={showResults ? "" : "search-hidden"}>
-          <ul id="search-result-list">
-            {userList}
-            {projectList}
-          </ul>
+          value={query}
+          placeholder={t("Search.Site")} />
+
+        {/* text input */}
+        <div className={query.length > 0 ? "search-results-outer" : "search-results-outer is-hidden"}>
+
+          {/* hidden heading (for accessibility) */}
+          <h2 className="u-visually-hidden">{t("Search.Results")}</h2>
+
+          {/* Message: keep typing */}
+          <h3 className={query.length <= 2 ? "search-results-message font-lg u-margin-bottom-off u-text-center" : "search-results-message is-hidden"}>{t("Search.KeepTyping")}</h3>
+
+          {/* Message: no results */}
+          <h3 className={query.length > 2 && allResults.length === 0 ? "search-results-message font-lg u-margin-bottom-off u-text-center" : "search-results-message is-hidden"}>{t("Search.NoResults")}</h3>
+
+          {/* users */}
+          <div className={query.length > 2 && userList.length !== 0 ? "search-results-inner" : "search-results-inner is-hidden"}>
+            <h3 className="search-results-heading font-md">
+              <span className="search-results-heading-icon pt-icon pt-icon-people" />&nbsp;{t("Search.UsersHeading")}
+            </h3>
+            <ul className="search-results-list">
+              {userList}
+            </ul>
+          </div>
+
+          {/* projects */}
+          <div className={query.length > 2 && projectList.length !== 0 ? "search-results-inner" : "search-results-inner is-hidden"}>
+            <h3 className="search-results-heading font-md">
+              <span className="search-results-heading-icon pt-icon pt-icon-applications" />&nbsp;{t("Search.ProjectsHeading")}
+            </h3>
+            <ul className="search-results-list">
+              {projectList}
+            </ul>
+          </div>
+
+          {/* close button */}
+          <button className="search-reset-button pt-dialog-close-button pt-icon-small-cross" onClick={this.clearSearch.bind(this)} aria-label="Close" />
         </div>
       </div>
     );

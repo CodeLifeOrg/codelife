@@ -59,10 +59,29 @@
   height: 100%;
 }
 
+/* center elements the dumb but sometimes useful way */
+@define-mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@define-mixin absolute-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+@define-mixin absolute-horizontal-center {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 /* list reset */
 @define-mixin list-reset {
   list-style-type: none; /* remove bullets */
   padding-left: 0; /* thanks blueprint */
+  margin-bottom: 0; /* thanks blueprint */
 }
 
 /* button group; apply to pt-button, not parent */
@@ -155,17 +174,6 @@
     & > span,
     & > .pt-dialog-header-title {
       display: none;
-    }
-
-    /* close button */
-    & .pt-dialog-close-button {
-      @add-mixin font-lg;
-      color: var(--gray);
-      transition: 0.2s color;
-
-      &:hover, &:focus {
-        color: var(--dark-2);
-      }
     }
   }
 

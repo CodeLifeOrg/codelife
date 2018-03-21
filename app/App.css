@@ -49,7 +49,7 @@ p > a,
   color: var(--sky-dark);
   cursor: pointer;
   font-weight: 700;
-  transform: color 0.2s;
+  transition: color 0.2s;
 
   &:hover, &:focus {
     color: var(--sky);

@@ -18,13 +18,13 @@ class Home extends Component {
       current: false,
       progress: [],
       projects: false,
-      isSignupOpen: false,
+      isauthForm: false,
       formMode: "login"
     };
   }
 
-  toggleSignupOpen(modeArg) {
-    this.setState({formMode: modeArg, isSignupOpen: !this.state.isSignupOpen});
+  authForm(mode) {
+    this.setState({formMode: mode, isauthForm: !this.state.isauthForm});
   }
 
   componentDidMount() {
@@ -48,7 +48,7 @@ class Home extends Component {
   render() {
 
     const {locale, t, islands} = this.props;
-    const {codeBlocks, current, isSignupOpen, progress, projects} = this.state;
+    const {codeBlocks, current, isauthForm, progress, projects} = this.state;
 
     const videos = {
       en: "3s2vPV-tRhI",
@@ -80,10 +80,10 @@ class Home extends Component {
             {/* <p className="intro-text font-lg">{ t("Home.IntroText")}</p> */}
 
             <div className="authform-button-group u-margin-bottom-off">
-              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.toggleSignupOpen.bind(this, "signup")}>
+              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
                 { t("Home.GetStarted")}
               </button>
-              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.toggleSignupOpen.bind(this, "login")}>
+              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "login")}>
                 <span className="pt-icon pt-icon-log-in" />
                 {t("LogIn.Log_in")}
               </button>
@@ -130,8 +130,8 @@ class Home extends Component {
         <Dialog
           className="form-container"
           iconName="inbox"
-          isOpen={isSignupOpen}
-          onClose={this.toggleSignupOpen.bind(this)}
+          isOpen={isauthForm}
+          onClose={this.authForm.bind(this)}
           title="Dialog header"
         >
           <AuthForm initialMode={this.state.formMode}/>

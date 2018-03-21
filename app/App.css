@@ -558,3 +558,10 @@ utility classes
 .u-text-center {
   text-align: center;
 }
+
+/* show/hide content */
+.u-hide-below-sm {
+  @add-mixin max-sm {
+    display: none !important;
+  }
+}

@@ -30,7 +30,7 @@
   /* rebalance flex item widths */
   @add-mixin min-lg {
     & > .logo,
-    & > .links {
+    & > .link-list {
       flex: 2 2 0;
     }
     & > .search {
@@ -188,8 +188,8 @@
   }
 
   /* main nav list */
-  & .links {
-    text-align: right; /* keep links on the right */
+  & .link-list {
+    text-align: right; /* keep link-list on the right */
 
     & .link {
       @add-mixin nav-link;
@@ -201,9 +201,51 @@
         color: var(--black);
       }
 
-      /* remove right padding from map link, bring in browser toggle */
-      &.map-link {
+      /* remove right padding, bring in toggle buttons */
+      &.with-toggle {
+        @add-mixin min-sm {
+          padding-right: 0;
+        }
+        @add-mixin max-sm {
+          & + .link-toggle-container {
+            display: none;
+          }
+        }
+      }
+
+      /* signup icon optical alignment adjustment */
+      & .pt-icon-new-person {
+        left: 0.025em;
+        top: -0.025em;
+      }
+
+      /* show projects link on small screens and huge screens */
+      &.projects-link {
+        @media (min-width: 768px) and (max-width: 1400px) {
+          display: none;
+        }
+      }
+
+      /* language links */
+      &.language-icon-container,
+      &.language-link {
+        @add-mixin max-sm {
+          display: none;
+        }
+      }
+      &.language-icon-container {
         padding-right: 0;
+        margin-right: -1em;
+        pointer-events: none;
+        z-index: -1;
+      }
+      &.language-link {
+        padding-right: 0.5em;
+
+        &:last-of-type {
+          padding-left: 0.5em;
+          border-left: 1px solid var(--sky-dark);
+        }
       }
 
       /* tiny screens */
@@ -217,10 +259,6 @@
         & .link-icon {
           font-size: 22px;
         }
-        /* hide link text */
-        & .link-text {
-          display: none;
-        }
       }
 
       @add-mixin min-xs {
@@ -233,13 +271,14 @@
 }
 
 /* slide browser */
-.browser {
+.link-toggle-container {
   display: inline-block;
 
   /* chevron toggle button */
-  & .browser-toggle {
+  & .link-toggle-button {
     @add-mixin nav-link;
-    padding: 0.25em;
+    padding: 0.25em 0.75em;
+    margin-left: -0.5em; /* offset padding */
 
     /* interactions */
     &:hover, &:focus {
@@ -273,10 +312,19 @@
 }
 
 /* user popover */
-.user-popover {
-  & .pt-button {
+.account-popover {
+
+  &.pt-popover-content-sizing > .pt-popover-content {
+    padding: var(--gutter-xs) var(--gutter-sm);
+  }
+
+  & .link {
+    @add-mixin nav-link;
     display: block;
-    margin-bottom: var(--gutter-xs);
-    width: 125px;
+    line-height: 2;
+  }
+
+  & .link-icon {
+    margin-right: 0.5em;
   }
 }

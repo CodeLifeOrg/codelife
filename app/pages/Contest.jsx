@@ -17,9 +17,9 @@ class Contest extends Component {
 
     return (
       <div id="contest-container">
-        <div>
-        Welcome to the Codelife Contest
-        </div>
+        <h2>Welcome to the Codelife Contest</h2>
+        
+        <p>code with your friends and win prizes</p>
         <ul>
           <li>rules</li>
           <li>rules</li>

@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
-import "./Contest.css";
+import "./ContestSignup.css";
 
-class Contest extends Component {
+class ContestSignup extends Component {
 
   constructor(props) {
     super(props);
@@ -16,9 +16,9 @@ class Contest extends Component {
     // const {t} = this.props;
 
     return (
-      <div id="contest-container">
+      <div id="signup-container">
         <div>
-        Welcome to the Codelife Contest
+        Signup here
         </div>
         <ul>
           <li>rules</li>
@@ -26,7 +26,7 @@ class Contest extends Component {
           <li>rules</li>
         </ul>
         <ul>
-          <li><Link to="/contest/signup">sign up</Link></li>
+          <li><Link to="/contest">see the rules</Link></li>
           <li><Link to="/contest/submit">submit a project</Link></li>
         </ul>
       </div>
@@ -34,4 +34,4 @@ class Contest extends Component {
   }
 }
 
-export default translate()(Contest);
+export default translate()(ContestSignup);

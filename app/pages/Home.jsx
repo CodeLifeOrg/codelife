@@ -2,11 +2,11 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
-import {Login, SignUp} from "datawheel-canon";
-import {Intent, Spinner} from "@blueprintjs/core";
 import axios from "axios";
 import CodeBlockCard from "components/CodeBlockCard";
 import ProjectCard from "components/ProjectCard";
+import AuthForm from "components/AuthForm";
+import {Dialog, Intent, Spinner} from "@blueprintjs/core";
 import "./Home.css";
 
 class Home extends Component {
@@ -16,14 +16,15 @@ class Home extends Component {
     this.state = {
       codeBlocks: false,
       current: false,
-      formMode: false,
       progress: [],
-      projects: false
+      projects: false,
+      isauthForm: false,
+      formMode: "login"
     };
   }
 
-  toggleSignup(formMode) {
-    this.setState({formMode});
+  authForm(mode) {
+    this.setState({formMode: mode, isauthForm: !this.state.isauthForm});
   }
 
   componentDidMount() {
@@ -46,8 +47,8 @@ class Home extends Component {
 
   render() {
 
-    const {locale, t, user, islands} = this.props;
-    const {codeBlocks, current, formMode, progress, projects} = this.state;
+    const {locale, t, islands} = this.props;
+    const {codeBlocks, current, isauthForm, progress, projects} = this.state;
 
     const videos = {
       en: "3s2vPV-tRhI",
@@ -55,8 +56,10 @@ class Home extends Component {
     };
 
     return (
-      <div id="Home">
-        <div id="island" className={ `island ${current ? current.theme : "island-jungle"}` }>
+      <div className="content home">
+
+        {/* OG intro */}
+        <div className={ `island content-section ${current ? current.theme : "island-jungle"}` }>
           <div className="island-image image">
             <div className="logo">
               <div className="tag">Beta</div>
@@ -68,43 +71,71 @@ class Home extends Component {
             <iframe className="video" src={ `https://www.youtube-nocookie.com/embed/${ videos[locale] || videos.en }?rel=0` } frameBorder="0" allowFullScreen></iframe>
           </div>
         </div>
-        <a id="login"></a>
-        { user ? null
-          : formMode === "signup"
-            ? <div className="form">
-              <a className="callToAction" onClick={ this.toggleSignup.bind(this, "login") }>{ t("Login.CallToAction") }</a>
-              <SignUp />
+
+        {/* intro */}
+        { !current
+          ? <div className="intro content-section u-text-center">
+
+            <h1 className="intro-headline">{ t("Home.Headline")}</h1>
+            {/* <p className="intro-text font-lg">{ t("Home.IntroText")}</p> */}
+
+            <div className="authform-button-group u-margin-bottom-off">
+              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
+                { t("Home.GetStarted")}
+              </button>
+              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "login")}>
+                <span className="pt-icon pt-icon-log-in" />
+                {t("LogIn.Log_in")}
+              </button>
             </div>
-            : formMode === "login"
-              ? <div className="form">
-                <a className="callToAction" onClick={ this.toggleSignup.bind(this, "signup") }>{ t("SignUp.CallToAction") }</a>
-                <Login />
-                <a className="callToAction" href="/reset">{ t("SignUp.ResetPw") }</a>
-              </div>
-              : <div className="form buttons">
-                <h2>{ t("home.prompt") }</h2>
-                <button className="pt-button pt-large" onClick={ this.toggleSignup.bind(this, "signup") }>{ t("SignUp.Sign Up") }</button>
-                <button className="pt-button pt-large pt-intent-primary" onClick={ this.toggleSignup.bind(this, "login") }>{ t("Login.Login") }</button>
-              </div>
+          </div>
+          : null
         }
-        <h2>{ t("Featured Projects") }</h2>
-        <div className="projects">
-          { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
+
+        {/* made on codelife */}
+        <div className="content-section">
+
+          <h2>{t("Home.MadeOnCodelife")}</h2>
+
+          {/* projects */}
+          <div className="project-section">
+            <h3>{ t("Featured Projects") }</h3>
+            <div className="project-list">
+              { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
+            </div>
+          </div>
+
+          {/* codeblocks */}
+          <div className="codeblock-section">
+            <h3>{ t("Featured CodeBlocks") }</h3>
+            <div className="codeblock-list">
+              { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
+                const {theme, icon} = islands.find(i => i.id === c.lid);
+                return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;
+              }) }
+            </div>
+          </div>
         </div>
-        <h2>{ t("Featured CodeBlocks") }</h2>
-        <div className="codeBlocks">
-          { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
-            const {theme, icon} = islands.find(i => i.id === c.lid);
-            return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;
-          }) }
-        </div>
-        <h2>{ t("What is CodeLife?") }</h2>
-        <div className="aboutTxt">
+
+        {/* about blurb */}
+        <div className="about content-section limited-width u-margin-auto">
+          <h2>{ t("What is CodeLife?") }</h2>
           <p>{ t("splashP1") }</p>
           <p>{ t("splashP2") }</p>
           <p>{ t("splashP3") }</p>
           <p>{ t("splashP4") }</p>
         </div>
+
+        {/* Authform */}
+        <Dialog
+          className="form-container"
+          iconName="inbox"
+          isOpen={isauthForm}
+          onClose={this.authForm.bind(this)}
+          title="Dialog header"
+        >
+          <AuthForm initialMode={this.state.formMode}/>
+        </Dialog>
       </div>
     );
   }

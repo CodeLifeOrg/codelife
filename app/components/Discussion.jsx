@@ -117,7 +117,13 @@ class Discussion extends Component {
             <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={translate("Title")} />
             <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
             <div className="post-button-container">
-              <Button className="pt-intent-success post-button" onClick={this.newThread.bind(this)}>{translate("Start New Thread")}</Button>
+              <Button 
+                className="pt-intent-success post-button" 
+                onClick={this.newThread.bind(this)}
+                disabled={!threadTitle || !threadContent || threadContent === "<p><br></p>"}
+              >
+                {translate("Start New Thread")}
+              </Button>
             </div>
           </div>
         </div>

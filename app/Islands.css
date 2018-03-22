@@ -24,7 +24,7 @@ then add the theme name to the @each loop below */
     & > .island-link-image-small {
       background-image: url("/islands/island-$(theme)-small.png");
     }
-    &.footer {
+    &.footer:before {
       background-image: url("/islands/island-$(theme)-ground.png");
     }
     /* set background colors */
@@ -45,15 +45,6 @@ then add the theme name to the @each loop below */
     & .island-path .code-block.is-done .side {
       background-color: var(--$(theme)-island-light);
     }
-    /* primary buttons */
-    &.pt-button.pt-intent-primary,
-    & .pt-button.pt-intent-primary {
-      background-color: var(--$(theme)-island-medium);
-      /* interactions */
-      &:hover, &:focus {
-        background-color: var(--$(theme)-island-dark);
-      }
-    }
     /* set color */
     & .island-path .code-block.is-done .side {
       color: var(--$(theme)-island-dark);
@@ -72,6 +63,18 @@ then add the theme name to the @each loop below */
     & .pt-dialog,
     & .island-path .code-block .side {
       border-color: var(--$(theme)-island-dark);
+    }
+    /* set background color and border color */
+    &.pt-button.pt-intent-primary,
+    & .pt-button.pt-intent-primary {
+      background-color: var(--$(theme)-island-medium);
+      border-color: var(--$(theme)-island-medium);
+      /* interactions */
+      &:hover, &:focus {
+        background-color: var(--$(theme)-island-dark);
+        border-color: var(--$(theme)-island-dark);
+        opacity: 1;
+      }
     }
     /* set svg fill */
     &.pt-tooltip .pt-popover-arrow-fill {

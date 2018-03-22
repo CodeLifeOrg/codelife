@@ -13,63 +13,243 @@
   /* sizing */
   height: var(--nav-height);
 
+  /* make room for search bar */
+  @add-mixin max-xs {
+    /* allow content & padding to dictate height */
+    height: auto;
+    padding-top: var(--gutter-xs);
+    padding-bottom: var(--gutter-lg);
+  }
+
   /* increase padding on bigger screens */
   @add-mixin min-md {
     padding-right: var(--gutter-xs); /* account for var(--gutter-sm) .link padding */
     padding-left: var(--gutter-md);
   }
 
-  /* logo */
-  & .logo {
-    width: 80px;
-    top: -1px; /* fudge into place */
-    transition:
-      transform 0.25s ease-out,
-      opacity 0.2s;
+  /* rebalance flex item widths */
+  @add-mixin min-lg {
+    & > .logo,
+    & > .link-list {
+      flex: 2 2 0;
+    }
+    & > .search {
+      flex: 1 1 0;
+    }
+  }
 
-    /* hide offscreen (home page only) */
-    &.is-hidden {
-      opacity: 0;
-      transform: translateY(-150%);
+  /* logo */
+  & .logo-link {
+    display: inline-block; /* size img, contain tag */
+    vertical-align: middle;
+    height: 20px;
+    /* transitions */
+    transition:
+      transform 0.2s;
+
+    /* huge logo (home page only) */
+    @add-mixin min-md {
+      &.is-huge {
+        transform: scale(1.75) translateX(15%);
+
+        & .logo-tag {
+          opacity: 0;
+        }
+      }
     }
 
     /* beta */
-    & .tag {
+    & .logo-tag {
       /* positioning */
-      margin-top: -8px;
+      position: absolute;
+      top: -1.5em;
       text-align: right;
+      /* sizing */
+      width: 100%; /* increase clickability */
       /* typography */
-      font-size: 0.75em;
       font-weight: 800;
       text-transform: uppercase;
       /* theming */
       color: var(--sky-dark);
+      /* transitions */
+      transition: opacity 0.2s;
     }
-    & .text {
-      width: 148px;
+
+    & .logo-text {
+      max-height: 100%;
+      transition: transform 0.1s;
     }
-    &:hover {
-      text-decoration: none;
+
+    /* interactions */
+    &:hover, &:focus {
+      & .logo-text {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  /* search bar placement */
+  & > .search-container {
+
+    /* positioned above the rest on small viewports */
+    @add-mixin max-xs {
+      position: absolute;
+      bottom: var(--gutter-xs);
+      left: var(--gutter-sm);
+      width: 100%;
+
+      & .search-label,
+      & .search-input {
+        font-size: 0.75rem;
+      }
+      & .search-label {
+        top: 0.55em;
+        z-index: 3;
+      }
+      & .search-input {
+        width: calc(100% - 30px);
+        z-index: 2;
+      }
+    }
+
+    /* centered */
+    @add-mixin min-md {
+      margin-left: var(--gutter-sm);
+      margin-right: var(--gutter-sm);
+
+      /* width dictated by flex */
+      & .search-input {
+        width: 100%;
+      }
+    }
+
+    /* results */
+    & .search-results-outer {
+      /* positioning */
+      position: absolute;
+      margin-top: 0.5rem;
+      /* sizing */
+      width: 100%;
+      width: calc(100vw - 30px);
+      min-height: 7.875rem; /* should equal search message + padding */
+      max-height: 90vh; /* fallback */
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding: var(--gutter-sm);
+      /* theming */
+      background-color: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
+      /* transitions */
+      transition:
+        opacity 0.3s ease-out;
+
+      &.is-hidden {
+        transform: translateY(-300px);
+        opacity: 0;
+      }
+
+      @add-mixin min-xs {
+        position: fixed;
+        margin-top: 0;
+        top: var(--nav-height);
+        left: var(--gutter-sm);
+
+        /* two column layout */
+        & .search-results-inner {
+          /* sizing */
+          display: inline-block;
+          width: 50%; /* fallback */
+          width: calc(50% - 1em); /* account for margin */
+          /* positioning */
+          margin-left: calc(0.5em);
+          margin-right: calc(0.5em);
+          vertical-align: top; /* thanks blueprint */
+        }
+      }
+
+      /* keep it centered */
+      @add-mixin min-lg {
+        @add-mixin absolute-horizontal-center;
+        top: 3rem;
+        width: 40rem;
+      }
+    }
+  }
+
+  /* messages */
+  & .search-results-message {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    &.is-hidden {
+      display: none;
     }
   }
 
   /* main nav list */
-  & .links {
-    text-align: right; /* keep links on the right */
-    padding-left: var(--gutter-md); /* links will wrap before crowding the logo */
+  & .link-list {
+    text-align: right; /* keep link-list on the right */
 
     & .link {
       @add-mixin nav-link;
       /* sizing */
       padding: 0.25em var(--gutter-sm);
 
-      /* remove right padding from map link, bring in browser toggle */
-      &.map-link {
+      /* interactions */
+      &:hover, &:focus {
+        color: var(--black);
+      }
+
+      /* remove right padding, bring in toggle buttons */
+      &.with-toggle {
+        @add-mixin min-sm {
+          padding-right: 0;
+        }
+        @add-mixin max-sm {
+          & + .link-toggle-container {
+            display: none;
+          }
+        }
+      }
+
+      /* signup icon optical alignment adjustment */
+      & .pt-icon-new-person {
+        left: 0.025em;
+        top: -0.025em;
+      }
+
+      /* show projects link on small screens and huge screens */
+      &.projects-link {
+        @media (min-width: 768px) and (max-width: 1400px) {
+          display: none;
+        }
+      }
+
+      /* language links */
+      &.language-icon-container,
+      &.language-link {
+        @add-mixin max-sm {
+          display: none;
+        }
+      }
+      &.language-icon-container {
         padding-right: 0;
+        margin-right: -1em;
+        pointer-events: none;
+        z-index: -1;
+      }
+      &.language-link {
+        padding-right: 0.5em;
+
+        &:last-of-type {
+          padding-left: 0.5em;
+          border-left: 1px solid var(--sky-dark);
+        }
       }
 
       /* tiny screens */
-      @add-mixin max-xs {
+      @add-mixin max-sm {
         /* reduce padding */
         & {
           padding-left: var(--gutter-xs);
@@ -78,10 +258,6 @@
         /* increase icon size */
         & .link-icon {
           font-size: 22px;
-        }
-        /* hide link text */
-        & .link-text {
-          display: none;
         }
       }
 
@@ -95,13 +271,19 @@
 }
 
 /* slide browser */
-.browser {
+.link-toggle-container {
   display: inline-block;
 
   /* chevron toggle button */
-  & .browser-toggle {
+  & .link-toggle-button {
     @add-mixin nav-link;
-    padding: 0.25em;
+    padding: 0.25em 0.75em;
+    margin-left: -0.5em; /* offset padding */
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--black);
+    }
   }
 }
 
@@ -130,10 +312,19 @@
 }
 
 /* user popover */
-.user-popover {
-  & .pt-button {
+.account-popover {
+
+  &.pt-popover-content-sizing > .pt-popover-content {
+    padding: var(--gutter-xs) var(--gutter-sm);
+  }
+
+  & .link {
+    @add-mixin nav-link;
     display: block;
-    margin-bottom: var(--gutter-xs);
-    width: 125px;
+    line-height: 2;
+  }
+
+  & .link-icon {
+    margin-right: 0.5em;
   }
 }

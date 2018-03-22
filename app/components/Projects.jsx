@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Intent, Tooltip} from "@blueprintjs/core";
+import {Alert, Intent, Tooltip, Position, Icon, Popover, MenuItem} from "@blueprintjs/core";
+import {MultiSelect} from "@blueprintjs/labs";
 
 class Projects extends Component {
 
@@ -13,6 +14,18 @@ class Projects extends Component {
     this.state = {
       deleteAlert: false,
       projects: [],
+      collabs: [],
+      userList: [
+        {id: 1, name: "jimmy"},
+        {id: 2, name: "dave"},
+        {id: 3, name: "alex"},
+        {id: 4, name: "sabrina"},
+        {id: 5, name: "nick"},
+        {id: 6, name: "james"},
+        {id: 7, name: "natalia"},
+        {id: 8, name: "walther"}
+      ],
+      users: [],
       projectName: "",
       currentProject: null
     };
@@ -20,16 +33,18 @@ class Projects extends Component {
 
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
+    const cget = axios.get("/api/projects/collabs");
     const {t} = this.props;
 
-    Promise.all([pget]).then(resp => {
+    Promise.all([pget, cget]).then(resp => {
       const projects = resp[0].data;
+      const collabs = resp[1].data;
       
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
         if (!currentProject) currentProject = projects[0];
-        this.setState({currentProject, projects}, this.props.openProject.bind(this, currentProject.id));
+        this.setState({currentProject, projects, collabs}, this.props.openProject.bind(this, currentProject.id));
       }
       else {
         if (projects.length === 0) {
@@ -46,7 +61,7 @@ class Projects extends Component {
             }
           }
           const currentProject = projects[latestIndex];
-          this.setState({currentProject, projects}, this.props.openProject.bind(this, currentProject.id));
+          this.setState({currentProject, projects, collabs}, this.props.openProject.bind(this, currentProject.id));
         }
       }
     });
@@ -134,6 +149,60 @@ class Projects extends Component {
     }
   }
 
+  toggleCollab() {
+
+  }
+
+  // ============================================
+  // BEGIN MULTISELECT 
+  // ============================================
+
+  renderUser(obj) {
+    const {item, handleClick} = obj;
+    return (
+      <MenuItem
+        icon={this.isUserSelected(item) ? "tick" : "blank"}
+        key={item.id}
+        label={item.name}
+        onClick={handleClick}
+        text={item.name}
+        shouldDismissPopover={false}
+      />
+    );
+  }
+
+  isUserSelected(user) { 
+    return this.state.users.indexOf(user) !== -1;
+  } 
+
+  handleUserSelect(user) {
+    !this.isUserSelected(user) ? this.selectUser(user) : this.deselectUser(this.getSelectedUserIndex(user));
+  }
+
+  getSelectedUserIndex(user) {
+    return this.state.users.indexOf(user);
+  }
+
+  selectUser(user) {
+    this.setState({users: [...this.state.users, user]});
+  }
+  
+  deselectUser(index) {
+    this.setState({users: this.state.users.filter((_user, i) => i !== index)});
+  }
+
+  filterUser(query, user) {
+    return user.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+  }
+
+  handleTagRemove(_tag, index) {
+    this.deselectUser(index);
+  }
+
+  // ============================================
+  // END MULTISELECT 
+  // ============================================  
+
   render() {
 
     const {t} = this.props;
@@ -144,13 +213,47 @@ class Projects extends Component {
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
-        <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
-        { showDeleteButton
-          ? <Tooltip content={ t("Delete Project") }>
-            <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
-          </Tooltip>
-          : null
+        
+        {
+          project.collaborators.length 
+            ? <Tooltip position={Position.TOP_LEFT} content={ `${t("Collaborators")}: ${project.collaborators.map(c => c.user.username).join(" ")}` }>
+              <div><span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>&nbsp;<Icon iconName="people" /></div>
+            </Tooltip>
+            : <span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>
         }
+        <div>
+          <Tooltip content={ "Add Collaborator" }>
+            <Popover>
+              <span className="pt-icon-standard pt-icon-plus" onClick={ () => this.toggleCollab(project) } />
+              <MultiSelect
+                // initialContent={<MenuItem disabled={true} text="test" />} 
+                style={{padding: "30px"}}
+                itemRenderer={this.renderUser.bind(this)}
+                itemPredicate={this.filterUser.bind(this)}
+                items={this.state.userList}
+                noResults={<MenuItem disabled={true} text="No results." />}
+                onItemSelect={this.handleUserSelect.bind(this)}
+                // popoverProps={{ popoverClassName: popoverMinimal ? Classes.MINIMAL : "" }}
+                tagRenderer={u => u.name}
+                tagInputProps={{onRemove: this.handleTagRemove.bind(this)}}
+                selectedItems={this.state.users}
+              />
+            </Popover>
+          </Tooltip>&nbsp;&nbsp;&nbsp;
+          { showDeleteButton
+            ? <Tooltip content={ t("Delete Project") }>
+              <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
+            </Tooltip>
+            : null
+          }
+        </div>
+      </li>);
+
+    const collabItems = this.state.collabs.map(collab => 
+      <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>
+        <Tooltip position={Position.TOP_LEFT} content={ `${t("Owner")}: ${collab.username}` }>
+          <div><span className="project-title" onClick={() => this.handleClick(collab)}>{collab.name}</span>&nbsp;<Icon iconName="people" /></div>
+        </Tooltip>
       </li>);
 
     return (
@@ -164,6 +267,8 @@ class Projects extends Component {
         </div>
         <ul className="project-list">
           {projectItems}
+          <li>--------</li>
+          {collabItems}
         </ul>
         <Alert
           isOpen={ deleteAlert ? true : false }

@@ -60,7 +60,7 @@ class UsersList extends Component {
         <h2>{title}</h2>
         { users.length
           ? <div className="flex-row">{ users.map(user => <UserCard user={user} />) }</div>
-          : <p>{ t("No other users found.") }</p>}
+          : <p>{ t("noUsers") }</p>}
       </div>
     );
   }

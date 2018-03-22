@@ -151,7 +151,7 @@ class CodeBlock extends Component {
           <Alert
             isOpen={ this.state.resetAlert }
             cancelButtonText={ t("Cancel") }
-            confirmButtonText={ t("Reset") }
+            confirmButtonText={ t("buttonReset") }
             intent={ Intent.DANGER }
             onCancel={ () => this.setState({resetAlert: false}) }
             onConfirm={ () => this.resetCodeBlock() }>
@@ -163,7 +163,7 @@ class CodeBlock extends Component {
           { this.state.mounted ? <CodeEditor ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
         <div className="codeBlock-foot">
-          <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
+          <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
           { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
           { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <Popover

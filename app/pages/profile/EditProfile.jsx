@@ -35,7 +35,7 @@ class EditProfile extends Component {
     if (username !== loggedInUsername) {
       this.setState({
         loading: false,
-        error: t("You don't have permission to edit this user's profile.")
+        error: t("userPermissionError")
       });
       return;
     }

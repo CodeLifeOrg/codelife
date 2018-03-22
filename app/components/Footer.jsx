@@ -10,32 +10,142 @@ class Footer extends Component {
     const {protocol, host} = serverLocation;
     const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
 
-    const governmentLogos = false;
+
+    // about link array
+    const aboutLinks = [
+      {id: 1, title: t("About"), link: "/about"},
+      {id: 2, title: t("Partners"), link: "/learnmore"},
+      {id: 3, title: t("Privacy Policy"), link: "/privacy"}
+    ];
+    const surveyLink = [
+      {id: 4, title: t("Survey"), link: "/survey"}
+    ];
+
+    // if logged in, add survey to about links
+    if (user) {
+      aboutLinks.push(surveyLink[0]);
+    }
+
+
+    // explore link array (to be added as necessary)
+    const exploreLinks = [
+      /* {id: 1, title: t("Leaderboard"), link: "/leaderboard"},
+      {id: 2, title: t("Snippets"), link: "/snippets"},
+      {id: 3, title: t("Codeblocks"), link: "/codeblocks"}, */
+      {id: 4, title: t("Glossary"), link: "/glossary"}
+    ];
+
+
+    // account link array — must be logged in
+    const username = user ? user.username : "";
+
+    const accountLinks = [
+      {id: 1, title: t("My profile"), link: `/profile/${ username }`},
+      {id: 2, title: t("My projects"), link: `/projects/${ username }`},
+      {id: 3, title: t("Log out"), link: "/auth/logout"}
+    ];
+
+
+    // language select links
+    const languageLinks = [
+      {id: 1, title: "English", link: `${protocol}//en.${hostSansSub}${currentPath}`},
+      {id: 2, title: "Portuguese", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+    ];
+
+
+    // loop through arrays and create corresponding list items
+    const aboutLinkItems = aboutLinks.map(aboutLink =>
+      <li className="footer-item" key={aboutLink.id}>
+        <Link className="footer-link font-sm" to={aboutLink.link}>{t(aboutLink.title)}</Link>
+      </li>
+    );
+    const exploreLinkItems = exploreLinks.map(exploreLink =>
+      <li className="footer-item" key={exploreLink.id}>
+        <Link className="footer-link font-sm" to={exploreLink.link}>{t(exploreLink.title)}</Link>
+      </li>
+    );
+    // logout must be a standard link, not a Link component
+    const accountLinkItems = accountLinks.map(accountLink =>
+      <li className="footer-item" key={accountLink.id}>
+        { accountLink.link === "/auth/logout"
+          ? <a className="footer-link font-sm" href={accountLink.link}>{t(accountLink.title)}</a>
+          : <Link className="footer-link font-sm" to={accountLink.link}>{t(accountLink.title)}</Link>
+        }
+      </li>
+    );
+    // locale subdomain links must be standard links, not Link components
+    const languageLinkItems = languageLinks.map(languageLink =>
+      <li className="footer-item" key={languageLink.id}>
+        <a className="footer-link font-sm" href={languageLink.link}>{t(languageLink.title)}</a>
+      </li>
+    );
+
 
     return (
-      <footer id="footer" className={ `footer ${className}` }>
-        <div className="links">
-          <Link className="link" to="/glossary">{ t("Glossary") }</Link>
-          <Link className="link" to="/about">{ t("About") }</Link>
-          <Link className="link" to="/privacy">{ t("Privacy Policy") }</Link>
-          <Link className="link" to="/learnmore">{ t("Learn More") }</Link>
-          { user ? <Link className="link" to="/survey">{ t("Survey") }</Link> : null }
-          <a className="link language" href={`${protocol}//en.${hostSansSub}${currentPath}`} >EN</a> | <a className="link language" href={`${protocol}//pt.${hostSansSub}${currentPath}`} >PT</a>
-        </div>
-        <div className="logos">
-          { governmentLogos
-            ? null
-            : <div>
-              <a target="_blank" className="text-link" rel="noopener noreferrer" href="http://www.fapemig.br/">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</a>
-              <a target="_blank" className="text-link" rel="noopener noreferrer" href="http://mg.gov.br">Governo do Estado de Minas Gerais</a>
-            </div>}
-          <a target="_blank" rel="noopener noreferrer" href="http://www.datawheel.us/"><img className="logo datawheel" src="/footer/logo-datawheel.svg" /></a>
-          { governmentLogos
-            ? <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
-            : null }
-          { governmentLogos
-            ? <a target="_blank" rel="noopener noreferrer" href="http://mg.gov.br"><img className="logo" src="/footer/logo-mg.svg" /></a>
-            : null }
+      <footer id="footer" className={ `footer ${className}` }>{/* :before element used for background image */}
+
+        <div className="footer-inner">
+
+          {/* hidden heading (for accessibility) */}
+          <h2 className="u-visually-hidden">{ t("Navigation: ") }</h2>
+
+          {/* list of links */}
+          <nav className="footer-nav">
+
+            {/* about links */}
+            <div className="footer-list-container">
+              <h3 className="footer-heading">{ t("About ") }</h3> {/* space afterward is intentional, as full About Codelife link follows */}
+              <ul className="footer-list">
+                { aboutLinkItems }
+              </ul>
+            </div>
+
+            {/* explore links */}
+            <div className="footer-list-container">
+              <h3 className="footer-heading">{ t("Explore") }</h3>
+              <ul className="footer-list">
+                { exploreLinkItems }
+              </ul>
+            </div>
+
+            {/* account links */}
+            { user ? <div className="footer-list-container">
+              <h3 className="footer-heading">{ t("Account") }</h3>
+              <ul className="footer-list">
+                { accountLinkItems }
+              </ul>
+            </div> : null }
+
+            {/* language select */}
+            <div className="footer-list-container">
+              <h3 className="footer-heading">{ t("Language") }</h3>
+              <ul className="footer-list">
+                { languageLinkItems }
+              </ul>
+            </div>
+          </nav>
+
+          <div className="footer-credits-container">
+
+            {/* datawheel logo */}
+            <a className="footer-logo-link" target="_blank" rel="noopener noreferrer" href="http://www.datawheel.us/">
+              <span className="footer-logo-text font-sm">{ t("Built by ") }</span>
+              <img className="footer-logo-img" src="/footer/logo-datawheel.svg" alt="Datawheel" />
+            </a>
+
+            {/* additional links */}
+            <div className="footer-credits">
+              <a target="_blank" className="footer-credits-link font-xs" rel="noopener noreferrer" href="http://www.fapemig.br/">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</a>
+              <a target="_blank" className="footer-credits-link font-xs" rel="noopener noreferrer" href="http://mg.gov.br">Governo do Estado de Minas Gerais</a>
+            </div>
+
+            {/* governmentLogos
+              ? <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
+              : null }
+            { governmentLogos
+              ? <a target="_blank" rel="noopener noreferrer" href="http://mg.gov.br"><img className="logo" src="/footer/logo-mg.svg" /></a>
+              : null */}
+          </div>
         </div>
       </footer>
     );

@@ -1,54 +1,195 @@
-.footer {
-  align-items: center;
-  background-image: url("/ground.png");
-  background-repeat: repeat-x;
-  bottom: 0;
-  color: var(--white);
-  display: flex;
-  height: var(--footer-height);
-  justify-content: space-between;
-  left: 0;
-  padding: var(--gutter-lg) var(--gutter-md) var(--gutter-md);
-  position: absolute;
+@import "../mixins.css";
+
+/* repeating image */
+.footer:before {
+  content: '';
+  display: block;
+  /* sizing */
   width: 100%;
-  & .links {
-    & .link {
-      color: var(--white);
-      letter-spacing: 1px;
-      text-transform: uppercase;
+  height: 50px;
+  /* positioning */
+  position: absolute;
+  top: -50px; /* position bg image above .footer background */
+  /* background sizing and default image */
+  background-image: url("/ground.png");
+  background-size: contain;
+  background-position: -10% bottom;
+  background-repeat: repeat-x;
+}
+
+/* default colors */
+.footer {
+  margin-top: 150px; /* offset image */
+  background: var(--black);
+
+  & * {
+    color: var(--light-2);
+  }
+}
+
+/* container */
+.footer-inner {
+  padding: var(--gutter-md);
+
+  /* space out content on bigger screens */
+  @add-mixin min-sm {
+    padding: var(--gutter-lg) var(--gutter-lg) var(--gutter-md) var(--gutter-lg);
+  }
+
+  /* tweakpoint to align links left, credits right on big screens */
+  @media (min-width: 1240px) {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* align links and credits */
+  & > * {
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+/* lists of links */
+.footer-list {
+  @add-mixin list-reset;
+  margin-top: -0.25rem; /* fudge into place */
+
+  /* full width links on mobile */
+  @add-mixin max-xs {
+    width: 100%;
+
+    & .footer-item + .footer-item {
+      border-top: 1px solid var(--dark-3);
     }
-    & .link:not(.language) {
-      margin-right: var(--gutter-sm);
+
+    & .footer-link {
+      display: block;
+      width: 100%;
     }
   }
-  & .logos {
-    align-items: center;
+
+  /* links (nested within list items) */
+  & .footer-link {
+    @add-mixin nav-link;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+
+    @add-mixin min-xs {
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
+    }
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--light-2);
+    }
+  }
+}
+
+/* list of lists */
+.footer-nav {
+  display: block;
+
+  /* let flex take over once that makes sense */
+  @add-mixin min-sm {
     display: flex;
-    & .text-link {
-      color: var(--white);
-      display: block;
-      flex: none;
-      font-size: 12px;
-      font-weight: 200;
-      margin-bottom: 2px;
-      opacity: 0.9;
-      text-align: right;
-      width: 100%;
-      &:hover {
-        color: var(--white);
+    justify-content: center;
+  }
+
+  & .footer-list-container {
+    /* positioning */
+    display: inline-block; /* parent flexbox fallback */
+    vertical-align: top; /* thanks blueprint */
+    margin-bottom: var(--gutter-md);
+    /* sizing */
+    width: 100%;
+    max-width: 100%;
+
+    /* sizing and margin for bigger screens */
+    @add-mixin min-xs {
+      width: 11.5rem; /* 184px */
+      margin-right: var(--gutter-md); /* 40px */
+
+      /* reset margin on last item */
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+/* credits */
+.footer-credits-container {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+
+  /* right align on big viewports */
+  @media (min-width: 1240px) {
+    text-align: right;
+    width: auto;
+  }
+
+  /* datawheel logo */
+  & .footer-logo-link {
+    height: var(--gutter-md);
+    /* increase clickable area */
+    padding-top: var(--gutter-md);
+    padding-bottom: var(--gutter-md);
+
+    /* offset height when side by side */
+    @add-mixin min-sm {
+      top: -10px; /* fudge into place */
+    }
+
+    /* vertically center built by datawheel */
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* space out "built by" and logo */
+    & > .footer-logo-text {
+      margin-right: 0.25em;
+    }
+
+    /* logo sizing */
+    & > .footer-logo-img {
+      height: var(--gutter-lg);
+      /* transitons */
+      opacity: 0.75;
+      transition: 0.2s opacity;
+    }
+
+    /* interactions */
+    &:hover, &:focus {
+      /* remove underline from "built by" */
+      text-decoration: none;
+
+      /* reset opacity on logo */
+      & > .footer-logo-img {
         opacity: 1;
       }
     }
-    & .logo {
-      height: var(--gutter-md);
-      margin: 0 var(--gutter-sm);
-      opacity: 0.9;
-      transition: opacity 0.2s;
-      &.datawheel {
-        height: var(--gutter-lg);
-      }
-      &:hover {
-        opacity: 1;
+  }
+
+  /* credits */
+  & .footer-credits {
+    margin-top: var(--gutter-sm);
+
+    /* positioning adjustment */
+    @media (min-width: 1240px) {
+      margin-top: var(--gutter-lg);
+    }
+
+    /* make partner links subtle */
+    & .footer-credits-link {
+      display: block;
+      margin-top: 0.25em;
+      color: var(--light-3);
+
+      &:hover, &:focus {
+        color: var(--light-2);
       }
     }
   }

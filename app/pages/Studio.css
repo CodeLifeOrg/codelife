@@ -1,17 +1,10 @@
-#studio {
-  background-color: var(--white);
-  border-radius: var(--radius-lg);
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 225px);
-  left: 0;
-  margin: 0 var(--gutter-md) var(--gutter-md);
-  padding: var(--gutter-md) 0 var(--gutter-md);
-  position: absolute;
-  top: 100px;
-  width: calc(100% - var(--gutter-lg));
+@import '../mixins.css';
 
-  & #head {
+.studio {
+  @add-mixin slide-theme;
+  @add-mixin slide-sizing;
+
+  & .head {
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -29,7 +22,7 @@
 
   }
 
-  & #body {
+  & .body {
     align-self: stretch;
     display: flex;
     flex: 1;

@@ -15,25 +15,7 @@
 /* inner container */
 .slide-inner {
   @add-mixin slide-theme;
-  /* positioning */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* sizing */
-  min-height: 85vh; /* fallback */
-  min-height: calc(100vh - 85px); /* fudged — accounts for .slide-inner padding and .nav height */
-  padding: var(--gutter-md) var(--gutter-sm);
-
-  /* no border radius on smaller viewports */
-  @add-mixin max-md {
-    border-radius: 0;
-  }
-
-  /* add margin on larger viewports */
-  @add-mixin min-md {
-    margin: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
-    padding: var(--gutter-md);
-  }
+  @add-mixin slide-sizing;
 
   &.pt-dialog-body {
     margin: 0;
@@ -258,7 +240,6 @@
     & .slide-text {
       align-self: stretch;
       flex: none;
-      overflow: scroll;
       width: 300px;
       margin-bottom: 1.5em;
 

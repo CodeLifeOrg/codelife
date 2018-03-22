@@ -16,7 +16,7 @@ class Studio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTabId: "projects",
+      activeTabId: "projects-tab",
       mounted: false,
       execState: false,
       currentProject: null
@@ -69,10 +69,11 @@ class Studio extends Component {
 
   onClickProject(project) {
     const {t} = this.props;
+    console.log(project);
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-        toast.show({message: t("Save your changes before opening a new webpage."), timeout: 1500, intent: Intent.WARNING});
+        toast.show({message: t("saveWarning"), timeout: 1500, intent: Intent.WARNING});
         return false;
       }
       else {
@@ -108,6 +109,7 @@ class Studio extends Component {
   }
 
   handleTabChange(activeTabId) {
+    console.log(activeTabId)
     this.setState({activeTabId});
   }
 
@@ -124,15 +126,17 @@ class Studio extends Component {
     if (!auth.user) browserHistory.push("/");
 
     const allCodeBlockRef = <CodeBlockList/>;
-    const projectRef = <Projects  projectToLoad={filename}
-                                  onCreateProject={this.onCreateProject.bind(this)}
-                                  onDeleteProject={this.onDeleteProject.bind(this)}
-                                  openProject={this.openProject.bind(this)}
-                                  onClickProject={this.onClickProject.bind(this)}/>;
+    const projectRef = <Projects  
+      projectToLoad={filename}
+      onCreateProject={this.onCreateProject.bind(this)}
+      onDeleteProject={this.onDeleteProject.bind(this)}
+      openProject={this.openProject.bind(this)}
+      onClickProject={this.onClickProject.bind(this)}
+    />;
 
     return (
-      <div id="studio">
-        <div id="head">
+      <div className="studio">
+        <div className="head">
           <h1 className="title">{ t("Projects") }</h1>
           { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
           <div className="buttons">
@@ -141,10 +145,10 @@ class Studio extends Component {
             <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
           </div>
         </div>
-        <div id="body">
+        <div className="body">
           <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-            <Tab2 id="projects" title={t("Projects")} panel={ projectRef } />
-            <Tab2 id="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
+            <Tab2 id="projects-tab" key="projects" className="projects" title={t("Projects")} panel={ projectRef } />
+            <Tab2 id="code-blocks-tab" key="code-blocks" className="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
           </Tabs2>
           <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)} initialValue={currentProject ? currentProject.studentcontent : ""} ref={c => this.editor = c} />
         </div>

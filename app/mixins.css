@@ -16,6 +16,74 @@
 @define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
 @define-mixin max-xxs { @media (max-width: 319px)  { @mixin-content; } }
 
+/* type scaling */
+@define-mixin font-xxl {
+  font-size: 3.75rem; /* 60px */
+  line-height: 1.25;
+}
+@define-mixin font-xl {
+  font-size: 2.375rem; /* 38px */
+  line-height: 1.25;
+}
+@define-mixin font-lg {
+  font-size: 1.625rem; /* 26px */
+  line-height: 1.25;
+}
+@define-mixin font-md {
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.5; /* 30px */
+}
+@define-mixin font-sm {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.42857; /* ~20px */
+}
+@define-mixin font-xs {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.666; /* 20px */
+}
+
+/* accessibly hidden text and elements */
+@define-mixin visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+/* fill up all the space — make sure the parent has pos:rel */
+@define-mixin absolute-expand {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* center elements the dumb but sometimes useful way */
+@define-mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@define-mixin absolute-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+@define-mixin absolute-horizontal-center {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+/* list reset */
+@define-mixin list-reset {
+  list-style-type: none; /* remove bullets */
+  padding-left: 0; /* thanks blueprint */
+  margin-bottom: 0; /* thanks blueprint */
+}
+
 /* button group; apply to pt-button, not parent */
 @define-mixin button-groupify {
   margin: 0; /* smush buttons together */
@@ -47,11 +115,6 @@
   color: var(--sky-dark);
   font-weight: 700;
   text-transform: uppercase;
-
-  /* interactions */
-  &:hover, &:focus {
-    color: var(--black);
-  }
 }
 
 /* slide theme */
@@ -59,5 +122,155 @@
   background-color: var(--white);
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 2em rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
+}
+
+/* slide sizing */
+@define-mixin slide-sizing {
+  /* positioning */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* sizing */
+  min-height: 85vh; /* fallback */
+  min-height: calc(100vh - 85px); /* fudged — accounts for .slide-inner padding and .nav height */
+  padding: var(--gutter-md) var(--gutter-sm);
+
+  /* no border radius on smaller viewports */
+  @add-mixin max-md {
+    border-radius: 0;
+  }
+
+  /* add margin on larger viewports */
+  @add-mixin min-md {
+    margin: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
+    padding: var(--gutter-md);
+  }
+}
+
+/* layout for login/signup forms */
+@define-mixin form-layout {
+  /* positioning */
+  margin: 1rem;
+  /* sizing */
+  width: 100%;
+  max-width: 52rem;
+  max-height: 100vh; /* make it work on shorter screens */
+
+  &[class*=form-container] {
+    position: relative !important; /* thanks, blueprint */
+  }
+
+  /* if you can't remove it, hide it */
+  & .pt-dialog-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* blueprint theming overrides */
+    background: inherit;
+    box-shadow: none;
+
+    /* hide unnecessary elements */
+    & > span,
+    & > .pt-dialog-header-title {
+      display: none;
+    }
+  }
+
+  /* close button positioning */
+  & .auth-form-close {
+    position: absolute;
+    top: -25px;
+    right: -25px;
+
+    @add-mixin min-sm {
+      top: -50px;
+      right: -50px;
+    }
+  }
+
+  /* horizontal layout on bigger viewports */
+  @media (min-width: 840px) {
+    & .form-inner,
+    & .form-divider,
+    & .social-button-list {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    & .form-inner,
+    & .social-button-list {
+      width: 42.5%; /* fallback */
+      width: calc(50% - 60px); /* make room for the line */
+    }
+  }
+
+  /* make sure social buttons don't break */
+  & .social-button {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+
+    /* account for icon sizing */
+    & .social-svg {
+      margin-left: -0.25em;
+    }
+  }
+}
+
+/* form divider */
+@define-mixin form-divider {
+  margin-bottom: -0.8em; /* offset button padding */
+
+  /* text */
+  & > .signup-divider-text {
+    /* positioning */
+    display: inline-block;
+    padding: 1em 0.5em; /* hide :before line */
+    margin-bottom: 0; /* blueprint override */
+    /* typography */
+    font-weight: 700;
+    /* theming */
+    background: var(--white); /* hide :before line */
+    color: var(--gray);
+  }
+
+  /* line */
+  &:before {
+    /* sizing */
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    /* positioning */
+    position: absolute;
+    top: 50%;
+    margin-top: -1px; /* account for 2px thickness */
+    /* theming */
+    background: var(--light-3);
+    border-radius: 1px;
+  }
+
+  /* horizontal layout on big enough viewports */
+  @media (min-width: 840px) {
+    width: 15%; /* fallback */
+    width: calc(120px);
+    margin-top: 1.9em;
+    margin-bottom: 0.1em;
+    /* remember to set height */
+
+    & > .signup-divider-text {
+      padding: 0.25em; /* hide :before line */
+      top: 43%; /* fudgy fallback */
+      top: calc(50% - 1.5em);
+    }
+
+    /* line becomes vertical */
+    &:before {
+      height: 100%;
+      width: 2px;
+      left: 50%;
+      top: 0;
+      margin-top: 0;
+      margin-left: -1px;
+    }
+  }
 }

@@ -643,7 +643,7 @@ class CodeEditor extends Component {
                 this.props.blurred
                   ? <div className={ `codeBlockTooltip pt-popover pt-tooltip ${ island ? island : "" }` }>
                     <div className="pt-popover-content">
-                      { t("Codeblock's code will be shown after you complete the last level of this island.") }
+                      { t("codeblockWarn") }
                     </div>
                   </div>
                   : null

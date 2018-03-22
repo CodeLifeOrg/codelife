@@ -121,16 +121,10 @@ class ContestSignup extends Component {
 
             <div className="pt-form-group pt-inline">
               <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Where are you from?")}
-              </label>
-              <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
-            </div>
-
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
                 {t("What school do you go to?")}
               </label>
               <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
+
             </div>
 
             <div className="pt-form-group pt-inline">
@@ -175,7 +169,7 @@ class ContestSignup extends Component {
               type="button" 
               className="pt-button pt-intent-success"
               disabled={
-                !this.isEmailValid(email) || !CPF.isValid(cpf) || !this.isDobValid(dob)
+                !this.isEmailValid(email) || !CPF.isValid(cpf) || !this.isDobValid(dob) 
               }
             >
               {t("Enter")}

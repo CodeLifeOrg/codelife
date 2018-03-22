@@ -9,6 +9,8 @@ import {CPF} from "cpf_cnpj";
 import Loading from "components/Loading";
 import {DateInput} from "@blueprintjs/datetime";
 import {Icon} from "@blueprintjs/core";
+import SelectGeo from "pages/profile/SelectGeo";
+import SelectSchool from "pages/profile/SelectSchool";
 import "./ContestSignup.css";
 
 class ContestSignup extends Component {
@@ -73,6 +75,14 @@ class ContestSignup extends Component {
     this.setState({profileUser: Object.assign(this.state.profileUser, {dob: moment(bday).format("YYYY-MM-DD")})});
   }
 
+  setGid(geo) {
+    this.setState({profileUser: Object.assign(this.state.profileUser, {gid: geo.id})});
+  }
+
+  setSid(school) {
+    this.setState({profileUser: Object.assign(this.state.profileUser, {sid: school.id})});
+  }
+
   isDobValid(bday) {
     const now = new Date();
     const then = new Date(bday);
@@ -82,6 +92,11 @@ class ContestSignup extends Component {
 
   onEmailUpdate(e) {
     this.setState({profileUser: Object.assign(this.state.profileUser, {email: e.target.value})});
+  }
+
+  isEmailValid(email) {
+    const re = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+    return re.test(email.toLowerCase());
   }
 
   render() {
@@ -98,27 +113,25 @@ class ContestSignup extends Component {
       <div id="signup-container">
         <div id="signup-forms">
           <h2>
-            Signup here
+            Contest Signup
           </h2>
+          <p>Hello <strong>{this.props.user.username}</strong>, please fill out the following profile fields to enter the contest</p>
+          <p>Remember, you need to finish all Codelife Islands and submit a final project to be considered in the drawing!</p>
           <form>
-
-            { /*
 
             <div className="pt-form-group pt-inline">
               <label className="pt-label" htmlFor="example-form-group-input-d">
                 {t("Where are you from?")}
               </label>
-              <SelectGeo gid={gid} callback={setGid} />
+              <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
             </div>
 
             <div className="pt-form-group pt-inline">
               <label className="pt-label" htmlFor="example-form-group-input-d">
                 {t("What school do you go to?")}
               </label>
-              <SelectSchool sid={sid} callback={setSid} />
+              <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
             </div>
-
-            */ }
 
             <div className="pt-form-group pt-inline">
               <label className="pt-label" htmlFor="example-form-group-input-d">
@@ -158,13 +171,21 @@ class ContestSignup extends Component {
               </div>
             </div>
 
-            <button type="button" className="pt-button pt-intent-success">{t("Save")}</button>
+            <button 
+              type="button" 
+              className="pt-button pt-intent-success"
+              disabled={
+                !this.isEmailValid(email) || !CPF.isValid(cpf) || !this.isDobValid(dob)
+              }
+            >
+              {t("Enter")}
+            </button>
 
           </form> 
         </div>
         <div id="eligibility-box">
           <ul>
-            <li>{email ? good : bad} email</li>
+            <li>{this.isEmailValid(email) ? good : bad} email</li>
             <li>{CPF.isValid(cpf) ? good : bad} CPF</li>
             <li>{this.isDobValid(dob) ? good : bad} under 19</li>
           </ul>

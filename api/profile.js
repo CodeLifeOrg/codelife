@@ -81,6 +81,15 @@ module.exports = function(app) {
       });
   });
 
+  app.post("/api/user/email", isAuthenticated, (req, res) => {
+    const {email} = req.body;
+    db.users.update(
+      {email},
+      {where: {id: req.user.id}}
+    ).then(u => res.json(u).end());
+
+  });
+
   app.get("/api/profileping", isAuthenticated, (req, res) => {
     db.userprofiles.findOrCreate({where: {uid: req.user.id}}).then(u => {
       res.json(u).end();

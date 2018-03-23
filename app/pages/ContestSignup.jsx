@@ -103,6 +103,34 @@ class ContestSignup extends Component {
     return re.test(email.toLowerCase());
   }
 
+  enterContest() {
+    const {profileUser, skip} = this.state;
+    const profilePayload = {
+      cpf: profileUser.cpf,
+      dob: profileUser.dob
+    };
+    if (skip) {
+      profilePayload.sid = -1;
+    }
+    else {
+      profilePayload.gid = profileUser.gid;
+      profilePayload.sid = profileUser.sid;
+    }
+    const userPayload = {
+      email: profileUser.email
+    };
+    const contestPayload = {
+      uid: profileUser.uid,
+      eligible: 1
+    };
+    const pPost = axios.post("/api/profile/", profilePayload);
+    const uPost = axios.post("/api/user/email", userPayload);
+    const cPost = axios.post("/api/contest", contestPayload);
+    Promise.all([pPost, uPost, cPost]).then(resp => {
+      console.log(resp);
+    });
+  }
+
   render() {
     
     if (!this.state.profileUser) return <Loading />;
@@ -112,8 +140,6 @@ class ContestSignup extends Component {
 
     const good = <Icon iconName="tick" className="pt-intent-success" />;
     const bad = <Icon iconName="cross" className="pt-intent-danger" />;
-
-    console.log(this.state.skip);
 
     return (
       <div id="signup-container">
@@ -194,8 +220,12 @@ class ContestSignup extends Component {
             <button 
               type="button" 
               className="pt-button pt-intent-success"
+              onClick={this.enterContest.bind(this)}
               disabled={
-                !this.isEmailValid(email) || !CPF.isValid(cpf) || !this.isDobValid(dob) 
+                !this.isEmailValid(email) || 
+                !CPF.isValid(cpf) || 
+                !this.isDobValid(dob) ||
+                !(this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid)
               }
             >
               {t("Enter")}

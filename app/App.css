@@ -480,6 +480,15 @@ form fields
 layout
 ----------------------------------- */
 
+/* Set min width on content container so the footer stays at the bottom */
+.content,
+.container > .nav + * {
+  @media (min-height: 680px) {
+    min-height: 55vh; /* fallback */
+    min-height: calc(100vh - 29.75rem); /* 100% fudged */
+  }
+}
+
 .content {
   padding: var(--gutter-md);
   max-width: 1220px; /* TODO: add to style.yml */

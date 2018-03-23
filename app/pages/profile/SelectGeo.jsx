@@ -75,16 +75,23 @@ class SelectGeo extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const {gid, t} = this.props;
     const {loading, error, geos, filteredGeos, geoQuery, homeGeo} = this.state;
+    const state = gid ? gid.substr(0, 3) : null;
     const filterGeos = this.filterGeos.bind(this);
     const setSelectedGeo = this.setSelectedGeo.bind(this);
+    const changeState = this.changeState.bind(this);
 
     if (loading) return <p>{t("Loading")}...</p>;
     if (error) return <h1>{error}</h1>;
 
     return (
       <div className="pt-form-content">
+        <div className="pt-select">
+          <select onChange={changeState} value={state || ""}>
+            {STATES.map(s => <option key={s.id} value={s.id}>{`${s.id.substr(1, 2).toUpperCase()} - ${s.name}`}</option>)}
+          </select>
+        </div>
         { geos.length
           ? <Select
             resetOnSelect={true}

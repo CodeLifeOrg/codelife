@@ -19,7 +19,8 @@ class ContestSignup extends Component {
     super(props);
     this.state = {
       mounted: false,
-      profileUser: null
+      profileUser: null,
+      skip: false
     };
   }
 
@@ -28,7 +29,6 @@ class ContestSignup extends Component {
 
     axios.get(`/api/profile/${username}`).then(userResp => {
       const userData = userResp.data;
-      console.log(userData);
       if (userResp.error) {
         this.setState({mounted: true, error: userResp.error});
       }
@@ -83,6 +83,10 @@ class ContestSignup extends Component {
     this.setState({profileUser: Object.assign(this.state.profileUser, {sid: school.id})});
   }
 
+  handleCheckbox() {
+    this.setState({skip: !this.state.skip});
+  }
+
   isDobValid(bday) {
     const now = new Date();
     const then = new Date(bday);
@@ -109,6 +113,8 @@ class ContestSignup extends Component {
     const good = <Icon iconName="tick" className="pt-intent-success" />;
     const bad = <Icon iconName="cross" className="pt-intent-danger" />;
 
+    console.log(this.state.skip);
+
     return (
       <div id="signup-container">
         <div id="signup-forms">
@@ -119,12 +125,32 @@ class ContestSignup extends Component {
           <p>Remember, you need to finish all Codelife Islands and submit a final project to be considered in the drawing!</p>
           <form>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("What school do you go to?")}
-              </label>
-              <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
+            <h2>Location Info</h2>
 
+            <div className="pt-form-group pt-inline">
+              <label className="pt-control pt-checkbox">
+                <input type="checkbox" checked={this.state.skip} onChange={this.handleCheckbox.bind(this)}/>
+                <span className="pt-control-indicator"></span>
+                {t("I'd rather not say")}
+              </label>
+            </div>
+
+            <div className={this.state.skip ? "hidden" : ""}>
+
+              <div className="pt-form-group pt-inline">
+                <label className="pt-label" htmlFor="example-form-group-input-d">
+                  {t("Where are you from?")}
+                </label>
+                <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
+              </div>
+              
+              <div className="pt-form-group pt-inline">
+                <label className="pt-label" htmlFor="example-form-group-input-d">
+                  {t("What school do you go to?")}
+                </label>
+                <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
+
+              </div>
             </div>
 
             <div className="pt-form-group pt-inline">
@@ -179,6 +205,7 @@ class ContestSignup extends Component {
         </div>
         <div id="eligibility-box">
           <ul>
+            <li>{this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid ? good : bad} location</li>
             <li>{this.isEmailValid(email) ? good : bad} email</li>
             <li>{CPF.isValid(cpf) ? good : bad} CPF</li>
             <li>{this.isDobValid(dob) ? good : bad} under 19</li>

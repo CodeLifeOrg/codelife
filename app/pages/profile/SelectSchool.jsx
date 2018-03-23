@@ -101,7 +101,7 @@ class SelectSchool extends Component {
       <div>
         <SelectGeo gid={gid} callback={updateSchoolList} />
         {error ? <p>{error}</p> : null}
-        {schools.length
+        {schools.length && !error
           ? <Select
             resetOnSelect={true}
             items={filteredSchools}

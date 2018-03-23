@@ -333,7 +333,60 @@ blueprint overrides
 
 
 /* -----------------------------------
-form fields
+layout
+----------------------------------- */
+
+/* Set min width on content container so the footer stays at the bottom */
+.content,
+.container > .nav + * {
+  @media (min-height: 680px) {
+    min-height: 55vh; /* fallback */
+    min-height: calc(100vh - 26.6rem); /* 100% fudged */
+
+  }
+}
+
+.content {
+  padding: var(--gutter-md);
+  max-width: 1220px; /* TODO: add to style.yml */
+  margin-left: auto;
+  margin-right: auto;
+
+  @add-mixin min-sm {
+    padding: var(--gutter-lg);
+  }
+
+  /* space out sections */
+  & > .content-section {
+    padding-top: var(--gutter-lg);
+    padding-bottom: var(--gutter-lg);
+
+    /* keep line-length in check */
+    &.limited-width {
+      max-width: 600px; /* TODO: add to style.yml */
+    }
+
+    /* no padding on first and last sections */
+    &:first-of-type {
+      padding-top: 0;
+    }
+    &:last-of-type {
+      padding-bottom: 0;
+    }
+  }
+
+  /* space out typography */
+  & h1, & h2, & h3, & h4, & h5, & h6,
+  & p, & li, & a,
+  & .heading, & .link, & [class*=button] {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+}
+
+
+/* -----------------------------------
+form field layout
 ----------------------------------- */
 
 /* container theming & padding */
@@ -421,6 +474,7 @@ form fields
   & > button,
   & > [class*=button] {
     margin-top: 1.15em;
+    margin-bottom: 0; /* reset from .content */
   }
 
   /* social buttons */
@@ -477,58 +531,6 @@ form fields
 
 
 /* -----------------------------------
-layout
------------------------------------ */
-
-/* Set min width on content container so the footer stays at the bottom */
-.content,
-.container > .nav + * {
-  @media (min-height: 680px) {
-    min-height: 55vh; /* fallback */
-    min-height: calc(100vh - 29.75rem); /* 100% fudged */
-  }
-}
-
-.content {
-  padding: var(--gutter-md);
-  max-width: 1220px; /* TODO: add to style.yml */
-  margin-left: auto;
-  margin-right: auto;
-
-  @add-mixin min-sm {
-    padding: var(--gutter-lg);
-  }
-
-  /* space out sections */
-  & > .content-section {
-    padding-top: var(--gutter-lg);
-    padding-bottom: var(--gutter-lg);
-
-    /* keep line-length in check */
-    &.limited-width {
-      max-width: 600px; /* TODO: add to style.yml */
-    }
-
-    /* no padding on first and last sections */
-    &:first-of-type {
-      padding-top: 0;
-    }
-    &:last-of-type {
-      padding-bottom: 0;
-    }
-  }
-
-  /* space out typography */
-  & h1, & h2, & h3, & h4, & h5, & h6,
-  & p, & li, & a,
-  & .heading, & .link, & [class*=button] {
-    margin-top: 0.75em;
-    margin-bottom: 0.75em;
-  }
-}
-
-
-/* -----------------------------------
 utility classes
 ----------------------------------- */
 /* make buttons not look like buttons */
@@ -573,4 +575,10 @@ utility classes
   @add-mixin max-sm {
     display: none !important;
   }
+}
+
+/* vertially align child content via flexbox */
+.u-vertical-align-children {
+  display: flex;
+  align-items: center;
 }

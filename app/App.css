@@ -382,6 +382,12 @@ layout
     margin-top: 0.75em;
     margin-bottom: 0.75em;
   }
+
+  /* don't be indenting list items */
+  & ul,
+  & ol {
+    padding-left: 1.1em;
+  }
 }
 
 
@@ -542,6 +548,11 @@ utility classes
 /* screen reader text */
 .u-visually-hidden {
   @add-mixin visually-hidden;
+}
+
+/* make lists not look like lists */
+.u-list-reset {
+  @add-mixin list-reset;
 }
 
 /* vertical margin */

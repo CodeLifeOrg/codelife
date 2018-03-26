@@ -33,6 +33,12 @@ class Search extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.linkObj !== nextProps.linkObj) {
+      this.clearSearch();
+    }
+  }
+
   clearSearch() {
     this.setState({selectedIndex: null, query: "", showResults: false, results: {users: [], projects: []}});
   }
@@ -173,5 +179,6 @@ class Search extends Component {
 Search = connect(state => ({
   auth: state.auth
 }))(Search);
-Search = translate()(Search);
+Search = translate(undefined, {withRef: true})(Search);
 export default Search;
+

@@ -66,7 +66,7 @@ class Nav extends Component {
         </div>
 
         {/* site-wide search */}
-        { auth.user ? <Search scope="sitewide" /> : null }
+        { auth.user ? <Search linkObj={linkObj} scope="sitewide" /> : null }
 
         { auth.user
           ? <div className="link-list font-sm">

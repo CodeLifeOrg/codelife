@@ -20,7 +20,8 @@ class ContestSignup extends Component {
     this.state = {
       mounted: false,
       profileUser: null,
-      skip: false
+      skip: false,
+      gotEmailFromDB: false
     };
   }
 
@@ -35,7 +36,8 @@ class ContestSignup extends Component {
       else {
         this.setState({
           mounted: true,
-          profileUser: userData
+          profileUser: userData,
+          gotEmailFromDB: Boolean(userData.email)
         });
       }
     });
@@ -99,8 +101,13 @@ class ContestSignup extends Component {
   }
 
   isEmailValid(email) {
-    const re = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
-    return re.test(email.toLowerCase());
+    if (email) {
+      const re = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+      return re.test(email.toLowerCase());
+    }
+    else {
+      return false;
+    }
   }
 
   enterContest() {
@@ -185,7 +192,7 @@ class ContestSignup extends Component {
               </label>
               <div className="pt-form-content">
                 <div className="pt-input-group">
-                  <input onChange={this.onEmailUpdate.bind(this)} value={email || ""} placeholder="" id="email" className="pt-input" type="text" dir="auto" />
+                  <input onChange={this.onEmailUpdate.bind(this)} disabled={this.state.gotEmailFromDB} value={email || ""} placeholder="" id="email" className="pt-input" type="text" dir="auto" />
                 </div>
               </div>
             </div>

@@ -57,7 +57,7 @@ class App extends Component {
     const {auth, children, i18n, location, islands} = this.props;
     const {userInit} = this.state;
 
-    const routes = location.pathname.split("/");
+    const routes = this.props.router.location.pathname.split("/");
 
     const authRoute = routes[1] === "login";
     const bareRoute = ["projects", "codeBlocks"].includes(routes[1]) && routes.length === 4;

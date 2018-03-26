@@ -102,12 +102,12 @@ class Search extends Component {
     );
     const projectList = results.projects.filter(r => r.user).map(r =>
       <li key={r.id} className="search-results-item project-result">
-        <a className={`search-results-link ${r.selected ? "search-selected" : ""}`} href={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>
+        <Link className={`search-results-link ${r.selected ? "search-selected" : ""}`} to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>
           <span className="search-results-text primary-search-results-text font-sm">{r.name}</span>
           <span className="search-results-text secondary-search-results-text font-xs">
             {t("by")} {r.user.username}
           </span>
-        </a>
+        </Link>
       </li>
     );
 

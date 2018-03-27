@@ -4,8 +4,9 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Intent, Tooltip, Position, Icon, Popover, MenuItem} from "@blueprintjs/core";
-import {MultiSelect} from "@blueprintjs/labs";
+import {Alert, Intent, Tooltip, Position, Icon, Dialog, Button, MenuItem} from "@blueprintjs/core";
+import CollabSearch from "./CollabSearch";
+//import {MultiSelect} from "@blueprintjs/labs";
 
 class Projects extends Component {
 
@@ -15,18 +16,8 @@ class Projects extends Component {
       deleteAlert: false,
       projects: [],
       collabs: [],
-      userList: [
-        {id: 1, name: "jimmy"},
-        {id: 2, name: "dave"},
-        {id: 3, name: "alex"},
-        {id: 4, name: "sabrina"},
-        {id: 5, name: "nick"},
-        {id: 6, name: "james"},
-        {id: 7, name: "natalia"},
-        {id: 8, name: "walther"}
-      ],
-      users: [],
       projectName: "",
+      isOpen: false,
       currentProject: null
     };
   }
@@ -153,6 +144,10 @@ class Projects extends Component {
 
   }
 
+  toggleDialog() {
+    this.setState({isOpen: !this.state.isOpen});
+  }
+
   // ============================================
   // BEGIN MULTISELECT 
   // ============================================
@@ -223,22 +218,29 @@ class Projects extends Component {
         }
         <div>
           <Tooltip content={ "Add Collaborator" }>
-            <Popover>
-              <span className="pt-icon-standard pt-icon-plus" onClick={ () => this.toggleCollab(project) } />
-              <MultiSelect
-                // initialContent={<MenuItem disabled={true} text="test" />} 
-                style={{padding: "30px"}}
-                itemRenderer={this.renderUser.bind(this)}
-                itemPredicate={this.filterUser.bind(this)}
-                items={this.state.userList}
-                noResults={<MenuItem disabled={true} text="No results." />}
-                onItemSelect={this.handleUserSelect.bind(this)}
-                // popoverProps={{ popoverClassName: popoverMinimal ? Classes.MINIMAL : "" }}
-                tagRenderer={u => u.name}
-                tagInputProps={{onRemove: this.handleTagRemove.bind(this)}}
-                selectedItems={this.state.users}
-              />
-            </Popover>
+            <div>
+              <span className="pt-icon-standard pt-icon-plus" onClick={this.toggleDialog.bind(this)} />
+              <Dialog
+                icon="inbox"
+                isOpen={this.state.isOpen}
+                onClose={this.toggleDialog.bind(this)}
+                title={t("Collaborate")}
+                className="pt-dialog is-fullscreen"
+              >
+                <div className="pt-dialog-body ">
+                  <CollabSearch />
+                </div>
+                <div className="pt-dialog-footer">
+                  <div className="pt-dialog-footer-actions">
+                    <Button
+                      intent={Intent.PRIMARY}
+                      onClick={this.toggleDialog.bind(this)}
+                      text={t("Close")}
+                    />
+                  </div>
+                </div>
+              </Dialog>
+            </div>
           </Tooltip>&nbsp;&nbsp;&nbsp;
           { showDeleteButton
             ? <Tooltip content={ t("Delete Project") }>

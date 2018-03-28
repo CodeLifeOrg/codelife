@@ -11,6 +11,32 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+
+  app.get("/api/searchusers", isAuthenticated, (req, res) => {
+    const query = req.query.query;
+    db.userprofiles.findAll({
+      attributes: ["uid", "gid", "sid"],
+      include: [
+        {
+          association: "user", 
+          attributes: ["id", "username", "name"],
+          where: 
+            {
+              [sequelize.Op.or]: 
+                [
+                  {username: {[sequelize.Op.iLike]: `%${query}%`}}, 
+                  {name: {[sequelize.Op.iLike]: `%${query}%`}}
+                ]
+            } 
+        }
+      ]
+    }).then(users => {
+      res.json(users).end();
+    });
+  });
+
+
+
   app.get("/api/search", isAuthenticated, (req, res) => {
     const query = req.query.query;
     db.users.findAll({

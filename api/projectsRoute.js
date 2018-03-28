@@ -19,7 +19,7 @@ const pInclude = [
   {association: "userprofile", attributes: ["bio", "sharing"]}, 
   {association: "user", attributes: ["username"]}, 
   {association: "reportlist"},
-  {association: "collaborators", attributes: ["uid", "sid"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
+  {association: "collaborators", attributes: ["uid", "sid", "gid"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];
 
 module.exports = function(app) {

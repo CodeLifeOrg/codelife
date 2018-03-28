@@ -34,9 +34,9 @@ class CollabSearch extends Component {
 
   search() {
     const {query} = this.state;
-    axios.get(`/api/search/?query=${query}`).then(resp => {
+    axios.get(`/api/searchusers/?query=${query}`).then(resp => {
       if (resp.status === 200) {
-        this.setState({users: resp.data.users});
+        this.setState({users: resp.data});
       }
       else {
         console.log("error");
@@ -47,21 +47,12 @@ class CollabSearch extends Component {
   addCollaborator(searchResult) {
     const {currentProject} = this.props;
     const pid = currentProject.id;
-    const uid = searchResult.id;
+    const uid = searchResult.uid;
     if (uid && pid) {
       const payload = {uid, pid};
       axios.post("/api/projects/addcollab", payload).then(resp => {
         if (resp.status === 200) {
-          const newCollab = {
-            uid,
-            sid: "",
-            user: {
-              username: searchResult.username,
-              email: "placeholder",
-              name: searchResult.name
-            }
-          };
-          currentProject.collaborators = currentProject.collaborators.concat(newCollab);
+          currentProject.collaborators = currentProject.collaborators.concat(searchResult);
           this.setState({currentProject});
         }
         else {
@@ -98,11 +89,11 @@ class CollabSearch extends Component {
 
     const userList = users
       // do not include a current collaborator in the search results
-      .filter(u => !collabs.map(c => c.uid).includes(u.id))
+      .filter(u => !collabs.map(c => c.uid).includes(u.uid))
       .map(r =>
         <li className="list-result" key={r.id}>
           <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-            <h5>{r.username}</h5><br/>
+            <h5>{r.user.username}</h5><br/>
             <p>home will go here</p>
             <p>school will go here</p>
             <button onClick={this.addCollaborator.bind(this, r)}>Add</button>

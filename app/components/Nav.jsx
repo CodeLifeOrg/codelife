@@ -101,35 +101,36 @@ class Nav extends Component {
             </Link>
             {/* dropdown */}
             <Popover
+              inline
               interactionKind={PopoverInteractionKind.CLICK}
               className="link-toggle-container"
               popoverClassName="pt-popover-content-sizing account-popover"
               position={Position.BOTTOM}
             >
               {/* dropdown button */}
-              <button className="link-toggle-button u-unbutton" onClick={this.toggleBrowser.bind(this)} >
+              <button className="link-toggle-button u-unbutton">
                 <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
               </button>
 
               {/* dropdown links */}
               <div className="link-dropdown">
                 {/* my profile */}
-                <Link className="link font-sm" to={ `/profile/${ auth.user.username }` }>
+                <Link className="link font-sm pt-popover-dismiss" to={ `/profile/${ auth.user.username }` } autoFocus>
                   <span className="link-icon pt-icon-standard pt-icon-id-number" />
                   { t("My profile") }
                 </Link>
                 {/* my projects */}
-                <Link className="link font-sm" to={`/projects/${auth.user.username}`}>
+                <Link className="link font-sm pt-popover-dismiss" to={`/projects/${auth.user.username}`}>
                   <span className="link-icon pt-icon-standard pt-icon-applications" />
                   <span className="link-text u-hide-below-sm">{ t("My projects") }</span>
                 </Link>
                 {/* admin link */}
-                { auth.user.role > 0 ? <Link className="link font-sm" to="/admin">
+                { auth.user.role > 0 ? <Link className="link font-sm pt-popover-dismiss" to="/admin">
                   <span className="link-icon pt-icon-standard pt-icon-series-configuration" />
                   { t("Admin") }
                 </Link> : null }
                 {/* log out */}
-                <a className="link font-sm" href="/auth/logout">
+                <a className="link font-sm pt-popover-dismiss" href="/auth/logout">
                   <span className="link-icon pt-icon-standard pt-icon-log-out" />
                   { t("Log out") }
                 </a>

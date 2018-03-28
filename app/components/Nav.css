@@ -311,8 +311,36 @@
   }
 }
 
-/* user popover */
+/* adjust inline account popover */
+.link-toggle-button + .pt-overlay-inline {
+
+  /* set max-width */
+  & .pt-overlay-content,
+  & .account-popover,
+  & .account-popover > .pt-popover-content {
+    max-width: 9.5rem;
+  }
+
+  /* position container */
+  & .account-popover {
+    top: 0.125rem;
+    left: -1.125rem;
+
+    /* reset padding */
+    & > .pt-popover-content {
+      padding: 0.25rem 0;
+      margin-right: 0;
+
+      & .link {
+        display: block;
+        min-width: 9.5rem;
+      }
+    }
+  }
+}
+
 .account-popover {
+  text-align: left; /* override .nav .nav-list */
 
   &.pt-popover-content-sizing > .pt-popover-content {
     padding: var(--gutter-xs) var(--gutter-sm);
@@ -322,6 +350,10 @@
     @add-mixin nav-link;
     display: block;
     line-height: 2;
+
+    &:hover, &:focus {
+      color: var(--black);
+    }
   }
 
   & .link-icon {

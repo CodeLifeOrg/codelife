@@ -18,7 +18,9 @@ module.exports = function(app) {
         [sequelize.Op.or]: [
           {username: {[sequelize.Op.iLike]: `%${query}%`}}, 
           {name: {[sequelize.Op.iLike]: `%${query}%`}}
-        ]}
+        ]},
+      attributes: ["id", "username", "name"]
+
     }).then(users => {
       users = users.map(u => {
         u = u.toJSON();

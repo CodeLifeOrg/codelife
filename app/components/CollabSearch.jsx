@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-// import {Card, Elevation} from "@blueprintjs/core";
+import {Card} from "@blueprintjs/core";
 import {Link} from "react-router";
 import {connect} from "react-redux";
 import {browserHistory} from "react-router";
@@ -44,48 +44,119 @@ class CollabSearch extends Component {
     });
   }
 
+  addCollaborator(searchResult) {
+    const {currentProject} = this.props;
+    const pid = currentProject.id;
+    const uid = searchResult.id;
+    if (uid && pid) {
+      const payload = {uid, pid};
+      axios.post("/api/projects/addcollab", payload).then(resp => {
+        if (resp.status === 200) {
+          const newCollab = {
+            uid,
+            sid: "",
+            user: {
+              username: searchResult.username,
+              email: "placeholder",
+              name: searchResult.name
+            }
+          };
+          currentProject.collaborators = currentProject.collaborators.concat(newCollab);
+          this.setState({currentProject});
+        }
+        else {
+          console.log("error");
+        }
+      });
+    }
+  }
+
+  removeCollaborator(uid) {
+    const {currentProject} = this.props;
+    const pid = currentProject.id;
+    if (uid && pid) {
+      const payload = {uid, pid};
+      axios.post("/api/projects/removecollab", payload).then(resp => {
+        if (resp.status === 200) {
+          currentProject.collaborators = currentProject.collaborators.filter(c => c.uid !== uid);
+          this.setState({currentProject});
+        }
+        else {
+          console.log("error");
+        }
+      });
+    }
+  }
+
   render() {
 
-    const {t, scope} = this.props;
+    const {t, currentProject} = this.props;
     const {users, query} = this.state;
-    const inputID = `${scope}-search-input`;
+    const collabs = currentProject.collaborators;
 
-    const userList = users.map(r =>
-      /*<Card key={r.id} interactive={true} elevation={Elevation.TWO}>
-        <h5><a href="#">Card heading</a></h5>
-        <p>Card content</p>
-        <button>Submit</button>
-      </Card>
-    );*/
-      
+    console.log(users, collabs);
 
-      <li key={r.id} className="search-results-item user-result">
-        <Link className={`search-results-link ${r.selected ? "search-selected" : ""}`} to={`/profile/${r.username}`} onClick={this.clearSearch.bind(this)}>
-          <span className="search-results-text primary-search-results-text font-sm">{r.username}</span>
-          {r.name ? <span className="search-results-text secondary-search-results-text font-xs">{r.name}</span> : "" }
-        </Link>
+    const userList = users
+      // do not include a current collaborator in the search results
+      .filter(u => !collabs.map(c => c.uid).includes(u.id))
+      .map(r =>
+        <li className="list-result" key={r.id}>
+          <Card interactive={true} elevation={Card.ELEVATION_TWO}>
+            <h5>{r.username}</h5><br/>
+            <p>home will go here</p>
+            <p>school will go here</p>
+            <button onClick={this.addCollaborator.bind(this, r)}>Add</button>
+          </Card>
+        </li>
+      );
+
+    const collabList = collabs.map(r => 
+      <li className="collab-result" key={r.id}>
+        <Card interactive={true} elevation={Card.ELEVATION_TWO}>
+          <h5>{r.user.username}</h5><br/>
+          <p>home will go here</p>
+          <p>school will go here</p>
+          <button onClick={this.removeCollaborator.bind(this, r.uid)}>Remove</button>
+        </Card>
       </li>
     );
     
     return (
-      <div className="search-container">
-
-        {/* icon as label */}
-        <label className="search-label" htmlFor={inputID}>
-          <span className="search-label-icon pt-icon pt-icon-search" />
-          <span className="u-visually-hidden">{t("Search.Users")}</span>
-        </label>
-
-        {/* text input */}
+      <div className="collab-container">
+        <h3>{`${t("Collaborate on")} ${currentProject.name}`}</h3>
         <input
-          id={inputID}
-          className="search-input font-sm"
           onChange={this.handleChange.bind(this)}
           value={query}
-          placeholder={t("Search.Users")} />
-
-
-      
+          placeholder={t("Search.Users")} 
+        />
+        <div className="collab-selections">
+          current collaborators
+          <ul className="collab-list">
+            {collabList}
+          </ul>
+        </div>
+        <div className="pt-select">
+          filter by loc
+          <select value={this.state.filterLoc} onChange={e => this.setState({filterLoc: e.target.value})}>
+            <option value="locs">locs</option>
+            <option value="go">go</option>
+            <option value="here">here</option>
+          </select>
+        </div>
+        <div className="pt-select">
+          filter by school
+          <select value={this.state.filterSchool} onChange={e => this.setState({filterSchool: e.target.value})}>
+            <option value="locs">schools</option>
+            <option value="go">go</option>
+            <option value="here">here</option>
+          </select>
+        </div>
+        <div className="box-results">
+          search results
+          <ul className="list-results">
+            {userList}
+          </ul>
+        </div>
       </div>
     );
   }

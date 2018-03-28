@@ -18,7 +18,8 @@ class Projects extends Component {
       collabs: [],
       projectName: "",
       isOpen: false,
-      currentProject: null
+      currentProject: null,
+      collabProject: null
     };
   }
 
@@ -144,8 +145,8 @@ class Projects extends Component {
 
   }
 
-  toggleDialog() {
-    this.setState({isOpen: !this.state.isOpen});
+  toggleDialog(project) {
+    this.setState({isOpen: !this.state.isOpen, collabProject: project});
   }
 
   // ============================================
@@ -219,7 +220,7 @@ class Projects extends Component {
         <div>
           <Tooltip content={ "Add Collaborator" }>
             <div>
-              <span className="pt-icon-standard pt-icon-plus" onClick={this.toggleDialog.bind(this)} />
+              <span className="pt-icon-standard pt-icon-plus" onClick={this.toggleDialog.bind(this, project)} />
               <Dialog
                 icon="inbox"
                 isOpen={this.state.isOpen}
@@ -228,7 +229,7 @@ class Projects extends Component {
                 className="pt-dialog is-fullscreen"
               >
                 <div className="pt-dialog-body ">
-                  <CollabSearch />
+                  <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
                 </div>
                 <div className="pt-dialog-footer">
                   <div className="pt-dialog-footer-actions">

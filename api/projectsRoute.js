@@ -19,7 +19,7 @@ const pInclude = [
   {association: "userprofile", attributes: ["bio", "sharing"]}, 
   {association: "user", attributes: ["username"]}, 
   {association: "reportlist"},
-  {association: "collaborators", attributes: ["uid", "sid"], include: [{association: "user", attributes: ["username", "email"]}]}
+  {association: "collaborators", attributes: ["uid", "sid"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];
 
 module.exports = function(app) {
@@ -155,6 +155,20 @@ module.exports = function(app) {
             .sort((a, b) => a.name < b.name ? -1 : 1);
           res.json({currentProject, projects: resp}).end();
         });
+    });
+  });
+
+  app.post("/api/projects/addcollab", isAuthenticated, (req, res) => {
+    const {uid, pid} = req.body;
+    db.projects_userprofiles.create({uid, pid}).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  app.post("/api/projects/removecollab", isAuthenticated, (req, res) => {
+    const {uid, pid} = req.body;
+    db.projects_userprofiles.destroy({where: {uid, pid}}).then(u => {
+      res.json(u).end();
     });
   });
 

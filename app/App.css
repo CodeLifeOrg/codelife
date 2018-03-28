@@ -337,12 +337,10 @@ layout
 ----------------------------------- */
 
 /* Set min width on content container so the footer stays at the bottom */
-.content,
-.container > .nav + * {
+.content {
   @media (min-height: 680px) {
     min-height: 55vh; /* fallback */
     min-height: calc(100vh - 26.6rem); /* 100% fudged */
-
   }
 }
 

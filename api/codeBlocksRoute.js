@@ -19,9 +19,9 @@ function flattenCodeBlock(user, cb) {
 }
 
 const cbIncludes = [
-  {association: "userprofile", attributes: ["sharing"]}, 
-  {association: "user", attributes: ["username"]}, 
-  {association: "likelist"}, 
+  {association: "userprofile", attributes: ["sharing"]},
+  {association: "user", attributes: ["username"]},
+  {association: "likelist"},
   {association: "reportlist"}
 ];
 
@@ -58,11 +58,11 @@ module.exports = function(app) {
   app.get("/api/codeBlocks/featured", (req, res)  => {
     db.codeblocks.findAll({
       where: {
-        [Op.or]: [{id: 863}, {id: 834}, {id: 921}, {id: 30}]
+        [Op.or]: [{id: 834}, {id: 921}, {id: 30}]
       },
       include: cbIncludes
     })
-      .then(cbRows => 
+      .then(cbRows =>
         res.json(cbRows
           .map(cb => flattenCodeBlock(req.user, cb.toJSON()))).end()
       );
@@ -73,7 +73,7 @@ module.exports = function(app) {
     db.codeblocks.findAll({
       include: cbIncludes.map(i => i.association === "user" ? Object.assign({}, i, {where: {id: req.query.uid}}) : i)
     })
-      .then(cbRows => 
+      .then(cbRows =>
         res.json(cbRows
           .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
           .filter(cb => !cb.hidden)
@@ -90,20 +90,20 @@ module.exports = function(app) {
       },
       include: cbIncludes.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
     })
-      .then(cbRows => 
+      .then(cbRows =>
         res.json(cbRows
           .map(cb => flattenCodeBlock(req.user, cb.toJSON())))
           .end()
       );
   });
 
-  // Used by CodeBlockList.jsx and Level.jsx to get codeblocks 
+  // Used by CodeBlockList.jsx and Level.jsx to get codeblocks
   app.get("/api/codeBlocks/all", isAuthenticated, (req, res) => {
     db.codeblocks.findAll({
       where: req.query,
       include: cbIncludes
     })
-      .then(cbRows => 
+      .then(cbRows =>
         res.json(cbRows
           .map(cb => flattenCodeBlock(req.user, cb.toJSON()))
           .filter(cb => !cb.hidden)

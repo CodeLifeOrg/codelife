@@ -16,8 +16,8 @@ function flattenProject(user, p) {
 }
 
 const pInclude = [
-  {association: "userprofile", attributes: ["bio", "sharing"]}, 
-  {association: "user", attributes: ["username"]}, 
+  {association: "userprofile", attributes: ["bio", "sharing"]},
+  {association: "user", attributes: ["username"]},
   {association: "reportlist"},
   {association: "collaborators", attributes: ["uid", "sid", "gid"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];
@@ -41,7 +41,7 @@ module.exports = function(app) {
       },
       include: pInclude
     })
-      .then(pRows => 
+      .then(pRows =>
         res.json(pRows
           .map(p => flattenProject(req.user, p.toJSON()))
           .filter(p => !p.hidden)
@@ -59,7 +59,7 @@ module.exports = function(app) {
         {association: "collabproj", include: pInclude}
       ]
     })
-      .then(pRows => 
+      .then(pRows =>
         res.json(pRows
           .map(p => flattenProject(req.user, p.collabproj[0].toJSON()))
           .filter(p => !p.hidden)
@@ -72,11 +72,11 @@ module.exports = function(app) {
   app.get("/api/projects/featured", (req, res) => {
     db.projects.findAll({
       where: {
-        [Op.or]: [{id: 1026}, {id: 982}, {id: 1020}, {id: 1009}]
+        [Op.or]: [{id: 1026}, {id: 1020}, {id: 1009}]
       },
       include: pInclude
     })
-      .then(pRows => 
+      .then(pRows =>
         res.json(pRows
           .map(p => flattenProject(req.user, p.toJSON()))).end()
       );
@@ -84,7 +84,7 @@ module.exports = function(app) {
 
   // Used by Studio to open a project by ID
   app.get("/api/projects/byid", isAuthenticated, (req, res) => {
-    
+
     /*
     TODO: work constraint back in so that users can only read their own projects OR THEIR COLLABS
     db.projects.findAll({where: {id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
@@ -102,7 +102,7 @@ module.exports = function(app) {
       },
       include: pInclude
     })
-      .then(pRows => 
+      .then(pRows =>
         res.json(pRows
           .map(p => flattenProject(req.user, p.toJSON()))
           .filter(p => !p.hidden)
@@ -119,7 +119,7 @@ module.exports = function(app) {
       },
       include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
     })
-      .then(pRows => 
+      .then(pRows =>
         res.json(pRows
           .map(p => flattenProject(req.user, p.toJSON()))).end()
       );
@@ -181,7 +181,7 @@ module.exports = function(app) {
         },
         include: pInclude
       })
-        .then(pRows => 
+        .then(pRows =>
           res.json(pRows
             .map(p => flattenProject(req.user, p.toJSON()))
             .filter(p => !p.hidden)

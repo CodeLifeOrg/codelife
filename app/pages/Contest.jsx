@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import AuthForm from "components/AuthForm";
-import ContestSignup from "pages/ContestSignup";
+import ContestSignup from "components/ContestSignup";
 import {Dialog} from "@blueprintjs/core";
 import axios from "axios";
 
@@ -81,35 +81,50 @@ class Contest extends Component {
           <li>
             {hasAccount ? good : bad} create a codelife account<br/>
             {!hasAccount
-              ? <button onClick={() => this.setState({isAuthOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for CodeLife</button>
+              ? <div>
+                <p>sign up for codelife explanation</p>
+                <button onClick={() => this.setState({isAuthOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for CodeLife</button>
+              </div>
               : null
             }
           </li>
           <li>
             {signedUp ? good : bad} sign up for the contest<br/>
             {hasAccount && !signedUp 
-              ? <button onClick={() => this.setState({isSignupOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for the Contest</button>
+              ? <div>
+                <p>sign up for the contest explanation</p>
+                <button onClick={() => this.setState({isSignupOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for the Contest</button>
+              </div>
               : null
             }
           </li>
           <li>
             {beatenGame ? good : bad} learn to code<br/>
             {hasAccount && signedUp && !beatenGame
-              ? <button className="pt-button pt-intent-primary font-md">Play all the levels</button>
+              ? <div>
+                <p>go beat all the islands</p>
+                <button className="pt-button pt-intent-primary font-md">Play all the levels</button>
+              </div>
               : null
             }
           </li>
           <li>
             {hasProjects ? good : bad} build a website<br/>
             {hasAccount && signedUp && beatenGame && !hasProjects
-              ? <button className="pt-button pt-intent-primary font-md">Make a Project</button>
+              ? <div>
+                <p>create projects in the studio</p>
+                <button className="pt-button pt-intent-primary font-md">Make a Project</button>
+              </div>
               : null
             }
           </li>
           <li>
             {hasSubmitted ? good : bad}submit your project<br/>
             {hasAccount && signedUp && beatenGame && hasProjects && !hasSubmitted
-              ? <button className="pt-button pt-intent-primary font-md">Submit your Project</button>
+              ? <div>
+                <p>select a project before xx/xx/xx date</p>
+                <button className="pt-button pt-intent-primary font-md">Submit your Project</button>
+              </div>
               : null
             }
           </li>

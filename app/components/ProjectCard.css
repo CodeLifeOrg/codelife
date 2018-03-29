@@ -6,6 +6,8 @@
 
 /* default card style */
 .card {
+  /* sizing */
+  height: 100%; /* fill container height */
   /* theming */
   background-color: var(--white);
   border-radius: var(--radius-md);
@@ -21,7 +23,7 @@
   width: 100%;
   padding-top: 53.57142857%;
   /* theming */
-  background-color: var(--sky-light); /* initial state */
+  background-color: var(--sky-dark); /* initial state */
   background-size: cover;
   /* overflow: hidden wasn't cutting it */
   border-top-left-radius: var(--radius-md);
@@ -42,6 +44,7 @@
   }
 }
 
+/* fullscreen icon — hidden by default */
 .card-fullscreen-icon {
   /* positioning */
   position: absolute;

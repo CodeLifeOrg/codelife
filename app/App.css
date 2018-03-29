@@ -553,7 +553,13 @@ utility classes
   @add-mixin list-reset;
 }
 
+/* absolute expand */
+.u-absolute-expand {
+  @add-mixin absolute-expand;
+}
+
 /* vertical margin */
+.u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
 .u-margin-top-md { margin-top: var(--gutter-md) !important; }
 .u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
 .u-margin-top-off { margin-top: 0 !important; }

@@ -24,6 +24,10 @@
   "CPF": "CPF",
   "Can't save non-passing code!": "Can't save non-passing code!",
   "Cancel": "Cancel",
+  "Card": {
+    "MadeBy": "Made by",
+    "NewProject": "New Project"
+  },
   "Close": "Close",
   "Code Blocks": "Code Blocks",
   "Code Editor": "Code Editor",
@@ -34,10 +38,15 @@
   "Codeblock Title": "Codeblock Title",
   "Codeblock's code will be shown after you complete the last level of this island": "Codeblock's code will be shown after you complete the last level of this island",
   "Codeblocks": "Codeblocks",
+  "Collaborate": "Collaborate",
   "Collaborators": "Collaborators",
   "Comment Posted!": "Comment Posted!",
   "Content Approved": "Content Approved",
   "Content Banned": "Content Banned",
+  "Contest": {
+    "GetStarted": "Get started",
+    "SubmitProject": "Submit project"
+  },
   "Contributor": "Contributor",
   "Create": "Create",
   "Create a New Project": "Create a New Project",
@@ -50,6 +59,8 @@
   "Earn your CodeBlock": "Earn your CodeBlock",
   "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!": "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!",
   "Edit Profile": "Edit Profile",
+  "Email": "Email",
+  "Enter": "Enter",
   "Error": "Error",
   "Execute": "Execute",
   "Explore": "Explore",
@@ -147,6 +158,9 @@
   "Privacy Policy": "Privacy Policy",
   "Profile": "Profile",
   "Profile saved!": "Profile saved!",
+  "Project": {
+    "View": "View project"
+  },
   "Project Title": "Project Title",
   "Projects": "Projects",
   "Projects (build your own site)": "Projects (build your own site)",
@@ -178,6 +192,7 @@
     "ProjectsHeading": "Projects",
     "Results": "Search results: ",
     "Site": "Search site",
+    "Users": "Search users",
     "UsersHeading": "Users"
   },
   "Select a project first!": "Select a project first!",

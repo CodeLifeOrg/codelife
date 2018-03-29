@@ -77,7 +77,7 @@ class Profile extends Component {
       }
       else {
         console.log("error");
-      }  
+      }
     });
   }
 
@@ -99,9 +99,9 @@ class Profile extends Component {
     if (error) return <h1>{error}</h1>;
 
     return (
-      <div id="profile">
+      <div className="profile" id="profile">
         <aside className="profile-side">
-          
+
           <UserInfo user={profileUser} loggedInUser={loggedInUser} />
           { this.props.user.role > 1 ? <Switch checked={this.state.sharing} label="Sharing Enabled" onChange={this.handleChangeSharing.bind(this)} /> : null }
           {/* <skillsList /> */}

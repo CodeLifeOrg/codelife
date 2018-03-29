@@ -216,6 +216,49 @@
   }
 }
 
+/* card layout mixins — add to .card-list container */
+@define-mixin card-layout-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  /* space out adjacent cards */
+  & > .card-container {
+    margin-bottom: 1.75rem;
+  }
+}
+@define-mixin card-layout-stacked {
+  flex-direction: column;
+}
+@define-mixin card-layout-2col {
+  & > .card-container {
+    width: 48%; /* fallback */
+    width: calc(50% - 0.875rem);
+  }
+}
+@define-mixin card-layout-3col {
+  & > .card-container {
+    width: 30%; /* fallback */
+    width: calc(33.333% - 1.2rem);
+
+    /* scale up uneven items in the last row */
+    &:nth-of-type(3n+0):nth-last-of-type(-n+3) ~ .card-container {
+      width: calc(50% - 0.875rem);
+    }
+  }
+}
+@define-mixin card-layout-4col {
+  & > .card-container {
+    width: 24%; /* fallback */
+    width: calc(25% - 1.375rem);
+
+    /* scale up uneven items in the last row */
+    &:nth-of-type(4n+0):nth-last-of-type(-n+4) ~ .card-container {
+      width: calc(33.333% - 1.2rem);
+    }
+  }
+}
+
 /* form divider */
 @define-mixin form-divider {
   margin-bottom: -0.8em; /* offset button padding */

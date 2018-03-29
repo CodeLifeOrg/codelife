@@ -81,6 +81,24 @@ then add the theme name to the @each loop below */
       fill: var(--$(theme)-island-dark);
     }
   }
+  /* codeblock card theming */
+  .island-$(theme)-card {
+    /* title color */
+    & .card-title {
+      color: var(--$(theme)-island-dark);
+    }
+    /* author link color */
+    & .card-author-link {
+      color: var(--$(theme)-island-medium);
+      /* interactions */
+      &:hover, &:focus {
+        color: var(--$(theme)-island-dark);
+      }
+    }
+    & .card-island-icon {
+      background-image: url("/islands/island-$(theme)-small.png");
+    }
+  }
 }
 
 

@@ -24,6 +24,10 @@
   "CPF": "CPF",
   "Can't save non-passing code!": "Não pode salvar o código com erros",
   "Cancel": "Cancelar",
+  "Card": {
+    "MadeBy": "Criado por",
+    "NewProject": "Card.NewProject"
+  },
   "Close": "Fechar",
   "Code Blocks": "Desafios",
   "Code Editor": "Editor de código",
@@ -34,10 +38,15 @@
   "Codeblock Title": "Título do desafio",
   "Codeblock's code will be shown after you complete the last level of this island": "O código será mostrado depois de completar o último nível desta ilha",
   "Codeblocks": "Codeblocks",
+  "Collaborate": "Collaborate",
   "Collaborators": "Collaborators",
   "Comment Posted!": "Comment Posted!",
   "Content Approved": "Conteúdo aprovado",
   "Content Banned": "Conteúdo banido",
+  "Contest": {
+    "GetStarted": "Contest.GetStarted",
+    "SubmitProject": "Contest.SubmitProject"
+  },
   "Contributor": "Colaborador",
   "Create": "Criar",
   "Create a New Project": "Criar Novo Projeto",
@@ -50,6 +59,8 @@
   "Earn your CodeBlock": "Conquiste seu CodeBlock",
   "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!": "Ganhe o desafio desta ilha para ver o código fonte de outros desafios!",
   "Edit Profile": "Editar Perfil",
+  "Email": "Email",
+  "Enter": "Enter",
   "Error": "Erro",
   "Execute": "Executar",
   "Explore": "Explore",
@@ -147,6 +158,9 @@
   "Privacy Policy": "Política de privacidade",
   "Profile": "Perfil",
   "Profile saved!": "Perfil salvo!",
+  "Project": {
+    "View": "Project.View"
+  },
   "Project Title": "Título do projeto",
   "Projects": "Projetos",
   "Projects (build your own site)": "Projetos (crie seu site)",
@@ -178,6 +192,7 @@
     "ProjectsHeading": "Search.ProjectsHeading",
     "Results": "Search.Results",
     "Site": "Search.Site",
+    "Users": "Search.Users",
     "UsersHeading": "Search.UsersHeading"
   },
   "Select a project first!": "Select a project first!",

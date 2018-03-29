@@ -100,7 +100,7 @@ class Home extends Component {
           {/* projects */}
           <div className="project-section">
             <h3>{ t("Featured Projects") }</h3>
-            <div className="project-list">
+            <div className="card-list project-list">
               { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
             </div>
           </div>
@@ -108,7 +108,7 @@ class Home extends Component {
           {/* codeblocks */}
           <div className="codeblock-section">
             <h3>{ t("Featured CodeBlocks") }</h3>
-            <div className="codeblock-list">
+            <div className="card-list codeblock-list">
               { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
                 const {theme, icon} = islands.find(i => i.id === c.lid);
                 return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;

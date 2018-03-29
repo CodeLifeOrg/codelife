@@ -101,7 +101,7 @@ STUDENT CODEBLOCKS
 
   /* sizing and positioning on larger viewports */
   @add-mixin min-md {
-    max-width: 1200px;
+    width: 1200px;
     padding: var(--gutter-lg) var(--gutter-md);
     margin: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
   }
@@ -110,21 +110,8 @@ STUDENT CODEBLOCKS
   Student codeblocks
   ------------------------------- */
 
-  & .snippets {
-    align-items: stretch;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  & .card-list:not(.snippets-more) {
     margin-top: var(--gutter-md);
-
-    & + .pt-collapse {
-      margin-top: -50px;
-
-      /* collapsed */
-      &:not([style=""]) {
-        margin-bottom: -50px;
-      }
-    }
   }
 
   /* -------------------------------

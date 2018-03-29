@@ -48,3 +48,20 @@
     }
   }
 }
+
+.student-codeblocks-container {
+  & .card-list {
+    @add-mixin card-layout-base;
+    text-align: left; /* override from .overworld */
+
+    /* stacked cards */
+    @media (max-width: 599px) {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 3 column layout */
+    @media (min-width: 600px) {
+      @add-mixin card-layout-3col;
+    }
+  }
+}

@@ -1,8 +1,15 @@
-.codeBlockCard {
-  margin: var(--gutter-sm);
+.codeblock-card-caption {
+  margin-left: var(--gutter-sm);
+}
 
-  & .box .icon {
-    background-size: 75%;
-  }
-
+.card-island-icon {
+  /* sizing */
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  /* positioning */
+  position: absolute;
+  top: 0.75rem;
+  left: -0.4rem;
+  background-size: cover;
 }

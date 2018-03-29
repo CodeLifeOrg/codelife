@@ -38,7 +38,7 @@ class UsersList extends Component {
   }
 
   render() {
-    const {user: me, t, type} = this.props;
+    const {user: me, t, type, id} = this.props;
     const {loading} = this.state;
     let {users} = this.state;
 
@@ -59,7 +59,7 @@ class UsersList extends Component {
       <div className="user-section">
         <h2>{title}</h2>
         { users.length
-          ? <div className="flex-row">{ users.map(user => <UserCard user={user} />) }</div>
+          ? <div className="card-list">{ users.map(user => <UserCard user={user} key={id} />) }</div>
           : <p>{ t("noUsers") }</p>}
       </div>
     );

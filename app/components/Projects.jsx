@@ -6,7 +6,6 @@ import "./Projects.css";
 
 import {Alert, Intent, Tooltip, Position, Icon, Dialog, Button, MenuItem} from "@blueprintjs/core";
 import CollabSearch from "./CollabSearch";
-//import {MultiSelect} from "@blueprintjs/labs";
 
 class Projects extends Component {
 

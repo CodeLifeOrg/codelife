@@ -10,4 +10,10 @@ module.exports = function(app) {
     });
   });
 
+  app.get("/api/contest/status", isAuthenticated, (req, res) => {
+    db.contestentries.findOne({where: {uid: req.user.id}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
 };

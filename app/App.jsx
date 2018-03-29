@@ -76,6 +76,8 @@ class App extends Component {
     const currentIsland = islands.find(island => island.id === lookup);
     if (currentIsland) theme = currentIsland.theme;
 
+    const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
+
     return (
       <div id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
@@ -84,7 +86,7 @@ class App extends Component {
             ? <div id="devbar">Development Server.  Do not edit content here!</div>
             : null
         }
-        { userInit && !auth.loading || authRoute
+        { reduxLoaded && userInit && !auth.loading || authRoute 
           ? bareRoute
             ? children
             : <div className="container">

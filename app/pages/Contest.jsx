@@ -48,18 +48,20 @@ class Contest extends Component {
         const progress = resp[1].data.progress;
         const projects = resp[2].data;
         const trueProgress = progress.filter(up => up.status === "completed");
-        const signedUp = status.eligible === 1;
+        const signedUp = Boolean(status && status.eligible === 1);
         const beatenGame = trueProgress.length >= flatProgress.length || this.props.user.role >= 1;
         const hasProjects = projects.length > 0;
-        const hasSubmitted = status.project_id !== null;
+        const hasSubmitted = status && status.project_id !== null;
         this.setState({signedUp, beatenGame, hasProjects, hasSubmitted});
       });
     }
   }
 
   determineStep() {
-    const hasAccount = this.props.user;
+    const hasAccount = Boolean(this.props.user);
     const {signedUp, beatenGame, hasProjects, hasSubmitted} = this.state;
+
+    console.log(hasAccount, signedUp, beatenGame);
 
     if (!hasAccount) return 1;
     if (hasAccount && !signedUp) return 2;
@@ -83,7 +85,7 @@ class Contest extends Component {
 
     const {t} = this.props;
 
-    const hasAccount = this.props.user;
+    const hasAccount = Boolean(this.props.user);
     const {signedUp, beatenGame, hasProjects, hasSubmitted} = this.state;
 
     const good = <span className="pt-icon pt-icon-tick" style={{color: "green"}}/>;

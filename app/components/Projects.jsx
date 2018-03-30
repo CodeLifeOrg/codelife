@@ -30,7 +30,7 @@ class Projects extends Component {
     Promise.all([pget, cget]).then(resp => {
       const projects = resp[0].data;
       const collabs = resp[1].data;
-      
+
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
@@ -149,7 +149,7 @@ class Projects extends Component {
   }
 
   // ============================================
-  // BEGIN MULTISELECT 
+  // BEGIN MULTISELECT
   // ============================================
 
   renderUser(obj) {
@@ -166,9 +166,9 @@ class Projects extends Component {
     );
   }
 
-  isUserSelected(user) { 
+  isUserSelected(user) {
     return this.state.users.indexOf(user) !== -1;
-  } 
+  }
 
   handleUserSelect(user) {
     !this.isUserSelected(user) ? this.selectUser(user) : this.deselectUser(this.getSelectedUserIndex(user));
@@ -181,7 +181,7 @@ class Projects extends Component {
   selectUser(user) {
     this.setState({users: [...this.state.users, user]});
   }
-  
+
   deselectUser(index) {
     this.setState({users: this.state.users.filter((_user, i) => i !== index)});
   }
@@ -195,8 +195,8 @@ class Projects extends Component {
   }
 
   // ============================================
-  // END MULTISELECT 
-  // ============================================  
+  // END MULTISELECT
+  // ============================================
 
   render() {
 
@@ -208,9 +208,9 @@ class Projects extends Component {
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
-        
+
         {
-          project.collaborators.length 
+          project.collaborators.length
             ? <Tooltip position={Position.TOP_LEFT} content={ `${t("Collaborators")}: ${project.collaborators.map(c => c.user.username).join(" ")}` }>
               <div><span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>&nbsp;<Icon iconName="people" /></div>
             </Tooltip>
@@ -251,7 +251,7 @@ class Projects extends Component {
         </div>
       </li>);
 
-    const collabItems = this.state.collabs.map(collab => 
+    const collabItems = this.state.collabs.map(collab =>
       <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>
         <Tooltip position={Position.TOP_LEFT} content={ `${t("Owner")}: ${collab.username}` }>
           <div><span className="project-title" onClick={() => this.handleClick(collab)}>{collab.name}</span>&nbsp;<Icon iconName="people" /></div>
@@ -269,7 +269,7 @@ class Projects extends Component {
         </div>
         <ul className="project-list">
           {projectItems}
-          <li>--------</li>
+          { collabItems ? <hr/> : null /* not working ¯\_(ツ)_/¯ */ }
           {collabItems}
         </ul>
         <Alert

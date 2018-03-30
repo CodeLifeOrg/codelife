@@ -61,8 +61,6 @@ class Contest extends Component {
     const hasAccount = Boolean(this.props.user);
     const {signedUp, beatenGame, hasProjects, hasSubmitted} = this.state;
 
-    console.log(hasAccount, signedUp, beatenGame);
-
     if (!hasAccount) return 1;
     if (hasAccount && !signedUp) return 2;
     if (hasAccount && signedUp && !beatenGame) return 3;

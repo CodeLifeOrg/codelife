@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import AuthForm from "components/AuthForm";
 import ContestSignup from "components/ContestSignup";
 import {Dialog} from "@blueprintjs/core";
+import {browserHistory} from "react-router";
 import axios from "axios";
 
 import "./Contest.css";
@@ -19,7 +20,8 @@ class Contest extends Component {
       hasProjects: false,
       hasSubmitted: false,
       isAuthOpen: false,
-      isSignupOpen: false
+      isSignupOpen: false,
+      formMode: "signup"
     };
   }
 
@@ -45,13 +47,16 @@ class Contest extends Component {
         const projects = resp[2].data;
         const trueProgress = progress.filter(up => up.status === "completed");
         const signedUp = status.eligible === 1;
-        //const signedUp = false;
-        const beatenGame = trueProgress.length >= flatProgress.length;
+        const beatenGame = trueProgress.length >= flatProgress.length || this.props.user.role >= 1;
         const hasProjects = projects.length > 0;
         const hasSubmitted = status.project_id !== null;
         this.setState({signedUp, beatenGame, hasProjects, hasSubmitted});
       });
     }
+  }
+
+  onSignup() {
+    this.setState({signedUp: true, isSignupOpen: false});
   }
 
   render() {
@@ -83,7 +88,9 @@ class Contest extends Component {
             {!hasAccount
               ? <div>
                 <p>sign up for codelife explanation</p>
-                <button onClick={() => this.setState({isAuthOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for CodeLife</button>
+                <button onClick={() => this.setState({isAuthOpen: true, formMode: "signup"})} className="pt-button pt-intent-primary font-md">Sign Up for CodeLife</button>
+                or
+                <button onClick={() => this.setState({isAuthOpen: true, formMode: "login"})} className="pt-button pt-intent-primary font-md">Login to CodeLife</button>
               </div>
               : null
             }
@@ -103,7 +110,7 @@ class Contest extends Component {
             {hasAccount && signedUp && !beatenGame
               ? <div>
                 <p>go beat all the islands</p>
-                <button className="pt-button pt-intent-primary font-md">Play all the levels</button>
+                <button onClick={() => browserHistory.push("/island")}className="pt-button pt-intent-primary font-md">Play all the levels</button>
               </div>
               : null
             }
@@ -137,7 +144,7 @@ class Contest extends Component {
           onClose={() => this.setState({isAuthOpen: false})}
           title="Dialog header"
         >
-          <AuthForm initialMode="signup" />
+          <AuthForm initialMode={this.state.formMode} />
         </Dialog>
 
         <Dialog
@@ -147,7 +154,7 @@ class Contest extends Component {
           onClose={() => this.setState({isSignupOpen: false})}
           title="Dialog header"
         >
-          <ContestSignup />
+          <ContestSignup onSignup={this.onSignup.bind(this)}/>
         </Dialog>
       </div>
     );

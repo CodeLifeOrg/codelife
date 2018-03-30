@@ -8,7 +8,7 @@ import moment from "moment";
 import {CPF} from "cpf_cnpj";
 import Loading from "components/Loading";
 import {DateInput} from "@blueprintjs/datetime";
-import {Icon} from "@blueprintjs/core";
+import {Icon, Toaster, Position, Intent} from "@blueprintjs/core";
 import SelectGeo from "pages/profile/SelectGeo";
 import SelectSchool from "pages/profile/SelectSchool";
 import "./ContestSignup.css";
@@ -111,6 +111,7 @@ class ContestSignup extends Component {
   }
 
   enterContest() {
+    const {t} = this.props;
     const {profileUser, skip} = this.state;
     const profilePayload = {
       cpf: profileUser.cpf,
@@ -134,7 +135,11 @@ class ContestSignup extends Component {
     const uPost = axios.post("/api/user/email", userPayload);
     const cPost = axios.post("/api/contest", contestPayload);
     Promise.all([pPost, uPost, cPost]).then(resp => {
-      console.log(resp);
+      if (resp.every(r => r.status === 200)) {
+        const toast = Toaster.create({className: "signupToast", position: Position.TOP_CENTER});
+        toast.show({message: t("Congratulations, you have signed up!"), intent: Intent.SUCCESS});
+        if (this.props.onSignup) this.props.onSignup();
+      }
     });
   }
 

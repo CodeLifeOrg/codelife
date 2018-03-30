@@ -57,6 +57,20 @@ class Contest extends Component {
     }
   }
 
+  determineStep() {
+    const hasAccount = this.props.user;
+    const {signedUp, beatenGame, hasProjects, hasSubmitted} = this.state;
+
+    if (!hasAccount) return 1;
+    if (hasAccount && !signedUp) return 2;
+    if (hasAccount && signedUp && !beatenGame) return 3;
+    if (hasAccount && signedUp && beatenGame && !hasProjects) return 4;
+    if (hasAccount && signedUp && beatenGame && hasProjects && !hasSubmitted) return 5;
+    // Step "6" means they have submitted a project but want to resubmit (overwrite)
+    if (hasAccount && signedUp && beatenGame && hasProjects && hasSubmitted) return 6;
+    return 0;
+  }
+
   onSignup() {
     this.setState({signedUp: true, isSignupOpen: false});
   }
@@ -75,6 +89,9 @@ class Contest extends Component {
     const good = <span className="pt-icon pt-icon-tick" style={{color: "green"}}/>;
     const bad = <span className="pt-icon pt-icon-cross" style={{color: "red"}}/>;
 
+    let submitText = t("Submit your Project");
+    if (this.determineStep() === 6) submitText = t("Manage your Submission");
+
     return (
       <div className="content contest font-md">
 
@@ -91,7 +108,7 @@ class Contest extends Component {
         <ul>
           <li>
             {hasAccount ? good : bad} create a codelife account<br/>
-            {!hasAccount
+            {this.determineStep() === 1
               ? <div>
                 <p>sign up for codelife explanation</p>
                 <button onClick={() => this.setState({isAuthOpen: true, formMode: "signup"})} className="pt-button pt-intent-primary font-md">Sign Up for CodeLife</button>
@@ -103,7 +120,7 @@ class Contest extends Component {
           </li>
           <li>
             {signedUp ? good : bad} sign up for the contest<br/>
-            {hasAccount && !signedUp 
+            {this.determineStep() === 2
               ? <div>
                 <p>sign up for the contest explanation</p>
                 <button onClick={() => this.setState({isSignupOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for the Contest</button>
@@ -113,7 +130,7 @@ class Contest extends Component {
           </li>
           <li>
             {beatenGame ? good : bad} learn to code<br/>
-            {hasAccount && signedUp && !beatenGame
+            {this.determineStep() === 3
               ? <div>
                 <p>go beat all the islands</p>
                 <button onClick={() => browserHistory.push("/island")}className="pt-button pt-intent-primary font-md">Play all the levels</button>
@@ -123,7 +140,7 @@ class Contest extends Component {
           </li>
           <li>
             {hasProjects ? good : bad} build a website<br/>
-            {hasAccount && signedUp && beatenGame && !hasProjects
+            {this.determineStep() === 4
               ? <div>
                 <p>create projects in the studio</p>
                 <button className="pt-button pt-intent-primary font-md">Make a Project</button>
@@ -133,15 +150,19 @@ class Contest extends Component {
           </li>
           <li>
             {hasSubmitted ? good : bad}submit your project<br/>
-            {hasAccount && signedUp && beatenGame && hasProjects && !hasSubmitted
+            {this.determineStep() === 5 || this.determineStep() === 6
               ? <div>
                 <p>select a project before xx/xx/xx date</p>
-                <button onClick={() => this.setState({isSubmitOpen: true})} className="pt-button pt-intent-primary font-md">Submit your Project</button>
+                <button onClick={() => this.setState({isSubmitOpen: true})} className="pt-button pt-intent-primary font-md">{submitText}</button>
               </div>
               : null
             }
           </li>
         </ul>
+
+        <div>
+          Pictures of prizes
+        </div>
 
         <Dialog
           className="form-container"

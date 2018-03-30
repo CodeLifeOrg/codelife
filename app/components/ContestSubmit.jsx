@@ -11,15 +11,27 @@ class ContestSubmit extends Component {
     super(props);
     this.state = {
       projects: [],
+      status: {},
       selectedProject: "choose-one",
       description: ""
     };
   }
 
   componentDidMount() {
-    axios.get("/api/projects/mine").then(resp => {
-      const projects = resp.data;
-      resp.status === 200 ? this.setState({projects}) : console.log("error");
+    const pget = axios.get("/api/projects/mine");
+    const cget = axios.get("/api/contest/status");
+
+    Promise.all([pget, cget]).then(resp => {
+      if (resp.every(r => r.status === 200)) {
+        const projects = resp[0].data;
+        const status = resp[1].data;
+        const selectedProject = status.project_id ? status.project_id : "choose-one";
+        const description = status.description ? status.description : "";
+        this.setState({projects, status, selectedProject, description});
+      }
+      else {
+        console.log("error");
+      }
     });
   }
 
@@ -28,7 +40,6 @@ class ContestSubmit extends Component {
   }
 
   selectProject(e) {
-    console.log(e.target.value);
     const project = this.state.projects.find(p => p.id === Number(e.target.value));
     const selectedProject = project ? project.id : "choose-one";
     if (selectedProject) this.setState({selectedProject});

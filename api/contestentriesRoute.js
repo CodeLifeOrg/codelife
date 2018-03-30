@@ -5,7 +5,10 @@ module.exports = function(app) {
   const {db} = app.settings;
 
   app.post("/api/contest", isAuthenticated, (req, res) => {
-    db.contestentries.upsert(req.body).then(u => {
+    const payload = Object.assign({}, req.body);
+    payload.uid = req.user.id;
+    payload.timestamp = Date.now();
+    db.contestentries.upsert(payload).then(u => {
       res.json(u).end();
     });
   });

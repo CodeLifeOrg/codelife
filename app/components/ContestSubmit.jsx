@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Toaster, Intent, Position} from "@blueprintjs/core";
+import {connect} from "react-redux";
 import "./ContestSubmit.css";
 
 class ContestSubmit extends Component {
@@ -37,9 +38,22 @@ class ContestSubmit extends Component {
     const {selectedProject, description} = this.state;
     const {t} = this.props;
     if (selectedProject !== "choose-one") {
-      const toast = Toaster.create({className: "contestToast", position: Position.TOP_CENTER});
-      toast.show({message: t("Your project has been submitted!"), intent: Intent.SUCCESS});
-      console.log("Would send", selectedProject, description);
+      const contestPayload = {
+        project_id: selectedProject,
+        description
+      };
+      console.log("sending", contestPayload);
+      axios.post("/api/contest", contestPayload).then(resp => {
+        if (resp.status === 200) {
+          const toast = Toaster.create({className: "contestToast", position: Position.TOP_CENTER});
+          toast.show({message: t("Your project has been submitted!"), intent: Intent.SUCCESS});
+          if (this.props.onSubmit) this.props.onSubmit();
+        }
+        else {
+          console.log("error");
+        }
+      });
+      
     }
     else {
       const toast = Toaster.create({className: "contestToast", position: Position.TOP_CENTER});
@@ -76,4 +90,9 @@ class ContestSubmit extends Component {
   }
 }
 
+ContestSubmit = connect(state => ({
+  user: state.auth.user
+}))(ContestSubmit);
+
 export default translate()(ContestSubmit);
+

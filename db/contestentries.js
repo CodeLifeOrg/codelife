@@ -8,7 +8,8 @@ module.exports = function(sequelize, db) {
       },
       eligible: db.INTEGER,
       project_id: db.INTEGER,
-      timestamp: db.DATE 
+      timestamp: db.DATE,
+      description: db.TEXT
     },
     {
       freezeTableName: true,

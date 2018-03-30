@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import AuthForm from "components/AuthForm";
 import ContestSignup from "components/ContestSignup";
+import ContestSubmit from "components/ContestSubmit";
 import {Dialog} from "@blueprintjs/core";
 import {browserHistory} from "react-router";
 import axios from "axios";
@@ -21,6 +22,7 @@ class Contest extends Component {
       hasSubmitted: false,
       isAuthOpen: false,
       isSignupOpen: false,
+      isSubmitOpen: false,
       formMode: "signup"
     };
   }
@@ -57,6 +59,10 @@ class Contest extends Component {
 
   onSignup() {
     this.setState({signedUp: true, isSignupOpen: false});
+  }
+
+  onSubmit() {
+    this.setState({hasSubmitted: true, isSubmitOpen: false});
   }
 
   render() {
@@ -130,7 +136,7 @@ class Contest extends Component {
             {hasAccount && signedUp && beatenGame && hasProjects && !hasSubmitted
               ? <div>
                 <p>select a project before xx/xx/xx date</p>
-                <button className="pt-button pt-intent-primary font-md">Submit your Project</button>
+                <button onClick={() => this.setState({isSubmitOpen: true})} className="pt-button pt-intent-primary font-md">Submit your Project</button>
               </div>
               : null
             }
@@ -156,6 +162,17 @@ class Contest extends Component {
         >
           <ContestSignup onSignup={this.onSignup.bind(this)}/>
         </Dialog>
+
+        <Dialog
+          className="form-container"
+          iconName="inbox"
+          isOpen={this.state.isSubmitOpen}
+          onClose={() => this.setState({isSubmitOpen: false})}
+          title="Dialog header"
+        >
+          <ContestSubmit onSubmit={this.onSubmit.bind(this)}/>
+        </Dialog>
+
       </div>
     );
   }

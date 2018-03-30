@@ -128,7 +128,6 @@ class ContestSignup extends Component {
       email: profileUser.email
     };
     const contestPayload = {
-      uid: profileUser.uid,
       eligible: 1
     };
     const pPost = axios.post("/api/profile/", profilePayload);

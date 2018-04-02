@@ -551,4 +551,5 @@ utility classes
 .u-vertical-align-children {
   display: flex;
   align-items: center;
+  justify-content: center;
 }

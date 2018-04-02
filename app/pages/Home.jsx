@@ -118,7 +118,7 @@ class Home extends Component {
         </div>
 
         {/* about blurb */}
-        <div className="about content-section limited-width u-margin-auto">
+        <div className="about content-section limited-width">
           <h2>{ t("What is CodeLife?") }</h2>
           <p>{ t("splashP1") }</p>
           <p>{ t("splashP2") }</p>

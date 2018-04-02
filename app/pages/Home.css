@@ -2,8 +2,6 @@
 
 .home {
   & .island {
-    margin-left: -50%;
-    width: 200%;
     & .image {
       height: 900px;
       margin-top: -var(--gutter-md);

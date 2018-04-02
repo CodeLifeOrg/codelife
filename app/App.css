@@ -1,6 +1,8 @@
 @import 'mixins.css';
 
-/* quality of life improvements */
+/* -----------------------------------
+resets & quality of life improvements
+----------------------------------- */
 * {
   margin: 0;
   padding: 0;
@@ -21,6 +23,16 @@ body * {
   position: relative;
 }
 
+/* reset focus style */
+/* NOTE: always be setting :focus along with :hover */
+:focus {
+  outline: 0;
+}
+
+/* -----------------------------------
+base
+----------------------------------- */
+
 /* fonts */
 body {
   font-family: var(--body-font);
@@ -33,6 +45,8 @@ h1, h2, h3, h4, h5, h6,
 .heading {
   font-family: var(--heading-font);
   text-transform: uppercase;
+  font-weight: 600;
+  color: var(--black);
 }
 
 /* default font sizing and line-height */
@@ -56,31 +70,20 @@ p > a,
   }
 }
 
-#app {
-  min-height: 100vh;
-  position: absolute;
-  width: 100%;
-  & .container {
-    min-height: 100vh;
-  }
-}
-
-#devbar {
+/* hey, don't edit content here! */
+.devbar {
+  /* sizing */
   width: 100%;
   height: var(--gutter-md);
-  background-color: var(--caution);
-  position: absolute;
+  /* positioning */
+  position: relative;
   top: 0px;
   left: 0px;
-  text-align:center;
-}
-
-h1 {
-  font-style: normal;
-}
-
-:focus {
-  outline: 0;
+  padding-top: 0.05rem;
+  /* theming */
+  background-color: var(--caution);
+  text-align: center;
+  opacity: 0.8;
 }
 
 
@@ -151,7 +154,6 @@ blueprint overrides
 }
 
 
-
 .pt-popover {
   border-radius: var(--radius-lg);
 
@@ -194,15 +196,7 @@ blueprint overrides
     justify-content: center;
   }
 
-  & .pt-dialog-header {
-    background: var(--sky-dark);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-    & h5, & button, & span {
-      color: var(--white);
-      font-weight: 400;
-      text-transform: uppercase;
-    }
-  }
+
   & .pt-dialog-body {
     align-items: center;
     display: flex;
@@ -238,76 +232,6 @@ blueprint overrides
   margin: 0;
 }
 
-.pt-card {
-  align-self: stretch;
-  background-color: rgba(120, 120, 120, 0.5);
-  border-radius: var(--radius-lg);
-  color: var(--white);
-  display: flex;
-  flex: none;
-  margin: var(--gutter-md);
-  padding: 0; /* blueprint override */
-  text-align: left;
-  width: 250px;
-  &:hover, &:focus {
-    color: var(--white);
-    text-decoration: inherit;
-  }
-  & .box {
-    align-items: center;
-    align-self: stretch;
-    display: flex;
-    padding: var(--gutter-xs);
-    & .icon {
-      background-color: var(--white);
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border-radius: var(--gutter-md);
-      flex: none;
-      height: var(--gutter-lg);
-      margin-right: var(--gutter-xs);
-      text-align: center;
-      width: var(--gutter-lg);
-      & .pt-icon-standard {
-        font-size: 26px;
-        line-height: 48px;
-      }
-    }
-    & .info {
-      align-self: stretch;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-right: var(--gutter-xxs);
-      & .card-title {
-        font-size: 16px;
-        text-transform: uppercase;
-        & .pt-icon-standard {
-          margin-right: var(--gutter-xxs);
-          opacity: 0.75;
-        }
-      }
-      & .card-meta {
-        font-size: 12px;
-        opacity: 0.75;
-        &>* {
-          margin-top: 3px;
-        }
-        & .pt-icon-standard {
-          margin-right: var(--gutter-xxs);
-        }
-        & .card-author .pt-icon-standard {
-          color: var(--white);
-        }
-      }
-    }
-  }
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 /* switches */
 .pt-control-indicator {
   background-color: var(--light-2) !important;
@@ -336,28 +260,39 @@ blueprint overrides
 layout
 ----------------------------------- */
 
-/* Set min width on content container so the footer stays at the bottom */
-.content {
-  @media (min-height: 680px) {
-    min-height: 55vh; /* fallback */
-    min-height: calc(100vh - 26.6rem); /* 100% fudged */
-  }
-}
-
 .content {
   padding: var(--gutter-md);
-  max-width: 1220px; /* TODO: add to style.yml */
   margin-left: auto;
   margin-right: auto;
 
+  /* bigger padding on bigger screens */
   @add-mixin min-sm {
     padding: var(--gutter-lg);
   }
 
+  /* set min width on content container so the footer stays at the bottom */
+  @media (min-height: 680px) {
+    min-height: 55vh; /* fallback */
+    min-height: calc(100vh - 26.6rem); /* 100% fudged */
+  }
+
+  /* fullwidth container with transparent background */
+  /* NOTE: requires a .content container within for padding */
+  & .fullwidth-container {
+    @add-mixin fullwidth-section;
+    background-color: var(--white);
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
   /* space out sections */
-  & > .content-section {
+  & .content-section {
     padding-top: var(--gutter-lg);
     padding-bottom: var(--gutter-lg);
+    /* center container */
+    margin-left: auto;
+    margin-right: auto;
+    /* set default width */
+    max-width: 1220px; /* TODO: add to style.yml */
 
     /* keep line-length in check */
     &.limited-width {
@@ -386,6 +321,21 @@ layout
   & ol {
     padding-left: 1.1em;
   }
+}
+
+
+/* -----------------------------------
+header
+----------------------------------- */
+
+.header {
+  /* set height */
+  min-height: 60vh;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  /* position .header-inner */
+  display: flex;
+  align-items: center;
 }
 
 
@@ -564,6 +514,7 @@ utility classes
 .u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
 .u-margin-top-off { margin-top: 0 !important; }
 
+.u-margin-bottom-xxs { margin-bottom: var(--gutter-xxs) !important; }
 .u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
 .u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
 .u-margin-bottom-off { margin-bottom: 0 !important; }
@@ -579,6 +530,10 @@ utility classes
   margin-left: auto !important;
   margin-right: auto !important;
 }
+
+/* padding */
+.u-padding-top-off { padding-top: 0 !important; }
+.u-padding-bottom-off { padding-bottom: 0 !important; }
 
 /* alignment */
 .u-text-center {

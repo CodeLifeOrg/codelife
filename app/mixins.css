@@ -19,7 +19,7 @@
 /* type scaling */
 @define-mixin font-xxl {
   font-size: 3.75rem; /* 60px */
-  line-height: 1.25;
+  line-height: 1;
 }
 @define-mixin font-xl {
   font-size: 2.375rem; /* 38px */
@@ -105,6 +105,14 @@
     padding-left: 1.25em;
     margin-left: -1px; /* obscure 1px inset box shadow on previous button */
   }
+}
+
+/* break out of container and be full width */
+@define-mixin fullwidth-section {
+  margin-left: auto;
+  margin-right: auto;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
 }
 
 /* nav link */

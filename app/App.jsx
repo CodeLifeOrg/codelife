@@ -83,10 +83,10 @@ class App extends Component {
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
         {
           location.href.includes("dev.")
-            ? <div id="devbar">Development Server.  Do not edit content here!</div>
+            ? <div className="devbar">Development Server. Do not edit content here!</div>
             : null
         }
-        { reduxLoaded && userInit && !auth.loading || authRoute 
+        { reduxLoaded && userInit && !auth.loading || authRoute
           ? bareRoute
             ? children
             : <div className="container">

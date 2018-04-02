@@ -5,7 +5,7 @@ import AuthForm from "components/AuthForm";
 import ContestSignup from "components/ContestSignup";
 import ContestSubmit from "components/ContestSubmit";
 import {Dialog} from "@blueprintjs/core";
-import {browserHistory} from "react-router";
+import {browserHistory, Link} from "react-router";
 import axios from "axios";
 
 import "./Contest.css";
@@ -86,111 +86,210 @@ class Contest extends Component {
     const hasAccount = Boolean(this.props.user);
     const {signedUp, beatenGame, hasProjects, hasSubmitted} = this.state;
 
-    const good = <span className="pt-icon pt-icon-tick" style={{color: "green"}}/>;
-    const bad = <span className="pt-icon pt-icon-cross" style={{color: "red"}}/>;
-
-    let submitText = t("Submit your Project");
-    if (this.determineStep() === 6) submitText = t("Manage your Submission");
+    // set projects link if user is logged in
+    let projectsLink = "/projects";
+    hasAccount ? projectsLink = `/projects/${this.props.user.username}` : null;
 
     return (
-      <div className="content contest font-md">
+      <div className="content contest u-padding-top-off">
 
-        <h1>Welcome to the Codelife Contest</h1>
+        {/* header */}
+        <header className="header contest-header">
+          <div className="header-inner">
+            <h1 className="header-headline font-xxl u-margin-top-off u-margin-bottom-off">{ t("Contest.Headline")}</h1>
+            <p className="header-subhead heading font-lg u-margin-bottom-off">{ t("Contest.Subhead")}</p>
+          </div>
+        </header>
 
-        <p>code with your friends and win prizes</p>
+        {/* checklist */}
+        <div className="fullwidth-container">
+          <div className="content font-md">
 
-        <ul style={{border: "1px solid black"}}>
-          <li>rules</li>
-          <li>rules</li>
-          <li>rules</li>
-        </ul>
+            {/* section heading */}
+            <h2 className="font-xl u-margin-top-off">{t("Contest.StepsHeading")}</h2>
 
-        <ul>
-          <li>
-            {hasAccount ? good : bad} create a codelife account<br/>
-            {this.determineStep() === 1
-              ? <div>
-                <p>sign up for codelife explanation</p>
-                <button onClick={() => this.setState({isAuthOpen: true, formMode: "signup"})} className="pt-button pt-intent-primary font-md">Sign Up for CodeLife</button>
-                or
-                <button onClick={() => this.setState({isAuthOpen: true, formMode: "login"})} className="pt-button pt-intent-primary font-md">Login to CodeLife</button>
-              </div>
-              : null
-            }
-          </li>
-          <li>
-            {signedUp ? good : bad} sign up for the contest<br/>
-            {this.determineStep() === 2
-              ? <div>
-                <p>sign up for the contest explanation</p>
-                <button onClick={() => this.setState({isSignupOpen: true})} className="pt-button pt-intent-primary font-md">Sign Up for the Contest</button>
-              </div>
-              : null
-            }
-          </li>
-          <li>
-            {beatenGame ? good : bad} learn to code<br/>
-            {this.determineStep() === 3
-              ? <div>
-                <p>go beat all the islands</p>
-                <button onClick={() => browserHistory.push("/island")}className="pt-button pt-intent-primary font-md">Play all the levels</button>
-              </div>
-              : null
-            }
-          </li>
-          <li>
-            {hasProjects ? good : bad} build a website<br/>
-            {this.determineStep() === 4
-              ? <div>
-                <p>create projects in the studio</p>
-                <button className="pt-button pt-intent-primary font-md">Make a Project</button>
-              </div>
-              : null
-            }
-          </li>
-          <li>
-            {hasSubmitted ? good : bad}submit your project<br/>
-            {this.determineStep() === 5 || this.determineStep() === 6
-              ? <div>
-                <p>select a project before xx/xx/xx date</p>
-                <button onClick={() => this.setState({isSubmitOpen: true})} className="pt-button pt-intent-primary font-md">{submitText}</button>
-              </div>
-              : null
-            }
-          </li>
-        </ul>
 
-        <div>
-          Pictures of prizes
+            {/* STEP 1 - Create account */}
+            <div className={ this.determineStep() === 1 ? "contest-step is-current-step" : "contest-step" }>
+              {/* status */}
+              <span className={ !hasAccount
+                ? "heading font-xl contest-step-status is-unticked"
+                : "heading font-xl contest-step-status is-ticked"
+              }>
+                { hasAccount ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                <span className="contest-step-number">1</span>
+              </span>
+              {/* content container */}
+              <div className="contest-step-content">
+                {/* heading */}
+                <h3 className="font-lg u-margin-bottom-off">
+                  {t("Contest.CreateAccountHeading")}
+                </h3>
+                {/* text */}
+                { !hasAccount
+                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.CreateAccountText")}</p>
+                  : null
+                }
+                {/* actions - hidden by default */}
+                <p className="contest-step-action">
+                  {/* sign up */}
+                  <button onClick={() => this.setState({isAuthOpen: true, formMode: "signup"})} className="contest-step-button pt-button pt-intent-primary">{t("SignUp.Create account")}</button>
+                  {/* or */}
+                  <span className="contest-button-or font-sm u-hide-below-sm"> {t("or")} </span>
+                  {/* log in */}
+                  <button onClick={() => this.setState({isAuthOpen: true, formMode: "login"})} className="contest-step-button pt-button pt-intent-primary">
+                    <span className="pt-icon-standard pt-icon-log-in" />
+                    { t("LogIn.Log_in") }
+                  </button>
+                </p>
+              </div>
+            </div>
+
+
+            {/* STEP 2 - Sign up for contest */}
+            <div className={ this.determineStep() === 2 ? "contest-step is-current-step" : "contest-step" }>
+              {/* status */}
+              <span className={ !signedUp
+                ? "heading font-xl contest-step-status is-unticked"
+                : "heading font-xl contest-step-status is-ticked"
+              }>
+                { signedUp ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                <span className="contest-step-number">2</span>
+              </span>
+              {/* content container */}
+              <div className="contest-step-content">
+                {/* heading */}
+                <h3 className="font-lg u-margin-bottom-off">
+                  {t("Contest.SignupHeading")}
+                </h3>
+                {/* text */}
+                { !signedUp
+                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.SignupText")}</p>
+                  : null
+                }
+                {/* actions - hidden by default */}
+                <p className="contest-step-action">
+                  {/* contest sign up */}
+                  <button onClick={() => this.setState({isSignupOpen: true})} className="contest-step-button pt-button pt-intent-primary">{t("Contest.SignupButton")}</button>
+                </p>
+              </div>
+            </div>
+
+
+            {/* STEP 3 - Learn to code */}
+            <div className={ this.determineStep() === 3 ? "contest-step is-current-step" : "contest-step" }>
+              {/* status */}
+              <span className={ !beatenGame
+                ? "heading font-xl contest-step-status is-unticked"
+                : "heading font-xl contest-step-status is-ticked"
+              }>
+                { beatenGame ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                <span className="contest-step-number">3</span>
+              </span>
+              {/* content container */}
+              <div className="contest-step-content">
+                {/* heading */}
+                <h3 className="font-lg u-margin-bottom-off">
+                  {t("Contest.LearnToCodeHeading")}
+                </h3>
+                {/* text */}
+                { !beatenGame
+                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.LearnToCodeText")}</p>
+                  : null
+                }
+                {/* actions - hidden by default */}
+                <p className="contest-step-action">
+                  {/* go to island */}
+                  <Link to="/island" className="contest-step-button pt-button pt-intent-primary">{t("Contest.LearnToCodeButton")}</Link>
+                </p>
+              </div>
+            </div>
+
+
+            {/* STEP 4 - Build a website */}
+            <div className={ this.determineStep() === 4 ? "contest-step is-current-step" : "contest-step" }>
+              {/* status */}
+              <span className={ !hasProjects
+                ? "heading font-xl contest-step-status is-unticked"
+                : "heading font-xl contest-step-status is-ticked"
+              }>
+                { hasProjects ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                <span className="contest-step-number">4</span>
+              </span>
+              {/* content container */}
+              <div className="contest-step-content">
+                {/* heading */}
+                <h3 className="font-lg u-margin-bottom-off">
+                  {t("Contest.BuildAWebsiteHeading")}
+                </h3>
+                {/* text */}
+                { !hasProjects
+                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.BuildAWebsiteText")}</p>
+                  : null
+                }
+                {/* actions - hidden by default */}
+                <p className="contest-step-action">
+                  {/* go to projects */}
+                  <Link to={projectsLink} className="contest-step-button pt-button pt-intent-primary">{t("Contest.BuildAWebsiteButton")}</Link>
+                </p>
+              </div>
+            </div>
+
+
+            {/* STEP 5 - Submit project */}
+            <div className={ this.determineStep() === 5 || this.determineStep() === 6 ? "contest-step is-current-step" : "contest-step" }>
+              {/* status */}
+              <span className={ !hasSubmitted
+                ? "heading font-xl contest-step-status is-unticked"
+                : "heading font-xl contest-step-status is-ticked"
+              }>
+                { hasSubmitted ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                <span className="contest-step-number">5</span>
+              </span>
+              {/* content container */}
+              <div className="contest-step-content">
+                {/* heading */}
+                <h3 className="font-lg u-margin-bottom-off">
+                  {t("Contest.SubmitHeading")}
+                </h3>
+                {/* text */}
+                { !hasSubmitted
+                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.SubmitText")}</p>
+                  : null
+                }
+                {/* actions - hidden by default */}
+                <p className="contest-step-action">
+                  {/* submit project / manage submission */}
+                  <button onClick={() => this.setState({isSubmitOpen: true})} className="contest-step-button pt-button pt-intent-primary">
+                    { this.determineStep() === 5 ? t("Contest.SubmitButton") : t("Contest.SubmitButtonManage")}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <Dialog
           className="form-container"
-          iconName="inbox"
           isOpen={this.state.isAuthOpen}
           onClose={() => this.setState({isAuthOpen: false})}
-          title="Dialog header"
-        >
+          title="">
           <AuthForm initialMode={this.state.formMode} />
         </Dialog>
 
         <Dialog
           className="form-container"
-          iconName="inbox"
           isOpen={this.state.isSignupOpen}
           onClose={() => this.setState({isSignupOpen: false})}
-          title="Dialog header"
-        >
+          title="">
           <ContestSignup onSignup={this.onSignup.bind(this)}/>
         </Dialog>
 
         <Dialog
           className="form-container"
-          iconName="inbox"
           isOpen={this.state.isSubmitOpen}
           onClose={() => this.setState({isSubmitOpen: false})}
-          title="Dialog header"
-        >
+          title="">
           <ContestSubmit onSubmit={this.onSubmit.bind(this)}/>
         </Dialog>
 
@@ -206,4 +305,3 @@ Contest = connect(state => ({
 }))(Contest);
 Contest = translate()(Contest);
 export default Contest;
-

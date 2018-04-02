@@ -1,0 +1,92 @@
+@import "../mixins.css";
+
+/* how to enter steps */
+.contest-step {
+
+  /* space out steps on bigger screens */
+  @add-mixin min-sm {
+    margin-top: 3.625rem;
+  }
+
+  /* status indicator */
+  & .contest-step-status {
+    /* sizing */
+    display: block;
+    width: 1.55em;
+    height: 1.55em;
+    /* positioning */
+    position: absolute;
+    top: -0.7em;
+    left: 0;
+    /* position children */
+    line-height: 1.55;
+    text-align: center;
+    /* default theme */
+    color: var(--light-1);
+    background: var(--dark-1);
+    border-radius: 50%;
+    /* transitions */
+    transition: background-color 0.2s;
+
+    /* change background color and offset alignment if ticked */
+    &.is-ticked {
+      background-color: var(--sky);
+      top: -1.1em;
+    }
+
+    /* tick styles */
+    & .contest-step-tick {
+      color: var(--white);
+
+      /* bump up the small tick to big tick size */
+      &.pt-icon-small-tick {
+        transform: scale(1.25);
+      }
+
+      /* hide number if ticked */
+      & + .contest-step-number {
+        @add-mixin visually-hidden;
+      }
+    }
+  }
+
+  /* text content */
+  & .contest-step-content {
+    padding-left: 5rem;
+  }
+
+  /* actions */
+  & .contest-step-action {
+    margin-top: 0.25em; /* space out from text */
+    display: none; /* default; overwritten if current step */
+  }
+
+  /* current step */
+  &.is-current-step {
+    /* set indicator background color */
+    & .contest-step-status {
+      background-color: var(--dark-3);
+    }
+    /* display actions */
+    & .contest-step-action {
+      display: block;
+    }
+  }
+
+  /* make buttons full width on small screens */
+  & .contest-step-button {
+    @add-mixin max-sm {
+      min-width: 45%;
+      margin-right: 5%;
+    }
+    @add-mixin max-xs {
+      width: 100%;
+    }
+  }
+
+  /* space out "or" between login/signup buttons */
+  & .contest-button-or {
+    margin-left: 0.75em;
+    margin-right: 0.75em;
+  }
+}

@@ -96,8 +96,27 @@ class Contest extends Component {
         {/* header */}
         <header className="header contest-header">
           <div className="header-inner">
-            <h1 className="header-headline font-xxl u-margin-top-off u-margin-bottom-off">{ t("Contest.Headline")}</h1>
-            <p className="header-subhead heading font-lg u-margin-bottom-off">{ t("Contest.Subhead")}</p>
+            {/* headline + subhead */}
+            <div className="header-text">
+              <h1 className="header-headline font-xxl u-margin-top-off u-margin-bottom-off">{ t("Contest.Headline")}</h1>
+              <p className="header-subhead heading font-lg u-margin-bottom-off">{ t("Contest.Subhead")}</p>
+            </div>
+            {/* timeline */}
+            <div className="header-sidebar contest-timeline">
+              <h2 className="contest-timeline-heading font-md u-margin-top-off">{t("Contest.TimelineHeading")}</h2>
+              <dl className="contest-timeline-list">
+                <dt className="contest-timeline-term heading u-margin-bottom-off font-sm">{t("Contest.OpensLabel")}</dt>
+                <dd className="contest-timeline-definition font-xs">{t("Contest.OpensDate")}</dd>
+                <dt className="contest-timeline-term heading u-margin-bottom-off font-sm">{t("Contest.CompetitionLabel")}</dt>
+                <dd className="contest-timeline-definition font-xs">{t("Contest.CompetitionDate")}</dd>
+                <dt className="contest-timeline-term heading u-margin-bottom-off font-sm">{t("Contest.JudgingLabel")}</dt>
+                <dd className="contest-timeline-definition font-xs">{t("Contest.JudgingDate")}</dd>
+                <dt className="contest-timeline-term heading u-margin-bottom-off font-sm">{t("Contest.WinnersAnnouncedLabel")}</dt>
+                <dd className="contest-timeline-definition font-xs">{t("Contest.WinnersAnnouncedDate")}</dd>
+                <dt className="contest-timeline-term heading u-margin-bottom-off font-sm">{t("Contest.AwardCeremonyLabel")}</dt>
+                <dd className="contest-timeline-definition font-xs">{t("Contest.AwardCeremonyDate")}</dd>
+              </dl>
+            </div>
           </div>
         </header>
 

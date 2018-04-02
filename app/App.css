@@ -336,6 +336,45 @@ header
   /* position .header-inner */
   display: flex;
   align-items: center;
+
+  /* reset width due to flex on parent */
+  & .header-inner {
+    width: 100%;
+  }
+
+  /* sidebar theming */
+  & .header-sidebar {
+    @add-mixin slide-theme;
+    padding: var(--gutter-sm) var(--gutter-md);
+  }
+
+  /* space out sidebar on small screens */
+  @add-mixin max-md {
+    & .header-sidebar {
+      margin-top: 3rem;
+    }
+  }
+
+  /* text left, sidebar right layout on larger screens */
+  @add-mixin min-md {
+    /* vertically center children */
+    & .header-text:not(:last-child),
+    & .header-sidebar {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* limit width of text container, if it isn't the only element */
+    & .header-text:not(:last-child) {
+      width: 75%; /* fallback */
+      width: calc(100% - 18.75rem);
+    }
+    & .header-sidebar {
+      width: 20%; /* fallback */
+      width: calc(16.25rem);
+      left: 2.5rem;
+    }
+  }
 }
 
 

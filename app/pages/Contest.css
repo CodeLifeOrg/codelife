@@ -1,5 +1,10 @@
 @import "../mixins.css";
 
+/* timeline baseline adjustment */
+.contest-timeline-definition {
+  top: -0.25em;
+}
+
 /* how to enter steps */
 .contest-step {
 

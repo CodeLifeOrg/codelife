@@ -122,169 +122,227 @@ class Contest extends Component {
 
         {/* checklist */}
         <div className="fullwidth-container">
-          <div className="content font-md">
+          <div className="content">
+            <article className="contest-step-container">
 
-            {/* section heading */}
-            <h2 className="font-xl u-margin-top-off">{t("Contest.StepsHeading")}</h2>
+              {/* section heading */}
+              <h2 className="font-xl u-margin-top-off">{t("Contest.StepsHeading")}</h2>
 
 
-            {/* STEP 1 - Create account */}
-            <div className={ this.determineStep() === 1 ? "contest-step is-current-step" : "contest-step" }>
-              {/* status */}
-              <span className={ !hasAccount
-                ? "heading font-xl contest-step-status is-unticked"
-                : "heading font-xl contest-step-status is-ticked"
-              }>
-                { hasAccount ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
-                <span className="contest-step-number">1</span>
-              </span>
-              {/* content container */}
-              <div className="contest-step-content">
-                {/* heading */}
-                <h3 className="font-lg u-margin-bottom-off">
-                  {t("Contest.CreateAccountHeading")}
-                </h3>
-                {/* text */}
-                { !hasAccount
-                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.CreateAccountText")}</p>
-                  : null
-                }
-                {/* actions - hidden by default */}
-                <p className="contest-step-action">
-                  {/* sign up */}
-                  <button onClick={() => this.setState({isAuthOpen: true, formMode: "signup"})} className="contest-step-button pt-button pt-intent-primary">{t("SignUp.Create account")}</button>
-                  {/* or */}
-                  <span className="contest-button-or font-sm u-hide-below-sm"> {t("or")} </span>
-                  {/* log in */}
-                  <button onClick={() => this.setState({isAuthOpen: true, formMode: "login"})} className="contest-step-button pt-button pt-intent-primary">
-                    <span className="pt-icon-standard pt-icon-log-in" />
-                    { t("LogIn.Log_in") }
-                  </button>
-                </p>
+              {/* STEP 1 - Create account */}
+              <div className={ this.determineStep() === 1 ? "contest-step is-current-step" : "contest-step" }>
+                {/* status */}
+                <span className={ !hasAccount
+                  ? "heading font-xl contest-step-status is-unticked"
+                  : "heading font-xl contest-step-status is-ticked"
+                }>
+                  { hasAccount ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                  <span className="contest-step-number">1</span>
+                </span>
+                {/* content container */}
+                <div className="contest-step-content">
+                  {/* heading */}
+                  <h3 className="font-lg u-margin-bottom-off">
+                    {t("Contest.CreateAccountHeading")}
+                  </h3>
+                  {/* text */}
+                  { !hasAccount
+                    ? <p className="font-md u-margin-top-off u-margin-bottom-off">{t("Contest.CreateAccountText")}</p>
+                    : null
+                  }
+                  {/* actions - hidden by default */}
+                  <p className="contest-step-action">
+                    {/* sign up */}
+                    <button onClick={() => this.setState({isAuthOpen: true, formMode: "signup"})} className="contest-step-button pt-button pt-intent-primary">{t("SignUp.Create account")}</button>
+                    {/* or */}
+                    <span className="contest-button-or font-sm u-hide-below-sm"> {t("or")} </span>
+                    {/* log in */}
+                    <button onClick={() => this.setState({isAuthOpen: true, formMode: "login"})} className="contest-step-button pt-button pt-intent-primary">
+                      <span className="pt-icon-standard pt-icon-log-in" />
+                      { t("LogIn.Log_in") }
+                    </button>
+                  </p>
+                </div>
               </div>
-            </div>
 
 
-            {/* STEP 2 - Sign up for contest */}
-            <div className={ this.determineStep() === 2 ? "contest-step is-current-step" : "contest-step" }>
-              {/* status */}
-              <span className={ !signedUp
-                ? "heading font-xl contest-step-status is-unticked"
-                : "heading font-xl contest-step-status is-ticked"
-              }>
-                { signedUp ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
-                <span className="contest-step-number">2</span>
-              </span>
-              {/* content container */}
-              <div className="contest-step-content">
-                {/* heading */}
-                <h3 className="font-lg u-margin-bottom-off">
-                  {t("Contest.SignupHeading")}
-                </h3>
-                {/* text */}
-                { !signedUp
-                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.SignupText")}</p>
-                  : null
-                }
-                {/* actions - hidden by default */}
-                <p className="contest-step-action">
-                  {/* contest sign up */}
-                  <button onClick={() => this.setState({isSignupOpen: true})} className="contest-step-button pt-button pt-intent-primary">{t("Contest.SignupButton")}</button>
-                </p>
+              {/* STEP 2 - Sign up for contest */}
+              <div className={ this.determineStep() === 2 ? "contest-step is-current-step" : "contest-step" }>
+                {/* status */}
+                <span className={ !signedUp
+                  ? "heading font-xl contest-step-status is-unticked"
+                  : "heading font-xl contest-step-status is-ticked"
+                }>
+                  { signedUp ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                  <span className="contest-step-number">2</span>
+                </span>
+                {/* content container */}
+                <div className="contest-step-content">
+                  {/* heading */}
+                  <h3 className="font-lg u-margin-bottom-off">
+                    {t("Contest.SignupHeading")}
+                  </h3>
+                  {/* text */}
+                  { !signedUp
+                    ? <p className="font-md u-margin-top-off u-margin-bottom-off">{t("Contest.SignupText")}</p>
+                    : null
+                  }
+                  {/* actions - hidden by default */}
+                  <p className="contest-step-action">
+                    {/* contest sign up */}
+                    <button onClick={() => this.setState({isSignupOpen: true})} className="contest-step-button pt-button pt-intent-primary">{t("Contest.SignupButton")}</button>
+                  </p>
+                </div>
               </div>
-            </div>
 
 
-            {/* STEP 3 - Learn to code */}
-            <div className={ this.determineStep() === 3 ? "contest-step is-current-step" : "contest-step" }>
-              {/* status */}
-              <span className={ !beatenGame
-                ? "heading font-xl contest-step-status is-unticked"
-                : "heading font-xl contest-step-status is-ticked"
-              }>
-                { beatenGame ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
-                <span className="contest-step-number">3</span>
-              </span>
-              {/* content container */}
-              <div className="contest-step-content">
-                {/* heading */}
-                <h3 className="font-lg u-margin-bottom-off">
-                  {t("Contest.LearnToCodeHeading")}
-                </h3>
-                {/* text */}
-                { !beatenGame
-                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.LearnToCodeText")}</p>
-                  : null
-                }
-                {/* actions - hidden by default */}
-                <p className="contest-step-action">
-                  {/* go to island */}
-                  <Link to="/island" className="contest-step-button pt-button pt-intent-primary">{t("Contest.LearnToCodeButton")}</Link>
-                </p>
+              {/* STEP 3 - Learn to code */}
+              <div className={ this.determineStep() === 3 ? "contest-step is-current-step" : "contest-step" }>
+                {/* status */}
+                <span className={ !beatenGame
+                  ? "heading font-xl contest-step-status is-unticked"
+                  : "heading font-xl contest-step-status is-ticked"
+                }>
+                  { beatenGame ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                  <span className="contest-step-number">3</span>
+                </span>
+                {/* content container */}
+                <div className="contest-step-content">
+                  {/* heading */}
+                  <h3 className="font-lg u-margin-bottom-off">
+                    {t("Contest.LearnToCodeHeading")}
+                  </h3>
+                  {/* text */}
+                  { !beatenGame
+                    ? <p className="font-md u-margin-top-off u-margin-bottom-off">{t("Contest.LearnToCodeText")}</p>
+                    : null
+                  }
+                  {/* actions - hidden by default */}
+                  <p className="contest-step-action">
+                    {/* go to island */}
+                    <Link to="/island" className="contest-step-button pt-button pt-intent-primary">{t("Contest.LearnToCodeButton")}</Link>
+                  </p>
+                </div>
               </div>
-            </div>
 
 
-            {/* STEP 4 - Build a website */}
-            <div className={ this.determineStep() === 4 ? "contest-step is-current-step" : "contest-step" }>
-              {/* status */}
-              <span className={ !hasProjects
-                ? "heading font-xl contest-step-status is-unticked"
-                : "heading font-xl contest-step-status is-ticked"
-              }>
-                { hasProjects ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
-                <span className="contest-step-number">4</span>
-              </span>
-              {/* content container */}
-              <div className="contest-step-content">
-                {/* heading */}
-                <h3 className="font-lg u-margin-bottom-off">
-                  {t("Contest.BuildAWebsiteHeading")}
-                </h3>
-                {/* text */}
-                { !hasProjects
-                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.BuildAWebsiteText")}</p>
-                  : null
-                }
-                {/* actions - hidden by default */}
-                <p className="contest-step-action">
-                  {/* go to projects */}
-                  <Link to={projectsLink} className="contest-step-button pt-button pt-intent-primary">{t("Contest.BuildAWebsiteButton")}</Link>
-                </p>
+              {/* STEP 4 - Build a website */}
+              <div className={ this.determineStep() === 4 ? "contest-step is-current-step" : "contest-step" }>
+                {/* status */}
+                <span className={ !hasProjects
+                  ? "heading font-xl contest-step-status is-unticked"
+                  : "heading font-xl contest-step-status is-ticked"
+                }>
+                  { hasProjects ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                  <span className="contest-step-number">4</span>
+                </span>
+                {/* content container */}
+                <div className="contest-step-content">
+                  {/* heading */}
+                  <h3 className="font-lg u-margin-bottom-off">
+                    {t("Contest.BuildAWebsiteHeading")}
+                  </h3>
+                  {/* text */}
+                  { !hasProjects
+                    ? <p className="font-md u-margin-top-off u-margin-bottom-off">{t("Contest.BuildAWebsiteText")}</p>
+                    : null
+                  }
+                  {/* actions - hidden by default */}
+                  <p className="contest-step-action">
+                    {/* go to projects */}
+                    <Link to={projectsLink} className="contest-step-button pt-button pt-intent-primary">{t("Contest.BuildAWebsiteButton")}</Link>
+                  </p>
+                </div>
               </div>
-            </div>
 
 
-            {/* STEP 5 - Submit project */}
-            <div className={ this.determineStep() === 5 || this.determineStep() === 6 ? "contest-step is-current-step" : "contest-step" }>
-              {/* status */}
-              <span className={ !hasSubmitted
-                ? "heading font-xl contest-step-status is-unticked"
-                : "heading font-xl contest-step-status is-ticked"
-              }>
-                { hasSubmitted ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
-                <span className="contest-step-number">5</span>
-              </span>
-              {/* content container */}
-              <div className="contest-step-content">
-                {/* heading */}
-                <h3 className="font-lg u-margin-bottom-off">
-                  {t("Contest.SubmitHeading")}
-                </h3>
-                {/* text */}
-                { !hasSubmitted
-                  ? <p className="u-margin-top-off u-margin-bottom-off">{t("Contest.SubmitText")}</p>
-                  : null
-                }
-                {/* actions - hidden by default */}
-                <p className="contest-step-action">
-                  {/* submit project / manage submission */}
-                  <button onClick={() => this.setState({isSubmitOpen: true})} className="contest-step-button pt-button pt-intent-primary">
-                    { this.determineStep() === 5 ? t("Contest.SubmitButton") : t("Contest.SubmitButtonManage")}
-                  </button>
-                </p>
+              {/* STEP 5 - Submit project */}
+              <div className={ this.determineStep() === 5 || this.determineStep() === 6 ? "contest-step is-current-step" : "contest-step" }>
+                {/* status */}
+                <span className={ !hasSubmitted
+                  ? "heading font-xl contest-step-status is-unticked"
+                  : "heading font-xl contest-step-status is-ticked"
+                }>
+                  { hasSubmitted ? <span className="contest-step-tick pt-icon pt-icon-small-tick" /> : null }
+                  <span className="contest-step-number">5</span>
+                </span>
+                {/* content container */}
+                <div className="contest-step-content">
+                  {/* heading */}
+                  <h3 className="font-lg u-margin-bottom-off">
+                    {t("Contest.SubmitHeading")}
+                  </h3>
+                  {/* text */}
+                  { !hasSubmitted
+                    ? <p className="font-md u-margin-top-off u-margin-bottom-off">{t("Contest.SubmitText")}</p>
+                    : null
+                  }
+                  {/* actions - hidden by default */}
+                  <p className="contest-step-action">
+                    {/* submit project / manage submission */}
+                    <button onClick={() => this.setState({isSubmitOpen: true})} className="contest-step-button pt-button pt-intent-primary">
+                      { this.determineStep() === 5 ? t("Contest.SubmitButton") : t("Contest.SubmitButtonManage")}
+                    </button>
+                  </p>
+                </div>
               </div>
-            </div>
+            </article>
+
+
+            {/* prizes */}
+            <aside className="contest-prize-container">
+
+              {/* prizes heading */}
+              <h2 className="font-xl u-margin-top-off">Prizes</h2>
+
+              {/* first place */}
+              <div className="prize font-md">
+                {/* image */}
+                <figure className="prize-figure">
+                  <img src="/contest/google-sao-paulo@2x.jpg" className="prize-img" alt=""/>
+                </figure>
+                {/* caption */}
+                <figcaption className="prize-caption">
+                  <h3 className="prize-heading">
+                    {t("Contest.FirstPlace")} <br/>
+                    <span className="prize-title font-xl">{t("Contest.Prize1Title")}</span>
+                  </h3>
+                  <p className="prize-text">{t("Contest.Prize1Quantity")} <br/> {t("Contest.Prize1Details")}</p>
+                </figcaption>
+              </div>
+
+              {/* second place */}
+              <div className="prize font-md">
+                {/* image */}
+                <figure className="prize-figure u-text-center">
+                  <img src="/contest/ipad@2x.jpg" className="prize-img" alt=""/>
+                </figure>
+                {/* caption */}
+                <figcaption className="prize-caption">
+                  <h3 className="prize-heading">
+                    {t("Contest.SecondPlace")} <br/>
+                    <span className="prize-title font-xl">{t("Contest.Prize2Title")}</span>
+                  </h3>
+                  <p className="prize-text">{t("Contest.Prize2Quantity")} <br/> {t("Contest.Prize2Details")}</p>
+                </figcaption>
+              </div>
+
+              {/* third place */}
+              <div className="prize font-md">
+                {/* image */}
+                <figure className="prize-figure u-text-center">
+                  <img src="/contest/nexus@2x.jpg" className="prize-img" alt=""/>
+                </figure>
+                {/* caption */}
+                <figcaption className="prize-caption">
+                  <h3 className="prize-heading">
+                    {t("Contest.ThirdPlace")} <br/>
+                    <span className="prize-title font-xl">{t("Contest.Prize3Title")}</span>
+                  </h3>
+                  <p className="prize-text">{t("Contest.Prize3Quantity")} <br/> {t("Contest.Prize3Details")}</p>
+                </figcaption>
+              </div>
+            </aside>
           </div>
         </div>
 

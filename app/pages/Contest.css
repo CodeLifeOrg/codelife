@@ -5,7 +5,47 @@
   top: -0.25em;
 }
 
-/* how to enter steps */
+/* default stacked page layout */
+.contest-prize-container {
+  @add-mixin max-lg {
+    margin-top: var(--gutter-lg);
+    padding-top: var(--gutter-lg);
+
+    &:before {
+      content: "";
+      display: block;
+      /* positioning */
+      position: absolute;
+      /* sizing */
+      height: 2px;
+      top: 0;
+      width: 100%;
+      /* theming */
+      background: var(--sky-light);
+      border-radius: var(--radius-sm);
+    }
+  }
+}
+
+/* layout for huge screens */
+@add-mixin min-lg {
+  .contest-step-container,
+  .contest-prize-container {
+    display: inline-block;
+    vertical-align: top; /* blueprint override */
+  }
+  .contest-step-container {
+    width: 60%;
+    padding-right: var(--gutter-lg);
+  }
+  .contest-prize-container {
+    width: 39.999%;
+    padding-left: var(--gutter-lg);
+  }
+}
+
+
+/* steps to enter */
 .contest-step {
 
   /* space out steps on bigger screens */
@@ -93,5 +133,56 @@
   & .contest-button-or {
     margin-left: 0.75em;
     margin-right: 0.75em;
+  }
+}
+
+
+/* prizes */
+.prize {
+  margin-bottom: 2.5rem;
+
+  /* default layout */
+  & .prize-figure,
+  & .prize-caption {
+    display: inline-block;
+    vertical-align: middle; /* blueprint override */
+  }
+  & .prize-figure {
+    width: 20%;
+    height: 20%;
+    /* theming */
+    padding: var(--gutter-xs);
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
+    transform: rotateZ(-2deg);
+
+    & > .prize-img {
+      max-height: 100%;
+      transform: rotateZ(2deg);
+    }
+  }
+
+  /* caption layout */
+  & .prize-caption {
+    display: inline-block;
+    width: 75%;
+    margin-left: 4.999%;
+  }
+
+  /* first place overrides */
+  &:first-of-type {
+    & > .prize-figure {
+      height: auto;
+
+      & > .prize-img {
+        transform: none;
+      }
+    }
+  }
+
+  /* override default header style for title span */
+  & .prize-title {
+    text-transform: none;
   }
 }

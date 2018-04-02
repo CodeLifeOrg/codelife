@@ -23,6 +23,12 @@ body * {
   position: relative;
 }
 
+/* override normalize */
+figure {
+  margin: 0;
+  line-height: 0.0001;
+}
+
 /* reset focus style */
 /* NOTE: always be setting :focus along with :hover */
 :focus {

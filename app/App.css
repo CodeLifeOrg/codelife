@@ -113,11 +113,6 @@ blueprint overrides
   }
 }
 
-.pt-select select {
-  border-radius: var(--radius-sm);
-  font-family: var(--heading-font);
-}
-
 .pt-button {
   padding-left: 1.5em;
   padding-right: 1.5em;
@@ -424,6 +419,62 @@ form field layout
     transition: color 0.2s;
   }
 
+  /* select */
+  /* reset select container and select element */
+  & > .pt-select,
+  & > .pt-select > select {
+    font-size: inherit;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* icon hover effect,
+  NOTE: unfortunately won't work with :focus because of the blueprint markup */
+  & > .pt-select:hover:after {
+    color: var(--sky-dark);
+  }
+
+  /* reset padding */
+  & > .pt-select > select {
+    padding: 0.35em 2em 0.55em 0.75em;
+    /* theming */
+    border: 1px solid var(--light-2);
+    border-radius: var(--radius-sm);
+    box-shadow: none;
+    background-color: var(--light-1);
+    background-image:
+      linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.75),
+      rgba(255, 255, 255, 0.25));
+    /* transitions */
+    transition:
+      0.2s background-color,
+      0.2s border-color;
+
+    /* interactions */
+    &:hover, &:focus {
+      background-color: var(--white);
+      border-color: var(--sky-dark);
+    }
+  }
+
+  /* icon */
+  & > .pt-select:after {
+    /* sizing */
+    font-size: inherit;
+    line-height: 1.5;
+    /* positioning */
+    position: absolute;
+    z-index: 1;
+    top: auto; /* reset */
+    bottom: 0.5em;
+    right: 0.6em;
+    color: var(--gray);
+    /* transitions */
+    transition: color 0.2s;
+  }
+
   /* width of inputs, textareas, and buttons dictated by container */
   & > input:not([type=submit]):not([type=file]),
   & > textarea,
@@ -456,6 +507,12 @@ form field layout
         color: var(--sky-dark);
       }
     }
+  }
+
+  /* textarea min/max height */
+  & > textarea {
+    min-height: 11rem;
+    max-height: 30rem;
   }
 
   /* make room in text input for icon, which must follow after input

@@ -45,7 +45,8 @@ class ContestSubmit extends Component {
     if (selectedProject) this.setState({selectedProject});
   }
 
-  submit() {
+  submit(event) {
+    event.preventDefault(); // prevent page reload
     const {selectedProject, description} = this.state;
     const {t} = this.props;
     if (selectedProject !== "choose-one") {
@@ -64,7 +65,7 @@ class ContestSubmit extends Component {
           console.log("error");
         }
       });
-      
+
     }
     else {
       const toast = Toaster.create({className: "contestToast", position: Position.TOP_CENTER});
@@ -73,7 +74,7 @@ class ContestSubmit extends Component {
   }
 
   render() {
-    // const {t} = this.props;
+    const {t} = this.props;
     const {projects} = this.state;
 
     const projectList = projects.map(p =>
@@ -81,21 +82,48 @@ class ContestSubmit extends Component {
     );
 
     return (
-      <div id="contest-submit-container">
-        <div>Select a Project</div>
-        <div className="pt-select">
-          <select value={this.state.selectedProject} onChange={this.selectProject.bind(this)}>
-            <option key="choose-one" value="choose-one">Choose a Project</option>
-            {projectList}
-          </select>
-        </div>
-        <div>Describe your Project</div>
-        <div>
-          <textarea value={this.state.description} onChange={this.changeDescription.bind(this)} />
-        </div>
-        <div>
-          <button className="pt-button pt-intent-success" onClick={this.submit.bind(this)}>Submit</button>
-        </div>
+      <div className="contest-submit-container">
+
+        {/* heading */}
+        <h2 className="signup-heading font-xl">{ t("Contest.ProjectSubmit") }</h2>
+
+        {/* submission form */}
+        <form onSubmit={this.submit.bind(this)} className="contest-form-inner">
+
+          {/* select project */}
+          <div className="field-container font-md has-icon">
+            <label className="font-sm" htmlFor="contest-project-select">{ t("Contest.ProjectSelectLabel") }</label>
+            <div className="pt-select">
+              <select className="field-input"
+                id="contest-project-select"
+                value={this.state.selectedProject}
+                onChange={this.selectProject.bind(this)}
+                autoFocus>
+                <option key="choose-one" value="choose-one"></option>
+                {projectList}
+              </select>
+            </div>
+            {/* <span className="field-icon pt-icon pt-icon-application" /> */}
+          </div>
+
+          {/* description */}
+          <div className="field-container font-md">
+            <label className="font-sm" htmlFor="contest-project-description">{ t("Contest.ProjectDescriptionLabel") }</label>
+            <textarea className="field-input"
+              id="contest-project-description"
+              value={this.state.description}
+              name="description"
+              onChange={this.changeDescription.bind(this)} />
+          </div>
+
+          {/* submit */}
+          <div className="field-container">
+            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md">
+              <span className="pt-icon pt-icon-application" />
+              { t("Contest.SubmitProjectButton") }
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
@@ -106,4 +134,3 @@ ContestSubmit = connect(state => ({
 }))(ContestSubmit);
 
 export default translate()(ContestSubmit);
-

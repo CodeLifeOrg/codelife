@@ -1,16 +1,30 @@
 @import "../mixins.css";
 
+/* --------------------------------
+header
+-------------------------------- */
+/* limit header width & center */
+.contest-header > .header-inner {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
 /* timeline baseline adjustment */
 .contest-timeline-definition {
   top: -0.25em;
 }
 
+
+/* --------------------------------
+page layout
+-------------------------------- */
 /* default stacked page layout */
 .contest-prize-container {
   @add-mixin max-lg {
     margin-top: var(--gutter-lg);
     padding-top: var(--gutter-lg);
 
+    /* divider */
     &:before {
       content: "";
       display: block;
@@ -26,7 +40,6 @@
     }
   }
 }
-
 /* layout for huge screens */
 @add-mixin min-lg {
   .contest-step-container,
@@ -45,12 +58,16 @@
 }
 
 
+/* --------------------------------
+steps to enter
+-------------------------------- */
 /* steps to enter */
 .contest-step {
+  margin-top: 2rem;
 
   /* space out steps on bigger screens */
   @add-mixin min-sm {
-    margin-top: 3.625rem;
+    margin-top: 3rem;
   }
 
   /* status indicator */
@@ -72,6 +89,11 @@
     border-radius: 50%;
     /* transitions */
     transition: background-color 0.2s;
+
+    /* scale down status indicator on small screens */
+    @add-mixin max-sm {
+      transform: scale(0.75);
+    }
 
     /* change background color and offset alignment if ticked */
     &.is-ticked {
@@ -95,27 +117,41 @@
     }
   }
 
-  /* text content */
-  & .contest-step-content {
-    padding-left: 5rem;
-  }
-
   /* actions */
   & .contest-step-action {
     margin-top: 0.25em; /* space out from text */
     display: none; /* default; overwritten if current step */
   }
 
-  /* current step */
+  /* current step (doesn't apply to final step) */
   &.is-current-step {
-    /* set indicator background color */
-    & .contest-step-status {
-      background-color: var(--dark-3);
-    }
-    /* display actions */
+
+    /* display the action */
     & .contest-step-action {
       display: block;
     }
+
+    /* adjustments for active steps, but not the last step */
+    &:not(:last-child) {
+      /* set indicator background color */
+      & .contest-step-status {
+        background-color: var(--dark-3);
+      }
+      /* button margin adjustment */
+      & .contest-step-action {
+        margin-bottom: -0.5em;
+      }
+    }
+
+    /* reset positioning for last step, if completed */
+    &:last-child .contest-step-status {
+      top: -0.7em;
+    }
+  }
+
+  /* text content */
+  & .contest-step-content {
+    padding-left: 5rem;
   }
 
   /* make buttons full width on small screens */
@@ -137,9 +173,15 @@
 }
 
 
-/* prizes */
+/* --------------------------------
+prizes
+-------------------------------- */
 .prize {
-  margin-bottom: 2.5rem;
+
+  /* space out adjacent prizes */
+  & + .prize {
+    margin-top: 2.5rem;
+  }
 
   /* default layout */
   & .prize-figure,

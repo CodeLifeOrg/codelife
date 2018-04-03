@@ -398,6 +398,7 @@ form field layout
 
 /* NOTE: font size / placement of .field-icon and inputs depends on font-size inherited from .field-container */
 .field-container {
+  transition: opacity 0.2s;
 
   /* make label more clickable */
   & > label {
@@ -573,6 +574,15 @@ form field layout
     & > .social-button-text {
       margin-left: 0.2em;
     }
+  }
+
+  /* disabled state */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-disabled {
+    pointer-events: none;
+    cursor: default;
+    z-index: 0;
+    opacity: 0.3;
   }
 }
 

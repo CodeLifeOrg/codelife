@@ -75,7 +75,7 @@ class ContestSubmit extends Component {
 
   render() {
     const {t} = this.props;
-    const {projects} = this.state;
+    const {projects, selectedProject} = this.state;
 
     const projectList = projects.map(p =>
       <option key={p.id} value={p.id}>{p.name}</option>
@@ -117,8 +117,8 @@ class ContestSubmit extends Component {
           </div>
 
           {/* submit */}
-          <div className="field-container">
-            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md">
+          <div className={ selectedProject === "choose-one" ? "field-container is-disabled" : "field-container" }>
+            <button type="submit" className="pt-button pt-fill pt-intent-primary font-md" tabIndex={ selectedProject === "choose-one" ? "-1" : null }>
               <span className="pt-icon pt-icon-application" />
               { t("Contest.SubmitProjectButton") }
             </button>

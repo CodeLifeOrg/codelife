@@ -2,9 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Card} from "@blueprintjs/core";
-import {Link} from "react-router";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
 import "./CollabSearch.css";
 
 class CollabSearch extends Component {
@@ -13,7 +11,8 @@ class CollabSearch extends Component {
     super(props);
     this.state = {
       query: "",
-      users: []
+      users: [],
+      MAX_COLLABS: 5
     };
   }
 
@@ -48,7 +47,8 @@ class CollabSearch extends Component {
     const {currentProject} = this.props;
     const pid = currentProject.id;
     const uid = searchResult.uid;
-    if (uid && pid) {
+    const atMax = currentProject.collaborators.length >= this.state.MAX_COLLABS;
+    if (uid && pid && !atMax) {
       const payload = {uid, pid};
       axios.post("/api/projects/addcollab", payload).then(resp => {
         if (resp.status === 200) {
@@ -84,8 +84,7 @@ class CollabSearch extends Component {
     const {t, currentProject} = this.props;
     const {users, query} = this.state;
     const collabs = currentProject.collaborators;
-
-    console.log(users, collabs);
+    const atMax = collabs.length >= this.state.MAX_COLLABS;
 
     const userList = users
       // do not include a current collaborator in the search results
@@ -145,7 +144,7 @@ class CollabSearch extends Component {
         <div className="box-results">
           search results
           <ul className="list-results">
-            {userList}
+            {atMax ? <div>{t("at max")}</div> : userList}
           </ul>
         </div>
       </div>

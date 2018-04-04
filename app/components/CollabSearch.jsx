@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Card} from "@blueprintjs/core";
+import {Card, Icon} from "@blueprintjs/core";
 import {connect} from "react-redux";
 import "./CollabSearch.css";
 
@@ -12,6 +12,8 @@ class CollabSearch extends Component {
     this.state = {
       query: "",
       users: [],
+      geos: [],
+      schools: [],
       MAX_COLLABS: 5
     };
   }
@@ -82,30 +84,52 @@ class CollabSearch extends Component {
   render() {
 
     const {t, currentProject} = this.props;
-    const {users, query} = this.state;
+    const {users, query, filterLoc, filterSchool} = this.state;
     const collabs = currentProject.collaborators;
     const atMax = collabs.length >= this.state.MAX_COLLABS;
 
-    const userList = users
-      // do not include a current collaborator in the search results
-      .filter(u => !collabs.map(c => c.uid).includes(u.uid))
-      .map(r =>
-        <li className="list-result" key={r.id}>
-          <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-            <h5>{r.user.username}</h5><br/>
-            <p>home will go here</p>
-            <p>school will go here</p>
-            <button onClick={this.addCollaborator.bind(this, r)}>Add</button>
-          </Card>
-        </li>
+    // do not include a current collaborator in the search results
+    let usersWithoutCollabs = users.filter(u => !collabs.map(c => c.uid).includes(u.uid));
+
+    const locList = Array.from(new Set(usersWithoutCollabs
+      .map(r => r.geo && r.geo.name ? r.geo.name : null)))
+      .filter(loc => Boolean(loc))
+      .map(loc => 
+        <option key={loc} value={loc}>{loc}</option>
       );
+
+    const schoolList = Array.from(new Set(usersWithoutCollabs
+      .map(r => r.school && r.school.name ? r.school.name : null)))
+      .filter(school => Boolean(school))
+      .map(school => 
+        <option key={school} value={school}>{school}</option>
+      );
+
+    if (filterLoc && filterLoc !== "default") {
+      usersWithoutCollabs = usersWithoutCollabs.filter(u => u.geo && u.geo.name && u.geo.name === filterLoc);
+    }
+
+    if (filterSchool && filterSchool !== "default") {
+      usersWithoutCollabs = usersWithoutCollabs.filter(u => u.school && u.school.name && u.school.name === filterSchool);
+    }
+
+    const userList = usersWithoutCollabs.map(r =>
+      <li className="list-result" key={r.id}>
+        <Card interactive={true} elevation={Card.ELEVATION_TWO}>
+          <h5>{r.user.username}</h5><br/>
+          {r.geo && r.geo.name ? <p><Icon iconName="map-marker" /> {r.geo.name}</p> : null}
+          {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null}
+          <button onClick={this.addCollaborator.bind(this, r)}>Add</button>
+        </Card>
+      </li>
+    );
 
     const collabList = collabs.map(r => 
       <li className="collab-result" key={r.id}>
         <Card interactive={true} elevation={Card.ELEVATION_TWO}>
           <h5>{r.user.username}</h5><br/>
-          <p>home will go here</p>
-          <p>school will go here</p>
+          {r.geo && r.geo.name ? <p><Icon iconName="map-marker" /> {r.geo.name}</p> : null}
+          {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null}
           <button onClick={this.removeCollaborator.bind(this, r.uid)}>Remove</button>
         </Card>
       </li>
@@ -128,17 +152,15 @@ class CollabSearch extends Component {
         <div className="pt-select">
           filter by loc
           <select value={this.state.filterLoc} onChange={e => this.setState({filterLoc: e.target.value})}>
-            <option value="locs">locs</option>
-            <option value="go">go</option>
-            <option value="here">here</option>
+            <option value="default">show all locations</option>
+            {locList}
           </select>
         </div>
         <div className="pt-select">
           filter by school
           <select value={this.state.filterSchool} onChange={e => this.setState({filterSchool: e.target.value})}>
-            <option value="locs">schools</option>
-            <option value="go">go</option>
-            <option value="here">here</option>
+            <option value="default">show all schools</option>
+            {schoolList}
           </select>
         </div>
         <div className="box-results">

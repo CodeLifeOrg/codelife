@@ -28,6 +28,12 @@ module.exports = function(app) {
                   {name: {[sequelize.Op.iLike]: `%${query}%`}}
                 ]
             } 
+        },
+        {
+          association: "geo"
+        },
+        {
+          association: "school"
         }
       ]
     }).then(users => {

@@ -148,8 +148,6 @@ class Projects extends Component {
           else {
             this.setState({leaveAlert: false, collabs}); 
           }
-          
-          
         }
         else {
           console.log("error");

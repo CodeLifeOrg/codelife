@@ -1,0 +1,151 @@
+@import "../mixins.css";
+
+/* set container height to minimize reflows when loading */
+.geosearch-container {
+  min-height: 5.0625rem;
+}
+.school-geosearch-container {
+  min-height: 10.125rem;
+}
+
+/* keep state & city select side by side */
+.state-select-container,
+.city-select-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* state select */
+.state-select-container {
+  width: 4.35em; /* the perfect width to only show the abbreviation */
+}
+
+/* city select */
+.city-select-container {
+  width: calc(100% - 5.6em);
+  left: 1.25em;
+}
+
+/* reset blueprint popover target style */
+.field-container .pt-popover-target {
+  display: block;
+}
+
+/* make the select trigger button look like a select menu */
+/* WARNING: this sucks, but the labs select seems to require the blueprint Button element to work correctly so 🤷‍ */
+.pt-button.select-trigger {
+  @add-mixin select-theme;
+  text-align: left;
+  box-shadow: none !important;
+
+  /* reset text and icon size */
+  & > span {
+    font-size: inherit;
+    display: block;
+    height: auto;
+
+    /* text overflow */
+    &:not(.pt-icon-geosearch) {
+      @add-mixin overflow-ellipsis;
+      height: 1.5em; /* same as line-height */
+    }
+  }
+
+  /* icon */
+  & > .pt-icon-geosearch {
+    @add-mixin select-icon-right;
+    /* blueprint resets */
+    margin-left: 0;
+  }
+
+  /* interactions */
+  &:hover, &:focus {
+
+  }
+  &:hover > .pt-icon-geosearch {
+    color: var(--sky-dark);
+  }
+}
+
+
+/* select popover */
+/* WARNING: this is gonna get ugly */
+
+/* position inline overlay over select trigger button */
+.field-container .pt-overlay-inline {
+  position: absolute;
+  top: 0;
+}
+/* necessary for everything to take up 100% of the space */
+.field-container .pt-overlay-inline * {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.geosearch-popover {
+
+  /* so much border radius, so little time 😒 */
+  &, & .pt-popover-content {
+    border-radius: var(--radius-sm);
+  }
+  & .pt-popover-content * {
+    border-radius: 0;
+  }
+
+  /* hide tooltip arrow  */
+  & > .pt-popover-arrow {
+    display: none;
+  }
+
+  /* adjust container padding */
+  & > div.pt-popover-content { /* increase specificity */
+    padding: 0;
+    background-color: var(--light-1);
+    overflow: hidden;
+  }
+
+  /* adjust search input */
+  & input {
+    @add-mixin font-md;
+    @add-mixin button-padding;
+    height: auto;
+    border: 1px solid var(--sky-dark);
+    box-shadow: 0 1px 1em var(--white) !important;
+    background-color: var(--sky-light);
+    z-index: 1;
+  }
+  /* adjust search and clear icons */
+  & .pt-input-group > .pt-icon {
+    pointer-events: none; /* prevent from obscuring click */
+    font-size: 1rem;
+    line-height: 2.75rem;
+    padding: 0 0.5rem 0.25rem 0.5rem;
+    margin: 0;
+    color: var(--sky-dark);
+    z-index: 2;
+  }
+  /* hide the button that doesn't work */
+  & .pt-input-group button {
+    display: none;
+  }
+
+  /* adjust menu */
+  & .pt-menu {
+    @add-mixin font-sm;
+    padding: 0 !important;
+
+    /* interactions */
+    & .pt-menu-item {
+      will-change: background-color, padding;
+      transition:
+        0.1s background-color,
+        0.1s padding;
+
+      &:hover, &:focus, &.is-focused {
+        background-color: var(--light-1);
+        padding-left: 0.75em;
+      }
+    }
+  }
+}

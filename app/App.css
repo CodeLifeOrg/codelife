@@ -127,7 +127,7 @@ blueprint overrides
 
   /* more padding on bigger buttons */
   &.font-md {
-    padding: 0.35em 2em 0.55em 2em;
+    @add-mixin button-padding;
 
     & > .pt-icon {
       margin-right: 0.5em;
@@ -256,6 +256,7 @@ blueprint overrides
   }
 }
 
+/* NOTE: there are a bunch of overrides for the hideous blueprints lab Select component found in SelectGeo.css */
 
 /* -----------------------------------
 layout
@@ -438,42 +439,12 @@ form field layout
 
   /* reset padding */
   & > .pt-select > select {
-    padding: 0.35em 2em 0.55em 0.75em;
-    /* theming */
-    border: 1px solid var(--light-2);
-    border-radius: var(--radius-sm);
-    box-shadow: none;
-    background-color: var(--light-1);
-    background-image:
-      linear-gradient(to bottom,
-      rgba(255, 255, 255, 0.75),
-      rgba(255, 255, 255, 0.25));
-    /* transitions */
-    transition:
-      0.2s background-color,
-      0.2s border-color;
-
-    /* interactions */
-    &:hover, &:focus {
-      background-color: var(--white);
-      border-color: var(--sky-dark);
-    }
+    @add-mixin select-theme;
   }
 
   /* icon */
   & > .pt-select:after {
-    /* sizing */
-    font-size: inherit;
-    line-height: 1.5;
-    /* positioning */
-    position: absolute;
-    z-index: 1;
-    top: auto; /* reset */
-    bottom: 0.5em;
-    right: 0.6em;
-    color: var(--gray);
-    /* transitions */
-    transition: color 0.2s;
+    @add-mixin select-icon-right;
   }
 
   /* width of inputs, textareas, and buttons dictated by container */

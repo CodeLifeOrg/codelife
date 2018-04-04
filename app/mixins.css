@@ -84,6 +84,56 @@
   margin-bottom: 0; /* thanks blueprint */
 }
 
+/* ellipsis */
+/* NOTE: works best with defined width & height, 1 line of text */
+@define-mixin overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* default button padding */
+@define-mixin button-padding {
+  padding: 0.35em 2em 0.55em 2em;
+}
+/* select menu theming */
+@define-mixin select-theme {
+  padding: 0.35em 2em 0.55em 0.75em;
+  border: 1px solid var(--light-2);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  background-color: var(--light-1);
+  background-image:
+    linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.25));
+  /* transitions */
+  transition:
+    0.2s background-color,
+    0.2s border-color;
+
+  /* interactions */
+  &:hover, &:focus {
+    background-color: var(--white);
+    border-color: var(--sky-dark);
+  }
+}
+/* select icon */
+@define-mixin select-icon-right {
+  /* sizing */
+  font-size: inherit;
+  line-height: 1.5;
+  /* positioning */
+  position: absolute;
+  z-index: 1;
+  top: auto; /* reset */
+  bottom: 0.5em;
+  right: 0.6em;
+  color: var(--gray);
+  /* transitions */
+  transition: color 0.2s;
+}
+
 /* button group; apply to pt-button, not parent */
 @define-mixin button-groupify {
   margin: 0; /* smush buttons together */

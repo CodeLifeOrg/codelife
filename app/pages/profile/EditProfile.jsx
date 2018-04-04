@@ -6,8 +6,8 @@ import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import UserInfo from "./UserInfo";
-import SelectGeo from "./SelectGeo";
-import SelectSchool from "./SelectSchool";
+import SelectGeo from "components/SelectGeo";
+import SelectSchool from "components/SelectSchool";
 import SelectImg from "./SelectImg";
 import "@blueprintjs/datetime/dist/blueprint-datetime.css";
 import "moment/locale/pt-br";
@@ -236,18 +236,14 @@ class EditProfile extends Component {
               </div>
             </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Where are you from?")}
-              </label>
-              <SelectGeo gid={gid} callback={setGid} />
-            </div>
+            <div className="location-group-inner">
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("What school do you go to?")}
-              </label>
+              <h3 className="font-sm u-margin-bottom-off">{t("YourLocation")}</h3>
+              <SelectGeo gid={gid} callback={setGid} />
+
+              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("YourSchool")}</h3>
               <SelectSchool sid={sid} callback={setSid} />
+
             </div>
 
             <div className="pt-form-group pt-inline">

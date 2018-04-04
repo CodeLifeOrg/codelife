@@ -9,8 +9,8 @@ import {CPF} from "cpf_cnpj";
 import Loading from "components/Loading";
 import {DateInput} from "@blueprintjs/datetime";
 import {Icon, Toaster, Position, Intent} from "@blueprintjs/core";
-import SelectGeo from "pages/profile/SelectGeo";
-import SelectSchool from "pages/profile/SelectSchool";
+import SelectGeo from "components/SelectGeo";
+import SelectSchool from "components/SelectSchool";
 import "./ContestSignup.css";
 
 class ContestSignup extends Component {
@@ -143,7 +143,7 @@ class ContestSignup extends Component {
   }
 
   render() {
-    
+
     if (!this.state.profileUser) return <Loading />;
 
     const {t} = this.props;
@@ -153,97 +153,92 @@ class ContestSignup extends Component {
     const bad = <Icon iconName="cross" className="pt-intent-danger" />;
 
     return (
-      <div id="signup-container">
-        <div id="signup-forms">
-          <h2>
-            Contest Signup
-          </h2>
-          <p>Hello <strong>{this.props.user.username}</strong>, please fill out the following profile fields to enter the contest</p>
-          <p>Remember, you need to finish all Codelife Islands and submit a final project to be considered in the drawing!</p>
-          <form>
+      <div className="contest-signup-container">
+        <form className="contest-signup-form">
 
-            <h2>Location Info</h2>
+          <h2>Contest Signup</h2>
+
+          <div className={this.state.skip ? "location-group is-inactive" : "location-group"}>
+
+            <div className="location-group-inner">
+
+              <h3 className="font-sm u-margin-bottom-off">{t("Your location")}</h3>
+              <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
+
+              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("Your school")}</h3>
+              <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
+
+            </div>
 
             <div className="pt-form-group pt-inline">
-              <label className="pt-control pt-checkbox">
+              <label className="pt-control pt-checkbox font-xs">
                 <input type="checkbox" checked={this.state.skip} onChange={this.handleCheckbox.bind(this)}/>
-                <span className="pt-control-indicator"></span>
+                <span className="pt-control-indicator" />
                 {t("I'd rather not say")}
               </label>
             </div>
 
-            <div className={this.state.skip ? "hidden" : ""}>
+          </div>
 
-              <div className="pt-form-group pt-inline">
-                <label className="pt-label" htmlFor="example-form-group-input-d">
-                  {t("Where are you from?")}
-                </label>
-                <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
-              </div>
-              
-              <div className="pt-form-group pt-inline">
-                <label className="pt-label" htmlFor="example-form-group-input-d">
-                  {t("What school do you go to?")}
-                </label>
-                <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
 
+
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("Email")}
+            </label>
+            <div className="pt-form-content">
+              <div className="pt-input-group">
+                <input onChange={this.onEmailUpdate.bind(this)} disabled={this.state.gotEmailFromDB} value={email || ""} placeholder="" id="email" className="pt-input" type="text" dir="auto" />
               </div>
             </div>
+          </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Email")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <input onChange={this.onEmailUpdate.bind(this)} disabled={this.state.gotEmailFromDB} value={email || ""} placeholder="" id="email" className="pt-input" type="text" dir="auto" />
-                </div>
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("CPF")}
+            </label>
+            <div className="pt-form-content">
+              <div className="pt-input-group">
+                <input onChange={this.onCpfUpdate.bind(this)} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" type="text" dir="auto" />
               </div>
             </div>
+          </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("CPF")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <input onChange={this.onCpfUpdate.bind(this)} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" type="text" dir="auto" />
-                </div>
-              </div>
+          <div className="pt-form-group pt-inline">
+            <label className="pt-label" htmlFor="example-form-group-input-d">
+              {t("Birthday")}
+            </label>
+            <div className="pt-form-content">
+              <DateInput
+                onChange={this.setBday.bind(this)}
+                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+                format="DD/MM/YYYY"
+                locale="pt-br"
+                minDate={new Date("1900")}
+                maxDate={new Date("2008")}
+              />
             </div>
+          </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Birthday")}
-              </label>
-              <div className="pt-form-content">
-                <DateInput
-                  onChange={this.setBday.bind(this)}
-                  value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
-                  format="DD/MM/YYYY"
-                  locale="pt-br"
-                  minDate={new Date("1900")}
-                  maxDate={new Date("2008")}
-                />
-              </div>
-            </div>
+          <button
+            type="button"
+            className="pt-button pt-intent-success"
+            onClick={this.enterContest.bind(this)}
+            disabled={
+              !this.isEmailValid(email) ||
+              !CPF.isValid(cpf) ||
+              !this.isDobValid(dob) ||
+              !(this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid)
+            }
+          >
+            {t("Enter")}
+          </button>
 
-            <button 
-              type="button" 
-              className="pt-button pt-intent-success"
-              onClick={this.enterContest.bind(this)}
-              disabled={
-                !this.isEmailValid(email) || 
-                !CPF.isValid(cpf) || 
-                !this.isDobValid(dob) ||
-                !(this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid)
-              }
-            >
-              {t("Enter")}
-            </button>
+        </form>
 
-          </form> 
-        </div>
+        {/* <p>Hello <strong>{this.props.user.username}</strong>, please fill out the following profile fields to enter the contest</p>
+        <p>Remember, you need to finish all Codelife Islands and submit a final project to be considered in the drawing!</p> */}
+
         <div id="eligibility-box">
           <ul>
             <li>{this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid ? good : bad} location</li>
@@ -252,8 +247,8 @@ class ContestSignup extends Component {
             <li>{this.isDobValid(dob) ? good : bad} under 19</li>
           </ul>
         </div>
-        
-        
+
+
       </div>
     );
   }

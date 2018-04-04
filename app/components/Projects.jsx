@@ -13,6 +13,7 @@ class Projects extends Component {
     super(props);
     this.state = {
       deleteAlert: false,
+      leaveAlert: false,
       projects: [],
       collabs: [],
       projectName: "",
@@ -123,6 +124,40 @@ class Projects extends Component {
     }
   }
 
+  showLeaveAlert(collab) {
+    const {t} = this.props;
+    const leaveAlert = {
+      collab,
+      text: t("Are you sure you want to leave this project?")
+    };
+    this.setState({leaveAlert});
+  }
+
+  leaveCollab() {
+    const {collab} = this.state.leaveAlert;
+    const {projects} = this.state;
+    if (collab && collab.id) {
+      const pid = collab.id;
+      axios.post("/api/projects/leavecollab", {pid}).then(resp => {
+        if (resp.status === 200) {
+          const collabs = this.state.collabs.filter(c => c.id !== collab.id);
+          if (collab.id === this.state.currentProject.id) {
+            const currentProject = projects[0];
+            this.setState({leaveAlert: false, currentProject, collabs}, this.props.openProject.bind(this, currentProject.id));
+          }
+          else {
+            this.setState({leaveAlert: false, collabs}); 
+          }
+          
+          
+        }
+        else {
+          console.log("error");
+        }
+      });
+    }
+  }
+
   clickNewProject() {
     const {t} = this.props;
     const projectName = this.state.projectName;
@@ -201,7 +236,7 @@ class Projects extends Component {
   render() {
 
     const {t} = this.props;
-    const {deleteAlert} = this.state;
+    const {deleteAlert, leaveAlert} = this.state;
 
     const showDeleteButton = this.state.projects.length > 1;
 
@@ -256,6 +291,9 @@ class Projects extends Component {
         <Tooltip position={Position.TOP_LEFT} content={ `${t("Owner")}: ${collab.username}` }>
           <div><span className="project-title" onClick={() => this.handleClick(collab)}>{collab.name}</span>&nbsp;<Icon iconName="people" /></div>
         </Tooltip>
+        <Tooltip position={Position.TOP_RIGHT} content={ `${t("Leave Project")}` }>
+          <span className="pt-icon-standard pt-icon-log-out" onClick={() => this.showLeaveAlert(collab)}></span>
+        </Tooltip>
       </li>);
 
     return (
@@ -280,6 +318,16 @@ class Projects extends Component {
           onCancel={ () => this.setState({deleteAlert: false}) }
           onConfirm={ () => this.deleteProject(true) }>
           <p>{ deleteAlert ? deleteAlert.text : "" }</p>
+        </Alert>
+        <Alert
+          isOpen={ leaveAlert ? true : false }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Leave") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({leaveAlert: false}) }
+          onConfirm={ () => this.leaveCollab() }>
+          <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
+          <p>{ leaveAlert ? leaveAlert.text : "" }</p>
         </Alert>
       </div>
     );

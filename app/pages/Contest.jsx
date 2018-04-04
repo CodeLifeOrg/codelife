@@ -5,7 +5,7 @@ import AuthForm from "components/AuthForm";
 import ContestSignup from "components/ContestSignup";
 import ContestSubmit from "components/ContestSubmit";
 import {Dialog} from "@blueprintjs/core";
-import {browserHistory, Link} from "react-router";
+import {Link} from "react-router";
 import axios from "axios";
 
 import "./Contest.css";

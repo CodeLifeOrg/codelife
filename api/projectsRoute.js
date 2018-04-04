@@ -172,6 +172,14 @@ module.exports = function(app) {
     });
   });
 
+  app.post("/api/projects/leavecollab", isAuthenticated, (req, res) => {
+    const {pid} = req.body;
+    const uid = req.user.id;
+    db.projects_userprofiles.destroy({where: {uid, pid}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
   // Used by Projects to delete a project
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
     db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => {

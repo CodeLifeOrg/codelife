@@ -156,41 +156,47 @@ class ContestSignup extends Component {
       <div className="contest-signup-container">
         <form className="contest-signup-form">
 
-          <h2>Contest Signup</h2>
+          {/* form heading */}
+          <h2 className="signup-heading font-xl u-text-center">{t("Contest.SignupFormHeading")}</h2>
 
-          <div className={this.state.skip ? "location-group is-inactive" : "location-group"}>
 
-            <div className="location-group-inner">
+          {/* location */}
+          <div className={this.state.skip ? "field-container is-inactive" : "field-container"}>
 
-              <h3 className="font-sm u-margin-bottom-off">{t("Your location")}</h3>
-              <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
+            {/* your location */}
+            <h3 className="font-sm u-margin-bottom-off">{t("YourLocation")}</h3>
+            <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
 
-              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("Your school")}</h3>
-              <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
-
-            </div>
-
-            <div className="pt-form-group pt-inline">
-              <label className="pt-control pt-checkbox font-xs">
-                <input type="checkbox" checked={this.state.skip} onChange={this.handleCheckbox.bind(this)}/>
-                <span className="pt-control-indicator" />
-                {t("I'd rather not say")}
-              </label>
-            </div>
+            {/* your school */}
+            <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("YourSchool")}</h3>
+            <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
 
           </div>
 
-
-
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Email")}
+          {/* no thanks */}
+          <div className="field-container pt-inline">
+            <label className="pt-control pt-checkbox font-xs">
+              <input type="checkbox" checked={this.state.skip} onChange={this.handleCheckbox.bind(this)}/>
+              <span className="pt-control-indicator" />
+              {t("I'd rather not say")}
             </label>
-            <div className="pt-form-content">
-              <div className="pt-input-group">
-                <input onChange={this.onEmailUpdate.bind(this)} disabled={this.state.gotEmailFromDB} value={email || ""} placeholder="" id="email" className="pt-input" type="text" dir="auto" />
-              </div>
-            </div>
+          </div>
+
+
+          {/* required fields */}
+          {/* email */}
+          <div className={this.state.gotEmailFromDB ? "field-container is-valid font-md has-icon" : "field-container font-md has-icon" }>
+            <label className="font-sm" htmlFor="contest-signup-email">{ t("SignUp.Email") }</label>
+            <input className="field-input"
+              id="contest-signup-email"
+              value={email || ""}
+              type="email"
+              name="contest-signup-email"
+              onChange={this.onEmailUpdate.bind(this)}
+              disabled={this.state.gotEmailFromDB}
+              tabIndex={this.state.gotEmailFromDB ? "-1" : null } />
+            <span className="field-icon pt-icon pt-icon-envelope" />
+            <span className="field-icon validation-icon pt-icon pt-icon-small-tick" />
           </div>
 
           <div className="pt-form-group pt-inline">

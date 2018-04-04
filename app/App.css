@@ -104,7 +104,6 @@ blueprint overrides
 
 .pt-input {
   border-radius: var(--radius-sm);
-  font-family: var(--heading-font);
 }
 
 .pt-file-upload-input {
@@ -232,6 +231,15 @@ blueprint overrides
 
 .pt-toast .pt-button {
   margin: 0;
+}
+
+/* set cursor back to default for non-links */
+button, .pt-button,
+[class*="pt"] select {
+  cursor: auto;
+}
+label.pt-control {
+  cursor: default;
 }
 
 /* checkbox overrides */
@@ -478,6 +486,13 @@ form field layout
     color: var(--gray);
     /* transitions */
     transition: color 0.2s;
+
+    /* if there are two icons, position the second one right */
+    &:nth-of-type(2) {
+      /* position right */
+      left: auto;
+      right: 0.5em;
+    }
   }
 
   /* select */
@@ -614,6 +629,50 @@ form field layout
     cursor: default;
     z-index: 0;
     opacity: 0.3;
+  }
+
+  /* hide validation icon by default */
+  & .validation-icon {
+    opacity: 0;
+    transform: scale(0.25);
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+
+  /* disabled but validated state */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-valid {
+    pointer-events: none;
+    cursor: default;
+    z-index: 0;
+
+    & > input:not([type=submit]):not([type=file]),
+    & > textarea {
+      background-color: var(--white);
+      border-color: var(--light-1);
+      color: var(--gray);
+      padding-right: 2.1em; /* make room for validation tick */
+    }
+
+    /* check icon */
+    & > .validation-icon {
+      /* theming */
+      background: var(--sky);
+      border-radius: 50%;
+      /* transitions */
+      opacity: 1;
+      transform: none;
+
+      /* the tick mark itself */
+      &:before {
+        /* alignment adjustment */
+        position: relative;
+        top: 1px;
+        /* theming */
+        color: var(--white);
+      }
+    }
   }
 }
 

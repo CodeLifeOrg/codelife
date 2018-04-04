@@ -151,6 +151,10 @@ class ContestSignup extends Component {
 
     const good = <Icon iconName="tick" className="pt-intent-success" />;
     const bad = <Icon iconName="cross" className="pt-intent-danger" />;
+    const popoverProps = {
+      popoverClassName: "calendar-popover pt-minimal",
+      inline: true
+    };
 
     return (
       <div className="contest-signup-container">
@@ -184,8 +188,10 @@ class ContestSignup extends Component {
 
 
           {/* required fields */}
+          <h3 className="font-sm u-margin-bottom-off">{t("Contest.RequiredFields")}</h3>
+
           {/* email */}
-          <div className={this.state.gotEmailFromDB ? "field-container is-valid font-md has-icon" : "field-container font-md has-icon" }>
+          <div className={this.state.gotEmailFromDB ? "field-container is-immutable is-valid font-md has-icon" : "field-container font-md has-icon" }>
             <label className="font-sm" htmlFor="contest-signup-email">{ t("SignUp.Email") }</label>
             <input className="field-input"
               id="contest-signup-email"
@@ -196,34 +202,39 @@ class ContestSignup extends Component {
               disabled={this.state.gotEmailFromDB}
               tabIndex={this.state.gotEmailFromDB ? "-1" : null } />
             <span className="field-icon pt-icon pt-icon-envelope" />
-            <span className="field-icon validation-icon pt-icon pt-icon-small-tick" />
+            <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
           </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("CPF")}
-            </label>
-            <div className="pt-form-content">
-              <div className="pt-input-group">
-                <input onChange={this.onCpfUpdate.bind(this)} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" type="text" dir="auto" />
-              </div>
-            </div>
+          {/* CPF */}
+          <div className="field-container font-md has-icon">
+            <label className="font-sm" htmlFor="cpf">{ t("CPF") }</label>
+            <input className="field-input"
+              id="cpf"
+              value={cpf || ""}
+              type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              placeholder="000.000.000-00"
+              name="cpf"
+              onChange={this.onCpfUpdate.bind(this)} />
+            <span className="field-icon pt-icon pt-icon-id-number" />
           </div>
 
-          <div className="pt-form-group pt-inline">
-            <label className="pt-label" htmlFor="example-form-group-input-d">
-              {t("Birthday")}
-            </label>
-            <div className="pt-form-content">
-              <DateInput
-                onChange={this.setBday.bind(this)}
-                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
-                format="DD/MM/YYYY"
-                locale="pt-br"
-                minDate={new Date("1900")}
-                maxDate={new Date("2008")}
-              />
-            </div>
+          {/* Date of birth */}
+          <div className="field-container date-picker-container font-md has-icon">
+            <label className="font-sm" htmlFor="dob">{ t("DOB") }</label>
+            <DateInput
+              popoverProps={popoverProps}
+              className="field-input font-sm"
+              id="dob"
+              onChange={this.setBday.bind(this)}
+              value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+              format="DD/MM/YYYY"
+              locale="pt-br"
+              minDate={new Date("1900")}
+              maxDate={new Date("2008")}
+            />
+            <span className="field-icon pt-icon pt-icon-calendar" />
           </div>
 
           <button

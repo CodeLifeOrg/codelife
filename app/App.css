@@ -22,6 +22,13 @@ html {
 body * {
   position: relative;
 }
+/* hide the spinner on inputs with a type of "number" */
+/* see https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none; /* `display: none` can cause crashes */
+  margin: 0; /* nuke the margin */
+}
 
 /* override normalize */
 figure {
@@ -235,10 +242,8 @@ blueprint overrides
 
 /* set cursor back to default for non-links */
 button, .pt-button,
-[class*="pt"] select {
-  cursor: auto;
-}
-label.pt-control {
+[class*="pt"] select,
+label.pt-control  {
   cursor: default;
 }
 
@@ -479,6 +484,7 @@ form field layout
 
   /* NOTE: placement requires icons to follow input */
   & > .field-icon {
+    pointer-events: none; /* prevent from obscuring field */
     position: absolute;
     z-index: 1;
     bottom: 0.75em;
@@ -487,8 +493,8 @@ form field layout
     /* transitions */
     transition: color 0.2s;
 
-    /* if there are two icons, position the second one right */
-    &:nth-of-type(2) {
+    /* position an icon right */
+    &.position-right {
       /* position right */
       left: auto;
       right: 0.5em;
@@ -532,7 +538,8 @@ form field layout
 
   /* style inputs & textareas */
   & > input:not([type=submit]):not([type=file]),
-  & > textarea {
+  & > textarea,
+  &.date-picker-container input {
     padding: 0.35em 0.75em 0.55em;
     background-color: var(--light-1);
     border: 1px solid var(--gray);
@@ -541,6 +548,14 @@ form field layout
     transition:
       background-color 0.2s,
       border 0.2s;
+
+    /* placeholder text */
+    &:placeholder-shown {
+      color: var(--dark-1);
+    }
+    &:focus:placeholder-shown {
+      color: var(--sky-dark);
+    }
 
     /* interactions */
     &:hover {
@@ -622,12 +637,25 @@ form field layout
     }
   }
 
+  /* immutable state — used on email address */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-immutable {
+    @add-mixin disable-field;
+
+    /* entered text */
+    & > input:not([type=submit]):not([type=file]),
+    & > textarea {
+      background-color: var(--white);
+      border-color: var(--light-1);
+      color: var(--gray);
+      padding-right: 2.1em; /* make room for validation tick */
+    }
+  }
+
   /* disabled state */
   /* NOTE: remember to also set `tabIndex="-1"` */
   &.is-disabled {
-    pointer-events: none;
-    cursor: default;
-    z-index: 0;
+    @add-mixin disable-field;
     opacity: 0.3;
   }
 
@@ -640,20 +668,8 @@ form field layout
       transform 0.2s;
   }
 
-  /* disabled but validated state */
-  /* NOTE: remember to also set `tabIndex="-1"` */
+  /* validated state */
   &.is-valid {
-    pointer-events: none;
-    cursor: default;
-    z-index: 0;
-
-    & > input:not([type=submit]):not([type=file]),
-    & > textarea {
-      background-color: var(--white);
-      border-color: var(--light-1);
-      color: var(--gray);
-      padding-right: 2.1em; /* make room for validation tick */
-    }
 
     /* check icon */
     & > .validation-icon {
@@ -675,6 +691,52 @@ form field layout
     }
   }
 }
+
+/* date picker overrides 😭 */
+.date-picker-container {
+
+  /* THE INPUT */
+  & input {
+    height: auto;
+    box-shadow: none !important;
+
+    /* invalid date */
+    &[value="Out of range"] {
+      border-color: var(--danger);
+      background-color: var(--danger-light);
+    }
+  }
+  /* make room for the icon on the left again 🙄 */
+  &.has-icon input {
+    padding-left: 2.1em;
+    padding-right: 0.75em;
+  }
+  /* reset the font size after unsetting it so the popover isn't huge 😡 */
+  &.font-md input {
+    @add-mixin font-md;
+  }
+
+  /* THE PICKER */
+  /* offset positioning, make it stop uncentering itself */
+  & .pt-overlay {
+    display: block;
+    text-align: center;
+  }
+  /* reset border radius */
+  &, & .pt-popover-content {
+    border-radius: var(--radius-sm);
+  }
+  /* adjust container padding */
+  & .pt-popover-content {
+    padding: 0;
+  }
+
+  /* make next/prev buttons work */
+  & .DayPicker-NavButton {
+    z-index: 1;
+  }
+}
+
 
 /* switch from login to signup */
 .form-container .form-switcher {

@@ -73,12 +73,12 @@
 /* WARNING: this is gonna get ugly */
 
 /* position inline overlay over select trigger button */
-.field-container .pt-overlay-inline {
+[class*=geosearch-container] .pt-overlay-inline {
   position: absolute;
   top: 0;
 }
 /* necessary for everything to take up 100% of the space */
-.field-container .pt-overlay-inline * {
+[class*=geosearch-container] .pt-overlay-inline * {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -92,11 +92,6 @@
   }
   & .pt-popover-content * {
     border-radius: 0;
-  }
-
-  /* hide tooltip arrow  */
-  & > .pt-popover-arrow {
-    display: none;
   }
 
   /* adjust container padding */

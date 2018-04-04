@@ -278,22 +278,17 @@ blueprint overrides
   }
 
   /* interactions */
-  &:hover {
-    & > .pt-control-indicator {
-      background-color: var(--white);
-      border-color: var(--sky-dark);
-      opacity: 0.9;
-    }
+  & > input:focus ~ .pt-control-indicator,
+  &:hover > .pt-control-indicator {
+    background-color: var(--white);
+    border-color: var(--sky-dark);
+    opacity: 0.9;
+    outline: none;
   }
   /* checked state */
   & > input:checked ~ .pt-control-indicator:before {
     opacity: 1;
     transform: none;
-  }
-  /* override blueprint :focus styles */
-  & > input:focus ~ .pt-control-indicator {
-    outline: none;
-    opacity: 0.9;
   }
 }
 

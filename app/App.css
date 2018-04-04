@@ -234,6 +234,69 @@ blueprint overrides
   margin: 0;
 }
 
+/* checkbox overrides */
+.pt-checkbox {
+  line-height: 1.333; /* fudge into alignment */
+  padding-left: 1.75em;
+
+  /* checkbox appearance */
+  &.pt-control > .pt-control-indicator {
+    /* theming */
+    @add-mixin select-theme;
+    box-shadow: none !important;
+    border-radius: var(--radius-md);
+    /* sizing */
+    font-size: inherit;
+    width: 1.333em;
+    height: 1.333em;
+    /* transitions */
+    will-change: opacity;
+    transition:
+      opacity 0.1s
+      border-color 0.1s;
+
+    /* check pseudo element */
+    &:before {
+      /* positioning */
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      /* position check */
+      text-align: center;
+      /* theming */
+      border-radius: var(--radius-md);
+      background: var(--sky-dark);
+      /* transitions */
+      opacity: 0;
+      transform: scale(0.25);
+      transition:
+        opacity 0.1s,
+        transform 0.1s;
+    }
+  }
+
+  /* interactions */
+  &:hover {
+    & > .pt-control-indicator {
+      background-color: var(--white);
+      border-color: var(--sky-dark);
+      opacity: 0.9;
+    }
+  }
+  /* checked state */
+  & > input:checked ~ .pt-control-indicator:before {
+    opacity: 1;
+    transform: none;
+  }
+  /* override blueprint :focus styles */
+  & > input:focus ~ .pt-control-indicator {
+    outline: none;
+    opacity: 0.9;
+  }
+}
+
 /* switches */
 .pt-control-indicator {
   background-color: var(--light-2) !important;
@@ -440,6 +503,7 @@ form field layout
 
   /* reset padding */
   & > .pt-select > select {
+    @add-mixin select-padding;
     @add-mixin select-theme;
   }
 

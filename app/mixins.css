@@ -96,9 +96,12 @@
 @define-mixin button-padding {
   padding: 0.35em 2em 0.55em 2em;
 }
+/* select menu padding */
+@define-mixin select-padding {
+  padding: 0.35em 2em 0.55em 0.75em;
+}
 /* select menu theming */
 @define-mixin select-theme {
-  padding: 0.35em 2em 0.55em 0.75em;
   border: 1px solid var(--light-2);
   border-radius: var(--radius-sm);
   box-shadow: none;

@@ -22,8 +22,8 @@
 
 /* city select */
 .city-select-container {
-  width: calc(100% - 5.6em);
-  left: 1.25em;
+  width: calc(100% - 4.35em - 1.25rem);
+  left: 1.25rem;
 }
 
 /* reset blueprint popover target style */
@@ -34,6 +34,7 @@
 /* make the select trigger button look like a select menu */
 /* WARNING: this sucks, but the labs select seems to require the blueprint Button element to work correctly so 🤷‍ */
 .pt-button.select-trigger {
+  @add-mixin select-padding;
   @add-mixin select-theme;
   text-align: left;
   box-shadow: none !important;

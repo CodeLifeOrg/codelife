@@ -211,9 +211,7 @@ class ContestSignup extends Component {
             <input className="field-input"
               id="cpf"
               value={cpf || ""}
-              type="number"
-              inputMode="numeric"
-              pattern="[0-9]*"
+              type="text"
               placeholder="000.000.000-00"
               name="cpf"
               onChange={this.onCpfUpdate.bind(this)} />

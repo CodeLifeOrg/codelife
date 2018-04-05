@@ -470,8 +470,35 @@ form field layout
   padding: var(--gutter-md);
   box-shadow: 0 2px 0.75em rgba(8, 26, 24, 0.25);
 
+  & .form-column {
+    margin-top: 1.5rem;
+  }
+
+  /* give 2nd column some breathing room on small screens */
+  @add-mixin max-sm {
+    & .form-column-half:nth-of-type(2) {
+      margin-top: 2.25rem;
+
+      /* assume submit button */
+      & + .field-container {
+        margin-top: 1rem;
+      }
+    }
+  }
+
   @add-mixin min-sm {
     padding: var(--gutter-lg);
+
+    & .form-column-half {
+      width: 45%;
+      width: calc(50% - 1.5rem);
+      display: inline-block;
+      vertical-align: top;
+
+      &:nth-of-type(2) {
+        left: 3rem;
+      }
+    }
   }
 }
 
@@ -599,6 +626,16 @@ form field layout
   & > [class*=button] {
     margin-top: 1.15em;
     margin-bottom: 0; /* reset from .content */
+  }
+
+  /* checkbox */
+  & .checkbox-container {
+    margin-top: 1.125rem;
+  }
+
+  /* space out headings */
+  & .field-heading {
+    margin-top: 2.5em;
   }
 
   /* social buttons */

@@ -26,6 +26,11 @@
   left: 1.25rem;
 }
 
+/* school select */
+.school-select-container {
+  margin-top: 0.5rem;
+}
+
 /* reset blueprint popover target style */
 .field-container .pt-popover-target {
   display: block;

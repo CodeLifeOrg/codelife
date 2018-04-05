@@ -224,6 +224,7 @@
   width: 100%;
   max-width: 52rem;
   max-height: 100vh; /* make it work on shorter screens */
+  overflow-y: auto;
 
   &[class*=form-container] {
     position: relative !important; /* thanks, blueprint */

@@ -208,78 +208,84 @@ class ContestSignup extends Component {
           {/* form heading */}
           <h2 className="signup-heading font-xl u-text-center">{t("Contest.SignupFormHeading")}</h2>
 
-
           {/* location */}
-          <div className={this.state.skip ? "field-container is-disabled" : "field-container"}>
+          <div className="form-column form-column-half">
 
             {/* your location */}
-            <h3 className="font-sm u-margin-bottom-off">{t("YourLocation")}</h3>
+            <h3 className="font-sm u-margin-bottom-off field-heading">{t("YourLocation")}</h3>
             <SelectGeo gid={gid} callback={this.setGid.bind(this)} />
 
-            {/* your school */}
-            <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("YourSchool")}</h3>
-            <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
+            {/* skippable school section */}
+            <div className={this.state.skip ? "field-container is-disabled" : "field-container"}>
+              {/* your school */}
+              <h3 className="font-sm u-margin-bottom-off field-heading">{t("YourSchool")}</h3>
+              <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
+            </div>
 
-          </div>
+            {/* no thanks */}
+            <div className="field-container pt-inline">
+              <div className="checkbox-container">
+                <label className="pt-control pt-checkbox font-xs u-margin-bottom-off">
+                  <input type="checkbox" checked={this.state.skip} onChange={this.handleCheckbox.bind(this)}/>
+                  <span className="pt-control-indicator" />
+                  {t("I'd rather not say")}
+                </label>
+              </div>
+            </div>
 
-          {/* no thanks */}
-          <div className="field-container pt-inline">
-            <label className="pt-control pt-checkbox font-xs">
-              <input type="checkbox" checked={this.state.skip} onChange={this.handleCheckbox.bind(this)}/>
-              <span className="pt-control-indicator" />
-              {t("I'd rather not say")}
-            </label>
           </div>
 
 
           {/* required fields */}
-          <h3 className="font-sm u-margin-bottom-off">{t("Contest.RequiredFields")}</h3>
+          <div className="form-column form-column-half">
+            <h3 className="font-sm u-margin-bottom-off field-heading">{t("Contest.RequiredFields")}</h3>
 
-          {/* email */}
-          <div className={emailClasses}>
-            <label className="font-sm" htmlFor="contest-signup-email">{ t("SignUp.Email") }</label>
-            <input className="field-input"
-              id="contest-signup-email"
-              value={email || ""}
-              type="email"
-              name="contest-signup-email"
-              onChange={this.onEmailUpdate.bind(this)}
-              disabled={this.state.gotEmailFromDB}
-              tabIndex={this.state.gotEmailFromDB ? "-1" : null } />
-            <span className="field-icon pt-icon pt-icon-envelope" />
-            <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
-          </div>
+            {/* email */}
+            <div className={emailClasses}>
+              <label className="font-sm" htmlFor="contest-signup-email">{ t("SignUp.Email") }</label>
+              <input className="field-input"
+                id="contest-signup-email"
+                value={email || ""}
+                type="email"
+                name="contest-signup-email"
+                onChange={this.onEmailUpdate.bind(this)}
+                disabled={this.state.gotEmailFromDB}
+                tabIndex={this.state.gotEmailFromDB ? "-1" : null } />
+              <span className="field-icon pt-icon pt-icon-envelope" />
+              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+            </div>
 
-          {/* CPF */}
-          <div className={cpfClasses}>
-            <label className="font-sm" htmlFor="cpf">{ t("CPF") }</label>
-            <input className="field-input"
-              id="cpf"
-              value={cpf || ""}
-              type="text"
-              placeholder="000.000.000-00"
-              name="cpf"
-              onChange={this.onCpfUpdate.bind(this)} />
-            <span className="field-icon pt-icon pt-icon-id-number" />
-            <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
-          </div>
+            {/* CPF */}
+            <div className={cpfClasses}>
+              <label className="font-sm" htmlFor="cpf">{ t("CPF") }</label>
+              <input className="field-input"
+                id="cpf"
+                value={cpf || ""}
+                type="text"
+                placeholder="000.000.000-00"
+                name="cpf"
+                onChange={this.onCpfUpdate.bind(this)} />
+              <span className="field-icon pt-icon pt-icon-id-number" />
+              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+            </div>
 
-          {/* Date of birth */}
-          <div className={dobClasses}>
-            <label className="font-sm" htmlFor="dob">{ t("DOB") }</label>
-            <DateInput
-              popoverProps={popoverProps}
-              className="field-input font-sm"
-              id="dob"
-              onChange={this.setBday.bind(this)}
-              value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
-              format="DD/MM/YYYY"
-              locale="pt-br"
-              minDate={new Date("1999")}
-              maxDate={new Date("2008")}
-            />
-            <span className="field-icon pt-icon pt-icon-calendar" />
-            <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+            {/* Date of birth */}
+            <div className={dobClasses}>
+              <label className="font-sm" htmlFor="dob">{ t("DOB") }</label>
+              <DateInput
+                popoverProps={popoverProps}
+                className="field-input font-sm"
+                id="dob"
+                onChange={this.setBday.bind(this)}
+                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+                format="DD/MM/YYYY"
+                locale="pt-br"
+                minDate={new Date("1999")}
+                maxDate={new Date("2008")}
+              />
+              <span className="field-icon pt-icon pt-icon-calendar" />
+              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+            </div>
           </div>
 
           {/* submit */}

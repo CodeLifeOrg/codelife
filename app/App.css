@@ -29,6 +29,10 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none; /* `display: none` can cause crashes */
   margin: 0; /* nuke the margin */
 }
+/* textareas can be resized, but only vertically */
+textarea {
+  resize: vertical;
+}
 
 /* override normalize */
 figure {

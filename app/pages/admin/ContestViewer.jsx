@@ -37,15 +37,36 @@ class ContestViewer extends Component {
 
     if (!mounted) return <Loading />;
 
-    console.log(entries);
+    console.log(sortBy);
 
-    const entryList = entries.map(e =>
+    let sortedEntries = entries;
+    const {prop, desc} = sortBy;
+    if (["timestamp", "project"].includes(prop)) {
+      sortedEntries = entries.sort((a, b) => desc ? a[prop] < b[prop] : a[prop] >= b[prop]);
+    } 
+    else if (["username", "name", "email"].includes(prop)) {
+      sortedEntries = entries.sort((a, b) => desc ? a.user[prop] < b.user[prop] : a.user[prop] >= b.user[prop]);
+    }
+    else if (["dob"].includes(prop)) {
+      sortedEntries = entries.sort((a, b) => desc ? a.userprofile[prop] < b.userprofile[prop] : a.userprofile[prop] >= b.userprofile[prop]);
+    } 
+    /*
+    else if (["geoname"].includes(prop)) {
+      sortedEntries = entries.sort((a, b) => desc ? a.userprofile.geo.name < b.userprofile.geo.name : a.userprofile.geo.name >= b.userprofile.geo.name);
+    }
+    else if (["schoolname"].includes(prop)) {
+      sortedEntries = entries.sort((a, b) => desc ? a.userprofile.school.name < b.userprofile.school.name : a.userprofile.school.name >= b.userprofile.school.name);
+    }*/
+
+    const entryList = sortedEntries.map(e =>
       <tr key={e.uid}>
         <td className="username">{e.user.username}</td>
+        <td className="signedup">{e.timestamp}</td>
         <td className="name">{e.user.name}</td>
         <td className="email">{e.user.email}</td>
         <td className="geoname">{e.userprofile.geo ? e.userprofile.geo.name : null}</td>
         <td className="schoolname">{e.userprofile.school ? e.userprofile.school.name : null}</td>
+        <td className="dob">{e.userprofile.dob}</td>
         <td className="project">{e.project ? <Link to={`/projects/${e.user.username}/${e.project.name}`}>{e.project.name}</Link> : null}</td>
       </tr>
     );
@@ -56,11 +77,13 @@ class ContestViewer extends Component {
           <thead>
             <tr>
               <th className="username" onClick={this.handleHeaderClick.bind(this, "username")}><span className={ `pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Username</th>
-              <th className="name" onClick={this.handleHeaderClick.bind(this, "progressPercent")}><span className={ `pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Name</th>
+              <th className="signedup" onClick={this.handleHeaderClick.bind(this, "timestamp")}><span className={ `pt-icon-standard ${ sortBy.prop === "signedup" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Signed Up</th>
+              <th className="name" onClick={this.handleHeaderClick.bind(this, "name")}><span className={ `pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Name</th>
               <th className="email" onClick={this.handleHeaderClick.bind(this, "email")}><span className={ `pt-icon-standard ${ sortBy.prop === "email" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Email</th>              
               <th className="geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}><span className={ `pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Municipality</th>
               <th className="schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}><span className={ `pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>School</th>
-              <th className="project" onClick={this.handleHeaderClick.bind(this, "project")}><span className={ `pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Project</th>
+              <th className="dob" onClick={this.handleHeaderClick.bind(this, "dob")}><span className={ `pt-icon-standard ${ sortBy.prop === "dob" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>DoB</th>
+              <th className="project" onClick={this.handleHeaderClick.bind(this, "project")}><span className={ `pt-icon-standard ${ sortBy.prop === "project" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Project</th>
             </tr>
           </thead>
           <tbody>

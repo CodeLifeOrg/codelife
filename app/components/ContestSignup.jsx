@@ -110,7 +110,9 @@ class ContestSignup extends Component {
     }
   }
 
-  enterContest() {
+  enterContest(e) {
+    e.preventDefault();
+
     const {t} = this.props;
     const {profileUser, skip} = this.state;
     const profilePayload = {
@@ -148,24 +150,67 @@ class ContestSignup extends Component {
 
     const {t} = this.props;
     const {cpf, dob, email, gid, sid} = this.state.profileUser;
-
-    const good = <Icon iconName="tick" className="pt-intent-success" />;
-    const bad = <Icon iconName="cross" className="pt-intent-danger" />;
     const popoverProps = {
       popoverClassName: "calendar-popover pt-minimal",
       inline: true
     };
 
+    // set email field classes based on state & validation
+    let emailClasses = "field-container font-md has-icon";
+    // valid email address entered, but not yet submitted
+    this.isEmailValid(email) && !this.state.gotEmailFromDB
+      ? emailClasses = "field-container font-md has-icon is-valid" : null;
+    // valid email address has already been submitted
+    this.state.gotEmailFromDB
+      ? emailClasses = "field-container font-md has-icon is-valid is-immutable" : null;
+
+    // set CPF field classes based on validation
+    let cpfClasses = "field-container font-md has-icon";
+    // valid CPF entered
+    CPF.isValid(cpf)
+      ? cpfClasses = "field-container font-md has-icon is-valid" : null;
+    // invalid CPF entered
+    cpf ? cpf.length === 14 ? !CPF.isValid(cpf)
+      ? cpfClasses = "field-container font-md has-icon is-invalid"
+      : null : null : null;
+
+    // set DOB field classes based on validation
+    let dobClasses = "date-picker-container field-container font-md has-icon";
+    // valid DOB entered
+    this.isDobValid(dob)
+      ? dobClasses = "date-picker-container field-container font-md has-icon is-valid" : null;
+    // invalid DOB entered
+    dob ? dob.length === 10 ? !this.isDobValid(dob)
+      ? dobClasses = "date-picker-container field-container font-md has-icon is-invalid"
+      : null : null : null;
+
+    // validate all the things
+    let readyToSubmit = false;
+
+    !this.isEmailValid(email) ||
+    !CPF.isValid(cpf) ||
+    !this.isDobValid(dob) ||
+    !(this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid)
+      ? readyToSubmit = true : false;
+
+    // submit button classes based on validation
+    let submitClasses = "field-container";
+    // if anything isn't valid, add .is-disabled
+    readyToSubmit
+      ? submitClasses = "field-container is-disabled" : null;
+
+
+
     return (
       <div className="contest-signup-container">
-        <form className="contest-signup-form">
+        <form className="contest-signup-form" onSubmit={this.enterContest.bind(this)}>
 
           {/* form heading */}
           <h2 className="signup-heading font-xl u-text-center">{t("Contest.SignupFormHeading")}</h2>
 
 
           {/* location */}
-          <div className={this.state.skip ? "field-container is-inactive" : "field-container"}>
+          <div className={this.state.skip ? "field-container is-disabled" : "field-container"}>
 
             {/* your location */}
             <h3 className="font-sm u-margin-bottom-off">{t("YourLocation")}</h3>
@@ -191,7 +236,7 @@ class ContestSignup extends Component {
           <h3 className="font-sm u-margin-bottom-off">{t("Contest.RequiredFields")}</h3>
 
           {/* email */}
-          <div className={this.state.gotEmailFromDB ? "field-container is-immutable is-valid font-md has-icon" : "field-container font-md has-icon" }>
+          <div className={emailClasses}>
             <label className="font-sm" htmlFor="contest-signup-email">{ t("SignUp.Email") }</label>
             <input className="field-input"
               id="contest-signup-email"
@@ -206,7 +251,7 @@ class ContestSignup extends Component {
           </div>
 
           {/* CPF */}
-          <div className="field-container font-md has-icon">
+          <div className={cpfClasses}>
             <label className="font-sm" htmlFor="cpf">{ t("CPF") }</label>
             <input className="field-input"
               id="cpf"
@@ -216,10 +261,11 @@ class ContestSignup extends Component {
               name="cpf"
               onChange={this.onCpfUpdate.bind(this)} />
             <span className="field-icon pt-icon pt-icon-id-number" />
+            <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
           </div>
 
           {/* Date of birth */}
-          <div className="field-container date-picker-container font-md has-icon">
+          <div className={dobClasses}>
             <label className="font-sm" htmlFor="dob">{ t("DOB") }</label>
             <DateInput
               popoverProps={popoverProps}
@@ -229,30 +275,28 @@ class ContestSignup extends Component {
               value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
               format="DD/MM/YYYY"
               locale="pt-br"
-              minDate={new Date("1900")}
+              minDate={new Date("1999")}
               maxDate={new Date("2008")}
             />
             <span className="field-icon pt-icon pt-icon-calendar" />
+            <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
           </div>
 
-          <button
-            type="button"
-            className="pt-button pt-intent-success"
-            onClick={this.enterContest.bind(this)}
-            disabled={
-              !this.isEmailValid(email) ||
-              !CPF.isValid(cpf) ||
-              !this.isDobValid(dob) ||
-              !(this.state.skip || this.state.profileUser.gid && this.state.profileUser.sid)
-            }
-          >
-            {t("Enter")}
-          </button>
+          {/* submit */}
+          <div className={submitClasses}>
+            <button
+              type="submit"
+              className="pt-button pt-fill pt-intent-primary font-md"
+              disabled={ readyToSubmit }
+              tabIndex={ readyToSubmit ? "-1" : null }>
+              { t("Contest.SignUp") }
+            </button>
+          </div>
 
         </form>
 
         {/* <p>Hello <strong>{this.props.user.username}</strong>, please fill out the following profile fields to enter the contest</p>
-        <p>Remember, you need to finish all Codelife Islands and submit a final project to be considered in the drawing!</p> */}
+        <p>Remember, you need to finish all Codelife Islands and submit a final project to be considered in the drawing!</p>
 
         <div id="eligibility-box">
           <ul>
@@ -261,8 +305,7 @@ class ContestSignup extends Component {
             <li>{CPF.isValid(cpf) ? good : bad} CPF</li>
             <li>{this.isDobValid(dob) ? good : bad} under 19</li>
           </ul>
-        </div>
-
+        </div> */}
 
       </div>
     );

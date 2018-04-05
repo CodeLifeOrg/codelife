@@ -141,6 +141,12 @@ blueprint overrides
     }
   }
 
+  /* override blueprint disabled style */
+  &:disabled {
+    color: var(--white) !important;
+    background-color: var(--light-2) !important;
+  }
+
   /* use sky colors for primary buttons */
   &.pt-intent-primary {
     background: var(--sky-dark);
@@ -643,8 +649,8 @@ form field layout
     @add-mixin disable-field;
 
     /* entered text */
-    & > input:not([type=submit]):not([type=file]),
-    & > textarea {
+    & input:not([type=submit]):not([type=file]),
+    & textarea {
       background-color: var(--white);
       border-color: var(--light-1);
       color: var(--gray);
@@ -661,32 +667,91 @@ form field layout
 
   /* hide validation icon by default */
   & .validation-icon {
+    /* theming */
+    background-color: var(--gray);
+    border-radius: 50%;
+    /* transitions */
     opacity: 0;
-    transform: scale(0.25);
+    transform: scale(0);
     transition:
       opacity 0.2s,
-      transform 0.2s;
+      transform 0.2s,
+      background-color 0.2s;
+
+    /* the tick mark itself */
+    &:before {
+      /* alignment adjustment */
+      position: relative;
+      top: 1px;
+      /* theming */
+      color: var(--white);
+      /* transitions */
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
   }
 
-  /* validated state */
+  /* valid state */
   &.is-valid {
 
-    /* check icon */
-    & > .validation-icon {
-      /* theming */
-      background: var(--sky);
-      border-radius: 50%;
-      /* transitions */
+    /* style inputs & textareas */
+    &:not(.is-immutable) input:not([type=submit]):not([type=file]),
+    &:not(.is-immutable) textarea {
+      background-color: var(--white);
+      border-color: var(--sky);
+      color: var(--sky-dark);
+    }
+
+    /* icon color */
+    &:not(.is-immutable) .field-icon {
+      color: var(--sky);
+    }
+
+    /* show validation icon */
+    & .validation-icon {
+      background-color: var(--sky);
       opacity: 1;
       transform: none;
 
-      /* the tick mark itself */
       &:before {
-        /* alignment adjustment */
-        position: relative;
-        top: 1px;
-        /* theming */
-        color: var(--white);
+        opacity: 1;
+      }
+    }
+  }
+
+  /* invalid state */
+  &.is-invalid {
+
+    /* style inputs & textareas */
+    &:not(.is-immutable) input:not([type=submit]):not([type=file]),
+    &:not(.is-immutable) textarea {
+      background-color: var(--white);
+      border-color: var(--danger);
+      color: var(--danger-dark);
+
+      /* focus color */
+      &:focus {
+        background-color: var(--danger-light);
+      }
+    }
+
+    /* icon color */
+    & .field-icon {
+      color: var(--danger-dark) !important;
+    }
+
+    /* show validation icon */
+    & .validation-icon {
+      opacity: 1;
+      transform: none;
+      background-color: var(--white);
+
+      /* change ✔ to ! */
+      &:before {
+        content: "";
+        top: 0; /* reset fudged positioning */
+        color: var(--danger);
+        opacity: 1;
       }
     }
   }
@@ -701,9 +766,13 @@ form field layout
     box-shadow: none !important;
 
     /* invalid date */
-    &[value="Out of range"] {
-      border-color: var(--danger);
-      background-color: var(--danger-light);
+    &[value="Out of range"],
+    &[value="Invalid date"] {
+      &, &:focus {
+        background-color: var(--danger-light);
+        border-color: var(--danger);
+        color: var(--danger-dark);
+      }
     }
   }
   /* make room for the icon on the left again 🙄 */

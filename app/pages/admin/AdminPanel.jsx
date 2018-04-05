@@ -9,6 +9,7 @@ import RuleBuilder from "pages/admin/lessonbuilder/RuleBuilder";
 import GlossaryBuilder from "pages/admin/GlossaryBuilder";
 import ReportViewer from "pages/admin/ReportViewer";
 import Statistics from "pages/admin/Statistics";
+import ContestViewer from "pages/admin/ContestViewer";
 import {browserHistory} from "react-router";
 
 import "./AdminPanel.css";
@@ -76,6 +77,7 @@ class AdminPanel extends Component {
           { this.props.auth.user.role > 1 ? <Tab2 id="report-viewer" className="admin-tab" title={t("Flagged Content")} panel={<ReportViewer />} /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User Admin")} panel={<UserAdmin />} /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="statistics" className="admin-tab" title={t("Statistics")} panel={<Statistics />} /> : null }
+          { this.props.auth.user.role > 1 ? <Tab2 id="contest-viewer" className="admin-tab" title={t("Contest Viewer")} panel={<ContestViewer />} /> : null }
         </Tabs2>
       </div>
     );

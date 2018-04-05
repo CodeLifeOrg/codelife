@@ -17,6 +17,12 @@ module.exports = function(sequelize, db) {
     }
   );
 
+  c.associate = models => {
+    c.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});
+    c.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
+    c.belongsTo(models.projects, {foreignKey: "project_id", targetKey: "id", as: "project"});
+  };
+
   return c;
 
 };

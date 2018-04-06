@@ -211,97 +211,105 @@ class EditProfile extends Component {
         {/* edit profile */}
         <div className="profile-info">
 
-          {/* form heading */}
-          <h2>{t("Edit Profile")}</h2>
-
           {/* the form */}
           <form className="profile-edit-form" onSubmit={saveUserInfo}>
 
-            {/* name */}
-            <div className="field-container font-md has-icon">
-              <label className="font-sm" htmlFor="profile-name">{ t("Display name") }</label>
-              <input className="field-input"
-                id="profile-name"
-                value={name}
-                type="text"
-                name="name"
-                onChange={onSimpleUpdate}
-                autoFocus />
-              <span className="field-icon pt-icon pt-icon-id-number" />
-            </div>
+            {/* form heading */}
+            <h2 className="profile-heading">{t("Editing profile…")}</h2>
 
-            {/* file select */}
-            <SelectImg callback={onImgUpdate} context="profile" />
+            {/* location */}
+            <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My info")}</h3>
 
-            {/* about me */}
-            <div className="field-container font-md">
-              <label className="font-sm" htmlFor="profile-about">{ t("About me") }</label>
-              <textarea className="field-input"
-                id="profile-about"
-                name="bio"
-                value={bio || ""}
-                onChange={onSimpleUpdate} />
-            </div>
+            {/* name, image, gender, dob */}
+            <div className="form-column form-column-half u-margin-top-off">
 
-            {/* select gender */}
-            <div className="field-container gender-select-container font-md">
-              <label className="font-sm" htmlFor="gender-select">{ t("Gender") }</label>
-              <div className="pt-select">
-                <select className="field-input"
-                  id="profile-gender-select"
-                  name="gender"
-                  value={gender || ""}
-                  onChange={onSimpleUpdate}>
-                  <option value="OTHER">{t("Rather not say")}</option>
-                  <option value="FEMALE">{t("Female")}</option>
-                  <option value="MALE">{t("Male")}</option>
-                </select>
+              {/* name */}
+              <div className="field-container font-md has-icon">
+                <label className="font-sm" htmlFor="profile-name">{ t("Display name") }</label>
+                <input className="field-input"
+                  id="profile-name"
+                  value={name}
+                  type="text"
+                  name="name"
+                  onChange={onSimpleUpdate}
+                  autoFocus />
+                <span className="field-icon pt-icon pt-icon-id-number" />
               </div>
-              {/* <span className="field-icon pt-icon pt-icon-application" /> */}
+
+              {/* file select */}
+              <SelectImg callback={onImgUpdate} context="profile" />
+
+              {/* select gender */}
+              <div className="field-container gender-select-container font-md">
+                <label className="font-sm" htmlFor="gender-select">{ t("Gender") }</label>
+                <div className="pt-select">
+                  <select className="field-input"
+                    id="profile-gender-select"
+                    name="gender"
+                    value={gender || ""}
+                    onChange={onSimpleUpdate}>
+                    <option value="OTHER">{t("Rather not say")}</option>
+                    <option value="FEMALE">{t("Female")}</option>
+                    <option value="MALE">{t("Male")}</option>
+                  </select>
+                </div>
+                {/* <span className="field-icon pt-icon pt-icon-application" /> */}
+              </div>
+
+              {/* Date of birth */}
+              <div className={dobClasses}>
+                <label className="font-sm" htmlFor="profile-dob">{ t("DOB") }</label>
+                <DateInput
+                  popoverProps={popoverProps}
+                  className="field-input font-sm"
+                  id="profile-dob"
+                  name="dob"
+                  onChange={setBday}
+                  value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+                  format="DD/MM/YYYY"
+                  locale="pt-br"
+                  minDate={new Date("1918")}
+                  maxDate={new Date()}
+                />
+                <span className="field-icon pt-icon pt-icon-calendar" />
+                <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+              </div>
+            </div>
+
+            {/* about me, CPF */}
+            <div className="form-column form-column-half u-margin-top-off">
+              {/* about me */}
+              <div className="field-container font-md">
+                <label className="font-sm" htmlFor="profile-about">{ t("About me") }</label>
+                <textarea className="field-input"
+                  id="profile-about"
+                  name="bio"
+                  value={bio || ""}
+                  onChange={onSimpleUpdate} />
+              </div>
+              {/* CPF */}
+              <div className={cpfClasses}>
+                <label className="font-sm" htmlFor="profile-cpf">{ t("CPF") }</label>
+                <input className="field-input"
+                  id="profile-cpf"
+                  name="cpf"
+                  value={cpf || ""}
+                  type="text"
+                  placeholder="000.000.000-00"
+                  onChange={onCpfUpdate} />
+                <span className="field-icon pt-icon pt-icon-id-number" />
+                <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+              </div>
             </div>
 
             {/* location & school */}
             <div className="field-container location-group-inner">
-
+              {/* location */}
               <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My location")}</h3>
               <SelectGeo gid={gid} callback={setGid} />
-
+              {/* school */}
               <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My school")}</h3>
               <SelectSchool sid={sid} callback={setSid} />
-
-            </div>
-
-            {/* CPF */}
-            <div className={cpfClasses}>
-              <label className="font-sm" htmlFor="profile-cpf">{ t("CPF") }</label>
-              <input className="field-input"
-                id="profile-cpf"
-                name="cpf"
-                value={cpf || ""}
-                type="text"
-                placeholder="000.000.000-00"
-                onChange={onCpfUpdate} />
-              <span className="field-icon pt-icon pt-icon-id-number" />
-              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
-            </div>
-
-            {/* Date of birth */}
-            <div className={dobClasses}>
-              <label className="font-sm" htmlFor="profile-dob">{ t("DOB") }</label>
-              <DateInput
-                popoverProps={popoverProps}
-                className="field-input font-sm"
-                id="profile-dob"
-                name="dob"
-                onChange={setBday}
-                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
-                format="DD/MM/YYYY"
-                locale="pt-br"
-                minDate={new Date("1918")}
-                maxDate={new Date()}
-              />
-              <span className="field-icon pt-icon pt-icon-calendar" />
-              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
             </div>
 
             {/* submit */}

@@ -473,14 +473,15 @@ form field layout
   border-radius: var(--radius-md);
   padding: var(--gutter-md);
   box-shadow: 0 2px 0.75em rgba(8, 26, 24, 0.25);
+}
 
-  & .form-column {
-    margin-top: 1.5rem;
-  }
+/* form columns */
+.form-column {
+  margin-top: 1.5rem;
 
-  /* give 2nd column some breathing room on small screens */
+  /* give adjacent columns breathing room */
   @add-mixin max-sm {
-    & .form-column-half:nth-of-type(2) {
+    &:nth-of-type(2) {
       margin-top: 2.25rem;
 
       /* assume submit button */
@@ -490,10 +491,10 @@ form field layout
     }
   }
 
+  /* 2 columns on bigger screens */
   @add-mixin min-sm {
-    padding: var(--gutter-lg);
 
-    & .form-column-half {
+    &.form-column-half {
       width: 45%;
       width: calc(50% - 1.5rem);
       display: inline-block;
@@ -505,6 +506,8 @@ form field layout
     }
   }
 }
+
+
 
 /* NOTE: font size / placement of .field-icon and inputs depends on font-size inherited from .field-container */
 .field-container {

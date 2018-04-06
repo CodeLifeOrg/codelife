@@ -511,7 +511,7 @@ form field layout
   transition: opacity 0.2s;
 
   /* make label more clickable */
-  & > label {
+  & label {
     display: inline-block;
     width: 100%;
     /* space out label without creating a dead spot */
@@ -520,7 +520,7 @@ form field layout
   }
 
   /* NOTE: placement requires icons to follow input */
-  & > .field-icon {
+  & .field-icon {
     pointer-events: none; /* prevent from obscuring field */
     position: absolute;
     z-index: 1;
@@ -576,36 +576,10 @@ form field layout
   /* style inputs & textareas */
   & > input:not([type=submit]):not([type=file]),
   & > textarea,
-  &.date-picker-container input {
-    padding: 0.35em 0.75em 0.55em;
-    background-color: var(--light-1);
-    border: 1px solid var(--gray);
-    border-radius: var(--radius-sm);
-    /* transitions */
-    transition:
-      background-color 0.2s,
-      border 0.2s;
-
-    /* placeholder text */
-    &:placeholder-shown {
-      color: var(--dark-1);
-    }
-    &:focus:placeholder-shown {
-      color: var(--sky-dark);
-    }
-
-    /* interactions */
-    &:hover {
-      background-color: var(--white);
-    }
-    &:focus {
-      background-color: var(--sky-light);
-      border-color: var(--sky-dark);
-
-      & + .field-icon {
-        color: var(--sky-dark);
-      }
-    }
+  &.date-picker-container input,
+  & .file-select-container .field-input {
+    @add-mixin text-input-padding;
+    @add-mixin text-input-theme;
   }
 
   /* textarea min/max height */
@@ -616,7 +590,8 @@ form field layout
 
   /* make room in text input for icon, which must follow after input
   in source order in order to style icon on :focus */
-  &.has-icon > input:not([type=submit]):not([type=file]) {
+  &.has-icon input:not([type=submit]):not([type=file]),
+  &.has-icon .fake-file-select {
     padding-left: 2.1em;
   }
 
@@ -794,6 +769,84 @@ form field layout
         color: var(--danger);
         opacity: 1;
       }
+    }
+  }
+}
+
+/* file select overrides */
+.file-select-container {
+
+  /* adjust padding on actual field */
+  & .field-input[type="file"] {
+    padding-top: 0.25em;
+    padding-bottom: 0.375em;
+    opacity: 0;
+  }
+  /* make real field and fake field take up width of container */
+  & .field-input {
+    width: 100%;
+
+    /* interactions */
+    &:hover, &:focus {
+      & ~ .fake-file-select {
+        background-color: var(--white);
+        border-color: var(--sky-dark);
+      }
+      & ~ .fake-file-select:after {
+        background-color: var(--sky-dark);
+      }
+    }
+  }
+  /* blueprint overrides */
+  & .field-input,
+  & .fake-file-select:after {
+    box-shadow: none !important;
+  }
+
+  /* position "field" */
+  & .fake-file-select {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* theming */
+    border-top-right-radius: 1.5em !important;
+    border-bottom-right-radius: 1.5em !important;
+    /* prevent obscuring the actual button */
+    pointer-events: none;
+
+    /* fake button covers the entire field */
+    @add-mixin max-md {
+      border-radius: 1.5em !important;
+    }
+  }
+
+  /* "button" */
+  & .fake-file-select:after {
+    @add-mixin button-padding;
+    display: block;
+    content: attr(data-button-text-lg);
+    /* theming */
+    background-color: var(--sky);
+    border: 1px solid var(--sky-dark);
+    border-top-right-radius: 1.5em;
+    border-bottom-right-radius: 1.5em;
+    color: var(--white);
+    /* positioning */
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    z-index: 1;
+    /* prevent obscuring the actual button */
+    pointer-events: none;
+    /* transitions */
+    transition: background-color 0.2s;
+
+    /* small screen adjustments */
+    @add-mixin max-md {
+      content: attr(data-button-text-sm);
+      left: -1px;
+      text-align: center;
+      border-radius: 1.5em;
     }
   }
 }

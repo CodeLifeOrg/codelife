@@ -103,6 +103,42 @@
 @define-mixin button-padding {
   padding: 0.35em 2em 0.55em 2em;
 }
+/* default text input padding */
+@define-mixin text-input-padding {
+  padding: 0.35em 0.75em 0.55em;
+}
+/* default text input theming */
+@define-mixin text-input-theme {
+  height: auto; /* reset blueprint */
+  background-color: var(--light-1);
+  border: 1px solid var(--gray);
+  border-radius: var(--radius-sm);
+  /* transitions */
+  transition:
+    background-color 0.2s,
+    border 0.2s;
+
+  /* interactions */
+  &:hover {
+    background-color: var(--white);
+  }
+  &:focus {
+    background-color: var(--sky-light);
+    border-color: var(--sky-dark);
+
+    & + .field-icon {
+      color: var(--sky-dark);
+    }
+  }
+
+  /* placeholder text */
+  &:placeholder-shown {
+    color: var(--dark-1);
+  }
+  &:focus:placeholder-shown {
+    color: var(--sky-dark);
+  }
+}
 /* select menu padding */
 @define-mixin select-padding {
   padding: 0.35em 2em 0.55em 0.75em;

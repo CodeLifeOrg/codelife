@@ -4,6 +4,7 @@
   "About": "About CodeLife",
   "About ": "About ",
   "About Me": "About Me",
+  "About me": "About me",
   "Account": "Account",
   "Activate": {
     "actions": {
@@ -21,6 +22,7 @@
   "Ban Content": "Ban Content",
   "Ban this Page": "Ban this Page",
   "Birthday": "Birthday",
+  "Browse…": "Browse…",
   "Built by ": "Built by ",
   "CPF": "CPF",
   "Can't save non-passing code!": "Can't save non-passing code!",
@@ -109,6 +111,7 @@
   "Database Error": "Database Error",
   "Delete": "Delete",
   "Delete Project": "Delete Project",
+  "Display name": "Display name",
   "Do you go to school in Minas Gerais?": "Do you go to school in Minas Gerais?",
   "Earn your CodeBlock": "Earn your CodeBlock",
   "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!": "Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!",
@@ -189,8 +192,10 @@
   "Modified on": "Modified on",
   "Monthly Flag Limit Reached": "Monthly Flag Limit Reached",
   "My Project": "My Project",
+  "My location": "My location",
   "My profile": "My profile",
   "My projects": "My projects",
+  "My school": "My school",
   "Name": "Name",
   "Next": "Next",
   "Next Level": "Next Level",
@@ -213,6 +218,7 @@
   "Previous": "Previous",
   "Privacy Policy": "Privacy Policy",
   "Profile": "Profile",
+  "Profile image": "Profile image",
   "Profile saved!": "Profile saved!",
   "Project": {
     "View": "View project"
@@ -309,6 +315,7 @@
   "This user doesn't have any projects yet": "This user doesn't have any projects yet",
   "Thread Posted!": "Thread Posted!",
   "Unable to upload image!": "Unable to upload image!",
+  "Upload image": "Upload image",
   "Upload new picture": "Upload new picture",
   "User": "User",
   "User Admin": "User Admin",

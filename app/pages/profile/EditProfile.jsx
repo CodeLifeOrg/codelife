@@ -56,7 +56,8 @@ class EditProfile extends Component {
 
   onSimpleUpdate(e) {
     const {profileUser} = this.state;
-    profileUser[e.target.id] = e.target.value;
+    // use `name` attribute for value so IDs can remain unique
+    profileUser[e.target.name] = e.target.value;
     this.setState({profileUser});
   }
 
@@ -184,64 +185,67 @@ class EditProfile extends Component {
 
     return (
       <div id="profile">
+
         <aside className="profile-side">
-          <UserInfo user={profileUser} loggedInUser={loggedInUser} />
+          <UserInfo user={profileUser} loggedInUser={loggedInUser} mode="edit" />
           {/* <skillsList /> */}
         </aside>
-        <content className="profile-info">
+
+        {/* edit profile */}
+        <div className="profile-info">
           <h2>{t("Edit Profile")}</h2>
-          <form>
+          <form className="profile-edit-form">
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Name")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <input onChange={onSimpleUpdate} value={name} id="name" className="pt-input" type="text" dir="auto" />
-                </div>
+
+            {/* name */}
+            <div className="field-container font-md has-icon">
+              <label className="font-sm" htmlFor="profile-name">{ t("Display name") }</label>
+              <input className="field-input"
+                id="profile-name"
+                value={name}
+                type="text"
+                name="name"
+                onChange={onSimpleUpdate}
+                autoFocus />
+              <span className="field-icon pt-icon pt-icon-id-number" />
+            </div>
+
+            {/* file select */}
+            <SelectImg callback={onImgUpdate} context="profile" />
+
+            {/* about me */}
+            <div className="field-container font-md">
+              <label className="font-sm" htmlFor="profile-about">{ t("About me") }</label>
+              <textarea className="field-input"
+                id="profile-about"
+                name="bio"
+                value={bio || ""}
+                onChange={onSimpleUpdate} />
+            </div>
+
+            {/* select gender */}
+            <div className="field-container gender-select-container font-md">
+              <label className="font-sm" htmlFor="gender-select">{ t("Gender") }</label>
+              <div className="pt-select">
+                <select className="field-input"
+                  id="gender-select"
+                  name="gender"
+                  value={gender || ""}
+                  onChange={onSimpleUpdate}>
+                  <option value="OTHER">{t("Rather not say")}</option>
+                  <option value="FEMALE">{t("Female")}</option>
+                  <option value="MALE">{t("Male")}</option>
+                </select>
               </div>
+              {/* <span className="field-icon pt-icon pt-icon-application" /> */}
             </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Image")}
-              </label>
-              <SelectImg callback={onImgUpdate} />
-            </div>
+            <div className="field-container location-group-inner">
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("About Me")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <textarea onChange={onSimpleUpdate} value={bio || ""} id="bio" className="pt-input" dir="auto"></textarea>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Gender")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-select">
-                  <select onChange={onSimpleUpdate} id="gender" value={gender || "OTHER"}>
-                    <option value="OTHER">{t("Rather not say")}</option>
-                    <option value="FEMALE">{t("Female")}</option>
-                    <option value="MALE">{t("Male")}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="location-group-inner">
-
-              <h3 className="font-sm u-margin-bottom-off">{t("YourLocation")}</h3>
+              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My location")}</h3>
               <SelectGeo gid={gid} callback={setGid} />
 
-              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("YourSchool")}</h3>
+              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My school")}</h3>
               <SelectSchool sid={sid} callback={setSid} />
 
             </div>
@@ -276,7 +280,7 @@ class EditProfile extends Component {
             <button onClick={saveUserInfo} type="button" className="pt-button pt-intent-success">{t("Save")}</button>
 
           </form>
-        </content>
+        </div>
       </div>
     );
   }

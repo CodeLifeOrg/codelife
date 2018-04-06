@@ -58,7 +58,7 @@ export default function RouteCreate() {
 
       <Route path="learnmore" component={LearnMore} />
 
-      <Route path="contest" component={Contest} />
+      {/* <Route path="contest" component={Contest} /> */}
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />

@@ -174,6 +174,10 @@ class EditProfile extends Component {
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
     const setBday = this.setBday.bind(this);
+    const popoverProps = {
+      popoverClassName: "calendar-popover pt-minimal",
+      inline: true
+    };
 
     if (loading) return <Loading />;
     if (error) return <h1>{error}</h1>;
@@ -182,6 +186,19 @@ class EditProfile extends Component {
 
     moment.locale("pt-BR");
     // console.log(moment.locale()); // pt-BR
+
+    // set CPF field classes based on validation
+    let cpfClasses = "field-container font-md has-icon";
+    // valid CPF entered
+    CPF.isValid(cpf)
+      ? cpfClasses = "field-container font-md has-icon is-valid" : null;
+    // invalid CPF entered
+    cpf ? cpf.length === 14 ? !CPF.isValid(cpf)
+      ? cpfClasses = "field-container font-md has-icon is-invalid"
+      : null : null : null;
+
+    // set DOB field classes based on validation
+    const dobClasses = "date-picker-container field-container font-md has-icon";
 
     return (
       <div id="profile">
@@ -193,9 +210,12 @@ class EditProfile extends Component {
 
         {/* edit profile */}
         <div className="profile-info">
-          <h2>{t("Edit Profile")}</h2>
-          <form className="profile-edit-form">
 
+          {/* form heading */}
+          <h2>{t("Edit Profile")}</h2>
+
+          {/* the form */}
+          <form className="profile-edit-form" onSubmit={saveUserInfo}>
 
             {/* name */}
             <div className="field-container font-md has-icon">
@@ -228,7 +248,7 @@ class EditProfile extends Component {
               <label className="font-sm" htmlFor="gender-select">{ t("Gender") }</label>
               <div className="pt-select">
                 <select className="field-input"
-                  id="gender-select"
+                  id="profile-gender-select"
                   name="gender"
                   value={gender || ""}
                   onChange={onSimpleUpdate}>
@@ -240,6 +260,7 @@ class EditProfile extends Component {
               {/* <span className="field-icon pt-icon pt-icon-application" /> */}
             </div>
 
+            {/* location & school */}
             <div className="field-container location-group-inner">
 
               <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My location")}</h3>
@@ -250,34 +271,45 @@ class EditProfile extends Component {
 
             </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("CPF")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <input onChange={onCpfUpdate} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" type="text" dir="auto" />
-                </div>
-              </div>
+            {/* CPF */}
+            <div className={cpfClasses}>
+              <label className="font-sm" htmlFor="profile-cpf">{ t("CPF") }</label>
+              <input className="field-input"
+                id="profile-cpf"
+                name="cpf"
+                value={cpf || ""}
+                type="text"
+                placeholder="000.000.000-00"
+                onChange={onCpfUpdate} />
+              <span className="field-icon pt-icon pt-icon-id-number" />
+              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
             </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Birthday")}
-              </label>
-              <div className="pt-form-content">
-                <DateInput
-                  onChange={setBday}
-                  value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
-                  format="DD/MM/YYYY"
-                  locale="pt-br"
-                  minDate={new Date("1900")}
-                  maxDate={new Date()}
-                />
-              </div>
+            {/* Date of birth */}
+            <div className={dobClasses}>
+              <label className="font-sm" htmlFor="profile-dob">{ t("DOB") }</label>
+              <DateInput
+                popoverProps={popoverProps}
+                className="field-input font-sm"
+                id="profile-dob"
+                name="dob"
+                onChange={setBday}
+                value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
+                format="DD/MM/YYYY"
+                locale="pt-br"
+                minDate={new Date("1918")}
+                maxDate={new Date()}
+              />
+              <span className="field-icon pt-icon pt-icon-calendar" />
+              <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
             </div>
 
-            <button onClick={saveUserInfo} type="button" className="pt-button pt-intent-success">{t("Save")}</button>
+            {/* submit */}
+            <div className="field-container">
+              <button type="submit" className="pt-button pt-fill pt-intent-primary font-md">
+                { t("Save changes") }
+              </button>
+            </div>
 
           </form>
         </div>

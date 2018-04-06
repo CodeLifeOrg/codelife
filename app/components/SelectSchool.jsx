@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Classes, MenuItem} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/labs";
-import SelectGeo from "./SelectGeo";
+import SelectGeo from "components/SelectGeo";
 
 class SelectSchool extends Component {
 
@@ -90,32 +90,48 @@ class SelectSchool extends Component {
     const {t} = this.props;
     const {loading, error, mySchool, schools, filteredSchools, schoolQuery} = this.state;
 
-    if (loading) return <p>{t("Loading")}...</p>;
+    if (loading) return <div className="school-geosearch-container"></div>;
 
     const filterSchools = this.filterSchools.bind(this);
     const setSelectedSchool = this.setSelectedSchool.bind(this);
     const updateSchoolList = this.updateSchoolList.bind(this);
     const gid = mySchool ? mySchool.gid : null;
+    const popoverProps = {
+      popoverClassName: "geosearch-popover pt-minimal",
+      inline: true
+    };
 
     return (
-      <div>
-        <SelectGeo gid={gid} callback={updateSchoolList} />
+      <div className="school-geosearch-container">
+
+        {/* select state & city */}
+        <SelectGeo gid={gid} callback={updateSchoolList} context="school" />
         {error ? <p>{error}</p> : null}
-        {schools.length
-          ? <Select
-            resetOnSelect={true}
-            items={filteredSchools}
-            inputProps={{value: schoolQuery, onChange: filterSchools}}
-            itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? Classes.ACTIVE : ""} text={geo.name} />}
-            onItemSelect={setSelectedSchool}
-            noResults={<MenuItem disabled text={t("noResults")} />}
-          >
-            <Button text={mySchool ? mySchool.name : ""} iconName="book" rightIconName="caret-down" />
-          </Select> : null}
+
+        {/* select school */}
+        <div className="field-container school-select-container font-md">
+          <label className="font-sm" htmlFor="school-select">{ t("School") }</label>
+          {schools.length && !error
+            ? <Select
+              popoverProps={popoverProps}
+              resetOnSelect={true}
+              items={filteredSchools}
+              inputProps={{onChange: filterSchools}}
+              itemRenderer={({handleClick, item: geo, isActive}) => <MenuItem onClick={handleClick} className={mySchool.id === geo.id || isActive ? "is-focused" : ""} text={geo.name} />}
+              onItemSelect={setSelectedSchool}
+              noResults={<MenuItem disabled text={t("noResults")} />}
+            >
+              <div className="field-container">
+                <Button
+                  className="select-trigger font-md u-margin-top-off"
+                  id="school-select"
+                  text={mySchool ? mySchool.name : ""} rightIconName="geosearch" />
+              </div>
+            </Select> : null}
+        </div>
       </div>
     );
   }
-
 }
 
 export default translate()(SelectSchool);

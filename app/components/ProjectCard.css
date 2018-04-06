@@ -1,4 +1,131 @@
-.projectCard {
+@import "../mixins.css";
+
+.card-container {
+  width: 100%;
+}
+
+/* default card style */
+.card {
+  /* sizing */
+  height: 100%; /* fill container height */
+  /* theming */
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 2em rgba(8, 26, 24, 0.1);
+  /* transitions */
+  transition:
+    box-shadow 0.3s ease-out;
+}
+
+/* img */
+.card-img {
+  /* sizing */
+  width: 100%;
+  padding-top: 53.57142857%;
+  /* theming */
+  background-color: var(--sky-dark); /* initial state */
+  background-size: cover;
+  /* overflow: hidden wasn't cutting it */
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+
+  /* shadow */
+  &:before {
+    content: "";
+    display: block;
+    /* sizing */
+    height: 0.625rem;
+    width: 100%;
+    /* positioning */
+    position: absolute;
+    bottom: 0;
+    /* theming */
+    background-image: linear-gradient(-180deg, rgba(255,255,255,0.00) 0%, rgba(8,26,24,0.10) 100%);
+  }
+}
+
+/* fullscreen icon — hidden by default */
+.card-fullscreen-icon {
+  /* positioning */
+  position: absolute;
+  top: var(--gutter-sm);
+  right: var(--gutter-sm);
+  /* theming */
+  color: var(--sky-light);
+  text-shadow:
+    0 1px 0.2em rgba(8, 26, 24, 0.9),
+    0 1px 1em rgba(8, 26, 24, 0.8),
+    0 1px 2em rgba(8, 26, 24, 0.6);
+  /* transitions */
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+/* caption */
+.card-caption {
+  /* extra padding on right to account for star */
+  padding: var(--gutter-xs) 3rem var(--gutter-xs) var(--gutter-sm);
+
+  /* position author */
+  & .card-author {
+    display: block; /* necessary for margin to be honored */
+
+    /* position author link above cover button */
+    & .card-author-link {
+      z-index: 2;
+    }
+  }
+
+  /* position likes */
+  & .card-likes {
+    position: absolute;
+    top: var(--gutter-xxs);
+    right: var(--gutter-sm);
+
+    /* button = star icon */
+    & .card-likes-button {
+      font-size: 0.875rem; /* 14px */
+      padding: 0.2em; /* increase clickability */
+      /* theming */
+      color: var(--gray);
+      /* position above cover button */
+      z-index: 2;
+      /* transitions */
+      transition: color 0.2s;
+
+      &.is-liked,
+      &:hover,
+      &:focus {
+        color: var(--caution);
+      }
+    }
+  }
+}
+
+
+/* make cover button clickable */
+.card-trigger {
+  z-index: 1;
+  cursor: zoom-in;
+
+  /* interactions triggered on adjacent .card */
+  &:hover + .card,
+  &:focus + .card {
+    box-shadow: 0 2px 2em rgba(8, 26, 24, 0.5);
+
+    & .card-fullscreen-icon {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+
+
+/* .projectCard {
 
   & .pt-overlay .pt-dialog-body {
     display: flex;
@@ -15,7 +142,5 @@
       top: 45%;
       width: 300px;
     }
-
   }
-
-}
+} */

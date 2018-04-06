@@ -34,8 +34,6 @@ then add the theme name to the @each loop below */
     & .island-path .stop:not(.is-next):not(.is-done),
     & .island-path .code-block:not(.is-next) .side,
     &.codeBlockCard,
-    &.pt-dialog .pt-dialog-header,
-    & .pt-dialog .pt-dialog-header,
     &.island-link-label,
     &.pt-tooltip > .pt-popover-content,
     & .island-path .code-block .side {
@@ -46,7 +44,8 @@ then add the theme name to the @each loop below */
       background-color: var(--$(theme)-island-light);
     }
     /* set color */
-    & .island-path .code-block.is-done .side {
+    & .island-path .code-block.is-done .side,
+    & .pt-dialog-header-title {
       color: var(--$(theme)-island-dark);
     }
     &.slide-inner a:not(.pt-button) {
@@ -79,6 +78,24 @@ then add the theme name to the @each loop below */
     /* set svg fill */
     &.pt-tooltip .pt-popover-arrow-fill {
       fill: var(--$(theme)-island-dark);
+    }
+  }
+  /* codeblock card theming */
+  .island-$(theme)-card {
+    /* title color */
+    & .card-title {
+      color: var(--$(theme)-island-dark);
+    }
+    /* author link color */
+    & .card-author-link {
+      color: var(--$(theme)-island-medium);
+      /* interactions */
+      &:hover, &:focus {
+        color: var(--$(theme)-island-dark);
+      }
+    }
+    & .card-island-icon {
+      background-image: url("/islands/island-$(theme)-small.png");
     }
   }
 }

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Link, browserHistory} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Position, Intent, Tooltip, Dialog} from "@blueprintjs/core";
+import {Position, Tooltip, Dialog} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
 import Discussion from "components/Discussion";

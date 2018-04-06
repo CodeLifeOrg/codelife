@@ -49,7 +49,7 @@ class UserCodeBlocks extends Component {
     return (
       <div className="user-section">
         <h2>{ t("Code Blocks") }</h2>
-        <div className="flex-row">
+        <div className="card-list">
           { codeBlocks.length
             ? codeBlocks.map(cb => {
               const {theme, icon} = islands.find(i => i.id === cb.lid);

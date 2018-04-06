@@ -19,7 +19,6 @@
         margin: 0 var(--gutter-xxs);
       }
     }
-
   }
 
   & .body {
@@ -42,6 +41,45 @@
         overflow-y: auto;
       }
 
+      /* list of mini islands */
+      & .snippets-list {
+        @add-mixin list-reset;
+
+        /* island list item */
+        & .snippet {
+          /* space out islands */
+          padding-top: 0.5em;
+          padding-bottom: 0.5em;
+          /* make it look clickable */
+          /* TODO: make these buttons */
+          cursor: pointer;
+          /* theming */
+          border-radius: var(--radius-sm);
+          /* transitions */
+          transition:
+            background-color 0.2s,
+            padding 0.1s;
+
+          /* interations */
+          &:hover, &:focus {
+            background-color: var(--sky-light);
+            padding-left: 0.5em;
+          }
+        }
+
+        /* island icon */
+        & .icon {
+          height: var(--gutter-md);
+          margin-right: var(--gutter-xxs);
+          vertical-align: middle;
+          width: var(--gutter-md);
+        }
+      }
+
+      /* actual card list; add padding when visible */
+      & .pt-collapse-body[aria-hidden=false] {
+        padding: var(--gutter-xs);
+      }
     }
 
     & .studio-editor {
@@ -58,7 +96,10 @@
       flex: 1;
       margin: 0 var(--gutter-xs);
     }
-
   }
+}
 
+
+.studio .card-list .card-container {
+  margin-bottom: 1rem;
 }

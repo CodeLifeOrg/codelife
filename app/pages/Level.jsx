@@ -341,7 +341,7 @@ class Level extends Component {
 
     const otherCodeBlockItemsBeforeFold = [];
     const otherCodeBlockItemsAfterFold = [];
-    let top = 4;
+    let top = 3;
     for (const cb of otherCodeBlocks) {
       const cbc = <CodeBlockCard theme={currentIsland.theme} icon={currentIsland.icon} codeBlock={cb} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherCodeBlockItemsBeforeFold.push(cbc) : otherCodeBlockItemsAfterFold.push(cbc);
@@ -421,12 +421,12 @@ class Level extends Component {
                   </div>
                 </Popover> : null }
             </h2>
-            <div className="snippets">{otherCodeBlockItemsBeforeFold}</div>
+            <div className="snippets card-list">{otherCodeBlockItemsBeforeFold}</div>
             { otherCodeBlockItemsAfterFold.length
-              ? <Collapse isOpen={showMore}><div className="snippets snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
+              ? <Collapse isOpen={showMore}><div className="snippets card-list snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
               : null }
             { otherCodeBlockItemsAfterFold.length
-              ? <button className="pt-button toggle-show" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <button className="pt-button toggle-show u-margin-top-off" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
               </button>
               : null }

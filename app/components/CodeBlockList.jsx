@@ -100,7 +100,7 @@ class CodeBlockList extends Component {
 
     return (
       <div className="snippets">
-        <ul className="snippets-list">
+        <ul className="snippets-list card-list">
           { codeBlockItems }
         </ul>
       </div>

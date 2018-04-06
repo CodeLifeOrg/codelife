@@ -1,6 +1,8 @@
 @import 'mixins.css';
 
-/* quality of life improvements */
+/* -----------------------------------
+resets & quality of life improvements
+----------------------------------- */
 * {
   margin: 0;
   padding: 0;
@@ -20,10 +22,38 @@ html {
 body * {
   position: relative;
 }
+/* hide the spinner on inputs with a type of "number" */
+/* see https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none; /* `display: none` can cause crashes */
+  margin: 0; /* nuke the margin */
+}
+/* textareas can be resized, but only vertically */
+textarea {
+  resize: vertical;
+}
+
+/* override normalize */
+figure {
+  margin: 0;
+  line-height: 0.0001;
+}
+
+/* reset focus style */
+/* NOTE: always be setting :focus along with :hover */
+:focus {
+  outline: 0;
+}
+
+/* -----------------------------------
+base
+----------------------------------- */
 
 /* fonts */
 body {
   font-family: var(--body-font);
+  font-weight: 400;
   overflow-x: hidden;
   font-size: 100%; /* override blueprint */
   color: var(--dark-3);
@@ -33,6 +63,8 @@ h1, h2, h3, h4, h5, h6,
 .heading {
   font-family: var(--heading-font);
   text-transform: uppercase;
+  font-weight: 700;
+  color: var(--black);
 }
 
 /* default font sizing and line-height */
@@ -56,31 +88,20 @@ p > a,
   }
 }
 
-#app {
-  min-height: 100vh;
-  position: absolute;
-  width: 100%;
-  & .container {
-    min-height: 100vh;
-  }
-}
-
-#devbar {
+/* hey, don't edit content here! */
+.devbar {
+  /* sizing */
   width: 100%;
   height: var(--gutter-md);
-  background-color: var(--caution);
-  position: absolute;
+  /* positioning */
+  position: relative;
   top: 0px;
   left: 0px;
-  text-align:center;
-}
-
-h1 {
-  font-style: normal;
-}
-
-:focus {
-  outline: 0;
+  padding-top: 0.05rem;
+  /* theming */
+  background-color: var(--caution);
+  text-align: center;
+  opacity: 0.8;
 }
 
 
@@ -94,7 +115,6 @@ blueprint overrides
 
 .pt-input {
   border-radius: var(--radius-sm);
-  font-family: var(--heading-font);
 }
 
 .pt-file-upload-input {
@@ -102,11 +122,6 @@ blueprint overrides
   &:after {
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   }
-}
-
-.pt-select select {
-  border-radius: var(--radius-sm);
-  font-family: var(--heading-font);
 }
 
 .pt-button {
@@ -123,11 +138,17 @@ blueprint overrides
 
   /* more padding on bigger buttons */
   &.font-md {
-    padding: 0.35em 2em 0.55em 2em;
+    @add-mixin button-padding;
 
     & > .pt-icon {
       margin-right: 0.5em;
     }
+  }
+
+  /* override blueprint disabled style */
+  &:disabled {
+    color: var(--white) !important;
+    background-color: var(--light-2) !important;
   }
 
   /* use sky colors for primary buttons */
@@ -149,7 +170,6 @@ blueprint overrides
     }
   }
 }
-
 
 
 .pt-popover {
@@ -194,15 +214,7 @@ blueprint overrides
     justify-content: center;
   }
 
-  & .pt-dialog-header {
-    background: var(--sky-dark);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-    & h5, & button, & span {
-      color: var(--white);
-      font-weight: 400;
-      text-transform: uppercase;
-    }
-  }
+
   & .pt-dialog-body {
     align-items: center;
     display: flex;
@@ -238,73 +250,68 @@ blueprint overrides
   margin: 0;
 }
 
-.pt-card {
-  align-self: stretch;
-  background-color: rgba(120, 120, 120, 0.5);
-  border-radius: var(--radius-lg);
-  color: var(--white);
-  display: flex;
-  flex: none;
-  margin: var(--gutter-md);
-  padding: 0; /* blueprint override */
-  text-align: left;
-  width: 250px;
-  &:hover, &:focus {
-    color: var(--white);
-    text-decoration: inherit;
-  }
-  & .box {
-    align-items: center;
-    align-self: stretch;
-    display: flex;
-    padding: var(--gutter-xs);
-    & .icon {
-      background-color: var(--white);
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border-radius: var(--gutter-md);
-      flex: none;
-      height: var(--gutter-lg);
-      margin-right: var(--gutter-xs);
+/* set cursor back to default for non-links */
+button, .pt-button,
+[class*="pt"] select,
+label.pt-control  {
+  cursor: default;
+}
+
+/* checkbox overrides */
+.pt-checkbox {
+  line-height: 1.333; /* fudge into alignment */
+  padding-left: 1.75em;
+
+  /* checkbox appearance */
+  &.pt-control > .pt-control-indicator {
+    /* theming */
+    @add-mixin select-theme;
+    box-shadow: none !important;
+    border-radius: var(--radius-md);
+    /* sizing */
+    font-size: inherit;
+    width: 1.333em;
+    height: 1.333em;
+    /* transitions */
+    will-change: opacity;
+    transition:
+      opacity 0.1s
+      border-color 0.1s;
+
+    /* check pseudo element */
+    &:before {
+      /* positioning */
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      /* position check */
       text-align: center;
-      width: var(--gutter-lg);
-      & .pt-icon-standard {
-        font-size: 26px;
-        line-height: 48px;
-      }
-    }
-    & .info {
-      align-self: stretch;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-right: var(--gutter-xxs);
-      & .card-title {
-        font-size: 16px;
-        text-transform: uppercase;
-        & .pt-icon-standard {
-          margin-right: var(--gutter-xxs);
-          opacity: 0.75;
-        }
-      }
-      & .card-meta {
-        font-size: 12px;
-        opacity: 0.75;
-        &>* {
-          margin-top: 3px;
-        }
-        & .pt-icon-standard {
-          margin-right: var(--gutter-xxs);
-        }
-        & .card-author .pt-icon-standard {
-          color: var(--white);
-        }
-      }
+      /* theming */
+      border-radius: var(--radius-md);
+      background: var(--sky-dark);
+      /* transitions */
+      opacity: 0;
+      transform: scale(0.25);
+      transition:
+        opacity 0.1s,
+        transform 0.1s;
     }
   }
-  &:hover {
-    cursor: pointer;
+
+  /* interactions */
+  & > input:focus ~ .pt-control-indicator,
+  &:hover > .pt-control-indicator {
+    background-color: var(--white);
+    border-color: var(--sky-dark);
+    opacity: 0.9;
+    outline: none;
+  }
+  /* checked state */
+  & > input:checked ~ .pt-control-indicator:before {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -331,9 +338,132 @@ blueprint overrides
   }
 }
 
+/* NOTE: there are a bunch of overrides for the hideous blueprints lab Select component found in SelectGeo.css */
 
 /* -----------------------------------
-form fields
+layout
+----------------------------------- */
+
+.content {
+  padding: var(--gutter-md);
+  margin-left: auto;
+  margin-right: auto;
+
+  /* bigger padding on bigger screens */
+  @add-mixin min-sm {
+    padding: var(--gutter-lg);
+  }
+
+  /* set min width on content container so the footer stays at the bottom */
+  @media (min-height: 680px) {
+    min-height: 55vh; /* fallback */
+    min-height: calc(100vh - 26.6rem); /* 100% fudged */
+  }
+
+  /* fullwidth container with transparent background */
+  /* NOTE: requires a .content container within for padding */
+  & .fullwidth-container {
+    @add-mixin fullwidth-section;
+    background-color: var(--white);
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* space out sections */
+  & .content-section {
+    padding-top: var(--gutter-lg);
+    padding-bottom: var(--gutter-lg);
+    /* center container */
+    margin-left: auto;
+    margin-right: auto;
+    /* set default width */
+    max-width: 1220px; /* TODO: add to style.yml */
+
+    /* keep line-length in check */
+    &.limited-width {
+      max-width: 600px; /* TODO: add to style.yml */
+    }
+
+    /* no padding on first and last sections */
+    &:first-of-type {
+      padding-top: 0;
+    }
+    &:last-of-type {
+      padding-bottom: 0;
+    }
+  }
+
+  /* space out typography */
+  & h1, & h2, & h3, & h4, & h5, & h6,
+  & p, & li, & a,
+  & .heading, & .link, & [class*=button] {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  /* don't be indenting list items */
+  & ul,
+  & ol {
+    padding-left: 1.1em;
+  }
+}
+
+
+/* -----------------------------------
+header
+----------------------------------- */
+
+.header {
+  /* set height */
+  min-height: 60vh;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  /* position .header-inner */
+  display: flex;
+  align-items: center;
+
+  /* reset width due to flex on parent */
+  & .header-inner {
+    width: 100%;
+  }
+
+  /* sidebar theming */
+  & .header-sidebar {
+    @add-mixin slide-theme;
+    padding: var(--gutter-sm) var(--gutter-md);
+  }
+
+  /* space out sidebar on small screens */
+  @add-mixin max-md {
+    & .header-sidebar {
+      margin-top: 3rem;
+    }
+  }
+
+  /* text left, sidebar right layout on larger screens */
+  @add-mixin min-md {
+    /* vertically center children */
+    & .header-text:not(:last-child),
+    & .header-sidebar {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* limit width of text container, if it isn't the only element */
+    & .header-text:not(:last-child) {
+      width: 75%; /* fallback */
+      width: calc(100% - 18.75rem);
+    }
+    & .header-sidebar {
+      width: 20%; /* fallback */
+      width: calc(16.25rem);
+      left: 2.5rem;
+    }
+  }
+}
+
+
+/* -----------------------------------
+form field layout
 ----------------------------------- */
 
 /* container theming & padding */
@@ -344,13 +474,41 @@ form fields
   padding: var(--gutter-md);
   box-shadow: 0 2px 0.75em rgba(8, 26, 24, 0.25);
 
+  & .form-column {
+    margin-top: 1.5rem;
+  }
+
+  /* give 2nd column some breathing room on small screens */
+  @add-mixin max-sm {
+    & .form-column-half:nth-of-type(2) {
+      margin-top: 2.25rem;
+
+      /* assume submit button */
+      & + .field-container {
+        margin-top: 1rem;
+      }
+    }
+  }
+
   @add-mixin min-sm {
     padding: var(--gutter-lg);
+
+    & .form-column-half {
+      width: 45%;
+      width: calc(50% - 1.5rem);
+      display: inline-block;
+      vertical-align: top;
+
+      &:nth-of-type(2) {
+        left: 3rem;
+      }
+    }
   }
 }
 
 /* NOTE: font size / placement of .field-icon and inputs depends on font-size inherited from .field-container */
 .field-container {
+  transition: opacity 0.2s;
 
   /* make label more clickable */
   & > label {
@@ -363,6 +521,7 @@ form fields
 
   /* NOTE: placement requires icons to follow input */
   & > .field-icon {
+    pointer-events: none; /* prevent from obscuring field */
     position: absolute;
     z-index: 1;
     bottom: 0.75em;
@@ -370,6 +529,40 @@ form fields
     color: var(--gray);
     /* transitions */
     transition: color 0.2s;
+
+    /* position an icon right */
+    &.position-right {
+      /* position right */
+      left: auto;
+      right: 0.5em;
+    }
+  }
+
+  /* select */
+  /* reset select container and select element */
+  & > .pt-select,
+  & > .pt-select > select {
+    font-size: inherit;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* icon hover effect,
+  NOTE: unfortunately won't work with :focus because of the blueprint markup */
+  & > .pt-select:hover:after {
+    color: var(--sky-dark);
+  }
+
+  /* reset padding */
+  & > .pt-select > select {
+    @add-mixin select-padding;
+    @add-mixin select-theme;
+  }
+
+  /* icon */
+  & > .pt-select:after {
+    @add-mixin select-icon-right;
   }
 
   /* width of inputs, textareas, and buttons dictated by container */
@@ -382,7 +575,8 @@ form fields
 
   /* style inputs & textareas */
   & > input:not([type=submit]):not([type=file]),
-  & > textarea {
+  & > textarea,
+  &.date-picker-container input {
     padding: 0.35em 0.75em 0.55em;
     background-color: var(--light-1);
     border: 1px solid var(--gray);
@@ -391,6 +585,14 @@ form fields
     transition:
       background-color 0.2s,
       border 0.2s;
+
+    /* placeholder text */
+    &:placeholder-shown {
+      color: var(--dark-1);
+    }
+    &:focus:placeholder-shown {
+      color: var(--sky-dark);
+    }
 
     /* interactions */
     &:hover {
@@ -404,6 +606,12 @@ form fields
         color: var(--sky-dark);
       }
     }
+  }
+
+  /* textarea min/max height */
+  & > textarea {
+    min-height: 11rem;
+    max-height: 30rem;
   }
 
   /* make room in text input for icon, which must follow after input
@@ -421,6 +629,17 @@ form fields
   & > button,
   & > [class*=button] {
     margin-top: 1.15em;
+    margin-bottom: 0; /* reset from .content */
+  }
+
+  /* checkbox */
+  & .checkbox-container {
+    margin-top: 1.125rem;
+  }
+
+  /* space out headings */
+  & .field-heading {
+    margin-top: 2.5em;
   }
 
   /* social buttons */
@@ -464,7 +683,170 @@ form fields
       margin-left: 0.2em;
     }
   }
+
+  /* immutable state — used on email address */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-immutable {
+    @add-mixin disable-field;
+
+    /* entered text */
+    & input:not([type=submit]):not([type=file]),
+    & textarea {
+      background-color: var(--white);
+      border-color: var(--light-1);
+      color: var(--gray);
+      padding-right: 2.1em; /* make room for validation tick */
+    }
+  }
+
+  /* disabled state */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-disabled {
+    @add-mixin disable-field;
+    opacity: 0.3;
+  }
+
+  /* hide validation icon by default */
+  & .validation-icon {
+    /* theming */
+    background-color: var(--gray);
+    border-radius: 50%;
+    /* transitions */
+    opacity: 0;
+    transform: scale(0);
+    transition:
+      opacity 0.2s,
+      transform 0.2s,
+      background-color 0.2s;
+
+    /* the tick mark itself */
+    &:before {
+      /* alignment adjustment */
+      position: relative;
+      top: 1px;
+      /* theming */
+      color: var(--white);
+      /* transitions */
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+  }
+
+  /* valid state */
+  &.is-valid {
+
+    /* style inputs & textareas */
+    &:not(.is-immutable) input:not([type=submit]):not([type=file]),
+    &:not(.is-immutable) textarea {
+      background-color: var(--white);
+      border-color: var(--sky);
+      color: var(--sky-dark);
+    }
+
+    /* icon color */
+    &:not(.is-immutable) .field-icon {
+      color: var(--sky);
+    }
+
+    /* show validation icon */
+    & .validation-icon {
+      background-color: var(--sky);
+      opacity: 1;
+      transform: none;
+
+      &:before {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* invalid state */
+  &.is-invalid {
+
+    /* style inputs & textareas */
+    &:not(.is-immutable) input:not([type=submit]):not([type=file]),
+    &:not(.is-immutable) textarea {
+      background-color: var(--white);
+      border-color: var(--danger);
+      color: var(--danger-dark);
+
+      /* focus color */
+      &:focus {
+        background-color: var(--danger-light);
+      }
+    }
+
+    /* icon color */
+    & .field-icon {
+      color: var(--danger-dark) !important;
+    }
+
+    /* show validation icon */
+    & .validation-icon {
+      opacity: 1;
+      transform: none;
+      background-color: var(--white);
+
+      /* change ✔ to ! */
+      &:before {
+        content: "";
+        top: 0; /* reset fudged positioning */
+        color: var(--danger);
+        opacity: 1;
+      }
+    }
+  }
 }
+
+/* date picker overrides 😭 */
+.date-picker-container {
+
+  /* THE INPUT */
+  & input {
+    height: auto;
+    box-shadow: none !important;
+
+    /* invalid date */
+    &[value="Out of range"],
+    &[value="Invalid date"] {
+      &, &:focus {
+        background-color: var(--danger-light);
+        border-color: var(--danger);
+        color: var(--danger-dark);
+      }
+    }
+  }
+  /* make room for the icon on the left again 🙄 */
+  &.has-icon input {
+    padding-left: 2.1em;
+    padding-right: 0.75em;
+  }
+  /* reset the font size after unsetting it so the popover isn't huge 😡 */
+  &.font-md input {
+    @add-mixin font-md;
+  }
+
+  /* THE PICKER */
+  /* offset positioning, make it stop uncentering itself */
+  & .pt-overlay {
+    display: block;
+    text-align: center;
+  }
+  /* reset border radius */
+  &, & .pt-popover-content {
+    border-radius: var(--radius-sm);
+  }
+  /* adjust container padding */
+  & .pt-popover-content {
+    padding: 0;
+  }
+
+  /* make next/prev buttons work */
+  & .DayPicker-NavButton {
+    z-index: 1;
+  }
+}
+
 
 /* switch from login to signup */
 .form-container .form-switcher {
@@ -472,49 +854,6 @@ form fields
 
   @add-mixin min-sm {
     margin-bottom: 0; /* blueprint override */
-  }
-}
-
-
-/* -----------------------------------
-layout
------------------------------------ */
-
-.content {
-  padding: var(--gutter-md);
-  max-width: 1220px; /* TODO: add to style.yml */
-  margin-left: auto;
-  margin-right: auto;
-
-  @add-mixin min-sm {
-    padding: var(--gutter-lg);
-  }
-
-  /* space out sections */
-  & > .content-section {
-    padding-top: var(--gutter-lg);
-    padding-bottom: var(--gutter-lg);
-
-    /* keep line-length in check */
-    &.limited-width {
-      max-width: 600px; /* TODO: add to style.yml */
-    }
-
-    /* no padding on first and last sections */
-    &:first-of-type {
-      padding-top: 0;
-    }
-    &:last-of-type {
-      padding-bottom: 0;
-    }
-  }
-
-  /* space out typography */
-  & h1, & h2, & h3, & h4, & h5, & h6,
-  & p, & li, & a,
-  & .heading, & .link, & [class*=button] {
-    margin-top: 0.75em;
-    margin-bottom: 0.75em;
   }
 }
 
@@ -533,11 +872,23 @@ utility classes
   @add-mixin visually-hidden;
 }
 
+/* make lists not look like lists */
+.u-list-reset {
+  @add-mixin list-reset;
+}
+
+/* absolute expand */
+.u-absolute-expand {
+  @add-mixin absolute-expand;
+}
+
 /* vertical margin */
+.u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
 .u-margin-top-md { margin-top: var(--gutter-md) !important; }
 .u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
 .u-margin-top-off { margin-top: 0 !important; }
 
+.u-margin-bottom-xxs { margin-bottom: var(--gutter-xxs) !important; }
 .u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
 .u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
 .u-margin-bottom-off { margin-bottom: 0 !important; }
@@ -554,6 +905,10 @@ utility classes
   margin-right: auto !important;
 }
 
+/* padding */
+.u-padding-top-off { padding-top: 0 !important; }
+.u-padding-bottom-off { padding-bottom: 0 !important; }
+
 /* alignment */
 .u-text-center {
   text-align: center;
@@ -564,4 +919,11 @@ utility classes
   @add-mixin max-sm {
     display: none !important;
   }
+}
+
+/* vertially align child content via flexbox */
+.u-vertical-align-children {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

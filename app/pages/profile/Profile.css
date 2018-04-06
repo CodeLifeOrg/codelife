@@ -1,3 +1,5 @@
+@import "../../mixins.css";
+
 #profile {
   background-color: var(--white);
   border-radius: var(--radius-lg);
@@ -122,4 +124,31 @@
 
   }
 
+}
+
+
+
+/* card layout */
+.profile .card-list {
+  @add-mixin card-layout-base;
+
+  /* stacked cards */
+  @add-mixin max-md {
+    @add-mixin card-layout-stacked;
+  }
+
+  /* 2 column layout */
+  @add-mixin min-md {
+    @add-mixin card-layout-2col;
+  }
+
+  /* 3 column layout */
+  @add-mixin min-lg {
+    @add-mixin card-layout-3col;
+  }
+
+  /* 4 column layout */
+  @add-mixin min-xl {
+    @add-mixin card-layout-4col;
+  }
 }

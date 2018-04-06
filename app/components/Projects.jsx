@@ -4,8 +4,8 @@ import {connect} from "react-redux";
 import axios from "axios";
 import "./Projects.css";
 
-import {Alert, Intent, Tooltip, Position, Icon, Popover, MenuItem} from "@blueprintjs/core";
-import {MultiSelect} from "@blueprintjs/labs";
+import {Alert, Intent, Tooltip, Position, Icon, Dialog, Button, MenuItem} from "@blueprintjs/core";
+import CollabSearch from "./CollabSearch";
 
 class Projects extends Component {
 
@@ -13,21 +13,13 @@ class Projects extends Component {
     super(props);
     this.state = {
       deleteAlert: false,
+      leaveAlert: false,
       projects: [],
       collabs: [],
-      userList: [
-        {id: 1, name: "jimmy"},
-        {id: 2, name: "dave"},
-        {id: 3, name: "alex"},
-        {id: 4, name: "sabrina"},
-        {id: 5, name: "nick"},
-        {id: 6, name: "james"},
-        {id: 7, name: "natalia"},
-        {id: 8, name: "walther"}
-      ],
-      users: [],
       projectName: "",
-      currentProject: null
+      isOpen: false,
+      currentProject: null,
+      collabProject: null
     };
   }
 
@@ -39,7 +31,7 @@ class Projects extends Component {
     Promise.all([pget, cget]).then(resp => {
       const projects = resp[0].data;
       const collabs = resp[1].data;
-      
+
       let {currentProject} = this.state;
       if (this.props.projectToLoad) {
         currentProject = projects.find(p => p.name === this.props.projectToLoad);
@@ -132,6 +124,38 @@ class Projects extends Component {
     }
   }
 
+  showLeaveAlert(collab) {
+    const {t} = this.props;
+    const leaveAlert = {
+      collab,
+      text: t("Are you sure you want to leave this project?")
+    };
+    this.setState({leaveAlert});
+  }
+
+  leaveCollab() {
+    const {collab} = this.state.leaveAlert;
+    const {projects} = this.state;
+    if (collab && collab.id) {
+      const pid = collab.id;
+      axios.post("/api/projects/leavecollab", {pid}).then(resp => {
+        if (resp.status === 200) {
+          const collabs = this.state.collabs.filter(c => c.id !== collab.id);
+          if (collab.id === this.state.currentProject.id) {
+            const currentProject = projects[0];
+            this.setState({leaveAlert: false, currentProject, collabs}, this.props.openProject.bind(this, currentProject.id));
+          }
+          else {
+            this.setState({leaveAlert: false, collabs}); 
+          }
+        }
+        else {
+          console.log("error");
+        }
+      });
+    }
+  }
+
   clickNewProject() {
     const {t} = this.props;
     const projectName = this.state.projectName;
@@ -153,8 +177,12 @@ class Projects extends Component {
 
   }
 
+  toggleDialog(project) {
+    this.setState({isOpen: !this.state.isOpen, collabProject: project});
+  }
+
   // ============================================
-  // BEGIN MULTISELECT 
+  // BEGIN MULTISELECT
   // ============================================
 
   renderUser(obj) {
@@ -171,9 +199,9 @@ class Projects extends Component {
     );
   }
 
-  isUserSelected(user) { 
+  isUserSelected(user) {
     return this.state.users.indexOf(user) !== -1;
-  } 
+  }
 
   handleUserSelect(user) {
     !this.isUserSelected(user) ? this.selectUser(user) : this.deselectUser(this.getSelectedUserIndex(user));
@@ -186,7 +214,7 @@ class Projects extends Component {
   selectUser(user) {
     this.setState({users: [...this.state.users, user]});
   }
-  
+
   deselectUser(index) {
     this.setState({users: this.state.users.filter((_user, i) => i !== index)});
   }
@@ -200,22 +228,22 @@ class Projects extends Component {
   }
 
   // ============================================
-  // END MULTISELECT 
-  // ============================================  
+  // END MULTISELECT
+  // ============================================
 
   render() {
 
     const {t} = this.props;
-    const {deleteAlert} = this.state;
+    const {deleteAlert, leaveAlert} = this.state;
 
     const showDeleteButton = this.state.projects.length > 1;
 
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
       <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
-        
+
         {
-          project.collaborators.length 
+          project.collaborators.length
             ? <Tooltip position={Position.TOP_LEFT} content={ `${t("Collaborators")}: ${project.collaborators.map(c => c.user.username).join(" ")}` }>
               <div><span className="project-title" onClick={() => this.handleClick(project)}>{project.name}</span>&nbsp;<Icon iconName="people" /></div>
             </Tooltip>
@@ -223,22 +251,29 @@ class Projects extends Component {
         }
         <div>
           <Tooltip content={ "Add Collaborator" }>
-            <Popover>
-              <span className="pt-icon-standard pt-icon-plus" onClick={ () => this.toggleCollab(project) } />
-              <MultiSelect
-                // initialContent={<MenuItem disabled={true} text="test" />} 
-                style={{padding: "30px"}}
-                itemRenderer={this.renderUser.bind(this)}
-                itemPredicate={this.filterUser.bind(this)}
-                items={this.state.userList}
-                noResults={<MenuItem disabled={true} text="No results." />}
-                onItemSelect={this.handleUserSelect.bind(this)}
-                // popoverProps={{ popoverClassName: popoverMinimal ? Classes.MINIMAL : "" }}
-                tagRenderer={u => u.name}
-                tagInputProps={{onRemove: this.handleTagRemove.bind(this)}}
-                selectedItems={this.state.users}
-              />
-            </Popover>
+            <div>
+              <span className="pt-icon-standard pt-icon-plus" onClick={this.toggleDialog.bind(this, project)} />
+              <Dialog
+                icon="inbox"
+                isOpen={this.state.isOpen}
+                onClose={this.toggleDialog.bind(this)}
+                title={t("Collaborate")}
+                className="pt-dialog is-fullscreen"
+              >
+                <div className="pt-dialog-body ">
+                  <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
+                </div>
+                <div className="pt-dialog-footer">
+                  <div className="pt-dialog-footer-actions">
+                    <Button
+                      intent={Intent.PRIMARY}
+                      onClick={this.toggleDialog.bind(this)}
+                      text={t("Close")}
+                    />
+                  </div>
+                </div>
+              </Dialog>
+            </div>
           </Tooltip>&nbsp;&nbsp;&nbsp;
           { showDeleteButton
             ? <Tooltip content={ t("Delete Project") }>
@@ -249,10 +284,13 @@ class Projects extends Component {
         </div>
       </li>);
 
-    const collabItems = this.state.collabs.map(collab => 
+    const collabItems = this.state.collabs.map(collab =>
       <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>
         <Tooltip position={Position.TOP_LEFT} content={ `${t("Owner")}: ${collab.username}` }>
           <div><span className="project-title" onClick={() => this.handleClick(collab)}>{collab.name}</span>&nbsp;<Icon iconName="people" /></div>
+        </Tooltip>
+        <Tooltip position={Position.TOP_RIGHT} content={ `${t("Leave Project")}` }>
+          <span className="pt-icon-standard pt-icon-log-out" onClick={() => this.showLeaveAlert(collab)}></span>
         </Tooltip>
       </li>);
 
@@ -267,7 +305,7 @@ class Projects extends Component {
         </div>
         <ul className="project-list">
           {projectItems}
-          <li>--------</li>
+          { collabItems ? <hr/> : null /* not working ¯\_(ツ)_/¯ */ }
           {collabItems}
         </ul>
         <Alert
@@ -278,6 +316,16 @@ class Projects extends Component {
           onCancel={ () => this.setState({deleteAlert: false}) }
           onConfirm={ () => this.deleteProject(true) }>
           <p>{ deleteAlert ? deleteAlert.text : "" }</p>
+        </Alert>
+        <Alert
+          isOpen={ leaveAlert ? true : false }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Leave") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({leaveAlert: false}) }
+          onConfirm={ () => this.leaveCollab() }>
+          <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
+          <p>{ leaveAlert ? leaveAlert.text : "" }</p>
         </Alert>
       </div>
     );

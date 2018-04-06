@@ -49,7 +49,7 @@ class UserProjects extends Component {
       <div className="user-section">
         <h2>{ t("Projects") }</h2>
         { projects.length
-          ? <div className="flex-row">{ projects.map(p => <ProjectCard key={p.id} project={p} />)}</div>
+          ? <div className="card-list">{ projects.map(p => <ProjectCard key={p.id} project={p} />)}</div>
           : <p>{ t("noProjects") }</p>
         }
       </div>

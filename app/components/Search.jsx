@@ -22,6 +22,19 @@ class Search extends Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKey.bind(this));
+  }
+
+  handleKey(e) {
+    const left = e.keyCode === 37;
+    const up = e.keyCode === 38;
+    const right = e.keyCode === 39;
+    const down = e.keyCode === 40;
+    if (down) this.setState({selectedIndex: this.state.selectedIndex + 1});
+    if (up) this.setState({selectedIndex: this.state.selectedIndex - 1});
+  }
+
   handleChange(e) {
     const query = e.target.value;
     if (query.length > 2) {
@@ -30,6 +43,13 @@ class Search extends Component {
     }
     else {
       this.setState({query, showResults: true, results: {users: [], projects: []}});
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // If the user changes pages by clicking a link *outside* the search results bar, reset and hide everything
+    if (this.props.linkObj !== nextProps.linkObj) {
+      this.clearSearch();
     }
   }
 
@@ -102,12 +122,12 @@ class Search extends Component {
     );
     const projectList = results.projects.filter(r => r.user).map(r =>
       <li key={r.id} className="search-results-item project-result">
-        <a className={`search-results-link ${r.selected ? "search-selected" : ""}`} href={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>
+        <Link className={`search-results-link ${r.selected ? "search-selected" : ""}`} to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>
           <span className="search-results-text primary-search-results-text font-sm">{r.name}</span>
           <span className="search-results-text secondary-search-results-text font-xs">
             {t("by")} {r.user.username}
           </span>
-        </a>
+        </Link>
       </li>
     );
 
@@ -173,5 +193,6 @@ class Search extends Component {
 Search = connect(state => ({
   auth: state.auth
 }))(Search);
-Search = translate()(Search);
+Search = translate(undefined, {withRef: true})(Search);
 export default Search;
+

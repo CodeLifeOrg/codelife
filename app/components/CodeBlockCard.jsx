@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
+import {Link} from "react-router";
 import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
 
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -85,22 +86,75 @@ class CodeBlockCard extends Component {
 
     const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
 
+    // define thumbnail image as null
+    let thumbnailImg = null;
+
+    // get corresponding thumbnail image
+    if (username && snippetname) {
+      if (username === "alice" && snippetname === "My Theme Park Island Snippet") {
+        thumbnailImg = "concert-thumbnail@2x.jpg";
+      }
+      else if (username === "chloe" && snippetname === "O Suco Mais Gostoso!") {
+        thumbnailImg = "bem-vindo-thumbnail@2x.jpg";
+      }
+      else if (username === "elio-soares" && snippetname === "Meu Ilha Gelada Desafio") {
+        thumbnailImg = "iglu-da-lorena-thumbnail@2x.jpg";
+      }
+    }
+
+    // define image path
+    const thumbnailURL = `/thumbnails/codeblocks/${thumbnailImg}`;
+
     return (
-      <div className={ `codeBlockCard pt-card pt-elevation-0 pt-interactive ${theme}`}>
-        <div className="box" onClick={ this.toggleDialog.bind(this) }>
-          <div className="icon" style={{backgroundImage: `url("/islands/${theme}-small.png")`}}>
-          </div>
-          <div className="info">
-            <div className="card-title">{ icon ? <span className={ `pt-icon-standard ${icon}` } /> : null }{snippetname}</div>
-            <div className="card-meta">
-              { username ? <div className="card-author">
-                { mine ? <span className="pt-icon-standard pt-icon-user pt-intent-primary"></span> : null }
-                { `${t("Created by")} ${displayname || username}` }
-              </div> : null }
-              <div className="card-like"><span className={ `pt-icon-standard pt-icon-star${ liked ? " pt-intent-warning" : "-empty" }` }></span>{ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }</div>
+      <div className="card-container">
+
+        {/* cover button */}
+        <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={ this.toggleDialog.bind(this) }>
+          <span className="u-visually-hidden">{ t("Project.View") }</span>
+        </button>
+
+        {/* card inner */}
+        <div className={`codeblock-card ${theme}-card card`}>
+
+          {/* show thumbnail image if one is found */}
+          { thumbnailImg
+            ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
+              <span className="card-fullscreen-icon pt-icon pt-icon-fullscreen" />
             </div>
+            : null }
+
+          {/* caption */}
+          <div className="card-caption codeblock-card-caption">
+
+            {/* title */}
+            <h4 className="card-title u-margin-top-off u-margin-bottom-off">{ snippetname }</h4>
+
+            {/* author */}
+            { username
+              ? <span className="card-author font-xs">
+                { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
+                  { username }
+                </Link>
+              </span>
+              : null }
+
+            {/* likes */}
+            <p className="card-likes font-xs u-margin-top-off">
+              <button className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` } />
+              <span className="card-likes-count">{ likes }</span>
+              <span className="u-visually-hidden">&nbsp;
+                { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+              </span>
+            </p>
+
+            {/* island icon */}
+            <span className="card-island-icon" />
+
+            {/* datemodified ? <div className="card-author">{ t("Modified on") } { moment(datemodified).format("DD/MM/YY") }</div> : null */}
           </div>
         </div>
+
+        {/* dialog */}
         <Dialog
           isOpen={ open }
           onClose={ this.toggleDialog.bind(this) }

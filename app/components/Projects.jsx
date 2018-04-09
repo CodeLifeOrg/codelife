@@ -146,7 +146,7 @@ class Projects extends Component {
             this.setState({leaveAlert: false, currentProject, collabs}, this.props.openProject.bind(this, currentProject.id));
           }
           else {
-            this.setState({leaveAlert: false, collabs}); 
+            this.setState({leaveAlert: false, collabs});
           }
         }
         else {
@@ -257,21 +257,10 @@ class Projects extends Component {
                 icon="inbox"
                 isOpen={this.state.isOpen}
                 onClose={this.toggleDialog.bind(this)}
-                title={t("Collaborate")}
-                className="pt-dialog is-fullscreen"
+                title=""
+                className="form-container collab-form-container"
               >
-                <div className="pt-dialog-body ">
-                  <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
-                </div>
-                <div className="pt-dialog-footer">
-                  <div className="pt-dialog-footer-actions">
-                    <Button
-                      intent={Intent.PRIMARY}
-                      onClick={this.toggleDialog.bind(this)}
-                      text={t("Close")}
-                    />
-                  </div>
-                </div>
+                <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
               </Dialog>
             </div>
           </Tooltip>&nbsp;&nbsp;&nbsp;

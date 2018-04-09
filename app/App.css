@@ -922,6 +922,10 @@ utility classes
   border: 0;
   background: none;
 }
+/* make children into a button group */
+.u-button-group > * {
+  @add-mixin button-groupify;
+}
 
 /* screen reader text */
 .u-visually-hidden {

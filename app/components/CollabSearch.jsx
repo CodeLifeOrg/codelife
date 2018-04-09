@@ -94,14 +94,14 @@ class CollabSearch extends Component {
     const locList = Array.from(new Set(usersWithoutCollabs
       .map(r => r.geo && r.geo.name ? r.geo.name : null)))
       .filter(loc => Boolean(loc))
-      .map(loc => 
+      .map(loc =>
         <option key={loc} value={loc}>{loc}</option>
       );
 
     const schoolList = Array.from(new Set(usersWithoutCollabs
       .map(r => r.school && r.school.name ? r.school.name : null)))
       .filter(school => Boolean(school))
-      .map(school => 
+      .map(school =>
         <option key={school} value={school}>{school}</option>
       );
 
@@ -113,61 +113,190 @@ class CollabSearch extends Component {
       usersWithoutCollabs = usersWithoutCollabs.filter(u => u.school && u.school.name && u.school.name === filterSchool);
     }
 
+    // available collaborators
     const userList = usersWithoutCollabs.map(r =>
-      <li className="list-result" key={r.id}>
-        <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-          <h5>{r.user.username}</h5><br/>
-          {r.geo && r.geo.name ? <p><Icon iconName="map-marker" /> {r.geo.name}</p> : null}
-          {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null}
-          <button onClick={this.addCollaborator.bind(this, r)}>Add</button>
-        </Card>
+      <li className="collab-item available-collab-item card-container" key={r.id}>
+
+        {/* add collaborator button */}
+        <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={this.addCollaborator.bind(this, r)}>
+          <span className="u-visually-hidden">{ t("Collab.Add") }</span>
+        </button>
+
+        {/* card inner */}
+        <span className="card collab-inner">
+
+          <span className="collab-avatar">
+            {/* show user image if one is found */}
+            { r.user.img
+              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.user.img})`}} />
+              : <span className="collab-avatar-icon pt-icon pt-icon-person" />
+            }
+            {/* action indicator */}
+            <span className="action-indicator">
+              <span className="action-indicator-icon pt-icon pt-icon-plus" />
+            </span>
+          </span>
+
+          {/* name */}
+          <span className="collab-caption">
+            <h4 className="collab-heading u-margin-top-off u-margin-bottom-off">{r.user.username}</h4>
+            {/* {r.geo && r.geo.name ? <p><Icon iconName="map-marker" /> {r.geo.name}</p> : null}
+            {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null} */}
+          </span>
+        </span>
       </li>
     );
 
-    const collabList = collabs.map(r => 
-      <li className="collab-result" key={r.id}>
-        <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-          <h5>{r.user.username}</h5><br/>
-          {r.geo && r.geo.name ? <p><Icon iconName="map-marker" /> {r.geo.name}</p> : null}
-          {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null}
-          <button onClick={this.removeCollaborator.bind(this, r.uid)}>Remove</button>
-        </Card>
+    // current collaborators
+    const collabList = collabs.map(r =>
+      <li className="collab-item current-collab-item card-container" key={r.id}>
+
+        {/* remove collaborator button */}
+        <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={this.removeCollaborator.bind(this, r.uid)}>
+          <span className="u-visually-hidden">{ t("Collab.Remove") }</span>
+        </button>
+
+        {/* card inner */}
+        <span className="card collab-inner">
+
+          <span className="collab-avatar">
+            {/* show user image if one is found */}
+            { r.user.img
+              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.user.img})`}} />
+              : <span className="collab-avatar-icon pt-icon pt-icon-person" />
+            }
+            {/* action indicator */}
+            <span className="action-indicator">
+              <span className="action-indicator-icon pt-icon pt-icon-small-cross" />
+            </span>
+          </span>
+
+          {/* name */}
+          <span className="collab-caption">
+            <h4 className="collab-heading u-margin-top-off u-margin-bottom-off">{r.user.username}</h4>
+            {/* {r.geo && r.geo.name ? <p><Icon iconName="map-marker" /> {r.geo.name}</p> : null}
+            {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null} */}
+          </span>
+        </span>
       </li>
     );
-    
+
+    // markup for placeholder collaborator slot
+    const emptySlot =
+    <li className="collab-item placeholder-collab-item">
+      {/* img */}
+      <span className="collab-avatar" />
+      {/* name */}
+      <div className="collab-caption">
+        <h4 className="collab-heading u-margin-top-off u-margin-bottom-off">
+          {t("Slot")} <span className="placeholder-collab-item-count" /> {t("open")}
+        </h4>
+      </div>
+    </li>;
+
+    // add / remove placeholder slots as necessary
+    if (!atMax) {
+      let i = currentProject.collaborators.length;
+      for (i; i < this.state.MAX_COLLABS; i++) {
+        collabList.push(emptySlot);
+      }
+    }
+
     return (
       <div className="collab-container">
-        <h3>{`${t("Collaborate on")} ${currentProject.name}`}</h3>
-        <input
-          onChange={this.handleChange.bind(this)}
-          value={query}
-          placeholder={t("Search.Users")} 
-        />
-        <div className="collab-selections">
-          current collaborators
-          <ul className="collab-list">
-            {collabList}
-          </ul>
-        </div>
-        <div className="pt-select">
-          filter by loc
-          <select value={this.state.filterLoc} onChange={e => this.setState({filterLoc: e.target.value})}>
-            <option value="default">show all locations</option>
-            {locList}
-          </select>
-        </div>
-        <div className="pt-select">
-          filter by school
-          <select value={this.state.filterSchool} onChange={e => this.setState({filterSchool: e.target.value})}>
-            <option value="default">show all schools</option>
-            {schoolList}
-          </select>
-        </div>
-        <div className="box-results">
-          search results
-          <ul className="list-results">
-            {atMax ? <div>{t("at max")}</div> : userList}
-          </ul>
+
+        {/* heading */}
+        <h2 className="collab-heading font-xl u-text-center">{t("Collab.Manage")}</h2>
+        <p className="collab-subhead heading font-md u-text-center">{currentProject.name}</p>
+
+        {/* wrapper around controls and search results */}
+        <div className="collab-outer">
+
+          {/* controls */}
+          <div className="collab-controls">
+
+            {/* search */}
+            <div className="collab-search-controls">
+              {/* heading */}
+              <h3 className="collab-search-heading font-sm">{t("Collab.AddCollaborators")}</h3>
+              {/* main search input */}
+              <input
+                onChange={this.handleChange.bind(this)}
+                value={query}
+                placeholder={t("Search.Users")}
+                autoFocus
+              />
+              {/* main search input */}
+              <div className="pt-select">
+                filter by loc
+                <select value={this.state.filterLoc} onChange={e => this.setState({filterLoc: e.target.value})}>
+                  <option value="default">show all locations</option>
+                  {locList}
+                </select>
+              </div>
+              <div className="pt-select">
+                filter by school
+                <select value={this.state.filterSchool} onChange={e => this.setState({filterSchool: e.target.value})}>
+                  <option value="default">show all schools</option>
+                  {schoolList}
+                </select>
+              </div>
+            </div>
+
+            {/* current collaborators */}
+            <div className="collab-selections">
+              {/* heading */}
+              <h3 className="collab-search-heading font-sm">{t("Collab.CurrentCollaborators")}</h3>
+              <ul className="collab-list u-list-reset">
+                {collabList}
+              </ul>
+            </div>
+          </div>
+
+          {/* search results */}
+          <div className="collab-search-results">
+
+            {/* hidden heading for accessiblity and message styling */}
+            <h3 className="u-visually-hidden">{t("Search.Results")}</h3>
+
+            {/* results list */}
+            {!atMax && query.length >= 3 && userList !== null
+              ? <div className="collab-list-results-container">
+                <ul className="collab-list-results u-list-reset"> {userList} </ul>
+              </div>
+              : null }
+            {/* message */}
+            <div className="collab-results-message u-vertical-align-children">
+
+              {/* Message: start typing */}
+              <h3 className={!atMax && query.length === 0 ? "collab-results-heading font-lg u-margin-bottom-off u-text-center" : "collab-results-heading is-hidden"}>{t("Search.StartTyping")}</h3>
+
+              {/* Message: keep typing */}
+              <h3 className={!atMax && query.length > 0 && query.length < 3 ? "collab-results-heading font-lg u-margin-bottom-off u-text-center" : "collab-results-heading is-hidden"}>{t("Search.KeepTyping")}</h3>
+
+              {/* Message: no more results */}
+              {!atMax && query.length >= 3
+                ? <div className="clear-collab-results u-text-center">
+                  <h3 className="collab-results-heading font-md">{t("Collab.NoMoreResults")}</h3>
+                  {/* buttons */}
+                  <div className="clear-collab-button-group u-button-group">
+                    <button className="pt-button pt-intent-danger">
+                      <span className="pt-icon pt-icon-search" />
+                      clear search
+                    </button>
+                    <button className="pt-button pt-intent-danger">
+                      <span className="pt-icon pt-icon-filter" />
+                      clear filters
+                    </button>
+                  </div>
+                </div>
+                : null}
+
+              {/* Message: max collabs cap */}
+              <h3 className={atMax ? "collab-results-heading font-lg u-margin-bottom-off u-text-center" : "collab-results-heading is-hidden"}>{t("Collab.AtMax")}</h3>
+
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -179,4 +308,3 @@ CollabSearch = connect(state => ({
 }))(CollabSearch);
 CollabSearch = translate(undefined, {withRef: true})(CollabSearch);
 export default CollabSearch;
-

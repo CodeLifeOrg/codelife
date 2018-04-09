@@ -18,9 +18,10 @@ import Survey from "pages/Survey";
 import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
 import ResetPw from "pages/ResetPw";
-import Contest from "pages/Contest";
+import LessonPlan from "pages/LessonPlan";
 import Error from "pages/Error";
 
+//import Contest from "pages/Contest";
 
 export default function RouteCreate() {
 
@@ -59,6 +60,9 @@ export default function RouteCreate() {
       <Route path="learnmore" component={LearnMore} />
 
       {/* <Route path="contest" component={Contest} /> */}
+
+      <Route path="lessonplan" component={LessonPlan} />
+      <Route path="lessonplan/:island" component={LessonPlan} />
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />

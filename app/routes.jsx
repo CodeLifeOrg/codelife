@@ -62,7 +62,7 @@ export default function RouteCreate() {
       {/* <Route path="contest" component={Contest} /> */}
 
       <Route path="lessonplan" component={LessonPlan} />
-      <Route path="lessonplan/:island" component={LessonPlan} />
+      <Route path="lessonplan/:lid" component={LessonPlan} />
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />

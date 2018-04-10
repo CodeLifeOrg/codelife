@@ -21,6 +21,14 @@ layout
   }
 }
 
+/* left align headings on small screens */
+@add-mixin max-xs {
+  .collab-heading,
+  .collab-subhead {
+    text-align: left;
+  }
+}
+
 /* 2 column layout */
 .collab-outer {
   display: flex;
@@ -81,14 +89,25 @@ layout
 
 /* card layout */
 .collab-list-results {
-  @add-mixin card-layout-base;
+
+  /* list style */
+  @add-mixin max-xs {
+    & .available-collab-item .card {
+      padding: 0.4375rem 0;
+      box-shadow: none;
+    }
+    & .available-collab-item + .available-collab-item {
+      border-top: 1px solid var(--light-1);
+    }
+  }
 
   @add-mixin min-xs {
-    @add-mixin card-layout-2col;
+    @add-mixin condensed-card-layout-base;
+    @add-mixin condensed-card-layout-2col;
   }
 
   @add-mixin min-md {
-    @add-mixin card-layout-3col;
+    @add-mixin condensed-card-layout-3col;
   }
 }
 
@@ -96,7 +115,7 @@ layout
 .collab-results-message {
   border: 1px solid var(--light-1);
   border-radius: var(--radius-md);
-  padding: var(--gutter-lg);
+  padding: var(--gutter-lg) var(--gutter-md);
 }
 
 /* button group */
@@ -133,11 +152,21 @@ make the message take up the full height of the container */
   position: absolute;
   height: 100%;
   height: calc(100% - 0.25rem);
-  margin-top: 1.25rem;
+  margin-top: 0.5rem;
+
+  /* adjust margin on 2 column layout */
+  @add-mixin min-md {
+    margin-top: 1.25rem;
+  }
 }
 /* otherwise, add spacing in between the list and message */
 .collab-list-results-container + .collab-results-message {
-  margin-top: 1.75rem;
+  margin-top: 0.75rem;
+
+  /* adjust margin on 2 column layout */
+  @add-mixin min-md {
+    margin-top: 2.625rem;
+  }
 }
 
 
@@ -328,6 +357,7 @@ placeholder slots
 .placeholder-collab-item {
   opacity: 0.3;
   background-color: var(--light-1);
+  pointer-events: none;
 }
 
 

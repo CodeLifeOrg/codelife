@@ -31,7 +31,7 @@ module.exports = function(sequelize, db) {
   );
 
   i.associate = models => {
-    i.hasMany(models.levels, {foreignKey: "id", targetKey: "lid", as: "levels", foreignKeyConstraint: true});
+    i.hasMany(models.levels, {foreignKey: "lid", sourceKey: "id", as: "levels", foreignKeyConstraint: true});
   };
 
   return i;

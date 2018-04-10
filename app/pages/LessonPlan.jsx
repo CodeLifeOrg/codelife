@@ -7,6 +7,17 @@ import {fetchData} from "datawheel-canon";
 import Slide from "pages/Slide.jsx";
 import "./LessonPlan.css";
 
+import ImageText from "components/slidetypes/ImageText";
+import InputCode from "components/slidetypes/InputCode";
+import Quiz from "components/slidetypes/Quiz";
+import TextCode from "components/slidetypes/TextCode";
+import TextImage from "components/slidetypes/TextImage";
+import TextText from "components/slidetypes/TextText";
+import RenderCode from "components/slidetypes/RenderCode";
+import CheatSheet from "components/slidetypes/CheatSheet";
+
+const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
+
 class LessonPlan extends Component {
 
   constructor(props) {
@@ -28,24 +39,27 @@ class LessonPlan extends Component {
 
     const currentIsland = islands.find(i => i.id === lid);
 
-    if (lid && !currentIsland) return <Loading />;
+    const s = (a, b) => a.ordering - b.ordering;
 
-    const islandList = islands.map(i => 
+    const islandList = islands.sort(s).map(i => 
       <li key={i.id}><Link to={`/lessonplan/${i.id}`}>{i.name}</Link></li>
     );
 
-    console.log(currentIsland);
+    let levelList = [];
 
-    const levelList = currentIsland.levels.map(l => 
-      <li key={l.id}>
-        <h3 key={l.id}>{`Level ${l.ordering + 1}: ${l.name}`}</h3>
-        <ul>
-          {l.slides.map(s => 
-            <li key={s.id}>{s.title}</li>
-          )}
-        </ul>
-      </li>
-    );
+    if (lid) {
+      levelList = currentIsland.levels.sort(s).map(l => 
+        <li key={l.id}>
+          <h3 key={l.id}>{`Level ${l.ordering + 1}: ${l.name}`}</h3>
+          <ul>
+            {l.slides.sort(s).map(s => {
+              const SlideComponent = compLookup[s.type];
+              return <li key={s.id}><SlideComponent {...s} island={currentIsland.theme}/></li>;
+            })}
+          </ul>
+        </li>
+      );
+    }
 
     return (
       <div id="lesson-plan" className="content">

@@ -21,7 +21,7 @@ module.exports = function(sequelize, db) {
 
   l.associate = models => {
     l.belongsTo(models.islands, {foreignKey: "lid", targetKey: "id", as: "island", foreignKeyConstraint: true});
-    l.hasMany(models.slides, {foreignKey: "id", targetKey: "mlid", as: "slides", foreignKeyConstraint: true});
+    l.hasMany(models.slides, {foreignKey: "mlid", sourceKey: "id", as: "slides", foreignKeyConstraint: true});
   };
 
   return l;

@@ -20,8 +20,7 @@ module.exports = function(app) {
       where: req.query,
       include: [{association: "levels", include: [{association: "slides"}]}]
     }).then(islands => {
-      /*
-      islands = translateObjArray(lang, islands);
+      /*islands = translateObjArray(lang, islands);
       islands.forEach(island => {
         island.levels = translateObjArray(lang, island.levels);
         island.levels.forEach(level => {

@@ -45,7 +45,9 @@
     height: 20px;
     /* transitions */
     transition:
-      transform 0.2s;
+      transform 0.2s,
+      opacity 0.2s;
+    opacity: 0.85;
 
     /* huge logo (home page only) */
     @add-mixin min-md {
@@ -89,6 +91,8 @@
 
     /* interactions */
     &:hover, &:focus {
+      opacity: 1;
+
       & .logo-text {
         transform: scale(1.1);
       }

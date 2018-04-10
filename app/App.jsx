@@ -91,7 +91,7 @@ class App extends Component {
             ? children
             : <div className="container">
               <Clouds />
-              <Nav currentPath={location.pathname} linkObj={this.props.params} logo={ !this.props.router.location.pathname.includes("login") && this.props.router.location.pathname !== "/" } />
+              <Nav currentPath={location.pathname} linkObj={this.props.params} isHome={ !this.props.router.location.pathname.includes("login") && this.props.router.location.pathname !== "/" } />
               { children }
               <Footer currentPath={location.pathname} className={ theme } />
             </div>

@@ -78,6 +78,13 @@
     & .logo-text {
       max-height: 100%;
       transition: transform 0.1s;
+
+      /* the logo */
+      & svg,
+      & image {
+        height: 100%;
+        width: auto;
+      }
     }
 
     /* interactions */

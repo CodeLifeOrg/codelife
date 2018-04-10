@@ -11,6 +11,52 @@ layout
 
   @add-mixin min-sm {
     min-height: 42rem;
+    max-height: calc(100vh - 8rem);
+  }
+
+  /* pin the sidebar to the left */
+  /* TODO: cross browser testing */
+  @media (min-width: 992px) and (min-height: 768px) {
+    height: 43rem;
+
+    /* fudge container alignment */
+    & .collab-container {
+      padding-bottom: 2.25rem;
+    }
+
+    /* make fixed positioning relative to container */
+    & .collab-controls {
+      position: fixed;
+      top: auto;
+      margin-top: 1rem;
+      left: auto;
+    }
+
+    /* account for sidebar with fixed positioning */
+    & .collab-search-results {
+      /* positioning */
+      margin-left: auto;
+      right: auto;
+      left: auto;
+      /* make results line up with sidebar */
+      min-height: 28rem;
+      top: 1px; /* baseline adjustment */
+    }
+
+    /* keep close button in view */
+    & .pt-dialog-header {
+      /* positioning */
+      position: fixed;
+      z-index: 1; /* position above title, beneath cards */
+      /* make fixed positioning relative to container */
+      top: auto;
+      right: auto;
+      /* WARNING: magic number as hell */
+      margin-top: -1.5rem;
+      margin-left: 66.75rem;
+      /* no background, just in case the positioning is off */
+      background: none;
+    }
   }
 }
 
@@ -155,7 +201,7 @@ make the message take up the full height of the container */
   margin-top: 0.5rem;
 
   /* adjust margin on 2 column layout */
-  @add-mixin min-md {
+  @add-mixin min-sm {
     margin-top: 1.25rem;
   }
 }

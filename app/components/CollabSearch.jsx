@@ -14,7 +14,9 @@ class CollabSearch extends Component {
       users: [],
       geos: [],
       schools: [],
-      MAX_COLLABS: 5
+      MAX_COLLABS: 5,
+      filterLoc: "default",
+      filterSchool: "default"
     };
   }
 
@@ -31,6 +33,10 @@ class CollabSearch extends Component {
 
   clearSearch() {
     this.setState({query: "", users: []});
+  }
+
+  clearFilters() {
+    this.setState({filterLoc: "default", filterSchool: "default"});
   }
 
   search() {
@@ -217,29 +223,59 @@ class CollabSearch extends Component {
 
             {/* search */}
             <div className="collab-search-controls">
+
               {/* heading */}
               <h3 className="collab-search-heading font-sm">{t("Collab.AddCollaborators")}</h3>
+
               {/* main search input */}
-              <input
-                onChange={this.handleChange.bind(this)}
-                value={query}
-                placeholder={t("Search.Users")}
-                autoFocus
-              />
-              {/* main search input */}
-              <div className="pt-select">
-                filter by loc
-                <select value={this.state.filterLoc} onChange={e => this.setState({filterLoc: e.target.value})}>
-                  <option value="default">show all locations</option>
-                  {locList}
-                </select>
+              <div className="field-container font-sm has-icon">
+                <label className="font-xs" htmlFor="collab-search">
+                  { t("Search.Users") }
+                </label>
+                <input className="field-input"
+                  id="collab-search"
+                  value={query}
+                  type="text"
+                  name="collab-search"
+                  onChange={this.handleChange.bind(this)}
+                  autoFocus />
+                <span className="field-icon pt-icon pt-icon-search" />
               </div>
-              <div className="pt-select">
-                filter by school
-                <select value={this.state.filterSchool} onChange={e => this.setState({filterSchool: e.target.value})}>
-                  <option value="default">show all schools</option>
-                  {schoolList}
-                </select>
+
+              {/* location filter */}
+              <div className="field-container font-sm">
+                <label className="font-xs" htmlFor="collab-location-filter">
+                  { t("Collab.LocationFilterLabel") }
+                </label>
+                <div className="pt-select">
+                  <select className="field-input"
+                    id="collab-location-filter"
+                    value={this.state.filterLoc}
+                    onChange={e => this.setState({filterLoc: e.target.value})}>
+                    <option value="default">
+                      {t("Collab.LocationFilterInitialValue") }
+                    </option>
+                    {locList}
+                  </select>
+                </div>
+              </div>
+
+              {/* school filter */}
+              <div className="field-container font-sm">
+                <label className="font-xs" htmlFor="school-location-filter">
+                  { t("Collab.SchoolFilterLabel") }
+                </label>
+                <div className="pt-select">
+                  <select className="field-input"
+                    id="school-location-filter"
+                    value={this.state.filterSchool}
+                    onChange={e => this.setState({filterSchool: e.target.value})}>
+                    <option value="default">
+                      {t("Collab.SchoolFilterInitialValue") }
+                    </option>
+                    {locList}
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -280,14 +316,19 @@ class CollabSearch extends Component {
                   <h3 className="collab-results-heading font-md">{t("Collab.NoMoreResults")}</h3>
                   {/* buttons */}
                   <div className="clear-collab-button-group u-button-group">
-                    <button className="pt-button pt-intent-danger">
+                    <button className="pt-button pt-intent-danger"
+                      onClick={this.clearSearch.bind(this)}>
                       <span className="pt-icon pt-icon-search" />
-                      clear search
+                      { t("Collab.ClearSearch") }
                     </button>
-                    <button className="pt-button pt-intent-danger">
-                      <span className="pt-icon pt-icon-filter" />
-                      clear filters
-                    </button>
+                    {/* display clear filter button if filters have been set */}
+                    { filterLoc !== "default" || filterSchool !== "default"
+                      ? <button className="pt-button pt-intent-danger"
+                        onClick={this.clearFilters.bind(this)}>
+                        <span className="pt-icon pt-icon-filter" />
+                        { t("Collab.ClearFilters") }
+                      </button>
+                      : null }
                   </div>
                 </div>
                 : null}

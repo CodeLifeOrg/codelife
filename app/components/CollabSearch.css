@@ -7,13 +7,13 @@ layout
 /* set max-width and min-height on popover */
 .collab-form-container {
   max-width: 72.5rem;
-  min-height: 44rem;
+  min-height: 42rem;
 }
 
 /* adjust padding on bigger screens */
 .collab-container {
   @add-mixin min-md {
-    padding: var(--gutter-md);
+    padding: var(--gutter-md) var(--gutter-md) 3.125rem var(--gutter-md);
   }
 }
 
@@ -75,6 +75,7 @@ make the message take up the full height of the container */
 h3.u-visually-hidden + .collab-results-message {
   position: absolute;
   height: 100%;
+  height: calc(100% - 0.25rem);
   margin-top: 1.25rem;
 }
 /* otherwise, add spacing in between the list and message */
@@ -138,6 +139,11 @@ current & placeholder collaborators
       }
     }
   }
+
+  /* set max width for name */
+  & .collab-caption {
+    width: calc(100% - 1.8125rem);
+  }
 }
 
 /* --------------------------------
@@ -155,9 +161,15 @@ shared collab item styles
   vertical-align: middle; /* thx blueprint */
 }
 
-/* baseline adjustment */
+/* caption baseline adjustment */
 .collab-caption {
   top: 1px;
+
+  /* handle long usernames */
+  & .collab-heading {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
 }
 
 /* shared avatar theming & positioning */
@@ -283,6 +295,12 @@ available search results
     }
   }
 
+  /* set max width for name */
+  & .collab-caption {
+    width: calc(100% - 2.9375rem);
+  }
+
+  /* adjust card padding */
   & .card {
     padding: 0.875rem 0.9375rem;
   }

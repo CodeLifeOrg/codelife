@@ -567,6 +567,10 @@ form field layout
   & > .pt-select:after {
     @add-mixin select-icon-right;
   }
+  /* adjust placement for .font-sm size */
+  &.font-sm > .pt-select:after {
+    line-height: 1.25rem;
+  }
 
   /* width of inputs, textareas, and buttons dictated by container */
   & > input:not([type=submit]):not([type=file]),

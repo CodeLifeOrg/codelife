@@ -293,7 +293,7 @@ class CollabSearch extends Component {
           <div className="collab-search-results">
 
             {/* hidden heading for accessiblity and message styling */}
-            <h3 className="u-visually-hidden">{t("Search.Results")}</h3>
+            <h3 className="collab-search-results-heading u-hide-above-sm font-sm">{t("Search.Results")}</h3>
 
             {/* results list */}
             {!atMax && query.length >= 3 && userList !== null

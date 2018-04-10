@@ -984,6 +984,11 @@ utility classes
     display: none !important;
   }
 }
+.u-hide-above-sm {
+  @add-mixin min-sm {
+    display: none !important;
+  }
+}
 
 /* vertially align child content via flexbox */
 .u-vertical-align-children {

@@ -7,7 +7,11 @@ layout
 /* set max-width and min-height on popover */
 .collab-form-container {
   max-width: 72.5rem;
-  min-height: 42rem;
+  min-height: calc(100vh - 2rem);
+
+  @add-mixin min-sm {
+    min-height: 42rem;
+  }
 }
 
 /* adjust padding on bigger screens */
@@ -20,39 +24,85 @@ layout
 /* 2 column layout */
 .collab-outer {
   display: flex;
+  flex-direction: column;
   margin-top: var(--gutter-md);
 }
-.collab-controls,
-.collab-search-results {
-  display: inline-block; /* fallback */
-  vertical-align: top; /* thx blueprint */
-}
-.collab-controls {
-  width: 17.3125rem;
-  top: 1rem; /* baseline adjustment */
-}
-.collab-search-results {
-  width: calc(100% - 17.3125rem - 3.125rem);
-  left: 3.125rem;
 
-  /* card layout */
-  & .collab-list-results {
-    @add-mixin card-layout-base;
+/* small screen adjustments */
+@add-mixin max-xs {
+  /* swap position of selected collaborators and search controls */
+  .collab-selections {
+    top: -16rem;
+  }
+  .collab-search-controls {
+    top: 14rem;
+  }
+}
+
+/* 2 column controls */
+@media (min-width: 480px) and (max-width: 767px) {
+  .collab-controls {
+    display: flex;
+    width: 100%;
+
+    & > .collab-search-controls,
+    & > .collab-selections {
+      width: 50%;
+      width: calc(50% - 0.75rem);
+    }
+
+    & .collab-selections {
+      margin-top: 0;
+      left: 1.5rem;
+    }
+  }
+}
+
+/* 2 column layout */
+@add-mixin min-sm {
+  .collab-outer {
+    flex-direction: row;
+  }
+  .collab-controls,
+  .collab-search-results {
+    display: inline-block; /* fallback */
+    vertical-align: top; /* thx blueprint */
+  }
+  .collab-controls {
+    width: 17.3125rem;
+    top: 1rem; /* baseline adjustment */
+  }
+  .collab-search-results {
+    width: calc(100% - 17.3125rem - 3.125rem);
+    left: 3.125rem;
+  }
+}
+
+
+/* card layout */
+.collab-list-results {
+  @add-mixin card-layout-base;
+
+  @add-mixin min-xs {
+    @add-mixin card-layout-2col;
+  }
+
+  @add-mixin min-md {
     @add-mixin card-layout-3col;
   }
+}
 
-  /* message theming */
-  & .collab-results-message {
-    border: 1px solid var(--light-1);
-    border-radius: var(--radius-md);
-    padding: var(--gutter-lg);
-  }
+/* message theming */
+.collab-results-message {
+  border: 1px solid var(--light-1);
+  border-radius: var(--radius-md);
+  padding: var(--gutter-lg);
+}
 
-  /* button group */
-  & .clear-collab-button-group {
-    top: 0.25em;
-    padding-bottom: 0.75em;
-  }
+/* button group */
+.clear-collab-button-group {
+  top: 0.25em;
+  padding-bottom: 0.75em;
 }
 
 
@@ -70,9 +120,16 @@ search messages
     }
   }
 }
+
+/* space out collab search results when visible */
+.collab-search-results-heading {
+  @add-mixin max-sm {
+    margin-top: 1.5rem;
+  }
+}
 /* if there is no list before the message,
 make the message take up the full height of the container */
-h3.u-visually-hidden + .collab-results-message {
+.collab-search-results-heading + .collab-results-message {
   position: absolute;
   height: 100%;
   height: calc(100% - 0.25rem);

@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import Loading from "components/Loading";
 import {fetchData} from "datawheel-canon";
+import Slide from "pages/Slide.jsx";
 import "./LessonPlan.css";
 
 class LessonPlan extends Component {
@@ -25,10 +26,25 @@ class LessonPlan extends Component {
     const {lid} = this.props.params;
     const {islands} = this.props.data;
 
-    console.log(islands);
+    const currentIsland = islands.find(i => i.id === lid);
+
+    if (lid && !currentIsland) return <Loading />;
 
     const islandList = islands.map(i => 
       <li key={i.id}><Link to={`/lessonplan/${i.id}`}>{i.name}</Link></li>
+    );
+
+    console.log(currentIsland);
+
+    const levelList = currentIsland.levels.map(l => 
+      <li key={l.id}>
+        <h3 key={l.id}>{`Level ${l.ordering + 1}: ${l.name}`}</h3>
+        <ul>
+          {l.slides.map(s => 
+            <li key={s.id}>{s.title}</li>
+          )}
+        </ul>
+      </li>
     );
 
     return (
@@ -41,7 +57,15 @@ class LessonPlan extends Component {
             </ul>
           </div>
           : <div id="island-view">
-            i am island {lid}
+            <h1>{currentIsland.name}</h1>
+            <div id="island-title">{currentIsland.description}</div>
+            <h3>Content Overview:</h3>
+            <div id="cheat-sheet" style={{backgroundColor: "white"}} dangerouslySetInnerHTML={{__html: currentIsland.cheatsheet}} />
+            <div id="all-levels">
+              <ul>
+                {levelList}
+              </ul>
+            </div>
           </div>
         }
       </div>
@@ -49,8 +73,10 @@ class LessonPlan extends Component {
   }
 }
 
+// whut
+
 LessonPlan.need = [
-  fetchData("islands", "/api/islands/nested")
+  fetchData("islands", "/api/islands/nested?lang=<i18n.locale>")
 ];
 
 const mapStateToProps = state => ({

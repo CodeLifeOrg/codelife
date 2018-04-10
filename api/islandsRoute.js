@@ -1,4 +1,5 @@
 const translate = require("../tools/translate.js");
+const translateObjArray = require("../tools/translateObjArray.js");
 
 module.exports = function(app) {
 
@@ -13,12 +14,21 @@ module.exports = function(app) {
   });
 
   app.get("/api/islands/nested", (req, res) => {
+    const {lang} = req.query;
+    delete req.query.lang;
     db.islands.findAll({
       where: req.query,
       include: [{association: "levels", include: [{association: "slides"}]}]
-    }).then(u => {
-      u = translate(req.headers.host, "pt", u);
-      res.json(u).end();
+    }).then(islands => {
+      /*
+      islands = translateObjArray(lang, islands);
+      islands.forEach(island => {
+        island.levels = translateObjArray(lang, island.levels);
+        island.levels.forEach(level => {
+          level.slides = translateObjArray(lang, level.slides);
+        });
+      });*/
+      res.json(islands).end();
     });
   });
 

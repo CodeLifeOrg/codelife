@@ -65,7 +65,7 @@ class CodeEditor extends Component {
    */
   componentDidMount() {
     if (window) window.addEventListener("message", this.recRef, false);
-    this.ping = setInterval(this.pingRemoteRef, 50);
+    this.ping = setInterval(this.pingRemoteRef, 1000);
   }
 
   /**
@@ -600,7 +600,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, console, island, readOnly, t, tabs} = this.props;
+    const {codeTitle, showConsole, island, readOnly, t, tabs} = this.props;
     const {baseRules, titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
@@ -675,7 +675,7 @@ class CodeEditor extends Component {
             </div>
             : null }
           <iframe className="panel-content iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
-          { console
+          { showConsole
             ? <div className={ `drawer ${openConsole ? "open" : ""}` }>
               <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count">{ embeddedConsole.length }</span> : null }</div>
               <div className="contents">{consoleText}</div>
@@ -689,7 +689,7 @@ class CodeEditor extends Component {
 
 CodeEditor.defaultProps = {
   blurred: false,
-  console: true,
+  showConsole: true,
   island: false,
   readOnly: false,
   showEditor: true,

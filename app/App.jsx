@@ -64,8 +64,8 @@ class App extends Component {
 
     const routes = this.props.router.location.pathname.split("/");
 
-    const authRoute = routes[1] === "login";
-    const bareRoute = ["projects", "codeBlocks"].includes(routes[1]) && routes.length === 4;
+    const authRoute = routes[0] === "login";
+    const bareRoute = ["projects", "codeBlocks"].includes(routes[0]) && routes.length === 3;
 
     const meta = header.meta.slice();
 
@@ -77,7 +77,7 @@ class App extends Component {
     meta.push({property: "og:locale", content: i18n.locale});
 
     let theme = "";
-    const lookup = routes[1] === "island" && routes.length > 2 ? routes[2] : false;
+    const lookup = routes[0] === "island" && routes.length > 1 ? routes[1] : false;
     const currentIsland = islands.find(island => island.id === lookup);
     if (currentIsland) theme = currentIsland.theme;
 

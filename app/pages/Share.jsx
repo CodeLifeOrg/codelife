@@ -76,7 +76,7 @@ class Share extends Component {
 
     return (
       <div id="share">
-        <CodeEditor initialValue={this.state.content.studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} console={false} />
+        <CodeEditor initialValue={this.state.content.studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
         <div id="tag">
           <div className="info">
             <span className="pt-icon-standard pt-icon-code"></span>

@@ -15,16 +15,18 @@ class Quiz extends Component {
   }
 
   onChooseAnswer(question) {
-    const {t} = this.props;
-    const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
-    if (question.isCorrect) {
-      toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
-      if (this.props.unblock) this.props.unblock();
+    if (!this.props.readOnly) {
+      const {t} = this.props;
+      const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
+      if (question.isCorrect) {
+        toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
+        if (this.props.unblock) this.props.unblock();
+      }
+      else {
+        toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});
+      }
+      this.setState({activeQ: question.text});
     }
-    else {
-      toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});
-    }
-    this.setState({activeQ: question.text});
   }
 
   componentDidMount() {

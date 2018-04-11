@@ -144,9 +144,12 @@ class CodeBlock extends Component {
 
     return (
       <div className="codeBlock" id="codeBlock">
-        <div style={{textAlign: "right"}} className="codeblock-filename-form">
-          {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
-        </div>
+        {!this.props.readOnly
+          ? <div style={{textAlign: "right"}} className="codeblock-filename-form">
+            {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
+          </div>
+          : null
+        }
         <div className="codeBlock-body">
           <Alert
             isOpen={ this.state.resetAlert }
@@ -160,25 +163,28 @@ class CodeBlock extends Component {
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: island.prompt}} />
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor readOnly={this.props.readOnly} ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
-        <div className="codeBlock-foot">
-          <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
-          { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
-          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
-          <Popover
-            interactionKind={PopoverInteractionKind.CLICK}
-            popoverClassName="pt-popover-content-sizing"
-            position={Position.RIGHT_BOTTOM}
-          >
-            <Button intent={Intent.PRIMARY} iconName="help">{t("Help")}</Button>
-            <div>
-              <h5>{island.name} - {t("Help")}</h5>
-              <p dangerouslySetInnerHTML={{__html: island.cheatsheet}} />
-            </div>
-          </Popover>
-          <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
-        </div>
+        {!this.props.readOnly
+          ? <div className="codeBlock-foot">
+            <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
+            { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
+            { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
+            <Popover
+              interactionKind={PopoverInteractionKind.CLICK}
+              popoverClassName="pt-popover-content-sizing"
+              position={Position.RIGHT_BOTTOM}
+            >
+              <Button intent={Intent.PRIMARY} iconName="help">{t("Help")}</Button>
+              <div>
+                <h5>{island.name} - {t("Help")}</h5>
+                <p dangerouslySetInnerHTML={{__html: island.cheatsheet}} />
+              </div>
+            </Popover>
+            <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
+          </div>
+          : null
+        }
       </div>
     );
   }

@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Link} from "react-router";
-import Loading from "components/Loading";
 import {fetchData} from "datawheel-canon";
-import Slide from "pages/Slide.jsx";
 import "./LessonPlan.css";
+
+import CodeBlock from "components/CodeBlock";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -36,6 +36,7 @@ class LessonPlan extends Component {
 
     const {lid} = this.props.params;
     const {islands} = this.props.data;
+    const {t} = this.props;
 
     const currentIsland = islands.find(i => i.id === lid);
 
@@ -54,7 +55,7 @@ class LessonPlan extends Component {
           <ul>
             {l.slides.sort(s).map(s => {
               const SlideComponent = compLookup[s.type];
-              return <li key={s.id}><SlideComponent {...s} island={currentIsland.theme}/></li>;
+              return <li key={s.id} style={{backgroundColor: "white"}}><SlideComponent {...s} readOnly={true} island={currentIsland.theme}/></li>;
             })}
           </ul>
         </li>
@@ -71,6 +72,7 @@ class LessonPlan extends Component {
             </ul>
           </div>
           : <div id="island-view">
+            <Link to="/lessonplan">{`<== ${t("Back to Island List")}`}</Link>
             <h1>{currentIsland.name}</h1>
             <div id="island-title">{currentIsland.description}</div>
             <h3>Content Overview:</h3>
@@ -79,6 +81,13 @@ class LessonPlan extends Component {
               <ul>
                 {levelList}
               </ul>
+            </div>
+            <h3>Final Codeblock:</h3>
+            <div id="codeblock-stub" style={{backgroundColor: "white"}}>
+              <CodeBlock
+                island={currentIsland}
+                readOnly={true}
+              />
             </div>
           </div>
         }

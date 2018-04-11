@@ -81,9 +81,9 @@ class Level extends Component {
   }
 
   componentDidUpdate() {
-    const {location} = this.props;
+    const {location} = this.props.router;
     const {currentIsland, loading} = this.state;
-    if (!loading && !currentIsland || currentIsland && currentIsland.id !== location.pathname.split("/")[2]) {
+    if (!loading && !currentIsland || currentIsland && currentIsland.id !== location.pathname.split("/")[1]) {
       this.setState({currentIsland: null, levels: null, userProgress: null, loading: true}, this.loadFromDB);
     }
   }

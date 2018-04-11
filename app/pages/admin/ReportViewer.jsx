@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import Thread from "components/Thread";
 import Comment from "components/Comment";
 import Loading from "components/Loading";
@@ -66,6 +66,7 @@ class ReportViewer extends Component {
 
   handleBan(type, report) {
     const {t} = this.props;
+    const {browserHistory} = this.context;
     if (type) {
       axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}).then(resp => {
         if (resp.status === 200) {
@@ -239,6 +240,10 @@ class ReportViewer extends Component {
     );
   }
 }
+
+ReportViewer.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 ReportViewer = connect(state => ({
   auth: state.auth

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import {changePassword, resetPassword, validateReset} from "datawheel-canon/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
@@ -62,6 +62,7 @@ class PasswordReset extends Component {
 
     const {auth, t} = this.props;
     const {email, submitted, toast, token} = this.state;
+    const {browserHistory} = this.context;
 
     if (!token && auth.msg === RESET_TOKEN_SUCCESS) {
       this.setState({token: true});
@@ -168,6 +169,10 @@ class PasswordReset extends Component {
 
   }
 }
+
+PasswordReset.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth

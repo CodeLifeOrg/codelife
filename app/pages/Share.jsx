@@ -32,8 +32,8 @@ class Share extends Component {
     const {username, filename} = this.props.params;
     let path = "";
 
-    if (this.props.location.pathname.includes("/codeBlocks/")) path = "codeBlocks";
-    if (this.props.location.pathname.includes("/projects/")) path = "projects";
+    if (this.props.location.pathname.includes("codeBlocks/")) path = "codeBlocks";
+    if (this.props.location.pathname.includes("projects/")) path = "projects";
 
     const cget = axios.get(`/api/${path}/byUsernameAndFilename?username=${username}&filename=${filename}`);
     const rget = axios.get("/api/reports");

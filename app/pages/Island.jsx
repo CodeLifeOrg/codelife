@@ -1,6 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import "./Island.css";
@@ -53,6 +53,8 @@ class Island extends Component {
     const {userProgress} = this.state;
     const {auth, islands} = this.props;
 
+    const {browserHistory} = this.context;
+
     if (!auth.user) browserHistory.push("/");
 
     if (islands === [] || !userProgress) return <Loading />;
@@ -74,6 +76,10 @@ class Island extends Component {
     );
   }
 }
+
+Island.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

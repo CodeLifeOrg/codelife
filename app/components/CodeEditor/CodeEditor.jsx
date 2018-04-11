@@ -271,14 +271,19 @@ class CodeEditor extends Component {
   }
 
   /**
-   * Given the text currently in the editor, send a postMessage containing that source to the sandbox for rendering.
-   * @param {String} theText The text to be rendered in the sandbox
+   * Given the text currently in the editor, determine if it has open and closing script tags.
+   * @param {String} theText The current editor text
    */
   hasJS(theText) {
-    const re = new RegExp(`<script[^>]*>`, "g");
-    const open = theText.search(re);
-    const close = theText.indexOf("</script>");
-    return open !== -1 && close !== -1 && open < close;
+    if (theText) {
+      const re = new RegExp("<script[^>]*>", "g");
+      const open = theText.search(re);
+      const close = theText.indexOf("</script>");
+      return open !== -1 && close !== -1 && open < close;
+    } 
+    else {
+      return false;
+    }
   }
 
   /**

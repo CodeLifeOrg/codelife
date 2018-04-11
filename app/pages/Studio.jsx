@@ -1,6 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
@@ -28,16 +28,19 @@ class Studio extends Component {
   }
 
   onCreateProject(project) {
+    const {browserHistory} = this.context;
     this.setState({currentProject: project});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}/edit`);
   }
 
   onDeleteProject(newproject) {
+    const {browserHistory} = this.context;
     this.setState({currentProject: newproject});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
   }
 
   openProject(pid) {
+    const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data[0]});
       browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}/edit`);
@@ -51,6 +54,7 @@ class Studio extends Component {
   shareProject() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
+    const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       // browserHistory.push(`/share/project/${this.state.currentProject.id}`);
       browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
@@ -122,6 +126,7 @@ class Studio extends Component {
     const {auth, t} = this.props;
     const {activeTabId, currentProject, titleText, execState} = this.state;
     const {filename} = this.props.params;
+    const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -156,6 +161,10 @@ class Studio extends Component {
     );
   }
 }
+
+Studio.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Studio = connect(state => ({
   auth: state.auth

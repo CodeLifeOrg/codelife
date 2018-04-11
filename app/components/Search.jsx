@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Icon} from "@blueprintjs/core";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import "./Search.css";
 
 class Search extends Component {
@@ -60,6 +59,7 @@ class Search extends Component {
   onKeyDown(e) {
     const {selectedIndex, results} = this.state;
     const allResults = results.users.concat(results.projects);
+    const {browserHistory} = this.context;
     if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter") {
       if (selectedIndex === null) {
         if (e.key === "ArrowDown") {
@@ -189,6 +189,10 @@ class Search extends Component {
     );
   }
 }
+
+Search.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Search = connect(state => ({
   auth: state.auth

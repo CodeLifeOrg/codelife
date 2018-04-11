@@ -10,7 +10,7 @@ import GlossaryBuilder from "pages/admin/GlossaryBuilder";
 import ReportViewer from "pages/admin/ReportViewer";
 import Statistics from "pages/admin/Statistics";
 import ContestViewer from "pages/admin/ContestViewer";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 
 import "./AdminPanel.css";
 
@@ -26,6 +26,7 @@ class AdminPanel extends Component {
   }
 
   componentDidMount() {
+    const {browserHistory} = this.context;
     if (this.props.auth.user.role < 1) browserHistory.push("/");
     if (!this.props.params.tab) {
       this.handleTabChange("lesson-builder");
@@ -35,6 +36,7 @@ class AdminPanel extends Component {
   }
 
   setPath(node) {
+    const {browserHistory} = this.context;
     let path = "/admin/lesson-builder/";
     if (node.itemType === "island") {
       path += node.id;
@@ -50,6 +52,7 @@ class AdminPanel extends Component {
   }
 
   handleTabChange(activeTabId) {
+    const {browserHistory} = this.context;
     if (activeTabId === "lesson-builder" && this.state.currentNode) {
       this.setPath(this.state.currentNode);
     }
@@ -83,6 +86,10 @@ class AdminPanel extends Component {
     );
   }
 }
+
+AdminPanel.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 AdminPanel = connect(state => ({
   auth: state.auth

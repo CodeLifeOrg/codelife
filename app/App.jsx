@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {isAuthenticated} from "datawheel-canon";
+import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
 import header from "./helmet.js";
@@ -24,6 +25,10 @@ class App extends Component {
 
   componentWillMount() {
     this.props.isAuthenticated();
+  }
+
+  getChildContext() {
+    return {browserHistory: this.props.router};
   }
 
   componentDidUpdate(prevProps) {
@@ -104,6 +109,10 @@ class App extends Component {
 
   }
 }
+
+App.childContextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

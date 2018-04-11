@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree} from "@blueprintjs/core";
 import Loading from "components/Loading";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 
 import "./Browser.css";
 
@@ -183,6 +183,7 @@ class Browser extends Component {
 
   handleNodeClick(node) {
     const {currentNode} = this.state;
+    const {browserHistory} = this.context;
     if (!currentNode) {
       node.isSelected = true;
     }
@@ -231,6 +232,10 @@ class Browser extends Component {
     );
   }
 }
+
+Browser.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Browser = connect(state => ({
   auth: state.auth

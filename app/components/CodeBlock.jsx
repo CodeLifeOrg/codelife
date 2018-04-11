@@ -1,8 +1,8 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import React, {Component} from "react";
-import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
+import PropTypes from "prop-types";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
@@ -81,6 +81,7 @@ class CodeBlock extends Component {
   shareCodeblock() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
+    const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
     }
@@ -189,6 +190,10 @@ class CodeBlock extends Component {
     );
   }
 }
+
+CodeBlock.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 CodeBlock = connect(state => ({
   auth: state.auth

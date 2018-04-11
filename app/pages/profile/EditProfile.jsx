@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, {Component} from "react";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Intent, Position, Toaster} from "@blueprintjs/core";
@@ -62,6 +62,7 @@ class EditProfile extends Component {
   }
 
   saveUserInfo(e) {
+    const {browserHistory} = this.context;
     e.preventDefault();
     this.setState({loading: true});
     const {t} = this.props;
@@ -325,6 +326,10 @@ class EditProfile extends Component {
     );
   }
 }
+
+EditProfile.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 EditProfile = connect(state => ({
   user: state.auth.user

@@ -13,7 +13,7 @@ import Privacy from "pages/Privacy";
 import Profile from "pages/profile/Profile";
 import Share from "pages/Share";
 import Slide from "pages/Slide";
-import Studio from "pages/Studio";
+import Projects from "pages/Projects";
 import Survey from "pages/Survey";
 import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
@@ -34,9 +34,9 @@ export default function RouteCreate() {
       <Route path="island/:lid" component={Level} />
       <Route path="island/:lid/:mlid(/:sid)" component={Slide} />
 
-      <Route path="projects/:username" component={Studio} />
+      <Route path="projects/:username" component={Projects} />
       <Route path="projects/:username/:filename" component={Share} />
-      <Route path="projects/:user/:filename/edit" component={Studio} />
+      <Route path="projects/:user/:filename/edit" component={Projects} />
 
       <Route path="profile/:username" component={Profile} />
       <Route path="profile/:username/edit" component={EditProfile} />

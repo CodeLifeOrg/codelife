@@ -6,12 +6,12 @@ import {translate} from "react-i18next";
 import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
 
 import CodeBlockList from "components/CodeBlockList";
-import Projects from "components/Projects";
+import ProjectSwitcher from "components/ProjectSwitcher";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 
-import "./Studio.css";
+import "./Projects.css";
 
-class Studio extends Component {
+class Projects extends Component {
 
   constructor(props) {
     super(props);
@@ -19,7 +19,8 @@ class Studio extends Component {
       activeTabId: "projects-tab",
       mounted: false,
       execState: false,
-      currentProject: null
+      currentProject: null,
+      collabProject: true
     };
   }
 
@@ -112,10 +113,10 @@ class Studio extends Component {
     }
   }
 
-  handleTabChange(activeTabId) {
+  /* handleTabChange(activeTabId) {
     console.log(activeTabId)
     this.setState({activeTabId});
-  }
+  } */
 
   executeCode() {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
@@ -124,14 +125,14 @@ class Studio extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {activeTabId, currentProject, titleText, execState} = this.state;
+    const {activeTabId, collabProject, currentProject, titleText, execState} = this.state;
     const {filename} = this.props.params;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
 
     const allCodeBlockRef = <CodeBlockList/>;
-    const projectRef = <Projects  
+    const projectRef = <ProjectSwitcher
       projectToLoad={filename}
       onCreateProject={this.onCreateProject.bind(this)}
       onDeleteProject={this.onDeleteProject.bind(this)}
@@ -140,34 +141,95 @@ class Studio extends Component {
     />;
 
     return (
-      <div className="studio">
-        <div className="head">
-          <h1 className="title">{ t("Projects") }</h1>
-          { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
-          <div className="buttons">
-            { currentProject ? <span className="pt-button" onClick={this.shareProject.bind(this)}>{ t("Share") }</span> : null }
-            { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{ t("Execute") }</button> : null }
-            <button className="pt-button pt-intent-success" onClick={this.saveCodeToDB.bind(this)}>{ t("Save") }</button>
+      <div className="projects">
+
+        {/* hidden h1 for accessibility */}
+        <h1 className="u-visually-hidden">{ t("Projects") }</h1>
+
+
+        <div className="project-body">
+
+          {/* controls */}
+          <div className="project-controls">
+
+            {/* current file */}
+            <h2 className="project-title font-lg">{filename}</h2>
+
+            <h3 className="project-subtitle font-sm">{t("Actions")}</h3>
+
+            {/* list of actions */}
+            <ul className="project-action-list font-xs u-list-reset">
+
+              {/* save project */}
+              <li className="project-action-item">
+                <button className="project-action-button u-unbutton link" onClick={this.saveCodeToDB.bind(this)}>
+                  <span className="project-action-button-icon pt-icon pt-icon-floppy-disk" />
+                  { t("Project.Save") }
+                </button>
+              </li>
+
+              {/* execute code */}
+              { execState ? <li className="project-action-item">
+                <button className="project-action-button u-unbutton link" onClick={this.executeCode.bind(this)}>
+                  <span className="project-action-button-icon pt-icon pt-icon-refresh" />
+                  { t("Project.Execute") }
+                </button>
+              </li> : null }
+
+              {/* add / manage collaborators */}
+              { currentProject ? <li className="project-action-item">
+                <button className="project-action-button u-unbutton link">
+                  <span className="project-action-button-icon pt-icon pt-icon-people" />
+                  { !collabProject ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") } 👈
+                </button>
+              </li> : null }
+
+              {/* share project */}
+              { currentProject ? <li className="project-action-item">
+                <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
+                  <span className="project-action-button-icon pt-icon pt-icon-share" />
+                  { t("Project.Share") }
+                </button>
+              </li> : null }
+
+              {/* delete / leave project */}
+              { currentProject ? <li className="project-action-item">
+                <button className="project-action-button u-unbutton link">
+                  <span className={ !collabProject ? "project-action-button-icon pt-icon pt-icon-trash" : "project-action-button-icon pt-icon pt-icon-log-out" } />
+                  { !collabProject ? t("Project.Delete") : t("Project.Leave") } 👈
+                </button>
+              </li> : null }
+
+            </ul>
+
+            {/* project switcher */}
+            <ProjectSwitcher
+              projectToLoad={filename}
+              onCreateProject={this.onCreateProject.bind(this)}
+              onDeleteProject={this.onDeleteProject.bind(this)}
+              openProject={this.openProject.bind(this)}
+              onClickProject={this.onClickProject.bind(this)} />
           </div>
-        </div>
-        <div className="body">
-          <Tabs2 className="studio-panel" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-            <Tab2 id="projects-tab" key="projects" className="projects" title={t("Projects")} panel={ projectRef } />
-            <Tab2 id="code-blocks-tab" key="code-blocks" className="code-blocks" title={t("CodeBlocks")} panel={ allCodeBlockRef } />
-          </Tabs2>
-          <CodeEditor codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)} initialValue={currentProject ? currentProject.studentcontent : ""} ref={c => this.editor = c} />
+
+          {/* editor */}
+          <div className="project-editor">
+            <CodeEditor
+              codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)}
+              initialValue={currentProject ? currentProject.studentcontent : ""}
+              ref={c => this.editor = c} />
+          </div>
         </div>
       </div>
     );
   }
 }
 
-Studio.contextTypes = {
+Projects.contextTypes = {
   browserHistory: PropTypes.object
 };
 
-Studio = connect(state => ({
+Projects = connect(state => ({
   auth: state.auth
-}))(Studio);
-Studio = translate()(Studio);
-export default Studio;
+}))(Projects);
+Projects = translate()(Projects);
+export default Projects;

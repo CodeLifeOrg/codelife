@@ -1,0 +1,121 @@
+@import '../mixins.css';
+
+.projects {
+  @add-mixin slide-theme;
+  @add-mixin slide-sizing;
+
+  /* layout */
+  & .project-body {
+    align-self: stretch;
+    display: flex;
+    flex: 1;
+
+    /* stacked layout */
+    @add-mixin max-sm {
+      flex-direction: column;
+    }
+
+    /* fallback */
+    & > * {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    /* controls */
+    & .project-controls {
+      align-self: stretch;
+
+      /* sidebar left layout */
+      @add-mixin min-sm {
+        width: 300px;
+        padding-right: var(--gutter-lg);
+      }
+    }
+
+    /* NOTE: additional styles found in components/SlideSwitcher.css */
+
+    /* editor */
+    & .project-editor {
+      align-self: stretch;
+      flex: 1;
+
+      /* make code editor take up 100% height */
+      & > div {
+        height: 100%;
+      }
+
+      /* sidebar left layout */
+      @add-mixin min-sm {
+        width: calc(100% - 300px);
+        padding-left: var(--gutter-lg);
+      }
+    }
+  }
+}
+
+
+/* controls */
+.project-controls {
+
+  /* the name of the current project */
+  & .project-title {
+    text-transform: none;
+    margin-bottom: 0.8em;
+  }
+
+  /* extend button clickability */
+  & .project-action-button {
+    padding-top: 0.375em;
+    padding-bottom: 0.375em;
+    display: block;
+    width: 100%;
+    text-align: left; /* override button default */
+  }
+  /* space out icon and text */
+  & .project-action-button-icon {
+    font-size: 1.1666em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+  }
+}
+
+
+/* list of mini islands
+.project .snippets-list {
+  @add-mixin list-reset;
+
+  /* island list item
+  & .snippet {
+    /* space out islands
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    /* make it look clickable
+    /* TODO: make these buttons
+    cursor: pointer;
+    /* theming
+    border-radius: var(--radius-sm);
+    /* transitions
+    transition:
+      background-color 0.2s,
+      padding 0.1s;
+
+    /* interations
+    &:hover, &:focus {
+      background-color: var(--sky-light);
+      padding-left: 0.5em;
+    }
+  }
+
+  /* island icon
+  & .icon {
+    height: var(--gutter-md);
+    margin-right: var(--gutter-xxs);
+    vertical-align: middle;
+    width: var(--gutter-md);
+  }
+
+  /* actual card list; add padding when visible
+  & .pt-collapse-body[aria-hidden=false] {
+    padding: var(--gutter-xs);
+  }
+} */

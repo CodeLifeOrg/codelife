@@ -1,13 +1,14 @@
 import React, {Component} from "react";
+import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
-import "./Projects.css";
+import "./ProjectSwitcher.css";
 
 import {Alert, Intent, Tooltip, Position, Icon, Dialog, Button, MenuItem} from "@blueprintjs/core";
 import CollabSearch from "./CollabSearch";
 
-class Projects extends Component {
+class ProjectSwitcher extends Component {
 
   constructor(props) {
     super(props);
@@ -100,9 +101,9 @@ class Projects extends Component {
     this.setState({projectName: e.target.value});
   }
 
-  handleClick(project) {
+  /* handleClick(project) {
     if (this.props.onClickProject(project)) this.setState({currentProject: project});
-  }
+  } */
 
   createNewProject(projectName) {
     // Trim leading and trailing whitespace from the project title
@@ -233,14 +234,18 @@ class Projects extends Component {
 
   render() {
 
-    const {t} = this.props;
+    const {auth, t} = this.props;
     const {deleteAlert, leaveAlert} = this.state;
 
     const showDeleteButton = this.state.projects.length > 1;
 
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
-      <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
+      <li className="project-switcher-item" key={project.id}>
+        <Link to={`/projects/${auth.user.username}/${project.name}/edit`} className="project-switcher-link link">{ project.name }</Link>
+      </li>
+
+      /* <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
 
         {
           project.collaborators.length
@@ -263,7 +268,7 @@ class Projects extends Component {
                 <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
               </Dialog>
             </div>
-          </Tooltip>&nbsp;&nbsp;&nbsp;
+          </Tooltip>
           { showDeleteButton
             ? <Tooltip content={ t("Delete Project") }>
               <span className="pt-icon-standard pt-icon-trash" onClick={ () => this.deleteProject(project) }></span>
@@ -271,32 +276,56 @@ class Projects extends Component {
             : null
           }
         </div>
-      </li>);
+      </li> */
+    );
 
     const collabItems = this.state.collabs.map(collab =>
-      <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>
+      <li to={collab.id} className="project-switcher-item" key={collab.id}>
+        <Link to={`/projects/${auth.user.username}/${collab.name}/edit`} className="project-switcher-link link">{ collab.name }</Link>
+      </li>
+
+      /* <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>
         <Tooltip position={Position.TOP_LEFT} content={ `${t("Owner")}: ${collab.username}` }>
           <div><span className="project-title" onClick={() => this.handleClick(collab)}>{collab.name}</span>&nbsp;<Icon iconName="people" /></div>
         </Tooltip>
         <Tooltip position={Position.TOP_RIGHT} content={ `${t("Leave Project")}` }>
           <span className="pt-icon-standard pt-icon-log-out" onClick={() => this.showLeaveAlert(collab)}></span>
-        </Tooltip>
-      </li>);
+        </Tooltip> */
+    );
 
     return (
-      <div id="projects">
-        <div className="project-new">
-          <div className="project-new-title">{t("Create a New Project")}</div>
-          <div className="project-new-form">
-            <input className="pt-input project-new-filename" type="text" value={this.state.projectName} placeholder={ t("Project Title") } onChange={this.handleChange.bind(this)} />
-            <button className="pt-button" onClick={this.clickNewProject.bind(this)}>{ t("Create") }</button>
-          </div>
+      <div className="project-switcher font-xs">
+
+        {/* Switch to project heading */}
+        <h2 className="project-switcher-heading font-md">{ t("Project.SwitcherHeading") }</h2>
+
+        {/* created by user */}
+        <div className="my-project-switcher">
+          <h3 className="project-switcher-subhead font-xs">{ t("Project.MyProjects") }</h3>
+          <ul className="project-switcher-list u-list-reset">
+            {projectItems}
+          </ul>
         </div>
-        <ul className="project-list">
-          {projectItems}
-          { collabItems ? <hr/> : null /* not working ¯\_(ツ)_/¯ */ }
-          {collabItems}
-        </ul>
+
+        {/* joined by user */}
+        { collabItems.length > 0
+          ? <div className="collab-project-switcher">
+
+            <h3 className="project-switcher-subhead font-xs">{ t("Project.JoinedProjects") }</h3>
+
+            <ul className="project-switcher-list u-list-reset">
+              {collabItems}
+            </ul>
+          </div>
+          : null
+        }
+
+        {/* new project */}
+        <button className="new-project-button pt-button pt-intent-primary">
+          <span className="pt-icon pt-icon-application" />
+          { t("create new project") } 👈
+        </button>
+
         <Alert
           isOpen={ deleteAlert ? true : false }
           cancelButtonText={ t("Cancel") }
@@ -321,8 +350,9 @@ class Projects extends Component {
   }
 }
 
-Projects = connect(state => ({
+ProjectSwitcher = connect(state => ({
+  auth: state.auth,
   user: state.auth.user
-}))(Projects);
-Projects = translate()(Projects);
-export default Projects;
+}))(ProjectSwitcher);
+ProjectSwitcher = translate()(ProjectSwitcher);
+export default ProjectSwitcher;

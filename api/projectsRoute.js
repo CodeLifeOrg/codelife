@@ -182,21 +182,22 @@ module.exports = function(app) {
 
   // Used by Projects to delete a project
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
-    db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => {
-      db.projects.findAll({
-        where: {
-          uid: req.user.id
-        },
-        include: pInclude
-      })
-        .then(pRows =>
-          res.json(pRows
-            .map(p => flattenProject(req.user, p.toJSON()))
-            .filter(p => !p.hidden)
-            .sort((a, b) => a.name < b.name ? -1 : 1))
-            .end()
-        );
-    });
+    db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => 
+      db.projects_userprofiles.destroy({where: {pid: req.query.id}}).then(() => {
+        db.projects.findAll({
+          where: {
+            uid: req.user.id
+          },
+          include: pInclude
+        })
+          .then(pRows =>
+            res.json(pRows
+              .map(p => flattenProject(req.user, p.toJSON()))
+              .filter(p => !p.hidden)
+              .sort((a, b) => a.name < b.name ? -1 : 1))
+              .end()
+          );
+      }));
   });
 
 };

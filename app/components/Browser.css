@@ -1,0 +1,80 @@
+@import "../mixins.css";
+
+/* browser popover —  not nested within .browser */
+.browser-popover {
+  background-color: var(--white);
+  width: 250px;
+  height: auto;
+
+  /* default theming */
+  & > .pt-popover-content {
+    width: auto; /* override default width: max-content */
+    color: var(--black);
+    background-color: var(--white);
+
+    & > .browser-list {
+      /* account for 20px padding on parent,
+      which is necessary to hide the popover arrow shadow */
+      margin: -20px;
+      padding: var(--gutter-xs) 0;
+    }
+  }
+
+  /* icon color */
+  & .pt-tree-node-icon,
+  & .pt-tree-node-caret,
+  & .pt-icon-lock {
+    color: var(--dark-2);
+  }
+
+  /* make linked elements act like links & onclicky elements act like buttons */
+  & .pt-tree-node {
+    cursor: pointer;
+
+    & .pt-tree-node-caret {
+      cursor: default;
+    }
+
+    /* locked browser level */
+    &.is-locked {
+      opacity: 0.5;
+
+      & .pt-tree-node-label {
+        cursor: not-allowed;
+      }
+    }
+
+    /* interactions */
+    &:not(.slide):hover > .pt-tree-node-label {
+      color: var(--sky-dark);
+    }
+
+    /* unlocked browser level */
+    &:not(.is-locked) {
+      & .pt-tree-node-label:hover,
+      & .pt-tree-node-label:focus {
+        color: var(--sky-dark);
+      }
+    }
+
+    /* slides can't be selected */
+    &.slide {
+      cursor: default;
+    }
+    &.slide * {
+      pointer-events: none;
+    }
+    &.slide:not(.pt-tree-node-selected):hover .pt-tree-node-content {
+      color: inherit;
+      background: var(--white);
+    }
+
+    /* selected */
+    &.pt-tree-node-selected > .pt-tree-node-content,
+    &.pt-tree-node-selected > .pt-tree-node-content > .pt-tree-node-label:hover,
+    &.pt-tree-node-selected.slide:hover .pt-tree-node-content > .pt-tree-node-label {
+      color: var(--white);
+      background-color: var(--sky-dark);
+    }
+  }
+}

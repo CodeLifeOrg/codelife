@@ -51,7 +51,7 @@ class Browser extends Component {
   buildTree() {
     const {islands, levels, slides, progress, current} = this.state;
     const nodes = [];
-    const blockLabel = 
+    const blockLabel =
       <Tooltip content="You haven't unlocked this level yet!">
         <span className="pt-icon-standard pt-icon-lock"/>
       </Tooltip>;
@@ -77,7 +77,7 @@ class Browser extends Component {
       };
       if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
       islandObj.hasBeaten = progress.find(p => p.level === i.id) || i.id === current.id;
-      if (!islandObj.hasBeaten) islandObj.secondaryLabel = blockLabel;
+      if (!islandObj.hasBeaten) islandObj.secondaryLabel = blockLabel, islandObj.className = "is-locked";
       nodes.push(islandObj);
     }
     for (let l of levels) {
@@ -97,7 +97,7 @@ class Browser extends Component {
         };
         if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
         levelObj.hasBeaten = progress.find(p => p.level === l.id);
-        if (!levelObj.hasBeaten) levelObj.secondaryLabel = blockLabel;
+        if (!levelObj.hasBeaten) levelObj.secondaryLabel = blockLabel, levelObj.className = "is-locked";
         islandNode.childNodes.push(levelObj);
       }
     }
@@ -112,7 +112,7 @@ class Browser extends Component {
       if (levelNode) {
         const slideObj = {
           id: s.id,
-          className: s.id,
+          className: `${s.id} slide`,
           hasCaret: false,
           iconName: slideIcons[s.type],
           label: s.title,

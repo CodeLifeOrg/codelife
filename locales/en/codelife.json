@@ -6,6 +6,7 @@
   "About Me": "About Me",
   "About me": "About me",
   "Account": "Account",
+  "Actions": "Actions",
   "Activate": {
     "actions": {
       "ACTIVATE_SEND_FAILURE": "Error sending activation to {{email}}.",
@@ -19,6 +20,7 @@
   "All Rules Passing": "All Rules Passing",
   "Are you sure you want to leave this project?": "Are you sure you want to leave this project?",
   "Are you sure you want to reset the code to its original state?": "Are you sure you want to reset the code to its original state?",
+  "Back to Island List": "Back to Island List",
   "Ban Content": "Ban Content",
   "Ban this Page": "Ban this Page",
   "Birthday": "Birthday",
@@ -195,7 +197,10 @@
     "CallToAction": "Already have an account? Click here to Login!",
     "E-mail": "E-mail",
     "Facebook": "Facebook",
+    "Github": "",
+    "Google": "",
     "Instagram": "Instagram",
+    "LinkedIn": "",
     "Login": "Login",
     "Password": "Password",
     "Twitter": "Twitter",
@@ -238,6 +243,16 @@
   "Profile image": "Profile image",
   "Profile saved!": "Profile saved!",
   "Project": {
+    "AddCollaborators": "Add collaborators",
+    "Delete": "Delete project",
+    "Execute": "Execute project",
+    "JoinedProjects": "Projects I've joined",
+    "Leave": "Leave project",
+    "ManageCollaborators": "Manage collaborators",
+    "MyProjects": "Projects I've created",
+    "Save": "Save project",
+    "Share": "Share project",
+    "SwitcherHeading": "Switch to project",
     "View": "View project"
   },
   "Project Title": "Project Title",
@@ -370,6 +385,7 @@
   "buttonReset": "Reset",
   "by": "by",
   "codeblockWarn": "Codeblock's code will be shown after you complete the last level of this island.",
+  "create new project": "create new project",
   "deleteAlert": "Are you sure you want to delete \"{{projectName}}\"? This action cannot be undone.",
   "glossary": {
     "CSS": {

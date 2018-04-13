@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-.codeEditor {
+.code-editor {
   align-self: stretch;
   display: flex;
   flex: 1;
@@ -278,5 +278,71 @@
   & .panel-content {
     min-height: 0;
     max-height: 100%;
+  }
+}
+
+/* fullscreen toggle */
+.code-editor-fullscreen-button {
+  /* sizing */
+  width: 2.5rem; /* 40px */
+  height: 2.5rem; /* 40px */
+  padding: 0; /* override button default */
+  /* positioning */
+  position: absolute; /* take out of the flow */
+  top: -0.375em;
+  right: 1em;
+  z-index: 1; /* position above code editor */
+  /* theming */
+  text-align: center;
+  /* transitions */
+  &.pt-button { /* increase specificity */
+    transition: box-shadow 0.2s;
+  }
+
+  /* icon sizing */
+  & .code-editor-fullscreen-icon {
+    margin-right: 0; /* blueprint override */
+    font-size: 1.25rem; /* 20px */
+    line-height: 2.5rem; /* button height */
+    top: -1px; /* baseline adjustment */
+    /* transitons */
+    transition: transform 0.2s ease-out;
+  }
+
+  /* interactions */
+  &.pt-button { /* increase specificity */
+    &:hover {
+      opacity: 1; /* override button default */
+      box-shadow: 0 2px 1em rgba(8, 26, 24, 0.2) !important; /* override override, feels bad man */
+
+      /* yo dawg I heard you like transforms */
+      & .code-editor-fullscreen-icon {
+        transform: scale(1.15);
+      }
+    }
+  }
+  /* reset when clicked */
+  &:active .code-editor-fullscreen-icon {
+    transform: none;
+  }
+}
+
+/* fullscreen editor */
+.code-editor.is-fullscreen {
+  /* position above everything */
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20; /* position above navbar */
+
+  /* opposite button icon scaling */
+  & .code-editor-fullscreen-button .code-editor-fullscreen-icon,
+  & .code-editor-fullscreen-button:active .code-editor-fullscreen-icon {
+    transform: scale(1.15);
+  }
+  & .code-editor-fullscreen-button:hover .code-editor-fullscreen-icon {
+    transform: none;
   }
 }

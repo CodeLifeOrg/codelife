@@ -53,7 +53,8 @@ class CodeEditor extends Component {
         page: remotePage
       },
       openRules: false,
-      openConsole: false
+      openConsole: false,
+      fullscreenEditor: false
     };
     this.recRef = this.receiveMessage.bind(this);
     this.pingRemoteRef = this.pingRemote.bind(this);
@@ -280,7 +281,7 @@ class CodeEditor extends Component {
       const open = theText.search(re);
       const close = theText.indexOf("</script>");
       return open !== -1 && close !== -1 && open < close;
-    } 
+    }
     else {
       return false;
     }
@@ -597,11 +598,19 @@ class CodeEditor extends Component {
     this.setState({[drawer]: !this.state[drawer]});
   }
 
+  /**
+   * toggle fullscreen state
+   *
+   */
+  fullscreenEditorToggle() {
+    this.setState({fullscreenEditor: !this.state.fullscreenEditor});
+  }
+
   /* End of external functions */
 
   render() {
     const {codeTitle, showConsole, island, readOnly, t, tabs} = this.props;
-    const {baseRules, titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
+    const {baseRules, titleText, currentText, embeddedConsole, fullscreenEditor, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
       const t1 = this.evalType(args[0]);
@@ -623,7 +632,12 @@ class CodeEditor extends Component {
     });
 
     return (
-      <div className="codeEditor" id="codeEditor">
+      <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id="codeEditor">
+        <button className="code-editor-fullscreen-button pt-button pt-intent-primary" onClick={ this.fullscreenEditorToggle.bind(this) }>
+          <span className={!fullscreenEditor
+            ? "code-editor-fullscreen-icon pt-icon pt-icon-fullscreen"
+            : "code-editor-fullscreen-icon pt-icon pt-icon-minimize"} />
+        </button>
         {
           this.props.showEditor
             ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>

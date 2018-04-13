@@ -101,9 +101,9 @@ class ProjectSwitcher extends Component {
     this.setState({projectName: e.target.value});
   }
 
-  /* handleClick(project) {
+  handleClick(project) {
     if (this.props.onClickProject(project)) this.setState({currentProject: project});
-  } */
+  }
 
   createNewProject(projectName) {
     // Trim leading and trailing whitespace from the project title
@@ -242,7 +242,12 @@ class ProjectSwitcher extends Component {
     const projectArray = this.state.projects;
     const projectItems = projectArray.map(project =>
       <li className="project-switcher-item" key={project.id}>
-        <Link to={`/projects/${auth.user.username}/${project.name}/edit`} className="project-switcher-link link">{ project.name }</Link>
+        <Link
+          to={`/projects/${auth.user.username}/${project.name}/edit`}
+          onClick={() => this.handleClick(project)}
+          className="project-switcher-link link">
+          { project.name }
+        </Link>
       </li>
 
       /* <li className={this.state.currentProject && project.id === this.state.currentProject.id ? "project selected" : "project" } key={project.id}>
@@ -281,7 +286,12 @@ class ProjectSwitcher extends Component {
 
     const collabItems = this.state.collabs.map(collab =>
       <li to={collab.id} className="project-switcher-item" key={collab.id}>
-        <Link to={`/projects/${auth.user.username}/${collab.name}/edit`} className="project-switcher-link link">{ collab.name }</Link>
+        <Link
+          to={`/projects/${auth.user.username}/${collab.name}/edit`}
+          onClick={() => this.handleClick(collab)}
+          className="project-switcher-link link">
+          { collab.name }
+        </Link>
       </li>
 
       /* <li className={this.state.currentProject && collab.id === this.state.currentProject.id ? "project selected" : "project" } key={collab.id}>

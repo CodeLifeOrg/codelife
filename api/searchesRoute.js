@@ -45,6 +45,7 @@ module.exports = function(app) {
 
   app.get("/api/search", isAuthenticated, (req, res) => {
     const query = req.query.query;
+    const searchid = req.query.searchid;
     db.users.findAll({
       where: {
         [sequelize.Op.or]: [
@@ -70,7 +71,7 @@ module.exports = function(app) {
           p.type = "project";
           return p;
         });
-        res.json({users, projects}).end();
+        res.json({users, projects, searchid}).end();
       });
     });
 

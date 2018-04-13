@@ -194,7 +194,7 @@ class Projects extends Component {
 
               {/* delete / leave project */}
               { currentProject ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link">
+                <button className="project-action-button u-unbutton link danger-text">
                   <span className={ !collabProject ? "project-action-button-icon pt-icon pt-icon-trash" : "project-action-button-icon pt-icon pt-icon-log-out" } />
                   <span className="project-action-button-text u-hide-below-xxs">{ !collabProject ? t("Project.Delete") : t("Project.Leave") } 👈</span>
                 </button>

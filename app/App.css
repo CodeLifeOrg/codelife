@@ -83,9 +83,22 @@ p > a,
   font-weight: 700;
   transition: color 0.2s;
 
+  /* interactions */
   &:hover, &:focus {
     color: var(--sky);
   }
+
+  /* danger text */
+  &.danger-text:hover,
+  &.danger-text:focus {
+    color: var(--danger);
+    opacity: 0.8; /* approximate sky color value */
+  }
+}
+
+/* text theming */
+.danger-text {
+  color: var(--danger);
 }
 
 /* hey, don't edit content here! */

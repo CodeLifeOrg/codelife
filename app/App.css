@@ -984,6 +984,11 @@ utility classes
     display: none !important;
   }
 }
+.u-hide-below-xxs {
+  @add-mixin max-xxs {
+    display: none !important;
+  }
+}
 .u-hide-above-sm {
   @add-mixin min-sm {
     display: none !important;

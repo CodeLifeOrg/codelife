@@ -164,7 +164,7 @@ class Projects extends Component {
               <li className="project-action-item">
                 <button className="project-action-button u-unbutton link" onClick={this.saveCodeToDB.bind(this)}>
                   <span className="project-action-button-icon pt-icon pt-icon-floppy-disk" />
-                  { t("Project.Save") }
+                  <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Save") }</span>
                 </button>
               </li>
 
@@ -172,7 +172,7 @@ class Projects extends Component {
               { execState ? <li className="project-action-item">
                 <button className="project-action-button u-unbutton link" onClick={this.executeCode.bind(this)}>
                   <span className="project-action-button-icon pt-icon pt-icon-refresh" />
-                  { t("Project.Execute") }
+                  <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Execute") }</span>
                 </button>
               </li> : null }
 
@@ -180,7 +180,7 @@ class Projects extends Component {
               { currentProject ? <li className="project-action-item">
                 <button className="project-action-button u-unbutton link">
                   <span className="project-action-button-icon pt-icon pt-icon-people" />
-                  { !collabProject ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") } 👈
+                  <span className="project-action-button-text u-hide-below-xxs">{ !collabProject ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") } 👈</span>
                 </button>
               </li> : null }
 
@@ -188,7 +188,7 @@ class Projects extends Component {
               { currentProject ? <li className="project-action-item">
                 <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
                   <span className="project-action-button-icon pt-icon pt-icon-share" />
-                  { t("Project.Share") }
+                  <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                 </button>
               </li> : null }
 
@@ -196,7 +196,7 @@ class Projects extends Component {
               { currentProject ? <li className="project-action-item">
                 <button className="project-action-button u-unbutton link">
                   <span className={ !collabProject ? "project-action-button-icon pt-icon pt-icon-trash" : "project-action-button-icon pt-icon pt-icon-log-out" } />
-                  { !collabProject ? t("Project.Delete") : t("Project.Leave") } 👈
+                  <span className="project-action-button-text u-hide-below-xxs">{ !collabProject ? t("Project.Delete") : t("Project.Leave") } 👈</span>
                 </button>
               </li> : null }
 

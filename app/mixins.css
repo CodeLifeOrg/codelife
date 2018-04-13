@@ -14,7 +14,7 @@
 @define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
 @define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
 @define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
-@define-mixin max-xxs { @media (max-width: 319px)  { @mixin-content; } }
+@define-mixin max-xxs { @media (max-width: 324px)  { @mixin-content; } }
 
 /* type scaling */
 @define-mixin font-xxl {

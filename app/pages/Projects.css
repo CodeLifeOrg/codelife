@@ -76,19 +76,57 @@
     margin-bottom: 0.8em;
   }
 
-  /* extend button clickability */
-  & .project-action-button {
-    padding-top: 0.375em;
-    padding-bottom: 0.375em;
-    display: block;
-    width: 100%;
-    text-align: left; /* override button default */
+  /* icon only layout on tiny screens */
+  @add-mixin max-xxs {
+    /* make items flex to fill up the available horizontal space */
+    & .project-action-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      /* inline-block fallback & button alignment */
+      & .project-action-item {
+        display: inline-block;
+        text-align: center;
+        flex: 1 0 2rem;
+
+        /* style the button */
+        & > .project-action-button {
+          /* sizing */
+          width: 2rem;
+          height: 2rem;
+          /* theming */
+          border-radius: 50%;
+          color: var(--white);
+          background-color: var(--sky-dark);
+          /* transitions */
+          transition: 0.2s opacity;
+
+          /* interactions */
+          &:hover, &:focus {
+            opacity: 0.85;
+          }
+        }
+      }
+    }
   }
-  /* space out icon and text */
-  & .project-action-button-icon {
-    font-size: 1.1666em;
-    margin-right: 0.5em;
-    vertical-align: middle;
+
+  /* stacked layout on non-tiny screens */
+  @add-mixin min-xxs {
+    /* extend button clickability */
+    & .project-action-button {
+      padding-top: 0.375em;
+      padding-bottom: 0.375em;
+      display: block;
+      width: 100%;
+      text-align: left; /* override button default */
+    }
+    /* space out icon and text */
+    & .project-action-button-icon {
+      font-size: 1.1666em;
+      margin-right: 0.5em;
+      vertical-align: middle;
+    }
   }
 }
 

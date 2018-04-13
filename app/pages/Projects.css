@@ -1,34 +1,45 @@
 @import '../mixins.css';
 
+/* main container */
 .projects {
-  @add-mixin slide-theme;
-  @add-mixin slide-sizing;
+  /* theming */
+  background-color: var(--white);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
 
   /* layout */
   & .project-body {
-    align-self: stretch;
-    display: flex;
-    flex: 1;
+    /* stacked controls & editor */
+    flex-direction: column;
 
-    /* stacked layout */
-    @add-mixin max-sm {
-      flex-direction: column;
+    /* controls left layout */
+    @add-mixin min-sm {
+      /* sizing */
+      min-height: 90vh; /* fallback */
+      min-height: calc(100vh - 60px); /* account for nav height */
+      /* children */
+      display: flex;
+      align-self: stretch;
+      flex-direction: row;
     }
 
-    /* fallback */
+    /* .project-controls & .project-editor */
     & > * {
+      /* layout fallback */
       display: inline-block;
       vertical-align: top;
     }
 
     /* controls */
     & .project-controls {
-      align-self: stretch;
+      background-color: var(--white);
+      /* add padding */
+      padding: var(--gutter-md);
+      width: 100%;
 
       /* sidebar left layout */
       @add-mixin min-sm {
-        width: 300px;
-        padding-right: var(--gutter-lg);
+        width: 16rem;
       }
     }
 
@@ -36,18 +47,20 @@
 
     /* editor */
     & .project-editor {
+      width: 100%;
       align-self: stretch;
       flex: 1;
 
       /* make code editor take up 100% height */
       & > div {
-        height: 100%;
+        height: calc(100vh - 110px);
       }
 
       /* sidebar left layout */
       @add-mixin min-sm {
-        width: calc(100% - 300px);
-        padding-left: var(--gutter-lg);
+        width: calc(100% - 16rem);
+        /* add padding */
+        padding: var(--gutter-md);
       }
     }
   }

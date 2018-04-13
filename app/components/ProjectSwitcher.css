@@ -31,7 +31,6 @@
   /* new project button */
   & .new-project-button {
     margin-top: var(--gutter-md);
-    margin-bottom: var(--gutter-lg);
 
     /* bigger margin on bigger screens */
     @add-mixin min-sm {

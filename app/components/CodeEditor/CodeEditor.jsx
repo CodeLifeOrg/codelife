@@ -642,7 +642,7 @@ class CodeEditor extends Component {
           this.props.showEditor
             ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>
               { tabs
-                ? <div className="panel-title">
+                ? <div className="panel-title font-sm">
                   <span className="favicon pt-icon-standard pt-icon-code"></span>
                   { codeTitle || (readOnly ? t("Code Example") : t("Code Editor")) }
                 </div>
@@ -671,7 +671,7 @@ class CodeEditor extends Component {
                 ? <div className={ `drawer ${openRules ? "open" : ""}` }>
                   <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
                     <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-                    <div className="completion" style={{width: `${ Math.round(goodRatio * 100) }%`}}>{ Math.round(goodRatio * 100) }%</div>
+                    <div className="completion-indicator-label" style={{width: `${ Math.round(goodRatio * 100) }%`}}>{ Math.round(goodRatio * 100) }%</div>
                   </div>
                   <DrawerValidation rules={ baseRules.concat(rulejson) } errors={ ruleErrors } />
                 </div>
@@ -681,17 +681,17 @@ class CodeEditor extends Component {
         }
         <div className="render">
           { tabs
-            ? <div className="panel-title">
+            ? <div className="panel-title font-sm">
               { island
                 ? <img className="favicon" src={ `/islands/${island}-small.png` } />
                 : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
               { titleText }
             </div>
             : null }
-          <iframe className="panel-content iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
+          <iframe className="panel-content font-xs iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
           { showConsole
-            ? <div className={ `drawer ${openConsole ? "open" : ""}` }>
-              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count">{ embeddedConsole.length }</span> : null }</div>
+            ? <div className={ `drawer font-xs ${openConsole ? "open" : ""}` }>
+              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count font-xs">{ embeddedConsole.length }</span> : null }</div>
               <div className="contents">{consoleText}</div>
             </div>
             : null}

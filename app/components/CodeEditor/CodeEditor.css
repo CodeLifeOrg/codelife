@@ -80,12 +80,13 @@
   width: 100%;
   & .title {
     background-color: var(--light-1);
-    border-bottom: 1px solid var(--light-1);
     height: var(--gutter-md);
-    padding: var(--gutter-xxs);
-    &:hover {
-      background-color: var(--light-1);
-      cursor: pointer;
+    line-height: var(--gutter-md);
+    padding: 0 var(--gutter-xxs);
+    transition: background-color 0.2s;
+    &:hover, &:focus {
+      background-color: var(--sky-light);
+      cursor: default;
     }
     & .pt-icon-standard {
       color: rgba(0, 0, 0, 0.5);
@@ -94,26 +95,30 @@
     & .pt-progress-bar {
       position: absolute;
       /* vertical size / position */
-      height: 12px;
-      top: 8px;
+      height: 0.75rem;
+      top: 0.4375rem;
       /* horizonal size / position */
       width: calc(100% - 10px);
       left: 5px;
+
+      &.pt-intent-success .pt-progress-meter {
+        background-color: var(--sky-dark);
+      }
     }
-    & .completion {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 9px;
-      padding: 3px var(--gutter-xxs);
+    & .completion-indicator-label {
+      color: var(--white);
+      font-size: 0.5rem;
+      padding: 0 0.5em;
       text-align: center;
       white-space: nowrap;
       z-index: 2;
     }
     & .console-count {
-      background-color: var(--danger);
-      border-radius: var(--radius-lg);
+      background-color: var(--sky-dark);
+      border-radius: 50%;
       color: var(--white);
       display: inline-block;
-      font-size: 12px;
+      width: 17px;
       height: 17px;
       line-height: 17px;
       margin-left: var(--gutter-xxs);
@@ -121,6 +126,11 @@
       width: 17px;
     }
   }
+
+  & .pt-icon-standard.pt-intent-success {
+    color: var(--sky-dark);
+  }
+  
   & .contents {
     background-color: var(--white);
     height: 0;
@@ -145,6 +155,7 @@
         color: rgba(0, 0, 0, 0.25);
         font-size: 12px;
         margin-right: var(--gutter-xxs);
+
         &.pt-icon-delete {
           color: var(--danger);
         }
@@ -152,10 +163,10 @@
       & .arg {
         margin-right: var(--gutter-xs);
         &.number {
-          color: var(--rando-blue);
+          color: var(--sky-dark);
         }
         &.string {
-          color: var(--danger-dark);
+          color: var(--dark-2);
         }
         &.undefined {
           color: var(--gray);
@@ -329,13 +340,17 @@
 
 /* fullscreen editor */
 .code-editor.is-fullscreen {
-  /* position above everything */
+  /* pin to the edges of the screen */
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 20; /* position above navbar */
+  /* take up 100% screen size */
+  width: 100% !important;
+  height: 100% !important;
+  /* position above navbar */
+  z-index: 20;
 
   /* fullscreen editor layout dictated by device orientation */
   @media (orientation: landscape) {

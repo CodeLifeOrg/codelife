@@ -337,6 +337,14 @@
   left: 0;
   z-index: 20; /* position above navbar */
 
+  /* fullscreen editor layout dictated by device orientation */
+  @media (orientation: landscape) {
+    flex-direction: row;
+  }
+  @media (orientation: portrait) {
+    flex-direction: column;
+  }
+
   /* opposite button icon scaling */
   & .code-editor-fullscreen-button .code-editor-fullscreen-icon,
   & .code-editor-fullscreen-button:active .code-editor-fullscreen-icon {

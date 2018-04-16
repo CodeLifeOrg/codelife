@@ -151,6 +151,11 @@
   "Help": "Help",
   "Hide Discussion": "Hide Discussion",
   "Home": {
+    "BeginAdventure": "Begin your adventure",
+    "ContinueAdventure": "Continue your adventure",
+    "Feature1": "Learn to build websites with HTML, CSS, and JavaScript",
+    "Feature2": "Built for Brazilian students, but free and open to all",
+    "Feature3": "Have fun as you learn by completing levels and challenges",
     "GetStarted": "Get started",
     "Headline": "Learn to code for free",
     "IntroText": "Home.IntroText",
@@ -478,6 +483,7 @@
       "def": "A CSS term. A value indicates how you want to style your content."
     }
   },
+  "go to island": "go to island",
   "home": {
     "body": "",
     "continue": "Continue your adventure on {{island}}",

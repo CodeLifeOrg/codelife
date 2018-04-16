@@ -426,10 +426,9 @@ header
 ----------------------------------- */
 
 .header {
-  /* set height */
-  min-height: 60vh;
-  padding-top: 6rem;
-  padding-bottom: 6rem;
+  @add-mixin section-bg-gradient;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   /* position .header-inner */
   display: flex;
   align-items: center;
@@ -439,15 +438,18 @@ header
     width: 100%;
   }
 
+  /* set height */
+  @media (min-width: 1200px) and (min-height: 900px) {
+    min-height: 60vh;
+  }
+
   /* sidebar theming */
   & .header-sidebar {
     @add-mixin slide-theme;
     padding: var(--gutter-sm) var(--gutter-md);
-  }
 
-  /* space out sidebar on small screens */
-  @add-mixin max-md {
-    & .header-sidebar {
+    /* space out sidebar on small screens */
+    @add-mixin max-md {
       margin-top: 3rem;
     }
   }
@@ -472,8 +474,47 @@ header
       left: 2.5rem;
     }
   }
+
+  /* half and half layout */
+  & .header-half {
+    /* stacked layout on small screens */
+    @add-mixin max-md {
+      & + .header-half {
+        margin-top: 2rem;
+      }
+    }
+    /* side by side layout on bigger screens */
+    @add-mixin min-md {
+      width: 50%; /* fallback */
+      width: calc(50% - 2rem);
+      max-width: 38rem;
+      margin: 1rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }
 
+
+/* -----------------------------------
+embedded video
+----------------------------------- */
+/* use container to set proportions */
+.video-container {
+  padding-bottom: 56.25%; /* height ratio */
+  height: 0;
+  /* theming */
+  background-color: var(--sky-dark); /* before the video loads in */
+  border-radius: 0.4em; /* has to be more than the iframe's border radius ¯\_(ツ)_/¯ */
+  overflow: hidden; /* crop off the background */
+  box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
+
+  /* let the iframe expand to fill the container */
+  & .video-iframe {
+    @add-mixin absolute-expand;
+    border-radius: 0.325em; /* necessary ¯\_(ツ)_/¯ */
+  }
+}
 
 /* -----------------------------------
 form field layout

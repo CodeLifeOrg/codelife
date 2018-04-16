@@ -243,6 +243,29 @@
   box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
 }
 
+/* subtle background gradient for highlighted sections */
+@define-mixin section-bg-gradient {
+  @supports (left: -10vw) {
+    &:before {
+      content: '';
+      /* sizing */
+      display: block;
+      width: 200vw;
+      height: 100%;
+      /* positioning */
+      position: absolute;
+      left: -100vw;
+      /* theming */
+      background-image:
+      linear-gradient(-180deg,
+        rgba(255,255,255,0.00) 0%,
+        rgba(255,255,255,0.12) 50%,
+        rgba(255,255,255,0.00) 100%
+        );
+    }
+  }
+}
+
 /* slide sizing */
 @define-mixin slide-sizing {
   /* positioning */

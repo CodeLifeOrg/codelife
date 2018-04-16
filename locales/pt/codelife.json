@@ -151,6 +151,11 @@
   "Help": "Ajuda",
   "Hide Discussion": "Hide Discussion",
   "Home": {
+    "BeginAdventure": "Home.BeginAdventure",
+    "ContinueAdventure": "Home.ContinueAdventure",
+    "Feature1": "Home.Feature1",
+    "Feature2": "Home.Feature2",
+    "Feature3": "Home.Feature3",
     "GetStarted": "Home.GetStarted",
     "Headline": "Home.Headline",
     "IntroText": "Home.IntroText",
@@ -478,6 +483,7 @@
       "def": "Esse é um termo usado em CSS para indicar como você deseja adicionar estilo ao seu conteúdo."
     }
   },
+  "go to island": "go to island",
   "home": {
     "body": "",
     "continue": "Continue explorando",

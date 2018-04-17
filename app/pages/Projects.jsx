@@ -179,6 +179,7 @@ class Projects extends Component {
               {/* add / manage collaborators */}
               { currentProject ? <li className="project-action-item">
                 <button className="project-action-button u-unbutton link">
+                  
                   <span className="project-action-button-icon pt-icon pt-icon-people" />
                   <span className="project-action-button-text u-hide-below-xxs">{ !collabProject ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") } 👈</span>
                 </button>
@@ -204,6 +205,7 @@ class Projects extends Component {
 
             {/* project switcher */}
             <ProjectSwitcher
+              ref={ comp => this.ps = comp }
               projectToLoad={filename}
               onCreateProject={this.onCreateProject.bind(this)}
               onDeleteProject={this.onDeleteProject.bind(this)}

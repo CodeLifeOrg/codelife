@@ -3,10 +3,10 @@ import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
-import "./ProjectSwitcher.css";
-
-import {Alert, Intent, Tooltip, Position, Icon, Dialog, Button, MenuItem} from "@blueprintjs/core";
+import {Alert, Intent, Dialog} from "@blueprintjs/core";
 import CollabSearch from "./CollabSearch";
+
+import "./ProjectSwitcher.css";
 
 class ProjectSwitcher extends Component {
 
@@ -182,56 +182,6 @@ class ProjectSwitcher extends Component {
     this.setState({isOpen: !this.state.isOpen, collabProject: project});
   }
 
-  // ============================================
-  // BEGIN MULTISELECT
-  // ============================================
-
-  renderUser(obj) {
-    const {item, handleClick} = obj;
-    return (
-      <MenuItem
-        icon={this.isUserSelected(item) ? "tick" : "blank"}
-        key={item.id}
-        label={item.name}
-        onClick={handleClick}
-        text={item.name}
-        shouldDismissPopover={false}
-      />
-    );
-  }
-
-  isUserSelected(user) {
-    return this.state.users.indexOf(user) !== -1;
-  }
-
-  handleUserSelect(user) {
-    !this.isUserSelected(user) ? this.selectUser(user) : this.deselectUser(this.getSelectedUserIndex(user));
-  }
-
-  getSelectedUserIndex(user) {
-    return this.state.users.indexOf(user);
-  }
-
-  selectUser(user) {
-    this.setState({users: [...this.state.users, user]});
-  }
-
-  deselectUser(index) {
-    this.setState({users: this.state.users.filter((_user, i) => i !== index)});
-  }
-
-  filterUser(query, user) {
-    return user.name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-  }
-
-  handleTagRemove(_tag, index) {
-    this.deselectUser(index);
-  }
-
-  // ============================================
-  // END MULTISELECT
-  // ============================================
-
   render() {
 
     const {auth, t} = this.props;
@@ -336,6 +286,16 @@ class ProjectSwitcher extends Component {
           { t("create new project") } 👈
         </button>
 
+        <Dialog
+          icon="inbox"
+          isOpen={this.state.isOpen}
+          onClose={this.toggleDialog.bind(this)}
+          title=""
+          className="form-container collab-form-container"
+        >
+          <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
+        </Dialog>
+
         <Alert
           isOpen={ deleteAlert ? true : false }
           cancelButtonText={ t("Cancel") }
@@ -363,6 +323,6 @@ class ProjectSwitcher extends Component {
 ProjectSwitcher = connect(state => ({
   auth: state.auth,
   user: state.auth.user
-}))(ProjectSwitcher);
-ProjectSwitcher = translate()(ProjectSwitcher);
+}), null, null, {withRef: true})(ProjectSwitcher);
+ProjectSwitcher = translate(undefined, {withRef: true})(ProjectSwitcher);
 export default ProjectSwitcher;

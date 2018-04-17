@@ -29,10 +29,9 @@ class Footer extends Component {
 
     // explore link array (to be added as necessary)
     const exploreLinks = [
-      /* {id: 1, title: t("Leaderboard"), link: "/leaderboard"},
-      {id: 2, title: t("Snippets"), link: "/snippets"},
-      {id: 3, title: t("Codeblocks"), link: "/codeblocks"}, */
-      {id: 4, title: t("Glossary"), link: "/glossary"}
+      {id: 1, title: t("Lesson plan"), link: "/lessonplan"},
+      {id: 2, title: t("Glossary"), link: "/glossary"}
+      // {id: 3, title: t("Leaderboard"), link: "/leaderboard"}
     ];
 
 

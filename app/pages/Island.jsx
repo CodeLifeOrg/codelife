@@ -70,7 +70,7 @@ class Island extends Component {
     return (
       <div className="overworld">
         <div className="map">
-          { islandArray.map(island => <IslandLink key={island.id} island={island} />) }
+          { islandArray.map(island => <IslandLink key={island.id} island={island} standalone="false" />) }
         </div>
       </div>
     );

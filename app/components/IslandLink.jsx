@@ -6,11 +6,11 @@ class IslandLink extends Component {
 
   render() {
 
-    const {description, done, island, next, width} = this.props;
+    const {description, done, island, next, standalone, width} = this.props;
 
     const small = width < 400;
 
-    if (island.isNext || next || island.isDone || done) {
+    if (island.isNext || next || island.isDone || done || standalone === true) {
 
       { /* unlocked island link */ }
       let unlockedClasses = `${ island.theme } island-link`;
@@ -54,7 +54,8 @@ class IslandLink extends Component {
 
 IslandLink.defaultProps = {
   description: true,
-  width: 400
+  width: 400,
+  standalone: true
 };
 
 export default IslandLink;

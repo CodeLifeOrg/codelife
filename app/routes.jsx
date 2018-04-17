@@ -19,6 +19,7 @@ import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
 import ResetPw from "pages/ResetPw";
 import LessonPlan from "pages/LessonPlan";
+import Leaderboard from "pages/Leaderboard";
 import Error from "pages/Error";
 
 //import Contest from "pages/Contest";
@@ -63,6 +64,8 @@ export default function RouteCreate() {
 
       <Route path="lessonplan" component={LessonPlan} />
       <Route path="lessonplan/:lid" component={LessonPlan} />
+
+      <Route path="leaderboard" component={Leaderboard} />
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />

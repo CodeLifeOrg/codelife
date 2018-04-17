@@ -10,7 +10,7 @@ import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
 
-import "./Level.css";
+import "./IslandLevel.css";
 
 import Loading from "components/Loading";
 

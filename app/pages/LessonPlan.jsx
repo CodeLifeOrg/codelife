@@ -6,6 +6,7 @@ import {fetchData} from "datawheel-canon";
 import "./LessonPlan.css";
 
 import CodeBlock from "components/CodeBlock";
+import IslandLink from "components/IslandLink";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -29,7 +30,7 @@ class LessonPlan extends Component {
   }
 
   componentDidMount() {
-    
+
   }
 
   render() {
@@ -42,14 +43,15 @@ class LessonPlan extends Component {
 
     const s = (a, b) => a.ordering - b.ordering;
 
-    const islandList = islands.sort(s).map(i => 
-      <li key={i.id}><Link to={`/lessonplan/${i.id}`}>{i.name}</Link></li>
+    // list of island links
+    const islandList = islands.sort(s).map(island =>
+      <IslandLink key={island.id} island={island} linkContext="lessonplan" />
     );
 
     let levelList = [];
 
     if (lid) {
-      levelList = currentIsland.levels.sort(s).map(l => 
+      levelList = currentIsland.levels.sort(s).map(l =>
         <li key={l.id}>
           <h3 key={l.id}>{`Level ${l.ordering + 1}: ${l.name}`}</h3>
           <ul>
@@ -64,14 +66,27 @@ class LessonPlan extends Component {
 
     return (
       <div id="lesson-plan" className="content">
-        {!lid 
-          ? <div id="island-list"> 
-            <h3>Choose an Island</h3>
-            <ul>
-              {islandList}
-            </ul>
+        {!lid
+
+          // map view
+          ? <div className="map u-text-center">
+            {/* heading */}
+            <div className="map-heading content-section">
+              <h1 className="lessonplan-heading u-margin-bottom-off">
+                {t("Lessonplan.Headline")}
+              </h1>
+              <h2 className="font-md u-margin-bottom-off">
+                {t("IslandMap.SelectIsland")}
+              </h2>
+            </div>
+            {/* list of islands */}
+            <div className="map-list content-section">
+              { islandList }
+            </div>
           </div>
-          : <div id="island-view">
+
+          // island view
+          : <div className="content-section">
             <Link to="/lessonplan">{`<== ${t("Back to Island List")}`}</Link>
             <h1>{currentIsland.name}</h1>
             <div id="island-title">{currentIsland.description}</div>

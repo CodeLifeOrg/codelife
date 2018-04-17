@@ -168,6 +168,9 @@
   "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "Tendo a possibilidade de ganhar um \"Certificado CodeLife\", o quanto você ficaria motivado a concluir as atividades do site?",
   "I'd rather not say": "Prefiro não dizer",
   "Image": "Imagem",
+  "IslandMap": {
+    "SelectIsland": "IslandMap.SelectIsland"
+  },
   "Islands (lessons)": "Ilhas (lições)",
   "JavaScript Console": "Console do JavaScript",
   "Keep Exploring": "Continue explorando",
@@ -183,6 +186,9 @@
   "Leave": "Leave",
   "Leave Project": "Leave Project",
   "Lesson Builder": "Gestão do conteúdo",
+  "Lessonplan": {
+    "Headline": "Lessonplan.Headline"
+  },
   "Like": "Gosto",
   "Likes": "Gost@",
   "Loading": "Carregando",

@@ -7,8 +7,8 @@ import About from "pages/About";
 import EditProfile from "pages/profile/EditProfile";
 import Glossary from "pages/Glossary";
 import Home from "pages/Home";
-import Island from "pages/Island";
-import Level from "pages/Level";
+import IslandMap from "pages/IslandMap";
+import IslandLevel from "pages/IslandLevel";
 import Privacy from "pages/Privacy";
 import Profile from "pages/profile/Profile";
 import Share from "pages/Share";
@@ -31,8 +31,8 @@ export default function RouteCreate() {
 
       <IndexRoute component={Home} />
 
-      <Route path="island" component={Island} />
-      <Route path="island/:lid" component={Level} />
+      <Route path="island" component={IslandMap} />
+      <Route path="island/:lid" component={IslandLevel} />
       <Route path="island/:lid/:mlid(/:sid)" component={Slide} />
 
       <Route path="projects/:username" component={Projects} />

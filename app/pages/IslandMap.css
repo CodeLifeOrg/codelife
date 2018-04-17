@@ -1,0 +1,48 @@
+@import '../mixins.css';
+
+
+/* adjust spacing between heading and island list */
+.map-heading {
+  /* increase specificity to override .content-section */
+  &.content-section {
+    padding-bottom: 0;
+  }
+  /* less space needed on tiny screens */
+  @add-mixin max-sm {
+    margin-bottom: -2rem;
+  }
+}
+
+
+/* map layout */
+.map-list {
+
+  & .island-link {
+    margin: var(--gutter-md) auto; /* space out adjacent islands */
+    transition: transform 0.2s ease-out; /* smooth out scaling on bigger screens */
+
+    /* scale up island links with screen */
+    @add-mixin min-md { transform: scale(1.1); }
+    @add-mixin min-lg { transform: scale(1.2); }
+    @add-mixin min-xl { transform: scale(1.25); }
+
+    /* staggered layout */
+    @add-mixin min-sm {
+      /* offset spacing between first and second islands */
+      &:first-child {
+        margin-bottom: 100px;
+      }
+      /* nudge adjacent islands into place */
+      & ~ .island-link {
+        margin-top: -125px;
+      }
+      /* stagger left and right islands */
+      &:nth-of-type(even):not(:first-child) {
+        margin-left: 0;
+      }
+      &:nth-of-type(odd):not(:first-child) {
+        margin-right: 0;
+      }
+    }
+  }
+}

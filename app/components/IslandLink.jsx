@@ -6,20 +6,17 @@ class IslandLink extends Component {
 
   render() {
 
-    const {description, done, island, next, standalone, width} = this.props;
-
-    const small = width < 400;
+    const {description, done, island, linkContext, next, small, standalone} = this.props;
 
     if (island.isNext || next || island.isDone || done || standalone === true) {
 
-      { /* unlocked island link */ }
+      // unlocked island link
       let unlockedClasses = `${ island.theme } island-link`;
-      if (small) unlockedClasses += " island-link-small";
       if (!(island.isNext || next)) unlockedClasses += " is-prev";
       if (island.isNext || next) unlockedClasses += " is-next";
       if (island.isDone || done) unlockedClasses += " is-done";
 
-      return <Link to={`/island/${island.id}`} className={ unlockedClasses } key={ island.id }>
+      return <Link to={`/${linkContext}/${island.id}`} className={ unlockedClasses } key={ island.id }>
         <div className={ small ? "island-link-image island-link-image-small" : "island-link-image" } />
         <div className="island-link-popover pt-popover pt-tooltip">
           <div className={ `${ island.theme } island-link-label pt-popover-content` }>
@@ -33,12 +30,12 @@ class IslandLink extends Component {
       </Link>;
     }
 
-    { /* locked island link */ }
+    // locked island link
     let lockedClasses = `${ island.theme } island-link is-locked`;
     if (small) lockedClasses += " island-link-small";
 
     return <div className={ lockedClasses } key={ island.id }>
-      <div className={ small ? "island-link-image island-link-image-small" : "island-link-image" } to={`/island/${island.id}`} />
+      <div className={ small ? "island-link-image island-link-image-small" : "island-link-image" } />
       <div className={ `island-link-popover pt-popover pt-tooltip ${ island.id }` }>
         <div className={ `${ island.theme } island-link-label pt-popover-content` }>
           <div className="island-link-title">
@@ -54,8 +51,9 @@ class IslandLink extends Component {
 
 IslandLink.defaultProps = {
   description: true,
-  width: 400,
-  standalone: true
+  small: false,
+  standalone: true,
+  linkContext: "island"
 };
 
 export default IslandLink;

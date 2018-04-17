@@ -168,6 +168,9 @@
   "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?": "How much does the potential of receiving a \"CodeLife degree\" motivate you to complete the site?",
   "I'd rather not say": "I'd rather not say",
   "Image": "Image",
+  "IslandMap": {
+    "SelectIsland": "Select an island"
+  },
   "Islands (lessons)": "Islands (lessons)",
   "JavaScript Console": "JavaScript Console",
   "Keep Exploring": "Keep Exploring",
@@ -183,6 +186,9 @@
   "Leave": "Leave",
   "Leave Project": "Leave Project",
   "Lesson Builder": "Lesson Builder",
+  "Lessonplan": {
+    "Headline": "Codelife lesson plan"
+  },
   "Like": "Like",
   "Likes": "Likes",
   "Loading": "Loading",

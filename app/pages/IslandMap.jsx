@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import "./Island.css";
+import "./IslandMap.css";
 import IslandLink from "components/IslandLink";
 import Loading from "components/Loading";
 
@@ -51,7 +51,7 @@ class Island extends Component {
   render() {
 
     const {userProgress} = this.state;
-    const {auth, islands} = this.props;
+    const {auth, islands, t} = this.props;
 
     const {browserHistory} = this.context;
 
@@ -68,8 +68,15 @@ class Island extends Component {
     }
 
     return (
-      <div className="overworld">
-        <div className="map">
+      <div className="content map u-text-center">
+        {/* heading */}
+        <div className="map-heading content-section">
+          <h1 className="u-margin-bottom-off">
+            {t("IslandMap.SelectIsland")}
+          </h1>
+        </div>
+        {/* list of islands */}
+        <div className="map-list content-section">
           { islandArray.map(island => <IslandLink key={island.id} island={island} standalone="false" />) }
         </div>
       </div>

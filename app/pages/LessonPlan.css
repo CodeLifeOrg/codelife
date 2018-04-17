@@ -1,0 +1,7 @@
+@import "../mixins.css";
+
+/* override .anchor */
+.lessonplan-section.anchor {
+  padding-top: 1rem;
+  margin-top: 1rem;
+}

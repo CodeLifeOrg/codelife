@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import {fetchData} from "datawheel-canon";
+import {AnchorLink} from "datawheel-canon/src/components/AnchorLink";
 import "./LessonPlan.css";
 
 import CodeBlock from "components/CodeBlock";
@@ -48,28 +49,126 @@ class LessonPlan extends Component {
       <IslandLink key={island.id} island={island} linkContext="lessonplan" />
     );
 
-    let levelList = [];
+    let levelSections = [];
+    let levelTOC = [];
 
+    // loop through levels
     if (lid) {
-      levelList = currentIsland.levels.sort(s).map(l =>
-        <li key={l.id}>
-          <h3 key={l.id}>{`Level ${l.ordering + 1}: ${l.name}`}</h3>
-          <ul>
-            {l.slides.sort(s).map(s => {
-              const SlideComponent = compLookup[s.type];
-              return <li key={s.id} style={{backgroundColor: "white"}}><SlideComponent {...s} readOnly={true} island={currentIsland.theme}/></li>;
-            })}
-          </ul>
+
+      // generate level sections
+      levelSections = currentIsland.levels.sort(s).map(l =>
+        <section id={l.id} className="lessonplan-section anchor" key={l.id}>
+
+          <h2 className="lessonplan-section-heading" key={l.id}>
+            {`${ t("Level") } ${l.ordering + 1}: ${l.name}`}
+          </h2>
+
+          {/* slides */}
+          {l.slides.sort(s).map(s => {
+            const SlideComponent = compLookup[s.type];
+            return <section key={s.id}>
+              <SlideComponent {...s}
+                readOnly={true}
+                island={currentIsland.theme}/>
+            </section>;
+          })}
+
+        </section>
+      );
+
+      // generate table of contents for islands
+      levelTOC = currentIsland.levels.sort(s).map(l =>
+        <li className="lessonplan-toc-item" key={l.id}>
+          <AnchorLink className="lessonplan-toc-link link" to={l.id}>{l.name}</AnchorLink>
         </li>
+      );
+
+      // level view
+      return (
+        <div className="lessonplan content u-padding-top-off">
+
+          {/* header */}
+          <header className="header lessonplan-header">
+            <div className="header-inner">
+
+              {/* island title & description */}
+              <div className="header-text">
+                <h1 className="lessonplan-section-title font-xxl u-margin-top-off u-margin-bottom-off">
+                  {currentIsland.name} {t("lesson plan")}
+                </h1>
+                <p className="lessonplan-section-description font-md u-margin-bottom-off">
+                  {currentIsland.description}
+                </p>
+              </div>
+
+              {/* table of contents */}
+              <div className="header-sidebar contest-toc">
+                <h2 className="lessonplan-toc-heading font-md u-margin-top-off">{t("Table of contents")}</h2>
+
+                {/* table of contents numbered list */}
+                <ol className="lessonplan-toc-list">
+
+                  {/* overview */}
+                  <li className="lessonplan-toc-item">
+                    <AnchorLink className="lessonplan-toc-link link" to="overview">
+                      {t("Lessonplan.Overview")}
+                    </AnchorLink>
+                  </li>
+
+                  {/* levels */}
+                  { levelTOC }
+
+                  {/* codeblock */}
+                  <li className="lessonplan-toc-item">
+                    <AnchorLink className="lessonplan-toc-link link" to="codeblock">
+                      {t("Codeblock")}
+                    </AnchorLink>
+                  </li>
+
+                </ol>
+              </div>
+            </div>
+          </header>
+
+
+          {/* main content */}
+          <div className="fullwidth-container">
+            <div className="content">
+
+              {/* nav */}
+              <nav className="lessonplan-nav">
+                <Link className="lessonplan-nav-link link" to="/lessonplan">
+                  <span className="pt-icon pt-icon-map" /> {t("Lessonplan.IslandIndex")}
+                </Link>
+              </nav>
+
+              {/* overview / cheatsheet */}
+              <section className="lessonplan-section anchor" id="overview" >
+                <h2 className="lessonplan-subhead">{t("Lessonplan.Overview")}</h2>
+                <div dangerouslySetInnerHTML={{__html: currentIsland.cheatsheet}} />
+              </section>
+
+              {/* levels */}
+              {levelSections}
+
+              {/* codeblock */}
+              <section className="lessonplan-section anchor" id="codeblock">
+                <h2 className="lessonplan-subhead">{t("Codeblock")}</h2>
+                <CodeBlock
+                  island={currentIsland}
+                  readOnly={true} />
+              </section>
+            </div>
+          </div>
+        </div>
       );
     }
 
-    return (
-      <div id="lesson-plan" className="content">
-        {!lid
-
-          // map view
-          ? <div className="map u-text-center">
+    // map view
+    else {
+      return (
+        <div className="lessonplan content">
+          <div className="map u-text-center">
             {/* heading */}
             <div className="map-heading content-section">
               <h1 className="lessonplan-heading u-margin-bottom-off">
@@ -84,30 +183,9 @@ class LessonPlan extends Component {
               { islandList }
             </div>
           </div>
-
-          // island view
-          : <div className="content-section">
-            <Link to="/lessonplan">{`<== ${t("Back to Island List")}`}</Link>
-            <h1>{currentIsland.name}</h1>
-            <div id="island-title">{currentIsland.description}</div>
-            <h3>Content Overview:</h3>
-            <div id="cheat-sheet" style={{backgroundColor: "white"}} dangerouslySetInnerHTML={{__html: currentIsland.cheatsheet}} />
-            <div id="all-levels">
-              <ul>
-                {levelList}
-              </ul>
-            </div>
-            <h3>Final Codeblock:</h3>
-            <div id="codeblock-stub" style={{backgroundColor: "white"}}>
-              <CodeBlock
-                island={currentIsland}
-                readOnly={true}
-              />
-            </div>
-          </div>
-        }
-      </div>
-    );
+        </div>
+      );
+    }
   }
 }
 

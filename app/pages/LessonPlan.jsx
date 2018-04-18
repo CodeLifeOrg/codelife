@@ -140,8 +140,8 @@ class LessonPlan extends Component {
             </div>
           </header>
 
-          {/* nav */}
-          <nav className="lessonplan-nav">
+          {/* header nav */}
+          <nav className="lessonplan-nav header-lessonplan-nav">
 
             {/* previous island */}
             {/* hiding for now
@@ -187,6 +187,25 @@ class LessonPlan extends Component {
               </section>
             </div>
           </div>
+
+
+          {/* footer nav */}
+          <nav className="lessonplan-nav footer-lessonplan-nav">
+
+            {/* back to top */}
+            <AnchorLink className="lessonplan-nav-link link" to="app">
+              <span className="link-icon pt-icon pt-icon-arrow-up" />
+              <span className="link-text">{t("Back to top")}</span>
+            </AnchorLink>
+
+            {/* island index */}
+            <Link className="lessonplan-nav-link link" to="/lessonplan">
+              {/* NOTE: replace arrow-left icon with map icon if next/prev links are added */}
+              <span className="link-icon pt-icon pt-icon-arrow-left" />
+              <span className="link-text">{t("Lessonplan.IslandIndex")}</span>
+            </Link>
+
+          </nav>
         </div>
       );
     }

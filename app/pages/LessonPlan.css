@@ -4,16 +4,35 @@
 Nav
 ------------------------------- */
 .lessonplan-nav {
-  top: -0.875em;
+
+  &.header-lessonplan-nav {
+    top: -0.875em;
+  }
+  &.footer-lessonplan-nav {
+    top: 0.875em;
+  }
 
   /* center links on bigger screens */
-  @add-mixin min-md {
+  @add-mixin min-sm {
     text-align: center;
   }
+
 
   /* style like main nav links */
   & .lessonplan-nav-link {
     @add-mixin nav-link;
+
+    /* make links 100% width block elements on smaller screens */
+    @add-mixin max-sm {
+      width: 100%;
+    }
+
+    /* space out inline links on bigger screens */
+    @add-mixin min-sm {
+      &:not(:last-of-type) {
+        margin-right: 1rem;
+      }
+    }
 
     /* space out icon & text */
     & .link-icon {
@@ -194,6 +213,22 @@ Slides
 /* codeblock */
 .codeblock-lessonplan-section {
 
+  /* override heading sizes style */
+  & .lesson-prompt {
+    & h1 {
+      @add-mixin font-lg;
+      margin-top: 0;
+    }
+
+    & h2 {
+      @add-mixin font-md;
+    }
+
+    & * + h2 {
+      margin-top: 1.5em;
+    }
+  }
+
   @add-mixin min-md {
     /* override margin */
     & .codeBlock .codeBlock-text {
@@ -203,6 +238,13 @@ Slides
     /* space out code editor */
     & .code-editor {
       padding-left: 2rem;
+      max-height: 80vh;
+
+      /* overrides for fullscreen */
+      &.is-fullscreen {
+        max-height: 100vh;
+        padding-left: 0;
+      }
     }
   }
 }

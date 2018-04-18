@@ -3,8 +3,7 @@ import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import axios from "axios";
-import {Alert, Intent, Dialog} from "@blueprintjs/core";
-import CollabSearch from "./CollabSearch";
+import {Alert, Intent} from "@blueprintjs/core";
 
 import "./ProjectSwitcher.css";
 
@@ -13,14 +12,10 @@ class ProjectSwitcher extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deleteAlert: false,
-      leaveAlert: false,
       projects: [],
       collabs: [],
       projectName: "",
-      isOpen: false,
-      currentProject: null,
-      collabProject: null
+      currentProject: null
     };
   }
 

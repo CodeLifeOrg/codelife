@@ -17,6 +17,8 @@ class Projects extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      deleteAlert: false,
+      leaveAlert: false,
       activeTabId: "projects-tab",
       mounted: false,
       execState: false,

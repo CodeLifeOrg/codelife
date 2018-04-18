@@ -243,6 +243,7 @@ Slides
       /* overrides for fullscreen */
       &.is-fullscreen {
         max-height: 100vh;
+        margin-top: 0;
         padding-left: 0;
       }
     }

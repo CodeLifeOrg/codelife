@@ -90,7 +90,16 @@ module.exports = function(app) {
     db.projects.findAll({where: {id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
     */
 
-    db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
+    db.projects.findOne({
+      where: {
+        id: req.query.id
+      },
+      include: pInclude
+    }).then(p =>
+      res.json(flattenProject(req.user, p.toJSON())).end()
+    );
+
+    // db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
 
   });
 

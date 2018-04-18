@@ -178,9 +178,7 @@ class ProjectSwitcher extends Component {
 
   }
 
-  toggleDialog(project) {
-    this.setState({isOpen: !this.state.isOpen, collabProject: project});
-  }
+
 
   render() {
 
@@ -285,16 +283,6 @@ class ProjectSwitcher extends Component {
           <span className="pt-icon pt-icon-application" />
           { t("create new project") } 👈
         </button>
-
-        <Dialog
-          icon="inbox"
-          isOpen={this.state.isOpen}
-          onClose={this.toggleDialog.bind(this)}
-          title=""
-          className="form-container collab-form-container"
-        >
-          <CollabSearch projects={this.state.projects} currentProject={this.state.collabProject}/>
-        </Dialog>
 
         <Alert
           isOpen={ deleteAlert ? true : false }

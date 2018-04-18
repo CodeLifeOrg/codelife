@@ -3,11 +3,12 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Tab2, Tabs2, Toaster} from "@blueprintjs/core";
+import {Intent, Position, Dialog, Toaster} from "@blueprintjs/core";
 
 import CodeBlockList from "components/CodeBlockList";
 import ProjectSwitcher from "components/ProjectSwitcher";
 import CodeEditor from "components/CodeEditor/CodeEditor";
+import CollabSearch from "components/CollabSearch";
 
 import "./Projects.css";
 
@@ -20,7 +21,7 @@ class Projects extends Component {
       mounted: false,
       execState: false,
       currentProject: null,
-      collabProject: true
+      collabProject: null
     };
   }
 
@@ -43,8 +44,8 @@ class Projects extends Component {
   openProject(pid) {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
-      this.setState({currentProject: resp.data[0]});
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data[0].name}/edit`);
+      this.setState({currentProject: resp.data});
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
     });
   }
 
@@ -74,7 +75,6 @@ class Projects extends Component {
 
   onClickProject(project) {
     const {t} = this.props;
-    console.log(project);
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
@@ -113,13 +113,12 @@ class Projects extends Component {
     }
   }
 
-  /* handleTabChange(activeTabId) {
-    console.log(activeTabId)
-    this.setState({activeTabId});
-  } */
-
   executeCode() {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
+  }
+
+  toggleDialog() {
+    this.setState({isOpen: !this.state.isOpen});
   }
 
   render() {
@@ -131,14 +130,10 @@ class Projects extends Component {
 
     if (!auth.user) browserHistory.push("/");
 
+    const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
+    const hasCollabs = currentProject && currentProject.collaborators.length;
+
     const allCodeBlockRef = <CodeBlockList/>;
-    const projectRef = <ProjectSwitcher
-      projectToLoad={filename}
-      onCreateProject={this.onCreateProject.bind(this)}
-      onDeleteProject={this.onDeleteProject.bind(this)}
-      openProject={this.openProject.bind(this)}
-      onClickProject={this.onClickProject.bind(this)}
-    />;
 
     return (
       <div className="projects">
@@ -177,11 +172,10 @@ class Projects extends Component {
               </li> : null }
 
               {/* add / manage collaborators */}
-              { currentProject ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link">
-                  
+              { isMine ? <li className="project-action-item">
+                <button className="project-action-button u-unbutton link" onClick={this.toggleDialog.bind(this)}>
                   <span className="project-action-button-icon pt-icon pt-icon-people" />
-                  <span className="project-action-button-text u-hide-below-xxs">{ !collabProject ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") } 👈</span>
+                  <span className="project-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
                 </button>
               </li> : null }
 
@@ -205,13 +199,22 @@ class Projects extends Component {
 
             {/* project switcher */}
             <ProjectSwitcher
-              ref={ comp => this.ps = comp }
               projectToLoad={filename}
               onCreateProject={this.onCreateProject.bind(this)}
               onDeleteProject={this.onDeleteProject.bind(this)}
               openProject={this.openProject.bind(this)}
               onClickProject={this.onClickProject.bind(this)} />
           </div>
+
+          <Dialog
+            icon="inbox"
+            isOpen={this.state.isOpen}
+            onClose={this.toggleDialog.bind(this)}
+            title=""
+            className="form-container collab-form-container"
+          >
+            <CollabSearch currentProject={currentProject}/>
+          </Dialog>
 
           {/* editor */}
           <div className="project-editor">

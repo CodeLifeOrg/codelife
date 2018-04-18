@@ -8,6 +8,7 @@ import "./LessonPlan.css";
 
 import CodeBlock from "components/CodeBlock";
 import IslandLink from "components/IslandLink";
+import CTA from "components/CTA";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -40,9 +41,10 @@ class LessonPlan extends Component {
 
     const {lid} = this.props.params;
     const {islands} = this.props.data;
-    const {t} = this.props;
+    const {auth, t} = this.props;
     // let {nextIsland, prevIsland} = this.state;
 
+    // NOTE: `islands.find` throws an error before rendering
     const currentIsland = islands.find(i => i.id === lid);
 
     // next/prev links
@@ -209,6 +211,9 @@ class LessonPlan extends Component {
             </Link>
 
           </nav>
+
+          {/* display CTA if logged out */}
+          { !auth.user ? <CTA context="lessonplan" /> : null }
         </div>
       );
     }
@@ -232,6 +237,9 @@ class LessonPlan extends Component {
               { islandList }
             </div>
           </div>
+
+          {/* display CTA if logged out */}
+          { !auth.user ? <CTA context="lessonplan" /> : null }
         </div>
       );
     }

@@ -21,6 +21,7 @@
   "Are you sure you want to leave this project?": "Are you sure you want to leave this project?",
   "Are you sure you want to reset the code to its original state?": "Are you sure you want to reset the code to its original state?",
   "Back to Island List": "Back to Island List",
+  "Back to top": "Back to top",
   "Ban Content": "Ban Content",
   "Ban this Page": "Ban this Page",
   "Birthday": "Birthday",
@@ -153,6 +154,7 @@
   "Hide Discussion": "Hide Discussion",
   "Home": {
     "BeginAdventure": "Begin your adventure",
+    "CTA": "Sign up for a free codelife  account and start coding",
     "ContinueAdventure": "Continue your adventure",
     "Feature1": "Learn to build websites with HTML, CSS, and JavaScript",
     "Feature2": "Built for Brazilian students, but free and open to all",
@@ -189,6 +191,7 @@
   "Lesson Builder": "Lesson Builder",
   "Lesson plan": "Lesson plan",
   "Lessonplan": {
+    "CTA": "Sign up for a free codelife  account and learn to code",
     "Codeblock": "Codeblock challenge",
     "Headline": "Codelife lesson plan",
     "IslandIndex": "Lesson index",

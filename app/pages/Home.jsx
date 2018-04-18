@@ -7,6 +7,7 @@ import CodeBlockCard from "components/CodeBlockCard";
 import ProjectCard from "components/ProjectCard";
 import IslandLink from "components/IslandLink";
 import AuthForm from "components/AuthForm";
+import CTA from "components/CTA";
 import {Dialog, Intent, Spinner} from "@blueprintjs/core";
 import "./Home.css";
 
@@ -181,6 +182,9 @@ class Home extends Component {
           <p>{ t("splashP3") }</p>
           <p>{ t("splashP4") }</p>
         </div>
+
+        {/* display CTA if logged out */}
+        { !this.props.user ? <CTA context="home" /> : null }
 
         {/* Authform */}
         <Dialog

@@ -1,6 +1,48 @@
 @import "../mixins.css";
 
 /* -------------------------------
+Header
+------------------------------- */
+.lessonplan-header-image-container {
+  /* sizing */
+  width: 50%;
+  /* positioning */
+  margin: 0 auto 2rem auto;
+
+  /* position left of text on non-tiny screens */
+  @add-mixin min-sm {
+    @add-mixin absolute-vertical-center;
+    width: 30%;
+    left: -5%;
+
+    /* make room for image by adding padding to all following elements */
+    & ~ * {
+      padding-left: 25%;
+    }
+  }
+
+  /* remove padding from elements on big screens */
+  @add-mixin min-lg {
+    left: -7%;
+  }
+  @media (min-width: 1460px) {
+    width: 40%;
+    left: -17.5%;
+  }
+
+  /* image sizing */
+  & .lessonplan-header-image {
+    /* sizing */
+    width: 100%;
+    padding-top: 75%; /* 600 / 800 */
+    /* background sizing */
+    background-size: contain;
+    background-repeat: no-repeat; /* just in case */
+  }
+}
+
+
+/* -------------------------------
 Nav
 ------------------------------- */
 .lessonplan-nav {

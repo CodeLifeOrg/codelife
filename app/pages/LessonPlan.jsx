@@ -79,7 +79,7 @@ class LessonPlan extends Component {
             return <section className={`lessonplan-slide ${s.type}-lessonplan-slide`} key={s.id}>
               <SlideComponent {...s}
                 readOnly={true}
-                island={currentIsland.theme}/>
+                island={currentIsland.theme} />
             </section>;
           })}
 
@@ -95,7 +95,7 @@ class LessonPlan extends Component {
 
       // level view
       return (
-        <div className="lessonplan content u-padding-top-off">
+        <div className={`lessonplan content u-padding-top-off ${currentIsland.theme}`}>
 
           {/* header */}
           <header className="header lessonplan-header">
@@ -103,6 +103,9 @@ class LessonPlan extends Component {
 
               {/* island title & description */}
               <div className="header-text">
+                <div className="lessonplan-header-image-container">
+                  <div className="lessonplan-header-image" />
+                </div>
                 <h1 className="lessonplan-section-title font-xxl u-margin-top-off u-margin-bottom-off">
                   {currentIsland.name} {t("lesson plan")}
                 </h1>

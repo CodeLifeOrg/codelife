@@ -18,7 +18,8 @@ then add the theme name to the @each loop below */
   .island-$(theme) {
     /* set background image paths */
     & .island-image,
-    & > .island-link-image {
+    & > .island-link-image,
+    & .lessonplan-header-image {
       background-image: url("/islands/island-$(theme).png");
     }
     & > .island-link-image-small {
@@ -45,10 +46,12 @@ then add the theme name to the @each loop below */
     }
     /* set color */
     & .island-path .code-block.is-done .side,
-    & .pt-dialog-header-title {
+    & .pt-dialog-header-title,
+    & .lessonplan-toc > * {
       color: var(--$(theme)-island-dark);
     }
-    &.slide-inner a:not(.pt-button) {
+    &.slide-inner a:not(.pt-button),
+    & .lessonplan-toc-link {
       color: var(--$(theme)-island-medium);
       /* interactions */
       &:hover, &:focus {

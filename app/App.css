@@ -436,6 +436,12 @@ header
   /* reset width due to flex on parent */
   & .header-inner {
     width: 100%;
+
+    @add-mixin min-md {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   /* set height */

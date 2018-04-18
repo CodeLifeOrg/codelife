@@ -427,8 +427,8 @@ header
 
 .header {
   @add-mixin section-bg-gradient;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
   /* position .header-inner */
   display: flex;
   align-items: center;

@@ -207,11 +207,6 @@
       /* sizing */
       padding: 0.25em var(--gutter-sm);
 
-      /* interactions */
-      &:hover, &:focus {
-        color: var(--black);
-      }
-
       /* remove right padding, bring in toggle buttons */
       &.with-toggle {
         @add-mixin min-sm {

@@ -26,7 +26,9 @@ class LessonPlan extends Component {
     super(props);
     this.state = {
       islands: [],
-      currentIsland: {}
+      currentIsland: {},
+      nextIsland: null,
+      prevIsland: null
     };
   }
 
@@ -39,8 +41,16 @@ class LessonPlan extends Component {
     const {lid} = this.props.params;
     const {islands} = this.props.data;
     const {t} = this.props;
+    // let {nextIsland, prevIsland} = this.state;
 
     const currentIsland = islands.find(i => i.id === lid);
+
+    // next/prev links
+    /* NOTE: This technically works, but cause the console to yell about setting state in render
+       when using them. Also, the page slows down considerably. React is hard.
+
+       currentIsland ? nextIsland = islands.find(i => i.ordering === currentIsland.ordering + 1) : null;
+       currentIsland ? prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1) : null; */
 
     const s = (a, b) => a.ordering - b.ordering;
 
@@ -94,7 +104,7 @@ class LessonPlan extends Component {
               {/* island title & description */}
               <div className="header-text">
                 <h1 className="lessonplan-section-title font-xxl u-margin-top-off u-margin-bottom-off">
-                  {currentIsland.name} {t("lesson plan")}
+                  {currentIsland.name} {t("lesson plan")}
                 </h1>
                 <p className="lessonplan-section-description font-md u-margin-bottom-off">
                   {currentIsland.description}
@@ -130,17 +140,34 @@ class LessonPlan extends Component {
             </div>
           </header>
 
+          {/* nav */}
+          <nav className="lessonplan-nav">
+
+            {/* previous island */}
+            {/* hiding for now
+            {prevIsland
+              // island exists; link to it
+              ? <Link className="lessonplan-nav-link link" to={`/lessonplan/${prevIsland.id}`}>
+                <span className="link-icon pt-icon pt-icon-arrow-left" />
+                <span className="link-text">{prevIsland.name}</span>
+              </Link>
+              // island doesn't exist; show nothing
+              : null
+            } */}
+
+            {/* island index */}
+            <Link className="lessonplan-nav-link link" to="/lessonplan">
+              {/* NOTE: replace arrow-left icon with map icon if next/prev links are added */}
+              <span className="link-icon pt-icon pt-icon-arrow-left" />
+              <span className="link-text">{t("Lessonplan.IslandIndex")}</span>
+            </Link>
+
+          </nav>
+
 
           {/* main content */}
           <div className="fullwidth-container">
             <div className="content">
-
-              {/* nav */}
-              <nav className="lessonplan-nav">
-                <Link className="lessonplan-nav-link link" to="/lessonplan">
-                  <span className="pt-icon pt-icon-map" /> {t("Lessonplan.IslandIndex")}
-                </Link>
-              </nav>
 
               {/* overview / cheatsheet */}
               <section className="lessonplan-section anchor" id="overview" >

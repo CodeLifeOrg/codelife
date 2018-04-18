@@ -4,4 +4,29 @@
 .lessonplan-section.anchor {
   padding-top: 1rem;
   margin-top: 1rem;
+
+  &:first-of-type {
+    margin-top: -2rem;
+  }
+}
+
+/* nav */
+.lessonplan-nav {
+  top: -0.875em;
+
+  /* center links on bigger screens */
+  @add-mixin min-md {
+    text-align: center;
+  }
+
+  /* style like main nav links */
+  & .lessonplan-nav-link {
+    @add-mixin nav-link;
+
+    /* space out icon & text */
+    & .link-icon {
+      margin-right: var(--gutter-xxs);
+      top: -1px; /* baseline adjustment */
+    }
+  }
 }

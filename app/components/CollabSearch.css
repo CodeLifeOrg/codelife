@@ -17,11 +17,11 @@ layout
   /* pin the sidebar to the left */
   /* TODO: cross browser testing */
   @media (min-width: 992px) and (min-height: 768px) {
-    height: 43rem;
+    height: 42.5rem;
 
     /* fudge container alignment */
     & .collab-container {
-      padding-bottom: 2.25rem;
+      padding-bottom: 0.25rem;
     }
 
     /* make fixed positioning relative to container */
@@ -52,18 +52,11 @@ layout
       top: auto;
       right: auto;
       /* WARNING: magic number as hell */
-      margin-top: -1.5rem;
-      margin-left: 66.75rem;
+      margin-top: -3rem;
+      margin-left: 65rem;
       /* no background, just in case the positioning is off */
       background: none;
     }
-  }
-}
-
-/* adjust padding on bigger screens */
-.collab-container {
-  @add-mixin min-md {
-    padding: var(--gutter-md) var(--gutter-md) 3.125rem var(--gutter-md);
   }
 }
 

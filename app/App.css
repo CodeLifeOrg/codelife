@@ -1000,6 +1000,11 @@ utility classes
   @add-mixin absolute-expand;
 }
 
+/* clearfix */
+.u-clearfix {
+  @add-mixin clearfix;
+}
+
 /* vertical margin */
 .u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
 .u-margin-top-md { margin-top: var(--gutter-md) !important; }

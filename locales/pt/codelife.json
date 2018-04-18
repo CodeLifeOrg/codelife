@@ -40,6 +40,7 @@
   "Code Example": "Exemplo de código",
   "CodeBlock": "Desafio",
   "CodeBlocks": "Desafios",
+  "Codeblock": "Codeblock",
   "Codeblock Name": "Nome do desafio",
   "Codeblock Title": "Título do desafio",
   "Codeblock's code will be shown after you complete the last level of this island": "O código será mostrado depois de completar o último nível desta ilha",
@@ -186,9 +187,14 @@
   "Leave": "Leave",
   "Leave Project": "Leave Project",
   "Lesson Builder": "Gestão do conteúdo",
+  "Lesson plan": "Lesson plan",
   "Lessonplan": {
-    "Headline": "Lessonplan.Headline"
+    "Codeblock": "Lessonplan.Codeblock",
+    "Headline": "Lessonplan.Headline",
+    "IslandIndex": "Lessonplan.IslandIndex",
+    "Overview": "Lessonplan.Overview"
   },
+  "Level": "Level",
   "Like": "Gosto",
   "Likes": "Gost@",
   "Loading": "Carregando",
@@ -221,8 +227,10 @@
   "Logout": "Sair",
   "Male": "Masculino",
   "Map": "Mapa",
+  "Member Since": "Member Since",
   "Modified on": "Modificado em",
   "Monthly Flag Limit Reached": "Limite mensal atingido",
+  "Municipality": "Municipality",
   "My Project": "Meu Projeto",
   "My info": "My info",
   "My location": "My location",
@@ -253,6 +261,7 @@
   "Profile": "Perfil",
   "Profile image": "Profile image",
   "Profile saved!": "Perfil salvo!",
+  "Progress": "Progress",
   "Project": {
     "AddCollaborators": "Project.AddCollaborators",
     "Delete": "Project.Delete",
@@ -356,6 +365,7 @@
   "Submit Report": "Enviar relatório",
   "Submit Survey": "Enviar respostas",
   "Survey": "Pesquisa",
+  "Table of contents": "Table of contents",
   "This is a full sentence used as the translation key": "Esta é uma frase completa usada como chave de tradução",
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui desafios",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",
@@ -500,6 +510,7 @@
     "title": "",
     "welcome": "Bem-vind@ {{name}}!"
   },
+  "lesson plan": "lesson plan",
   "myCodeblock": "Meu {{ islandName }} Desafio",
   "noCodeblocks": "Este usuário ainda não possui desafios",
   "noProjects": "Este usuário ainda não possui nenhum projeto",

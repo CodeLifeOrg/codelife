@@ -105,6 +105,16 @@
   z-index: 0;
 }
 
+/* clearfix */
+@define-mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+
 /* ellipsis */
 /* NOTE: works best with defined width & height, 1 line of text */
 @define-mixin overflow-ellipsis {

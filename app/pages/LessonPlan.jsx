@@ -69,14 +69,14 @@ class LessonPlan extends Component {
       levelSections = currentIsland.levels.sort(s).map(l =>
         <section id={l.id} className="lessonplan-section anchor" key={l.id}>
 
-          <h2 className="lessonplan-section-heading" key={l.id}>
+          <h2 className="lessonplan-section-heading font-xl" key={l.id}>
             {`${ t("Level") } ${l.ordering + 1}: ${l.name}`}
           </h2>
 
-          {/* slides */}
+          {/* loop through slides */}
           {l.slides.sort(s).map(s => {
             const SlideComponent = compLookup[s.type];
-            return <section key={s.id}>
+            return <section className={`lessonplan-slide ${s.type}-lessonplan-slide`} key={s.id}>
               <SlideComponent {...s}
                 readOnly={true}
                 island={currentIsland.theme}/>
@@ -112,7 +112,7 @@ class LessonPlan extends Component {
               </div>
 
               {/* table of contents */}
-              <div className="header-sidebar contest-toc">
+              <div className="header-sidebar lessonplan-toc">
                 <h2 className="lessonplan-toc-heading font-md u-margin-top-off">{t("Table of contents")}</h2>
 
                 {/* table of contents numbered list */}
@@ -131,7 +131,7 @@ class LessonPlan extends Component {
                   {/* codeblock */}
                   <li className="lessonplan-toc-item">
                     <AnchorLink className="lessonplan-toc-link link" to="codeblock">
-                      {t("Codeblock")}
+                      {t("Lessonplan.Codeblock")}
                     </AnchorLink>
                   </li>
 
@@ -170,8 +170,8 @@ class LessonPlan extends Component {
             <div className="content">
 
               {/* overview / cheatsheet */}
-              <section className="lessonplan-section anchor" id="overview" >
-                <h2 className="lessonplan-subhead">{t("Lessonplan.Overview")}</h2>
+              <section className="overview-lessonplan-section lessonplan-section anchor" id="overview" >
+                <h2 className="lessonplan-section-heading font-xl">{t("Lessonplan.Overview")}</h2>
                 <div dangerouslySetInnerHTML={{__html: currentIsland.cheatsheet}} />
               </section>
 
@@ -179,8 +179,8 @@ class LessonPlan extends Component {
               {levelSections}
 
               {/* codeblock */}
-              <section className="lessonplan-section anchor" id="codeblock">
-                <h2 className="lessonplan-subhead">{t("Codeblock")}</h2>
+              <section className="codeblock-lessonplan-section lessonplan-section anchor" id="codeblock">
+                <h2 className="lessonplan-section-heading font-xl">{t("Lessonplan.Codeblock")}</h2>
                 <CodeBlock
                   island={currentIsland}
                   readOnly={true} />

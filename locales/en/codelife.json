@@ -40,6 +40,7 @@
   "Code Example": "Code Example",
   "CodeBlock": "CodeBlock",
   "CodeBlocks": "CodeBlocks",
+  "Codeblock": "Codeblock",
   "Codeblock Name": "Codeblock Name",
   "Codeblock Title": "Codeblock Title",
   "Codeblock's code will be shown after you complete the last level of this island": "Codeblock's code will be shown after you complete the last level of this island",
@@ -186,9 +187,14 @@
   "Leave": "Leave",
   "Leave Project": "Leave Project",
   "Lesson Builder": "Lesson Builder",
+  "Lesson plan": "Lesson plan",
   "Lessonplan": {
-    "Headline": "Codelife lesson plan"
+    "Codeblock": "Codeblock challenge",
+    "Headline": "Codelife lesson plan",
+    "IslandIndex": "Lesson index",
+    "Overview": "Lesson overview"
   },
+  "Level": "Level",
   "Like": "Like",
   "Likes": "Likes",
   "Loading": "Loading",
@@ -221,8 +227,10 @@
   "Logout": "Log out",
   "Male": "Male",
   "Map": "Map",
+  "Member Since": "Member Since",
   "Modified on": "Modified on",
   "Monthly Flag Limit Reached": "Monthly Flag Limit Reached",
+  "Municipality": "Municipality",
   "My Project": "My Project",
   "My info": "My info",
   "My location": "My location",
@@ -253,6 +261,7 @@
   "Profile": "Profile",
   "Profile image": "Profile image",
   "Profile saved!": "Profile saved!",
+  "Progress": "Progress",
   "Project": {
     "AddCollaborators": "Add collaborators",
     "Delete": "Delete project",
@@ -356,6 +365,7 @@
   "Submit Report": "Submit Report",
   "Submit Survey": "Submit Survey",
   "Survey": "Survey",
+  "Table of contents": "Table of contents",
   "This is a full sentence used as the translation key": "This is a full sentence used as the translation key",
   "This user doesn't have any code blocks yet": "This user doesn't have any code blocks yet",
   "This user doesn't have any projects yet": "This user doesn't have any projects yet",
@@ -500,6 +510,7 @@
     "title": "",
     "welcome": "Welcome {{name}}!"
   },
+  "lesson plan": "lesson plan",
   "myCodeblock": "My {{ islandName }} CodeBlock",
   "noCodeblocks": "This user doesn't have any code blocks yet.",
   "noProjects": "This user doesn't have any projects yet.",

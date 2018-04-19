@@ -248,10 +248,6 @@ class Projects extends Component {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
-  toggleDialog() {
-    this.setState({isOpen: !this.state.isOpen});
-  }
-
   render() {
 
     const {auth, t} = this.props;
@@ -324,7 +320,7 @@ class Projects extends Component {
 
               {/* add / manage collaborators */}
               { isMine ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link" onClick={this.toggleDialog.bind(this)}>
+                <button className="project-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
                   <span className="project-action-button-icon pt-icon pt-icon-people" />
                   <span className="project-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
                 </button>
@@ -385,7 +381,7 @@ class Projects extends Component {
               }
 
               {/* new project */}
-              <button className="new-project-button pt-button pt-intent-primary" onClick={this.createNewProject.bind(this, String(new Date().getTime()))}>
+              <button className="new-project-button pt-button pt-intent-primary" onClick={() => this.setState({isNewOpen: true})}>
                 <span className="pt-icon pt-icon-application" />
                 { t("create new project") } 👈
               </button>
@@ -396,11 +392,24 @@ class Projects extends Component {
           <Dialog
             icon="inbox"
             isOpen={this.state.isOpen}
-            onClose={this.toggleDialog.bind(this)}
+            onClose={() => this.setState({isOpen: !this.state.isOpen})}
             title=""
             className="form-container collab-form-container"
           >
             <CollabSearch currentProject={currentProject}/>
+          </Dialog>
+
+          <Dialog
+            icon="code"
+            isOpen={this.state.isNewOpen}
+            onClose={() => this.setState({isNewOpen: !this.state.isNewOpen})}
+            title={t("Create New Project")}
+            className=""
+          >
+            <div>
+              <button>new blank project</button><br/>
+              <button>new project from codeblock</button>
+            </div>
           </Dialog>
 
           <Alert

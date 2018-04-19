@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
+import PropTypes from "prop-types";
 
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import ReportBox from "components/ReportBox";
@@ -36,6 +37,24 @@ class CodeBlockCard extends Component {
       }
     }
     this.setState({open: !this.state.open});
+  }
+
+  toggleFork() {
+    const {browserHistory} = this.context;
+    // Trim leading and trailing whitespace from the project title
+    const name = this.state.codeBlock.snippetname.concat(String(new Date().getTime())).replace(/^\s+|\s+$/gm, "");
+    const {studentcontent} = this.state.codeBlock;
+    axios.post("/api/projects/new", {name, studentcontent}).then(resp => {
+      if (resp.status === 200) {
+        const projects = resp.data.projects;
+        const newid = resp.data.id;
+        const currentProject = projects.find(p => p.id === newid);
+        browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
+      }
+      else {
+        alert("Error");
+      }
+    });
   }
 
   toggleLike() {
@@ -174,6 +193,11 @@ class CodeBlockCard extends Component {
             <div className="pt-dialog-footer-actions">
               { user
                 ? <div>
+                  { done && <Button
+                    iconName="fork"
+                    onClick={ this.toggleFork.bind(this) }
+                    text={t("New Project from Codeblock")} 
+                  /> }
                   <Popover
                     interactionKind={PopoverInteractionKind.CLICK}
                     popoverClassName="pt-popover-content-sizing"
@@ -209,6 +233,10 @@ class CodeBlockCard extends Component {
     );
   }
 }
+
+CodeBlockCard.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 CodeBlockCard = connect(state => ({
   user: state.auth.user

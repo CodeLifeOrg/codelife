@@ -55,43 +55,6 @@ class ProjectSwitcher extends Component {
     });
   }
 
-  deleteProject(project) {
-    const {t} = this.props;
-
-    if (project === true) {
-      const {deleteAlert} = this.state;
-      axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
-        if (resp.status === 200) {
-          const projects = resp.data;
-          let newProject = null;
-          // if the project i'm trying to delete is the one i'm currently on, pick a new project
-          // to open (in this case, the first one in the list)
-          if (deleteAlert.project.id === this.state.currentProject.id) {
-            if (projects.length > 0) newProject = projects[0];
-          }
-          // if the project i'm trying to delete is a different project, it's fine to stay on
-          // my current project.
-          else {
-            newProject = this.state.currentProject;
-          }
-          this.setState({deleteAlert: false, projectName: "", currentProject: newProject, projects});
-          this.props.onDeleteProject(newProject);
-        }
-        else {
-          console.log("Error");
-        }
-      });
-    }
-    else {
-      this.setState({deleteAlert: {
-        project,
-        // text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
-        text: t("deleteAlert", {projectName: project.name})
-      }});
-    }
-
-  }
-
   handleChange(e) {
     this.setState({projectName: e.target.value});
   }
@@ -120,38 +83,6 @@ class ProjectSwitcher extends Component {
     }
   }
 
-  showLeaveAlert(collab) {
-    const {t} = this.props;
-    const leaveAlert = {
-      collab,
-      text: t("Are you sure you want to leave this project?")
-    };
-    this.setState({leaveAlert});
-  }
-
-  leaveCollab() {
-    const {collab} = this.state.leaveAlert;
-    const {projects} = this.state;
-    if (collab && collab.id) {
-      const pid = collab.id;
-      axios.post("/api/projects/leavecollab", {pid}).then(resp => {
-        if (resp.status === 200) {
-          const collabs = this.state.collabs.filter(c => c.id !== collab.id);
-          if (collab.id === this.state.currentProject.id) {
-            const currentProject = projects[0];
-            this.setState({leaveAlert: false, currentProject, collabs}, this.props.openProject.bind(this, currentProject.id));
-          }
-          else {
-            this.setState({leaveAlert: false, collabs});
-          }
-        }
-        else {
-          console.log("error");
-        }
-      });
-    }
-  }
-
   clickNewProject() {
     const {t} = this.props;
     const projectName = this.state.projectName;
@@ -169,16 +100,9 @@ class ProjectSwitcher extends Component {
     }
   }
 
-  toggleCollab() {
-
-  }
-
-
-
   render() {
 
     const {auth, t} = this.props;
-    const {deleteAlert, leaveAlert} = this.state;
 
     const showDeleteButton = this.state.projects.length > 1;
 
@@ -279,25 +203,6 @@ class ProjectSwitcher extends Component {
           { t("create new project") } 👈
         </button>
 
-        <Alert
-          isOpen={ deleteAlert ? true : false }
-          cancelButtonText={ t("Cancel") }
-          confirmButtonText={ t("Delete") }
-          intent={ Intent.DANGER }
-          onCancel={ () => this.setState({deleteAlert: false}) }
-          onConfirm={ () => this.deleteProject(true) }>
-          <p>{ deleteAlert ? deleteAlert.text : "" }</p>
-        </Alert>
-        <Alert
-          isOpen={ leaveAlert ? true : false }
-          cancelButtonText={ t("Cancel") }
-          confirmButtonText={ t("Leave") }
-          intent={ Intent.DANGER }
-          onCancel={ () => this.setState({leaveAlert: false}) }
-          onConfirm={ () => this.leaveCollab() }>
-          <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
-          <p>{ leaveAlert ? leaveAlert.text : "" }</p>
-        </Alert>
       </div>
     );
   }

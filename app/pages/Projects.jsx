@@ -3,10 +3,10 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Dialog, Toaster} from "@blueprintjs/core";
+import {Intent, Position, Dialog, Toaster, Alert} from "@blueprintjs/core";
+import {Link} from "react-router";
 
 import CodeBlockList from "components/CodeBlockList";
-import ProjectSwitcher from "components/ProjectSwitcher";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import CollabSearch from "components/CollabSearch";
 
@@ -23,24 +23,47 @@ class Projects extends Component {
       mounted: false,
       execState: false,
       currentProject: null,
-      collabProject: null
+      collabProject: null,
+      projects: [],
+      collabs: []
     };
   }
 
   componentDidMount() {
-    this.setState({mounted: true});
-  }
+    const pget = axios.get("/api/projects/mine");
+    const cget = axios.get("/api/projects/collabs");
+    const {t} = this.props;
 
-  onCreateProject(project) {
-    const {browserHistory} = this.context;
-    this.setState({currentProject: project});
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${project.name}/edit`);
-  }
+    Promise.all([pget, cget]).then(resp => {
+      const projects = resp[0].data;
+      const collabs = resp[1].data;
 
-  onDeleteProject(newproject) {
-    const {browserHistory} = this.context;
-    this.setState({currentProject: newproject});
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${newproject.name}/edit`);
+      let {currentProject} = this.state;
+      const {filename} = this.props.params;
+      if (filename) {
+        currentProject = projects.find(p => p.name === filename);
+        if (!currentProject) currentProject = projects[0];
+        this.setState({currentProject, projects, collabs}, this.openProject.bind(this, currentProject.id));
+      }
+      else {
+        if (projects.length === 0) {
+          this.createNewProject.bind(this)(t("My Project"));
+        }
+        else {
+          let latestIndex = 0;
+          let latestDate = projects[0].datemodified;
+          for (let i = 0; i < projects.length; i++) {
+            const p = projects[i];
+            if (p.datemodified && Date.parse(p.datemodified) > Date.parse(latestDate)) {
+              latestIndex = i;
+              latestDate = p.datemodified;
+            }
+          }
+          const currentProject = projects[latestIndex];
+          this.setState({currentProject, projects, collabs}, this.openProject.bind(this, currentProject.id));
+        }
+      }
+    });
   }
 
   openProject(pid) {
@@ -55,18 +78,127 @@ class Projects extends Component {
     this.setState({execState});
   }
 
+  createNewProject(projectName) {
+    const {browserHistory} = this.context;
+    // Trim leading and trailing whitespace from the project title
+    projectName = projectName.replace(/^\s+|\s+$/gm, "");
+    if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
+        if (resp.status === 200) {
+          const projects = resp.data.projects;
+          const newid = resp.data.id;
+          const currentProject = projects.find(p => p.id === newid);
+          this.setState({projectName: "", currentProject, projects});
+          browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
+        }
+        else {
+          alert("Error");
+        }
+      });
+    }
+    else {
+      alert("File cannot be in use or blank");
+    }
+  }
+
+  clickNewProject() {
+    const {t} = this.props;
+    const projectName = this.state.projectName;
+    // todo: maybe check with db instead of local state, should check back on this
+    if (this.state.changesMade) {
+      if (confirm(t("Abandon changes and open new file?"))) {
+        this.createNewProject.bind(this, projectName);
+      }
+      else {
+        // do nothing
+      }
+    }
+    else {
+      this.createNewProject.bind(this, projectName);
+    }
+  }
+
   shareProject() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
     const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/share/project/${this.state.currentProject.id}`);
       browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
     }
     else {
       const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
       toast.show({message: t("Save your webpage before sharing!"), timeout: 1500, intent: Intent.WARNING});
     }
+  }
+
+  showLeaveAlert(collab) {
+    const {t} = this.props;
+    const leaveAlert = {
+      collab,
+      text: t("Are you sure you want to leave this project?")
+    };
+    this.setState({leaveAlert});
+  }
+
+  leaveCollab() {
+    const {collab} = this.state.leaveAlert;
+    const {projects} = this.state;
+    if (collab && collab.id) {
+      const pid = collab.id;
+      axios.post("/api/projects/leavecollab", {pid}).then(resp => {
+        if (resp.status === 200) {
+          const collabs = this.state.collabs.filter(c => c.id !== collab.id);
+          if (collab.id === this.state.currentProject.id) {
+            const currentProject = projects[0];
+            this.setState({leaveAlert: false, currentProject, collabs}, this.openProject.bind(this, currentProject.id));
+          }
+          else {
+            this.setState({leaveAlert: false, collabs});
+          }
+        }
+        else {
+          console.log("error");
+        }
+      });
+    }
+  }
+
+  deleteProject(project) {
+    const {t} = this.props;
+    const {browserHistory} = this.context;
+
+    if (project === true) {
+      const {deleteAlert} = this.state;
+      axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
+        if (resp.status === 200) {
+          const projects = resp.data;
+          let newProject = null;
+          // if the project i'm trying to delete is the one i'm currently on, pick a new project
+          // to open (in this case, the first one in the list)
+          if (deleteAlert.project.id === this.state.currentProject.id) {
+            if (projects.length > 0) newProject = projects[0];
+          }
+          // if the project i'm trying to delete is a different project, it's fine to stay on
+          // my current project.
+          else {
+            newProject = this.state.currentProject;
+          }
+          this.setState({deleteAlert: false, projectName: "", currentProject: newProject, projects});
+          browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);
+        }
+        else {
+          console.log("Error");
+        }
+      });
+    }
+    else {
+      this.setState({deleteAlert: {
+        project,
+        // text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
+        text: t("deleteAlert", {projectName: project.name})
+      }});
+    }
+
   }
 
   // TODO: i'm loading studentcontent twice.  once when we instantiate projects, and then again
@@ -81,16 +213,13 @@ class Projects extends Component {
     if (this.state.currentProject) {
       if (this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
         toast.show({message: t("saveWarning"), timeout: 1500, intent: Intent.WARNING});
-        return false;
       }
       else {
         this.openProject(project.id);
-        return true;
       }
     }
     else {
       this.openProject(project.id);
-      return true;
     }
   }
 
@@ -126,7 +255,7 @@ class Projects extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {activeTabId, collabProject, currentProject, titleText, execState} = this.state;
+    const {currentProject, deleteAlert, leaveAlert, execState} = this.state;
     const {filename} = this.props.params;
     const {browserHistory} = this.context;
 
@@ -134,8 +263,28 @@ class Projects extends Component {
 
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
     const hasCollabs = currentProject && currentProject.collaborators.length;
+    const showDeleteButton = this.state.projects.length > 1;
 
-    const allCodeBlockRef = <CodeBlockList/>;
+    const projectItems = this.state.projects.map(project =>
+      <li className="project-switcher-item" key={project.id}>
+        <Link
+          onClick={() => this.onClickProject.bind(this)(project)}
+          className="project-switcher-link link">
+          { project.name }
+        </Link>
+      </li>
+    );
+
+    const collabItems = this.state.collabs.map(collab =>
+      <li to={collab.id} className="project-switcher-item" key={collab.id}>
+        <Link
+          onClick={() => this.onClickProject.bind(this)(collab)}
+          className="project-switcher-link link">
+          { collab.name }
+        </Link>
+      </li>
+    );
+
 
     return (
       <div className="projects">
@@ -191,21 +340,57 @@ class Projects extends Component {
 
               {/* delete / leave project */}
               { currentProject ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link danger-text">
-                  <span className={ !collabProject ? "project-action-button-icon pt-icon pt-icon-trash" : "project-action-button-icon pt-icon pt-icon-log-out" } />
-                  <span className="project-action-button-text u-hide-below-xxs">{ !collabProject ? t("Project.Delete") : t("Project.Leave") } 👈</span>
-                </button>
+                {
+                  isMine 
+                    ? showDeleteButton
+                      ? <button className="project-action-button u-unbutton link danger-text" onClick={this.deleteProject.bind(this, currentProject)}>
+                        <span className="project-action-button-icon pt-icon pt-icon-trash" />
+                        <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
+                      </button>
+                      : null
+                    : <button className="project-action-button u-unbutton link danger-text" onClick={this.showLeaveAlert.bind(this, currentProject)}>
+                      <span className="project-action-button-icon pt-icon pt-icon-log-out" />
+                      <span className="project-action-button-text u-hide-below-xxs">{t("Project.Leave") }</span>
+                    </button>
+                }
               </li> : null }
 
             </ul>
 
-            {/* project switcher */}
-            <ProjectSwitcher
-              projectToLoad={filename}
-              onCreateProject={this.onCreateProject.bind(this)}
-              onDeleteProject={this.onDeleteProject.bind(this)}
-              openProject={this.openProject.bind(this)}
-              onClickProject={this.onClickProject.bind(this)} />
+            {/* project switcher f*/}
+            <div className="project-switcher font-xs">
+
+              {/* Switch to project heading */}
+              <h2 className="project-switcher-heading font-md">{ t("Project.SwitcherHeading") }</h2>
+
+              {/* created by user */}
+              <div className="my-project-switcher">
+                <h3 className="project-switcher-subhead font-xs">{ t("Project.MyProjects") }</h3>
+                <ul className="project-switcher-list u-list-reset">
+                  {projectItems}
+                </ul>
+              </div>
+
+              {/* joined by user */}
+              { collabItems.length > 0
+                ? <div className="collab-project-switcher">
+
+                  <h3 className="project-switcher-subhead font-xs">{ t("Project.JoinedProjects") }</h3>
+
+                  <ul className="project-switcher-list u-list-reset">
+                    {collabItems}
+                  </ul>
+                </div>
+                : null
+              }
+
+              {/* new project */}
+              <button className="new-project-button pt-button pt-intent-primary" onClick={this.createNewProject.bind(this, String(new Date().getTime()))}>
+                <span className="pt-icon pt-icon-application" />
+                { t("create new project") } 👈
+              </button>
+
+            </div>
           </div>
 
           <Dialog
@@ -217,6 +402,26 @@ class Projects extends Component {
           >
             <CollabSearch currentProject={currentProject}/>
           </Dialog>
+
+          <Alert
+            isOpen={ deleteAlert ? true : false }
+            cancelButtonText={ t("Cancel") }
+            confirmButtonText={ t("Delete") }
+            intent={ Intent.DANGER }
+            onCancel={ () => this.setState({deleteAlert: false}) }
+            onConfirm={ () => this.deleteProject(true) }>
+            <p>{ deleteAlert ? deleteAlert.text : "" }</p>
+          </Alert>
+          <Alert
+            isOpen={ leaveAlert ? true : false }
+            cancelButtonText={ t("Cancel") }
+            confirmButtonText={ t("Leave") }
+            intent={ Intent.DANGER }
+            onCancel={ () => this.setState({leaveAlert: false}) }
+            onConfirm={ () => this.leaveCollab.bind(this) }>
+            <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
+            <p>{ leaveAlert ? leaveAlert.text : "" }</p>
+          </Alert>
 
           {/* editor */}
           <div className="project-editor">

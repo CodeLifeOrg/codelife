@@ -90,7 +90,6 @@ class CollabSearch extends Component {
   render() {
 
     const {t, currentProject} = this.props;
-    console.log(currentProject);
     const {users, query, filterLoc, filterSchool} = this.state;
     const collabs = currentProject.collaborators;
     const atMax = collabs.length >= this.state.MAX_COLLABS;

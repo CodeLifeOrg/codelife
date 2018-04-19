@@ -162,7 +162,7 @@ module.exports = function(app) {
             .map(p => flattenProject(req.user, p.toJSON()))
             .filter(p => !p.hidden)
             .sort((a, b) => a.name < b.name ? -1 : 1);
-          res.json({currentProject, projects: resp}).end();
+          res.json({id: currentProject.id, projects: resp}).end();
         });
     });
   });

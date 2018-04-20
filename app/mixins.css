@@ -522,3 +522,14 @@
     }
   }
 }
+
+
+/* print stylesheet mixins */
+/* display an html attr as a pseudo element */
+@define-mixin print-attr {
+  display: block;
+  position: relative;
+  color: var(--sky-dark);
+  text-decoration: underline;
+  font-size: 0.5em;
+}

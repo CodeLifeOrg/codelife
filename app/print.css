@@ -1,0 +1,54 @@
+@import "mixins.css";
+
+@media print {
+  /* reset everything to black on transparent */
+  * {
+    color: black !important;
+    background-color: transparent !important;
+  }
+
+  /* white background */
+  .island-link-label,
+  .island-title,
+  .stop, .side,
+  .pt-popover-content {
+    background-color: white !important;
+  }
+
+  /* black logo */
+  .logo-svg g {
+    fill: black;
+  }
+
+  /* display href attr */
+  a[href]:not([href="/"]):after {
+    @add-mixin print-attr;
+    content: "<" attr(href) ">";
+  }
+  a[href]:not([href*=http]):not([href="/"]):after {
+    @add-mixin print-attr;
+    content: "<http://codelife.com/" attr(href) ">";
+  }
+
+  /* overrides for island links */
+  .island-link:after {
+    position: absolute !important;
+    bottom: -1rem;
+  }
+
+  /* reset padding on main content container */
+  .nav + .content {
+    padding-top: 0 !important;
+  }
+
+  /* hide unuseful stuff */
+  button, input, textarea,
+  .nav .link-list,
+  .search-container,
+  .video-container,
+  .clouds, #clouds,
+  .cta,
+  .footer-logo-img {
+    display: none !important;
+  }
+}

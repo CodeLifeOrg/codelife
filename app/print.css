@@ -1,6 +1,9 @@
 @import "mixins.css";
 
 @media print {
+  html {
+    font-size: 10pt;
+  }
   /* reset everything to black on transparent */
   * {
     color: black !important;
@@ -38,7 +41,9 @@
 
   /* reset padding on main content container */
   .nav + .content {
-    padding-top: 0 !important;
+    width: 100% !imporatnt;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* hide unuseful stuff */
@@ -48,6 +53,7 @@
   .video-container,
   .clouds, #clouds,
   .cta,
+  .footer,
   .footer-logo-img {
     display: none !important;
   }

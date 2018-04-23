@@ -21,18 +21,21 @@ class Footer extends Component {
       {id: 4, title: t("Survey"), link: "/survey"}
     ];
 
-    // if logged in, add survey to about links
-    if (user) {
-      aboutLinks.push(surveyLink[0]);
-    }
-
-
     // explore link array (to be added as necessary)
     const exploreLinks = [
       {id: 1, title: t("Lesson plan"), link: "/lessonplan"},
       {id: 2, title: t("Glossary"), link: "/glossary"}
-      // {id: 3, title: t("Leaderboard"), link: "/leaderboard"}
     ];
+    const leaderboardLink = [
+      {id: 3, title: t("Leaderboard"), link: "/leaderboard"}
+    ];
+
+
+    // if logged in, add additional links to footer
+    if (user) {
+      aboutLinks.push(surveyLink[0]);
+      exploreLinks.push(leaderboardLink[0]);
+    }
 
 
     // account link array — must be logged in

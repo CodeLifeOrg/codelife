@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2} from "@blueprintjs/core";
+import {NonIdealState, Popover, PopoverInteractionKind} from "@blueprintjs/core";
 import Loading from "components/Loading";
 
 import "./Leaderboard.css";
@@ -15,7 +15,7 @@ class Leaderboard extends Component {
       mounted: false,
       users: [],
       flatProgress: [],
-      sortBy: {prop: "name", desc: true}
+      sortBy: {prop: "username", desc: true}
     };
   }
 
@@ -86,17 +86,15 @@ class Leaderboard extends Component {
         }
       }
 
-      let intent = "pt-intent-danger";
-      if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
-      if (u.progressPercent > 60) intent = "pt-intent-success";
-      return <tr key={u.id}>
-        <td className="username">{u.username}</td>
-        <td className="progressPercent">
+      const intent = "pt-intent-primary";
+      // if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
+      // if (u.progressPercent > 60) intent = "pt-intent-primary";
+      return <tr className="statistics-table-row" key={u.id}>
+        <td className="statistics-table-cell username">{u.username}</td>
+        <td className="statistics-table-cell progress">
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
-            <div>
-              <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
-                <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
-              </div>
+            <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
+              <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
             </div>
             <div style={{padding: "8px"}}>
               { latestLevel
@@ -106,39 +104,60 @@ class Leaderboard extends Component {
             </div>
           </Popover>
         </td>
-        <td className="name">{u.name}</td>
-        <td className="schoolname">{u.schoolname}</td>
-        <td className="geoname">{u.geoname}</td>
-        <td className="createdAt">{new Date(u.createdAt).toDateString()}</td>
+        <td className="statistics-table-cell name">{u.name}</td>
+        <td className="statistics-table-cell schoolname">{u.schoolname}</td>
+        <td className="statistics-table-cell geoname">{u.geoname}</td>
+        <td className="statistics-table-cell created-at">{new Date(u.createdAt).toDateString()}</td>
       </tr>;
     });
 
     return (
+      <div className="statistics content">
+        <div className="content-section">
 
-      <div>
-
-        <div id="statistics" className="content">
-
-          <h1>{t("Leaderboard")}</h1>
+          <h1 className="statistics-heading font-xxl u-text-center">{t("Leaderboard")}</h1>
 
           { userList.length
-            ? <table className="pt-table pt-striped pt-interactive">
-              <thead>
-                <tr>
-                  <th className="username" onClick={this.handleHeaderClick.bind(this, "username")}><span className={ `pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>{t("Username")}</th>
-                  <th className="progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}><span className={ `pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>{t("Progress")}</th>
-                  <th className="name" onClick={this.handleHeaderClick.bind(this, "name")}><span className={ `pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>{t("Name")}</th>
-                  <th className="schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}><span className={ `pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>{t("School")}</th>
-                  <th className="geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}><span className={ `pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>{t("Municipality")}</th>
-                  <th className="createdAt" onClick={this.handleHeaderClick.bind(this, "createdAt")}><span className={ `pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>{t("Member Since")}</th>
+            ? <table className="statistics-table pt-table">
+              <thead className="statistics-table-header">
+                <tr className="statistics-table-header-row statistics-table-row">
+                  {/* username */}
+                  <th className="statistics-table-heading statistics-table-cell username" onClick={this.handleHeaderClick.bind(this, "username")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-sort-alphabetical-desc" : "pt-icon-sort-alphabetical" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Username")}
+                  </th>
+                  {/* progress */}
+                  <th className="statistics-table-heading statistics-table-cell progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-sort-desc" : "pt-icon-sort-asc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Progress")}
+                  </th>
+                  {/* name */}
+                  <th className="statistics-table-heading statistics-table-cell name" onClick={this.handleHeaderClick.bind(this, "name")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-sort-alphabetical-desc" : "pt-icon-sort-alphabetical" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Name")}
+                  </th>
+                  {/* school */}
+                  <th className="statistics-table-heading statistics-table-cell schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-sort-alphabetical-desc" : "pt-icon-sort-alphabetical" : "pt-icon-double-caret-vertical" }` } />
+                    {t("School")}
+                  </th>
+                  {/* municipality */}
+                  <th className="statistics-table-heading statistics-table-cell geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-sort-alphabetical-desc" : "pt-icon-sort-alphabetical" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Municipality")}
+                  </th>
+                  {/* member since */}
+                  <th className="statistics-table-heading statistics-table-cell created-at" onClick={this.handleHeaderClick.bind(this, "createdAt")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-sort-numerical-desc" : "pt-icon-sort-numerical" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Member Since")}
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="statistics-table-body">
                 { userList }
               </tbody>
             </table>
             : <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." /> }
-
         </div>
       </div>
     );

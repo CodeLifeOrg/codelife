@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/labs";
 import PropTypes from "prop-types";
 
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -193,6 +194,7 @@ class CodeBlockCard extends Component {
           title={snippetname}
           lazy={false}
           inline={false}
+          enforceFocus={false}
           className={`${ theme } is-fullscreen` }
         >
           <div className="codeblock-inner pt-dialog-body">
@@ -206,13 +208,14 @@ class CodeBlockCard extends Component {
             <div className="pt-dialog-footer-actions">
               { user
                 ? <div>
-                  { done && <Popover
+                  { done && <Popover2
                     interactionKind={PopoverInteractionKind.CLICK}
                     popoverClassName="pt-popover-content-sizing"
-                    position={Position.TOP}
+                    placement="top"
                     popoverDidOpen={this.selectFork.bind(this)}
                     key="fork-pop"
-                    lazy={false}
+                    inline={true}
+                    
                   >
                     <Button
                       iconName="fork"
@@ -223,7 +226,7 @@ class CodeBlockCard extends Component {
                       <input id="fork" key="fork" type="text" ref={i => this.forkInput = i} onChange={this.handleChange.bind(this)} value={this.state.forkName} /><br/>
                       <button className="pt-button pt-intent-success" onClick={this.toggleFork.bind(this)} >{t("Create")}</button>
                     </div>
-                  </Popover> 
+                  </Popover2> 
                   }
                   <Popover
                     interactionKind={PopoverInteractionKind.CLICK}

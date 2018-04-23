@@ -231,7 +231,8 @@ class Projects extends Component {
       const id = currentProject.id;
       const name = currentProject.name;
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
-      axios.post("/api/projects/update", {id, name, studentcontent}).then (resp => {
+      const username = this.props.auth.user.username;
+      axios.post("/api/projects/update", {id, username, name, studentcontent}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});

@@ -112,7 +112,9 @@ class CodeBlock extends Component {
     if (this.state.filename !== "") name = this.state.filename.replace(/^\s+|\s+$/gm, "");
     let endpoint = "/api/codeBlocks/";
     codeBlock ? endpoint += "update" : endpoint += "new";
-    axios.post(endpoint, {uid, iid, name, studentcontent}).then(resp => {
+    const username = this.props.auth.user.username;
+    console.log(username);
+    axios.post(endpoint, {uid, username, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});

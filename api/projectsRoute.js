@@ -1,5 +1,8 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
+const fs = require("fs");
+const path = require("path");
+const screenshot = require("electron-screenshot-service");
 const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
 const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 
@@ -136,8 +139,23 @@ module.exports = function(app) {
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
-    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}})
-      .then(u => res.json(u).end());
+    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
+      .then(u => {
+        const url = `http://localhost:3300/projects/${req.body.username}/${req.body.name}`;
+        const width = 800;
+        const height = 600;
+        const page = true;
+        const delay = 3000;
+        screenshot({url, width, height, page, delay}).then(img => {
+          const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
+          fs.writeFile(imgPath, img.data, err => {
+            console.log(err);
+            //screenshot.close();
+          });
+        });
+
+        res.json(u).end();
+      });
   });
 
   // Used by Admins in ReportBox and ReportViewer to Ban pages

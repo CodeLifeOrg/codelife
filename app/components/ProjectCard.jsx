@@ -57,7 +57,11 @@ class ProjectCard extends Component {
     }
 
     // define image path
-    const thumbnailURL = `/thumbnails/projects/${thumbnailImg}`;
+    //const thumbnailURL = `/thumbnails/projects/${thumbnailImg}`;
+
+    const thumbnailURL = `/pj_images/${id}.png?v=${new Date().getTime()}`;
+
+    thumbnailImg = true;
 
     return (
       <div className="card-container" key={id}>

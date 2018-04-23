@@ -33,6 +33,7 @@
     "cpf_cnpj": "^0.2.0",
     "css": "git+https://github.com/Datawheel/css.git",
     "datawheel-canon": "^0.15.8",
+    "electron-screenshot-service": "^4.0.3",
     "eslint": "^4.13.1",
     "faker": "^4.1.0",
     "himalaya": "^0.2.10",

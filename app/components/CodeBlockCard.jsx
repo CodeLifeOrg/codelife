@@ -46,7 +46,6 @@ class CodeBlockCard extends Component {
   }
 
   selectFork() {
-    console.log("WHY");
     this.forkInput.focus();
     this.forkInput.select();
   }
@@ -136,7 +135,11 @@ class CodeBlockCard extends Component {
     }
 
     // define image path
-    const thumbnailURL = `/thumbnails/codeblocks/${thumbnailImg}`;
+    //const thumbnailURL = `/thumbnails/codeblocks/${thumbnailImg}`;
+    thumbnailImg = true;
+    const thumbnailURL = `/cb_images/${id}.png?v=${new Date().getTime()}`;
+
+    
 
     return (
       <div className="card-container">

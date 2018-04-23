@@ -101,21 +101,14 @@ class Home extends Component {
           : <div className="header home-header logged-in-home-header u-text-center">
             <div className="header-inner header-half-container">
 
-              {/* island */}
-              <div className="header-half">
-                <IslandLink key={current.id} island={current} />
-              </div>
-
               {/* text */}
-              <div className="header-half u-text-left">
-                <h1 className={`header-headline ${current.theme}`}>
-                  { progress.length ? t("Home.ContinueAdventure") : t("Home.BeginAdventure") }
-                </h1>
-                <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary ${current.theme} font-md u-margin-top-off` }>
-                  <span className="pt-icon pt-icon-send-to-map" />
-                  { t("go to island") }
-                </Link>
-              </div>
+              <h1 className="header-headline font-xxl">
+                { progress.length ? t("Home.ContinueAdventure") : t("Home.BeginAdventure") }
+              </h1>
+
+              {/* island */}
+              <IslandLink key={current.id} island={current} />
+
             </div>
           </div>
         }

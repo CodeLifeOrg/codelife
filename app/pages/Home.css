@@ -149,6 +149,14 @@
 /* logged in header */
 .logged-in-home-header {
 
+  /* account for scaled up island */
+  @add-mixin min-lg {
+    & .header-headline {
+      top: -3rem;
+      z-index: 1;
+    }
+  }
+
   /* center island */
   & .island-link {
     margin-left: auto;

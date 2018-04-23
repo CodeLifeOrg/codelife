@@ -20,9 +20,11 @@ class Projects extends Component {
       deleteAlert: false,
       leaveAlert: false,
       activeTabId: "projects-tab",
+      projectName: "",
       mounted: false,
       execState: false,
       currentProject: null,
+      currentPreview: null,
       collabProject: null,
       projects: [],
       collabs: []
@@ -88,7 +90,7 @@ class Projects extends Component {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
-          this.setState({projectName: "", currentProject, projects});
+          this.setState({projectName: "", currentProject, projects, isNewOpen: false});
           browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
         }
         else {
@@ -405,11 +407,10 @@ class Projects extends Component {
             isOpen={this.state.isNewOpen}
             onClose={() => this.setState({isNewOpen: !this.state.isNewOpen})}
             title={t("Create New Project")}
-            className=""
           >
             <div>
-              <button>new blank project</button><br/>
-              <button>new project from codeblock</button>
+              <input value={this.state.projectName} onChange={e => this.setState({projectName: e.target.value})} /><br/>
+              <button onClick={this.createNewProject.bind(this, this.state.projectName)}>new blank project</button><br/><br/><br/><br/>
             </div>
           </Dialog>
 

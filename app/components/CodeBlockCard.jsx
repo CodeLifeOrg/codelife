@@ -18,7 +18,8 @@ class CodeBlockCard extends Component {
     this.state = {
       open: false,
       codeBlock: null,
-      initialLikeState: false
+      initialLikeState: false,
+      forkName: ""
     };
   }
 
@@ -39,10 +40,20 @@ class CodeBlockCard extends Component {
     this.setState({open: !this.state.open});
   }
 
+  handleChange(e) {
+    this.setState({forkName: e.target.value});
+  }
+
+  selectFork() {
+    console.log("WHY");
+    this.forkInput.focus();
+    this.forkInput.select();
+  }
+
   toggleFork() {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace from the project title
-    const name = this.state.codeBlock.snippetname.concat(String(new Date().getTime())).replace(/^\s+|\s+$/gm, "");
+    const name = this.state.forkName;
     const {studentcontent} = this.state.codeBlock;
     axios.post("/api/projects/new", {name, studentcontent}).then(resp => {
       if (resp.status === 200) {
@@ -73,14 +84,16 @@ class CodeBlockCard extends Component {
   componentDidMount() {
     const {codeBlock} = this.props;
     const initialLikeState = codeBlock.liked ? true : false;
-    this.setState({initialLikeState, codeBlock});
+    const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 1000));
+    this.setState({initialLikeState, codeBlock, forkName});
   }
 
   componentDidUpdate() {
     if (this.state.codeBlock && this.props.codeBlock.id !== this.state.codeBlock.id) {
       const {codeBlock} = this.props;
       const initialLikeState = codeBlock.liked ? true : false;
-      this.setState({initialLikeState, codeBlock});
+      const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 1000));
+      this.setState({initialLikeState, codeBlock, forkName});
     }
   }
 
@@ -193,11 +206,25 @@ class CodeBlockCard extends Component {
             <div className="pt-dialog-footer-actions">
               { user
                 ? <div>
-                  { done && <Button
-                    iconName="fork"
-                    onClick={ this.toggleFork.bind(this) }
-                    text={t("New Project from Codeblock")} 
-                  /> }
+                  { done && <Popover
+                    interactionKind={PopoverInteractionKind.CLICK}
+                    popoverClassName="pt-popover-content-sizing"
+                    position={Position.TOP}
+                    popoverDidOpen={this.selectFork.bind(this)}
+                    key="fork-pop"
+                    lazy={false}
+                  >
+                    <Button
+                      iconName="fork"
+                      text={t("New Project from Codeblock")} 
+                    />
+                    <div key="fork-div">
+                      {t("New Project Name")}<br/>
+                      <input id="fork" key="fork" type="text" ref={i => this.forkInput = i} onChange={this.handleChange.bind(this)} value={this.state.forkName} /><br/>
+                      <button className="pt-button pt-intent-success" onClick={this.toggleFork.bind(this)} >{t("Create")}</button>
+                    </div>
+                  </Popover> 
+                  }
                   <Popover
                     interactionKind={PopoverInteractionKind.CLICK}
                     popoverClassName="pt-popover-content-sizing"

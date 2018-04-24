@@ -195,7 +195,7 @@ class Projects extends Component {
       });
     }
     else {
-      this.setState({leaveAlert: {
+      this.setState({deleteAlert: {
         project,
         // text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
         text: t("deleteAlert", {projectName: project.name})

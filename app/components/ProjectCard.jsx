@@ -36,6 +36,9 @@ class ProjectCard extends Component {
     const {location, project, t, user} = this.props;
     const {datemodified, id, likes, liked, name, studentcontent, username, reported} = project;
 
+    const mine = this.props.user && project.uid === this.props.user.id;
+    const displayname = mine ? t("you!") : false;
+
     moment.locale("pt-BR");
 
     const embedLink = `${ location.origin }/projects/${ username }/${ project.name }`;
@@ -93,7 +96,7 @@ class ProjectCard extends Component {
             { username
               ? <span className="card-author font-xs">
                 { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
-                  { username }
+                  { username ? displayname || username : t("anonymous user") }
                 </Link>
               </span>
               : null }

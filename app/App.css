@@ -247,10 +247,10 @@ blueprint overrides
   }
   & .pt-dialog-footer {
     padding: 0 var(--gutter-xs);
+
     & .pt-dialog-footer-byline {
       color: var(--dark-3);
       float: left;
-      opacity: 0.75;
 
       & .share-link {
         display: block; /* line break */

@@ -176,7 +176,7 @@ class CodeBlockCard extends Component {
             { username
               ? <span className="card-author font-xs">
                 { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
-                  { username }
+                  { username ? displayname || username : t("anonymous user") }
                 </Link>
               </span>
               : null }
@@ -220,10 +220,10 @@ class CodeBlockCard extends Component {
             {/* created by */}
             <p className="pt-dialog-footer-byline u-margin-bottom-off font-sm">
               {t("Created by")}&nbsp;
-              <a href={userLink}>
+              <a href={userLink} className="codeblock-dialog-link user-link">
                 { username ? displayname || username : t("anonymous user") }
               </a>
-              <a href={ embedLink } target="_blank" className="share-link font-xs">{ embedLink }</a>
+              <a href={ embedLink } target="_blank" className="codeblock-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
             {/* show actions if logged in */}

@@ -122,7 +122,7 @@ class ProjectCard extends Component {
         >
           <div className="pt-dialog-body">
             <div className="render">
-              <CodeEditor initialValue={studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} />
+              <CodeEditor initialValue={studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} noZoom={true} />
             </div>
           </div>
           <div className="pt-dialog-footer">

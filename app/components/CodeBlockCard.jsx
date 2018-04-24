@@ -65,7 +65,7 @@ class CodeBlockCard extends Component {
           this.props.handleFork(newid, projects);
         }
         else {
-          browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);  
+          browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
         }
       }
       else {
@@ -211,7 +211,7 @@ class CodeBlockCard extends Component {
 
           {/* main content */}
           <div className="codeblock-dialog-inner codeblock-inner pt-dialog-body">
-            <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} />
+            <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} noZoom={true} />
           </div>
 
           {/* footer */}

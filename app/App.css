@@ -540,6 +540,34 @@ form field layout
   }
 }
 
+/* alerts */
+.alert-container {
+  max-width: 40rem; /* override form-layout mixin */
+
+  & .pt-button {
+    /* make buttons look like the rest of the buttons */
+    @add-mixin font-md;
+    @add-mixin button-padding;
+    /* transitions */
+    transition: opacity 0.2s;
+    will-change: opacity;
+
+    /* interactions */
+    &:hover, &:focus {
+      opacity: 0.9;
+    }
+  }
+
+  /* remove unnecessary margin, thanks blueprint */
+  & .pt-alert-footer .pt-button:not(.pt-intent-danger) {
+    margin-left: 0;
+  }
+
+  & .pt-button.pt-intent-danger {
+    background-color: var(--danger);
+  }
+}
+
 /* form columns */
 .form-column {
   margin-top: 1.5rem;

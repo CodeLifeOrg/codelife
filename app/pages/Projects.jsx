@@ -138,7 +138,7 @@ class Projects extends Component {
     const {t} = this.props;
     const leaveAlert = {
       collab,
-      text: t("Are you sure you want to leave this project?")
+      text: `${t("Are you sure you want to leave")} “${collab.name}”?`
     };
     this.setState({leaveAlert});
   }
@@ -195,7 +195,7 @@ class Projects extends Component {
       });
     }
     else {
-      this.setState({deleteAlert: {
+      this.setState({leaveAlert: {
         project,
         // text: `Are you sure you want to delete "${ project.name }"? This action cannot be undone.`
         text: t("deleteAlert", {projectName: project.name})
@@ -470,25 +470,26 @@ class Projects extends Component {
 
         {/* confirm delete project */}
         <Alert
+          className="alert-container form-container u-text-center"
           isOpen={ deleteAlert ? true : false }
           cancelButtonText={ t("Cancel") }
           confirmButtonText={ t("Delete") }
           intent={ Intent.DANGER }
           onCancel={ () => this.setState({deleteAlert: false}) }
           onConfirm={ () => this.deleteProject(true) }>
-          <p>{ deleteAlert ? deleteAlert.text : "" }</p>
+          <p className="font-lg u-margin-top-off u-margin-bottom-md">{ deleteAlert ? deleteAlert.text : "" }</p>
         </Alert>
 
         {/* confirm leave project */}
         <Alert
+          className="alert-container form-container u-text-center"
           isOpen={ leaveAlert ? true : false }
           cancelButtonText={ t("Cancel") }
           confirmButtonText={ t("Leave") }
           intent={ Intent.DANGER }
           onCancel={ () => this.setState({leaveAlert: false}) }
           onConfirm={ () => this.leaveCollab.bind(this) }>
-          <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
-          <p>{ leaveAlert ? leaveAlert.text : "" }</p>
+          <p className="font-lg u-margin-top-off u-margin-bottom-md">{ leaveAlert ? leaveAlert.text : "" }</p>
         </Alert>
 
       </div>

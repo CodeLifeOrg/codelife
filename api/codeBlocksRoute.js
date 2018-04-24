@@ -48,8 +48,8 @@ module.exports = function(app) {
     db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.iid}, returning: true, plain: true})
       .then(u => {
         const url = `http://localhost:3300/codeBlocks/${req.body.username}/${req.body.name}`;
-        const width = 800;
-        const height = 600;
+        const width = 400;
+        const height = 300;
         const page = true;
         const delay = 3000;
         screenshot({url, width, height, page, delay}).then(img => {

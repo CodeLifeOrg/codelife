@@ -251,6 +251,10 @@ class Projects extends Component {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
+  handleFork(newid, projects) {
+    this.setState({projects}, this.openProject.bind(this, newid));
+  }
+
   render() {
 
     const {auth, t} = this.props;
@@ -388,6 +392,9 @@ class Projects extends Component {
                 <span className="pt-icon pt-icon-application" />
                 { t("create new project") } 👈
               </button>
+
+              <h3>BROWSE CODEBLOCKS</h3>
+              <CodeBlockList handleFork={this.handleFork.bind(this)} />
 
             </div>
           </div>

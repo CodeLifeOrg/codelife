@@ -60,7 +60,13 @@ class CodeBlockCard extends Component {
         const projects = resp.data.projects;
         const newid = resp.data.id;
         const currentProject = projects.find(p => p.id === newid);
-        browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
+        this.setState({open: false});
+        if (this.props.handleFork) {
+          this.props.handleFork(newid, projects);
+        }
+        else {
+          browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);  
+        }
       }
       else {
         alert("Error");

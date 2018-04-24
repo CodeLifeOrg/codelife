@@ -20,6 +20,7 @@ class CodeBlockList extends Component {
   componentDidMount() {
     const cbget = axios.get("/api/codeBlocks/all");
     const upget = axios.get("/api/userprogress/mine");
+    const MAX_LENGTH = 5;
     Promise.all([cbget, upget]).then(resp => {
       const allCodeBlocks = resp[0].data;
       const userProgress = resp[1].data.progress;
@@ -36,10 +37,20 @@ class CodeBlockList extends Component {
             island.myCodeBlocks.push(cb);
           }
           else {
-            cb.liked ? island.likedCodeBlocks.push(cb) : island.unlikedCodeBlocks.push(cb);
+            if (cb.liked) {
+              if (island.likedCodeBlocks.length <= MAX_LENGTH) {
+                island.likedCodeBlocks.push(cb);
+              }
+            }
+            else {
+              if (island.unlikedCodeBlocks.length <= MAX_LENGTH) {
+                island.unlikedCodeBlocks.push(cb);
+              }
+            }
           }
         }
       }
+
       this.setState({islands, userProgress});
     });
   }
@@ -72,6 +83,10 @@ class CodeBlockList extends Component {
     this.setState({[l]: !this.state[l]});
   }
 
+  handleFork(newid, projects) {
+    if (this.props.handleFork) this.props.handleFork(newid, projects);
+  }
+
   render() {
     const {islands, userProgress} = this.state;
 
@@ -92,7 +107,7 @@ class CodeBlockList extends Component {
       const thisIslandItems = [];
       for (const s of i.myCodeBlocks.concat(i.likedCodeBlocks, i.unlikedCodeBlocks)) {
         thisIslandItems.push(
-          <li><CodeBlockCard theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
+          <li><CodeBlockCard handleFork={this.handleFork.bind(this)} theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
         );
       }
       codeBlockItems.push(<Collapse isOpen={this.state[i.id]}>{thisIslandItems}</Collapse>);

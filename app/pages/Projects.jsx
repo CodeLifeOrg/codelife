@@ -396,7 +396,7 @@ class Projects extends Component {
                 {/* new project */}
                 <button className="new-project-button pt-button pt-intent-primary" onClick={() => this.setState({isNewOpen: true})}>
                   <span className="pt-icon pt-icon-application" />
-                  { t("create new project") } 👈
+                  { t("create new project") }
                 </button>
 
               </div>
@@ -450,8 +450,7 @@ class Projects extends Component {
           isOpen={this.state.isOpen}
           onClose={() => this.setState({isOpen: !this.state.isOpen})}
           title=""
-          className="form-container collab-form-container"
-        >
+          className="form-container collab-form-container" >
           <CollabSearch currentProject={currentProject}/>
         </Dialog>
 
@@ -461,16 +460,37 @@ class Projects extends Component {
           isOpen={this.state.isNewOpen}
           onClose={() => this.setState({isNewOpen: !this.state.isNewOpen})}
           title={t("Create New Project")}
-          classname="form-container new-project-form-container"
-        >
-          <input value={this.state.projectName} onChange={e => this.setState({projectName: e.target.value})} />
+          className="form-container new-project-form-container" >
 
-          <button onClick={this.createNewProject.bind(this, this.state.projectName)}>new blank project</button>
+          {/* input */}
+          <div className="field-container">
+            <label
+              className="heading font-md"
+              htmlFor="new-project-title">
+              {t("Project name")}
+            </label>
+            <input
+              id="new-project-title"
+              className="font-md"
+              value={this.state.projectName}
+              onChange={e => this.setState({projectName: e.target.value})}
+              autoFocus />
+          </div>
+
+          {/* submit */}
+          <div className="field-container">
+            <button
+              className="pt-button pt-intent-primary font-md"
+              onClick={this.createNewProject.bind(this, this.state.projectName)}>
+              <span className="pt-icon pt-icon-application" />
+              { t("create new project") }
+            </button>
+          </div>
         </Dialog>
 
         {/* confirm delete project */}
         <Alert
-          className="alert-container form-container u-text-center"
+          className="alert-container form-container"
           isOpen={ deleteAlert ? true : false }
           cancelButtonText={ t("Cancel") }
           confirmButtonText={ t("Delete") }
@@ -482,7 +502,7 @@ class Projects extends Component {
 
         {/* confirm leave project */}
         <Alert
-          className="alert-container form-container u-text-center"
+          className="alert-container form-container"
           isOpen={ leaveAlert ? true : false }
           cancelButtonText={ t("Cancel") }
           confirmButtonText={ t("Leave") }

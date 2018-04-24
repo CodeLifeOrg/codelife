@@ -544,6 +544,7 @@ form field layout
 .alert-container {
   max-width: 40rem; /* override form-layout mixin */
 
+  /* unclassable buttons */
   & .pt-button {
     /* make buttons look like the rest of the buttons */
     @add-mixin font-md;
@@ -561,6 +562,7 @@ form field layout
   /* remove unnecessary margin, thanks blueprint */
   & .pt-alert-footer .pt-button:not(.pt-intent-danger) {
     margin-left: 0;
+    margin-right: 0.75em;
   }
 
   & .pt-button.pt-intent-danger {

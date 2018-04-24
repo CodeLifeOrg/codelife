@@ -73,6 +73,7 @@
   /* the name of the current project */
   & .project-title {
     text-transform: none;
+    letter-spacing: -0.5px;
     margin-bottom: 0.8em;
   }
 
@@ -135,6 +136,8 @@
   }
 }
 
+
+/* project switcher */
 .project-switcher {
 
   /* main heading baseline adjustment */
@@ -263,4 +266,10 @@
     vertical-align: middle;
     width: var(--gutter-md);
   }
+}
+
+
+/* create new project dialog */
+.new-project-form-container {
+  max-width: 40rem;
 }

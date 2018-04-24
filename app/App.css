@@ -251,10 +251,9 @@ blueprint overrides
       color: var(--dark-3);
       float: left;
       opacity: 0.75;
+
       & .share-link {
-        display: block;
-        font-size: 12px;
-        margin-top: var(--gutter-xxs);
+        display: block; /* line break */
       }
     }
   }
@@ -1024,6 +1023,7 @@ utility classes
 .u-margin-top-off { margin-top: 0 !important; }
 
 .u-margin-bottom-xxs { margin-bottom: var(--gutter-xxs) !important; }
+.u-margin-bottom-sm { margin-bottom: var(--gutter-sm) !important; }
 .u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
 .u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
 .u-margin-bottom-off { margin-bottom: 0 !important; }

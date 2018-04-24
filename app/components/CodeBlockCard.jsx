@@ -117,6 +117,7 @@ class CodeBlockCard extends Component {
     const done = userProgress ? userProgress.find(p => p.level === lid && p.status === "completed") !== undefined : true;
 
     const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
+    const userLink = `${ location.origin }/profile/${ username }`;
 
     // define thumbnail image as null
     let thumbnailImg = null;
@@ -139,7 +140,7 @@ class CodeBlockCard extends Component {
     thumbnailImg = true;
     const thumbnailURL = `/cb_images/${id}.png?v=${new Date().getTime()}`;
 
-    
+
 
     return (
       <div className="card-container">
@@ -176,7 +177,9 @@ class CodeBlockCard extends Component {
 
             {/* likes */}
             <p className="card-likes font-xs u-margin-top-off">
-              <button className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` } />
+              <button
+                className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
+                onClick={ this.toggleLike.bind(this) } />
               <span className="card-likes-count">{ likes }</span>
               <span className="u-visually-hidden">&nbsp;
                 { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
@@ -198,68 +201,113 @@ class CodeBlockCard extends Component {
           lazy={false}
           inline={false}
           enforceFocus={false}
-          className={`${ theme } is-fullscreen` }
-        >
-          <div className="codeblock-inner pt-dialog-body">
+          className={`codeblock-dialog ${ theme } is-fullscreen` } >
+
+          {/* main content */}
+          <div className="codeblock-dialog-inner codeblock-inner pt-dialog-body">
             <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} />
           </div>
-          <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">
-              { username ? `${t("Created by")} ${displayname || username}` : "" }
-              <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
-            </div>
-            <div className="pt-dialog-footer-actions">
-              { user
-                ? <div>
-                  { done && <Popover2
+
+          {/* footer */}
+          <div className="codeblock-dialog-footer pt-dialog-footer">
+
+            {/* created by */}
+            <p className="pt-dialog-footer-byline u-margin-bottom-off font-sm">
+              {t("Created by")}&nbsp;
+              <a href={userLink}>
+                { username ? displayname || username : t("anonymous user") }
+              </a>
+              <a href={ embedLink } target="_blank" className="share-link font-xs">{ embedLink }</a>
+            </p>
+
+            {/* show actions if logged in */}
+            { user &&
+              <div className="codeblock-dialog-footer-actions pt-dialog-footer-actions">
+
+                {/* likes */}
+                <p className="codeblock-dialog-footer-action card-likes font-xs u-margin-top-off u-margin-bottom-off">
+                  <button
+                    className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
+                    onClick={ this.toggleLike.bind(this) } />
+                  <span className="card-likes-count codeblock-dialog-footer-action-text">{ likes }</span>
+                  <span className="u-visually-hidden">&nbsp;
+                    { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+                  </span>
+                </p>
+
+
+                {/* flag content */}
+                <Popover
+                  interactionKind={PopoverInteractionKind.CLICK}
+                  popoverClassName="pt-popover-content-sizing"
+                  position={Position.TOP_RIGHT} >
+
+                  {/* flag button */}
+                  <button className="codeblock-dialog-footer-action flag-button u-unbutton font-xs ">
+                    <span className="codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                    <span className="codeblock-dialog-footer-action-text">
+                      {reported ? "Flagged" : "Flag"}
+                    </span>
+                  </button>
+
+                  {/* flag form */}
+                  <ReportBox
+                    reportid={id}
+                    contentType="codeblock"
+                    handleReport={this.handleReport.bind(this)}
+                  />
+                </Popover>
+
+
+                {/* fork codeblock as project */}
+                { done &&
+                  <Popover2
                     interactionKind={PopoverInteractionKind.CLICK}
-                    popoverClassName="pt-popover-content-sizing"
-                    placement="top"
+                    popoverClassName="fork-popover pt-popover-content-sizing"
+                    placement="auto-end"
                     popoverDidOpen={this.selectFork.bind(this)}
                     key="fork-pop"
-                    inline={true}
-                    
-                  >
-                    <Button
-                      iconName="fork"
-                      text={t("New Project from Codeblock")} 
-                    />
-                    <div key="fork-div">
-                      {t("New Project Name")}<br/>
-                      <input id="fork" key="fork" type="text" ref={i => this.forkInput = i} onChange={this.handleChange.bind(this)} value={this.state.forkName} /><br/>
-                      <button className="pt-button pt-intent-success" onClick={this.toggleFork.bind(this)} >{t("Create")}</button>
+                    inline={false}>
+
+                    {/* fork button */}
+                    <button className="codeblock-dialog-footer-action fork-button u-unbutton link font-xs">
+                      <span className="codeblock-dialog-footer-action-icon fork-button-icon pt-icon pt-icon-fork" />
+                      <span className="codeblock-dialog-footer-action-text">
+                        {t("New Project from Codeblock")}
+                      </span>
+                    </button>
+
+                    {/* fork popover */}
+                    <div className="fork-popover-inner u-text-center" key="fork-div">
+                      <div className="field-container">
+
+                        {/* label */}
+                        <label htmlFor="fork" className="heading font-md fork-heading">{t("New Project Name")}</label>
+
+                        {/* input */}
+                        <input
+                          className="fork-input"
+                          id="fork"
+                          key="fork"
+                          type="text"
+                          ref={i => this.forkInput = i}
+                          onChange={this.handleChange.bind(this)}
+                          value={this.state.forkName}
+                          autoFocus />
+                      </div>
+
+                      {/* submit button */}
+                      <div className="field-container">
+                        <button
+                          className="fork-submit pt-button pt-intent-primary" onClick={this.toggleFork.bind(this)} >
+                          {t("Create project")}
+                        </button>
+                      </div>
                     </div>
-                  </Popover2> 
-                  }
-                  <Popover
-                    interactionKind={PopoverInteractionKind.CLICK}
-                    popoverClassName="pt-popover-content-sizing"
-                    position={Position.TOP_RIGHT}
-                  >
-                    <Button
-                      intent={reported ? "" : Intent.DANGER}
-                      iconName="flag"
-                      text={reported ? "Flagged" : "Flag"}
-                    />
-                    <div>
-                      <ReportBox reportid={id} contentType="codeblock" handleReport={this.handleReport.bind(this)}/>
-                    </div>
-                  </Popover>
-                  <Button
-                    intent={ liked ? Intent.WARNING : Intent.DEFAULT }
-                    iconName={ `star${ liked ? "" : "-empty"}` }
-                    onClick={ this.toggleLike.bind(this) }
-                    text={ `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
-                  />
-                </div>
-                : null
-              }
-              <Button
-                intent={ Intent.PRIMARY }
-                onClick={ this.toggleDialog.bind(this) }
-                text={ t("Close") }
-              />
-            </div>
+                  </Popover2>
+                }
+              </div>
+            }
           </div>
         </Dialog>
       </div>

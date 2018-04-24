@@ -13,3 +13,64 @@
   left: -0.4rem;
   background-size: cover;
 }
+
+/* dialog */
+.codeblock-dialog {
+  padding-bottom: 0; /* blueprint override */
+
+  /* reset margin on inner content */
+  & .codeblock-dialog-inner {
+    margin-bottom: 0;
+  }
+
+  /* footer */
+  & .codeblock-dialog-footer {
+    /* reset margin & padding */
+    margin: 0;
+    padding: var(--gutter-sm) 20px;
+    /* theming */
+    background-color: var(--white);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+
+  /* actions */
+  & .codeblock-dialog-footer-actions {
+    /* vertically center inline items */
+    & > * {
+      vertical-align: middle;
+
+      /* space out items */
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  /* space out icon and text */
+  & .codeblock-dialog-footer-action-icon {
+    margin-right: 0.3em;
+  }
+  /* set text height */
+  & .codeblock-dialog-footer-action-text {
+    line-height: 2.125rem;
+  }
+
+  /* flag button theme */
+  & .flag-button {
+    transition: color 0.2s;
+
+    &:hover, &:focus {
+      color: var(--danger);
+    }
+  }
+}
+
+.fork-popover-inner {
+  min-width: 16rem;
+}
+
+.fork-input,
+.fork-submit {
+  display: block;
+  width: 100%;
+}

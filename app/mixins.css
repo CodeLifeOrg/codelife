@@ -527,9 +527,11 @@
 /* print stylesheet mixins */
 /* display an html attr as a pseudo element */
 @define-mixin print-attr {
-  display: block;
+  display: block; /* needed to make content display */
+  /* positioning */
   position: relative;
-  color: var(--sky-dark);
-  text-decoration: underline;
+  /* theming */
   font-size: 0.5em;
+  color: var(--sky-dark); /* it's the link href, so give it the link color */
+  text-decoration: none; /* but it's small, so don't underline it */
 }

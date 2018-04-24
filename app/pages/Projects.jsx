@@ -27,7 +27,8 @@ class Projects extends Component {
       currentPreview: null,
       collabProject: null,
       projects: [],
-      collabs: []
+      collabs: [],
+      showCodeblocks: false
     };
   }
 
@@ -255,10 +256,14 @@ class Projects extends Component {
     this.setState({projects}, this.openProject.bind(this, newid));
   }
 
+  toggleCodeblocks() {
+    this.setState({showCodeblocks: !this.state.showCodeblocks});
+  }
+
   render() {
 
     const {auth, t} = this.props;
-    const {currentProject, deleteAlert, leaveAlert, execState} = this.state;
+    const {currentProject, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
     const {filename} = this.props.params;
     const {browserHistory} = this.context;
 
@@ -291,164 +296,201 @@ class Projects extends Component {
 
     return (
       <div className="projects">
+        <div className="projects-inner">
 
-        {/* hidden h1 for accessibility */}
-        <h1 className="u-visually-hidden">{ t("Projects") }</h1>
+          {/* hidden h1 for accessibility */}
+          <h1 className="u-visually-hidden">{ t("Projects") }</h1>
 
+          {/* body */}
+          <div className="project-body">
 
-        <div className="project-body">
+            {/* controls */}
+            <div className="project-controls">
 
-          {/* controls */}
-          <div className="project-controls">
+              {/* current file */}
+              <h2 className="project-title font-lg">{filename}</h2>
 
-            {/* current file */}
-            <h2 className="project-title font-lg">{filename}</h2>
+              <h3 className="project-subtitle font-sm">{t("Actions")}</h3>
 
-            <h3 className="project-subtitle font-sm">{t("Actions")}</h3>
+              {/* list of actions */}
+              <ul className="project-action-list font-xs u-list-reset">
 
-            {/* list of actions */}
-            <ul className="project-action-list font-xs u-list-reset">
+                {/* save project */}
+                <li className="project-action-item">
+                  <button className="project-action-button u-unbutton link" onClick={this.saveCodeToDB.bind(this)}>
+                    <span className="project-action-button-icon pt-icon pt-icon-floppy-disk" />
+                    <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Save") }</span>
+                  </button>
+                </li>
 
-              {/* save project */}
-              <li className="project-action-item">
-                <button className="project-action-button u-unbutton link" onClick={this.saveCodeToDB.bind(this)}>
-                  <span className="project-action-button-icon pt-icon pt-icon-floppy-disk" />
-                  <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Save") }</span>
-                </button>
-              </li>
+                {/* execute code */}
+                { execState ? <li className="project-action-item">
+                  <button className="project-action-button u-unbutton link" onClick={this.executeCode.bind(this)}>
+                    <span className="project-action-button-icon pt-icon pt-icon-refresh" />
+                    <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Execute") }</span>
+                  </button>
+                </li> : null }
 
-              {/* execute code */}
-              { execState ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link" onClick={this.executeCode.bind(this)}>
-                  <span className="project-action-button-icon pt-icon pt-icon-refresh" />
-                  <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Execute") }</span>
-                </button>
-              </li> : null }
+                {/* add / manage collaborators */}
+                { isMine ? <li className="project-action-item">
+                  <button className="project-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
+                    <span className="project-action-button-icon pt-icon pt-icon-people" />
+                    <span className="project-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
+                  </button>
+                </li> : null }
 
-              {/* add / manage collaborators */}
-              { isMine ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
-                  <span className="project-action-button-icon pt-icon pt-icon-people" />
-                  <span className="project-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
-                </button>
-              </li> : null }
+                {/* share project */}
+                { currentProject ? <li className="project-action-item">
+                  <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
+                    <span className="project-action-button-icon pt-icon pt-icon-share" />
+                    <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
+                  </button>
+                </li> : null }
 
-              {/* share project */}
-              { currentProject ? <li className="project-action-item">
-                <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
-                  <span className="project-action-button-icon pt-icon pt-icon-share" />
-                  <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
-                </button>
-              </li> : null }
-
-              {/* delete / leave project */}
-              { currentProject ? <li className="project-action-item">
-                {
-                  isMine 
-                    ? showDeleteButton
-                      ? <button className="project-action-button u-unbutton link danger-text" onClick={this.deleteProject.bind(this, currentProject)}>
-                        <span className="project-action-button-icon pt-icon pt-icon-trash" />
-                        <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
+                {/* delete / leave project */}
+                { currentProject ? <li className="project-action-item">
+                  {
+                    isMine
+                      ? showDeleteButton
+                        ? <button className="project-action-button u-unbutton link danger-text" onClick={this.deleteProject.bind(this, currentProject)}>
+                          <span className="project-action-button-icon pt-icon pt-icon-trash" />
+                          <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
+                        </button>
+                        : null
+                      : <button className="project-action-button u-unbutton link danger-text" onClick={this.showLeaveAlert.bind(this, currentProject)}>
+                        <span className="project-action-button-icon pt-icon pt-icon-log-out" />
+                        <span className="project-action-button-text u-hide-below-xxs">{t("Project.Leave") }</span>
                       </button>
-                      : null
-                    : <button className="project-action-button u-unbutton link danger-text" onClick={this.showLeaveAlert.bind(this, currentProject)}>
-                      <span className="project-action-button-icon pt-icon pt-icon-log-out" />
-                      <span className="project-action-button-text u-hide-below-xxs">{t("Project.Leave") }</span>
-                    </button>
-                }
-              </li> : null }
+                  }
+                </li> : null }
 
-            </ul>
+              </ul>
 
-            {/* project switcher f*/}
-            <div className="project-switcher font-xs">
+              {/* project switcher f*/}
+              <div className="project-switcher font-xs">
 
-              {/* Switch to project heading */}
-              <h2 className="project-switcher-heading font-md">{ t("Project.SwitcherHeading") }</h2>
+                {/* Switch to project heading */}
+                <h2 className="project-switcher-heading font-md">{ t("Project.SwitcherHeading") }</h2>
 
-              {/* created by user */}
-              <div className="my-project-switcher">
-                <h3 className="project-switcher-subhead font-xs">{ t("Project.MyProjects") }</h3>
-                <ul className="project-switcher-list u-list-reset">
-                  {projectItems}
-                </ul>
-              </div>
-
-              {/* joined by user */}
-              { collabItems.length > 0
-                ? <div className="collab-project-switcher">
-
-                  <h3 className="project-switcher-subhead font-xs">{ t("Project.JoinedProjects") }</h3>
-
+                {/* created by user */}
+                <div className="my-project-switcher">
+                  <h3 className="project-switcher-subhead font-xs">{ t("Project.MyProjects") }</h3>
                   <ul className="project-switcher-list u-list-reset">
-                    {collabItems}
+                    {projectItems}
                   </ul>
                 </div>
-                : null
-              }
 
-              {/* new project */}
-              <button className="new-project-button pt-button pt-intent-primary" onClick={() => this.setState({isNewOpen: true})}>
-                <span className="pt-icon pt-icon-application" />
-                { t("create new project") } 👈
-              </button>
+                {/* joined by user */}
+                { collabItems.length > 0
+                  ? <div className="collab-project-switcher">
 
-              <h3>BROWSE CODEBLOCKS</h3>
-              <CodeBlockList handleFork={this.handleFork.bind(this)} />
+                    <h3 className="project-switcher-subhead font-xs">{ t("Project.JoinedProjects") }</h3>
 
+                    <ul className="project-switcher-list u-list-reset">
+                      {collabItems}
+                    </ul>
+                  </div>
+                  : null
+                }
+
+                {/* new project */}
+                <button className="new-project-button pt-button pt-intent-primary" onClick={() => this.setState({isNewOpen: true})}>
+                  <span className="pt-icon pt-icon-application" />
+                  { t("create new project") } 👈
+                </button>
+
+              </div>
             </div>
-          </div>
 
-          <Dialog
-            icon="inbox"
-            isOpen={this.state.isOpen}
-            onClose={() => this.setState({isOpen: !this.state.isOpen})}
-            title=""
-            className="form-container collab-form-container"
-          >
-            <CollabSearch currentProject={currentProject}/>
-          </Dialog>
-
-          <Dialog
-            icon="code"
-            isOpen={this.state.isNewOpen}
-            onClose={() => this.setState({isNewOpen: !this.state.isNewOpen})}
-            title={t("Create New Project")}
-          >
-            <div>
-              <input value={this.state.projectName} onChange={e => this.setState({projectName: e.target.value})} /><br/>
-              <button onClick={this.createNewProject.bind(this, this.state.projectName)}>new blank project</button><br/><br/><br/><br/>
+            {/* editor */}
+            <div className="project-editor">
+              <CodeEditor
+                codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)}
+                initialValue={currentProject ? currentProject.studentcontent : ""}
+                ref={c => this.editor = c} />
             </div>
-          </Dialog>
-
-          <Alert
-            isOpen={ deleteAlert ? true : false }
-            cancelButtonText={ t("Cancel") }
-            confirmButtonText={ t("Delete") }
-            intent={ Intent.DANGER }
-            onCancel={ () => this.setState({deleteAlert: false}) }
-            onConfirm={ () => this.deleteProject(true) }>
-            <p>{ deleteAlert ? deleteAlert.text : "" }</p>
-          </Alert>
-          <Alert
-            isOpen={ leaveAlert ? true : false }
-            cancelButtonText={ t("Cancel") }
-            confirmButtonText={ t("Leave") }
-            intent={ Intent.DANGER }
-            onCancel={ () => this.setState({leaveAlert: false}) }
-            onConfirm={ () => this.leaveCollab.bind(this) }>
-            <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
-            <p>{ leaveAlert ? leaveAlert.text : "" }</p>
-          </Alert>
-
-          {/* editor */}
-          <div className="project-editor">
-            <CodeEditor
-              codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)}
-              initialValue={currentProject ? currentProject.studentcontent : ""}
-              ref={c => this.editor = c} />
           </div>
         </div>
+
+
+        {/* show / hide codeblocks */}
+        { !showCodeblocks
+          // show the button
+          ? <div className="cta u-text-center u-margin-top-lg u-margin-bottom-off">
+
+            <h2 className="cta-heading u-margin-top-off u-margin-bottom-off font-lg">
+              { t("Need inspiration?") }
+            </h2>
+
+            {/* login | signup button */}
+            <button className="cta-button pt-button pt-intent-primary font-md u-margin-top-md" onClick={this.toggleCodeblocks.bind(this)}>
+              { t("Browse Codeblocks") }
+            </button>
+          </div>
+          // show the codeblocks
+          : <div className="codeblock-browser content u-padding-bottom-off">
+            <div className="content-section">
+              <h2 className="codeblock-browser-heading u-margin-top-off">{ t("Browse Codeblocks") }
+                <button
+                  className="codeblock-browser-hide-button u-unbutton u-margin-top-off u-margin-bottom-off"
+                  onClick={this.toggleCodeblocks.bind(this)}>
+                  <span className="pt-icon pt-icon-eye-off" />
+                  <span className="u-visually-hidden">{ t("Hide Codeblocks") }</span>
+                </button>
+              </h2>
+              <CodeBlockList handleFork={this.handleFork.bind(this)} />
+            </div>
+          </div>
+        }
+
+
+        {/* collab search */}
+        <Dialog
+          icon="inbox"
+          isOpen={this.state.isOpen}
+          onClose={() => this.setState({isOpen: !this.state.isOpen})}
+          title=""
+          className="form-container collab-form-container"
+        >
+          <CollabSearch currentProject={currentProject}/>
+        </Dialog>
+
+        {/* create new project */}
+        <Dialog
+          icon="code"
+          isOpen={this.state.isNewOpen}
+          onClose={() => this.setState({isNewOpen: !this.state.isNewOpen})}
+          title={t("Create New Project")}
+          classname="form-container new-project-form-container"
+        >
+          <input value={this.state.projectName} onChange={e => this.setState({projectName: e.target.value})} />
+
+          <button onClick={this.createNewProject.bind(this, this.state.projectName)}>new blank project</button>
+        </Dialog>
+
+        {/* confirm delete project */}
+        <Alert
+          isOpen={ deleteAlert ? true : false }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Delete") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({deleteAlert: false}) }
+          onConfirm={ () => this.deleteProject(true) }>
+          <p>{ deleteAlert ? deleteAlert.text : "" }</p>
+        </Alert>
+
+        {/* confirm leave project */}
+        <Alert
+          isOpen={ leaveAlert ? true : false }
+          cancelButtonText={ t("Cancel") }
+          confirmButtonText={ t("Leave") }
+          intent={ Intent.DANGER }
+          onCancel={ () => this.setState({leaveAlert: false}) }
+          onConfirm={ () => this.leaveCollab.bind(this) }>
+          <h3>{leaveAlert ? leaveAlert.collab.name : ""}</h3>
+          <p>{ leaveAlert ? leaveAlert.text : "" }</p>
+        </Alert>
+
       </div>
     );
   }

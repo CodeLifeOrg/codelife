@@ -1,7 +1,7 @@
 @import '../mixins.css';
 
 /* main container */
-.projects {
+.projects-inner {
   /* theming */
   background-color: var(--white);
   background-color: rgba(255, 255, 255, 0.8);
@@ -175,42 +175,92 @@
 }
 
 
-/* list of mini islands
-.project .snippets-list {
-  @add-mixin list-reset;
+/* codeblock browser layout */
+.codeblock-browser {
+  min-height: 0;
 
-  /* island list item
-  & .snippet {
-    /* space out islands
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    /* make it look clickable
-    /* TODO: make these buttons
-    cursor: pointer;
-    /* theming
+  & .content-section {
+    @add-mixin slide-theme;
+    min-height: 33.0625rem; /* fudged to height of all collapsed codeblocks */
+
+    /* override section padding; increase specificity */
+    &[class*="content-section"] {
+      padding: var(--gutter-md) var(--gutter-sm);
+
+      /* add margin on larger viewports */
+      @add-mixin min-md {
+        padding: var(--gutter-md);
+      }
+    }
+  }
+}
+
+/* heading */
+.codeblock-browser-heading {
+  text-transform: none;
+  letter-spacing: -0.5px;
+
+  /* hide icon */
+  & .codeblock-browser-hide-button {
+    /* positioning */
+    margin-left: 0.25em;
+    /* theming */
+    color: var(--sky-dark);
+    transform: 0.2s opacity;
+
+    &:hover, &:focus {
+      opacity: 0.875;
+    }
+  }
+}
+
+/* codeblock browser container */
+.codeblock-browser-list {
+
+  /* toggleable island titles */
+  & .codeblock-browser-button {
+    width: 100%;
+    /* space out islands */
+    /* theming */
     border-radius: var(--radius-sm);
-    /* transitions
+    text-align: left;
+    /* transitions */
     transition:
       background-color 0.2s,
       padding 0.1s;
 
-    /* interations
+    /* interations */
     &:hover, &:focus {
       background-color: var(--sky-light);
       padding-left: 0.5em;
     }
+
+    & ~ .codeblock-browser-button {
+      margin-top: 0;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
   }
 
-  /* island icon
-  & .icon {
+  /* card layout */
+  & .card-list > .pt-collapse-body {
+    @add-mixin card-layout-base;
+
+    @add-mixin min-xs {
+      @add-mixin card-layout-2col;
+    }
+    @add-mixin min-sm {
+      @add-mixin card-layout-3col;
+    }
+  }
+
+  /* island icon */
+  & .codeblock-browser-button-icon {
     height: var(--gutter-md);
     margin-right: var(--gutter-xxs);
     vertical-align: middle;
     width: var(--gutter-md);
   }
-
-  /* actual card list; add padding when visible
-  & .pt-collapse-body[aria-hidden=false] {
-    padding: var(--gutter-xs);
-  }
-} */
+}

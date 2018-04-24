@@ -100,24 +100,22 @@ class CodeBlockList extends Component {
       // incremented this for new january island
       if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > 7) continue;
       codeBlockItems.push(
-        <li className={`snippet ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>
-          <img className="icon" src={`/islands/${i.theme}-small.png`} />{ i.name }
-        </li>
+        <button className={`u-unbutton codeblock-browser-button ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>
+          <img className="codeblock-browser-button-icon" src={`/islands/${i.theme}-small.png`} />{ i.name }
+        </button>
       );
       const thisIslandItems = [];
       for (const s of i.myCodeBlocks.concat(i.likedCodeBlocks, i.unlikedCodeBlocks)) {
         thisIslandItems.push(
-          <li><CodeBlockCard handleFork={this.handleFork.bind(this)} theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/></li>
+          <CodeBlockCard handleFork={this.handleFork.bind(this)} theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/>
         );
       }
-      codeBlockItems.push(<Collapse isOpen={this.state[i.id]}>{thisIslandItems}</Collapse>);
+      codeBlockItems.push(<Collapse className="card-list" isOpen={this.state[i.id]}>{thisIslandItems}</Collapse>);
     }
 
     return (
-      <div className="snippets">
-        <ul className="snippets-list card-list">
-          { codeBlockItems }
-        </ul>
+      <div className="codeblock-browser-list card-list">
+        { codeBlockItems }
       </div>
     );
   }

@@ -1,7 +1,11 @@
+@import "../mixins.css";
+
+/* make room for absolutely positioned icon */
 .codeblock-card-caption {
   margin-left: var(--gutter-sm);
 }
 
+/* icon */
 .card-island-icon {
   /* sizing */
   display: block;
@@ -14,6 +18,17 @@
   background-size: cover;
 }
 
+
+/* inline card dialog */
+.codeblock-card + .pt-overlay-inline {
+  /* fix positioning for inline overlay */
+  &.pt-overlay-open {
+    position: fixed !important; /* blueprint override */
+    background-color: rgba(16, 22, 26, 0.7);
+  }
+}
+
+
 /* dialog */
 .codeblock-dialog {
   padding-bottom: 0; /* blueprint override */
@@ -21,6 +36,13 @@
   /* reset margin on inner content */
   & .codeblock-dialog-inner {
     margin-bottom: 0;
+  }
+
+  /* override margin inhereted from content */
+    & .pt-dialog-header-title,
+    & .pt-dialog-close-button {
+      margin-top: 0;
+      margin-bottom: 0;
   }
 
   /* footer */
@@ -31,12 +53,44 @@
     /* theming */
     background-color: var(--white);
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+
+    /* set reasonable max width for user generated content */
+    & .user-link,
+    & .share-link {
+      @add-mixin overflow-ellipsis;
+      display: inline-block;
+      vertical-align: bottom; /* blueprint override */
+      max-width: 100%;
+    }
+    @add-mixin min-sm {
+      & .user-link {
+        max-width: 20.5rem;
+      }
+      & .share-link {
+        max-width: 25rem;
+      }
+    }
+
+    /* stacked layout on small screens */
+    @add-mixin max-sm {
+      & .codeblock-dialog-footer-byline,
+      & .codeblock-dialog-footer-actions {
+        display: block;
+        width: 100%;
+        float: none; /* reset */
+      }
+      /* space out byline & actions */
+      & .codeblock-dialog-footer-actions {
+        top: 0.25rem;
+      }
+    }
   }
 
   /* actions */
   & .codeblock-dialog-footer-actions {
     /* vertically center inline items */
     & > * {
+      display: inline-block;
       vertical-align: middle;
 
       /* space out items */
@@ -65,12 +119,8 @@
   }
 }
 
+
+/* fork popover */
 .fork-popover-inner {
   min-width: 16rem;
-}
-
-.fork-input,
-.fork-submit {
-  display: block;
-  width: 100%;
 }

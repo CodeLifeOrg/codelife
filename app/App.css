@@ -1051,12 +1051,14 @@ utility classes
 .u-margin-top-md { margin-top: var(--gutter-md) !important; }
 .u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
 .u-margin-top-off { margin-top: 0 !important; }
+.u-margin-top-off-children * { margin-top: 0 !important; }
 
 .u-margin-bottom-xxs { margin-bottom: var(--gutter-xxs) !important; }
 .u-margin-bottom-sm { margin-bottom: var(--gutter-sm) !important; }
 .u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
 .u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
 .u-margin-bottom-off { margin-bottom: 0 !important; }
+.u-margin-bottom-off-children * { margin-bottom: 0 !important; }
 
 /* horizontal margin */
 .u-margin-left-md { margin-left: var(--gutter-md) !important; }

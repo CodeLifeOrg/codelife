@@ -206,7 +206,7 @@ class CodeBlockCard extends Component {
           title={snippetname}
           lazy={false}
           inline={true}
-          
+
           className={`codeblock-dialog ${ theme } is-fullscreen` } >
 
           {/* main content */}
@@ -215,10 +215,10 @@ class CodeBlockCard extends Component {
           </div>
 
           {/* footer */}
-          <div className="codeblock-dialog-footer pt-dialog-footer">
+          <div className="codeblock-dialog-footer pt-dialog-footer u-margin-top-off-children u-margin-bottom-off-children">
 
             {/* created by */}
-            <p className="pt-dialog-footer-byline u-margin-bottom-off font-sm">
+            <p className="codeblock-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
               <a href={userLink} className="codeblock-dialog-link user-link">
                 { username ? displayname || username : t("anonymous user") }
@@ -231,9 +231,9 @@ class CodeBlockCard extends Component {
               <div className="codeblock-dialog-footer-actions pt-dialog-footer-actions">
 
                 {/* likes */}
-                <p className="codeblock-dialog-footer-action card-likes font-xs u-margin-top-off u-margin-bottom-off">
+                <p className="codeblock-dialog-footer-action card-likes font-xs">
                   <button
-                    className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
+                    className={ `card-likes-button pt-icon-standard u-unbutton ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
                     onClick={ this.toggleLike.bind(this) } />
                   <span className="card-likes-count codeblock-dialog-footer-action-text">{ likes }</span>
                   <span className="u-visually-hidden">&nbsp;

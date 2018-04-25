@@ -100,6 +100,15 @@ class ProjectCard extends Component {
                 { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
                   { username ? displayname || username : t("anonymous user") }
                 </Link>
+
+                {/* show edit link if it's yours */}
+                { displayname &&
+                  <span className="edit-link-container">
+                    &nbsp;(<Link className="edit-link link" to={`/projects/${username}/${project.name}/edit`}>
+                      {t("edit project")}
+                    </Link>)
+                  </span>
+                }
               </span>
               : null }
 
@@ -144,6 +153,16 @@ class ProjectCard extends Component {
               <a href={userLink} className="project-dialog-link user-link">
                 { username ? displayname || username : t("anonymous user") }
               </a>
+
+              {/* show edit link if it's yours */}
+              { displayname &&
+                <span className="edit-link-container">
+                  &nbsp;(<Link className="edit-link link" to={`/projects/${username}/${project.name}/edit`}>
+                    {t("edit project")}
+                  </Link>)
+                </span>
+              }
+
               <a href={ embedLink } target="_blank" className="project-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 

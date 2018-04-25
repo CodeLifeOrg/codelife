@@ -73,7 +73,8 @@
     display: block; /* necessary for margin to be honored */
 
     /* position author link above cover button */
-    & .card-author-link {
+    & .card-author-link,
+    & .edit-link-container {
       z-index: 2;
     }
   }

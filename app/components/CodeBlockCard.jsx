@@ -178,6 +178,16 @@ class CodeBlockCard extends Component {
                 { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
                   { username ? displayname || username : t("anonymous user") }
                 </Link>
+
+                {/* show edit link if it's yours */}
+                {/* NOTE: codeblocks don't currently have a direct edit link though
+                { displayname &&
+                  <span className="edit-link-container">
+                    &nbsp;(<Link className="edit-link link" to={`/island/${codeBlock.uid}`}>
+                      {t("edit codeblock")}
+                    </Link>)
+                  </span>
+                } */}
               </span>
               : null }
 

@@ -92,7 +92,8 @@ then add the theme name to the @each loop below */
       color: var(--$(theme)-island-dark);
     }
     /* author link color */
-    & .card-author-link {
+    & .card-author-link,
+    & .edit-link {
       color: var(--$(theme)-island-medium);
       /* interactions */
       &:hover, &:focus {

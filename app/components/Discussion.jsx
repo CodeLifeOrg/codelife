@@ -28,10 +28,7 @@ class Discussion extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("didup");
-    console.log(prevProps, this.props);
     if (prevProps.subjectId !== this.props.subjectId) {
-      console.log("got in");
       const {subjectType, subjectId} = this.props;
       this.setState({threads: false});
       axios.get(`/api/threads/all?subject_type=${subjectType}&subject_id=${subjectId}`).then(resp => {

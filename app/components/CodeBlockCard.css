@@ -22,8 +22,10 @@
 /* inline card dialog */
 .codeblock-card + .pt-overlay-inline {
   /* fix positioning for inline overlay */
+  position: fixed !important; /* blueprint override */
+
+  /* add background when it's open */
   &.pt-overlay-open {
-    position: fixed !important; /* blueprint override */
     background-color: rgba(16, 22, 26, 0.7);
   }
 }

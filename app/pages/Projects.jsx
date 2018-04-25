@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Dialog, Toaster, Alert} from "@blueprintjs/core";
+import {Intent, Position, Dialog, Toaster, Alert, Tooltip} from "@blueprintjs/core";
 import {Link} from "react-router";
 
 import CodeBlockList from "components/CodeBlockList";
@@ -146,6 +146,7 @@ class Projects extends Component {
   leaveCollab() {
     const {collab} = this.state.leaveAlert;
     const {projects} = this.state;
+    console.log("got here");
     if (collab && collab.id) {
       const pid = collab.id;
       axios.post("/api/projects/leavecollab", {pid}).then(resp => {
@@ -283,13 +284,15 @@ class Projects extends Component {
       </li>
     );
 
-    const collabItems = this.state.collabs.map(collab =>
+    const collabItems = this.state.collabs.map(collab => 
       <li to={collab.id} className="project-switcher-item" key={collab.id}>
-        <Link
-          onClick={() => this.onClickProject.bind(this)(collab)}
-          className="project-switcher-link link">
-          { collab.name }
-        </Link>
+        <Tooltip position={Position.RIGHT} content={`${t("Project Owner - ")}${collab.user.username}`}>
+          <Link
+            onClick={() => this.onClickProject.bind(this)(collab)}
+            className="project-switcher-link link">
+            { collab.name }
+          </Link>
+        </Tooltip>
       </li>
     );
 
@@ -508,7 +511,7 @@ class Projects extends Component {
           confirmButtonText={ t("Leave") }
           intent={ Intent.DANGER }
           onCancel={ () => this.setState({leaveAlert: false}) }
-          onConfirm={ () => this.leaveCollab.bind(this) }>
+          onConfirm={this.leaveCollab.bind(this)}>
           <p className="font-lg u-margin-top-off u-margin-bottom-md">{ leaveAlert ? leaveAlert.text : "" }</p>
         </Alert>
 

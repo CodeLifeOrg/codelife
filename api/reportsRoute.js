@@ -145,6 +145,9 @@ module.exports = function(app) {
       ]
     })
       .then(rRows => {
+        // This filter catches reports whose target project has been deleted.
+        // TODO: The deletion of a project should not "wipe clean" a report - return a special "deleted"
+        // case that maintains the fact that this user was reported, but also shows their project was deleted.
         const resp = rRows.filter(p => p.project).map(r => {
           const rj = r.toJSON();
           console.log(rj);

@@ -205,8 +205,8 @@ class CodeBlockCard extends Component {
           onClose={ this.toggleDialog.bind(this) }
           title={snippetname}
           lazy={false}
-          inline={false}
-          enforceFocus={false}
+          inline={true}
+          
           className={`codeblock-dialog ${ theme } is-fullscreen` } >
 
           {/* main content */}
@@ -274,6 +274,7 @@ class CodeBlockCard extends Component {
                     popoverDidOpen={this.selectFork.bind(this)}
                     key="fork-pop"
                     inline={false}>
+
 
                     {/* fork button */}
                     <button className="codeblock-dialog-footer-action fork-button u-unbutton link font-xs">

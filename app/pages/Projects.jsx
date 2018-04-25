@@ -297,7 +297,7 @@ class Projects extends Component {
       </li>
     );
 
-    const collabItems = this.state.collabs.map(collab => 
+    const collabItems = this.state.collabs.map(collab =>
       <li to={collab.id} className="project-switcher-item" key={collab.id}>
         <Tooltip position={Position.RIGHT} content={`${t("Project Owner - ")}${collab.user.username}`}>
           <Link
@@ -325,12 +325,14 @@ class Projects extends Component {
 
               {/* current file */}
               <h2 className="project-title font-lg">
-                <EditableText 
-                  value={currentTitle} 
+                <EditableText
+                  value={currentTitle}
                   selectAllOnFocus={true}
-                  onChange={t => this.setState({currentTitle: t})} 
+                  onChange={t => this.setState({currentTitle: t})}
                   onCancel={() => this.setState({currentTitle: originalTitle})}
                   onConfirm={this.changeProjectName.bind(this)}
+                  multiline={true}
+                  confirmOnEnterKey={true}
                 />
               </h2>
 

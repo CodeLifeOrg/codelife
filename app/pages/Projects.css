@@ -75,6 +75,29 @@
     text-transform: none;
     letter-spacing: -0.5px;
     margin-bottom: 0.8em;
+
+    /* edit icon */
+    & .pt-editable-content:after {
+      /* set icon */
+      font-family: "Icons20";
+      content: "\270E"; /* ✏️ */
+      /* sizing */
+      font-size: 0.75em;
+      /* positioning */
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 0.25em;
+      margin-top: -0.125em;
+      /* theming */
+      color: var(--gray);
+      /* transitions */
+      transition: 0.2s color;
+    }
+
+    /* interactions */
+    &:hover .pt-editable-content:after {
+      color: var(--sky-dark);
+    }
   }
 
   /* icon only layout on tiny screens */

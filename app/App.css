@@ -1077,6 +1077,9 @@ utility classes
 .u-padding-bottom-off { padding-bottom: 0 !important; }
 
 /* alignment */
+.u-text-left {
+  text-align: left;
+}
 .u-text-center {
   text-align: center;
 }

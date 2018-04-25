@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
-import {Popover, PopoverInteractionKind, Position, Button, Dialog, Intent} from "@blueprintjs/core";
+import {PopoverInteractionKind, Dialog} from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/labs";
 import PropTypes from "prop-types";
 
@@ -249,11 +249,11 @@ class CodeBlockCard extends Component {
 
 
                 {/* flag content */}
-                <Popover
+                <Popover2
                   className="card-dialog-flag-container"
                   popoverClassName="pt-popover-content-sizing"
                   interactionKind={PopoverInteractionKind.CLICK}
-                  position={Position.TOP_RIGHT} >
+                  placement="bottom-end" >
 
                   {/* flag button */}
                   <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${reported && "is-flagged" } u-unbutton font-xs`}>
@@ -269,7 +269,7 @@ class CodeBlockCard extends Component {
                     contentType="codeblock"
                     handleReport={this.handleReport.bind(this)}
                   />
-                </Popover>
+                </Popover2>
 
 
                 {/* fork codeblock as project */}

@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
-import {Popover, PopoverInteractionKind, Intent, Position, Button, Dialog} from "@blueprintjs/core";
+import {PopoverInteractionKind, Dialog} from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/labs";
 import "moment/locale/pt-br";
 import moment from "moment";
 import ReportBox from "components/ReportBox";
@@ -151,11 +152,11 @@ class ProjectCard extends Component {
               <div className="card-dialog-footer-actions project-dialog-footer-actions pt-dialog-footer-actions">
 
                 {/* flag content */}
-                <Popover
+                <Popover2
                   className="card-dialog-flag-container"
                   popoverClassName="pt-popover-content-sizing"
                   interactionKind={PopoverInteractionKind.CLICK}
-                  position={Position.TOP_RIGHT} >
+                  placement="bottom-end" >
 
                   {/* flag button */}
                   <button className={`card-dialog-footer-action project-dialog-footer-action flag-button ${reported && "is-flagged" } u-unbutton font-xs`}>
@@ -171,7 +172,7 @@ class ProjectCard extends Component {
                     contentType="project"
                     handleReport={this.handleReport.bind(this)}
                   />
-                </Popover>
+                </Popover2>
               </div>
             }
           </div>

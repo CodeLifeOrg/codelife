@@ -149,25 +149,30 @@
 /* logged in header */
 .logged-in-home-header {
 
-  /* account for scaled up island */
-  @add-mixin min-lg {
-    & .header-headline {
-      top: -3rem;
-      z-index: 1;
-    }
-  }
-
   /* center island */
   & .island-link {
     margin-left: auto;
     margin-right: auto;
     /* no one ever resizes their screen, buuuuuut in case they do: */
     transition: transform 0.1s ease-out;
+  }
 
-    /* make island bigger on bigger screens */
-    @add-mixin min-lg {
-      transform: scale(1.5);
-    }
+  /* scale up island on bigger screens */
+  @add-mixin min-xs {
+    & .island-link { transform: scale(1.25); }
+    & .header-headline { top: -1.5rem; }
+  }
+  @add-mixin min-sm {
+    & .island-link { transform: scale(1.375); }
+    & .header-headline { top: -2.25rem; }
+  }
+  @add-mixin min-md {
+    & .island-link { transform: scale(1.5); }
+    & .header-headline { top: -4rem; }
+  }
+  @add-mixin min-xl {
+    & .island-link { transform: scale(1.75); }
+    & .header-headline { top: -6rem; }
   }
 }
 

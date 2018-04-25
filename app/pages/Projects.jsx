@@ -28,6 +28,7 @@ class Projects extends Component {
       collabProject: null,
       originalTitle: "",
       currentTitle: "",
+      canEditTitle: true,
       projects: [],
       collabs: [],
       showCodeblocks: false
@@ -148,7 +149,6 @@ class Projects extends Component {
   leaveCollab() {
     const {collab} = this.state.leaveAlert;
     const {projects} = this.state;
-    console.log("got here");
     if (collab && collab.id) {
       const pid = collab.id;
       axios.post("/api/projects/leavecollab", {pid}).then(resp => {
@@ -243,6 +243,7 @@ class Projects extends Component {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
+          this.setState({canEditTitle: true});
         }
       });
     }
@@ -266,18 +267,19 @@ class Projects extends Component {
   changeProjectName(newName) {
     const {browserHistory} = this.context;
     const {currentProject, projects} = this.state;
+    const canEditTitle = false;
     currentProject.name = newName;
     const cp = projects.find(p => p.id === currentProject.id);
     if (cp) cp.name = newName;
+    this.setState({currentProject, projects, canEditTitle});
     this.saveCodeToDB.bind(this)();
-    this.setState({currentProject, projects});
     browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
   }
 
   render() {
 
     const {auth, t} = this.props;
-    const {currentProject, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
+    const {currentProject, canEditTitle, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
     // const {filename} = this.props.params;
     const {browserHistory} = this.context;
 
@@ -332,6 +334,7 @@ class Projects extends Component {
                   onCancel={() => this.setState({currentTitle: originalTitle})}
                   onConfirm={this.changeProjectName.bind(this)}
                   multiline={true}
+                  disabled={!canEditTitle}
                   confirmOnEnterKey={true}
                 />
               </h2>

@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-import {Intent, Position, Toaster} from "@blueprintjs/core";
+import {Intent, Position, Toaster, Checkbox} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import UserInfo from "./UserInfo";
 import SelectGeo from "components/SelectGeo";
@@ -23,6 +23,7 @@ class EditProfile extends Component {
       loading: true,
       error: null,
       profileUser: null,
+      optOut: false,
       img: null
     };
   }
@@ -48,7 +49,8 @@ class EditProfile extends Component {
       else {
         this.setState({
           loading: false,
-          profileUser: userData
+          profileUser: userData,
+          optOut: userData.sid === -1
         });
       }
     });
@@ -76,7 +78,7 @@ class EditProfile extends Component {
       name: profileUser.name,
       sid: profileUser.sid
     };
-    //console.log("userPostData:\n", userPostData);
+    if (this.state.optOut) userPostData.sid = -1;
     axios.post("/api/profile/", userPostData).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {
@@ -156,6 +158,7 @@ class EditProfile extends Component {
     this.setState({img: file});
   }
 
+
   /**
    * 3 render states:
    * case (loading)
@@ -167,7 +170,7 @@ class EditProfile extends Component {
    */
   render() {
     const {t, user: loggedInUser} = this.props;
-    const {error, loading, profileUser} = this.state;
+    const {error, loading, profileUser, optOut} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
@@ -309,8 +312,13 @@ class EditProfile extends Component {
               <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My location")}</h3>
               <SelectGeo gid={gid} callback={setGid} />
               {/* school */}
-              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My school")}</h3>
-              <SelectSchool sid={sid} callback={setSid} />
+              <h3 className="font-sm u-margin-top-md">{t("My school")}</h3> 
+              <Checkbox 
+                checked={this.state.optOut} 
+                label={t("I'd rather not say")} 
+                onChange={e => this.setState({optOut: Boolean(e.target.checked)})}
+              />
+              { !optOut && <SelectSchool sid={sid} callback={setSid} /> }
             </div>
 
             {/* submit */}

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Dialog, Toaster, Alert, Tooltip} from "@blueprintjs/core";
+import {Intent, Position, Dialog, Toaster, Alert, EditableText, Tooltip} from "@blueprintjs/core";
 import {Link} from "react-router";
 
 import CodeBlockList from "components/CodeBlockList";
@@ -26,6 +26,8 @@ class Projects extends Component {
       currentProject: null,
       currentPreview: null,
       collabProject: null,
+      originalTitle: "",
+      currentTitle: "",
       projects: [],
       collabs: [],
       showCodeblocks: false
@@ -72,7 +74,7 @@ class Projects extends Component {
   openProject(pid) {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
-      this.setState({currentProject: resp.data});
+      this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
       browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
     });
   }
@@ -261,11 +263,22 @@ class Projects extends Component {
     this.setState({showCodeblocks: !this.state.showCodeblocks});
   }
 
+  changeProjectName(newName) {
+    const {browserHistory} = this.context;
+    const {currentProject, projects} = this.state;
+    currentProject.name = newName;
+    const cp = projects.find(p => p.id === currentProject.id);
+    if (cp) cp.name = newName;
+    this.saveCodeToDB.bind(this)();
+    this.setState({currentProject, projects});
+    browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
+  }
+
   render() {
 
     const {auth, t} = this.props;
-    const {currentProject, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
-    const {filename} = this.props.params;
+    const {currentProject, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
+    // const {filename} = this.props.params;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
@@ -311,7 +324,15 @@ class Projects extends Component {
             <div className="project-controls">
 
               {/* current file */}
-              <h2 className="project-title font-lg">{filename}</h2>
+              <h2 className="project-title font-lg">
+                <EditableText 
+                  value={currentTitle} 
+                  selectAllOnFocus={true}
+                  onChange={t => this.setState({currentTitle: t})} 
+                  onCancel={() => this.setState({currentTitle: originalTitle})}
+                  onConfirm={this.changeProjectName.bind(this)}
+                />
+              </h2>
 
               <h3 className="project-subtitle font-sm">{t("Actions")}</h3>
 

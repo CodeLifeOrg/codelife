@@ -274,6 +274,14 @@
   & .card-list > .pt-collapse-body {
     @add-mixin card-layout-base;
 
+    /* NOTE: `transform: translateY(0px)` creates a new stacking context,
+    which makes the inline codeblock dialog position itself relative
+    to the card list, even though it's set to `position: fixed`.
+    WTF, blueprint. 😡 */
+    &[aria-hidden=false] {
+      transform: none !important; /* fix stacking context bug */
+    }
+
     @add-mixin min-xs {
       @add-mixin card-layout-2col;
     }

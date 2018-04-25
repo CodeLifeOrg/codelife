@@ -130,7 +130,7 @@
   & .pt-icon-standard.pt-intent-success {
     color: var(--sky-dark);
   }
-  
+
   & .contents {
     background-color: var(--white);
     height: 0;
@@ -282,8 +282,7 @@
 }
 
 /* code block context */
-.pt-dialog > .codeblock-inner {
-  margin: 0 0 var(--gutter-md) 0;
+.pt-dialog > .codeblock-dialog-inner {
 
   /* reset panel height */
   & .panel-content {

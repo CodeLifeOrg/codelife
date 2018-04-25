@@ -20,7 +20,7 @@
 
 
 /* inline card dialog */
-.codeblock-card + .pt-overlay-inline {
+.card-container .pt-overlay-inline {
   /* fix positioning for inline overlay */
   position: fixed !important; /* blueprint override */
 
@@ -32,12 +32,11 @@
 
 
 /* dialog */
-.codeblock-dialog {
-  padding-bottom: 0; /* blueprint override */
+.card-dialog {
 
-  /* reset margin on inner content */
-  & .codeblock-dialog-inner {
-    margin-bottom: 0;
+  /* reset margin */
+  & .card-dialog-inner {
+    margin: 0;
   }
 
   /* override margin inhereted from content */
@@ -48,7 +47,7 @@
   }
 
   /* footer */
-  & .codeblock-dialog-footer {
+  & .card-dialog-footer {
     /* reset margin & padding */
     margin: 0;
     padding: var(--gutter-sm) 20px;
@@ -75,21 +74,21 @@
 
     /* stacked layout on small screens */
     @add-mixin max-sm {
-      & .codeblock-dialog-footer-byline,
-      & .codeblock-dialog-footer-actions {
+      & .card-dialog-footer-byline,
+      & .card-dialog-footer-actions {
         display: block;
         width: 100%;
         float: none; /* reset */
       }
       /* space out byline & actions */
-      & .codeblock-dialog-footer-actions {
+      & .card-dialog-footer-actions {
         top: 0.25rem;
       }
     }
   }
 
   /* actions */
-  & .codeblock-dialog-footer-actions {
+  & .card-dialog-footer-actions {
     /* vertically center inline items */
     & > * {
       display: inline-block;
@@ -103,11 +102,11 @@
   }
 
   /* space out icon and text */
-  & .codeblock-dialog-footer-action-icon {
+  & .card-dialog-footer-action-icon {
     margin-right: 0.3em;
   }
   /* set text height */
-  & .codeblock-dialog-footer-action-text {
+  & .card-dialog-footer-action-text {
     line-height: 2.125rem;
   }
 
@@ -115,7 +114,8 @@
   & .flag-button {
     transition: color 0.2s;
 
-    &:hover, &:focus {
+    /* interactions & flagged state */
+    &.is-flagged, &:hover, &:focus {
       color: var(--danger);
     }
   }

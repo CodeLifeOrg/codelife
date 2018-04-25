@@ -199,6 +199,7 @@ class CodeBlockCard extends Component {
           </div>
         </div>
 
+
         {/* dialog */}
         <Dialog
           isOpen={ open }
@@ -206,36 +207,41 @@ class CodeBlockCard extends Component {
           title={snippetname}
           lazy={false}
           inline={true}
-
-          className={`codeblock-dialog ${ theme } is-fullscreen` } >
+          className={`card-dialog codeblock-dialog ${ theme } is-fullscreen  u-padding-bottom-off` } >
 
           {/* main content */}
-          <div className="codeblock-dialog-inner codeblock-inner pt-dialog-body">
-            <CodeEditor initialValue={studentcontent} readOnly={true} blurred={!done} island={ theme } ref={c => this.editor = c} noZoom={true} />
+          <div className="card-dialog-inner codeblock-dialog-inner pt-dialog-body">
+            <CodeEditor
+              initialValue={studentcontent}
+              readOnly={true}
+              blurred={!done}
+              island={ theme }
+              ref={c => this.editor = c}
+              noZoom={true} />
           </div>
 
           {/* footer */}
-          <div className="codeblock-dialog-footer pt-dialog-footer u-margin-top-off-children u-margin-bottom-off-children">
+          <div className="card-dialog-footer codeblock-dialog-footer pt-dialog-footer u-margin-top-off-children u-margin-bottom-off-children">
 
             {/* created by */}
-            <p className="codeblock-dialog-footer-byline pt-dialog-footer-byline font-sm">
+            <p className="card-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
-              <a href={userLink} className="codeblock-dialog-link user-link">
+              <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
                 { username ? displayname || username : t("anonymous user") }
               </a>
-              <a href={ embedLink } target="_blank" className="codeblock-dialog-link share-link font-xs">{ embedLink }</a>
+              <a href={ embedLink } target="_blank" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
             {/* show actions if logged in */}
             { user &&
-              <div className="codeblock-dialog-footer-actions pt-dialog-footer-actions">
+              <div className="card-dialog-footer-actions codeblock-dialog-footer-actions pt-dialog-footer-actions">
 
                 {/* likes */}
-                <p className="codeblock-dialog-footer-action card-likes font-xs">
+                <p className="card-dialog-footer-action codeblock-dialog-footer-action card-likes font-xs">
                   <button
                     className={ `card-likes-button pt-icon-standard u-unbutton ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
                     onClick={ this.toggleLike.bind(this) } />
-                  <span className="card-likes-count codeblock-dialog-footer-action-text">{ likes }</span>
+                  <span className="card-dialog-footer-action-text card-likes-count codeblock-dialog-footer-action-text">{ likes }</span>
                   <span className="u-visually-hidden">&nbsp;
                     { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
                   </span>
@@ -244,14 +250,15 @@ class CodeBlockCard extends Component {
 
                 {/* flag content */}
                 <Popover
-                  interactionKind={PopoverInteractionKind.CLICK}
+                  className="card-dialog-flag-container"
                   popoverClassName="pt-popover-content-sizing"
+                  interactionKind={PopoverInteractionKind.CLICK}
                   position={Position.TOP_RIGHT} >
 
                   {/* flag button */}
-                  <button className="codeblock-dialog-footer-action flag-button u-unbutton font-xs ">
-                    <span className="codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
-                    <span className="codeblock-dialog-footer-action-text">
+                  <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${reported && "is-flagged" } u-unbutton font-xs`}>
+                    <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                    <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
                       {reported ? "Flagged" : "Flag"}
                     </span>
                   </button>
@@ -277,9 +284,9 @@ class CodeBlockCard extends Component {
 
 
                     {/* fork button */}
-                    <button className="codeblock-dialog-footer-action fork-button u-unbutton link font-xs">
-                      <span className="codeblock-dialog-footer-action-icon fork-button-icon pt-icon pt-icon-fork" />
-                      <span className="codeblock-dialog-footer-action-text">
+                    <button className="card-dialog-footer-action codeblock-dialog-footer-action fork-button u-unbutton link font-xs">
+                      <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon fork-button-icon pt-icon pt-icon-fork" />
+                      <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
                         {t("New Project from Codeblock")}
                       </span>
                     </button>

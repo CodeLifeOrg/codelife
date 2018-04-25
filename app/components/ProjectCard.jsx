@@ -42,6 +42,7 @@ class ProjectCard extends Component {
     moment.locale("pt-BR");
 
     const embedLink = `${ location.origin }/projects/${ username }/${ project.name }`;
+    const userLink = `${ location.origin }/profile/${ username }`;
 
     // define thumbnail image as null
     let thumbnailImg = null;
@@ -85,7 +86,7 @@ class ProjectCard extends Component {
             : null }
 
           {/* caption */}
-          <div className="card-caption">
+          <div className="card-caption project-card-caption">
 
             {/* title */}
             <h4 className="card-title u-margin-top-off u-margin-bottom-off">
@@ -102,17 +103,18 @@ class ProjectCard extends Component {
               : null }
 
             {/* likes */}
-            <p className="card-likes font-xs u-margin-top-off">
+            {/* <p className="card-likes font-xs u-margin-top-off">
               <button className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" }` } />
               <span className="card-likes-count">0</span>
               <span className="u-visually-hidden">&nbsp;
                 { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
               </span>
-            </p>
+            </p> */}
 
             {/* datemodified ? <div className="card-author">{ t("Modified on") } { moment(datemodified).format("DD/MM/YY") }</div> : null */}
           </div>
         </div>
+
 
         {/* dialog */}
         <Dialog
@@ -120,43 +122,58 @@ class ProjectCard extends Component {
           onClose={ this.toggleDialog.bind(this) }
           title={ name }
           lazy={false}
-          inline={false}
-          className="is-fullscreen"
-        >
-          <div className="pt-dialog-body">
-            <div className="render">
-              <CodeEditor initialValue={studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} noZoom={true} />
-            </div>
+          inline={true}
+          className="card-dialog project-dialog is-fullscreen u-padding-bottom-off" >
+
+          {/* main content */}
+          <div className="card-dialog-inner project-dialog-inner pt-dialog-body">
+            <CodeEditor
+              initialValue={studentcontent}
+              readOnly={true}
+              ref={c => this.editor = c}
+              noZoom={true} />
           </div>
-          <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-byline">
-              { t("Created by") } { username }
-              <a href={ embedLink } target="_blank" className="share-link">{ embedLink }</a>
-            </div>
-            <div className="pt-dialog-footer-actions">
-              { user
-                ? <Popover
-                  interactionKind={PopoverInteractionKind.CLICK}
+
+          {/* footer */}
+          <div className="card-dialog-footer project-dialog-footer pt-dialog-footer u-margin-top-off-children u-margin-bottom-off-children">
+
+            {/* created by */}
+            <p className="card-dialog-footer-byline project-dialog-footer-byline pt-dialog-footer-byline font-sm">
+              {t("Created by")}&nbsp;
+              <a href={userLink} className="project-dialog-link user-link">
+                { username ? displayname || username : t("anonymous user") }
+              </a>
+              <a href={ embedLink } target="_blank" className="project-dialog-link share-link font-xs">{ embedLink }</a>
+            </p>
+
+            {/* show actions if logged in */}
+            { user &&
+              <div className="card-dialog-footer-actions project-dialog-footer-actions pt-dialog-footer-actions">
+
+                {/* flag content */}
+                <Popover
+                  className="card-dialog-flag-container"
                   popoverClassName="pt-popover-content-sizing"
-                  position={Position.TOP_RIGHT}
-                >
-                  <Button
-                    intent={reported ? "" : Intent.DANGER}
-                    iconName="flag"
-                    text={reported ? "Flagged" : "Flag"}
+                  interactionKind={PopoverInteractionKind.CLICK}
+                  position={Position.TOP_RIGHT} >
+
+                  {/* flag button */}
+                  <button className={`card-dialog-footer-action project-dialog-footer-action flag-button ${reported && "is-flagged" } u-unbutton font-xs`}>
+                    <span className="card-dialog-footer-action-icon project-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                    <span className="card-dialog-footer-action-text project-dialog-footer-action-text">
+                      {reported ? "Flagged" : "Flag"}
+                    </span>
+                  </button>
+
+                  {/* flag form */}
+                  <ReportBox
+                    reportid={id}
+                    contentType="project"
+                    handleReport={this.handleReport.bind(this)}
                   />
-                  <div>
-                    <ReportBox reportid={id} contentType="project" handleReport={this.handleReport.bind(this)}/>
-                  </div>
                 </Popover>
-                : null
-              }
-              <Button
-                intent={ Intent.PRIMARY }
-                onClick={ this.toggleDialog.bind(this) }
-                text={ t("Close") }
-              />
-            </div>
+              </div>
+            }
           </div>
         </Dialog>
       </div>

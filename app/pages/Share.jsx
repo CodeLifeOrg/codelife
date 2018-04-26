@@ -69,8 +69,8 @@ class Share extends Component {
     const name = content.name || content.snippetname;
 
     let contentType = "";
-    if (this.props.location.pathname.includes("/codeBlocks/")) contentType = "codeblock";
-    if (this.props.location.pathname.includes("/projects/")) contentType = "project";
+    if (this.props.location.pathname.includes("codeBlocks/")) contentType = "codeblock";
+    if (this.props.location.pathname.includes("projects/")) contentType = "project";
 
     const reported = reports.find(r => r.type === contentType && r.report_id === id);
 

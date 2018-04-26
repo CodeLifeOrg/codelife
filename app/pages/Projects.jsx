@@ -402,11 +402,17 @@ class Projects extends Component {
                   {
                     isMine
                       ? showDeleteButton
+                        // delete button
                         ? <button className="project-action-button u-unbutton link danger-text" onClick={this.deleteProject.bind(this, currentProject)}>
                           <span className="project-action-button-icon pt-icon pt-icon-trash" />
                           <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
                         </button>
-                        : null
+                        // disabled delete button
+                        : <button className="project-action-button u-unbutton is-disabled link" tabIndex="-1">
+                          <span className="project-action-button-icon pt-icon pt-icon-trash" />
+                          <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
+                        </button>
+                      // leave project button
                       : <button className="project-action-button u-unbutton link danger-text" onClick={this.showLeaveAlert.bind(this, currentProject)}>
                         <span className="project-action-button-icon pt-icon pt-icon-log-out" />
                         <span className="project-action-button-text u-hide-below-xxs">{t("Project.Leave") }</span>

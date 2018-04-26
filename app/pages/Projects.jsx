@@ -290,6 +290,7 @@ class Projects extends Component {
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
     const hasCollabs = currentProject && currentProject.collaborators.length;
 
+    // list of collabs, passed to collabList
     let collabsList = [];
     hasCollabs ? collabsList = currentProject.collaborators : null;
 
@@ -317,9 +318,14 @@ class Projects extends Component {
       </li>
     );
 
+    // get project owner for current collab project
+    const collabOwner = !isMine && currentProject ? currentProject.user : null;
+    // this.state.collabs ? collabOwner = this.state.collabs[0] : null;
+
 
     return (
       <div className="projects">
+
         <div className="projects-inner">
 
           {/* hidden h1 for accessibility */}

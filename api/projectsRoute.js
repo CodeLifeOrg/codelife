@@ -19,8 +19,8 @@ function flattenProject(user, p) {
 }
 
 const pInclude = [
-  {association: "userprofile", attributes: ["bio", "sharing"]},
-  {association: "user", attributes: ["username"]},
+  {association: "userprofile", attributes: ["bio", "sharing", "uid", "img"]},
+  {association: "user", attributes: ["username", "id", "name"]},
   {association: "reportlist"},
   {association: "collaborators", attributes: ["uid", "sid", "gid", "img", "bio"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];

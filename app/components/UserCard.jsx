@@ -44,7 +44,7 @@ class UserCard extends Component {
           <div className="card-caption">
 
             {/* title */}
-            <h4 className="card-title u-margin-top-off u-margin-bottom-off" id={ username }>{ name }</h4>
+            <h4 className="card-title u-margin-top-off u-margin-bottom-off" id={ username }>{ name ? name : username }</h4>
 
             { bio ? <p className="card-bio font-xs u-margin-bottom-off">{ bio }</p> : null }
 

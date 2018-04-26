@@ -149,6 +149,12 @@
       display: block;
       width: 100%;
       text-align: left; /* override button default */
+
+      /* disabled state */
+      &.is-disabled {
+        color: var(--gray);
+        pointer-events: none;
+      }
     }
     /* space out icon and text */
     & .project-action-button-icon {

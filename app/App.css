@@ -222,6 +222,7 @@ blueprint overrides
 
   /* center align alert contents */
   & .pt-alert-contents {
+    width: 100%;
     text-align: center;
   }
   & .pt-alert-footer {

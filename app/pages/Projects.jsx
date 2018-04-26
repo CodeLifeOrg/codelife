@@ -8,6 +8,7 @@ import {Link} from "react-router";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
+import CollabList from "components/CollabList";
 import CollabSearch from "components/CollabSearch";
 
 import "./Projects.css";
@@ -31,7 +32,8 @@ class Projects extends Component {
       canEditTitle: true,
       projects: [],
       collabs: [],
-      showCodeblocks: false
+      showCodeblocks: false,
+      isViewCollabsOpen: false
     };
   }
 
@@ -287,6 +289,10 @@ class Projects extends Component {
 
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
     const hasCollabs = currentProject && currentProject.collaborators.length;
+
+    let collabsList = [];
+    hasCollabs ? collabsList = currentProject.collaborators : null;
+
     const showDeleteButton = this.state.projects.length > 1;
 
     const projectItems = this.state.projects.map(project =>
@@ -301,13 +307,13 @@ class Projects extends Component {
 
     const collabItems = this.state.collabs.map(collab =>
       <li to={collab.id} className="project-switcher-item" key={collab.id}>
-        <Tooltip position={Position.RIGHT} content={`${t("Project Owner - ")}${collab.user.username}`}>
-          <Link
-            onClick={() => this.onClickProject.bind(this)(collab)}
-            className="project-switcher-link link">
-            { collab.name }
-          </Link>
-        </Tooltip>
+        <Link
+          onClick={() => this.onClickProject.bind(this)(collab)}
+          className="project-switcher-link link">
+          { collab.name }
+        </Link>
+        {/* <Tooltip position={Position.RIGHT} content={`${t("Project Owner - ")}${collab.user.username}`}>
+        </Tooltip> */}
       </li>
     );
 
@@ -353,28 +359,41 @@ class Projects extends Component {
                 </li>
 
                 {/* execute code */}
-                { execState ? <li className="project-action-item">
-                  <button className="project-action-button u-unbutton link" onClick={this.executeCode.bind(this)}>
+                <li className="project-action-item">
+                  <button
+                    className={ `project-action-button u-unbutton link ${!execState && " is-disabled"}` }
+                    onClick={this.executeCode.bind(this)}
+                    tabIndex={!execState && "-1"}>
                     <span className="project-action-button-icon pt-icon pt-icon-refresh" />
                     <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Execute") }</span>
                   </button>
-                </li> : null }
+                </li>
 
                 {/* add / manage collaborators */}
                 { isMine ? <li className="project-action-item">
+                  {/* my project */}
                   <button className="project-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
                     <span className="project-action-button-icon pt-icon pt-icon-people" />
                     <span className="project-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
                   </button>
-                </li> : null }
+                  {/* joined project */}
+                </li> : <li className="project-action-item">
+                  <button className="project-action-button u-unbutton link" onClick={() => this.setState({isViewCollabsOpen: true})}>
+                    <span className="project-action-button-icon pt-icon pt-icon-people" />
+                    <span className="project-action-button-text u-hide-below-xxs">
+                      {/* X collaborators */}
+                      {hasCollabs} { t(" collaborators")}
+                    </span>
+                  </button>
+                </li> }
 
                 {/* share project */}
-                { currentProject ? <li className="project-action-item">
+                <li className="project-action-item">
                   <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
                     <span className="project-action-button-icon pt-icon pt-icon-share" />
                     <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                   </button>
-                </li> : null }
+                </li>
 
                 {/* delete / leave project */}
                 { currentProject ? <li className="project-action-item">
@@ -475,7 +494,6 @@ class Projects extends Component {
 
         {/* collab search */}
         <Dialog
-          icon="inbox"
           isOpen={this.state.isOpen}
           onClose={() => this.setState({isOpen: !this.state.isOpen})}
           title=""
@@ -483,9 +501,17 @@ class Projects extends Component {
           <CollabSearch currentProject={currentProject}/>
         </Dialog>
 
+        {/* collab list */}
+        <Dialog
+          isOpen={this.state.isViewCollabsOpen}
+          onClose={() => this.setState({isViewCollabsOpen: !this.state.isViewCollabsOpen})}
+          title=""
+          className="form-container collab-list-container" >
+          <CollabList currentProject={currentProject} />
+        </Dialog>
+
         {/* create new project */}
         <Dialog
-          icon="code"
           isOpen={this.state.isNewOpen}
           onClose={() => this.setState({isNewOpen: !this.state.isNewOpen})}
           title={t("Create New Project")}

@@ -1,0 +1,21 @@
+@import "../mixins.css";
+
+/* limit container width */
+.collab-list-container {
+  max-width: 40rem;
+
+  /* space out list from headings */
+  & .collab-list {
+    margin-top: 2rem;
+
+    /* space out cards */
+    & .card-container {
+      margin-top: 1rem;
+
+      /* adjust caption alignment */
+      & .card-caption {
+        padding-top: 1.25rem;
+      }
+    }
+  }
+}

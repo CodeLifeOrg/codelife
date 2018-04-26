@@ -11,11 +11,6 @@
     /* space out cards */
     & .card-container {
       margin-top: 1rem;
-
-      /* adjust caption alignment */
-      & .card-caption {
-        padding-top: 1.25rem;
-      }
     }
   }
 }

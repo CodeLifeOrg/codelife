@@ -131,7 +131,8 @@ class Projects extends Component {
     const {username} = this.props.auth.user;
     const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
+      //browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
+
     }
     else {
       const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
@@ -296,6 +297,12 @@ class Projects extends Component {
 
     const showDeleteButton = this.state.projects.length > 1;
 
+    const {origin} = this.props.location;
+    const {username} = this.props.auth.user;
+    const name = currentProject ? currentProject.name : "";
+    const shareLink = encodeURIComponent(`${origin}/${username}/${name}`);
+    console.log(shareLink);
+
     const projectItems = this.state.projects.map(project =>
       <li className="project-switcher-item" key={project.id}>
         <Link
@@ -390,12 +397,16 @@ class Projects extends Component {
                 </li> }
 
                 {/* share project */}
+                {/*
                 <li className="project-action-item">
                   <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
                     <span className="project-action-button-icon pt-icon pt-icon-share" />
                     <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                   </button>
                 </li>
+                */}
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} target="_blank">share project</a>
+
 
                 {/* delete / leave project */}
                 { currentProject ? <li className="project-action-item">
@@ -585,7 +596,8 @@ Projects.contextTypes = {
 };
 
 Projects = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(Projects);
 Projects = translate()(Projects);
 export default Projects;

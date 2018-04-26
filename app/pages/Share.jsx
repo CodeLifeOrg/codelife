@@ -4,6 +4,7 @@ import {translate} from "react-i18next";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import CodeEditor from "components/CodeEditor/CodeEditor";
+import {Helmet} from "react-helmet";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
 import "./Share.css";
 
@@ -69,13 +70,24 @@ class Share extends Component {
     const name = content.name || content.snippetname;
 
     let contentType = "";
-    if (this.props.location.pathname.includes("codeBlocks/")) contentType = "codeblock";
-    if (this.props.location.pathname.includes("projects/")) contentType = "project";
+    if (this.props.location.pathname.includes("/codeBlocks/")) contentType = "codeblock";
+    if (this.props.location.pathname.includes("/projects/")) contentType = "project";
 
     const reported = reports.find(r => r.type === contentType && r.report_id === id);
 
+    const url = this.props.location.href;
+    const img = `${this.props.location.origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
+
     return (
       <div id="share">
+        <Helmet>
+          <title>{name}</title>
+          <meta property="og:url" content={url} />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content={`${name} - A CodeLife Project`} />
+          <meta property="og:description" content="Description of Codelife" />
+          <meta property="og:image" content={img} />
+        </Helmet>
         <CodeEditor initialValue={this.state.content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
         <div id="tag">
           <div className="info">
@@ -84,6 +96,9 @@ class Share extends Component {
           </div>
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
+          </div>
+          <div className="fb">
+            fb
           </div>
           {
             content.status === "banned" || !this.props.auth.user
@@ -113,7 +128,8 @@ class Share extends Component {
 }
 
 Share = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(Share);
 Share = translate()(Share);
 export default Share;

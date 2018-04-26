@@ -27,7 +27,7 @@ class CollabList extends Component {
       const collabUser = {
         bio: user.bio,
         id: user.uid,
-        img: user.img, // TODO: fix me
+        img: user.img,
         name: user.user.name,
         username: user.user.username
       };

@@ -318,10 +318,6 @@ class Projects extends Component {
       </li>
     );
 
-    // get project owner for current collab project
-    const collabOwner = !isMine && currentProject ? currentProject.user : null;
-    // this.state.collabs ? collabOwner = this.state.collabs[0] : null;
-
 
     return (
       <div className="projects">

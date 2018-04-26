@@ -118,7 +118,7 @@ class ReportBox extends Component {
           }
         </h2>
 
-        <div className={`report-popover-form${disabled && " is-disabled"}`}>
+        <div className={`report-popover-form${disabled ? " is-disabled" : ""}`}>
 
           {/* reason for flagging */}
           <div className="field-container font-sm">

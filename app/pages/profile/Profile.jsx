@@ -115,8 +115,8 @@ class Profile extends Component {
             : null }
           <UserCodeBlocks user={profileUser} />
           <UserProjects user={profileUser} />
-          {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
-          {profileUser.sid && profileUser.sid !== -1 ? <UsersList type="school" user={profileUser} /> : null}
+          {/* {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
+          {profileUser.sid && profileUser.sid !== -1 ? <UsersList type="school" user={profileUser} /> : null} */}
         </content>
       </div>
     );

@@ -22,7 +22,7 @@ const pInclude = [
   {association: "userprofile", attributes: ["bio", "sharing"]},
   {association: "user", attributes: ["username"]},
   {association: "reportlist"},
-  {association: "collaborators", attributes: ["uid", "sid", "gid"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
+  {association: "collaborators", attributes: ["uid", "sid", "gid", "img", "bio"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];
 
 module.exports = function(app) {
@@ -208,7 +208,7 @@ module.exports = function(app) {
 
   // Used by Projects to delete a project
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
-    db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => 
+    db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() =>
       db.projects_userprofiles.destroy({where: {pid: req.query.id}}).then(() => {
         db.projects.findAll({
           where: {

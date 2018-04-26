@@ -25,9 +25,9 @@ class CollabList extends Component {
     // current collaborators
     const collabList = collabs.map(user => {
       const collabUser = {
-        bio: null,
+        bio: user.bio,
         id: user.uid,
-        img: null, // TODO: fix me
+        img: user.img, // TODO: fix me
         name: user.user.name,
         username: user.user.username
       };

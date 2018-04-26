@@ -14,20 +14,33 @@
 @define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
 @define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
 @define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
-@define-mixin max-xxs { @media (max-width: 319px)  { @mixin-content; } }
+@define-mixin max-xxs { @media (max-width: 324px)  { @mixin-content; } }
 
 /* type scaling */
 @define-mixin font-xxl {
-  font-size: 3.75rem; /* 60px */
+  font-size: 2.5rem; /* 40px */
   line-height: 1;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 3.75rem; /* 60px */
+  }
 }
 @define-mixin font-xl {
-  font-size: 2.375rem; /* 38px */
-  line-height: 1.25;
+  font-size: 1.75rem; /* 28px */
+  line-height: 1;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 2.375rem; /* 38px */
+    line-height: 1.25;
+  }
 }
 @define-mixin font-lg {
-  font-size: 1.625rem; /* 26px */
+  font-size: 1.5rem; /* 24px */
   line-height: 1.25;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 1.625rem; /* 26px */
+  }
 }
 @define-mixin font-md {
   font-size: 1.25rem; /* 20px */
@@ -81,6 +94,7 @@
 @define-mixin list-reset {
   list-style-type: none; /* remove bullets */
   padding-left: 0; /* thanks blueprint */
+  margin-top: 0; /* thanks blueprint */
   margin-bottom: 0; /* thanks blueprint */
 }
 
@@ -90,6 +104,16 @@
   cursor: default;
   z-index: 0;
 }
+
+/* clearfix */
+@define-mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
 
 /* ellipsis */
 /* NOTE: works best with defined width & height, 1 line of text */
@@ -102,6 +126,42 @@
 /* default button padding */
 @define-mixin button-padding {
   padding: 0.35em 2em 0.55em 2em;
+}
+/* default text input padding */
+@define-mixin text-input-padding {
+  padding: 0.35em 0.75em 0.55em;
+}
+/* default text input theming */
+@define-mixin text-input-theme {
+  height: auto; /* reset blueprint */
+  background-color: var(--light-1);
+  border: 1px solid var(--gray);
+  border-radius: var(--radius-sm);
+  /* transitions */
+  transition:
+    background-color 0.2s,
+    border 0.2s;
+
+  /* interactions */
+  &:hover {
+    background-color: var(--white);
+  }
+  &:focus {
+    background-color: var(--sky-light);
+    border-color: var(--sky-dark);
+
+    & + .field-icon {
+      color: var(--sky-dark);
+    }
+  }
+
+  /* placeholder text */
+  &:placeholder-shown {
+    color: var(--dark-1);
+  }
+  &:focus:placeholder-shown {
+    color: var(--sky-dark);
+  }
 }
 /* select menu padding */
 @define-mixin select-padding {
@@ -183,6 +243,11 @@
   color: var(--sky-dark);
   font-weight: 700;
   text-transform: uppercase;
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--black);
+  }
 }
 
 /* slide theme */
@@ -191,6 +256,29 @@
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: var(--radius-md);
   box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
+}
+
+/* subtle background gradient for highlighted sections */
+@define-mixin section-bg-gradient {
+  @supports (left: -10vw) {
+    &:before {
+      content: '';
+      /* sizing */
+      display: block;
+      width: 200vw;
+      height: 100%;
+      /* positioning */
+      position: absolute;
+      left: -100vw;
+      /* theming */
+      background-image:
+      linear-gradient(-180deg,
+        rgba(255,255,255,0.00) 0%,
+        rgba(255,255,255,0.12) 50%,
+        rgba(255,255,255,0.00) 100%
+        );
+    }
+  }
 }
 
 /* slide sizing */
@@ -345,6 +433,37 @@
   }
 }
 
+/* cards with smaller margins */
+@define-mixin condensed-card-layout-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  /* space out adjacent cards */
+  & > .card-container {
+    margin-bottom: 1rem;
+  }
+}
+@define-mixin condensed-card-layout-2col {
+  & > .card-container {
+    width: 48%; /* fallback */
+    width: calc(50% - 0.5rem);
+  }
+}
+@define-mixin condensed-card-layout-3col {
+  & > .card-container {
+    width: 30%; /* fallback */
+    width: calc(33.333% - 0.75rem);
+
+    /* only 2 items */
+    &:nth-last-of-type(n+2):nth-last-of-type(-n+2):first-of-type, &:nth-last-of-type(n+2):nth-last-of-type(-n+2):first-of-type ~ .card-container,
+    /* only 2 items in the last row */
+    &:nth-of-type(3n):nth-last-of-type(-n+3) ~ .card-container {
+      width: calc(50% - 0.5rem);
+    }
+  }
+}
+
 /* form divider */
 @define-mixin form-divider {
   margin-bottom: -0.8em; /* offset button padding */
@@ -402,4 +521,17 @@
       margin-left: -1px;
     }
   }
+}
+
+
+/* print stylesheet mixins */
+/* display an html attr as a pseudo element */
+@define-mixin print-attr {
+  display: block; /* needed to make content display */
+  /* positioning */
+  position: relative;
+  /* theming */
+  font-size: 0.5em;
+  color: var(--sky-dark); /* it's the link href, so give it the link color */
+  text-decoration: none; /* but it's small, so don't underline it */
 }

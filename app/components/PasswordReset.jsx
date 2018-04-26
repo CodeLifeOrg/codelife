@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import {changePassword, resetPassword, validateReset} from "datawheel-canon/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
@@ -28,7 +28,8 @@ class PasswordReset extends Component {
   }
 
   componentDidMount() {
-    const {token} = this.props.location ? this.props.location.query : this.props;
+    const {location} = this.props.router;
+    const {token} = location ? location.query : this.props;
     if (token) {
       this.props.validateReset(token);
       this.setState({submitted: true});
@@ -41,9 +42,9 @@ class PasswordReset extends Component {
 
   changePassword(e) {
     e.preventDefault();
-    const {t} = this.props;
+    const {t, router} = this.props;
     const {password, passwordAgain, toast} = this.state;
-    const {token} = this.props.location.query;
+    const {token} = router.location.query;
     if (password !== passwordAgain) {
       toast.show({iconName: "error", intent: Intent.DANGER, message: t("SignUp.error.PasswordMatch")});
       return;
@@ -60,7 +61,7 @@ class PasswordReset extends Component {
 
   componentDidUpdate() {
 
-    const {auth, t} = this.props;
+    const {auth, t, router} = this.props;
     const {email, submitted, toast, token} = this.state;
 
     if (!token && auth.msg === RESET_TOKEN_SUCCESS) {
@@ -68,7 +69,7 @@ class PasswordReset extends Component {
     }
     else if (submitted && !auth.loading && (auth.msg || auth.error)) {
       if (auth.msg === RESET_PW_SUCCESS) {
-        browserHistory.push("/login");
+        router.push("/login");
       }
       else if (auth.msg === RESET_SEND_SUCCESS) {
         toast.show({iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
@@ -168,6 +169,10 @@ class PasswordReset extends Component {
 
   }
 }
+
+PasswordReset.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth

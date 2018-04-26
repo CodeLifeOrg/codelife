@@ -6,10 +6,11 @@ import "./Profile.css";
 class UserInfo extends Component {
 
   render() {
-    const {t, loggedInUser, user} = this.props;
+    const {t, loggedInUser, user, mode} = this.props;
 
     return (
       <div className="user-info">
+
         {user.img
           ? <div className="user-img" style={{backgroundImage: `url(/uploads/${user.img}?v=${new Date().getTime()})`}}></div>
           : <span className="pt-icon-large pt-icon-user pt-intent-primary"></span>}
@@ -27,12 +28,16 @@ class UserInfo extends Component {
           <span className="pt-icon-standard pt-icon-link"></span>
           <a href={`/profile/${user.username}/`}>{`http://codelife.com/profile/${user.username}/`}</a>
         </p>
-        { loggedInUser.id === user.id
+        { loggedInUser.id === user.id && mode === "view"
           ? <Link className="pt-button edit-link" to={`/profile/${user.username}/edit`}>{ t("Edit Profile") }</Link>
           : null }
       </div>
     );
   }
 }
+
+UserInfo.defaultProps = {
+  mode: "view" // used to hide the edit button if alrady in edit mode
+};
 
 export default translate()(UserInfo);

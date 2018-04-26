@@ -1,3 +1,6 @@
+@import "../../mixins.css";
+
+/* statistics tabs */
 .stat-tabs .pt-tab-list {
   background-color: var(--light-1);
   border: 1px solid var(--light-3);
@@ -17,47 +20,93 @@
   }
 }
 
-#statistics {
-  & #totals {
+
+/* statistics page */
+.statistics {
+
+  /* admin only */
+  & .totals {
     margin: var(--gutter-xs) 0;
     text-align: center;
+
     & .stat {
       margin: 0 var(--gutter-xs);
+
       & .value {
         font-weight: bold;
       }
     }
   }
+
+  /* no users retreived */
   & .pt-non-ideal-state {
     height: 300px;
     max-width: 100%;
   }
-  & .pt-table {
+}
+
+
+/* the table */
+.statistics-table {
+  display: block; /* make the table honor width */
+  width: 110%; /* flow off the right edge of the page */
+  overflow: auto; /* scrollable on smaller screens */
+  /* theming */
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius-md);
+
+  /* no longer a need to overflow */
+  @add-mixin min-md {
     width: 100%;
-    & th {
-      cursor: pointer;
-      white-space: nowrap;
-      & .pt-icon-double-caret-vertical {
-        opacity: 0.25;
+  }
+
+  & .statistics-table-header,
+  & .statistics-table-body {
+    width: 100%;
+  }
+
+  /* zebra striping */
+  & .statistics-table-header-row,
+  & .statistics-table-row:nth-of-type(even) {
+    background-color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* clickable table labels */
+  & .statistics-table-heading {
+    cursor: default;
+    white-space: nowrap;
+
+    /* filter icons */
+    & .statistics-icon {
+      margin-right: 0.2em;
+      color: var(--light-3); /* default / unfiltered color */
+      /* transitions */
+      transition: color 0.2s;
+
+      /* filtered state */
+      &:not(.pt-icon-double-caret-vertical) {
+        color: var(--sky-dark);
       }
-      & .pt-icon-standard {
-        margin-left: -3px;
-      }
-      & .pt-icon-caret-down, & .pt-icon-caret-up {
-        color: var(--danger-dark);
-      }
     }
-    & td {
-      vertical-align: middle;
+
+    /* interactions */
+    &:hover .statistics-icon {
+      color: var(--sky);
     }
-    & .username {
-      max-width: 150px;
+  }
+
+  /* cells */
+  & .statistics-table-cell {
+    vertical-align: middle;
+    padding: 0.75em 1.5em;
+
+    &.progress .pt-progress-bar {
+      margin-top: 0.3125rem; /* fudge into place vertically */
+      width: 5.625rem;
     }
-    & .pt-progress-bar {
-      width: 80px;
-    }
-    & .createdAt {
-      min-width: 150px;
+
+    &.created-at {
+      min-width: 10rem;
     }
   }
 }

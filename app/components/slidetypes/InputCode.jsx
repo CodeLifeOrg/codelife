@@ -27,7 +27,7 @@ class InputCode extends Component {
     this.setState({mounted: true, rulejson, baseText});
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.rulejson !== this.props.rulejson) {
       const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
       this.setState({rulejson});
@@ -82,7 +82,7 @@ class InputCode extends Component {
         { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor panel-content"></div> }
+          { this.state.mounted ? <CodeEditor readOnly={this.props.readOnly} island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor panel-content"></div> }
         </div>
         <div className={execState ? "validation three-buttons" : "validation"} >
           <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>

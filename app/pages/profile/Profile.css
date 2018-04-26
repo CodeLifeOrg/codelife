@@ -50,13 +50,20 @@
 
         & .pt-icon-standard {
           opacity: 0.75;
-          width: var(--gutter-md);
+          width: 1em;
+          display: inline-block;
+          margin-right: 0.5em;
+
+          /* prevent link from breaking onto new line */
+          & + a {
+            @add-mixin overflow-ellipsis;
+            display: block; /* required for ellipsis to work */
+            padding-left: 1.5em;
+            top: -1.25em;
+          }
         }
-
       }
-
     }
-
   }
 
   & .profile-info {

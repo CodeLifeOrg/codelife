@@ -112,7 +112,7 @@ module.exports = function(app) {
       ]
     })
       .then(rRows => {
-        const resp = rRows.map(r => {
+        const resp = rRows.filter(c => c.codeblock).map(r => {
           const rj = r.toJSON();
           rj.username = rj.codeblock.user ? rj.codeblock.user.username : "";
           rj.email = rj.codeblock.user ? rj.codeblock.user.email : "";
@@ -145,8 +145,12 @@ module.exports = function(app) {
       ]
     })
       .then(rRows => {
-        const resp = rRows.map(r => {
+        // This filter catches reports whose target project has been deleted.
+        // TODO: The deletion of a project should not "wipe clean" a report - return a special "deleted"
+        // case that maintains the fact that this user was reported, but also shows their project was deleted.
+        const resp = rRows.filter(p => p.project).map(r => {
           const rj = r.toJSON();
+          console.log(rj);
           rj.username = rj.project.user ? rj.project.user.username : "";
           rj.email = rj.project.user ? rj.project.user.email : "";
           rj.name = rj.project.user ? rj.project.user.name : "";

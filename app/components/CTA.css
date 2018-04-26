@@ -1,0 +1,32 @@
+@import '../mixins.css';
+
+/* cta container */
+.cta {
+  /* theming */
+  @add-mixin slide-theme;
+  /* sizing */
+  padding: 2.5rem var(--gutter-lg) 2rem var(--gutter-lg);
+  max-width: 35rem; /* 560px */
+  /* positioning */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: -4.5rem; /* reduce space in between CTA & footer */
+
+  /* un-all-caps CTA heading */
+  & .cta-heading {
+    text-transform: none;
+    letter-spacing: -1px;
+  }
+  /* enforce lowercase on button */
+  & .cta-button {
+    text-transform: lowercase;
+  }
+}
+
+/* space out cta */
+.map + .cta {
+  margin-top: 5rem;
+}
+.footer-lessonplan-nav + .cta {
+  margin-top: 2rem;
+}

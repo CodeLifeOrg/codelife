@@ -7,17 +7,19 @@ import "./Loading.css";
 class Loading extends Component {
 
   render() {
-    const {dark, t} = this.props;
+    const {t} = this.props;
 
     return (
-      <div id="loading" className={ dark ? "dark" : "light" }>
-        <Spinner intent={Intent.WARNING} />
-        <h1 className="title">{ t("Loading") }...</h1>
+      <div className="loading">
+        <div className="loading-inner">
+          <div className="loading-spinner-container">
+            <Spinner intent={Intent.WARNING} />
+          </div>
+          <h1 className="loading-title font-md">{ t("Loading") }...</h1>
+        </div>
       </div>
     );
-
   }
-
 }
 
 Loading.defaultProps = {

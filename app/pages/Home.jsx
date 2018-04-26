@@ -5,7 +5,9 @@ import {translate} from "react-i18next";
 import axios from "axios";
 import CodeBlockCard from "components/CodeBlockCard";
 import ProjectCard from "components/ProjectCard";
+import IslandLink from "components/IslandLink";
 import AuthForm from "components/AuthForm";
+import CTA from "components/CTA";
 import {Dialog, Intent, Spinner} from "@blueprintjs/core";
 import "./Home.css";
 
@@ -58,39 +60,87 @@ class Home extends Component {
     return (
       <div className="content home">
 
-        {/* OG intro */}
-        <div className={ `island content-section ${current ? current.theme : "island-jungle"}` }>
-          <div className="island-image image">
-            <div className="logo">
-              <div className="tag">Beta</div>
-              <img className="text" src="/logo/logo-shadow.png" />
-            </div>
-            { current
-              ? <Link to={ `/island/${current.id}` } className={ `pt-button pt-intent-primary pt-large ${current.icon}` }>{ progress.length ? t("home.continue", {island: current.name}) : t("home.start", {island: current.name}) }</Link>
-              : <h2 className="title">{ t("home.tagline") }</h2> }
-            <iframe className="video" src={ `https://www.youtube-nocookie.com/embed/${ videos[locale] || videos.en }?rel=0` } frameBorder="0" allowFullScreen></iframe>
-          </div>
-        </div>
-
-        {/* intro */}
+        {/* header */}
         { !current
-          ? <div className="intro content-section u-text-center">
+          ? <div className="header home-header logged-out-home-header u-text-center">
+            <div className="header-inner header-half-container">
 
-            <h1 className="intro-headline">{ t("Home.Headline")}</h1>
-            {/* <p className="intro-text font-lg">{ t("Home.IntroText")}</p> */}
+              {/* headline/signup/login */}
+              <div className="header-half">
 
-            <div className="authform-button-group u-margin-bottom-off">
-              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
-                { t("Home.GetStarted")}
-              </button>
-              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "login")}>
-                <span className="pt-icon pt-icon-log-in" />
-                {t("LogIn.Log_in")}
-              </button>
+                {/* headline */}
+                <h1 className="intro-headline u-margin-bottom-off">{ t("Home.Headline")}</h1>
+                {/* <p className="intro-text font-lg">{ t("Home.IntroText")}</p> */}
+
+                {/* buttons */}
+                <div className="authform-button-group u-margin-bottom-off">
+                  <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
+                    { t("Home.GetStarted")}
+                  </button>
+                  <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "login")}>
+                    <span className="pt-icon pt-icon-log-in" />
+                    {t("LogIn.Log_in")}
+                  </button>
+                </div>
+              </div>
+
+              {/* video */}
+              <div className="header-half">
+                {/* container needed to make it responsive */}
+                <div className="video-container">
+                  <iframe className="video-iframe"
+                    src={ `https://www.youtube-nocookie.com/embed/${ videos[locale] || videos.en }?rel=0` }
+                    frameBorder="0"
+                    allowFullScreen />
+                </div>
+              </div>
             </div>
           </div>
-          : null
+
+          // logged in
+          : <div className="header home-header logged-in-home-header u-text-center">
+            <div className="header-inner header-half-container">
+
+              {/* text */}
+              <h1 className="header-headline font-xxl">
+                { progress.length ? t("Home.ContinueAdventure") : t("Home.BeginAdventure") }
+              </h1>
+
+              {/* island */}
+              <IslandLink key={current.id} island={current} />
+
+            </div>
+          </div>
         }
+
+        {/* mandatory 3 columns of features / selling points */}
+        { !current
+          ? <div className="content-section">
+            <div className="feature-list u-list-reset">
+              {/* feature 1 */}
+              <p className="feature-item font-md">
+                <span className="feature-icon pt-icon pt-icon-code" />
+                <span className="feature-text">
+                  {t("Home.Feature1")}
+                </span>
+              </p>
+              {/* feature 2 */}
+              <p className="feature-item font-md">
+                <span className="feature-icon pt-icon pt-icon-eye-open" />
+                <span className="feature-text">
+                  {t("Home.Feature2")}
+                </span>
+              </p>
+              {/* feature 3 */}
+              <p className="feature-item font-md">
+                <span className="feature-icon pt-icon pt-icon-send-to-map" />
+                <span className="feature-text">
+                  {t("Home.Feature3")}
+                </span>
+              </p>
+            </div>
+          </div>
+          : null }
 
         {/* made on codelife */}
         <div className="content-section">
@@ -125,6 +175,9 @@ class Home extends Component {
           <p>{ t("splashP3") }</p>
           <p>{ t("splashP4") }</p>
         </div>
+
+        {/* display CTA if logged out */}
+        { !this.props.user ? <CTA context="home" /> : null }
 
         {/* Authform */}
         <Dialog

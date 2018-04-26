@@ -45,7 +45,9 @@
     height: 20px;
     /* transitions */
     transition:
-      transform 0.2s;
+      transform 0.2s,
+      opacity 0.2s;
+    opacity: 0.85;
 
     /* huge logo (home page only) */
     @add-mixin min-md {
@@ -78,10 +80,19 @@
     & .logo-text {
       max-height: 100%;
       transition: transform 0.1s;
+
+      /* the logo */
+      & svg,
+      & image {
+        height: 100%;
+        width: auto;
+      }
     }
 
     /* interactions */
     &:hover, &:focus {
+      opacity: 1;
+
       & .logo-text {
         transform: scale(1.1);
       }
@@ -191,15 +202,16 @@
   & .link-list {
     text-align: right; /* keep link-list on the right */
 
+    /* align links with content edge */
+    @add-mixin min-sm {
+      margin-right: 0.5em;
+    }
+
+    /* individual links */
     & .link {
       @add-mixin nav-link;
       /* sizing */
       padding: 0.25em var(--gutter-sm);
-
-      /* interactions */
-      &:hover, &:focus {
-        color: var(--black);
-      }
 
       /* remove right padding, bring in toggle buttons */
       &.with-toggle {
@@ -287,29 +299,6 @@
   }
 }
 
-/* browser popover —  not nested within .browser */
-.browser-popover {
-  background-color: var(--white);
-  width: 250px;
-  height: auto;
-
-  & > .pt-popover-content {
-    width: auto; /* override default width: max-content */
-    background-color: var(--white);
-
-    & > .browser-list {
-      /* account for 20px padding on parent,
-      which is necessary to hide the popover arrow shadow */
-      margin: -20px;
-      padding: var(--gutter-xs) 0;
-
-      /* active node */
-      & .pt-tree-node-selected > .pt-tree-node-content {
-        background-color: var(--sky-dark);
-      }
-    }
-  }
-}
 
 /* adjust inline account popover */
 .link-toggle-button + .pt-overlay-inline {

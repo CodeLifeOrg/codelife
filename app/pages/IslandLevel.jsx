@@ -1,6 +1,7 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {browserHistory, Link} from "react-router";
+import {Link} from "react-router";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
@@ -9,7 +10,7 @@ import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
 
-import "./Level.css";
+import "./IslandLevel.css";
 
 import Loading from "components/Loading";
 
@@ -81,9 +82,9 @@ class Level extends Component {
   }
 
   componentDidUpdate() {
-    const {location} = this.props;
+    const {location} = this.props.router;
     const {currentIsland, loading} = this.state;
-    if (!loading && !currentIsland || currentIsland && currentIsland.id !== location.pathname.split("/")[2]) {
+    if (!loading && !currentIsland || currentIsland && currentIsland.id !== location.pathname.split("/")[1]) {
       this.setState({currentIsland: null, levels: null, userProgress: null, loading: true}, this.loadFromDB);
     }
   }
@@ -319,6 +320,7 @@ class Level extends Component {
 
     const {auth, t} = this.props;
     const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
+    const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <Loading />;
@@ -436,6 +438,10 @@ class Level extends Component {
     );
   }
 }
+
+Level.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

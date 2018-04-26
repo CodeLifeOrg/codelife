@@ -2,9 +2,9 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Tree} from "@blueprintjs/core";
+import {Tree, Tooltip} from "@blueprintjs/core";
 import Loading from "components/Loading";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 
 import "./Browser.css";
 
@@ -51,6 +51,11 @@ class Browser extends Component {
   buildTree() {
     const {islands, levels, slides, progress, current} = this.state;
     const nodes = [];
+    const blockLabel =
+      <Tooltip content="You haven't unlocked this level yet!">
+        <span className="pt-icon-standard pt-icon-lock"/>
+      </Tooltip>;
+
     const pathObj = {
       island: this.props.linkObj.lid,
       level: this.props.linkObj.mlid,
@@ -70,13 +75,10 @@ class Browser extends Component {
         childNodes: [],
         data: i
       };
-      if (progress.find(p => p.level === i.id) || i.id === current.id) {
-        if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
-        nodes.push(islandObj);
-      }
-      else {
-        continue;
-      }
+      if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+      islandObj.hasBeaten = progress.find(p => p.level === i.id) || i.id === current.id;
+      if (!islandObj.hasBeaten) islandObj.secondaryLabel = blockLabel, islandObj.className = "is-locked";
+      nodes.push(islandObj);
     }
     for (let l of levels) {
       l = this.fixNulls(l);
@@ -93,13 +95,10 @@ class Browser extends Component {
           childNodes: [],
           data: l
         };
-        if (progress.find(p => p.level === l.id)) {
-          if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
-          islandNode.childNodes.push(levelObj);
-        }
-        else {
-          continue;
-        }
+        if (pathObj && pathObj.island && pathObj.level && !pathObj.slide && pathObj.level === levelObj.id) nodeFromProps = levelObj;
+        levelObj.hasBeaten = progress.find(p => p.level === l.id);
+        if (!levelObj.hasBeaten) levelObj.secondaryLabel = blockLabel, levelObj.className = "is-locked";
+        islandNode.childNodes.push(levelObj);
       }
     }
     for (let s of slides) {
@@ -113,7 +112,7 @@ class Browser extends Component {
       if (levelNode) {
         const slideObj = {
           id: s.id,
-          className: s.id,
+          className: `${s.id} slide`,
           hasCaret: false,
           iconName: slideIcons[s.type],
           label: s.title,
@@ -122,7 +121,6 @@ class Browser extends Component {
           data: s
         };
         if (pathObj && pathObj.island && pathObj.level && pathObj.slide && pathObj.slide === slideObj.id) nodeFromProps = slideObj;
-
         levelNode.childNodes.push(slideObj);
       }
     }
@@ -182,25 +180,28 @@ class Browser extends Component {
   }
 
   handleNodeClick(node) {
-    const {currentNode} = this.state;
-    if (!currentNode) {
-      node.isSelected = true;
+    if (node.hasBeaten) {
+      const {currentNode} = this.state;
+      const {browserHistory} = this.context;
+      if (!currentNode) {
+        node.isSelected = true;
+      }
+      else if (node.id !== currentNode.id) {
+        node.isSelected = true;
+        currentNode.isSelected = false;
+      }
+      if (node.itemType === "island") {
+        browserHistory.push(`/island/${node.data.id}`);
+      }
+      else if (node.itemType === "level") {
+        browserHistory.push(`/island/${node.parent.data.id}/${node.data.id}`);
+      }
+      else if (node.itemType === "slide") {
+        browserHistory.push(`/island/${node.parent.parent.data.id}/${node.parent.data.id}/${node.data.id}`);
+      }
+      if (this.props.reportClick) this.props.reportClick(node);
+      this.setState({currentNode: node});
     }
-    else if (node.id !== currentNode.id) {
-      node.isSelected = true;
-      currentNode.isSelected = false;
-    }
-    if (node.itemType === "island") {
-      browserHistory.push(`/island/${node.data.id}`);
-    }
-    else if (node.itemType === "level") {
-      browserHistory.push(`/island/${node.parent.data.id}/${node.data.id}`);
-    }
-    else if (node.itemType === "slide") {
-      browserHistory.push(`/island/${node.parent.parent.data.id}/${node.parent.data.id}/${node.data.id}`);
-    }
-    if (this.props.reportClick) this.props.reportClick(node);
-    this.setState({currentNode: node});
   }
 
   handleNodeCollapse(node) {
@@ -231,6 +232,10 @@ class Browser extends Component {
     );
   }
 }
+
+Browser.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Browser = connect(state => ({
   auth: state.auth

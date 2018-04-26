@@ -1,7 +1,11 @@
+@import "../mixins.css";
+
+/* make room for absolutely positioned icon */
 .codeblock-card-caption {
   margin-left: var(--gutter-sm);
 }
 
+/* icon */
 .card-island-icon {
   /* sizing */
   display: block;
@@ -12,4 +16,113 @@
   top: 0.75rem;
   left: -0.4rem;
   background-size: cover;
+}
+
+
+/* inline card dialog */
+.card-container .pt-overlay-inline {
+  /* fix positioning for inline overlay */
+  position: fixed !important; /* blueprint override */
+
+  /* add background when it's open */
+  &.pt-overlay-open {
+    background-color: rgba(16, 22, 26, 0.7);
+  }
+}
+
+
+/* dialog */
+.card-dialog {
+
+  /* reset margin */
+  & .card-dialog-inner {
+    margin: 0;
+  }
+
+  /* override margin inhereted from content */
+    & .pt-dialog-header-title,
+    & .pt-dialog-close-button {
+      margin-top: 0;
+      margin-bottom: 0;
+  }
+
+  /* footer */
+  & .card-dialog-footer {
+    /* reset margin & padding */
+    margin: 0;
+    padding: var(--gutter-sm) 20px;
+    /* theming */
+    background-color: var(--white);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+
+    /* set reasonable max width for user generated content */
+    & .user-link,
+    & .share-link {
+      @add-mixin overflow-ellipsis;
+      display: inline-block;
+      vertical-align: bottom; /* blueprint override */
+      max-width: 100%;
+    }
+    @add-mixin min-sm {
+      & .user-link {
+        max-width: 20.5rem;
+      }
+      & .share-link {
+        max-width: 25rem;
+      }
+    }
+
+    /* stacked layout on small screens */
+    @add-mixin max-sm {
+      & .card-dialog-footer-byline,
+      & .card-dialog-footer-actions {
+        display: block;
+        width: 100%;
+        float: none; /* reset */
+      }
+      /* space out byline & actions */
+      & .card-dialog-footer-actions {
+        top: 0.25rem;
+      }
+    }
+  }
+
+  /* actions */
+  & .card-dialog-footer-actions {
+    /* vertically center inline items */
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+
+      /* space out items */
+      &:not(:last-child) {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  /* space out icon and text */
+  & .card-dialog-footer-action-icon {
+    margin-right: 0.3em;
+  }
+  /* set text height */
+  & .card-dialog-footer-action-text {
+    line-height: 2.125rem;
+  }
+
+  /* flag button theme */
+  & .flag-button {
+    transition: color 0.2s;
+
+    /* interactions & flagged state */
+    &.is-flagged, &:hover, &:focus {
+      color: var(--danger);
+    }
+  }
+}
+
+
+/* fork popover */
+.fork-popover-inner {
+  min-width: 16rem;
 }

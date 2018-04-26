@@ -1,11 +1,433 @@
-.list-results {
-  width: 1000px;
-  height: 500px;
-  overflow: auto;
-  display:flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0px;
-  border: 1px solid black;
+@import "../mixins.css";
+
+/* --------------------------------
+layout
+-------------------------------- */
+
+/* set max-width and min-height on popover */
+.collab-form-container {
+  max-width: 72.5rem;
+  min-height: calc(100vh - 2rem);
+
+  @add-mixin min-sm {
+    min-height: 42rem;
+    max-height: calc(100vh - 8rem);
+  }
+
+  /* pin the sidebar to the left */
+  /* TODO: cross browser testing */
+  @media (min-width: 992px) and (min-height: 768px) {
+    height: 42.5rem;
+
+    /* fudge container alignment */
+    & .collab-container {
+      padding-bottom: 0.25rem;
+    }
+
+    /* make fixed positioning relative to container */
+    & .collab-controls {
+      position: fixed;
+      top: auto;
+      margin-top: 1rem;
+      left: auto;
+    }
+
+    /* account for sidebar with fixed positioning */
+    & .collab-search-results {
+      /* positioning */
+      margin-left: auto;
+      right: auto;
+      left: auto;
+      /* make results line up with sidebar */
+      min-height: 28rem;
+      top: 1px; /* baseline adjustment */
+    }
+
+    /* keep close button in view */
+    & .pt-dialog-header {
+      /* positioning */
+      position: fixed;
+      z-index: 1; /* position above title, beneath cards */
+      /* make fixed positioning relative to container */
+      top: auto;
+      right: auto;
+      /* WARNING: magic number as hell */
+      margin-top: -3rem;
+      margin-left: 65rem;
+      /* no background, just in case the positioning is off */
+      background: none;
+    }
+  }
+}
+
+/* left align headings on small screens */
+@add-mixin max-xs {
+  .collab-heading,
+  .collab-subhead {
+    text-align: left;
+  }
+}
+
+/* 2 column layout */
+.collab-outer {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--gutter-md);
+}
+
+/* small screen adjustments */
+@add-mixin max-xs {
+  /* swap position of selected collaborators and search controls */
+  .collab-selections {
+    top: -16rem;
+  }
+  .collab-search-controls {
+    top: 14rem;
+  }
+}
+
+/* 2 column controls */
+@media (min-width: 480px) and (max-width: 767px) {
+  .collab-controls {
+    display: flex;
+    width: 100%;
+
+    & > .collab-search-controls,
+    & > .collab-selections {
+      width: 50%;
+      width: calc(50% - 0.75rem);
+    }
+
+    & .collab-selections {
+      margin-top: 0;
+      left: 1.5rem;
+    }
+  }
+}
+
+/* 2 column layout */
+@add-mixin min-sm {
+  .collab-outer {
+    flex-direction: row;
+  }
+  .collab-controls,
+  .collab-search-results {
+    display: inline-block; /* fallback */
+    vertical-align: top; /* thx blueprint */
+  }
+  .collab-controls {
+    width: 17.3125rem;
+    top: 1rem; /* baseline adjustment */
+  }
+  .collab-search-results {
+    width: calc(100% - 17.3125rem - 3.125rem);
+    left: 3.125rem;
+  }
+}
+
+
+/* card layout */
+.collab-list-results {
+
+  /* list style */
+  @add-mixin max-xs {
+    & .available-collab-item .card {
+      padding: 0.4375rem 0;
+      box-shadow: none;
+    }
+    & .available-collab-item + .available-collab-item {
+      border-top: 1px solid var(--light-1);
+    }
+  }
+
+  @add-mixin min-xs {
+    @add-mixin condensed-card-layout-base;
+    @add-mixin condensed-card-layout-2col;
+  }
+
+  @add-mixin min-md {
+    @add-mixin condensed-card-layout-3col;
+  }
+}
+
+/* message theming */
+.collab-results-message {
+  border: 1px solid var(--light-1);
+  border-radius: var(--radius-md);
+  padding: var(--gutter-lg) var(--gutter-md);
+}
+
+/* button group */
+.clear-collab-button-group {
+  top: 0.25em;
+  padding-bottom: 0.75em;
+}
+
+
+/* --------------------------------
+search messages
+-------------------------------- */
+.collab-results-message {
+  width: 100%;
+
+  /* heading */
+  & .collab-results-heading {
+    /* default (hidden) state */
+    &.is-hidden {
+      display: none;
+    }
+  }
+}
+
+/* space out collab search results when visible */
+.collab-search-results-heading {
+  @add-mixin max-sm {
+    margin-top: 1.5rem;
+  }
+}
+/* if there is no list before the message,
+make the message take up the full height of the container */
+.collab-search-results-heading + .collab-results-message {
+  position: absolute;
+  height: 100%;
+  height: calc(100% - 0.25rem);
+  margin-top: 0.5rem;
+
+  /* adjust margin on 2 column layout */
+  @add-mixin min-sm {
+    margin-top: 1.25rem;
+  }
+}
+/* otherwise, add spacing in between the list and message */
+.collab-list-results-container + .collab-results-message {
+  margin-top: 0.75rem;
+
+  /* adjust margin on 2 column layout */
+  @add-mixin min-md {
+    margin-top: 2.625rem;
+  }
+}
+
+
+/* --------------------------------
+current & placeholder collaborators
+-------------------------------- */
+.collab-selections {
+  margin-top: 2.5rem;
+}
+.collab-list {
+  counter-reset: collabs; /* set up a counter for placeholder numbering */
+
+  /* increment counter for placeholder numbering */
+  & > .collab-item {
+    counter-increment: collabs;
+
+    /* display the count */
+    & .placeholder-collab-item-count:before {
+      content: counter(collabs);
+    }
+  }
+
+  /* reset border radius */
+  & > .collab-item .card,
+  & > .placeholder-collab-item {
+    padding: 0.25rem 0.3125rem;
+    border-radius: 0;
+  }
+  & > .collab-item:first-of-type .card,
+  & > .collab-item.placeholder-collab-item:first-of-type {
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+  }
+  & > .collab-item:last-of-type .card,
+  & > .collab-item.placeholder-collab-item:last-of-type {
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+  }
+  /* 1px border between adjacent items */
+  & > .collab-item + .collab-item {
+    margin-top: 1px;
+  }
+  /* avatar image */
+  & .collab-avatar {
+    /* sizing */
+    width: 1.5rem;
+    height: 1.5rem;
+    /* positioning */
+    margin-right: 0.3125rem;
+
+    /* center icon within container */
+    & .collab-avatar-icon,
+    & .action-indicator {
+      &:before {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  /* set max width for name */
+  & .collab-caption {
+    width: calc(100% - 1.8125rem);
+  }
+}
+
+/* --------------------------------
+shared collab item styles
+-------------------------------- */
+/* turn nested spans into block elements */
+.collab-inner {
+  display: block;
+}
+
+/* position img and text */
+.collab-caption,
+.collab-avatar {
+  display: inline-block;
+  vertical-align: middle; /* thx blueprint */
+}
+
+/* caption baseline adjustment */
+.collab-caption {
+  top: 1px;
+
+  /* handle long usernames */
+  & .collab-heading {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+}
+
+/* shared avatar theming & positioning */
+.collab-avatar {
+  /* theming */
+  color: var(--white);
+  background-color: var(--dark-1);
+  border-radius: 50%;
+
+  /* action indicator defaults */
+  & .action-indicator {
+    /* positioning */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* theming */
+    border-radius: 50%;
+    /* transitions */
+    opacity: 0;
+    transition: 0.15s opacity ease-out;
+
+    /* icon scale transition */
+    & .action-indicator-icon {
+      transform: scale(0.5) rotateZ(45deg);
+      transition: 0.25s transform;
+      will-change: transform;
+    }
+
+    /* bump up icon size */
+    & .action-indicator-icon:before {
+      font-size: 1.5rem;
+    }
+  }
+
+  /* center avatar & action icons within container */
+  & .collab-avatar-img,
+  & .collab-avatar-icon,
+  & .action-indicator {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* reset cursor to default */
+.available-collab-item .card-trigger,
+.current-collab-item .card-trigger {
+  cursor: auto;
+}
+
+/* interactions */
+.card-trigger:hover + .card .action-indicator,
+.card-trigger:focus + .card .action-indicator {
+  opacity: 0.9; /* let a bit of the image bleed through */
+
+  & .action-indicator-icon {
+    transform: none;
+  }
+}
+
+/* --------------------------------
+current collaborators
+-------------------------------- */
+.current-collab-item {
+  z-index: 1; /* make sure shadow is visible above placeholder items */
+
+  /* border between current collaborators, which works well with shadow */
+  & + .current-collab-item:after {
+    content: "";
+    /* sizing */
+    display: block;
+    height: 1px;
+    width: 100%;
+    /* positioning */
+    position: absolute;
+    top: -1px;
+    /* theming */
+    background-color: var(--light-1);
+  }
+
+  /* reset initial card style */
+  & .card {
+    background: none; /* make :hover/:focus shadow visiable through adjacent cards */
+    box-shadow: none;
+  }
+
+  /* interactions */
+  & .action-indicator {
+    background-color: var(--danger);
+  }
+}
+
+
+/* --------------------------------
+placeholder slots
+-------------------------------- */
+.placeholder-collab-item {
+  opacity: 0.3;
+  background-color: var(--light-1);
+  pointer-events: none;
+}
+
+
+/* --------------------------------
+available search results
+-------------------------------- */
+.available-collab-item {
+
+  /* avatar image */
+  & .collab-avatar {
+    /* sizing */
+    width: 2rem;
+    height: 2rem;
+    /* positioning */
+    margin-right: 0.9375rem;
+    /* theming */
+    border-radius: 50%;
+    color: var(--white);
+
+    & .action-indicator {
+      background-color: var(--sky-dark);
+    }
+  }
+
+  /* set max width for name */
+  & .collab-caption {
+    width: calc(100% - 2.9375rem);
+  }
+
+  /* adjust card padding */
+  & .card {
+    padding: 0.875rem 0.9375rem;
+  }
 }

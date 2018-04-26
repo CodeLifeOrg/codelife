@@ -6,6 +6,7 @@ MAIN LAYOUT
 
 /* main container */
 .island {
+  margin-top: var(--gutter-md);
   margin-bottom: var(--gutter-lg);
   text-align: center;
 
@@ -106,13 +107,25 @@ STUDENT CODEBLOCKS
     margin: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
   }
 
-  /* -------------------------------
-  Student codeblocks
-  ------------------------------- */
+  & .card-list {
+    @add-mixin card-layout-base;
+    text-align: left; /* override from .overworld */
 
-  & .card-list:not(.snippets-more) {
-    margin-top: var(--gutter-md);
+    /* stacked cards */
+    @media (max-width: 599px) {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 3 column layout */
+    @media (min-width: 600px) {
+      @add-mixin card-layout-3col;
+    }
+
+    & .card-list:not(.snippets-more) {
+      margin-top: var(--gutter-md);
+    }
   }
+
 
   /* -------------------------------
   Student codeblocks toggle button

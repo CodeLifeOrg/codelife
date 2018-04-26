@@ -1,8 +1,8 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import React, {Component} from "react";
-import {browserHistory} from "react-router";
 import {translate} from "react-i18next";
+import PropTypes from "prop-types";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Alert, Intent, Position, Toaster, Popover, Button, PopoverInteractionKind} from "@blueprintjs/core";
 import "./CodeBlock.css";
@@ -81,6 +81,7 @@ class CodeBlock extends Component {
   shareCodeblock() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
+    const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
     }
@@ -111,7 +112,9 @@ class CodeBlock extends Component {
     if (this.state.filename !== "") name = this.state.filename.replace(/^\s+|\s+$/gm, "");
     let endpoint = "/api/codeBlocks/";
     codeBlock ? endpoint += "update" : endpoint += "new";
-    axios.post(endpoint, {uid, iid, name, studentcontent}).then(resp => {
+    const username = this.props.auth.user.username;
+    console.log(username);
+    axios.post(endpoint, {uid, username, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
@@ -144,9 +147,12 @@ class CodeBlock extends Component {
 
     return (
       <div className="codeBlock" id="codeBlock">
-        <div style={{textAlign: "right"}} className="codeblock-filename-form">
-          {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
-        </div>
+        {!this.props.readOnly
+          ? <div style={{textAlign: "right"}} className="codeblock-filename-form">
+            {t("Codeblock Name")} <input className="pt-input codeblock-filename" type="text" value={this.state.filename} placeholder={ t("Codeblock Title") } onChange={this.changeFilename.bind(this)} />
+          </div>
+          : null
+        }
         <div className="codeBlock-body">
           <Alert
             isOpen={ this.state.resetAlert }
@@ -160,29 +166,36 @@ class CodeBlock extends Component {
           <div className="codeBlock-text">
             <div className="lesson-prompt" dangerouslySetInnerHTML={{__html: island.prompt}} />
           </div>
-          { this.state.mounted ? <CodeEditor ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
+          { this.state.mounted ? <CodeEditor readOnly={this.props.readOnly} ref={c => this.editor = c} setExecState={this.setExecState.bind(this)} rulejson={rulejson} onChangeText={this.onChangeText.bind(this)} initialValue={initialContent}/> : <div className="codeEditor"></div> }
         </div>
-        <div className="codeBlock-foot">
-          <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
-          { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
-          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
-          <Popover
-            interactionKind={PopoverInteractionKind.CLICK}
-            popoverClassName="pt-popover-content-sizing"
-            position={Position.RIGHT_BOTTOM}
-          >
-            <Button intent={Intent.PRIMARY} iconName="help">{t("Help")}</Button>
-            <div>
-              <h5>{island.name} - {t("Help")}</h5>
-              <p dangerouslySetInnerHTML={{__html: island.cheatsheet}} />
-            </div>
-          </Popover>
-          <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
-        </div>
+        {!this.props.readOnly
+          ? <div className="codeBlock-foot">
+            <button className="pt-button" key="reset" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
+            { island.codeBlock ? <span className="pt-button" onClick={this.shareCodeblock.bind(this)}>{ t("Share") }</span> : null }
+            { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
+            <Popover
+              interactionKind={PopoverInteractionKind.CLICK}
+              popoverClassName="pt-popover-content-sizing"
+              position={Position.RIGHT_BOTTOM}
+            >
+              <Button intent={Intent.PRIMARY} iconName="help">{t("Help")}</Button>
+              <div>
+                <h5>{island.name} - {t("Help")}</h5>
+                <p dangerouslySetInnerHTML={{__html: island.cheatsheet}} />
+              </div>
+            </Popover>
+            <button className="pt-button pt-intent-success" key="save" onClick={this.verifyAndSaveCode.bind(this)}>{t("Save & Submit")}</button>
+          </div>
+          : null
+        }
       </div>
     );
   }
 }
+
+CodeBlock.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 CodeBlock = connect(state => ({
   auth: state.auth

@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, {Component} from "react";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-import {Intent, Position, Toaster} from "@blueprintjs/core";
+import {Intent, Position, Toaster, Checkbox} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import UserInfo from "./UserInfo";
 import SelectGeo from "components/SelectGeo";
@@ -23,6 +23,7 @@ class EditProfile extends Component {
       loading: true,
       error: null,
       profileUser: null,
+      optOut: false,
       img: null
     };
   }
@@ -48,7 +49,8 @@ class EditProfile extends Component {
       else {
         this.setState({
           loading: false,
-          profileUser: userData
+          profileUser: userData,
+          optOut: userData.sid === -1
         });
       }
     });
@@ -56,11 +58,13 @@ class EditProfile extends Component {
 
   onSimpleUpdate(e) {
     const {profileUser} = this.state;
-    profileUser[e.target.id] = e.target.value;
+    // use `name` attribute for value so IDs can remain unique
+    profileUser[e.target.name] = e.target.value;
     this.setState({profileUser});
   }
 
   saveUserInfo(e) {
+    const {browserHistory} = this.context;
     e.preventDefault();
     this.setState({loading: true});
     const {t} = this.props;
@@ -74,7 +78,7 @@ class EditProfile extends Component {
       name: profileUser.name,
       sid: profileUser.sid
     };
-    //console.log("userPostData:\n", userPostData);
+    if (this.state.optOut) userPostData.sid = -1;
     axios.post("/api/profile/", userPostData).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {
@@ -154,6 +158,7 @@ class EditProfile extends Component {
     this.setState({img: file});
   }
 
+
   /**
    * 3 render states:
    * case (loading)
@@ -165,7 +170,7 @@ class EditProfile extends Component {
    */
   render() {
     const {t, user: loggedInUser} = this.props;
-    const {error, loading, profileUser} = this.state;
+    const {error, loading, profileUser, optOut} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
@@ -173,6 +178,10 @@ class EditProfile extends Component {
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
     const setBday = this.setBday.bind(this);
+    const popoverProps = {
+      popoverClassName: "calendar-popover pt-minimal",
+      inline: true
+    };
 
     if (loading) return <Loading />;
     if (error) return <h1>{error}</h1>;
@@ -182,105 +191,153 @@ class EditProfile extends Component {
     moment.locale("pt-BR");
     // console.log(moment.locale()); // pt-BR
 
+    // set CPF field classes based on validation
+    let cpfClasses = "field-container font-md has-icon";
+    // valid CPF entered
+    CPF.isValid(cpf)
+      ? cpfClasses = "field-container font-md has-icon is-valid" : null;
+    // invalid CPF entered
+    cpf ? cpf.length === 14 ? !CPF.isValid(cpf)
+      ? cpfClasses = "field-container font-md has-icon is-invalid"
+      : null : null : null;
+
+    // set DOB field classes based on validation
+    const dobClasses = "date-picker-container field-container font-md has-icon";
+
     return (
       <div id="profile">
+
         <aside className="profile-side">
-          <UserInfo user={profileUser} loggedInUser={loggedInUser} />
+          <UserInfo user={profileUser} loggedInUser={loggedInUser} mode="edit" />
           {/* <skillsList /> */}
         </aside>
-        <content className="profile-info">
-          <h2>{t("Edit Profile")}</h2>
-          <form>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Name")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <input onChange={onSimpleUpdate} value={name} id="name" className="pt-input" type="text" dir="auto" />
-                </div>
+        {/* edit profile */}
+        <div className="profile-info">
+
+          {/* the form */}
+          <form className="profile-edit-form" onSubmit={saveUserInfo}>
+
+            {/* form heading */}
+            <h2 className="profile-heading">{t("Editing profile…")}</h2>
+
+            {/* location */}
+            <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My info")}</h3>
+
+            {/* name, image, gender, dob */}
+            <div className="form-column form-column-half u-margin-top-off">
+
+              {/* name */}
+              <div className="field-container font-md has-icon">
+                <label className="font-sm" htmlFor="profile-name">{ t("Display name") }</label>
+                <input className="field-input"
+                  id="profile-name"
+                  value={name}
+                  type="text"
+                  name="name"
+                  onChange={onSimpleUpdate}
+                  autoFocus />
+                <span className="field-icon pt-icon pt-icon-id-number" />
               </div>
-            </div>
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Image")}
-              </label>
-              <SelectImg callback={onImgUpdate} />
-            </div>
+              {/* file select */}
+              <SelectImg callback={onImgUpdate} context="profile" />
 
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("About Me")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <textarea onChange={onSimpleUpdate} value={bio || ""} id="bio" className="pt-input" dir="auto"></textarea>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Gender")}
-              </label>
-              <div className="pt-form-content">
+              {/* select gender */}
+              <div className="field-container gender-select-container font-md">
+                <label className="font-sm" htmlFor="gender-select">{ t("Gender") }</label>
                 <div className="pt-select">
-                  <select onChange={onSimpleUpdate} id="gender" value={gender || "OTHER"}>
+                  <select className="field-input"
+                    id="profile-gender-select"
+                    name="gender"
+                    value={gender || ""}
+                    onChange={onSimpleUpdate}>
                     <option value="OTHER">{t("Rather not say")}</option>
                     <option value="FEMALE">{t("Female")}</option>
                     <option value="MALE">{t("Male")}</option>
                   </select>
                 </div>
+                {/* <span className="field-icon pt-icon pt-icon-application" /> */}
               </div>
-            </div>
 
-            <div className="location-group-inner">
-
-              <h3 className="font-sm u-margin-bottom-off">{t("YourLocation")}</h3>
-              <SelectGeo gid={gid} callback={setGid} />
-
-              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("YourSchool")}</h3>
-              <SelectSchool sid={sid} callback={setSid} />
-
-            </div>
-
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("CPF")}
-              </label>
-              <div className="pt-form-content">
-                <div className="pt-input-group">
-                  <input onChange={onCpfUpdate} value={cpf || ""} placeholder="000.000.000-00" id="cpf" className="pt-input" type="text" dir="auto" />
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-form-group pt-inline">
-              <label className="pt-label" htmlFor="example-form-group-input-d">
-                {t("Birthday")}
-              </label>
-              <div className="pt-form-content">
+              {/* Date of birth */}
+              <div className={dobClasses}>
+                <label className="font-sm" htmlFor="profile-dob">{ t("DOB") }</label>
                 <DateInput
+                  popoverProps={popoverProps}
+                  className="field-input font-sm"
+                  id="profile-dob"
+                  name="dob"
                   onChange={setBday}
                   value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
                   format="DD/MM/YYYY"
                   locale="pt-br"
-                  minDate={new Date("1900")}
+                  minDate={new Date("1918")}
                   maxDate={new Date()}
                 />
+                <span className="field-icon pt-icon pt-icon-calendar" />
+                <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
               </div>
             </div>
 
-            <button onClick={saveUserInfo} type="button" className="pt-button pt-intent-success">{t("Save")}</button>
+            {/* about me, CPF */}
+            <div className="form-column form-column-half u-margin-top-off">
+              {/* about me */}
+              <div className="field-container font-md">
+                <label className="font-sm" htmlFor="profile-about">{ t("About me") }</label>
+                <textarea className="field-input"
+                  id="profile-about"
+                  name="bio"
+                  value={bio || ""}
+                  onChange={onSimpleUpdate} />
+              </div>
+              {/* CPF */}
+              <div className={cpfClasses}>
+                <label className="font-sm" htmlFor="profile-cpf">{ t("CPF") }</label>
+                <input className="field-input"
+                  id="profile-cpf"
+                  name="cpf"
+                  value={cpf || ""}
+                  type="text"
+                  placeholder="000.000.000-00"
+                  onChange={onCpfUpdate} />
+                <span className="field-icon pt-icon pt-icon-id-number" />
+                <span className="field-icon position-right validation-icon pt-icon pt-icon-small-tick" />
+              </div>
+            </div>
+
+            {/* location & school */}
+            <div className="field-container location-group-inner">
+              {/* location */}
+              <h3 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My location")}</h3>
+              <SelectGeo gid={gid} callback={setGid} />
+              {/* school */}
+              <h3 className="font-sm u-margin-top-md">{t("My school")}</h3> 
+              <Checkbox 
+                checked={this.state.optOut} 
+                label={t("I'd rather not say")} 
+                onChange={e => this.setState({optOut: Boolean(e.target.checked)})}
+              />
+              { !optOut && <SelectSchool sid={sid} callback={setSid} /> }
+            </div>
+
+            {/* submit */}
+            <div className="field-container">
+              <button type="submit" className="pt-button pt-fill pt-intent-primary font-md">
+                { t("Save changes") }
+              </button>
+            </div>
 
           </form>
-        </content>
+        </div>
       </div>
     );
   }
 }
+
+EditProfile.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 EditProfile = connect(state => ({
   user: state.auth.user

@@ -1,4 +1,5 @@
 @import 'mixins.css';
+@import 'print.css';
 
 /* -----------------------------------
 resets & quality of life improvements
@@ -83,9 +84,22 @@ p > a,
   font-weight: 700;
   transition: color 0.2s;
 
+  /* interactions */
   &:hover, &:focus {
     color: var(--sky);
   }
+
+  /* danger text */
+  &.danger-text:hover,
+  &.danger-text:focus {
+    color: var(--danger);
+    opacity: 0.8; /* approximate sky color value */
+  }
+}
+
+/* text theming */
+.danger-text {
+  color: var(--danger);
 }
 
 /* hey, don't edit content here! */
@@ -208,6 +222,7 @@ blueprint overrides
 
   /* center align alert contents */
   & .pt-alert-contents {
+    width: 100%;
     text-align: center;
   }
   & .pt-alert-footer {
@@ -233,14 +248,13 @@ blueprint overrides
   }
   & .pt-dialog-footer {
     padding: 0 var(--gutter-xs);
+
     & .pt-dialog-footer-byline {
       color: var(--dark-3);
       float: left;
-      opacity: 0.75;
+
       & .share-link {
-        display: block;
-        font-size: 12px;
-        margin-top: var(--gutter-xxs);
+        display: block; /* line break */
       }
     }
   }
@@ -413,10 +427,9 @@ header
 ----------------------------------- */
 
 .header {
-  /* set height */
-  min-height: 60vh;
-  padding-top: 6rem;
-  padding-bottom: 6rem;
+  @add-mixin section-bg-gradient;
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
   /* position .header-inner */
   display: flex;
   align-items: center;
@@ -424,17 +437,26 @@ header
   /* reset width due to flex on parent */
   & .header-inner {
     width: 100%;
+
+    @add-mixin min-md {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* set height */
+  @media (min-width: 1200px) and (min-height: 900px) {
+    min-height: 60vh;
   }
 
   /* sidebar theming */
   & .header-sidebar {
     @add-mixin slide-theme;
     padding: var(--gutter-sm) var(--gutter-md);
-  }
 
-  /* space out sidebar on small screens */
-  @add-mixin max-md {
-    & .header-sidebar {
+    /* space out sidebar on small screens */
+    @add-mixin max-md {
       margin-top: 3rem;
     }
   }
@@ -459,8 +481,47 @@ header
       left: 2.5rem;
     }
   }
+
+  /* half and half layout */
+  & .header-half {
+    /* stacked layout on small screens */
+    @add-mixin max-md {
+      & + .header-half {
+        margin-top: 2rem;
+      }
+    }
+    /* side by side layout on bigger screens */
+    @add-mixin min-md {
+      width: 50%; /* fallback */
+      width: calc(50% - 2rem);
+      max-width: 38rem;
+      margin: 1rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }
 
+
+/* -----------------------------------
+embedded video
+----------------------------------- */
+/* use container to set proportions */
+.video-container {
+  padding-bottom: 56.25%; /* height ratio */
+  height: 0;
+  /* theming */
+  background-color: var(--sky-dark); /* before the video loads in */
+  border-radius: 0.4em; /* has to be more than the iframe's border radius ¯\_(ツ)_/¯ */
+  overflow: hidden; /* crop off the background */
+  box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
+
+  /* let the iframe expand to fill the container */
+  & .video-iframe {
+    @add-mixin absolute-expand;
+    border-radius: 0.325em; /* necessary ¯\_(ツ)_/¯ */
+  }
+}
 
 /* -----------------------------------
 form field layout
@@ -474,13 +535,49 @@ form field layout
   padding: var(--gutter-md);
   box-shadow: 0 2px 0.75em rgba(8, 26, 24, 0.25);
 
-  & .form-column {
-    margin-top: 1.5rem;
+  /* increase padding on bigger screens */
+  @add-mixin min-sm {
+    padding: var(--gutter-lg);
+  }
+}
+
+/* alerts */
+.alert-container {
+  max-width: 40rem; /* override form-layout mixin */
+
+  /* unclassable buttons */
+  & .pt-button {
+    /* make buttons look like the rest of the buttons */
+    @add-mixin font-md;
+    @add-mixin button-padding;
+    /* transitions */
+    transition: opacity 0.2s;
+    will-change: opacity;
+
+    /* interactions */
+    &:hover, &:focus {
+      opacity: 0.9;
+    }
   }
 
-  /* give 2nd column some breathing room on small screens */
+  /* remove unnecessary margin, thanks blueprint */
+  & .pt-alert-footer .pt-button:not(.pt-intent-danger) {
+    margin-left: 0;
+    margin-right: 0.75em;
+  }
+
+  & .pt-button.pt-intent-danger {
+    background-color: var(--danger);
+  }
+}
+
+/* form columns */
+.form-column {
+  margin-top: 1.5rem;
+
+  /* give adjacent columns breathing room */
   @add-mixin max-sm {
-    & .form-column-half:nth-of-type(2) {
+    &:nth-of-type(2) {
       margin-top: 2.25rem;
 
       /* assume submit button */
@@ -490,10 +587,10 @@ form field layout
     }
   }
 
+  /* 2 columns on bigger screens */
   @add-mixin min-sm {
-    padding: var(--gutter-lg);
 
-    & .form-column-half {
+    &.form-column-half {
       width: 45%;
       width: calc(50% - 1.5rem);
       display: inline-block;
@@ -506,12 +603,14 @@ form field layout
   }
 }
 
+
+
 /* NOTE: font size / placement of .field-icon and inputs depends on font-size inherited from .field-container */
 .field-container {
   transition: opacity 0.2s;
 
   /* make label more clickable */
-  & > label {
+  & label {
     display: inline-block;
     width: 100%;
     /* space out label without creating a dead spot */
@@ -520,7 +619,7 @@ form field layout
   }
 
   /* NOTE: placement requires icons to follow input */
-  & > .field-icon {
+  & .field-icon {
     pointer-events: none; /* prevent from obscuring field */
     position: absolute;
     z-index: 1;
@@ -564,6 +663,10 @@ form field layout
   & > .pt-select:after {
     @add-mixin select-icon-right;
   }
+  /* adjust placement for .font-sm size */
+  &.font-sm > .pt-select:after {
+    line-height: 1.25rem;
+  }
 
   /* width of inputs, textareas, and buttons dictated by container */
   & > input:not([type=submit]):not([type=file]),
@@ -576,36 +679,10 @@ form field layout
   /* style inputs & textareas */
   & > input:not([type=submit]):not([type=file]),
   & > textarea,
-  &.date-picker-container input {
-    padding: 0.35em 0.75em 0.55em;
-    background-color: var(--light-1);
-    border: 1px solid var(--gray);
-    border-radius: var(--radius-sm);
-    /* transitions */
-    transition:
-      background-color 0.2s,
-      border 0.2s;
-
-    /* placeholder text */
-    &:placeholder-shown {
-      color: var(--dark-1);
-    }
-    &:focus:placeholder-shown {
-      color: var(--sky-dark);
-    }
-
-    /* interactions */
-    &:hover {
-      background-color: var(--white);
-    }
-    &:focus {
-      background-color: var(--sky-light);
-      border-color: var(--sky-dark);
-
-      & + .field-icon {
-        color: var(--sky-dark);
-      }
-    }
+  &.date-picker-container input,
+  & .file-select-container .field-input {
+    @add-mixin text-input-padding;
+    @add-mixin text-input-theme;
   }
 
   /* textarea min/max height */
@@ -616,7 +693,8 @@ form field layout
 
   /* make room in text input for icon, which must follow after input
   in source order in order to style icon on :focus */
-  &.has-icon > input:not([type=submit]):not([type=file]) {
+  &.has-icon input:not([type=submit]):not([type=file]),
+  &.has-icon .fake-file-select {
     padding-left: 2.1em;
   }
 
@@ -798,6 +876,84 @@ form field layout
   }
 }
 
+/* file select overrides */
+.file-select-container {
+
+  /* adjust padding on actual field */
+  & .field-input[type="file"] {
+    padding-top: 0.25em;
+    padding-bottom: 0.375em;
+    opacity: 0;
+  }
+  /* make real field and fake field take up width of container */
+  & .field-input {
+    width: 100%;
+
+    /* interactions */
+    &:hover, &:focus {
+      & ~ .fake-file-select {
+        background-color: var(--white);
+        border-color: var(--sky-dark);
+      }
+      & ~ .fake-file-select:after {
+        background-color: var(--sky-dark);
+      }
+    }
+  }
+  /* blueprint overrides */
+  & .field-input,
+  & .fake-file-select:after {
+    box-shadow: none !important;
+  }
+
+  /* position "field" */
+  & .fake-file-select {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* theming */
+    border-top-right-radius: 1.5em !important;
+    border-bottom-right-radius: 1.5em !important;
+    /* prevent obscuring the actual button */
+    pointer-events: none;
+
+    /* fake button covers the entire field */
+    @add-mixin max-md {
+      border-radius: 1.5em !important;
+    }
+  }
+
+  /* "button" */
+  & .fake-file-select:after {
+    @add-mixin button-padding;
+    display: block;
+    content: attr(data-button-text-lg);
+    /* theming */
+    background-color: var(--sky);
+    border: 1px solid var(--sky-dark);
+    border-top-right-radius: 1.5em;
+    border-bottom-right-radius: 1.5em;
+    color: var(--white);
+    /* positioning */
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    z-index: 1;
+    /* prevent obscuring the actual button */
+    pointer-events: none;
+    /* transitions */
+    transition: background-color 0.2s;
+
+    /* small screen adjustments */
+    @add-mixin max-md {
+      content: attr(data-button-text-sm);
+      left: -1px;
+      text-align: center;
+      border-radius: 1.5em;
+    }
+  }
+}
+
 /* date picker overrides 😭 */
 .date-picker-container {
 
@@ -866,6 +1022,10 @@ utility classes
   border: 0;
   background: none;
 }
+/* make children into a button group */
+.u-button-group > * {
+  @add-mixin button-groupify;
+}
 
 /* screen reader text */
 .u-visually-hidden {
@@ -882,16 +1042,24 @@ utility classes
   @add-mixin absolute-expand;
 }
 
+/* clearfix */
+.u-clearfix {
+  @add-mixin clearfix;
+}
+
 /* vertical margin */
 .u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
 .u-margin-top-md { margin-top: var(--gutter-md) !important; }
 .u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
 .u-margin-top-off { margin-top: 0 !important; }
+.u-margin-top-off-children * { margin-top: 0 !important; }
 
 .u-margin-bottom-xxs { margin-bottom: var(--gutter-xxs) !important; }
+.u-margin-bottom-sm { margin-bottom: var(--gutter-sm) !important; }
 .u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
 .u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
 .u-margin-bottom-off { margin-bottom: 0 !important; }
+.u-margin-bottom-off-children * { margin-bottom: 0 !important; }
 
 /* horizontal margin */
 .u-margin-left-md { margin-left: var(--gutter-md) !important; }
@@ -910,6 +1078,9 @@ utility classes
 .u-padding-bottom-off { padding-bottom: 0 !important; }
 
 /* alignment */
+.u-text-left {
+  text-align: left;
+}
 .u-text-center {
   text-align: center;
 }
@@ -917,6 +1088,16 @@ utility classes
 /* show/hide content */
 .u-hide-below-sm {
   @add-mixin max-sm {
+    display: none !important;
+  }
+}
+.u-hide-below-xxs {
+  @add-mixin max-xxs {
+    display: none !important;
+  }
+}
+.u-hide-above-sm {
+  @add-mixin min-sm {
     display: none !important;
   }
 }

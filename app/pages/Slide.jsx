@@ -85,10 +85,12 @@ class Slide extends Component {
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
-      if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
-      if (this.state.done) blocked = false;
-      this.setState({currentSlide: cs, blocked, showDiscussion: false});
+      if (cs) {
+        let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+        if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
+        if (this.state.done) blocked = false;
+        this.setState({currentSlide: cs, blocked, showDiscussion: false});
+      }
     }
 
     const i = slides.indexOf(currentSlide);
@@ -272,7 +274,7 @@ class Slide extends Component {
           { showDiscussion ? t("Hide Discussion") : `${t("Show Discussion")} (${this.state.currentSlide.threadlist.length})` }
           { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
         </button>
-        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" subjectId={sid}/> : null }
+        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" subjectId={currentSlide.id}/> : null }
       </div>
     );
   }

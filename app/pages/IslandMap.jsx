@@ -1,9 +1,9 @@
 import axios from "axios";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import "./Island.css";
+import "./IslandMap.css";
 import IslandLink from "components/IslandLink";
 import Loading from "components/Loading";
 
@@ -51,7 +51,9 @@ class Island extends Component {
   render() {
 
     const {userProgress} = this.state;
-    const {auth, islands} = this.props;
+    const {auth, islands, t} = this.props;
+
+    const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -66,14 +68,25 @@ class Island extends Component {
     }
 
     return (
-      <div className="overworld">
-        <div className="map">
-          { islandArray.map(island => <IslandLink key={island.id} island={island} />) }
+      <div className="content map u-text-center">
+        {/* heading */}
+        <div className="map-heading content-section">
+          <h1 className="u-margin-bottom-off">
+            {t("IslandMap.SelectIsland")}
+          </h1>
+        </div>
+        {/* list of islands */}
+        <div className="map-list content-section">
+          { islandArray.map(island => <IslandLink key={island.id} island={island} standalone="false" />) }
         </div>
       </div>
     );
   }
 }
+
+Island.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

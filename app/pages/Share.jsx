@@ -32,8 +32,8 @@ class Share extends Component {
     const {username, filename} = this.props.params;
     let path = "";
 
-    if (this.props.location.pathname.includes("/codeBlocks/")) path = "codeBlocks";
-    if (this.props.location.pathname.includes("/projects/")) path = "projects";
+    if (this.props.location.pathname.includes("codeBlocks/")) path = "codeBlocks";
+    if (this.props.location.pathname.includes("projects/")) path = "projects";
 
     const cget = axios.get(`/api/${path}/byUsernameAndFilename?username=${username}&filename=${filename}`);
     const rget = axios.get("/api/reports");
@@ -69,14 +69,14 @@ class Share extends Component {
     const name = content.name || content.snippetname;
 
     let contentType = "";
-    if (this.props.location.pathname.includes("/codeBlocks/")) contentType = "codeblock";
-    if (this.props.location.pathname.includes("/projects/")) contentType = "project";
+    if (this.props.location.pathname.includes("codeBlocks/")) contentType = "codeblock";
+    if (this.props.location.pathname.includes("projects/")) contentType = "project";
 
     const reported = reports.find(r => r.type === contentType && r.report_id === id);
 
     return (
       <div id="share">
-        <CodeEditor initialValue={this.state.content.studentcontent} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} console={false} />
+        <CodeEditor initialValue={this.state.content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
         <div id="tag">
           <div className="info">
             <span className="pt-icon-standard pt-icon-code"></span>

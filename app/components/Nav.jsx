@@ -3,6 +3,7 @@ import {translate} from "react-i18next";
 import {Link} from "react-router";
 import {connect} from "react-redux";
 import Browser from "components/Browser";
+import Logo from "components/Logo.svg";
 import Search from "components/Search";
 import AuthForm from "components/AuthForm";
 
@@ -43,7 +44,7 @@ class Nav extends Component {
   }
 
   render() {
-    const {auth, currentPath, logo, linkObj, serverLocation, t} = this.props;
+    const {auth, currentPath, isHome, linkObj, serverLocation, t} = this.props;
     const {isLoginOpen} = this.state;
     const {protocol, host} = serverLocation;
     const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
@@ -59,9 +60,11 @@ class Nav extends Component {
 
         {/* logo */}
         <div className="logo">
-          <Link className={logo ? "logo-link" : "logo-link is-huge"} to={"/"}>
+          <Link className={isHome ? "logo-link" : "logo-link is-huge"} to={"/"}>
             <span className="logo-tag font-xs">Beta</span>
-            <img className="logo-text" src="/logo/logo-sm.png" alt="Codelife" />
+            <span className="logo-text">
+              <Logo />
+            </span>
           </Link>
         </div>
 
@@ -186,7 +189,7 @@ class Nav extends Component {
 }
 
 Nav.defaultProps = {
-  logo: true
+  isHome: true
 };
 
 Nav = connect(state => ({

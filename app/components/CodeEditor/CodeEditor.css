@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-.codeEditor {
+.code-editor {
   align-self: stretch;
   display: flex;
   flex: 1;
@@ -80,12 +80,13 @@
   width: 100%;
   & .title {
     background-color: var(--light-1);
-    border-bottom: 1px solid var(--light-1);
     height: var(--gutter-md);
-    padding: var(--gutter-xxs);
-    &:hover {
-      background-color: var(--light-1);
-      cursor: pointer;
+    line-height: var(--gutter-md);
+    padding: 0 var(--gutter-xxs);
+    transition: background-color 0.2s;
+    &:hover, &:focus {
+      background-color: var(--sky-light);
+      cursor: default;
     }
     & .pt-icon-standard {
       color: rgba(0, 0, 0, 0.5);
@@ -94,26 +95,30 @@
     & .pt-progress-bar {
       position: absolute;
       /* vertical size / position */
-      height: 12px;
-      top: 8px;
+      height: 0.75rem;
+      top: 0.4375rem;
       /* horizonal size / position */
       width: calc(100% - 10px);
       left: 5px;
+
+      &.pt-intent-success .pt-progress-meter {
+        background-color: var(--sky-dark);
+      }
     }
-    & .completion {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 9px;
-      padding: 3px var(--gutter-xxs);
+    & .completion-indicator-label {
+      color: var(--white);
+      font-size: 0.5rem;
+      padding: 0 0.5em;
       text-align: center;
       white-space: nowrap;
       z-index: 2;
     }
     & .console-count {
-      background-color: var(--danger);
-      border-radius: var(--radius-lg);
+      background-color: var(--sky-dark);
+      border-radius: 50%;
       color: var(--white);
       display: inline-block;
-      font-size: 12px;
+      width: 17px;
       height: 17px;
       line-height: 17px;
       margin-left: var(--gutter-xxs);
@@ -121,6 +126,11 @@
       width: 17px;
     }
   }
+
+  & .pt-icon-standard.pt-intent-success {
+    color: var(--sky-dark);
+  }
+
   & .contents {
     background-color: var(--white);
     height: 0;
@@ -145,6 +155,7 @@
         color: rgba(0, 0, 0, 0.25);
         font-size: 12px;
         margin-right: var(--gutter-xxs);
+
         &.pt-icon-delete {
           color: var(--danger);
         }
@@ -152,10 +163,10 @@
       & .arg {
         margin-right: var(--gutter-xs);
         &.number {
-          color: var(--rando-blue);
+          color: var(--sky-dark);
         }
         &.string {
-          color: var(--danger-dark);
+          color: var(--dark-2);
         }
         &.undefined {
           color: var(--gray);
@@ -271,12 +282,89 @@
 }
 
 /* code block context */
-.pt-dialog > .codeblock-inner {
-  margin: 0 0 var(--gutter-md) 0;
+.pt-dialog > .codeblock-dialog-inner {
 
   /* reset panel height */
   & .panel-content {
     min-height: 0;
     max-height: 100%;
+  }
+}
+
+/* fullscreen toggle */
+.code-editor-fullscreen-button {
+  /* sizing */
+  width: 2.5rem; /* 40px */
+  height: 2.5rem; /* 40px */
+  padding: 0; /* override button default */
+  /* positioning */
+  position: absolute; /* take out of the flow */
+  top: -0.375em;
+  right: 1em;
+  z-index: 1; /* position above code editor */
+  /* theming */
+  text-align: center;
+  /* transitions */
+  &.pt-button { /* increase specificity */
+    transition: box-shadow 0.2s;
+  }
+
+  /* icon sizing */
+  & .code-editor-fullscreen-icon {
+    margin-right: 0; /* blueprint override */
+    font-size: 1.25rem; /* 20px */
+    line-height: 2.5rem; /* button height */
+    top: -1px; /* baseline adjustment */
+    /* transitons */
+    transition: transform 0.2s ease-out;
+  }
+
+  /* interactions */
+  &.pt-button { /* increase specificity */
+    &:hover {
+      opacity: 1; /* override button default */
+      box-shadow: 0 2px 1em rgba(8, 26, 24, 0.2) !important; /* override override, feels bad man */
+
+      /* yo dawg I heard you like transforms */
+      & .code-editor-fullscreen-icon {
+        transform: scale(1.15);
+      }
+    }
+  }
+  /* reset when clicked */
+  &:active .code-editor-fullscreen-icon {
+    transform: none;
+  }
+}
+
+/* fullscreen editor */
+.code-editor.is-fullscreen {
+  /* pin to the edges of the screen */
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* take up 100% screen size */
+  width: 100% !important;
+  height: 100% !important;
+  /* position above navbar */
+  z-index: 20;
+
+  /* fullscreen editor layout dictated by device orientation */
+  @media (orientation: landscape) {
+    flex-direction: row;
+  }
+  @media (orientation: portrait) {
+    flex-direction: column;
+  }
+
+  /* opposite button icon scaling */
+  & .code-editor-fullscreen-button .code-editor-fullscreen-icon,
+  & .code-editor-fullscreen-button:active .code-editor-fullscreen-icon {
+    transform: scale(1.15);
+  }
+  & .code-editor-fullscreen-button:hover .code-editor-fullscreen-icon {
+    transform: none;
   }
 }

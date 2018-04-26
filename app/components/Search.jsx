@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Icon} from "@blueprintjs/core";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import "./Search.css";
 
 class Search extends Component {
@@ -13,12 +12,12 @@ class Search extends Component {
     super(props);
     this.state = {
       query: "",
+      searchid: 0,
       results: {
         users: [],
         projects: []
       },
-      selectedIndex: null,
-      showResults: false
+      selectedIndex: null
     };
   }
 
@@ -37,12 +36,12 @@ class Search extends Component {
 
   handleChange(e) {
     const query = e.target.value;
+    const searchid = this.state.searchid + 1;
     if (query.length > 2) {
-      this.setState({query});
-      this.search();
+      this.setState({query, searchid}, this.search.bind(this));
     }
     else {
-      this.setState({query, showResults: true, results: {users: [], projects: []}});
+      this.setState({query, results: {users: [], projects: []}});
     }
   }
 
@@ -54,12 +53,13 @@ class Search extends Component {
   }
 
   clearSearch() {
-    this.setState({selectedIndex: null, query: "", showResults: false, results: {users: [], projects: []}});
+    this.setState({selectedIndex: null, query: "", results: {users: [], projects: []}});
   }
 
   onKeyDown(e) {
     const {selectedIndex, results} = this.state;
     const allResults = results.users.concat(results.projects);
+    const {browserHistory} = this.context;
     if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter") {
       if (selectedIndex === null) {
         if (e.key === "ArrowDown") {
@@ -87,10 +87,12 @@ class Search extends Component {
   }
 
   search() {
-    const {query} = this.state;
-    axios.get(`/api/search/?query=${query}`).then(resp => {
+    const {query, searchid} = this.state;
+    axios.get(`/api/search/?query=${query}&searchid=${searchid}`).then(resp => {
       if (resp.status === 200) {
-        this.setState({results: resp.data});
+        if (Number(resp.data.searchid) >= this.state.searchid) {
+          this.setState({results: resp.data});
+        }
       }
       else {
         console.log("error");
@@ -101,7 +103,7 @@ class Search extends Component {
   render() {
 
     const {t, scope} = this.props;
-    const {results, showResults, selectedIndex, query} = this.state;
+    const {results, selectedIndex, query} = this.state;
     const inputID = `${scope}-search-input`;
 
     const allResults = results.users.concat(results.projects).map(r => {
@@ -189,6 +191,10 @@ class Search extends Component {
     );
   }
 }
+
+Search.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Search = connect(state => ({
   auth: state.auth

@@ -1,5 +1,8 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
+const fs = require("fs");
+const path = require("path");
+const screenshot = require("electron-screenshot-service");
 const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
 const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 
@@ -19,7 +22,7 @@ const pInclude = [
   {association: "userprofile", attributes: ["bio", "sharing"]},
   {association: "user", attributes: ["username"]},
   {association: "reportlist"},
-  {association: "collaborators", attributes: ["uid", "sid", "gid"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
+  {association: "collaborators", attributes: ["uid", "sid", "gid", "img", "bio"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];
 
 module.exports = function(app) {
@@ -90,7 +93,16 @@ module.exports = function(app) {
     db.projects.findAll({where: {id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
     */
 
-    db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
+    db.projects.findOne({
+      where: {
+        id: req.query.id
+      },
+      include: pInclude
+    }).then(p =>
+      res.json(flattenProject(req.user, p.toJSON())).end()
+    );
+
+    // db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
 
   });
 
@@ -127,8 +139,22 @@ module.exports = function(app) {
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
-    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}})
-      .then(u => res.json(u).end());
+    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
+      .then(u => {
+        const url = `http://localhost:3300/projects/${req.body.username}/${req.body.name}`;
+        const width = 400;
+        const height = 300;
+        const page = true;
+        const delay = 3000;
+        screenshot({url, width, height, page, delay}).then(img => {
+          const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
+          fs.writeFile(imgPath, img.data, err => {
+            console.log(err);
+          });
+        });
+
+        res.json(u).end();
+      });
   });
 
   // Used by Admins in ReportBox and ReportViewer to Ban pages
@@ -153,7 +179,7 @@ module.exports = function(app) {
             .map(p => flattenProject(req.user, p.toJSON()))
             .filter(p => !p.hidden)
             .sort((a, b) => a.name < b.name ? -1 : 1);
-          res.json({currentProject, projects: resp}).end();
+          res.json({id: currentProject.id, projects: resp}).end();
         });
     });
   });
@@ -182,21 +208,22 @@ module.exports = function(app) {
 
   // Used by Projects to delete a project
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
-    db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() => {
-      db.projects.findAll({
-        where: {
-          uid: req.user.id
-        },
-        include: pInclude
-      })
-        .then(pRows =>
-          res.json(pRows
-            .map(p => flattenProject(req.user, p.toJSON()))
-            .filter(p => !p.hidden)
-            .sort((a, b) => a.name < b.name ? -1 : 1))
-            .end()
-        );
-    });
+    db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() =>
+      db.projects_userprofiles.destroy({where: {pid: req.query.id}}).then(() => {
+        db.projects.findAll({
+          where: {
+            uid: req.user.id
+          },
+          include: pInclude
+        })
+          .then(pRows =>
+            res.json(pRows
+              .map(p => flattenProject(req.user, p.toJSON()))
+              .filter(p => !p.hidden)
+              .sort((a, b) => a.name < b.name ? -1 : 1))
+              .end()
+          );
+      }));
   });
 
 };

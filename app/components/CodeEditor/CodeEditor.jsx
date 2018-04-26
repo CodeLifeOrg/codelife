@@ -53,7 +53,8 @@ class CodeEditor extends Component {
         page: remotePage
       },
       openRules: false,
-      openConsole: false
+      openConsole: false,
+      fullscreenEditor: false
     };
     this.recRef = this.receiveMessage.bind(this);
     this.pingRemoteRef = this.pingRemote.bind(this);
@@ -65,7 +66,7 @@ class CodeEditor extends Component {
    */
   componentDidMount() {
     if (window) window.addEventListener("message", this.recRef, false);
-    this.ping = setInterval(this.pingRemoteRef, 50);
+    this.ping = setInterval(this.pingRemoteRef, 1000);
   }
 
   /**
@@ -271,14 +272,19 @@ class CodeEditor extends Component {
   }
 
   /**
-   * Given the text currently in the editor, send a postMessage containing that source to the sandbox for rendering.
-   * @param {String} theText The text to be rendered in the sandbox
+   * Given the text currently in the editor, determine if it has open and closing script tags.
+   * @param {String} theText The current editor text
    */
   hasJS(theText) {
-    const re = new RegExp(`<script[^>]*>`, "g");
-    const open = theText.search(re);
-    const close = theText.indexOf("</script>");
-    return open !== -1 && close !== -1 && open < close;
+    if (theText) {
+      const re = new RegExp("<script[^>]*>", "g");
+      const open = theText.search(re);
+      const close = theText.indexOf("</script>");
+      return open !== -1 && close !== -1 && open < close;
+    }
+    else {
+      return false;
+    }
   }
 
   /**
@@ -592,11 +598,19 @@ class CodeEditor extends Component {
     this.setState({[drawer]: !this.state[drawer]});
   }
 
+  /**
+   * toggle fullscreen state
+   *
+   */
+  fullscreenEditorToggle() {
+    this.setState({fullscreenEditor: !this.state.fullscreenEditor});
+  }
+
   /* End of external functions */
 
   render() {
-    const {codeTitle, console, island, readOnly, t, tabs} = this.props;
-    const {baseRules, titleText, currentText, embeddedConsole, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
+    const {codeTitle, showConsole, island, readOnly, t, tabs} = this.props;
+    const {baseRules, titleText, currentText, embeddedConsole, fullscreenEditor, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
       const t1 = this.evalType(args[0]);
@@ -618,12 +632,17 @@ class CodeEditor extends Component {
     });
 
     return (
-      <div className="codeEditor" id="codeEditor">
+      <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id="codeEditor">
+        {!this.props.noZoom && <button className="code-editor-fullscreen-button pt-button pt-intent-primary" onClick={ this.fullscreenEditorToggle.bind(this) }>
+          <span className={!fullscreenEditor
+            ? "code-editor-fullscreen-icon pt-icon pt-icon-fullscreen"
+            : "code-editor-fullscreen-icon pt-icon pt-icon-minimize"} />
+        </button>}
         {
           this.props.showEditor
             ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>
               { tabs
-                ? <div className="panel-title">
+                ? <div className="panel-title font-sm">
                   <span className="favicon pt-icon-standard pt-icon-code"></span>
                   { codeTitle || (readOnly ? t("Code Example") : t("Code Editor")) }
                 </div>
@@ -652,7 +671,7 @@ class CodeEditor extends Component {
                 ? <div className={ `drawer ${openRules ? "open" : ""}` }>
                   <div className="title" onClick={ this.toggleDrawer.bind(this, "openRules") }>
                     <ProgressBar className="pt-no-stripes" intent={intent} value={goodRatio}/>
-                    <div className="completion" style={{width: `${ Math.round(goodRatio * 100) }%`}}>{ Math.round(goodRatio * 100) }%</div>
+                    <div className="completion-indicator-label" style={{width: `${ Math.round(goodRatio * 100) }%`}}>{ Math.round(goodRatio * 100) }%</div>
                   </div>
                   <DrawerValidation rules={ baseRules.concat(rulejson) } errors={ ruleErrors } />
                 </div>
@@ -662,17 +681,17 @@ class CodeEditor extends Component {
         }
         <div className="render">
           { tabs
-            ? <div className="panel-title">
+            ? <div className="panel-title font-sm">
               { island
                 ? <img className="favicon" src={ `/islands/${island}-small.png` } />
                 : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
               { titleText }
             </div>
             : null }
-          <iframe className="panel-content iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
-          { console
-            ? <div className={ `drawer ${openConsole ? "open" : ""}` }>
-              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count">{ embeddedConsole.length }</span> : null }</div>
+          <iframe className="panel-content font-xs iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
+          { showConsole
+            ? <div className={ `drawer font-xs ${openConsole ? "open" : ""}` }>
+              <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count font-xs">{ embeddedConsole.length }</span> : null }</div>
               <div className="contents">{consoleText}</div>
             </div>
             : null}
@@ -684,7 +703,7 @@ class CodeEditor extends Component {
 
 CodeEditor.defaultProps = {
   blurred: false,
-  console: true,
+  showConsole: true,
   island: false,
   readOnly: false,
   showEditor: true,

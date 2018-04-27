@@ -90,9 +90,9 @@ class ProjectCard extends Component {
           <div className="card-caption project-card-caption">
 
             {/* title */}
-            <h4 className="card-title u-margin-top-off u-margin-bottom-off">
+            <h3 className="card-title font-sm u-margin-top-off u-margin-bottom-off">
               { name !== "mypage.html" ? name : t("Card.NewProject") }
-            </h4>
+            </h3>
 
             {/* author */}
             { username

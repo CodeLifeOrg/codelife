@@ -155,20 +155,17 @@ class Search extends Component {
         {/* text input */}
         <div className={query.length > 0 ? "search-results-outer" : "search-results-outer is-hidden"}>
 
-          {/* hidden heading (for accessibility) */}
-          <h2 className="u-visually-hidden">{t("Search.Results")}</h2>
-
           {/* Message: keep typing */}
-          <h3 className={query.length <= 2 ? "search-results-message font-lg u-margin-bottom-off u-text-center" : "search-results-message is-hidden"}>{t("Search.KeepTyping")}</h3>
+          <p className={query.length <= 2 ? "heading search-results-message font-lg u-margin-bottom-off u-text-center" : "heading search-results-message is-hidden"}>{t("Search.KeepTyping")}</p>
 
           {/* Message: no results */}
-          <h3 className={query.length > 2 && allResults.length === 0 ? "search-results-message font-lg u-margin-bottom-off u-text-center" : "search-results-message is-hidden"}>{t("Search.NoResults")}</h3>
+          <p className={query.length > 2 && allResults.length === 0 ? "heading search-results-message font-lg u-margin-bottom-off u-text-center" : "heading search-results-message is-hidden"}>{t("Search.NoResults")}</p>
 
           {/* users */}
           <div className={query.length > 2 && userList.length !== 0 ? "search-results-inner" : "search-results-inner is-hidden"}>
-            <h3 className="search-results-heading font-md">
+            <p className="heading search-results-heading font-md">
               <span className="search-results-heading-icon pt-icon pt-icon-people" />&nbsp;{t("Search.UsersHeading")}
-            </h3>
+            </p>
             <ul className="search-results-list">
               {userList}
             </ul>
@@ -176,9 +173,9 @@ class Search extends Component {
 
           {/* projects */}
           <div className={query.length > 2 && projectList.length !== 0 ? "search-results-inner" : "search-results-inner is-hidden"}>
-            <h3 className="search-results-heading font-md">
+            <p className="heading search-results-heading font-md">
               <span className="search-results-heading-icon pt-icon pt-icon-applications" />&nbsp;{t("Search.ProjectsHeading")}
-            </h3>
+            </p>
             <ul className="search-results-list">
               {projectList}
             </ul>
@@ -201,4 +198,3 @@ Search = connect(state => ({
 }))(Search);
 Search = translate(undefined, {withRef: true})(Search);
 export default Search;
-

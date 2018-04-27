@@ -107,7 +107,7 @@ class Home extends Component {
               </h1>
 
               {/* island */}
-              <IslandLink key={current.id} island={current} />
+              <IslandLink key={current.id} island={current} heading={false} />
 
             </div>
           </div>
@@ -145,11 +145,12 @@ class Home extends Component {
         {/* made on codelife */}
         <div className="content-section">
 
-          <h2>{t("Home.MadeOnCodelife")}</h2>
+          {/* keep this a paragraph so that project and codeblock cards have the right heading level */}
+          <p className="heading font-lg">{t("Home.MadeOnCodelife")}</p>
 
           {/* projects */}
           <div className="project-section">
-            <h3>{ t("Featured Projects") }</h3>
+            <h2 className="font-md">{ t("Featured Projects") }</h2>
             <div className="card-list project-list">
               { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
             </div>
@@ -157,7 +158,7 @@ class Home extends Component {
 
           {/* codeblocks */}
           <div className="codeblock-section">
-            <h3>{ t("Featured CodeBlocks") }</h3>
+            <h2 className="font-md">{ t("Featured CodeBlocks") }</h2>
             <div className="card-list codeblock-list">
               { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
                 const {theme, icon} = islands.find(i => i.id === c.lid);

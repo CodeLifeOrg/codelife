@@ -351,16 +351,20 @@ class Level extends Component {
 
     const levelItems = levelStatuses.map(level => {
       const {lid} = this.props.params;
+      console.log(level);
       if (level.isDone) {
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop is-done" to={`/island/${lid}/${level.id}`}></Link>
-          <span>
-            {level.name}
-          </span>
+          <Link className="stop is-done" to={`/island/${lid}/${level.id}`}>
+            {/* descriptive text for screen readers */}
+            <span className="u-visually-hidden">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name}` }
+            </span>
+          </Link>
+          {level.name}
         </Popover>;
       }
       else if (level.isSkipped) {
@@ -370,18 +374,26 @@ class Level extends Component {
           popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
-          <span>
-            {`${level.name} (incomplete)`}
-          </span>
+          <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}>
+            {/* descriptive text for screen readers */}
+            <span className="u-visually-hidden">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name} (${ t("incomplete") })` }
+            </span>
+          </Link>
+          {`${level.name} (${ t("incomplete") })`}
         </Popover>;
       }
       else if (level.isNext) {
         return <Tooltip isOpen={!checkpointOpen} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
-          <Link className="stop is-next" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-next" to={`/island/${lid}/${level.id}`}>
+            {/* descriptive text for screen readers */}
+            <span className="u-visually-hidden">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name} })` }
+            </span>
+          </Link>
         </Tooltip>;
       }
-      return <div key={level.id} className="stop"></div>;
+      return <div key={level.id} className="stop" />;
     });
 
     return (
@@ -398,12 +410,14 @@ class Level extends Component {
             { this.buildTestPopover() }
           </div>
         </div>
+        { prevIsland && <h2 className="u-visually-hidden">{`${t("Previous island")}: `}</h2>}
         { prevIsland ? <IslandLink done={true} width={250} island={prevIsland} description={false} /> : null}
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
         { /* TODO2: adding blocker back in for November Beta */}
         { /* TODO3: incremented blocker for December Island */}
         { /* TODO4: incremented blocker for January Island */}
 
+        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) && <h2 className="u-visually-hidden">{`${t("Next island")}: `}</h2>}
         { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length

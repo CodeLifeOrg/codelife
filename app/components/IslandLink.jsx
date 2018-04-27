@@ -6,7 +6,7 @@ class IslandLink extends Component {
 
   render() {
 
-    const {description, done, island, linkContext, next, small, standalone} = this.props;
+    const {description, done, heading, island, linkContext, next, small, standalone} = this.props;
 
     if (island.isNext || next || island.isDone || done || standalone === true) {
 
@@ -18,6 +18,10 @@ class IslandLink extends Component {
 
       return <Link to={`/${linkContext}/${island.id}`} className={ unlockedClasses } key={ island.id }>
         <div className={ small ? "island-link-image island-link-image-small" : "island-link-image" } />
+
+        {/* hidden heading for accessiblity */}
+        {heading && <h3 className="u-visually-hidden">{ island.name }</h3>}
+
         <div className="island-link-popover pt-popover pt-tooltip">
           <div className={ `${ island.theme } island-link-label pt-popover-content` }>
             <div className="island-link-title">
@@ -53,7 +57,8 @@ IslandLink.defaultProps = {
   description: true,
   small: false,
   standalone: true,
-  linkContext: "island"
+  linkContext: "island",
+  heading: true
 };
 
 export default IslandLink;

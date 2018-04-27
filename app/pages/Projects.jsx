@@ -343,6 +343,7 @@ class Projects extends Component {
 
               {/* current file */}
               <h2 className="studio-title font-lg">
+                <span className="u-visually-hidden">{ t("Current project") }: </span>
                 <EditableText
                   value={currentTitle}
                   selectAllOnFocus={true}

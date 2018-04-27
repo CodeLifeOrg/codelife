@@ -170,7 +170,7 @@ class CodeBlockCard extends Component {
           <div className="card-caption codeblock-card-caption">
 
             {/* title */}
-            <h4 className="card-title u-margin-top-off u-margin-bottom-off">{ snippetname }</h4>
+            <h3 className="card-title font-sm u-margin-top-off u-margin-bottom-off">{ snippetname }</h3>
 
             {/* author */}
             { username

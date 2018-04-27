@@ -73,7 +73,7 @@ class Nav extends Component {
 
         { auth.user
           ? <div className="link-list font-sm">
-            <Link className="link with-toggle" to="/island">
+            <Link className="link with-toggle" to="/island" id="map-nav-link">
               <span className="link-icon pt-icon-standard pt-icon-map" />
               <span className="link-text u-hide-below-sm">{ t("Map") }</span>
             </Link>
@@ -83,7 +83,7 @@ class Nav extends Component {
               popoverClassName="pt-popover-content-sizing browser-popover"
               position={Position.BOTTOM}
             >
-              <button className="link-toggle-button u-unbutton" onClick={this.toggleBrowser.bind(this)} >
+              <button className="link-toggle-button u-unbutton" onClick={this.toggleBrowser.bind(this)} aria-labelledby="map-nav-link">
                 <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
               </button>
               <div className="dropdown-list browser-list" id="browser">
@@ -98,7 +98,7 @@ class Nav extends Component {
             </Link>
 
             {/* account */}
-            <Link className="link with-toggle" to={ `/profile/${ auth.user.username }` }>
+            <Link className="link with-toggle" to={ `/profile/${ auth.user.username }` } id="account-nav-link">
               <span className="link-icon pt-icon-standard pt-icon-user" />
               <span className="link-text u-hide-below-sm">{ auth.user.username }</span>
             </Link>
@@ -111,7 +111,7 @@ class Nav extends Component {
               position={Position.BOTTOM}
             >
               {/* dropdown button */}
-              <button className="link-toggle-button u-unbutton">
+              <button className="link-toggle-button u-unbutton" aria-labelledby="account-nav-link">
                 <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
               </button>
 

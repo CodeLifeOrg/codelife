@@ -192,10 +192,11 @@ class CodeBlockCard extends Component {
               : null }
 
             {/* likes */}
-            <p className="card-likes font-xs u-margin-top-off">
+            <p className="card-likes font-xs u-margin-top-off" id={`codeblock-card-${id}`}>
               <button
                 className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
-                onClick={ this.toggleLike.bind(this) } />
+                onClick={ this.toggleLike.bind(this) }
+                aria-labelledby={`codeblock-card-${id}`} />
               <span className="card-likes-count">{ likes }</span>
               <span className="u-visually-hidden">&nbsp;
                 { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }

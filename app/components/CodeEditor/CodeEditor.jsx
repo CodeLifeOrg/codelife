@@ -633,11 +633,21 @@ class CodeEditor extends Component {
 
     return (
       <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id="codeEditor">
-        {!this.props.noZoom && <button className="code-editor-fullscreen-button pt-button pt-intent-primary" onClick={ this.fullscreenEditorToggle.bind(this) }>
-          <span className={!fullscreenEditor
-            ? "code-editor-fullscreen-icon pt-icon pt-icon-fullscreen"
-            : "code-editor-fullscreen-icon pt-icon pt-icon-minimize"} />
-        </button>}
+        {!this.props.noZoom &&
+          <button
+            className="code-editor-fullscreen-button pt-button pt-intent-primary"
+            onClick={ this.fullscreenEditorToggle.bind(this) }
+            aria-labelledby="fullscreen-icon-label" >
+
+            {/* hidden label text for accessibility */}
+            <span className="u-visually-hidden" id="fullscreen-icon-label">{ t("Toggle fullscreen mode") }</span>
+
+            <span className={!fullscreenEditor
+              ? "code-editor-fullscreen-icon pt-icon pt-icon-fullscreen"
+              : "code-editor-fullscreen-icon pt-icon pt-icon-minimize"}
+            />
+          </button>
+        }
         {
           this.props.showEditor
             ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>

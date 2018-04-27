@@ -280,13 +280,14 @@ class CodeBlockEditor extends Component {
 
         {/* reset alert */}
         <Alert
+          className="alert-container form-container"
           isOpen={ this.state.resetAlert }
           cancelButtonText={ t("Cancel") }
           confirmButtonText={ t("buttonReset") }
           intent={ Intent.DANGER }
           onCancel={ () => this.setState({resetAlert: false}) }
           onConfirm={ () => this.resetCodeBlock() }>
-          <p>{ t("Are you sure you want to reset the code to its original state?") }</p>
+          <p className="font-lg u-margin-top-off u-margin-bottom-md">{ t("Are you sure you want to reset the code to its original state?") }</p>
         </Alert>
 
       </div>

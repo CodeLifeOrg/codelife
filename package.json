@@ -29,7 +29,6 @@
   "dependencies": {
     "@blueprintjs/datetime": "^1.19.0",
     "@blueprintjs/labs": "^0.11.0",
-    "bcrypt": "^1.0.3",
     "cpf_cnpj": "^0.2.0",
     "css": "git+https://github.com/Datawheel/css.git",
     "datawheel-canon": "^0.15.8",

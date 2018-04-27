@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
-import CodeBlock from "components/CodeBlock";
+import CodeBlockEditor from "components/CodeBlockEditor";
 import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
@@ -299,18 +299,17 @@ class Level extends Component {
           </div>
         </Tooltip>
         <Dialog
-          className={ `codeBlock ${ currentIsland.theme }` }
+          className={ `codeblockeditor-dialog studio-inner ${ currentIsland.theme }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
-          title={ title }
+          title=""
         >
-          <div className="pt-dialog-body">
-            <CodeBlock
-              island={currentIsland}
-              handleSave={this.handleSave.bind(this)}
-              onFirstCompletion={this.onFirstCompletion.bind(this)}
-            />
-          </div>
+          <CodeBlockEditor
+            island={ currentIsland }
+            title={ title }
+            handleSave={ this.handleSave.bind(this) }
+            onFirstCompletion={ this.onFirstCompletion.bind(this) }
+          />
         </Dialog>
       </div>
     );

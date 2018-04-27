@@ -352,6 +352,38 @@ label.pt-control  {
   }
 }
 
+/* tab 2 */
+.pt-tabs {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+
+  & .pt-tab-list {
+    flex-wrap: wrap; /* not pretty, but better than content flowing out of the container */
+  }
+
+  & .pt-tab {
+    /* typography */
+    @add-mixin font-xs;
+    font-family: var(--heading-font);
+    text-transform: uppercase;
+    font-weight: 700;
+    /* theming */
+    color: var(--sky-dark);
+
+    /* interactions */
+    /* NOTE: it's a div, so there's no :focus */
+    &:hover {
+      color: var(--sky);
+    }
+  }
+  /* active tab underline */
+  & .pt-tab-indicator {
+    background-color: var(--sky-light);
+    height: 2px;
+    bottom: -1px;
+  }
+}
+
 /* NOTE: there are a bunch of overrides for the hideous blueprints lab Select component found in SelectGeo.css */
 
 /* -----------------------------------

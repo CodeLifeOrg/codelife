@@ -6,7 +6,7 @@ import {fetchData} from "datawheel-canon";
 import {AnchorLink} from "datawheel-canon/src/components/AnchorLink";
 import "./LessonPlan.css";
 
-import CodeBlock from "components/CodeBlock";
+import CodeBlockEditor from "components/CodeBlockEditor";
 import IslandLink from "components/IslandLink";
 import CTA from "components/CTA";
 
@@ -186,7 +186,7 @@ class LessonPlan extends Component {
               {/* codeblock */}
               <section className="codeblock-lessonplan-section lessonplan-section anchor" id="codeblock">
                 <h2 className="lessonplan-section-heading font-xl">{t("Lessonplan.Codeblock")}</h2>
-                <CodeBlock
+                <CodeBlockEditor
                   island={currentIsland}
                   readOnly={true} />
               </section>

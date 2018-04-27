@@ -84,6 +84,20 @@ then add the theme name to the @each loop below */
     &.pt-tooltip .pt-popover-arrow-fill {
       fill: var(--$(theme)-island-dark);
     }
+    /* tabs */
+    & .pt-tab {
+      color: var(--$(theme)-island-dark);
+
+      /* interactions */
+      /* NOTE: it's a div, so there's no :focus */
+      &:hover {
+        color: var(--$(theme)-island-medium);
+      }
+    }
+    /* active tab underline */
+    & .pt-tab-indicator {
+      background-color: var(--$(theme)-island-light);
+    }
   }
   /* codeblock card theming */
   .island-$(theme)-card {

@@ -11,6 +11,7 @@ import CodeEditor from "components/CodeEditor/CodeEditor";
 import CollabList from "components/CollabList";
 import CollabSearch from "components/CollabSearch";
 
+import "components/Studio.css";
 import "./Projects.css";
 
 class Projects extends Component {
@@ -327,21 +328,21 @@ class Projects extends Component {
 
 
     return (
-      <div className="projects">
+      <div className="studio projects-studio">
 
-        <div className="projects-inner">
+        <div className="studio-inner">
 
           {/* hidden h1 for accessibility */}
           <h1 className="u-visually-hidden">{ t("Projects") }</h1>
 
           {/* body */}
-          <div className="project-body">
+          <div className="studio-body">
 
             {/* controls */}
-            <div className="project-controls">
+            <div className="studio-controls">
 
               {/* current file */}
-              <h2 className="project-title font-lg">
+              <h2 className="studio-title font-lg">
                 <EditableText
                   value={currentTitle}
                   selectAllOnFocus={true}
@@ -354,42 +355,43 @@ class Projects extends Component {
                 />
               </h2>
 
-              <h3 className="project-subtitle font-sm">{t("Actions")}</h3>
+              {/* actions title */}
+              <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>
 
               {/* list of actions */}
-              <ul className="project-action-list font-xs u-list-reset">
+              <ul className="studio-action-list font-xs u-list-reset">
 
                 {/* save project */}
-                <li className="project-action-item">
-                  <button className="project-action-button u-unbutton link" onClick={this.saveCodeToDB.bind(this)}>
-                    <span className="project-action-button-icon pt-icon pt-icon-floppy-disk" />
-                    <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Save") }</span>
+                <li className="studio-action-item">
+                  <button className="studio-action-button u-unbutton link" onClick={this.saveCodeToDB.bind(this)}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-floppy-disk" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Save") }</span>
                   </button>
                 </li>
 
                 {/* execute code */}
-                <li className="project-action-item">
+                <li className="studio-action-item">
                   <button
-                    className={ `project-action-button u-unbutton link ${!execState && " is-disabled"}` }
+                    className={ `studio-action-button u-unbutton link ${!execState && " is-disabled"}` }
                     onClick={this.executeCode.bind(this)}
                     tabIndex={!execState && "-1"}>
-                    <span className="project-action-button-icon pt-icon pt-icon-refresh" />
-                    <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Execute") }</span>
+                    <span className="studio-action-button-icon pt-icon pt-icon-refresh" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Execute") }</span>
                   </button>
                 </li>
 
                 {/* add / manage collaborators */}
-                { isMine ? <li className="project-action-item">
+                { isMine ? <li className="studio-action-item">
                   {/* my project */}
-                  <button className="project-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
-                    <span className="project-action-button-icon pt-icon pt-icon-people" />
-                    <span className="project-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
+                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-people" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
                   </button>
                   {/* joined project */}
-                </li> : <li className="project-action-item">
-                  <button className="project-action-button u-unbutton link" onClick={() => this.setState({isViewCollabsOpen: true})}>
-                    <span className="project-action-button-icon pt-icon pt-icon-people" />
-                    <span className="project-action-button-text u-hide-below-xxs">
+                </li> : <li className="studio-action-item">
+                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isViewCollabsOpen: true})}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-people" />
+                    <span className="studio-action-button-text u-hide-below-xxs">
                       {/* X collaborators */}
                       {hasCollabs} { t(" collaborators")}
                     </span>
@@ -397,11 +399,18 @@ class Projects extends Component {
                 </li> }
 
                 {/* share project */}
+<<<<<<< Updated upstream
                 {/*
                 <li className="project-action-item">
                   <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
                     <span className="project-action-button-icon pt-icon pt-icon-share" />
                     <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
+=======
+                <li className="studio-action-item">
+                  <button className="studio-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-share" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
+>>>>>>> Stashed changes
                   </button>
                 </li>
                 */}
@@ -409,31 +418,31 @@ class Projects extends Component {
 
 
                 {/* delete / leave project */}
-                { currentProject ? <li className="project-action-item">
+                { currentProject ? <li className="studio-action-item">
                   {
                     isMine
                       ? showDeleteButton
                         // delete button
-                        ? <button className="project-action-button u-unbutton link danger-text" onClick={this.deleteProject.bind(this, currentProject)}>
-                          <span className="project-action-button-icon pt-icon pt-icon-trash" />
-                          <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
+                        ? <button className="studio-action-button u-unbutton link danger-text" onClick={this.deleteProject.bind(this, currentProject)}>
+                          <span className="studio-action-button-icon pt-icon pt-icon-trash" />
+                          <span className="studio-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
                         </button>
                         // disabled delete button
-                        : <button className="project-action-button u-unbutton is-disabled link" tabIndex="-1">
-                          <span className="project-action-button-icon pt-icon pt-icon-trash" />
-                          <span className="project-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
+                        : <button className="studio-action-button u-unbutton is-disabled link" tabIndex="-1">
+                          <span className="studio-action-button-icon pt-icon pt-icon-trash" />
+                          <span className="studio-action-button-text u-hide-below-xxs">{t("Project.Delete")}</span>
                         </button>
                       // leave project button
-                      : <button className="project-action-button u-unbutton link danger-text" onClick={this.showLeaveAlert.bind(this, currentProject)}>
-                        <span className="project-action-button-icon pt-icon pt-icon-log-out" />
-                        <span className="project-action-button-text u-hide-below-xxs">{t("Project.Leave") }</span>
+                      : <button className="studio-action-button u-unbutton link danger-text" onClick={this.showLeaveAlert.bind(this, currentProject)}>
+                        <span className="studio-action-button-icon pt-icon pt-icon-log-out" />
+                        <span className="studio-action-button-text u-hide-below-xxs">{t("Project.Leave") }</span>
                       </button>
                   }
                 </li> : null }
 
               </ul>
 
-              {/* project switcher f*/}
+              {/* project switcher */}
               <div className="project-switcher font-xs">
 
                 {/* Switch to project heading */}
@@ -469,8 +478,9 @@ class Projects extends Component {
               </div>
             </div>
 
+
             {/* editor */}
-            <div className="project-editor">
+            <div className="studio-editor">
               <CodeEditor
                 codeTitle={ currentProject ? currentProject.name : "" } setExecState={this.setExecState.bind(this)}
                 initialValue={currentProject ? currentProject.studentcontent : ""}

@@ -96,7 +96,7 @@ class Projects extends Component {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
-          this.setState({projectName: "", currentProject, projects, isNewOpen: false});
+          this.setState({currentTitle: currentProject.name, currentProject, projects, isNewOpen: false});
           browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
         }
         else {

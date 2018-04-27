@@ -399,23 +399,14 @@ class Projects extends Component {
                 </li> }
 
                 {/* share project */}
-<<<<<<< Updated upstream
-                {/*
-                <li className="project-action-item">
-                  <button className="project-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
-                    <span className="project-action-button-icon pt-icon pt-icon-share" />
-                    <span className="project-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
-=======
                 <li className="studio-action-item">
-                  <button className="studio-action-button u-unbutton link" onClick={this.shareProject.bind(this)}>
+                  <a className="studio-action-button link"
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
+                    target="_blank">
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
->>>>>>> Stashed changes
-                  </button>
+                  </a>
                 </li>
-                */}
-                <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} target="_blank">share project</a>
-
 
                 {/* delete / leave project */}
                 { currentProject ? <li className="studio-action-item">

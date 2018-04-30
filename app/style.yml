@@ -63,6 +63,8 @@ danger-light: "#ffc8cb"
 danger-dark: "#C40000"
 
 caution: "#eec900"
+caution-dark: "#BCA000"
+caution-darker: "#826E00"
 
 success: "#436c31"
 

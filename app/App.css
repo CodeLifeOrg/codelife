@@ -256,9 +256,43 @@ blueprint overrides
   }
 }
 
-.pt-toast .pt-button {
-  margin: 0;
+/* toasts */
+.pt-toast-container {
+
+  /* reset padding */
+  & > span {
+    padding: 0;
+  }
+
+  & .pt-toast {
+    /* sizing */
+    min-width: 100%;
+    min-height: var(--nav-height);
+    /* theming */
+    color: var(--white); /* in case intent isn't set */
+    background-color: var(--sky-dark); /* default / success */
+    border-radius: 0;
+    /* position children */
+    align-items: center;
+    padding-left: var(--gutter-sm);
+    padding-right: var(--gutter-sm);
+
+    /* reset margin */
+    &,
+    & .pt-button {
+      margin: 0;
+    }
+
+    /* non-default states */
+    &.pt-intent-danger {
+      background-color: var(--danger);
+    }
+    &.pt-intent-warning {
+      background-color: var(--caution-dark);
+    }
+  }
 }
+
 
 /* set cursor back to default for non-links */
 button, .pt-button,

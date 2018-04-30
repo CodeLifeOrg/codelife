@@ -168,14 +168,42 @@ class Home extends Component {
           </div>
         </div>
 
+        {/* what you'll learn */}
+        <figure className="content-section learn-section">
+
+          <div className="learn-figure">
+            <img className="learn-img"
+              src="/home/what-youll-learn.png"
+              srcSet="/home/what-youll-learn.png 1x,
+                      /home/what-youll-learn@2x.png 2x"
+              alt=""/>
+          </div>
+
+          <figcaption className="learn-caption">
+            <h2 className="learn-heading">{ t("Home.LearnHeading") }</h2>
+
+            <ul className="learn-list font-md">
+              <li className="learn-list-item">{ t("Home.LearnItem1") }</li>
+              <li className="learn-list-item">{ t("Home.LearnItem2") }</li>
+              <li className="learn-list-item">{ t("Home.LearnItem3") }</li>
+              <li className="learn-list-item">{ t("Home.LearnItem4") }</li>
+              <li className="learn-list-item">{ t("Home.LearnItem5") }</li>
+            </ul>
+
+            <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
+              { t("Home.GetStarted")}
+            </button>
+          </figcaption>
+        </figure>
+
         {/* about blurb */}
-        <div className="about content-section limited-width">
+        {/* <div className="about content-section limited-width">
           <h2>{ t("What is CodeLife?") }</h2>
           <p>{ t("splashP1") }</p>
           <p>{ t("splashP2") }</p>
           <p>{ t("splashP3") }</p>
           <p>{ t("splashP4") }</p>
-        </div>
+        </div> */}
 
         {/* display CTA if logged out */}
         { !this.props.user ? <CTA context="home" /> : null }

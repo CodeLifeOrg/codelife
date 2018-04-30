@@ -139,8 +139,8 @@ blueprint overrides
 }
 
 .pt-button {
-  padding-left: 1.5em;
-  padding-right: 1.5em;
+  @add-mixin button-padding;
+  line-height: 1.5;
   border-radius: 2em;
   font-weight: 400;
   text-align: center; /* center align .pt-button text even when it's a div */
@@ -150,13 +150,9 @@ blueprint overrides
     transition: background-color 0.15s ease-out;
   }
 
-  /* more padding on bigger buttons */
-  &.font-md {
-    @add-mixin button-padding;
-
-    & > .pt-icon {
-      margin-right: 0.5em;
-    }
+  /* space out icons from text */
+  & > .pt-icon + * {
+    margin-left: 0.5em;
   }
 
   /* override blueprint disabled style */
@@ -581,7 +577,6 @@ form field layout
   & .pt-button {
     /* make buttons look like the rest of the buttons */
     @add-mixin font-md;
-    @add-mixin button-padding;
     /* transitions */
     transition: opacity 0.2s;
     will-change: opacity;
@@ -961,7 +956,7 @@ form field layout
     display: block;
     content: attr(data-button-text-lg);
     /* theming */
-    background-color: var(--sky);
+    background-color: var(--sky-dark);
     border: 1px solid var(--sky-dark);
     border-top-right-radius: 1.5em;
     border-bottom-right-radius: 1.5em;

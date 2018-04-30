@@ -191,9 +191,15 @@ class Home extends Component {
                 <li className="learn-list-item">{ t("Home.LearnItem5") }</li>
               </ul>
 
-              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
-                { t("Home.GetStarted")}
-              </button>
+              {/* buttons */}
+              <div className="authform-button-group u-margin-bottom-off">
+                <button className="authform-button pt-button pt-intent-primary font-sm" onClick={this.authForm.bind(this, "signup")}>
+                  { t("Home.GetStarted")}
+                </button>
+                <Link to="lessonplan" className="authform-button pt-button pt-intent-primary font-sm">
+                  {t("Lesson plan")}
+                </Link>
+              </div>
             </figcaption>
           </figure>
         }

@@ -114,8 +114,8 @@ class Home extends Component {
         }
 
         {/* mandatory 3 columns of features / selling points */}
-        { !current
-          ? <div className="content-section">
+        { !current &&
+          <div className="content-section">
             <div className="feature-list u-list-reset">
               {/* feature 1 */}
               <p className="feature-item font-md">
@@ -140,7 +140,7 @@ class Home extends Component {
               </p>
             </div>
           </div>
-          : null }
+        }
 
         {/* made on codelife */}
         <div className="content-section">
@@ -169,32 +169,34 @@ class Home extends Component {
         </div>
 
         {/* what you'll learn */}
-        <figure className="content-section learn-section">
+        { !current &&
+          <figure className="content-section learn-section">
 
-          <div className="learn-figure">
-            <img className="learn-img"
-              src="/home/what-youll-learn.png"
-              srcSet="/home/what-youll-learn.png 1x,
-                      /home/what-youll-learn@2x.png 2x"
-              alt=""/>
-          </div>
+            <div className="learn-figure">
+              <img className="learn-img"
+                src="/home/what-youll-learn.png"
+                srcSet="/home/what-youll-learn.png 1x,
+                        /home/what-youll-learn@2x.png 2x"
+                alt=""/>
+            </div>
 
-          <figcaption className="learn-caption">
-            <h2 className="learn-heading">{ t("Home.LearnHeading") }</h2>
+            <figcaption className="learn-caption">
+              <h2 className="learn-heading">{ t("Home.LearnHeading") }</h2>
 
-            <ul className="learn-list font-md">
-              <li className="learn-list-item">{ t("Home.LearnItem1") }</li>
-              <li className="learn-list-item">{ t("Home.LearnItem2") }</li>
-              <li className="learn-list-item">{ t("Home.LearnItem3") }</li>
-              <li className="learn-list-item">{ t("Home.LearnItem4") }</li>
-              <li className="learn-list-item">{ t("Home.LearnItem5") }</li>
-            </ul>
+              <ul className="learn-list font-md">
+                <li className="learn-list-item">{ t("Home.LearnItem1") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem2") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem3") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem4") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem5") }</li>
+              </ul>
 
-            <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
-              { t("Home.GetStarted")}
-            </button>
-          </figcaption>
-        </figure>
+              <button className="authform-button pt-button pt-intent-primary font-md" onClick={this.authForm.bind(this, "signup")}>
+                { t("Home.GetStarted")}
+              </button>
+            </figcaption>
+          </figure>
+        }
 
         {/* about blurb */}
         {/* <div className="about content-section limited-width">

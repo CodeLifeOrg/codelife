@@ -12,7 +12,7 @@ module.exports = function(app) {
 
     const params = {
       include: [
-        {association: "user", where: {createdAt: {[Op.gt]: launch}}, attributes: ["id", "name", "email", "username", "createdAt"]}, 
+        {association: "user", where: {createdAt: {[Op.gt]: launch}}, attributes: ["id", "name", "email", "username", "createdAt", "updatedAt"]}, 
         {association: "school", attributes: [["name", "schoolname"]], include: [{association: "geo", attributes: [["name", "geoname"]]}]},
         {association: "userprogress"}
       ],
@@ -49,7 +49,7 @@ module.exports = function(app) {
 
     const params = {
       include: [
-        {association: "user", where: {createdAt: {[Op.gt]: launch}}, attributes: ["id", "name", "username", "createdAt"]}, 
+        {association: "user", where: {createdAt: {[Op.gt]: launch}}, attributes: ["id", "name", "username", "createdAt", "updatedAt"]}, 
         {association: "school", attributes: [["name", "schoolname"]], include: [{association: "geo", attributes: [["name", "geoname"]]}]},
         {association: "userprogress"}
       ],
@@ -71,6 +71,7 @@ module.exports = function(app) {
             user.email = user.user ? user.user.email : "";
             user.username = user.user ? user.user.username : "";
             user.createdAt = user.user ? user.user.createdAt : "";
+            user.updatedAt = user.user ? user.user.updatedAt : "";
             return user;
           });        
           return res.json(flatusers).end();  

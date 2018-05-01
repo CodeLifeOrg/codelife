@@ -90,6 +90,8 @@ class CodeBlockList extends Component {
   render() {
     const {islands, userProgress} = this.state;
 
+    console.log(this.props.blockFork);
+
     if (!islands || !userProgress) return null;
 
     const codeBlockItems = [];
@@ -107,7 +109,7 @@ class CodeBlockList extends Component {
       const thisIslandItems = [];
       for (const s of i.myCodeBlocks.concat(i.likedCodeBlocks, i.unlikedCodeBlocks)) {
         thisIslandItems.push(
-          <CodeBlockCard handleFork={this.handleFork.bind(this)} theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/>
+          <CodeBlockCard blockFork={this.props.blockFork} handleFork={this.handleFork.bind(this)} theme={i.theme} icon={i.icon} codeBlock={s} userProgress={userProgress} reportLike={this.reportLike.bind(this)} projectMode={true}/>
         );
       }
       codeBlockItems.push(<Collapse className="card-list" isOpen={this.state[i.id]}>{thisIslandItems}</Collapse>);

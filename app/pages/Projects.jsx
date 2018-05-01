@@ -97,7 +97,7 @@ class Projects extends Component {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
-          this.setState({currentTitle: currentProject.name, currentProject, projects, isNewOpen: false});
+          this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, currentProject, projects, isNewOpen: false});
           browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
         }
         else {
@@ -112,18 +112,12 @@ class Projects extends Component {
 
   clickNewProject() {
     const {t} = this.props;
-    const projectName = this.state.projectName;
-    // todo: maybe check with db instead of local state, should check back on this
-    if (this.state.changesMade) {
-      if (confirm(t("Abandon changes and open new file?"))) {
-        this.createNewProject.bind(this, projectName);
-      }
-      else {
-        // do nothing
-      }
+    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
+      this.setState({isNewOpen: true});
     }
     else {
-      this.createNewProject.bind(this, projectName);
+      const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
+      toast.show({message: t("Save your webpage before starting a new one!"), timeout: 1500, intent: Intent.WARNING});
     }
   }
 
@@ -193,7 +187,7 @@ class Projects extends Component {
           else {
             newProject = this.state.currentProject;
           }
-          this.setState({deleteAlert: false, projectName: "", currentProject: newProject, projects});
+          this.setState({deleteAlert: false, projectName: "", currentProject: newProject, currentTitle: newProject.name, originalTitle: newProject.name, projects});
           browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);
         }
         else {
@@ -462,7 +456,7 @@ class Projects extends Component {
                 }
 
                 {/* new project */}
-                <button className="new-project-button pt-button pt-intent-primary" onClick={() => this.setState({isNewOpen: true})}>
+                <button className="new-project-button pt-button pt-intent-primary" onClick={this.clickNewProject.bind(this)}>
                   <span className="pt-icon pt-icon-application" />
                   { t("create new project") }
                 </button>
@@ -507,7 +501,7 @@ class Projects extends Component {
                   <span className="u-visually-hidden">{ t("Hide Codeblocks") }</span>
                 </button>
               </h2>
-              <CodeBlockList handleFork={this.handleFork.bind(this)} />
+              <CodeBlockList blockFork={this.editor && this.editor.getWrappedInstance().getWrappedInstance().changesMade()} handleFork={this.handleFork.bind(this)} />
             </div>
           </div>
         }

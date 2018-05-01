@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
-import {PopoverInteractionKind, Dialog} from "@blueprintjs/core";
+import {PopoverInteractionKind, Dialog, Toaster, Position, Intent} from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/labs";
 import PropTypes from "prop-types";
 
@@ -51,27 +51,34 @@ class CodeBlockCard extends Component {
   }
 
   toggleFork() {
-    const {browserHistory} = this.context;
-    // Trim leading and trailing whitespace from the project title
-    const name = this.state.forkName;
-    const {studentcontent} = this.state.codeBlock;
-    axios.post("/api/projects/new", {name, studentcontent}).then(resp => {
-      if (resp.status === 200) {
-        const projects = resp.data.projects;
-        const newid = resp.data.id;
-        const currentProject = projects.find(p => p.id === newid);
-        this.setState({open: false});
-        if (this.props.handleFork) {
-          this.props.handleFork(newid, projects);
+    const {t} = this.props;
+    if (this.props.blockFork) {
+      const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
+      toast.show({message: t("Save your webpage before starting a new one!"), timeout: 1500, intent: Intent.WARNING});
+    }
+    else {
+      const {browserHistory} = this.context;
+      // Trim leading and trailing whitespace from the project title
+      const name = this.state.forkName;
+      const {studentcontent} = this.state.codeBlock;
+      axios.post("/api/projects/new", {name, studentcontent}).then(resp => {
+        if (resp.status === 200) {
+          const projects = resp.data.projects;
+          const newid = resp.data.id;
+          const currentProject = projects.find(p => p.id === newid);
+          this.setState({open: false});
+          if (this.props.handleFork) {
+            this.props.handleFork(newid, projects);
+          }
+          else {
+            browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
+          }
         }
         else {
-          browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
+          alert("Error");
         }
-      }
-      else {
-        alert("Error");
-      }
-    });
+      });
+    }
   }
 
   toggleLike() {

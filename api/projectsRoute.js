@@ -2,9 +2,11 @@ const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
 const fs = require("fs");
 const path = require("path");
+const Xvfb = require("xvfb");
 const screenshot = require("electron-screenshot-service");
 const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
 const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
+
 
 function flattenProject(user, p) {
   p.username = p.user ? p.user.username : "";
@@ -146,13 +148,20 @@ module.exports = function(app) {
         const height = 300;
         const page = true;
         const delay = 3000;
-        screenshot({url, width, height, page, delay}).then(img => {
-          const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
-          fs.writeFile(imgPath, img.data, err => {
-            console.log(err);
+        const xvfb = new Xvfb();
+        xvfb.start((err, xvfbProcess) => {
+          console.log("starting xvfb process:", xvfbProcess);
+          console.log("xvfb start error", err);
+          screenshot({url, width, height, page, delay}).then(img => {
+            const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
+            fs.writeFile(imgPath, img.data, err => {
+              console.log("fs err", err);
+              xvfb.stop(err => {
+                console.log("xvfb stop err", err);
+              });
+            });
           });
         });
-
         res.json(u).end();
       });
   });

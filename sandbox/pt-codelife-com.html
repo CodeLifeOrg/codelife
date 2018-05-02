@@ -42,16 +42,29 @@
       );
     }
 
+    function isNodeList(nodes) {
+      var stringRepr = Object.prototype.toString.call(nodes);
+
+      return typeof nodes === 'object' &&
+          /^\[object (HTMLCollection|NodeList|Object)\]$/.test(stringRepr) &&
+          (typeof nodes.length === 'number') &&
+          (nodes.length === 0 || (typeof nodes[0] === "object" && nodes[0].nodeType > 0));
+    }
+
     window.addEventListener("message", receiveMessage, false);
 
     window.myPost = function() {
       const payload = [];
       for (const a of arguments) {
-        if (a & a.message) {
-          isNode(a.message) || isElement(a.message) ? payload.push(String(a.message)) : payload.push(a.message);
+        const arg = a && a.message ? a.message : a;
+        if (isNode(arg) || isElement(arg)) {
+          payload.push(arg.outerHTML);
+        }
+        else if (isNodeList(arg)) {
+          payload.push(arg.toString());
         }
         else {
-          isNode(a) || isElement(a) ? payload.push(String(a)) : payload.push(a)
+          payload.push(arg);
         }
       }
       source.postMessage(payload, host);

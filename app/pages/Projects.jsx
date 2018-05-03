@@ -296,7 +296,6 @@ class Projects extends Component {
     const {username} = this.props.auth.user;
     const name = currentProject ? currentProject.name : "";
     const shareLink = encodeURIComponent(`${origin}/projects/${username}/${name}`);
-    console.log(shareLink);
 
     const projectItems = this.state.projects.map(project =>
       <li className="project-switcher-item" key={project.id}>

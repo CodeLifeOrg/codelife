@@ -145,8 +145,8 @@ module.exports = function(app) {
       .then(u => {
         console.log(req.headers);
         const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}`;
-        const width = 400;
-        const height = 300;
+        const width = 600;
+        const height = 315;
         const page = true;
         const delay = 5000;
         const xvfb = new Xvfb({timeout: 5000});

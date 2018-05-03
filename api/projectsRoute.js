@@ -143,23 +143,19 @@ module.exports = function(app) {
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
     db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
       .then(u => {
+        console.log(req.headers);
         const url = `http://localhost:3300/projects/${req.body.username}/${req.body.name}`;
         const width = 400;
         const height = 300;
         const page = true;
         const delay = 3000;
-        const xvfb = new Xvfb();
-        xvfb.start((err, xvfbProcess) => {
-          console.log("starting xvfb process:", xvfbProcess);
-          console.log("xvfb start error", err);
-          screenshot({url, width, height, page, delay}).then(img => {
-            const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
-            fs.writeFile(imgPath, img.data, err => {
-              console.log("fs err", err);
-              xvfb.stop(err => {
-                console.log("xvfb stop err", err);
-              });
-            });
+        const xvfb = new Xvfb({timeout: 3000});
+        if (req.headers.host !== "localhost:3300") xvfb.startSync();
+        screenshot({url, width, height, page, delay}).then(img => {
+          const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
+          fs.writeFile(imgPath, img.data, err => {
+            console.log("fs err", err);
+            if (req.headers.host !== "localhost:3300") xvfb.stopSync();
           });
         });
         res.json(u).end();

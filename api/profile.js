@@ -66,19 +66,16 @@ module.exports = function(app) {
       });
   });
 
-  app.get("/api/profile/share/:uid", (req, res) => {
-    const {uid} = req.params;
+  app.get("/api/profile/share/:username", (req, res) => {
+    const {username} = req.params;
   
-    db.userprofiles.findAll({
-      include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {id: uid}}) : i)
+    db.users.findOne({
+      where: {username},
+      attributes: ["id", "username", "name"]
     })
-      .then(users => {
-        if (!users.length) {
-          return res.json({error: "No user matched that uid."});
-        }
-        const user = flattenProfile(req.user, users[0].toJSON());
-        return res.json(user).end();
-      });
+      .then(user => 
+        res.json(user).end()
+      );
   });
 
   app.post("/api/user/email", isAuthenticated, (req, res) => {

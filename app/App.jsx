@@ -94,7 +94,7 @@ class App extends Component {
             : null
         }
         { reduxLoaded && userInit && !auth.loading || authRoute || bareRoute || planRoute
-          ? bareRoute || planRoute
+          ? bareRoute
             ? children
             : <div className="container">
               <Clouds />

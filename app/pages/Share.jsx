@@ -71,9 +71,6 @@ class Share extends Component {
           <div className="logo">
             { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
           </div>
-          <div className="fb">
-            fb
-          </div>
           {
             content.status === "banned" || !this.props.auth.user
               ? null

@@ -33,6 +33,7 @@ export default function RouteCreate() {
 
       <Route path="island" component={IslandMap} />
       <Route path="island/:lid" component={IslandLevel} />
+      <Route path="island/:lid/show" component={IslandLevel} />
       <Route path="island/:lid/:mlid(/:sid)" component={Slide} />
 
       <Route path="projects/:username" component={Projects} />

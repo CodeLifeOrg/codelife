@@ -77,8 +77,13 @@ class Level extends Component {
         }
       }
 
-      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
+      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false}, this.maybeTriggerCodeblock.bind(this));
     });
+  }
+
+  maybeTriggerCodeblock() {
+    const testOpen = location.pathname.includes("/show") && this.allLevelsBeaten();
+    this.setState({testOpen});
   }
 
   componentDidUpdate() {
@@ -94,7 +99,20 @@ class Level extends Component {
   }
 
   toggleTest() {
-    this.setState({testOpen: !this.state.testOpen});
+    const {browserHistory} = this.context;
+    const {pathname} = this.props.router.location;
+    const path = pathname.slice(-1) === "/" ? pathname.slice(0, -1) : pathname;
+    const {testOpen} = this.state;
+    if (testOpen) {
+      this.setState({testOpen: false});  
+      const n = path.indexOf("/show");
+      const url = `/${path.substring(0, n !== -1 ? n : path.length)}`;
+      browserHistory.push(url);
+    }
+    else {
+      this.setState({testOpen: true});
+      browserHistory.push(`/${path}/show`);
+    }
   }
 
   handleSave(newCodeBlock) {
@@ -152,11 +170,16 @@ class Level extends Component {
 
   allLevelsBeaten() {
     const {levels} = this.state;
-    let missedLevels = 0;
-    for (const l of levels) {
-      if (!this.hasUserCompleted(l.id)) missedLevels++;
+    if (levels && levels.length) { 
+      let missedLevels = 0;
+      for (const l of levels) {
+        if (!this.hasUserCompleted(l.id)) missedLevels++;
+      }
+      return missedLevels === 0;
     }
-    return missedLevels === 0;
+    else {
+      return false;
+    }
   }
 
   promptFinalTest() {
@@ -351,7 +374,6 @@ class Level extends Component {
 
     const levelItems = levelStatuses.map(level => {
       const {lid} = this.props.params;
-      console.log(level);
       if (level.isDone) {
         return <Popover
           interactionKind={PopoverInteractionKind.HOVER}
@@ -459,7 +481,8 @@ Level.contextTypes = {
 const mapStateToProps = state => ({
   auth: state.auth,
   islands: state.islands,
-  levels: state.levels
+  levels: state.levels,
+  location: state.location
 });
 
 Level = connect(mapStateToProps)(Level);

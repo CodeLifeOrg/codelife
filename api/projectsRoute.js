@@ -144,12 +144,12 @@ module.exports = function(app) {
     db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
       .then(u => {
         console.log(req.headers);
-        const url = `http://localhost:3300/projects/${req.body.username}/${req.body.name}`;
+        const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}`;
         const width = 400;
         const height = 300;
         const page = true;
-        const delay = 3000;
-        const xvfb = new Xvfb({timeout: 3000});
+        const delay = 5000;
+        const xvfb = new Xvfb({timeout: 5000});
         if (req.headers.host !== "localhost:3300") xvfb.startSync();
         screenshot({url, width, height, page, delay}).then(img => {
           const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);

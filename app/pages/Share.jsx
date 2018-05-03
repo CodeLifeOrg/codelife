@@ -41,6 +41,8 @@ class Share extends Component {
     const contentType = pathname.includes("/codeBlocks/") ? "codeblock" : "project";
 
     const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
+
+    console.log(content);
     
     const {id} = content;
     const name = content.name || content.snippetname;
@@ -49,6 +51,8 @@ class Share extends Component {
 
     const url = this.props.location.href;
     const img = `${this.props.location.origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
+
+    console.log(img);
 
     return (
       <div id="share">

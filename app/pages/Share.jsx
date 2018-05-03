@@ -51,7 +51,7 @@ class Share extends Component {
 
     const url = this.props.location.href;
     const origin = this.props.location.origin.includes("localhost") ? this.props.location.origin : this.props.location.origin.replace("http:", "https:");
-    const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
+    const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png?v=${new Date().getTime()}`;
 
     console.log(img);
 

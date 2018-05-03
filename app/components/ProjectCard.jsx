@@ -90,9 +90,9 @@ class ProjectCard extends Component {
           <div className="card-caption project-card-caption">
 
             {/* title */}
-            <h4 className="card-title u-margin-top-off u-margin-bottom-off">
+            <h3 className="card-title font-sm u-margin-top-off u-margin-bottom-off">
               { name !== "mypage.html" ? name : t("Card.NewProject") }
-            </h4>
+            </h3>
 
             {/* author */}
             { username
@@ -113,8 +113,10 @@ class ProjectCard extends Component {
               : null }
 
             {/* likes */}
-            {/* <p className="card-likes font-xs u-margin-top-off">
-              <button className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" }` } />
+            {/* <p className="card-likes font-xs u-margin-top-off" id={`project-card-${id}`}>
+              <button className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" }` }
+              onClick={ this.toggleLike.bind(this) }
+              aria-labelledby={`project-card-${id}` } />
               <span className="card-likes-count">0</span>
               <span className="u-visually-hidden">&nbsp;
                 { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }

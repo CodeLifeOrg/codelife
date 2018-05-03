@@ -2,9 +2,11 @@ const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
 const fs = require("fs");
 const path = require("path");
+const Xvfb = require("xvfb");
 const screenshot = require("electron-screenshot-service");
 const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
 const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
+
 
 function flattenProject(user, p) {
   p.username = p.user ? p.user.username : "";
@@ -19,8 +21,8 @@ function flattenProject(user, p) {
 }
 
 const pInclude = [
-  {association: "userprofile", attributes: ["bio", "sharing"]},
-  {association: "user", attributes: ["username"]},
+  {association: "userprofile", attributes: ["bio", "sharing", "uid", "img"]},
+  {association: "user", attributes: ["username", "id", "name"]},
   {association: "reportlist"},
   {association: "collaborators", attributes: ["uid", "sid", "gid", "img", "bio"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
 ];
@@ -141,18 +143,21 @@ module.exports = function(app) {
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
     db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
       .then(u => {
-        const url = `http://localhost:3300/projects/${req.body.username}/${req.body.name}`;
-        const width = 400;
-        const height = 300;
+        console.log(req.headers);
+        const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}`;
+        const width = 600;
+        const height = 315;
         const page = true;
-        const delay = 3000;
+        const delay = 5000;
+        const xvfb = new Xvfb({timeout: 5000});
+        if (req.headers.host !== "localhost:3300") xvfb.startSync();
         screenshot({url, width, height, page, delay}).then(img => {
           const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
           fs.writeFile(imgPath, img.data, err => {
-            console.log(err);
+            console.log("fs err", err);
+            if (req.headers.host !== "localhost:3300") xvfb.stopSync();
           });
         });
-
         res.json(u).end();
       });
   });

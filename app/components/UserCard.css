@@ -3,15 +3,17 @@
 .user-card {
   /* account for absolutely positioned avatar */
   min-height: 3.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  /* user image */
   & > .card-avatar {
     /* sizing */
     width: 2rem;
     height: 2rem;
     /* positioning */
-    position: absolute;
     left: var(--gutter-sm);
-    top: var(--gutter-sm);
     /* theming */
     background: var(--sky-dark);
     background-size: cover;
@@ -26,15 +28,18 @@
       transform 0.2s;
     will-change: opacity, transform;
 
+    /* theming for placehodler icon */
     & > .card-avatar-icon {
       color: var(--white);
     }
   }
+
+  /* user info */
   & > .card-caption {
     /* make space for avatar */
-    padding-left: 4rem; /* fallback */
-    padding-left: calc(3rem + var(--gutter-sm));
+    padding-left: var(--gutter-xs); /* reset */
     padding-right: var(--gutter-xs); /* reset */
+    width: calc(100% - 3rem);
 
     /* title transition */
     & .card-title {

@@ -81,7 +81,6 @@ class ReportBox extends Component {
   submitReport() {
     const {reason, comment, userProfile} = this.state;
     const {reportid, contentType, permalink} = this.props;
-    console.log("permalink", permalink);
     const rpayload = {reason, comment, permalink, type: contentType, report_id: reportid};
     const rpost = axios.post("/api/reports/save", rpayload);
     const upost = axios.post("/api/profile/decrement");
@@ -118,7 +117,7 @@ class ReportBox extends Component {
           }
         </h2>
 
-        <div className={`report-popover-form${disabled && " is-disabled"}`}>
+        <div className={`report-popover-form${disabled ? " is-disabled" : ""}`}>
 
           {/* reason for flagging */}
           <div className="field-container font-sm">

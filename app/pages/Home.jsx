@@ -107,15 +107,15 @@ class Home extends Component {
               </h1>
 
               {/* island */}
-              <IslandLink key={current.id} island={current} />
+              <IslandLink key={current.id} island={current} heading={false} />
 
             </div>
           </div>
         }
 
         {/* mandatory 3 columns of features / selling points */}
-        { !current
-          ? <div className="content-section">
+        { !current &&
+          <div className="content-section">
             <div className="feature-list u-list-reset">
               {/* feature 1 */}
               <p className="feature-item font-md">
@@ -140,16 +140,17 @@ class Home extends Component {
               </p>
             </div>
           </div>
-          : null }
+        }
 
         {/* made on codelife */}
         <div className="content-section">
 
-          <h2>{t("Home.MadeOnCodelife")}</h2>
+          {/* keep this a paragraph so that project and codeblock cards have the right heading level */}
+          <p className="heading font-lg">{t("Home.MadeOnCodelife")}</p>
 
           {/* projects */}
           <div className="project-section">
-            <h3>{ t("Featured Projects") }</h3>
+            <h2 className="font-md">{ t("Featured Projects") }</h2>
             <div className="card-list project-list">
               { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
             </div>
@@ -157,7 +158,7 @@ class Home extends Component {
 
           {/* codeblocks */}
           <div className="codeblock-section">
-            <h3>{ t("Featured CodeBlocks") }</h3>
+            <h2 className="font-md">{ t("Featured CodeBlocks") }</h2>
             <div className="card-list codeblock-list">
               { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
                 const {theme, icon} = islands.find(i => i.id === c.lid);
@@ -167,14 +168,50 @@ class Home extends Component {
           </div>
         </div>
 
+        {/* what you'll learn */}
+        { !current &&
+          <figure className="content-section learn-section">
+
+            <div className="learn-figure">
+              <img className="learn-img"
+                src="/home/what-youll-learn.png"
+                srcSet="/home/what-youll-learn.png 1x,
+                        /home/what-youll-learn@2x.png 2x"
+                alt=""/>
+            </div>
+
+            <figcaption className="learn-caption">
+              <h2 className="learn-heading">{ t("Home.LearnHeading") }</h2>
+
+              <ul className="learn-list font-md">
+                <li className="learn-list-item">{ t("Home.LearnItem1") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem2") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem3") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem4") }</li>
+                <li className="learn-list-item">{ t("Home.LearnItem5") }</li>
+              </ul>
+
+              {/* buttons */}
+              <div className="authform-button-group u-margin-bottom-off">
+                <button className="authform-button pt-button pt-intent-primary font-sm" onClick={this.authForm.bind(this, "signup")}>
+                  { t("Home.GetStarted")}
+                </button>
+                <Link to="lessonplan" className="authform-button pt-button pt-intent-primary font-sm">
+                  {t("Lesson plan")}
+                </Link>
+              </div>
+            </figcaption>
+          </figure>
+        }
+
         {/* about blurb */}
-        <div className="about content-section limited-width">
+        {/* <div className="about content-section limited-width">
           <h2>{ t("What is CodeLife?") }</h2>
           <p>{ t("splashP1") }</p>
           <p>{ t("splashP2") }</p>
           <p>{ t("splashP3") }</p>
           <p>{ t("splashP4") }</p>
-        </div>
+        </div> */}
 
         {/* display CTA if logged out */}
         { !this.props.user ? <CTA context="home" /> : null }

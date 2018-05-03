@@ -46,6 +46,7 @@
     "react-dom-confetti": "0.0.8",
     "react-quill": "^1.1.0",
     "safe-eval": "^0.3.0",
-    "sharp": "^0.18.2"
+    "sharp": "^0.18.2",
+    "xvfb": "^0.2.3"
   }
 }

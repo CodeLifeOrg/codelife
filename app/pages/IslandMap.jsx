@@ -71,9 +71,12 @@ class Island extends Component {
       <div className="content map u-text-center">
         {/* heading */}
         <div className="map-heading content-section">
-          <h1 className="u-margin-bottom-off">
+          {/* hidden heading for accessibility */}
+          <h1 className="u-visually-hidden">{t("Map")}</h1>
+          {/* actual heading */}
+          <h2 className="u-margin-bottom-off font-xl">
             {t("IslandMap.SelectIsland")}
-          </h1>
+          </h2>
         </div>
         {/* list of islands */}
         <div className="map-list content-section">

@@ -1,0 +1,140 @@
+@import '../mixins.css';
+
+/* de-blueprintify */
+.codeblockeditor-dialog {
+  @add-mixin absolute-expand; /* position codeblock dialog */
+  @add-mixin hide-pt-dialog-header; /* hide the uneditable header */
+  border-radius: 0; /* reset border radius */
+  margin: 0; /* reset margin */
+
+  /* tweak close button placement */
+  & .pt-dialog-close-button {
+    top: -0.25em;
+    padding: 0;
+  }
+}
+
+/* override studio max-height */
+.codeblockeditor-body {
+  @add-mixin min-sm {
+    height: 100vh;
+
+    /* limit sidebar height to 100vh and allow scrolling */
+    & .studio-controls {
+      max-height: 100%;
+      overflow: auto;
+    }
+
+    & .studio-editor .code-editor {
+      height: 100%;
+    }
+  }
+}
+
+
+/* codeblock title */
+.codeblockeditor-title {
+  @add-mixin edit-icon; /* add edit icon */
+  display: inline-block; /* honor margin-bottom */
+
+  /* interactions */
+  &:hover:after {
+    color: var(--sky-dark);
+  }
+}
+
+
+/* show / hide filename input */
+.codeblockeditor-filename {
+  @add-mixin visually-hidden;
+  top: -2rem; /* offset .studio-title margin */
+
+  &:focus {
+    @add-mixin reset-visually-hidden;
+  }
+}
+
+
+/* prompt & cheetsheet */
+.codeblockeditor-text {
+  margin-top: 2rem;
+  line-height: 1.325;
+
+  & p + p {
+    margin-top: 1.25em;
+  }
+
+  /* bad content editor! 🙅‍ */
+  & p:empty,
+  & br {
+    display: none !important;
+    pointer-events: none;
+  }
+
+  /* thx blueprint */
+  & pre,
+  & code {
+    @add-mixin font-xs;
+    overflow-x: auto;
+  }
+}
+
+
+
+
+/* .codeblock-container {
+  align-self: stretch;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  & .codeblock-body {
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    padding: var(--gutter-xs) 0;
+
+    & .codeblock-text {
+      align-self: stretch;
+      flex: none;
+      font-size: 16px;
+      line-height: var(--gutter-md);
+      margin-top: var(--gutter-xs);
+      max-width: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+
+      & .pt-progress-bar {
+        height: var(--gutter-xs);
+        margin: 0 var(--gutter-xxs) var(--gutter-xs);
+        text-align: left;
+        width: calc(100% - var(--gutter-xs));
+      }
+    }
+
+    @add-mixin max-sm {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      & .codeblock-text {
+        max-width: auto;
+      }
+    }
+  }
+
+  & .codeblock-footer {
+    text-align: center;
+    & .pt-button {
+      margin: 0 var(--gutter-xxs) var(--gutter-xs);
+    }
+    & .pt-callout {
+      display: inline-block;
+    }
+  }
+}
+
+.pt-dialog.codeblock .pt-dialog-body {
+  display: flex;
+  min-height: 0;
+} */

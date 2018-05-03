@@ -62,10 +62,12 @@ class App extends Component {
     const {auth, children, i18n, location, islands} = this.props;
     const {userInit} = this.state;
 
-    const routes = this.props.router.location.pathname.split("/");
+    const path = this.props.router.location.pathname.slice(-1) === "/" ? this.props.router.location.pathname.slice(0, -1) : this.props.router.location.pathname;
+    const routes = path.split("/");
 
     const authRoute = routes[0] === "login";
     const bareRoute = ["projects", "codeBlocks"].includes(routes[0]) && routes.length === 3;
+    const planRoute = this.props.router.location.pathname.includes("lessonplan");
 
     const meta = header.meta.slice();
 
@@ -91,7 +93,7 @@ class App extends Component {
             ? <div className="devbar">Development Server. Do not edit content here!</div>
             : null
         }
-        { reduxLoaded && userInit && !auth.loading || authRoute
+        { reduxLoaded && userInit && !auth.loading || authRoute || bareRoute || planRoute
           ? bareRoute
             ? children
             : <div className="container">

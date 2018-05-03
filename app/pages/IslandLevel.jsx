@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
-import CodeBlock from "components/CodeBlock";
+import CodeBlockEditor from "components/CodeBlockEditor";
 import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
@@ -77,8 +77,13 @@ class Level extends Component {
         }
       }
 
-      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false});
+      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false}, this.maybeTriggerCodeblock.bind(this));
     });
+  }
+
+  maybeTriggerCodeblock() {
+    const testOpen = location.pathname.includes("/show") && this.allLevelsBeaten();
+    this.setState({testOpen});
   }
 
   componentDidUpdate() {
@@ -94,7 +99,20 @@ class Level extends Component {
   }
 
   toggleTest() {
-    this.setState({testOpen: !this.state.testOpen});
+    const {browserHistory} = this.context;
+    const {pathname} = this.props.router.location;
+    const path = pathname.slice(-1) === "/" ? pathname.slice(0, -1) : pathname;
+    const {testOpen} = this.state;
+    if (testOpen) {
+      this.setState({testOpen: false});  
+      const n = path.indexOf("/show");
+      const url = `/${path.substring(0, n !== -1 ? n : path.length)}`;
+      browserHistory.push(url);
+    }
+    else {
+      this.setState({testOpen: true});
+      browserHistory.push(`/${path}/show`);
+    }
   }
 
   handleSave(newCodeBlock) {
@@ -152,11 +170,16 @@ class Level extends Component {
 
   allLevelsBeaten() {
     const {levels} = this.state;
-    let missedLevels = 0;
-    for (const l of levels) {
-      if (!this.hasUserCompleted(l.id)) missedLevels++;
+    if (levels && levels.length) { 
+      let missedLevels = 0;
+      for (const l of levels) {
+        if (!this.hasUserCompleted(l.id)) missedLevels++;
+      }
+      return missedLevels === 0;
     }
-    return missedLevels === 0;
+    else {
+      return false;
+    }
   }
 
   promptFinalTest() {
@@ -299,18 +322,17 @@ class Level extends Component {
           </div>
         </Tooltip>
         <Dialog
-          className={ `codeBlock ${ currentIsland.theme }` }
+          className={ `codeblockeditor-dialog studio-inner ${ currentIsland.theme }` }
           isOpen={this.state.testOpen}
           onClose={this.toggleTest.bind(this)}
-          title={ title }
+          title=""
         >
-          <div className="pt-dialog-body">
-            <CodeBlock
-              island={currentIsland}
-              handleSave={this.handleSave.bind(this)}
-              onFirstCompletion={this.onFirstCompletion.bind(this)}
-            />
-          </div>
+          <CodeBlockEditor
+            island={ currentIsland }
+            title={ title }
+            handleSave={ this.handleSave.bind(this) }
+            onFirstCompletion={ this.onFirstCompletion.bind(this) }
+          />
         </Dialog>
       </div>
     );
@@ -358,10 +380,13 @@ class Level extends Component {
           popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop is-done" to={`/island/${lid}/${level.id}`}></Link>
-          <span>
-            {level.name}
-          </span>
+          <Link className="stop is-done" to={`/island/${lid}/${level.id}`}>
+            {/* descriptive text for screen readers */}
+            <span className="u-visually-hidden">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name}` }
+            </span>
+          </Link>
+          {level.name}
         </Popover>;
       }
       else if (level.isSkipped) {
@@ -371,18 +396,26 @@ class Level extends Component {
           popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
         >
-          <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}></Link>
-          <span>
-            {`${level.name} (incomplete)`}
-          </span>
+          <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}>
+            {/* descriptive text for screen readers */}
+            <span className="u-visually-hidden">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name} (${ t("incomplete") })` }
+            </span>
+          </Link>
+          {`${level.name} (${ t("incomplete") })`}
         </Popover>;
       }
       else if (level.isNext) {
         return <Tooltip isOpen={!checkpointOpen} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
-          <Link className="stop is-next" to={`/island/${lid}/${level.id}`}></Link>
+          <Link className="stop is-next" to={`/island/${lid}/${level.id}`}>
+            {/* descriptive text for screen readers */}
+            <span className="u-visually-hidden">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name} })` }
+            </span>
+          </Link>
         </Tooltip>;
       }
-      return <div key={level.id} className="stop"></div>;
+      return <div key={level.id} className="stop" />;
     });
 
     return (
@@ -399,12 +432,14 @@ class Level extends Component {
             { this.buildTestPopover() }
           </div>
         </div>
+        { prevIsland && <h2 className="u-visually-hidden">{`${t("Previous island")}: `}</h2>}
         { prevIsland ? <IslandLink done={true} width={250} island={prevIsland} description={false} /> : null}
         { /* TODO: RIP OUT THIS CRAPPY 3 BLOCKER AFTER AUGUST (DONE) */}
         { /* TODO2: adding blocker back in for November Beta */}
         { /* TODO3: incremented blocker for December Island */}
         { /* TODO4: incremented blocker for January Island */}
 
+        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) && <h2 className="u-visually-hidden">{`${t("Next island")}: `}</h2>}
         { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
@@ -446,7 +481,8 @@ Level.contextTypes = {
 const mapStateToProps = state => ({
   auth: state.auth,
   islands: state.islands,
-  levels: state.levels
+  levels: state.levels,
+  location: state.location
 });
 
 Level = connect(mapStateToProps)(Level);

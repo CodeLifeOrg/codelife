@@ -1,0 +1,4 @@
+/* fix report dialog text color on share view */
+.report-popover-form {
+  color: var(--black);
+}

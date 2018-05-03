@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {NonIdealState, Popover, PopoverInteractionKind} from "@blueprintjs/core";
 import Loading from "components/Loading";
+import {Link} from "react-router";
 
 import "./Leaderboard.css";
 
@@ -15,7 +16,7 @@ class Leaderboard extends Component {
       mounted: false,
       users: [],
       flatProgress: [],
-      sortBy: {prop: "username", desc: true}
+      sortBy: {prop: "progressPercent", desc: true}
     };
   }
 
@@ -39,7 +40,7 @@ class Leaderboard extends Component {
         u.progressPercent = u.userprogress.filter(up => up.status === "completed").length / flatProgress.length * 100;
         if (u.progressPercent === 0) u.progressPercent = .01;
         return u;
-      });
+      }).filter(u => u.progressPercent > .01);
       this.setState({mounted, users, flatProgress});
     });
   }
@@ -47,6 +48,11 @@ class Leaderboard extends Component {
   handleHeaderClick(sortProp) {
     const sortBy = {prop: sortProp, desc: sortProp === this.state.sortBy.prop ? !this.state.sortBy.desc : false};
     this.setState({sortBy});
+  }
+
+  formatDate(date) {
+    const ds = new Date(date).toDateString();
+    return ds.substr(ds.indexOf(" ") + 1);
   }
 
   render() {
@@ -90,7 +96,9 @@ class Leaderboard extends Component {
       // if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
       // if (u.progressPercent > 60) intent = "pt-intent-primary";
       return <tr className="statistics-table-row" key={u.id}>
-        <td className="statistics-table-cell username">{u.username}</td>
+        <td className="statistics-table-cell username">
+          <Link to={`/profile/${u.username}`}>{u.username}</Link>
+        </td>
         <td className="statistics-table-cell progress">
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
@@ -107,7 +115,8 @@ class Leaderboard extends Component {
         <td className="statistics-table-cell name">{u.name}</td>
         <td className="statistics-table-cell schoolname">{u.schoolname}</td>
         <td className="statistics-table-cell geoname">{u.geoname}</td>
-        <td className="statistics-table-cell created-at">{new Date(u.createdAt).toDateString()}</td>
+        <td className="statistics-table-cell created-at">{this.formatDate(u.createdAt)}</td>
+        {/*<td className="statistics-table-cell updated-at">{new Date(u.updatedAt).toDateString()}</td>*/}
       </tr>;
     });
 
@@ -151,6 +160,13 @@ class Leaderboard extends Component {
                     <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-sort-numerical-desc" : "pt-icon-sort-numerical" : "pt-icon-double-caret-vertical" }` } />
                     {t("Member Since")}
                   </th>
+                  {/* last login */}
+                  {/*
+                  <th className="statistics-table-heading statistics-table-cell created-at" onClick={this.handleHeaderClick.bind(this, "createdAt")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "updatedAt" ? sortBy.desc ? "pt-icon-sort-numerical-desc" : "pt-icon-sort-numerical" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Last Login")}
+                  </th>
+                  */}
                 </tr>
               </thead>
               <tbody className="statistics-table-body">

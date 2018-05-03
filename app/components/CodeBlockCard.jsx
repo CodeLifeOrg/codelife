@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
-import {PopoverInteractionKind, Dialog} from "@blueprintjs/core";
+import {PopoverInteractionKind, Dialog, Toaster, Position, Intent} from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/labs";
 import PropTypes from "prop-types";
 
@@ -51,27 +51,34 @@ class CodeBlockCard extends Component {
   }
 
   toggleFork() {
-    const {browserHistory} = this.context;
-    // Trim leading and trailing whitespace from the project title
-    const name = this.state.forkName;
-    const {studentcontent} = this.state.codeBlock;
-    axios.post("/api/projects/new", {name, studentcontent}).then(resp => {
-      if (resp.status === 200) {
-        const projects = resp.data.projects;
-        const newid = resp.data.id;
-        const currentProject = projects.find(p => p.id === newid);
-        this.setState({open: false});
-        if (this.props.handleFork) {
-          this.props.handleFork(newid, projects);
+    const {t} = this.props;
+    if (this.props.blockFork) {
+      const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
+      toast.show({message: t("Save your webpage before starting a new one!"), timeout: 1500, intent: Intent.WARNING});
+    }
+    else {
+      const {browserHistory} = this.context;
+      // Trim leading and trailing whitespace from the project title
+      const name = this.state.forkName;
+      const {studentcontent} = this.state.codeBlock;
+      axios.post("/api/projects/new", {name, studentcontent}).then(resp => {
+        if (resp.status === 200) {
+          const projects = resp.data.projects;
+          const newid = resp.data.id;
+          const currentProject = projects.find(p => p.id === newid);
+          this.setState({open: false});
+          if (this.props.handleFork) {
+            this.props.handleFork(newid, projects);
+          }
+          else {
+            browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
+          }
         }
         else {
-          browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
+          alert("Error");
         }
-      }
-      else {
-        alert("Error");
-      }
-    });
+      });
+    }
   }
 
   toggleLike() {
@@ -170,7 +177,7 @@ class CodeBlockCard extends Component {
           <div className="card-caption codeblock-card-caption">
 
             {/* title */}
-            <h4 className="card-title u-margin-top-off u-margin-bottom-off">{ snippetname }</h4>
+            <h3 className="card-title font-sm u-margin-top-off u-margin-bottom-off">{ snippetname }</h3>
 
             {/* author */}
             { username
@@ -192,10 +199,11 @@ class CodeBlockCard extends Component {
               : null }
 
             {/* likes */}
-            <p className="card-likes font-xs u-margin-top-off">
+            <p className="card-likes font-xs u-margin-top-off" id={`codeblock-card-${id}`}>
               <button
                 className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
-                onClick={ this.toggleLike.bind(this) } />
+                onClick={ this.toggleLike.bind(this) }
+                aria-labelledby={`codeblock-card-${id}`} />
               <span className="card-likes-count">{ likes }</span>
               <span className="u-visually-hidden">&nbsp;
                 { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }

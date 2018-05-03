@@ -1,0 +1,150 @@
+@import '../mixins.css';
+
+/* main container background */
+.studio-inner {
+  background-color: var(--white);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
+}
+
+/* layout */
+.studio-body {
+  /* stacked controls & editor */
+  flex-direction: column;
+
+  /* controls left layout */
+  @add-mixin min-sm {
+    /* sizing */
+    min-height: 90vh; /* fallback */
+    min-height: calc(100vh - 60px); /* account for nav height */
+    /* children */
+    display: flex;
+    align-self: stretch;
+    flex-direction: row;
+  }
+
+  /* .studio-controls & .studio-editor */
+  & > * {
+    /* layout fallback */
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  /* controls */
+  & .studio-controls {
+    background-color: var(--white);
+    /* add padding */
+    padding: var(--gutter-md);
+    width: 100%;
+
+    /* sidebar left layout */
+    @add-mixin min-sm {
+      width: 16rem;
+    }
+  }
+
+  /* editor */
+  & .studio-editor {
+    width: 100%;
+    align-self: stretch;
+    flex: 1;
+
+    /* make code editor take up 100% height */
+    & > div {
+      height: calc(100vh - 110px);
+    }
+
+    /* sidebar left layout */
+    @add-mixin min-sm {
+      width: calc(100% - 16rem);
+      /* add padding */
+      padding: var(--gutter-md);
+    }
+  }
+}
+
+
+/* controls */
+.studio-controls {
+
+  /* the name of the current project */
+  & .studio-title {
+    text-transform: none;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.8em;
+
+    /* edit icon */
+    & .pt-editable-content {
+      @add-mixin edit-icon;
+    }
+
+    /* interactions */
+    &:hover .pt-editable-content:after {
+      color: var(--sky-dark);
+    }
+  }
+
+  /* icon only layout on tiny screens */
+  @add-mixin max-xxs {
+    /* make items flex to fill up the available horizontal space */
+    & .studio-action-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      /* inline-block fallback & button alignment */
+      & .studio-action-item {
+        display: inline-block;
+        text-align: center;
+        flex: 1 0 2rem;
+
+        /* style the button */
+        & > .studio-action-button {
+          /* sizing */
+          width: 2rem;
+          height: 2rem;
+          /* theming */
+          border-radius: 50%;
+          color: var(--white);
+          background-color: var(--sky-dark);
+          /* transitions */
+          transition: 0.2s opacity;
+
+          /* interactions */
+          &:hover, &:focus {
+            opacity: 0.85;
+          }
+
+          /* delete / leave */
+          &.danger-text {
+            background-color: var(--danger);
+          }
+        }
+      }
+    }
+  }
+
+  /* stacked layout on non-tiny screens */
+  @add-mixin min-xxs {
+    /* extend button clickability */
+    & .studio-action-button {
+      padding-top: 0.375em;
+      padding-bottom: 0.375em;
+      display: block;
+      width: 100%;
+      text-align: left; /* override button default */
+
+      /* disabled state */
+      &.is-disabled {
+        color: var(--gray);
+        pointer-events: none;
+      }
+    }
+    /* space out icon and text */
+    & .studio-action-button-icon {
+      font-size: 1.1666em;
+      margin-right: 0.5em;
+      vertical-align: middle;
+    }
+  }
+}

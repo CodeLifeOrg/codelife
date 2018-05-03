@@ -89,7 +89,7 @@ class Footer extends Component {
         <div className="footer-inner">
 
           {/* hidden heading (for accessibility) */}
-          <h2 className="u-visually-hidden">{ t("Navigation: ") }</h2>
+          <h2 className="u-visually-hidden">{ t("Navigation") }</h2>
 
           {/* list of links */}
           <nav className="footer-nav">

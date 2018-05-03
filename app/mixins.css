@@ -64,6 +64,15 @@
   overflow: hidden;
 }
 
+/* reset visually-hidden properties */
+@define-mixin reset-visually-hidden {
+  clip: auto;
+  position: relative !important;
+  height: auto;
+  width: 100%;
+  overflow: auto;
+}
+
 /* fill up all the space — make sure the parent has pos:rel */
 @define-mixin absolute-expand {
   position: absolute;
@@ -227,6 +236,26 @@
   }
 }
 
+/* edit icon */
+@define-mixin edit-icon {
+  &:after {
+    /* set icon */
+    font-family: "Icons20";
+    content: "\270E"; /* ✏️ */
+    /* sizing */
+    font-size: 0.75em;
+    /* positioning */
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.25em;
+    margin-top: -0.125em;
+    /* theming */
+    color: var(--gray);
+    /* transitions */
+    transition: 0.2s color;
+  }
+}
+
 /* break out of container and be full width */
 @define-mixin fullwidth-section {
   margin-left: auto;
@@ -304,8 +333,30 @@
   }
 }
 
+/* hide .pt-dialog-header title */
+@define-mixin hide-pt-dialog-header {
+  /* if you can't remove it, hide it */
+  & .pt-dialog-header {
+    /* positioning */
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1; /* ensure clickability */
+    /* blueprint theming overrides */
+    background-color: transparent;
+    box-shadow: none;
+
+    /* hide unnecessary elements */
+    & > span,
+    & > .pt-dialog-header-title {
+      display: none;
+    }
+  }
+}
+
 /* layout for login/signup forms */
 @define-mixin form-layout {
+  @add-mixin hide-pt-dialog-header;
   /* positioning */
   margin: 1rem;
   /* sizing */
@@ -316,22 +367,6 @@
 
   &[class*=form-container] {
     position: relative !important; /* thanks, blueprint */
-  }
-
-  /* if you can't remove it, hide it */
-  & .pt-dialog-header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    /* blueprint theming overrides */
-    background: inherit;
-    box-shadow: none;
-
-    /* hide unnecessary elements */
-    & > span,
-    & > .pt-dialog-header-title {
-      display: none;
-    }
   }
 
   /* close button positioning */

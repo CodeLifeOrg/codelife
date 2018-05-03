@@ -18,11 +18,19 @@ class CollabList extends Component {
   }
 
   render() {
-
     const {t, currentProject} = this.props;
     const collabs = currentProject.collaborators;
 
-    // current collaborators
+    // project owner
+    const collabOwner = {
+      bio: currentProject.userprofile.bio,
+      id: currentProject.uid,
+      img: currentProject.userprofile.img,
+      name: currentProject.user.name,
+      username: currentProject.user.username
+    };
+
+    // project collaborators
     const collabList = collabs.map(user => {
       const collabUser = {
         bio: user.bio,
@@ -39,11 +47,23 @@ class CollabList extends Component {
       <div className="collab-list-inner">
 
         {/* heading */}
-        <h2 className="collab-list-heading font-xl u-text-center">{t("Collab.CurrentCollaborators")}</h2>
-        <p className="collab-list-subhead heading font-md u-text-center">{currentProject.name}</p>
+        <h2 className="collab-list-heading font-xl u-text-center">{currentProject.name}</h2>
+
+        {/* project owner */}
+        <div className="collab-list">
+          <h3 className="collab-list-subhead">
+            {t("Collab.Owner")}
+          </h3>
+
+          <UserCard user={collabOwner} key={collabOwner.id} />
+        </div>
+
 
         {/* current collaborators */}
         <div className="collab-list">
+          <h3 className="collab-list-subhead">
+            {t("Collab.Collaborators")}
+          </h3>
           {collabList}
         </div>
       </div>

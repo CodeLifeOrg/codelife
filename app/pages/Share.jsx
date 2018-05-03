@@ -1,13 +1,13 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
+import {fetchData} from "datawheel-canon";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import CodeEditor from "components/CodeEditor/CodeEditor";
+import {Helmet} from "react-helmet";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
 import "./Share.css";
-
-import Loading from "components/Loading";
 
 class Share extends Component {
 
@@ -16,41 +16,14 @@ class Share extends Component {
     this.state = {
       content: null,
       user: null,
-      reports: [],
-      constants: null
+      reports: []
     };
   }
 
-  getUser() {
-    const {uid} = this.state.content;
-    axios.get(`/api/profile/share/${uid}/`).then(resp => {
-      this.setState({user: resp.data});
-    });
-  }
-
   componentDidMount() {
-    const {username, filename} = this.props.params;
-    let path = "";
-
-    if (this.props.location.pathname.includes("codeBlocks/")) path = "codeBlocks";
-    if (this.props.location.pathname.includes("projects/")) path = "projects";
-
-    const cget = axios.get(`/api/${path}/byUsernameAndFilename?username=${username}&filename=${filename}`);
-    const rget = axios.get("/api/reports");
-    const scget = axios.get("/api/siteconfigs");
-
-    Promise.all([cget, rget, scget]).then(resp => {
-
-      const content = resp[0].data[0];
-      const reports = resp[1].data;
-      const constants = resp[2].data;
-
-      this.setState({content, reports, constants}, this.getUser.bind(this));
-    });
-  }
-
-  componentDidUpdate() {
-    console.log("updated");
+    axios.get("/api/reports").then(resp => 
+      resp.status === 200 ? this.setState({reports: resp.data}) : console.log("error")
+    );
   }
 
   handleReport(report) {
@@ -60,23 +33,36 @@ class Share extends Component {
   }
 
   render() {
-    const {content, reports, user} = this.state;
-
-    if (!content) return <Loading dark={true} />;
-
     const {t} = this.props;
+    const {reports} = this.state;
+    const {pathname} = this.props.location;
+    const {codeblockContent, projectContent, user} = this.props.data;
+
+    const contentType = pathname.includes("/codeBlocks/") ? "codeblock" : "project";
+
+    const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
+    
     const {id} = content;
     const name = content.name || content.snippetname;
 
-    let contentType = "";
-    if (this.props.location.pathname.includes("codeBlocks/")) contentType = "codeblock";
-    if (this.props.location.pathname.includes("projects/")) contentType = "project";
-
     const reported = reports.find(r => r.type === contentType && r.report_id === id);
+
+    const url = this.props.location.href;
+    const origin = this.props.location.origin.includes("localhost") ? this.props.location.origin : this.props.location.origin.replace("http:", "https:");
+    const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
 
     return (
       <div id="share">
-        <CodeEditor initialValue={this.state.content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
+        <Helmet>
+          <title>{name}</title>
+          <meta property="og:url" content={url} />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content={`${name} - A CodeLife Project`} />
+          <meta property="og:description" content="Description of Codelife" />
+          <meta property="og:image" content={img} />
+          <meta property="og:updated_time" content={new Date().toISOString()} />
+        </Helmet>
+        <CodeEditor initialValue={content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
         <div id="tag">
           <div className="info">
             <span className="pt-icon-standard pt-icon-code"></span>
@@ -112,8 +98,16 @@ class Share extends Component {
   }
 }
 
+Share.need = [
+  fetchData("codeblockContent", "/api/codeBlocks/byUsernameAndFilename?username=<username>&filename=<filename>"),
+  fetchData("projectContent", "/api/projects/byUsernameAndFilename?username=<username>&filename=<filename>"),
+  fetchData("user", "/api/profile/share/<username>")
+];
+
 Share = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location,
+  data: state.data
 }))(Share);
 Share = translate()(Share);
 export default Share;

@@ -50,7 +50,8 @@ class Share extends Component {
     const reported = reports.find(r => r.type === contentType && r.report_id === id);
 
     const url = this.props.location.href;
-    const img = `${this.props.location.origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
+    const origin = this.props.location.origin.includes("localhost") ? this.props.location.origin : this.props.location.origin.replace("http:", "https:");
+    const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
 
     console.log(img);
 

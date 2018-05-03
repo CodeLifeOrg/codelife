@@ -41,8 +41,6 @@ class Share extends Component {
     const contentType = pathname.includes("/codeBlocks/") ? "codeblock" : "project";
 
     const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
-
-    console.log(content);
     
     const {id} = content;
     const name = content.name || content.snippetname;
@@ -51,9 +49,7 @@ class Share extends Component {
 
     const url = this.props.location.href;
     const origin = this.props.location.origin.includes("localhost") ? this.props.location.origin : this.props.location.origin.replace("http:", "https:");
-    const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png?v=${new Date().getTime()}`;
-
-    console.log(img);
+    const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
 
     return (
       <div id="share">
@@ -64,6 +60,7 @@ class Share extends Component {
           <meta property="og:title" content={`${name} - A CodeLife Project`} />
           <meta property="og:description" content="Description of Codelife" />
           <meta property="og:image" content={img} />
+          <meta property="og:updated_time" content={new Date().toISOString()} />
         </Helmet>
         <CodeEditor initialValue={content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
         <div id="tag">

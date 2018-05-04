@@ -169,7 +169,7 @@ class CodeBlockCard extends Component {
           {/* show thumbnail image if one is found */}
           { thumbnailImg
             ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
-              <span className="card-fullscreen-icon pt-icon pt-icon-fullscreen" />
+              <span className="card-action-icon pt-icon pt-icon-fullscreen" />
             </div>
             : null }
 

@@ -45,7 +45,7 @@
 }
 
 /* fullscreen icon — hidden by default */
-.card-fullscreen-icon {
+.card-action-icon {
   /* positioning */
   position: absolute;
   top: var(--gutter-sm);
@@ -115,7 +115,7 @@
   &:focus + .card {
     box-shadow: 0 2px 2em rgba(8, 26, 24, 0.5);
 
-    & .card-fullscreen-icon {
+    & .card-action-icon {
       opacity: 1;
       transform: none;
     }

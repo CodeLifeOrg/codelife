@@ -72,9 +72,16 @@ class ProjectCard extends Component {
       <div className="card-container" key={id}>
 
         {/* cover button */}
-        <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={ this.toggleDialog.bind(this) }>
-          <span className="u-visually-hidden">{ t("Project.View") }</span>
-        </button>
+        { displayname
+          // my project; open in projects view
+          ? <Link className="card-trigger u-absolute-expand u-margin-top-off u-margin-bottom-off" to={`/projects/${username}/${project.name}/edit`}>
+            <span className="u-visually-hidden">{t("edit project")}</span>
+          </Link>
+          // someone else's project; open dialog
+          : <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={ this.toggleDialog.bind(this) }>
+            <span className="u-visually-hidden">{ t("Project.View") }</span>
+          </button>
+        }
 
         {/* card inner */}
         <div className="project-card card">
@@ -82,7 +89,7 @@ class ProjectCard extends Component {
           {/* show thumbnail image if one is found */}
           { thumbnailImg
             ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
-              <span className="card-fullscreen-icon pt-icon pt-icon-fullscreen" />
+              <span className={`card-action-icon pt-icon ${ !displayname ? "pt-icon-fullscreen" : "pt-icon-edit" }`} />
             </div>
             : null }
 
@@ -95,22 +102,13 @@ class ProjectCard extends Component {
             </h3>
 
             {/* author */}
-            { username
-              ? <span className="card-author font-xs">
+            { username &&
+              <span className="card-author font-xs">
                 { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
                   { username ? displayname || username : t("anonymous user") }
                 </Link>
-
-                {/* show edit link if it's yours */}
-                { displayname &&
-                  <span className="edit-link-container">
-                    &nbsp;(<Link className="edit-link link" to={`/projects/${username}/${project.name}/edit`}>
-                      {t("edit project")}
-                    </Link>)
-                  </span>
-                }
               </span>
-              : null }
+            }
 
             {/* likes */}
             {/* <p className="card-likes font-xs u-margin-top-off" id={`project-card-${id}`}>

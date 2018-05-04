@@ -44,9 +44,10 @@ class SignupForm extends Component {
     else if (!username || !email || !password) {
       this.setState({error: {iconName: "id-number", message: t("SignUp.error.IncompleteFields")}});
     }
-    else if ((legal.privacy || legal.terms) && !agreedToTerms) {
-      this.setState({error: {iconName: "saved", message: t("SignUp.error.TermsAgree")}});
-    }
+    // NOTE: disabling terms of service check until we have actual terms of service
+    // else if ((legal.privacy || legal.terms) && !agreedToTerms) {
+    //   this.setState({error: {iconName: "saved", message: t("SignUp.error.TermsAgree")}});
+    // }
     else {
       this.props.signup({username, email, password, redirect});
       this.setState({submitted: true});

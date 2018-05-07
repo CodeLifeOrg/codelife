@@ -123,7 +123,11 @@ class CodeBlockEditor extends Component {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
         if (this.editor) this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-        if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
+        
+        // Uncomment this to test Win Dialog
+        if (this.props.onFirstCompletion) this.props.onFirstCompletion();
+        //if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
+        
         if (codeBlock) {
           // If there's already a snippet, and we've saved new data down to the
           // database, we need to update our "in-memory" snippet to reflect the

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
+import {Helmet} from "react-helmet";
 import CodeBlockEditor from "components/CodeBlockEditor";
 import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
@@ -130,7 +131,7 @@ class Level extends Component {
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
-    this.setState({winMessage, testOpen: false, winOpen: true});
+    this.setState({winMessage, winOpen: true}, this.toggleTest.bind(this));
   }
 
   closeOverlay() {
@@ -214,6 +215,10 @@ class Level extends Component {
     this.setState({school});
   }
 
+  shareHook() {
+
+  }
+
   buildCheckpointPopover() {
     const {t} = this.props;
     const {theme} = this.state.currentIsland;
@@ -259,7 +264,13 @@ class Level extends Component {
   buildWinPopover() {
 
     const {t} = this.props;
-    const {name, theme} = this.state.currentIsland;
+    const {currentIsland} = this.state;
+    const {name, theme} = currentIsland;
+    const {origin} = this.props.location;
+    const {username} = this.props.auth.user;
+    const snippetname = currentIsland.codeBlock ? currentIsland.codeBlock.snippetname : "";
+
+    const shareLink = snippetname.length ? `${origin}/codeBlocks/${username}/${snippetname}` : origin;
 
     return (
       <Dialog
@@ -274,6 +285,13 @@ class Level extends Component {
         </div>
         <div className="pt-dialog-footer">
           <div className="pt-dialog-footer-actions">
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} target="_blank">
+              <Button
+                className="pt-fill"
+                intent={Intent.PRIMARY}
+                text={t("Share This on Facebook")}
+              />
+            </a>
             <Button
               className="pt-fill"
               intent={Intent.PRIMARY}
@@ -420,6 +438,7 @@ class Level extends Component {
 
     return (
       <div id="island" className={ `island ${currentIsland.theme}` }>
+
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
         <div className="island-image image">

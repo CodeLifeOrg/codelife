@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {isAuthenticated} from "datawheel-canon";
+import {Canon, isAuthenticated} from "datawheel-canon";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
@@ -86,7 +86,7 @@ class App extends Component {
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
 
     return (
-      <div id="app">
+      <Canon id="app">
         <Helmet title={ header.title } link={ header.link } meta={ meta } />
         {
           location.href.includes("dev.")
@@ -106,7 +106,7 @@ class App extends Component {
             <Clouds />
             <Loading />
           </div> }
-      </div>
+      </Canon>
     );
 
   }

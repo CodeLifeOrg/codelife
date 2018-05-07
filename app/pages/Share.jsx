@@ -35,10 +35,10 @@ class Share extends Component {
   render() {
     const {t} = this.props;
     const {reports} = this.state;
-    const {pathname} = this.props.location;
+    const {pathname} = this.props.router.location;
     const {codeblockContent, projectContent, user} = this.props.data;
 
-    const contentType = pathname.includes("/codeBlocks/") ? "codeblock" : "project";
+    const contentType = pathname.includes("codeBlocks/") ? "codeblock" : "project";
 
     const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
     

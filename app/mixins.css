@@ -245,10 +245,9 @@
     /* sizing */
     font-size: 0.75em;
     /* positioning */
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 0.25em;
-    margin-top: -0.125em;
+    position: absolute;
+    margin-left: 0.125em;
+    margin-top: 0.25em;
     /* theming */
     color: var(--gray);
     /* transitions */

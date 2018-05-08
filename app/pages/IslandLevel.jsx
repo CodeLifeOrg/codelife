@@ -276,13 +276,15 @@ class Level extends Component {
 
     return (
       <Dialog
-        className={ `share-dialog form-container ${theme}` }
+        className={ `share-dialog form-container u-text-center ${theme}` }
         isOpen={this.state.winOpen}
         onClose={this.closeOverlay.bind(this)} >
 
-        <h2 className="share-heading u-text-center font-xl">
+        <h2 className="share-heading font-xl">
           { t("{{island}} Complete", {island: name}) }
         </h2>
+
+        <p className="share-body font-md u-margin-bottom-off">{this.state.winMessage}</p>
 
         <div className="share-button-group field-container">
           {/* facebook */}
@@ -291,7 +293,7 @@ class Level extends Component {
             <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
             <span className="u-visually-hidden">{ t(" on Facebook") }</span>
           </a>
-          {/* TODO: replace with next island link */}
+          {/* TODO: replace with smarter text, check for next island */}
           <Button
             className="share-button pt-button pt-button-primary font-md"
             intent={Intent.PRIMARY}
@@ -300,8 +302,7 @@ class Level extends Component {
           />
         </div>
 
-        {/* <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} />
-        {this.state.winMessage} */}
+        {/* <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} /> */}
 
       </Dialog>
     );

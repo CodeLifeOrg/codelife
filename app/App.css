@@ -179,6 +179,36 @@ blueprint overrides
       background-color: var(--sky-dark); /* blueprint override */
     }
   }
+
+  /* success! */
+  /* TODO: refactor/rewrite to not use blueprint buttons/intent */
+  &.pt-intent-success {
+    background: var(--sky-dark) !important;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--sky-dark) !important;
+    color: var(--white) !important;
+    border: 1px solid var(--sky-dark) !important;
+    box-shadow: none !important; /* blueprint override */
+
+    &:hover, &:focus {
+      opacity: 0.9 !important; /* make the button seem to light up on hover */
+      background-color: var(--sky-dark) !important; /* blueprint override */
+    }
+  }
+
+  /* danger! */
+  /* TODO: refactor/rewrite to not use blueprint buttons/intent */
+  &.pt-intent-danger {
+    background: var(--danger) !important;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)) left no-repeat, center no-repeat var(--danger) !important;
+    color: var(--white) !important;
+    border: 1px solid var(--danger-dark) !important;
+    box-shadow: none !important; /* blueprint override */
+
+    &:hover, &:focus {
+      opacity: 0.9 !important; /* make the button seem to light up on hover */
+      background-color: var(--danger) !important; /* blueprint override */
+    }
+  }
 }
 
 
@@ -789,16 +819,22 @@ form field layout
 
     /* social theming */
     &[href*=twitter] {
-      background-color: #00ACED;
-      border-color: #00ACED;
+      &, &:hover, &:focus {
+        background-color: #00ACED;
+        border-color: #00ACED;
+      }
     }
     &[href*=facebook] {
-      background-color: #3B5998;
-      border-color: #3B5998;
+      &, &:hover, &:focus {
+        background-color: #3B5998;
+        border-color: #3B5998;
+      }
     }
     &[href*=instagram] {
-      background-color: #E4405F;
-      border-color: #E4405F;
+      &, &:hover, &:focus {
+        background-color: #E4405F;
+        border-color: #E4405F;
+      }
     }
 
     /* align buttons */

@@ -31,6 +31,7 @@ class Projects extends Component {
       originalTitle: "",
       currentTitle: "",
       canEditTitle: true,
+      optout: false,
       projects: [],
       collabs: [],
       showCodeblocks: false,
@@ -167,6 +168,10 @@ class Projects extends Component {
     }
   }
 
+  handleCheckbox() {
+    this.setState({optout: !this.state.optout});
+  }
+
   deleteProject(project) {
     const {t} = this.props;
     const {browserHistory} = this.context;
@@ -236,18 +241,30 @@ class Projects extends Component {
       const name = currentProject.name;
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
       const username = this.props.auth.user.username;
-      axios.post("/api/projects/update", {id, username, name, studentcontent}).then (resp => {
+      let isShareOpen = !currentProject.prompted;
+      if (this.state.optout || currentProject.userprofile.prompted) isShareOpen = false;
+      currentProject.prompted = true;
+      axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-          this.setState({canEditTitle: true});
+          this.setState({canEditTitle: true, isShareOpen});
         }
       });
     }
     else {
       alert("Open a new file first");
     }
+  }
+
+  closeFirstTimeShare() {
+    if (this.state.optout) {
+      axios.post("/api/profile/update", {prompted: true}).then(resp => {
+        resp.status === 200 ? console.log("success") : console.log("error");
+      });
+    }
+    this.setState({isShareOpen: false});
   }
 
   executeCode() {
@@ -427,6 +444,8 @@ class Projects extends Component {
 
               </ul>
 
+              <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button>
+
               {/* project switcher */}
               <div className="project-switcher font-xs">
 
@@ -504,6 +523,24 @@ class Projects extends Component {
             </div>
           </div>
         }
+
+        {/* first time share */}
+        <Dialog
+          isOpen={this.state.isShareOpen}
+          onClose={this.closeFirstTimeShare.bind(this)}
+          title={t("Share your Project")}
+          className="" >
+          <p>{t("Great Job on your Project!")}</p>
+          <p>{t("Anyone can see your public projects.  Share your creation with the world!")}</p>
+          <a className="studio-action-button link"
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
+            target="_blank">
+            <span className="studio-action-button-icon pt-icon pt-icon-share" />
+            <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
+          </a>
+          {t("Never Show this again")}
+          <input type="checkbox" checked={this.state.optout} onChange={this.handleCheckbox.bind(this)}/>
+        </Dialog>
 
 
         {/* collab search */}

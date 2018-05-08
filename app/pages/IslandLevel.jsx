@@ -11,6 +11,8 @@ import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
 
+import FacebookIcon from "components/FacebookIcon.svg.jsx";
+
 import "./IslandLevel.css";
 
 import Loading from "components/Loading";
@@ -105,7 +107,7 @@ class Level extends Component {
     const path = pathname.slice(-1) === "/" ? pathname.slice(0, -1) : pathname;
     const {testOpen} = this.state;
     if (testOpen) {
-      this.setState({testOpen: false});  
+      this.setState({testOpen: false});
       const n = path.indexOf("/show");
       const url = `/${path.substring(0, n !== -1 ? n : path.length)}`;
       browserHistory.push(url);
@@ -171,7 +173,7 @@ class Level extends Component {
 
   allLevelsBeaten() {
     const {levels} = this.state;
-    if (levels && levels.length) { 
+    if (levels && levels.length) {
       let missedLevels = 0;
       for (const l of levels) {
         if (!this.hasUserCompleted(l.id)) missedLevels++;
@@ -274,32 +276,33 @@ class Level extends Component {
 
     return (
       <Dialog
-        className={ theme }
+        className={ `share-dialog form-container ${theme}` }
         isOpen={this.state.winOpen}
-        onClose={this.closeOverlay.bind(this)}
-        title={ t("{{island}} Complete", {island: name}) }
-      >
-        <div className="pt-dialog-body">
-          <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} />
-          {this.state.winMessage}
+        onClose={this.closeOverlay.bind(this)} >
+
+        <h2 className="share-heading u-text-center font-xl">
+          { t("{{island}} Complete", {island: name}) }
+        </h2>
+
+        <div className="share-button-group field-container">
+          {/* facebook */}
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+            <FacebookIcon />
+            <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
+            <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+          </a>
+          {/* TODO: replace with next island link */}
+          <Button
+            className="share-button pt-button pt-button-primary font-md"
+            intent={Intent.PRIMARY}
+            onClick={this.closeOverlay.bind(this)}
+            text={t("Next island")}
+          />
         </div>
-        <div className="pt-dialog-footer">
-          <div className="pt-dialog-footer-actions">
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} target="_blank">
-              <Button
-                className="pt-fill"
-                intent={Intent.PRIMARY}
-                text={t("Share This on Facebook")}
-              />
-            </a>
-            <Button
-              className="pt-fill"
-              intent={Intent.PRIMARY}
-              onClick={this.closeOverlay.bind(this)}
-              text={t("Keep Exploring")}
-            />
-          </div>
-        </div>
+
+        {/* <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} />
+        {this.state.winMessage} */}
+
       </Dialog>
     );
   }
@@ -482,7 +485,7 @@ class Level extends Component {
               ? <Collapse isOpen={showMore}><div className="snippets card-list snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
               : null }
             { otherCodeBlockItemsAfterFold.length
-              ? <button className="pt-button toggle-show u-margin-top-off" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <button className="pt-button pt-intent-primary toggle-show u-margin-top-off" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
               </button>
               : null }

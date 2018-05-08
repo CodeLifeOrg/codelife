@@ -66,7 +66,7 @@ module.exports = function(app) {
       });
   });
 
-  // Used by ReportBox and ReportViewer to ban codeblocks, Admin Only
+  // Used by ReportBox and ReportViewer to ban or feature codeblocks, Admin Only
   app.post("/api/codeBlocks/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
     db.codeblocks.update({status}, {where: {id}}).then(u => {
@@ -74,12 +74,20 @@ module.exports = function(app) {
     });
   });
 
+  app.post("/api/codeBlocks/setfeatured", isRole(2), (req, res) => {
+    const {featured, id} = req.body;
+    db.codeblocks.update({featured}, {where: {id}}).then(u => res.json(u).end());
+  });
+
   // Used by Home.jsx to get hand-picked featured blocks
   app.get("/api/codeBlocks/featured", (req, res)  => {
     db.codeblocks.findAll({
+      /*
       where: {
         [Op.or]: [{id: 834}, {id: 921}, {id: 30}]
       },
+      */
+      where: {featured: true},
       include: cbIncludes
     })
       .then(cbRows =>

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
@@ -26,6 +27,15 @@ class ProjectCard extends Component {
     this.setState({open: !this.state.open});
   }
 
+  toggleFeature() {
+    const {project} = this.props;
+    project.featured = !project.featured;
+    axios.post("/api/projects/setfeatured", {id: project.id, featured: project.featured}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
+    this.forceUpdate();
+  }
+
   handleReport(report) {
     const {project} = this.props;
     project.reported = true;
@@ -35,7 +45,7 @@ class ProjectCard extends Component {
   render() {
     const {open} = this.state;
     const {location, project, t, user} = this.props;
-    const {datemodified, id, likes, liked, name, studentcontent, username, reported} = project;
+    const {datemodified, id, likes, liked, name, studentcontent, username, reported, featured} = project;
 
     const mine = this.props.user && project.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
@@ -169,6 +179,15 @@ class ProjectCard extends Component {
             {/* show actions if logged in */}
             { user &&
               <div className="card-dialog-footer-actions project-dialog-footer-actions pt-dialog-footer-actions">
+
+                {/* show feature button if user is admin */}
+                { user.role === 2 &&
+                  <button 
+                    onClick={this.toggleFeature.bind(this)}
+                    className={`pt-button ${featured ? "pt-intent-success" : "pt-intent"}`}>
+                    {featured ? "Featured" : "Feature"}
+                  </button>
+                }
 
                 {/* flag content */}
                 <Popover2

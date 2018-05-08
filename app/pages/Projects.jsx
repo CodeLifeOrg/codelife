@@ -427,6 +427,8 @@ class Projects extends Component {
 
               </ul>
 
+              <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button>
+
               {/* project switcher */}
               <div className="project-switcher font-xs">
 
@@ -504,6 +506,22 @@ class Projects extends Component {
             </div>
           </div>
         }
+
+        {/* first time share */}
+        <Dialog
+          isOpen={this.state.isShareOpen}
+          onClose={() => this.setState({isShareOpen: !this.state.isShareOpen})}
+          title={t("Share your Project")}
+          className="" >
+          <p>{t("Great Job on your First Project!")}</p>
+          <p>{t("Anyone can see your public projects.  Share your creation with the world!")}</p>
+          <a className="studio-action-button link"
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
+            target="_blank">
+            <span className="studio-action-button-icon pt-icon pt-icon-share" />
+            <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
+          </a>
+        </Dialog>
 
 
         {/* collab search */}

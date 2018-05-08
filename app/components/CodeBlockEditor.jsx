@@ -125,7 +125,7 @@ class CodeBlockEditor extends Component {
         if (this.editor) this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
         
         // Uncomment this to test Win Dialog
-        //if (this.props.onFirstCompletion) this.props.onFirstCompletion();
+        // if (this.props.onFirstCompletion) this.props.onFirstCompletion();
         if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
         
         if (codeBlock) {

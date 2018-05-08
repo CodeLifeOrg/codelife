@@ -87,7 +87,7 @@ class App extends Component {
 
     return (
       <Canon id="app">
-        <Helmet title={ header.title } link={ header.link } meta={ meta } />
+        <Helmet link={ header.link } meta={ meta } />
         {
           location.href.includes("dev.")
             ? <div className="devbar">Development Server. Do not edit content here!</div>

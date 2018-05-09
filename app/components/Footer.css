@@ -173,14 +173,61 @@
     }
   }
 
+  /* social links container */
+  & .footer-social-list {
+    margin-bottom: var(--gutter-md);
+    margin-top: 0.5rem;
+
+    /* adjustment on side by side footer layout */
+    @add-mixin min-lg {
+      margin-top: 0; /* reset */
+      /* account for built in svg padding */
+      right: -0.25rem;
+      top: -0.25rem;
+    }
+  }
+
+  /* social link list item layout */
+  & .footer-social-item {
+    display: inline-block;
+    vertical-align: middle;
+
+    & + .footer-social-item {
+      margin-left: var(--gutter-xs);
+    }
+  }
+
+  /* social link interactions */
+  & .footer-social-link {
+
+    /* svg sizing */
+    & .social-svg {
+      /* sizing */
+      height: 3rem;
+      /* theming */
+      fill: var(--dark-1);
+      /* transitions */
+      transition: fill 0.2s ease;
+    }
+
+    /* offset built-in svg padding */
+    &.youtube-footer-social-link .social-svg {
+      transform: scale(1.325); /* fudge youtube size */
+    }
+
+    /* adjust icon fill on hover */
+    &:hover, &:focus {
+      &.facebook-footer-social-link .social-svg  { fill: #3B5998; }
+      &.twitter-footer-social-link .social-svg   { fill: #00ACED; }
+      &.instagram-footer-social-link .social-svg { fill: #E4405F; }
+      &.youtube-footer-social-link .social-svg   { fill: #FF0000; }
+    }
+  }
+
+
+
   /* credits */
   & .footer-credits {
-    margin-top: var(--gutter-sm);
-
-    /* positioning adjustment */
-    @media (min-width: 1240px) {
-      margin-top: var(--gutter-lg);
-    }
 
     /* make partner links subtle */
     & .footer-credits-link {

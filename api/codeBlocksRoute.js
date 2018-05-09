@@ -48,7 +48,7 @@ module.exports = function(app) {
   app.post("/api/codeBlocks/update", isAuthenticated, (req, res) => {
     db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.iid}, returning: true, plain: true})
       .then(u => {
-        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${req.body.name}`;
+        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${req.body.name}?screenshot=true`;
         const width = 600;
         const height = 315;
         const page = true;

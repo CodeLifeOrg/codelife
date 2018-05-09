@@ -51,6 +51,8 @@ class Share extends Component {
     const origin = this.props.location.origin.includes("localhost") ? this.props.location.origin : this.props.location.origin.replace("http:", "https:");
     const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
 
+    const isScreenshot = this.props.location.query.screenshot === "true"
+
     return (
       <div id="share">
         <Helmet>
@@ -63,36 +65,38 @@ class Share extends Component {
           <meta property="og:updated_time" content={new Date().toISOString()} />
         </Helmet>
         <CodeEditor initialValue={content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
-        <div id="tag">
-          <div className="info">
-            <span className="pt-icon-standard pt-icon-code"></span>
-            { name }{ user ? ` ${ t("by") } ` : "" }{ user ? <a className="user-link" href={ `/profile/${ user.username }` }>{ user.name || user.username }</a> : null }
+        { !isScreenshot && 
+          <div id="tag">
+            <div className="info">
+              <span className="pt-icon-standard pt-icon-code"></span>
+              { name }{ user ? ` ${ t("by") } ` : "" }{ user ? <a className="user-link" href={ `/profile/${ user.username }` }>{ user.name || user.username }</a> : null }
+            </div>
+            <div className="logo">
+              { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
+            </div>
+            {
+              content.status === "banned" || !this.props.auth.user
+                ? null
+                : <div className="actions">
+                  <Popover
+                    interactionKind={PopoverInteractionKind.CLICK}
+                    popoverClassName="pt-popover-content-sizing"
+                    position={Position.TOP_RIGHT}
+                    inline={true}
+                  >
+                    <Button
+                      intent={reported ? "" : Intent.DANGER}
+                      iconName="flag"
+                      text={reported ? "Flagged" : "Flag"}
+                    />
+                    <div>
+                      <ReportBox reportid={id} contentType={contentType} handleReport={this.handleReport.bind(this)}/>
+                    </div>
+                  </Popover>
+                </div>
+            }
           </div>
-          <div className="logo">
-            { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
-          </div>
-          {
-            content.status === "banned" || !this.props.auth.user
-              ? null
-              : <div className="actions">
-                <Popover
-                  interactionKind={PopoverInteractionKind.CLICK}
-                  popoverClassName="pt-popover-content-sizing"
-                  position={Position.TOP_RIGHT}
-                  inline={true}
-                >
-                  <Button
-                    intent={reported ? "" : Intent.DANGER}
-                    iconName="flag"
-                    text={reported ? "Flagged" : "Flag"}
-                  />
-                  <div>
-                    <ReportBox reportid={id} contentType={contentType} handleReport={this.handleReport.bind(this)}/>
-                  </div>
-                </Popover>
-              </div>
-          }
-        </div>
+        }
       </div>
     );
   }

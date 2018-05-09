@@ -86,7 +86,7 @@ class App extends Component {
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
 
     return (
-      <Canon id="app">
+      <Canon id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />
         {
           location.href.includes("dev.")

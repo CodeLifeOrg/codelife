@@ -148,7 +148,7 @@ module.exports = function(app) {
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
     db.projects.update({studentcontent: req.body.studentcontent, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
       .then(u => {
-        const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}`;
+        const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}?screenshot=true`;
         const width = 600;
         const height = 315;
         const page = true;

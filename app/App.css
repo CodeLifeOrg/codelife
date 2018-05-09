@@ -55,7 +55,6 @@ base
 body {
   font-family: var(--body-font);
   font-weight: 400;
-  overflow-x: hidden;
   font-size: 100%; /* override blueprint */
   color: var(--dark-3);
 }
@@ -449,6 +448,22 @@ label.pt-control  {
 /* -----------------------------------
 layout
 ----------------------------------- */
+
+/* fix overflow */
+body {
+  overflow-y: auto;
+}
+/* if vh units are supported, move overflow to app */
+@supports (height: 100vh) {
+  body {
+    overflow-y: hidden;
+  }
+  #app {
+    overflow-y: auto;
+    height: 100vh;
+  }
+}
+
 
 .content {
   padding: var(--gutter-md);

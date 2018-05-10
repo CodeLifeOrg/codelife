@@ -55,6 +55,7 @@ class CodeBlockCard extends Component {
     codeBlock.featured = !codeBlock.featured;
     axios.post("/api/codeBlocks/setfeatured", {id: codeBlock.id, featured: codeBlock.featured}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
+      if (this.props.onToggleFeature) this.props.onToggleFeature();
     });
     this.forceUpdate();
   }

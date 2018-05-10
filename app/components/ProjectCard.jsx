@@ -32,6 +32,7 @@ class ProjectCard extends Component {
     project.featured = !project.featured;
     axios.post("/api/projects/setfeatured", {id: project.id, featured: project.featured}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
+      if (this.props.onToggleFeature) this.props.onToggleFeature();
     });
     this.forceUpdate();
   }

@@ -38,6 +38,15 @@ module.exports = function(app) {
     }).then(u => res.json(u).end());
   });
 
+  // Used by Featured.jsx to get a list of all projects
+  app.get("/api/projects/all", isRole(2), (req, res) => {
+    db.projects.findAll({include: pInclude}).then(pRows => 
+      res.json(pRows
+        .map(p => flattenProject(req.user, p.toJSON())))
+        .end()
+    );
+  });
+
   // Used by Projects to get a list of projects by the logged-in user
   app.get("/api/projects/mine", isAuthenticated, (req, res) => {
     db.projects.findAll({

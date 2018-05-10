@@ -1,15 +1,36 @@
-#share {
+@import "../mixins.css";
+
+/* hide redundant overflow scrollbar */
+#app.share-app {
+  overflow: hidden;
+}
+
+
+/* main page container */
+.share-render {
   height: 100vh;
   width: 100%;
-  & #iframe {
-    border: 0;
-    display: block;
-    height: calc(100vh - var(--gutter-lg));
-    margin: 0;
-    overflow-y: auto;
-    width: 100%;
+
+  /* rendered project defaults */
+  & .code-editor {
+    @add-mixin absolute-expand;
+    overflow: auto;
+
+    & .render {
+      border: none;
+    }
   }
-  & #tag {
+
+  /* footer */
+  & .share-footer {
+    /* positioning */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    /* sizing */
+    width: 100%;
+    /* align children */
     align-items: center;
     background-color: var(--sky);
     box-shadow: 0 0 var(--gutter-xxs) rgba(0, 0, 0, 0.1);
@@ -19,6 +40,7 @@
     justify-content: space-between;
     margin: 0;
     padding: 0 var(--gutter-md);
+
     & .info {
       flex: 1;
       & .pt-icon-standard {
@@ -29,13 +51,22 @@
         color: var(--white);
       }
     }
-    & .logo {
+
+    /* logo */
+    & .share-footer-logo {
       align-items: center;
       display: flex;
-      & img {
-        margin-left: var(--gutter-xxs);
-        margin-top: 2px;
-        width: 80px;
+
+      /* container positioning */
+      & .share-footer-logo-link {
+        line-height: 0.5; /* align logo with text */
+        margin-left: 0.5em;
+
+        /* set logo size */
+        & .logo-svg {
+          width: 7.25rem;
+          height: 1.625rem;
+        }
       }
     }
     & .actions {

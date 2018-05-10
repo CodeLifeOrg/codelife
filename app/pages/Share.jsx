@@ -5,6 +5,7 @@ import {fetchData} from "datawheel-canon";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import CodeEditor from "components/CodeEditor/CodeEditor";
+import Logo from "components/Logo.svg";
 import {Helmet} from "react-helmet";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
 import "./Share.css";
@@ -21,7 +22,7 @@ class Share extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/reports").then(resp => 
+    axios.get("/api/reports").then(resp =>
       resp.status === 200 ? this.setState({reports: resp.data}) : console.log("error")
     );
   }
@@ -35,13 +36,13 @@ class Share extends Component {
   render() {
     const {t} = this.props;
     const {reports} = this.state;
-    const {pathname} = this.props.location;
+    const {pathname} = this.props.router.location;
     const {codeblockContent, projectContent, user} = this.props.data;
 
-    const contentType = pathname.includes("/codeBlocks/") ? "codeblock" : "project";
+    const contentType = pathname.includes("codeBlocks/") ? "codeblock" : "project";
 
     const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
-    
+
     const {id} = content;
     const name = content.name || content.snippetname;
 
@@ -51,8 +52,10 @@ class Share extends Component {
     const origin = this.props.location.origin.includes("localhost") ? this.props.location.origin : this.props.location.origin.replace("http:", "https:");
     const img = `${origin}/${contentType === "codeblock" ? "cb_images" : "pj_images"}/${content.id}.png`;
 
+    const isScreenshot = this.props.location.query.screenshot === "true";
+
     return (
-      <div id="share">
+      <div id="share" className="share-render">
         <Helmet>
           <title>{name}</title>
           <meta property="og:url" content={url} />
@@ -62,25 +65,41 @@ class Share extends Component {
           <meta property="og:image" content={img} />
           <meta property="og:updated_time" content={new Date().toISOString()} />
         </Helmet>
-        <CodeEditor initialValue={content.studentcontent} noZoom={true} readOnly={true} showEditor={false} ref={c => this.editor = c} tabs={false} showConsole={false} />
-        <div id="tag">
-          <div className="info">
-            <span className="pt-icon-standard pt-icon-code"></span>
-            { name }{ user ? ` ${ t("by") } ` : "" }{ user ? <a className="user-link" href={ `/profile/${ user.username }` }>{ user.name || user.username }</a> : null }
-          </div>
-          <div className="logo">
-            { t("Hosted by") } <a href="/"><img src="/logo/logo-sm.png" /></a>
-          </div>
-          {
-            content.status === "banned" || !this.props.auth.user
+
+        {/* rendered website */}
+        <CodeEditor
+          initialValue={content.studentcontent}
+          noZoom={true}
+          readOnly={true}
+          showEditor={false}
+          ref={c => this.editor = c}
+          tabs={false}
+          showConsole={false} />
+
+        {/* footer */}
+        { !isScreenshot &&
+          <div className="share-footer" id="tag">
+
+            {/* user */}
+            <div className="info">
+              <span className="pt-icon-standard pt-icon-code"></span>
+              { name }{ user ? ` ${ t("by") } ` : "" }{ user ? <a className="user-link" href={ `/profile/${ user.username }` }>{ user.name || user.username }</a> : null }
+            </div>
+
+            {/* codelife logo & link */}
+            <div className="share-footer-logo">
+              { t("Hosted by") } <a className="share-footer-logo-link" href="/"><Logo /></a>
+            </div>
+
+            {/* report button */}
+            { content.status === "banned" || !this.props.auth.user
               ? null
               : <div className="actions">
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
                   popoverClassName="pt-popover-content-sizing"
                   position={Position.TOP_RIGHT}
-                  inline={true}
-                >
+                  inline={true}>
                   <Button
                     intent={reported ? "" : Intent.DANGER}
                     iconName="flag"
@@ -91,8 +110,9 @@ class Share extends Component {
                   </div>
                 </Popover>
               </div>
-          }
-        </div>
+            }
+          </div>
+        }
       </div>
     );
   }

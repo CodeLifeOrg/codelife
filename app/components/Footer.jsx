@@ -4,6 +4,10 @@ import {Link} from "react-router";
 import {connect} from "react-redux";
 import "./Footer.css";
 
+import FacebookIcon from "./FacebookIcon.svg.jsx";
+import InstagramIcon from "./InstagramIcon.svg.jsx";
+import YoutubeIcon from "./YoutubeIcon.svg.jsx";
+
 class Footer extends Component {
   render() {
     const {className, currentPath, t, user, serverLocation} = this.props;
@@ -55,6 +59,14 @@ class Footer extends Component {
     ];
 
 
+    // social links
+    const socialLinks = [
+      {id: 1, title: "facebook", link: "https://www.facebook.com/CodeLifeBR/"},
+      {id: 2, title: "youtube", link: "https://www.youtube.com/channel/UCR6iTxyV9jdSy21eqS1Ovyg"},
+      {id: 3, title: "instagram", link: "https://www.instagram.com/codelifebr/"}
+    ];
+
+
     // loop through arrays and create corresponding list items
     const aboutLinkItems = aboutLinks.map(aboutLink =>
       <li className="footer-item" key={aboutLink.id}>
@@ -79,6 +91,17 @@ class Footer extends Component {
     const languageLinkItems = languageLinks.map(languageLink =>
       <li className="footer-item" key={languageLink.id}>
         <a className="footer-link font-sm" href={languageLink.link}>{t(languageLink.title)}</a>
+      </li>
+    );
+    // social links
+    const socialLinkItems = socialLinks.map(socialLink =>
+      <li className="footer-social-item" key={socialLink.id}>
+        <a className={`footer-social-link font-sm ${socialLink.title}-footer-social-link`} href={socialLink.link}>
+          <span className="u-visually-hidden">{t(socialLink.title)}</span>
+          { socialLink.title === "facebook" && <FacebookIcon /> }
+          { socialLink.title === "youtube" && <YoutubeIcon /> }
+          { socialLink.title === "instagram" && <InstagramIcon /> }
+        </a>
       </li>
     );
 
@@ -128,6 +151,11 @@ class Footer extends Component {
           </nav>
 
           <div className="footer-credits-container">
+
+            {/* social links */}
+            <ul className="footer-social-list u-list-reset">
+              { socialLinkItems }
+            </ul>
 
             {/* datawheel logo */}
             <a className="footer-logo-link" target="_blank" rel="noopener noreferrer" href="http://www.datawheel.us/">

@@ -21,7 +21,7 @@ function flattenProject(user, p) {
 }
 
 const pInclude = [
-  {association: "userprofile", attributes: ["bio", "sharing", "uid", "img"]},
+  {association: "userprofile", attributes: ["bio", "sharing", "uid", "img", "prompted"]},
   {association: "user", attributes: ["username", "id", "name"]},
   {association: "reportlist"},
   {association: "collaborators", attributes: ["uid", "sid", "gid", "img", "bio"], include: [{association: "user", attributes: ["username", "email", "name"]}]}
@@ -36,6 +36,15 @@ module.exports = function(app) {
     db.userprofiles.findAll({
       include: [{association: "user"}]
     }).then(u => res.json(u).end());
+  });
+
+  // Used by Featured.jsx to get a list of all projects
+  app.get("/api/projects/all", isRole(2), (req, res) => {
+    db.projects.findAll({include: pInclude}).then(pRows => 
+      res.json(pRows
+        .map(p => flattenProject(req.user, p.toJSON())))
+        .end()
+    );
   });
 
   // Used by Projects to get a list of projects by the logged-in user
@@ -76,9 +85,14 @@ module.exports = function(app) {
   // Used by home for feature list.  No Authentication required.
   app.get("/api/projects/featured", (req, res) => {
     db.projects.findAll({
+      
+      /*
       where: {
         [Op.or]: [{id: 1026}, {id: 1020}, {id: 1009}]
       },
+      */
+
+      where: {featured: true},
       include: pInclude
     })
       .then(pRows =>
@@ -141,10 +155,9 @@ module.exports = function(app) {
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
-    db.projects.update({studentcontent: req.body.studentcontent, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
+    db.projects.update({studentcontent: req.body.studentcontent, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
       .then(u => {
-        console.log(req.headers);
-        const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}`;
+        const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}?screenshot=true`;
         const width = 600;
         const height = 315;
         const page = true;
@@ -162,12 +175,17 @@ module.exports = function(app) {
       });
   });
 
-  // Used by Admins in ReportBox and ReportViewer to Ban pages
+  // Used by Admins in ReportBox and ReportViewer to Ban or Feature pages
   app.post("/api/projects/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
     db.projects.update({status}, {where: {id}}).then(u => {
       db.reports.update({status}, {where: {type: "project", report_id: id}}).then(() => res.json(u).end());
     });
+  });
+
+  app.post("/api/projects/setfeatured", isRole(2), (req, res) => {
+    const {featured, id} = req.body;
+    db.projects.update({featured}, {where: {id}}).then(u => res.json(u).end());
   });
 
   // Used by Projects to create a new project

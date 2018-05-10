@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
@@ -26,6 +27,16 @@ class ProjectCard extends Component {
     this.setState({open: !this.state.open});
   }
 
+  toggleFeature() {
+    const {project} = this.props;
+    project.featured = !project.featured;
+    axios.post("/api/projects/setfeatured", {id: project.id, featured: project.featured}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+      if (this.props.onToggleFeature) this.props.onToggleFeature();
+    });
+    this.forceUpdate();
+  }
+
   handleReport(report) {
     const {project} = this.props;
     project.reported = true;
@@ -35,7 +46,7 @@ class ProjectCard extends Component {
   render() {
     const {open} = this.state;
     const {location, project, t, user} = this.props;
-    const {datemodified, id, likes, liked, name, studentcontent, username, reported} = project;
+    const {datemodified, id, likes, liked, name, studentcontent, username, reported, featured} = project;
 
     const mine = this.props.user && project.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
@@ -72,9 +83,16 @@ class ProjectCard extends Component {
       <div className="card-container" key={id}>
 
         {/* cover button */}
-        <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={ this.toggleDialog.bind(this) }>
-          <span className="u-visually-hidden">{ t("Project.View") }</span>
-        </button>
+        { displayname
+          // my project; open in projects view
+          ? <Link className="card-trigger u-absolute-expand u-margin-top-off u-margin-bottom-off" to={`/projects/${username}/${project.name}/edit`}>
+            <span className="u-visually-hidden">{t("edit project")}</span>
+          </Link>
+          // someone else's project; open dialog
+          : <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={ this.toggleDialog.bind(this) }>
+            <span className="u-visually-hidden">{ t("Project.View") }</span>
+          </button>
+        }
 
         {/* card inner */}
         <div className="project-card card">
@@ -82,7 +100,7 @@ class ProjectCard extends Component {
           {/* show thumbnail image if one is found */}
           { thumbnailImg
             ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
-              <span className="card-fullscreen-icon pt-icon pt-icon-fullscreen" />
+              <span className={`card-action-icon pt-icon ${ !displayname ? "pt-icon-fullscreen" : "pt-icon-edit" }`} />
             </div>
             : null }
 
@@ -95,22 +113,13 @@ class ProjectCard extends Component {
             </h3>
 
             {/* author */}
-            { username
-              ? <span className="card-author font-xs">
+            { username &&
+              <span className="card-author font-xs">
                 { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
                   { username ? displayname || username : t("anonymous user") }
                 </Link>
-
-                {/* show edit link if it's yours */}
-                { displayname &&
-                  <span className="edit-link-container">
-                    &nbsp;(<Link className="edit-link link" to={`/projects/${username}/${project.name}/edit`}>
-                      {t("edit project")}
-                    </Link>)
-                  </span>
-                }
               </span>
-              : null }
+            }
 
             {/* likes */}
             {/* <p className="card-likes font-xs u-margin-top-off" id={`project-card-${id}`}>
@@ -171,6 +180,15 @@ class ProjectCard extends Component {
             {/* show actions if logged in */}
             { user &&
               <div className="card-dialog-footer-actions project-dialog-footer-actions pt-dialog-footer-actions">
+
+                {/* show feature button if user is admin */}
+                { user.role === 2 &&
+                  <button 
+                    onClick={this.toggleFeature.bind(this)}
+                    className={`pt-button ${featured ? "pt-intent-success" : "pt-intent"}`}>
+                    {featured ? "Featured" : "Feature"}
+                  </button>
+                }
 
                 {/* flag content */}
                 <Popover2

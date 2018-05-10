@@ -218,6 +218,12 @@
   margin: 0; /* smush buttons together */
   min-width: var(--button-min-width); /* for buttons with small text, this will work nicely */
 
+  & > .button,
+  & > .pt-button {
+    display: inline-block;
+    width: auto;
+  }
+
   /* first button, but not if it's the only button */
   &:first-child:not(:last-child)  {
     border-radius: 20em 0 0 20em;
@@ -245,10 +251,9 @@
     /* sizing */
     font-size: 0.75em;
     /* positioning */
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 0.25em;
-    margin-top: -0.125em;
+    position: absolute;
+    margin-left: 0.125em;
+    margin-top: 0.25em;
     /* theming */
     color: var(--gray);
     /* transitions */

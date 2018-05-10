@@ -136,17 +136,6 @@ STUDENT CODEBLOCKS
     /* positioning */
     display: inline-block; /* honor text-align */
     margin-top: var(--gutter-md);
-    /* theming */
-    color: var(--sky-dark);
-    /* transitions */
-    transition:
-      color 0.2s,
-      background-color 0.2s;
-
-    /* interactions */
-    &:hover, &:focus {
-      color: var(--black);
-    }
 
     /* icon */
     & > .pt-icon-standard {
@@ -521,6 +510,33 @@ STATES & INTERACTIONS
     &:hover, &:focus {
       cursor: pointer; /* make this div feel more like a link */
       margin-top: -2px; /* bounce that box (translate & top already in use) */
+    }
+  }
+}
+
+/* -------------------------------
+SHARE / NEXT ISLAND DIALOG
+------------------------------- */
+
+/* limit share dialog width */
+.share-dialog {
+  max-width: 42rem;
+}
+/* reset hover effect on facebook icon */
+.share-button[href*=facebook] {
+  &:hover, &:focus {
+    opacity: 0.9;
+  }
+}
+/* move buttons inline */
+.share-button-group {
+  @add-mixin min-sm {
+    & .share-button {
+      width: calc(50% - 1rem);
+
+      & + .share-button {
+        margin-left: 2rem;
+      }
     }
   }
 }

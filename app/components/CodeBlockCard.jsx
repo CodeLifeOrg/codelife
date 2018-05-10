@@ -50,6 +50,16 @@ class CodeBlockCard extends Component {
     this.forkInput.select();
   }
 
+  toggleFeature() {
+    const {codeBlock} = this.state;
+    codeBlock.featured = !codeBlock.featured;
+    axios.post("/api/codeBlocks/setfeatured", {id: codeBlock.id, featured: codeBlock.featured}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+      if (this.props.onToggleFeature) this.props.onToggleFeature();
+    });
+    this.forceUpdate();
+  }
+
   toggleFork() {
     const {t} = this.props;
     if (this.props.blockFork) {
@@ -122,7 +132,7 @@ class CodeBlockCard extends Component {
     if (!codeBlock) return <Loading />;
 
     const {t, userProgress, theme, icon, user} = this.props;
-    const {id, lid, liked, reported, likes, snippetname, studentcontent, username} = codeBlock;
+    const {id, lid, liked, reported, likes, snippetname, studentcontent, username, featured} = codeBlock;
 
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
@@ -169,7 +179,7 @@ class CodeBlockCard extends Component {
           {/* show thumbnail image if one is found */}
           { thumbnailImg
             ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
-              <span className="card-fullscreen-icon pt-icon pt-icon-fullscreen" />
+              <span className="card-action-icon pt-icon pt-icon-fullscreen" />
             </div>
             : null }
 
@@ -253,6 +263,15 @@ class CodeBlockCard extends Component {
             {/* show actions if logged in */}
             { user &&
               <div className="card-dialog-footer-actions codeblock-dialog-footer-actions pt-dialog-footer-actions">
+
+                {/* show feature button if user is admin */}
+                { user.role === 2 &&
+                  <button 
+                    onClick={this.toggleFeature.bind(this)}
+                    className={`pt-button ${featured ? "pt-intent-success" : "pt-intent"}`}>
+                    {featured ? "Featured" : "Feature"}
+                  </button>
+                }
 
                 {/* likes */}
                 <p className="card-dialog-footer-action codeblock-dialog-footer-action card-likes font-xs">

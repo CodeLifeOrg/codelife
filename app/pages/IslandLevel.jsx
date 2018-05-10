@@ -5,10 +5,13 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
+import {Helmet} from "react-helmet";
 import CodeBlockEditor from "components/CodeBlockEditor";
 import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
+
+import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
 import "./IslandLevel.css";
 
@@ -104,7 +107,7 @@ class Level extends Component {
     const path = pathname.slice(-1) === "/" ? pathname.slice(0, -1) : pathname;
     const {testOpen} = this.state;
     if (testOpen) {
-      this.setState({testOpen: false});  
+      this.setState({testOpen: false});
       const n = path.indexOf("/show");
       const url = `/${path.substring(0, n !== -1 ? n : path.length)}`;
       browserHistory.push(url);
@@ -130,7 +133,7 @@ class Level extends Component {
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
-    this.setState({winMessage, testOpen: false, winOpen: true});
+    this.setState({winMessage, winOpen: true}, this.toggleTest.bind(this));
   }
 
   closeOverlay() {
@@ -170,7 +173,7 @@ class Level extends Component {
 
   allLevelsBeaten() {
     const {levels} = this.state;
-    if (levels && levels.length) { 
+    if (levels && levels.length) {
       let missedLevels = 0;
       for (const l of levels) {
         if (!this.hasUserCompleted(l.id)) missedLevels++;
@@ -212,6 +215,10 @@ class Level extends Component {
 
   pickedSchool(school) {
     this.setState({school});
+  }
+
+  shareHook() {
+
   }
 
   buildCheckpointPopover() {
@@ -259,29 +266,44 @@ class Level extends Component {
   buildWinPopover() {
 
     const {t} = this.props;
-    const {name, theme} = this.state.currentIsland;
+    const {currentIsland} = this.state;
+    const {name, theme} = currentIsland;
+    const {origin} = this.props.location;
+    const {username} = this.props.auth.user;
+    const snippetname = currentIsland.codeBlock ? currentIsland.codeBlock.snippetname : "";
+
+    const shareLink = snippetname.length ? `${origin}/codeBlocks/${username}/${snippetname}` : origin;
 
     return (
       <Dialog
-        className={ theme }
+        className={ `share-dialog form-container u-text-center ${theme}` }
         isOpen={this.state.winOpen}
-        onClose={this.closeOverlay.bind(this)}
-        title={ t("{{island}} Complete", {island: name}) }
-      >
-        <div className="pt-dialog-body">
-          <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} />
-          {this.state.winMessage}
+        onClose={this.closeOverlay.bind(this)} >
+
+        <h2 className="share-heading font-xl">
+          { t("{{island}} Complete", {island: name}) }
+        </h2>
+
+        <p className="share-body font-md u-margin-bottom-off">{this.state.winMessage}</p>
+
+        <div className="share-button-group field-container">
+          {/* facebook */}
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+            <FacebookIcon />
+            <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
+            <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+          </a>
+          {/* TODO: replace with smarter text, check for next island */}
+          <Button
+            className="share-button pt-button pt-button-primary font-md"
+            intent={Intent.PRIMARY}
+            onClick={this.closeOverlay.bind(this)}
+            text={t("Next island")}
+          />
         </div>
-        <div className="pt-dialog-footer">
-          <div className="pt-dialog-footer-actions">
-            <Button
-              className="pt-fill"
-              intent={Intent.PRIMARY}
-              onClick={this.closeOverlay.bind(this)}
-              text={t("Keep Exploring")}
-            />
-          </div>
-        </div>
+
+        {/* <div className="island-icon" style={{backgroundImage: `url('/islands/${theme}-small.png')`}} /> */}
+
       </Dialog>
     );
   }
@@ -420,6 +442,7 @@ class Level extends Component {
 
     return (
       <div id="island" className={ `island ${currentIsland.theme}` }>
+
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
         <div className="island-image image">
@@ -463,7 +486,7 @@ class Level extends Component {
               ? <Collapse isOpen={showMore}><div className="snippets card-list snippets-more">{otherCodeBlockItemsAfterFold}</div></Collapse>
               : null }
             { otherCodeBlockItemsAfterFold.length
-              ? <button className="pt-button toggle-show u-margin-top-off" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
+              ? <button className="pt-button pt-intent-primary toggle-show u-margin-top-off" onClick={this.showMore.bind(this)}><span className={ `pt-icon-standard pt-icon-double-chevron-${ showMore ? "up" : "down" }` } />
                 { showMore ? t("Show Less") : t("Show {{x}} More", {x: otherCodeBlockItemsAfterFold.length}) }
               </button>
               : null }

@@ -234,7 +234,7 @@
     background-color: var(--white);
     border: none;
     flex: 1;
-    overflow: scroll;
+    overflow: hidden;
   }
 }
 

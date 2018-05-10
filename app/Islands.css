@@ -69,8 +69,8 @@ then add the theme name to the @each loop below */
       border-color: var(--$(theme)-island-dark);
     }
     /* set background color and border color */
-    &.pt-button.pt-intent-primary,
-    & .pt-button.pt-intent-primary {
+    &.pt-button,
+    & .pt-button {
       background-color: var(--$(theme)-island-medium);
       border-color: var(--$(theme)-island-medium);
       /* interactions */

@@ -1,5 +1,7 @@
 @import '../mixins.css';
 
+/* NOTE: shared styles between Projects and CodeBlockEditor found in `studio.css` */
+
 /* de-blueprintify */
 .codeblockeditor-dialog {
   @add-mixin absolute-expand; /* position codeblock dialog */

@@ -29,7 +29,10 @@ class CodeEditor extends Component {
      * This is because we use postMessage to communicate with the sandbox, and we need hard-coded pages
      * on the remote side to receive the code and render it.
     */
-    const remotePage = props.location.hostname.replace(/\./g, "-").concat(`.html?v=${new Date().getTime()}`);
+    let remotePage = props.location.hostname.replace(/\./g, "-").concat(`.html?v=${new Date().getTime()}`);
+    if (props.location.query.screenshot === "true") {
+      remotePage += "&screenshot=true";
+    }
     this.state = {
       mounted: false,
       iFrameLoaded: false,

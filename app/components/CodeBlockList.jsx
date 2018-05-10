@@ -90,8 +90,6 @@ class CodeBlockList extends Component {
   render() {
     const {islands, userProgress} = this.state;
 
-    console.log(this.props.blockFork);
-
     if (!islands || !userProgress) return null;
 
     const codeBlockItems = [];

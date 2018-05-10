@@ -27,7 +27,8 @@ module.exports = function(sequelize, db) {
       getinvolved: db.JSONB,
       sharing: db.TEXT,
       reports: db.INTEGER,
-      last_upped: db.DATE
+      last_upped: db.DATE,
+      prompted: db.BOOLEAN
     },
     {
       freezeTableName: true,

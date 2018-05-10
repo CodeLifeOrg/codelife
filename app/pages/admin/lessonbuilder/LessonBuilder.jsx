@@ -338,7 +338,9 @@ class LessonBuilder extends Component {
       obj.childNodes = [objLevel];
     }
     if (obj) {
+      console.log("before", nodes);
       arr.push(obj);
+      console.log("after", nodes);
       arr.sort((a, b) => a.data.ordering - b.data.ordering);
       // oh boy do i hate this TODO: generalize this array without breaking it
       if (n.itemType === "slide") this.newNode([obj]);

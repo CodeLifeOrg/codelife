@@ -104,7 +104,6 @@
   }
 }
 
-
 /* make cover button clickable */
 .card-trigger {
   z-index: 1;
@@ -122,6 +121,12 @@
   }
 }
 
+/* feature on home page button */
+.card-feature-button {
+  & .pt-icon {
+    margin-left: -0.5em;
+  }
+}
 
 
 /* .projectCard {

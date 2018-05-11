@@ -119,6 +119,11 @@
     @media (min-width: 600px) {
       @add-mixin card-layout-3col;
     }
+
+    /* hide any cards after the first 6 */
+    & .card-container:nth-of-type(n + 6) ~ .card-container  {
+      display: none !important;
+    }
   }
 }
 

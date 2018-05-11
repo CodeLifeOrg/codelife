@@ -181,15 +181,6 @@ class ProjectCard extends Component {
             { user &&
               <div className="card-dialog-footer-actions project-dialog-footer-actions pt-dialog-footer-actions">
 
-                {/* show feature button if user is admin */}
-                { user.role === 2 &&
-                  <button 
-                    onClick={this.toggleFeature.bind(this)}
-                    className={`pt-button ${featured ? "pt-intent-success" : "pt-intent"}`}>
-                    {featured ? "Featured" : "Feature"}
-                  </button>
-                }
-
                 {/* flag content */}
                 <Popover2
                   className="card-dialog-flag-container"
@@ -212,8 +203,20 @@ class ProjectCard extends Component {
                     handleReport={this.handleReport.bind(this)}
                   />
                 </Popover2>
+
+                {/* show feature button if user is admin */}
+                { user.role === 2 &&
+                  <button
+                    onClick={this.toggleFeature.bind(this)}
+                    className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                    { featured && <span className="pt-icon pt-icon-tick" /> }
+                    { featured ? t("Featured") : t("Feature") }
+                  </button>
+                }
               </div>
             }
+
+
           </div>
         </Dialog>
       </div>

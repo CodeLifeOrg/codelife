@@ -3,13 +3,15 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Dialog, Toaster, Alert, EditableText, Tooltip} from "@blueprintjs/core";
+import {Alert, Dialog, EditableText, Intent, Position, Switch, Toaster, Tooltip} from "@blueprintjs/core";
 import {Link} from "react-router";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import CollabList from "components/CollabList";
 import CollabSearch from "components/CollabSearch";
+
+import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
 import "components/Studio.css";
 import "./Projects.css";
@@ -444,7 +446,7 @@ class Projects extends Component {
 
               </ul>
 
-              <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button>
+              {/* <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button> */}
 
               {/* project switcher */}
               <div className="project-switcher font-xs">
@@ -529,17 +531,38 @@ class Projects extends Component {
           isOpen={this.state.isShareOpen}
           onClose={this.closeFirstTimeShare.bind(this)}
           title={t("Share your Project")}
-          className="" >
-          <p>{t("Great Job on your Project!")}</p>
-          <p>{t("Anyone can see your public projects.  Share your creation with the world!")}</p>
-          <a className="studio-action-button link"
-            href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
-            target="_blank">
-            <span className="studio-action-button-icon pt-icon pt-icon-share" />
-            <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
-          </a>
-          {t("Never Show this again")}
-          <input type="checkbox" checked={this.state.optout} onChange={this.handleCheckbox.bind(this)}/>
+          className="share-dialog form-container u-text-center"
+        >
+
+          <h2 className="share-heading font-lg">
+            {t("Project.ShareHeadingOnFirstSave")}
+          </h2>
+
+          <p className="share-body font-md">
+            {t("Project.ShareBodyTextOnFirstSave")}
+          </p>
+
+          <div className="share-button-group field-container">
+            {/* facebook */}
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+              <FacebookIcon />
+              <span className="social-button-text">{ t("Project.Share") }</span>
+              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+            </a>
+            {/* TODO: add direct link */}
+          </div>
+
+          {/* stop bothering me */}
+          <div className="field-container switch-field-container centered-switch-field-container font-sm u-margin-top-md">
+            <label className="pt-control pt-switch">
+              <input type="checkbox"
+                checked={this.state.optout}
+                onChange={this.handleCheckbox.bind(this)}
+              />
+              <span className="pt-control-indicator" />
+              {t("Project.ShareOptOut")}
+            </label>
+          </div>
         </Dialog>
 
 

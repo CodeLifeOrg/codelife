@@ -244,15 +244,15 @@ class Projects extends Component {
       const name = currentProject.name;
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
       const username = this.props.auth.user.username;
-      let isShareOpen = !currentProject.prompted;
-      if (this.state.optout || currentProject.userprofile.prompted) isShareOpen = false;
+      let isFirstSaveShareOpen = !currentProject.prompted;
+      if (this.state.optout || currentProject.userprofile.prompted) isFirstSaveShareOpen = false;
       currentProject.prompted = true;
       axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-          this.setState({canEditTitle: true, isShareOpen});
+          this.setState({canEditTitle: true, isFirstSaveShareOpen});
         }
       });
     }
@@ -267,7 +267,7 @@ class Projects extends Component {
         resp.status === 200 ? console.log("success") : console.log("error");
       });
     }
-    this.setState({isShareOpen: false});
+    this.setState({isFirstSaveShareOpen: false});
   }
 
   executeCode() {
@@ -414,12 +414,10 @@ class Projects extends Component {
 
                 {/* share project */}
                 <li className="studio-action-item">
-                  <a className="studio-action-button link"
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
-                    target="_blank">
+                  <button className="studio-action-button link u-unbutton" onClick={() => this.setState({isShareOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
-                  </a>
+                  </button>
                 </li>
 
                 {/* delete / leave project */}
@@ -447,7 +445,7 @@ class Projects extends Component {
 
               </ul>
 
-              {/* <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button> */}
+              {/* <button onClick={() => this.setState({isFirstSaveShareOpen: true})}>TEST SHARE</button> */}
 
               {/* project switcher */}
               <div className="project-switcher font-xs">
@@ -529,7 +527,7 @@ class Projects extends Component {
 
         {/* first time share */}
         <Dialog
-          isOpen={this.state.isShareOpen}
+          isOpen={this.state.isFirstSaveShareOpen}
           onClose={this.closeFirstTimeShare.bind(this)}
           title={t("Share your Project")}
           className="share-dialog form-container u-text-center"
@@ -567,6 +565,34 @@ class Projects extends Component {
               <span className="pt-control-indicator" />
               {t("Project.ShareOptOut")}
             </label>
+          </div>
+        </Dialog>
+
+
+        {/* share dialog triggered by share button */}
+        <Dialog
+          isOpen={this.state.isShareOpen}
+          onClose={() => this.setState({isShareOpen: false})}
+          title={t("Share your Project")}
+          className="share-dialog form-container u-text-center"
+        >
+
+          <h2 className="share-heading font-lg u-margin-bottom-off">
+            {t("ShareDirectLink.Label")}:
+          </h2>
+
+          {/* direct link */}
+          <div className="field-container share-direct-link-field-container u-margin-top-off u-margin-bottom-sm">
+            <ShareDirectLink link={shareLink} fontSize="font-md" linkLabel={false} />
+          </div>
+
+          {/* facebook */}
+          <div className="field-container">
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+              <FacebookIcon />
+              <span className="social-button-text">{ t("Project.Share") }</span>
+              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+            </a>
           </div>
         </Dialog>
 

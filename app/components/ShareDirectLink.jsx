@@ -19,7 +19,7 @@ class ShareDirectLink extends Component {
   }
 
   render() {
-    const {link, t} = this.props;
+    const {fontSize, link, linkLabel, t} = this.props;
     const {copied} = this.state;
     // convert the link into a link that works
     const linkUrl = link.replace(/%3A/g, ":").replace(/%2F/g, "/");
@@ -32,10 +32,12 @@ class ShareDirectLink extends Component {
     copied ? copiedPopoverText = t("ShareDirectLink.Copied") : null;
 
     return (
-      <div className="share-link-popover font-sm">
+      <div className={`share-link-popover ${fontSize}`}>
 
         {/* Direct link label: */}
-        <p className="share-link-label">{ t("ShareDirectLink.Label") }: </p>
+        { linkLabel &&
+          <p className="share-link-label">{ t("ShareDirectLink.Label") }: </p>
+        }
 
         {/* popover trigger */}
         <Popover
@@ -59,6 +61,11 @@ class ShareDirectLink extends Component {
     );
   }
 }
+
+ShareDirectLink.defaultProps = {
+  fontSize: "font-sm",
+  linkLabel: true
+};
 
 ShareDirectLink = translate()(ShareDirectLink);
 export default ShareDirectLink;

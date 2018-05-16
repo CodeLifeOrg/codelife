@@ -3,8 +3,9 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Alert, Dialog, EditableText, Intent, Position, Switch, Toaster, Tooltip} from "@blueprintjs/core";
+import {Alert, Dialog, EditableText, Intent, Position, Toaster} from "@blueprintjs/core";
 import {Link} from "react-router";
+import slugify from "slugify";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -40,6 +41,7 @@ class Projects extends Component {
       showCodeblocks: false,
       isViewCollabsOpen: false
     };
+    this.slugOptions = {remove: /[$*_+~.()/#'"!\-:@]/g};
   }
 
   componentDidMount() {
@@ -54,7 +56,8 @@ class Projects extends Component {
       let {currentProject} = this.state;
       const {filename} = this.props.params;
       if (filename) {
-        currentProject = projects.find(p => p.name === filename);
+        currentProject = projects.find(p => p.slug === filename);
+        if (!currentProject) currentProject = projects.find(p => p.name === filename);
         if (!currentProject) currentProject = projects[0];
         this.setState({currentProject, projects, collabs}, this.openProject.bind(this, currentProject.id));
       }
@@ -83,7 +86,12 @@ class Projects extends Component {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
+      if (resp.data.slug) {
+        browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
+      } 
+      else {
+        browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
+      }
     });
   }
 
@@ -95,14 +103,21 @@ class Projects extends Component {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace from the project title
     projectName = projectName.replace(/^\s+|\s+$/gm, "");
+    const slug = slugify(projectName, this.slugOptions);
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
-      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: "", slug}).then(resp => {
         if (resp.status === 200) {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
           this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, currentProject, projects, isNewOpen: false});
-          browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
+          if (currentProject.slug) {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.slug}/edit`);  
+          }
+          else {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);  
+          }
+          
         }
         else {
           alert("Error");
@@ -196,7 +211,13 @@ class Projects extends Component {
             newProject = this.state.currentProject;
           }
           this.setState({deleteAlert: false, projectName: "", currentProject: newProject, currentTitle: newProject.name, originalTitle: newProject.name, projects});
-          browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);
+          if (newProject.slug) {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.slug}/edit`);
+          }
+          else {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);  
+          }
+          
         }
         else {
           console.log("Error");
@@ -242,12 +263,13 @@ class Projects extends Component {
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
+      const slug = slugify(name, this.slugOptions);
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
       const username = this.props.auth.user.username;
       let isFirstSaveShareOpen = !currentProject.prompted;
       if (this.state.optout || currentProject.userprofile.prompted) isFirstSaveShareOpen = false;
       currentProject.prompted = true;
-      axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
+      axios.post("/api/projects/update", {id, username, name, slug, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
@@ -286,12 +308,23 @@ class Projects extends Component {
     const {browserHistory} = this.context;
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
+    const newSlug = slugify(newName, this.slugOptions);
     currentProject.name = newName;
+    currentProject.slug = newSlug;
     const cp = projects.find(p => p.id === currentProject.id);
-    if (cp) cp.name = newName;
+    if (cp) {
+      cp.name = newName;
+      cp.slug = newSlug;
+    }
     this.setState({currentProject, projects, canEditTitle});
     this.saveCodeToDB.bind(this)();
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
+    if (newSlug) {
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${newSlug}/edit`);  
+    }
+    else {
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
+    }
+    
   }
 
   render() {
@@ -315,7 +348,10 @@ class Projects extends Component {
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
     const name = currentProject ? currentProject.name : "";
-    const shareLink = encodeURIComponent(`${origin}/projects/${username}/${name}`);
+    const slug = currentProject ? currentProject.slug : "";
+    
+    const shareLink = slug ? encodeURIComponent(`${origin}/projects/${username}/${slug}`) : encodeURIComponent(`${origin}/projects/${username}/${name}`);
+    const relativeLink = slug ? `/projects/${username}/${slug}` : `/projects/${username}/${name}`;
 
     const projectItems = this.state.projects.map(project =>
       <li className="project-switcher-item" key={project.id}>
@@ -428,6 +464,13 @@ class Projects extends Component {
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                   </button>
+                </li>
+
+                {/* permalink project */}
+                <li className="studio-action-item">
+                  <Link to={relativeLink}>
+                    PERMALINK
+                  </Link>
                 </li>
 
                 {/* delete / leave project */}

@@ -13,7 +13,8 @@ module.exports = function(sequelize, db) {
       datemodified: db.DATE,
       status: db.TEXT,
       prompted: db.BOOLEAN,
-      featured: db.BOOLEAN
+      featured: db.BOOLEAN,
+      slug: db.STRING
     }, 
     {
       freezeTableName: true,

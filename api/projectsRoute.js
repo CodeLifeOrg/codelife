@@ -143,7 +143,7 @@ module.exports = function(app) {
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
     db.projects.findAll({
       where: {
-        name: req.query.filename
+        [Op.or]: [{slug: req.query.filename}, {name: req.query.filename}]
       },
       include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
     })
@@ -155,7 +155,7 @@ module.exports = function(app) {
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
-    db.projects.update({studentcontent: req.body.studentcontent, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
+    db.projects.update({studentcontent: req.body.studentcontent, slug: req.body.slug, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
       .then(u => {
         const url = `${req.headers.origin}/projects/${req.body.username}/${req.body.name}?screenshot=true`;
         const width = 600;

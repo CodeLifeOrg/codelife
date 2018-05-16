@@ -1,20 +1,31 @@
 @import '../mixins.css';
 
-/* keep popover attached to link */
-.field-container .share-link-popover-trigger {
-  display: inline-block;
-  max-width: 100%;
+.share-link-popover-trigger {
+  /* keep popover attached to link */
+  &.pt-popover-target { /* increase specificity to override SelectGeo */
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* position label next to link */
+  & .share-link-label {
+    display: inline-block;
+  }
+
+  /* margin adjustment */
+  & .share-direct-link-field-container {
+    margin-top: 1rem;
+    margin-bottom: -1rem;
+  }
+
+  & .share-link {
+    @add-mixin overflow-ellipsis;
+    display: inline-block;
+    height: 1.5em;
+    max-width: 100%;
+  }
 }
 
 .share-link-popover .pt-popover-content {
   padding: var(--gutter-sm);
-}
-
-.share-link-label {
-  display: inline-block;
-}
-
-.share-direct-link-field-container {
-  margin-top: 1rem;
-  margin-bottom: -1rem;
 }

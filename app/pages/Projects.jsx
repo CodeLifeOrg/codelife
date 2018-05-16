@@ -130,7 +130,7 @@ class Projects extends Component {
     const {username} = this.props.auth.user;
     const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      //browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
+      // browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
 
     }
     else {
@@ -587,7 +587,7 @@ class Projects extends Component {
           </div>
 
           {/* facebook */}
-          <div className="field-container">
+          <div className="field-container u-margin-top-off">
             <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
               <FacebookIcon />
               <span className="social-button-text">{ t("Project.Share") }</span>

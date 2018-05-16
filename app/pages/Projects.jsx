@@ -322,7 +322,12 @@ class Projects extends Component {
         <Link
           onClick={() => this.onClickProject.bind(this)(project)}
           className="project-switcher-link link">
-          { project.name }
+          <span className="project-switcher-link-thumb">
+            <img className="project-switcher-link-thumb-img" src={`/pj_images/${project.id}.png?v=${new Date().getTime()}`} alt=""/>
+          </span>
+          <span className="project-switcher-link-text">
+            { project.name }
+          </span>
         </Link>
       </li>
     );
@@ -332,7 +337,12 @@ class Projects extends Component {
         <Link
           onClick={() => this.onClickProject.bind(this)(collab)}
           className="project-switcher-link link">
-          { collab.name }
+          <span className="project-switcher-link-thumb">
+            <img className="project-switcher-link-thumb-img" src={`/pj_images/${collab.id}.png?v=${new Date().getTime()}`} alt=""/>
+          </span>
+          <span className="project-switcher-link-text">
+            { collab.name }
+          </span>
         </Link>
         {/* <Tooltip position={Position.RIGHT} content={`${t("Project Owner - ")}${collab.user.username}`}>
         </Tooltip> */}

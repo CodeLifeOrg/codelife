@@ -351,7 +351,7 @@ class Projects extends Component {
     const slug = currentProject ? currentProject.slug : "";
     
     const shareLink = slug ? encodeURIComponent(`${origin}/projects/${username}/${slug}`) : encodeURIComponent(`${origin}/projects/${username}/${name}`);
-    const relativeLink = slug ? `/projects/${username}/${slug}` : `/projects/${username}/${name}`;
+    // const relativeLink = slug ? `/projects/${username}/${slug}` : `/projects/${username}/${name}`;
 
     const projectItems = this.state.projects.map(project =>
       <li className="project-switcher-item" key={project.id}>
@@ -464,13 +464,6 @@ class Projects extends Component {
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                   </button>
-                </li>
-
-                {/* permalink project */}
-                <li className="studio-action-item">
-                  <Link to={relativeLink}>
-                    PERMALINK
-                  </Link>
                 </li>
 
                 {/* delete / leave project */}

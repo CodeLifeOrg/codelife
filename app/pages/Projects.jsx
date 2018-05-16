@@ -10,6 +10,7 @@ import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import CollabList from "components/CollabList";
 import CollabSearch from "components/CollabSearch";
+import ShareDirectLink from "components/ShareDirectLink";
 
 import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
@@ -446,7 +447,7 @@ class Projects extends Component {
 
               </ul>
 
-              {/* <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button> */}
+              <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button>
 
               {/* project switcher */}
               <div className="project-switcher font-xs">
@@ -542,14 +543,18 @@ class Projects extends Component {
             {t("Project.ShareBodyTextOnFirstSave")}
           </p>
 
-          <div className="share-button-group field-container">
-            {/* facebook */}
+          {/* direct link */}
+          <div className="field-container share-direct-link-field-container">
+            <ShareDirectLink link={shareLink} />
+          </div>
+
+          {/* facebook */}
+          <div className="field-container">
             <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
               <FacebookIcon />
               <span className="social-button-text">{ t("Project.Share") }</span>
               <span className="u-visually-hidden">{ t(" on Facebook") }</span>
             </a>
-            {/* TODO: add direct link */}
           </div>
 
           {/* stop bothering me */}

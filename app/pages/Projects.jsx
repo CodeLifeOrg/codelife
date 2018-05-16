@@ -447,7 +447,7 @@ class Projects extends Component {
 
               </ul>
 
-              <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button>
+              {/* <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button> */}
 
               {/* project switcher */}
               <div className="project-switcher font-xs">

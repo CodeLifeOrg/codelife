@@ -43,6 +43,8 @@ class CodeBlockEditor extends Component {
       filename = this.props.island.codeBlock.snippetname;
     }
     this.setState({mounted: true, initialContent, filename, rulejson});
+
+    document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
   onFirstCompletion(winMessage) {
@@ -153,6 +155,25 @@ class CodeBlockEditor extends Component {
 
   handleTabChange(activeTabId) {
     this.setState({activeTabId});
+  }
+
+  handleKey(e) {
+    // cmd+s = save
+    // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser save dialog
+    if (e.key === "s" && e.ctrlKey) {
+      e.preventDefault();
+      this.verifyAndSaveCode();
+    }
+    // else if (e.key === "e" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser URL bar focus
+    else if (e.key === "e" && e.ctrlKey) {
+      e.preventDefault();
+      this.executeCode();
+    }
+    // else if (e.key === "r" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser refresh
+    else if (e.key === "r" && e.ctrlKey) {
+      e.preventDefault();
+      this.attemptReset();
+    }
   }
 
   render() {

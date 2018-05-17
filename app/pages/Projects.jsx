@@ -80,6 +80,8 @@ class Projects extends Component {
         }
       }
     });
+
+    document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
   openProject(pid) {
@@ -88,7 +90,7 @@ class Projects extends Component {
       this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
       if (resp.data.slug) {
         browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
-      } 
+      }
       else {
         browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
       }
@@ -112,12 +114,12 @@ class Projects extends Component {
           const currentProject = projects.find(p => p.id === newid);
           this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, currentProject, projects, isNewOpen: false});
           if (currentProject.slug) {
-            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.slug}/edit`);  
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.slug}/edit`);
           }
           else {
-            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);  
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
           }
-          
+
         }
         else {
           alert("Error");
@@ -215,9 +217,9 @@ class Projects extends Component {
             browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.slug}/edit`);
           }
           else {
-            browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);  
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);
           }
-          
+
         }
         else {
           console.log("Error");
@@ -319,13 +321,59 @@ class Projects extends Component {
     this.setState({currentProject, projects, canEditTitle});
     this.saveCodeToDB.bind(this)();
     if (newSlug) {
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${newSlug}/edit`);  
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${newSlug}/edit`);
     }
     else {
       browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
     }
-    
+
   }
+
+  handleKey(e) {
+    const {currentProject} = this.state;
+    const isMine = true; // delete me
+    // const isMine = currentProject && currentProject.uid === this.props.auth.user.id; // BUG: `currentProject.uid` is undefined, so `isMine` always returns false here
+
+    // cmd+s = save
+    // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser save dialog
+    if (e.key === "s" && e.ctrlKey) {
+      e.preventDefault();
+      this.saveCodeToDB();
+    }
+    // else if (e.key === "e" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser URL bar focus
+    else if (e.key === "e" && e.ctrlKey) {
+      e.preventDefault();
+      this.executeCode(); // NOTE: doesn't work
+    }
+    // else if (e.key === "r" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser refresh
+    else if (e.key === "r" && e.ctrlKey) {
+      e.preventDefault();
+      this.attemptReset();
+    }
+    // else if (e.key === "d" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && isMine) { // should work, but doesn't override browser bookmark
+    else if (e.key === "d" && e.ctrlKey && isMine) {
+      // BUG: `currentProject.uid` is undefined, so this always returns false
+      e.preventDefault();
+      this.deleteProject(this.state.currentProject);
+    }
+    // else if (e.key === "l" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && !isMine) { // should work, but doesn't override browser refresh
+    else if (e.key === "l" && e.ctrlKey && !isMine) {
+      // BUG: `currentProject.uid` is undefined, so this always returns false
+      e.preventDefault();
+      this.showLeaveAlert(this.state.currentProject);
+    }
+    // else if (e.key === "o" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser open
+    else if (e.key === "o" && e.ctrlKey) {
+      e.preventDefault();
+      this.setState({isViewCollabsOpen: true});
+    }
+    // else if (e.key === "n" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser new window
+    else if (e.key === "n" && e.ctrlKey) {
+      e.preventDefault();
+      this.clickNewProject();
+    }
+  }
+
 
   render() {
 
@@ -349,7 +397,7 @@ class Projects extends Component {
     const {username} = this.props.auth.user;
     const name = currentProject ? currentProject.name : "";
     const slug = currentProject ? currentProject.slug : "";
-    
+
     const shareLink = slug ? encodeURIComponent(`${origin}/projects/${username}/${slug}`) : encodeURIComponent(`${origin}/projects/${username}/${name}`);
     // const relativeLink = slug ? `/projects/${username}/${slug}` : `/projects/${username}/${name}`;
 

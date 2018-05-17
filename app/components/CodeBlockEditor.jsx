@@ -31,6 +31,7 @@ class CodeBlockEditor extends Component {
       filename: "",
       activeTabId: "codeblockeditor-prompt-tab"
     };
+    this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
   componentDidMount() {
@@ -44,7 +45,13 @@ class CodeBlockEditor extends Component {
     }
     this.setState({mounted: true, initialContent, filename, rulejson});
 
-    document.addEventListener("keypress", this.handleKey.bind(this));
+    // start listening for keypress when entering the page
+    document.addEventListener("keypress", this.handleKey);
+  }
+
+  // stop listening for keypress when leaving the page
+  componentWillUnmount() {
+    document.removeEventListener("keypress", this.handleKey);
   }
 
   onFirstCompletion(winMessage) {
@@ -167,7 +174,7 @@ class CodeBlockEditor extends Component {
     // else if (e.key === "e" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser URL bar focus
     else if (e.key === "e" && e.ctrlKey) {
       e.preventDefault();
-      this.executeCode();
+      this.executeCode(); // NOTE: doesn't work when editor has focus
     }
     // else if (e.key === "r" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser refresh
     else if (e.key === "r" && e.ctrlKey) {

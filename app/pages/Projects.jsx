@@ -43,6 +43,7 @@ class Projects extends Component {
       isViewCollabsOpen: false
     };
     this.slugOptions = {remove: /[$*_+~.()/#'"!\-:@]/g};
+    this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
   componentDidMount() {
@@ -82,7 +83,13 @@ class Projects extends Component {
       }
     });
 
-    document.addEventListener("keypress", this.handleKey.bind(this));
+    // start listening for keypress when entering the page
+    document.addEventListener("keypress", this.handleKey);
+  }
+
+  // stop listening for keypress when leaving the page
+  componentWillUnmount() {
+    document.removeEventListener("keypress", this.handleKey);
   }
 
   openProject(pid) {
@@ -335,7 +342,7 @@ class Projects extends Component {
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
 
     // cmd+s = save
-    // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser save dialog
+    // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
     if (e.key === "s" && e.ctrlKey) {
       e.preventDefault();
       this.saveCodeToDB();
@@ -343,7 +350,7 @@ class Projects extends Component {
     // else if (e.key === "e" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser URL bar focus
     else if (e.key === "e" && e.ctrlKey) {
       e.preventDefault();
-      this.executeCode(); // NOTE: doesn't work
+      this.executeCode(); // NOTE: doesn't work when editor has focus
     }
     // else if (e.key === "r" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser refresh
     else if (e.key === "r" && e.ctrlKey) {
@@ -353,17 +360,18 @@ class Projects extends Component {
     // else if (e.key === "d" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && isMine) { // should work, but doesn't override browser bookmark
     else if (e.key === "d" && e.ctrlKey && isMine) {
       e.preventDefault();
-      this.deleteProject(this.state.currentProject);
+      this.deleteProject(this.state.currentProject); // NOTE: doesn't work when editor has focus
     }
     // else if (e.key === "l" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && !isMine) { // should work, but doesn't override browser refresh
     else if (e.key === "l" && e.ctrlKey && !isMine) {
       e.preventDefault();
-      this.showLeaveAlert(this.state.currentProject);
+      this.showLeaveAlert(this.state.currentProject); // NOTE: doesn't work when editor has focus
     }
     // else if (e.key === "o" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser open
     else if (e.key === "o" && e.ctrlKey) {
       e.preventDefault();
 
+      // NOTE: doesn't work when editor has focus
       if (isMine) {
         this.setState({isManageCollabsOpen: true});
       }
@@ -372,7 +380,7 @@ class Projects extends Component {
       }
     }
     // else if (e.key === "n" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser new window
-    else if (e.key === "n" && e.ctrlKey) {
+    else if (e.key === "n" && e.ctrlKey) { // NOTE: doesn't work when editor has focus
       e.preventDefault();
       this.clickNewProject();
     }

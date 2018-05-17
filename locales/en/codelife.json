@@ -33,7 +33,7 @@
   "Browse…": "Browse…",
   "Built by ": "Built by ",
   "Bullying or abuse": "Bullying or abuse",
-  "CODEBLOCKS": "CODEBLOCKS",
+  "CODEBLOCKS": "Codeblocks",
   "CPF": "CPF",
   "Can't save non-passing code!": "Can't save non-passing code!",
   "Cancel": "Cancel",
@@ -47,7 +47,7 @@
   "Code Blocks": "Code blocks",
   "Code Editor": "Code editor",
   "Code Example": "Code example",
-  "CodeBlock": "CodeBlock",
+  "CodeBlock": "Codeblock",
   "CodeBlockEditor": {
     "Execute": "Execute codeblock",
     "Reset": "Reset codeblock",
@@ -58,6 +58,7 @@
   "Codeblock Name": "Codeblock name",
   "Codeblock Title": "Codeblock title",
   "Codeblock's code will be shown after you complete the last level of this island": "Codeblock's code will be shown after you complete the last level of this island",
+  "CodeblockExplainer": "Show off what you've learned by completing the challenge at the end of each island!",
   "Codeblocks": "Codeblocks",
   "Collab": {
     "Add": "add collaborator",
@@ -94,7 +95,7 @@
     "CreateAccountHeading": "Create a CodeLife account",
     "CreateAccountText": "You'll need an account in order to access the learning materials and create a project.",
     "FirstPlace": "First place",
-    "GetStarted": "Get started",
+    "GetStarted": "get started",
     "Headline": "Codelife programming challenge",
     "JudgingDate": "May 30 – June 10",
     "JudgingLabel": "Judging",
@@ -177,12 +178,12 @@
   "Hide Discussion": "Hide discussion",
   "Home": {
     "BeginAdventure": "Begin your adventure",
-    "CTA": "Sign up for a free codelife account and start coding",
+    "CTA": "Sign up for a free Codelife account and start coding",
     "ContinueAdventure": "Continue your adventure",
     "Feature1": "Learn to build websites with HTML, CSS, and JavaScript",
     "Feature2": "Built for Brazilian students, but free and open to all",
     "Feature3": "Have fun as you learn by completing levels and challenges",
-    "GetStarted": "Get started",
+    "GetStarted": "get started",
     "Headline": "Learn to code for free",
     "IntroText": "Home.IntroText",
     "LearnHeading": "What you’ll learn",
@@ -223,7 +224,7 @@
   "Lesson Builder": "Lesson builder",
   "Lesson plan": "Lesson plan",
   "Lessonplan": {
-    "CTA": "Sign up for a free codelife account and learn to code",
+    "CTA": "Sign up for a free Codelife account and learn to code",
     "Codeblock": "Codeblock challenge",
     "Headline": "Codelife lesson plan",
     "IslandIndex": "Lesson index",
@@ -324,6 +325,7 @@
   "Project Owner - ": "Project owner - ",
   "Project Title": "Project title",
   "Project name": "Project name",
+  "ProjectExplainer": "Free-form, unprompted sites made in our free code editor",
   "Projects": "Projects",
   "Projects (build your own site)": "Projects (build your own site)",
   "Prompt": "Prompt",

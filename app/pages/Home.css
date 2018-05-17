@@ -106,6 +106,30 @@
     }
   }
 
+  /* card sidebar layout */
+  & .card-sidebar {
+    padding-bottom: var(--gutter-sm);
+
+    /* side by side layout on bigger screens */
+    @add-mixin min-md {
+      width: 12.5rem; /* limit sidebar width */
+
+      /* shared layout style between sidebar and card list */
+      &, & + .card-list {
+        float: left; /* can't do inline-block here because card-list needs flex */
+      }
+
+      & + .card-list {
+        /* sizing */
+        width: calc(100% - 12.5rem - 3.75rem); /* account for sidebar and gutter */
+        /* positioning */
+        margin-top: 1.25rem;
+        top: 1px; /* fudge into place */
+        left: 3.75rem; /* gutter */
+      }
+    }
+  }
+
   /* card layout */
   & .card-list {
     @add-mixin card-layout-base;

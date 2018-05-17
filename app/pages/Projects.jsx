@@ -39,6 +39,7 @@ class Projects extends Component {
       projects: [],
       collabs: [],
       showCodeblocks: false,
+      isManageCollabsOpen: false,
       isViewCollabsOpen: false
     };
     this.slugOptions = {remove: /[$*_+~.()/#'"!\-:@]/g};
@@ -331,8 +332,7 @@ class Projects extends Component {
 
   handleKey(e) {
     const {currentProject} = this.state;
-    const isMine = true; // delete me
-    // const isMine = currentProject && currentProject.uid === this.props.auth.user.id; // BUG: `currentProject.uid` is undefined, so `isMine` always returns false here
+    const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
 
     // cmd+s = save
     // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser save dialog
@@ -352,20 +352,24 @@ class Projects extends Component {
     }
     // else if (e.key === "d" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && isMine) { // should work, but doesn't override browser bookmark
     else if (e.key === "d" && e.ctrlKey && isMine) {
-      // BUG: `currentProject.uid` is undefined, so this always returns false
       e.preventDefault();
       this.deleteProject(this.state.currentProject);
     }
     // else if (e.key === "l" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && !isMine) { // should work, but doesn't override browser refresh
     else if (e.key === "l" && e.ctrlKey && !isMine) {
-      // BUG: `currentProject.uid` is undefined, so this always returns false
       e.preventDefault();
       this.showLeaveAlert(this.state.currentProject);
     }
     // else if (e.key === "o" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser open
     else if (e.key === "o" && e.ctrlKey) {
       e.preventDefault();
-      this.setState({isViewCollabsOpen: true});
+
+      if (isMine) {
+        this.setState({isManageCollabsOpen: true});
+      }
+      else {
+        this.setState({isViewCollabsOpen: true});
+      }
     }
     // else if (e.key === "n" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser new window
     else if (e.key === "n" && e.ctrlKey) {
@@ -491,7 +495,7 @@ class Projects extends Component {
                 {/* add / manage collaborators */}
                 { isMine ? <li className="studio-action-item">
                   {/* my project */}
-                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
+                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isManageCollabsOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-people" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
                   </button>
@@ -693,8 +697,8 @@ class Projects extends Component {
 
         {/* collab search */}
         <Dialog
-          isOpen={this.state.isOpen}
-          onClose={() => this.setState({isOpen: !this.state.isOpen})}
+          isOpen={this.state.isManageCollabsOpen}
+          onClose={() => this.setState({isManageCollabsOpen: !this.state.isManageCollabsOpen})}
           title=""
           className="form-container collab-form-container" >
           <CollabSearch currentProject={currentProject}/>

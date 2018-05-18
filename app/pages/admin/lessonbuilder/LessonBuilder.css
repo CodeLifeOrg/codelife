@@ -18,13 +18,12 @@
     }
 
     & .pt-tree-node {
+      cursor: pointer;
+      margin-top: 0;
+      margin-bottom: 0;
 
       &.pt-tree-node-selected > .pt-tree-node-content {
         background-color: var(--sky-dark);
-      }
-
-      &:hover {
-        cursor: pointer;
       }
     }
   }

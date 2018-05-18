@@ -1180,6 +1180,7 @@ utility classes
 
 /* vertical margin */
 .u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
+.u-margin-top-sm { margin-top: var(--gutter-sm) !important; }
 .u-margin-top-md { margin-top: var(--gutter-md) !important; }
 .u-margin-top-lg { margin-top: var(--gutter-lg) !important; }
 .u-margin-top-off { margin-top: 0 !important; }

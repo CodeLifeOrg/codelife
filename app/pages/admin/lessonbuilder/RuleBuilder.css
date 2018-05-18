@@ -1,31 +1,28 @@
-#RuleBuilder {
-  background-color: var(--white);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: var(--gutter-md);
+.rulebuilder {
+  padding: 0 0 var(--gutter-md) 0;
+
+  /* adjust padding on bigger screens */
+  @add-mixin min-md {
+    padding: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  }
+
   & .rule {
-    border-bottom: 1px solid var(--light-1);
-    padding: var(--gutter-md) 0;
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-lg);
     width: 100%;
-    &:first-child {
-      padding-top: 0;
-    }
-    & .rule-title {
+
+    /* side by side fields */
+    & .rule-subhead,
+    & .rule-input {
       display: inline-block;
-      width: calc(50% - var(--gutter-xs));
+      width: 50%; /* fallback */
+      width: calc(50% - var(--gutter-sm));
     }
-    & .translation-title {
-      display: inline-block;
-      font-size: 14px;
-      margin-left: var(--gutter-md);
-      opacity: 0.75;
-      width: calc(50% - var(--gutter-xs));
-    }
-    & .pt-input {
-      margin: var(--gutter-xxs) 0;
-      width: calc(50% - var(--gutter-xs));
-      &.translation {
-        margin-left: var(--gutter-md);
-      }
+
+    /* add margin */
+    & .pt-rule-subhead,
+    & .pt-rule-input {
+      left: 30px;
     }
   }
 }

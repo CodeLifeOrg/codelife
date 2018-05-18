@@ -12,6 +12,9 @@
   /* set initial loading spinner height */
   & .loading {
     min-height: calc(100vh - 430px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -40,7 +43,6 @@
 
     & .pt-tab {
       color: rgba(255, 255, 255, 0.75);
-      cursor: pointer;
       font-weight: bold;
       padding: var(--gutter-xs) var(--gutter-md);
       margin: 0;

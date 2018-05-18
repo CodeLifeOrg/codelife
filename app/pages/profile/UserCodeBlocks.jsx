@@ -40,15 +40,14 @@ class UserCodeBlocks extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const {islands, t, user} = this.props;
     const {loading, codeBlocks} = this.state;
-    const {islands} = this.props;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 
     return (
       <div className="user-section">
-        <h2>{ t("Code Blocks") }</h2>
+        <h2>{ user.username }’s { t("CodeBlocks") }</h2>
         <div className="card-list">
           { codeBlocks.length
             ? codeBlocks.map(cb => {

@@ -40,14 +40,14 @@ class UserProjects extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const {t, user} = this.props;
     const {loading, projects} = this.state;
 
     if (loading) return <h2>{ t("Loading projects") }...</h2>;
 
     return (
       <div className="user-section">
-        <h2>{ t("Projects") }</h2>
+        <h2>{ user.username }’s { t("Projects") }</h2>
         { projects.length
           ? <div className="card-list">{ projects.map(p => <ProjectCard key={p.id} project={p} />)}</div>
           : <p>{ t("noProjects") }</p>

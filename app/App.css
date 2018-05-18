@@ -469,6 +469,7 @@ layout
 /* fix overflow */
 body {
   overflow-y: auto;
+  overflow-x: hidden;
 }
 /* if vh units are supported, move overflow to app */
 @supports (height: 100vh) {
@@ -477,6 +478,7 @@ body {
   }
   #app {
     overflow-y: auto;
+    overflow-x: hidden;
     height: 100vh;
   }
 }

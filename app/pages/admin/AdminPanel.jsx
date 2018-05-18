@@ -70,6 +70,13 @@ class AdminPanel extends Component {
     const pathObj = {island, level, slide};
     const {t} = this.props;
 
+    const userRoles =
+    <div className="admin-role">
+      <h2 className="font-xl u-text-center u-margin-bottom-off">User roles</h2>
+      <p className="font-sm u-text-center u-margin-bottom-lg">Cmd+F is recommended 😅</p>
+      <UserAdmin />
+    </div>;
+
     if (!mounted) return <Loading />;
 
     return (
@@ -79,7 +86,7 @@ class AdminPanel extends Component {
           <Tab2 id="rule-builder" className="admin-tab" title={t("Rule Builder")} panel={<RuleBuilder />} />
           <Tab2 id="glossary-builder" className="admin-tab" title={t("Glossary Builder")} panel={<GlossaryBuilder />} />
           { this.props.auth.user.role > 1 ? <Tab2 id="report-viewer" className="admin-tab" title={t("Flagged Content")} panel={<ReportViewer />} /> : null }
-          { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User Admin")} panel={<UserAdmin />} /> : null }
+          { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User roles")} panel={ userRoles } /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="statistics" className="admin-tab" title={t("Statistics")} panel={<Statistics />} /> : null }
           { /*this.props.auth.user.role > 1 ? <Tab2 id="contest-viewer" className="admin-tab" title={t("Contest Viewer")} panel={<ContestViewer />} /> : null */ }
           { this.props.auth.user.role > 1 ? <Tab2 id="featured-pages" className="admin-tab" title={t("Featured Pages")} panel={<Featured />} /> : null }

@@ -95,6 +95,14 @@ STUDENT CODEBLOCKS
   /* NOTE: remove this once islands are positioned properly */
   z-index: 2;
 
+  /* NOTE: `transform: translateY(0px)` creates a new stacking context,
+  which makes the inline codeblock dialog position itself relative
+  to the card list, even though it's set to `position: fixed`.
+  WTF, blueprint. 😡 */
+  & .pt-collapse-body[aria-hidden=false] {
+    transform: none !important; /* fix stacking context bug */
+  }
+
   /* no border radius on smaller viewports */
   @add-mixin max-md {
     border-radius: 0;

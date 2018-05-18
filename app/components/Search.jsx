@@ -76,7 +76,7 @@ class Search extends Component {
         else if (e.key === "Enter") {
           const selectedItem = allResults[selectedIndex];
           if (selectedItem && selectedItem.type === "user") browserHistory.push(`/profile/${selectedItem.username}`);
-          if (selectedItem && selectedItem.type === "project") browserHistory.push(`/projects/${selectedItem.user.username}/${selectedItem.name}`);
+          if (selectedItem && selectedItem.type === "project") browserHistory.push(`/projects/${selectedItem.user.username}/${selectedItem.slug ? selectedItem.slug : selectedItem.name}`);
           this.clearSearch();
         }
       }
@@ -124,7 +124,7 @@ class Search extends Component {
     );
     const projectList = results.projects.filter(r => r.user).map(r =>
       <li key={r.id} className="search-results-item project-result">
-        <Link className={`search-results-link ${r.selected ? "search-selected" : ""}`} to={`/projects/${r.user.username}/${r.name}`} onClick={this.clearSearch.bind(this)}>
+        <Link className={`search-results-link ${r.selected ? "search-selected" : ""}`} to={`/projects/${r.user.username}/${r.slug ? r.slug : r.name}`} onClick={this.clearSearch.bind(this)}>
           <span className="search-results-text primary-search-results-text font-sm">{r.name}</span>
           <span className="search-results-text secondary-search-results-text font-xs">
             {t("by")} {r.user.username}

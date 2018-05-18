@@ -264,15 +264,6 @@ class CodeBlockCard extends Component {
             { user &&
               <div className="card-dialog-footer-actions codeblock-dialog-footer-actions pt-dialog-footer-actions">
 
-                {/* show feature button if user is admin */}
-                { user.role === 2 &&
-                  <button 
-                    onClick={this.toggleFeature.bind(this)}
-                    className={`pt-button ${featured ? "pt-intent-success" : "pt-intent"}`}>
-                    {featured ? "Featured" : "Feature"}
-                  </button>
-                }
-
                 {/* likes */}
                 <p className="card-dialog-footer-action codeblock-dialog-footer-action card-likes font-xs">
                   <button
@@ -356,6 +347,17 @@ class CodeBlockCard extends Component {
                       </div>
                     </div>
                   </Popover2>
+                }
+
+
+                {/* show feature button if user is admin */}
+                { user.role === 2 &&
+                  <button
+                    onClick={this.toggleFeature.bind(this)}
+                    className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                    { featured && <span className="pt-icon pt-icon-tick" /> }
+                    { featured ? t("Featured") : t("Feature") }
+                  </button>
                 }
               </div>
             }

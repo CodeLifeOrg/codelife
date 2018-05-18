@@ -53,7 +53,7 @@ class ProjectCard extends Component {
 
     moment.locale("pt-BR");
 
-    const embedLink = `${ location.origin }/projects/${ username }/${ project.name }`;
+    const embedLink = `${ location.origin }/projects/${ username }/${ project.slug ? project.slug : project.name }`;
     const userLink = `${ location.origin }/profile/${ username }`;
 
     // define thumbnail image as null
@@ -85,7 +85,7 @@ class ProjectCard extends Component {
         {/* cover button */}
         { displayname
           // my project; open in projects view
-          ? <Link className="card-trigger u-absolute-expand u-margin-top-off u-margin-bottom-off" to={`/projects/${username}/${project.name}/edit`}>
+          ? <Link className="card-trigger u-absolute-expand u-margin-top-off u-margin-bottom-off" to={`/projects/${username}/${project.slug ? project.slug : project.name}/edit`}>
             <span className="u-visually-hidden">{t("edit project")}</span>
           </Link>
           // someone else's project; open dialog
@@ -168,7 +168,7 @@ class ProjectCard extends Component {
               {/* show edit link if it's yours */}
               { displayname &&
                 <span className="edit-link-container">
-                  &nbsp;(<Link className="edit-link link" to={`/projects/${username}/${project.name}/edit`}>
+                  &nbsp;(<Link className="edit-link link" to={`/projects/${username}/${project.slug ? project.slug : project.name}/edit`}>
                     {t("edit project")}
                   </Link>)
                 </span>
@@ -180,15 +180,6 @@ class ProjectCard extends Component {
             {/* show actions if logged in */}
             { user &&
               <div className="card-dialog-footer-actions project-dialog-footer-actions pt-dialog-footer-actions">
-
-                {/* show feature button if user is admin */}
-                { user.role === 2 &&
-                  <button 
-                    onClick={this.toggleFeature.bind(this)}
-                    className={`pt-button ${featured ? "pt-intent-success" : "pt-intent"}`}>
-                    {featured ? "Featured" : "Feature"}
-                  </button>
-                }
 
                 {/* flag content */}
                 <Popover2
@@ -212,8 +203,20 @@ class ProjectCard extends Component {
                     handleReport={this.handleReport.bind(this)}
                   />
                 </Popover2>
+
+                {/* show feature button if user is admin */}
+                { user.role === 2 &&
+                  <button
+                    onClick={this.toggleFeature.bind(this)}
+                    className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                    { featured && <span className="pt-icon pt-icon-tick" /> }
+                    { featured ? t("Featured") : t("Feature") }
+                  </button>
+                }
               </div>
             }
+
+
           </div>
         </Dialog>
       </div>

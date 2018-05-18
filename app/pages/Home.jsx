@@ -149,16 +149,42 @@ class Home extends Component {
           <p className="heading font-lg">{t("Home.MadeOnCodelife")}</p>
 
           {/* projects */}
-          <div className="project-section">
-            <h2 className="font-md">{ t("Featured Projects") }</h2>
+          <div className="project-section u-clearfix">
+            <div className="card-sidebar project-sidebar">
+              <h2 className="font-md u-margin-bottom-xxs">{ t("Projects") }</h2>
+              <p className="card-sidebar-text font-sm u-margin-top-off  u-margin-bottom-xxs">{ t("ProjectExplainer")}</p>
+              { !current
+                // logged out; sign up
+                ? <button className="authform-button pt-button pt-intent-primary font-sm" onClick={this.authForm.bind(this, "signup")}>
+                  { t("Home.GetStarted")}
+                </button>
+                // logged in; go to projects
+                : <Link className="pt-button pt-intent-primary" to={`/projects/${this.props.user.username}`}>
+                  { t("Home.GetStarted")}
+                </Link>
+              }
+            </div>
             <div className="card-list project-list">
               { !projects ? <Spinner intent={Intent.PRIMARY}/> : projects.map(p => <ProjectCard key={p.id} project={p} />) }
             </div>
           </div>
 
           {/* codeblocks */}
-          <div className="codeblock-section">
-            <h2 className="font-md">{ t("Featured CodeBlocks") }</h2>
+          <div className="codeblock-section u-clearfix">
+            <div className="card-sidebar project-sidebar">
+              <h2 className="font-md u-margin-bottom-xxs">{ t("CodeBlocks") }</h2>
+              <p className="card-sidebar-text font-sm u-margin-top-off  u-margin-bottom-xxs">{ t("CodeblockExplainer")}</p>
+              { !current
+                // logged out; sign up
+                ? <button className="authform-button pt-button pt-intent-primary font-sm" onClick={this.authForm.bind(this, "signup")}>
+                  { t("Home.GetStarted")}
+                </button>
+                // logged in; go to map
+                : <Link className="pt-button pt-intent-primary" to={`/island/${current.id}`}>
+                  { t("Home.GetStarted")}
+                </Link>
+              }
+            </div>
             <div className="card-list codeblock-list">
               { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
                 const {theme, icon} = islands.find(i => i.id === c.lid);

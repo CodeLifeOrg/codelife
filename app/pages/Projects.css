@@ -29,6 +29,29 @@
   & .project-switcher-link {
     display: block;
     width: 100%;
+    margin-top: 0.75rem;
+
+    & .project-switcher-link-thumb,
+    & .project-switcher-link-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    & .project-switcher-link-thumb {
+      width: 3.25rem;
+      height: 1.675rem;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 1px 0.5em var(--light-2);
+    }
+
+    & .project-switcher-link-text {
+      width: calc(100% - 4rem); /* room for thumbanil & spacing */
+      left: 0.5rem;
+      top: -1px; /* fudge into alginment */
+      line-height: 1;
+    }
+
   }
 
   /* new project button */

@@ -41,6 +41,21 @@
     @add-mixin min-sm {
       width: 16rem;
     }
+
+    /* read only state (lessonplan) */
+    &.is-read-only {
+      background-color: transparent;
+      /* remove padding */
+      padding: 0;
+
+      /* reset font size */
+      & .codeblockeditor-prompt,
+      & .codeblockeditor-cheatsheet {
+        &, & * {
+          @add-mixin font-sm;
+        }
+      }
+    }
   }
 
   /* editor */

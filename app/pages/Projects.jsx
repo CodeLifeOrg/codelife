@@ -3,13 +3,17 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Intent, Position, Dialog, Toaster, Alert, EditableText, Tooltip} from "@blueprintjs/core";
+import {Alert, Dialog, EditableText, Intent, Position, Toaster} from "@blueprintjs/core";
 import {Link} from "react-router";
+import slugify from "slugify";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import CollabList from "components/CollabList";
 import CollabSearch from "components/CollabSearch";
+import ShareDirectLink from "components/ShareDirectLink";
+
+import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
 import "components/Studio.css";
 import "./Projects.css";
@@ -35,8 +39,11 @@ class Projects extends Component {
       projects: [],
       collabs: [],
       showCodeblocks: false,
+      isManageCollabsOpen: false,
       isViewCollabsOpen: false
     };
+    this.slugOptions = {remove: /[$*_+~.()/#'"!\-:@]/g};
+    this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
   componentDidMount() {
@@ -51,7 +58,8 @@ class Projects extends Component {
       let {currentProject} = this.state;
       const {filename} = this.props.params;
       if (filename) {
-        currentProject = projects.find(p => p.name === filename);
+        currentProject = projects.find(p => p.slug === filename);
+        if (!currentProject) currentProject = projects.find(p => p.name === filename);
         if (!currentProject) currentProject = projects[0];
         this.setState({currentProject, projects, collabs}, this.openProject.bind(this, currentProject.id));
       }
@@ -74,13 +82,26 @@ class Projects extends Component {
         }
       }
     });
+
+    // start listening for keypress when entering the page
+    document.addEventListener("keypress", this.handleKey);
+  }
+
+  // stop listening for keypress when leaving the page
+  componentWillUnmount() {
+    document.removeEventListener("keypress", this.handleKey);
   }
 
   openProject(pid) {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
+      if (resp.data.slug) {
+        browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
+      }
+      else {
+        browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
+      }
     });
   }
 
@@ -92,14 +113,21 @@ class Projects extends Component {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace from the project title
     projectName = projectName.replace(/^\s+|\s+$/gm, "");
+    const slug = slugify(projectName, this.slugOptions);
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
-      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: "", slug}).then(resp => {
         if (resp.status === 200) {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
           this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, currentProject, projects, isNewOpen: false});
-          browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
+          if (currentProject.slug) {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.slug}/edit`);
+          }
+          else {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.name}/edit`);
+          }
+
         }
         else {
           alert("Error");
@@ -127,7 +155,7 @@ class Projects extends Component {
     const {username} = this.props.auth.user;
     const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      //browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
+      // browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
 
     }
     else {
@@ -193,7 +221,13 @@ class Projects extends Component {
             newProject = this.state.currentProject;
           }
           this.setState({deleteAlert: false, projectName: "", currentProject: newProject, currentTitle: newProject.name, originalTitle: newProject.name, projects});
-          browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);
+          if (newProject.slug) {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.slug}/edit`);
+          }
+          else {
+            browserHistory.push(`/projects/${this.props.auth.user.username}/${newProject.name}/edit`);
+          }
+
         }
         else {
           console.log("Error");
@@ -239,17 +273,18 @@ class Projects extends Component {
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
+      const slug = slugify(name, this.slugOptions);
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
       const username = this.props.auth.user.username;
-      let isShareOpen = !currentProject.prompted;
-      if (this.state.optout || currentProject.userprofile.prompted) isShareOpen = false;
+      let isFirstSaveShareOpen = !currentProject.prompted;
+      if (this.state.optout || currentProject.userprofile.prompted) isFirstSaveShareOpen = false;
       currentProject.prompted = true;
-      axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
+      axios.post("/api/projects/update", {id, username, name, slug, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-          this.setState({canEditTitle: true, isShareOpen});
+          this.setState({canEditTitle: true, isFirstSaveShareOpen});
         }
       });
     }
@@ -264,7 +299,7 @@ class Projects extends Component {
         resp.status === 200 ? console.log("success") : console.log("error");
       });
     }
-    this.setState({isShareOpen: false});
+    this.setState({isFirstSaveShareOpen: false});
   }
 
   executeCode() {
@@ -283,13 +318,74 @@ class Projects extends Component {
     const {browserHistory} = this.context;
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
+    const newSlug = slugify(newName, this.slugOptions);
     currentProject.name = newName;
+    currentProject.slug = newSlug;
     const cp = projects.find(p => p.id === currentProject.id);
-    if (cp) cp.name = newName;
+    if (cp) {
+      cp.name = newName;
+      cp.slug = newSlug;
+    }
     this.setState({currentProject, projects, canEditTitle});
     this.saveCodeToDB.bind(this)();
-    browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
+    if (newSlug) {
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${newSlug}/edit`);
+    }
+    else {
+      browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
+    }
+
   }
+
+  handleKey(e) {
+    const {currentProject} = this.state;
+    const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
+
+    // cmd+s = save
+    // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    if (e.key === "s" && e.ctrlKey) {
+      e.preventDefault();
+      this.saveCodeToDB();
+    }
+    // else if (e.key === "e" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser URL bar focus
+    else if (e.key === "e" && e.ctrlKey) {
+      e.preventDefault();
+      this.executeCode(); // NOTE: doesn't work when editor has focus
+    }
+    // else if (e.key === "r" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser refresh
+    else if (e.key === "r" && e.ctrlKey) {
+      e.preventDefault();
+      this.attemptReset();
+    }
+    // else if (e.key === "d" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && isMine) { // should work, but doesn't override browser bookmark
+    else if (e.key === "d" && e.ctrlKey && isMine) {
+      e.preventDefault();
+      this.deleteProject(this.state.currentProject); // NOTE: doesn't work when editor has focus
+    }
+    // else if (e.key === "l" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && !isMine) { // should work, but doesn't override browser refresh
+    else if (e.key === "l" && e.ctrlKey && !isMine) {
+      e.preventDefault();
+      this.showLeaveAlert(this.state.currentProject); // NOTE: doesn't work when editor has focus
+    }
+    // else if (e.key === "o" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser open
+    else if (e.key === "o" && e.ctrlKey) {
+      e.preventDefault();
+
+      // NOTE: doesn't work when editor has focus
+      if (isMine) {
+        this.setState({isManageCollabsOpen: true});
+      }
+      else {
+        this.setState({isViewCollabsOpen: true});
+      }
+    }
+    // else if (e.key === "n" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser new window
+    else if (e.key === "n" && e.ctrlKey) { // NOTE: doesn't work when editor has focus
+      e.preventDefault();
+      this.clickNewProject();
+    }
+  }
+
 
   render() {
 
@@ -312,14 +408,22 @@ class Projects extends Component {
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
     const name = currentProject ? currentProject.name : "";
-    const shareLink = encodeURIComponent(`${origin}/projects/${username}/${name}`);
+    const slug = currentProject ? currentProject.slug : "";
+
+    const shareLink = slug ? encodeURIComponent(`${origin}/projects/${username}/${slug}`) : encodeURIComponent(`${origin}/projects/${username}/${name}`);
+    // const relativeLink = slug ? `/projects/${username}/${slug}` : `/projects/${username}/${name}`;
 
     const projectItems = this.state.projects.map(project =>
       <li className="project-switcher-item" key={project.id}>
         <Link
           onClick={() => this.onClickProject.bind(this)(project)}
           className="project-switcher-link link">
-          { project.name }
+          <span className="project-switcher-link-thumb">
+            <img className="project-switcher-link-thumb-img" src={`/pj_images/${project.id}.png?v=${new Date().getTime()}`} alt=""/>
+          </span>
+          <span className="project-switcher-link-text">
+            { project.name }
+          </span>
         </Link>
       </li>
     );
@@ -329,7 +433,12 @@ class Projects extends Component {
         <Link
           onClick={() => this.onClickProject.bind(this)(collab)}
           className="project-switcher-link link">
-          { collab.name }
+          <span className="project-switcher-link-thumb">
+            <img className="project-switcher-link-thumb-img" src={`/pj_images/${collab.id}.png?v=${new Date().getTime()}`} alt=""/>
+          </span>
+          <span className="project-switcher-link-text">
+            { collab.name }
+          </span>
         </Link>
         {/* <Tooltip position={Position.RIGHT} content={`${t("Project Owner - ")}${collab.user.username}`}>
         </Tooltip> */}
@@ -394,7 +503,7 @@ class Projects extends Component {
                 {/* add / manage collaborators */}
                 { isMine ? <li className="studio-action-item">
                   {/* my project */}
-                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isOpen: true})}>
+                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isManageCollabsOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-people" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ !hasCollabs ? t("Project.AddCollaborators") : t("Project.ManageCollaborators") }</span>
                   </button>
@@ -411,12 +520,10 @@ class Projects extends Component {
 
                 {/* share project */}
                 <li className="studio-action-item">
-                  <a className="studio-action-button link"
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
-                    target="_blank">
+                  <button className="studio-action-button link u-unbutton" onClick={() => this.setState({isShareOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
-                  </a>
+                  </button>
                 </li>
 
                 {/* delete / leave project */}
@@ -444,7 +551,7 @@ class Projects extends Component {
 
               </ul>
 
-              <button onClick={() => this.setState({isShareOpen: true})}>TEST SHARE</button>
+              {/* <button onClick={() => this.setState({isFirstSaveShareOpen: true})}>TEST SHARE</button> */}
 
               {/* project switcher */}
               <div className="project-switcher font-xs">
@@ -526,27 +633,80 @@ class Projects extends Component {
 
         {/* first time share */}
         <Dialog
-          isOpen={this.state.isShareOpen}
+          isOpen={this.state.isFirstSaveShareOpen}
           onClose={this.closeFirstTimeShare.bind(this)}
           title={t("Share your Project")}
-          className="" >
-          <p>{t("Great Job on your Project!")}</p>
-          <p>{t("Anyone can see your public projects.  Share your creation with the world!")}</p>
-          <a className="studio-action-button link"
-            href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`}
-            target="_blank">
-            <span className="studio-action-button-icon pt-icon pt-icon-share" />
-            <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
-          </a>
-          {t("Never Show this again")}
-          <input type="checkbox" checked={this.state.optout} onChange={this.handleCheckbox.bind(this)}/>
+          className="share-dialog form-container u-text-center"
+        >
+
+          <h2 className="share-heading font-lg">
+            {t("Project.ShareHeadingOnFirstSave")}
+          </h2>
+
+          <p className="share-body font-md">
+            {t("Project.ShareBodyTextOnFirstSave")}
+          </p>
+
+          {/* direct link */}
+          <div className="field-container share-direct-link-field-container">
+            <ShareDirectLink link={shareLink} />
+          </div>
+
+          {/* facebook */}
+          <div className="field-container">
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+              <FacebookIcon />
+              <span className="social-button-text">{ t("Project.Share") }</span>
+              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+            </a>
+          </div>
+
+          {/* stop bothering me */}
+          <div className="field-container switch-field-container centered-switch-field-container font-sm u-margin-top-md">
+            <label className="pt-control pt-switch">
+              <input type="checkbox"
+                checked={this.state.optout}
+                onChange={this.handleCheckbox.bind(this)}
+              />
+              <span className="pt-control-indicator" />
+              {t("Project.ShareOptOut")}
+            </label>
+          </div>
+        </Dialog>
+
+
+        {/* share dialog triggered by share button */}
+        <Dialog
+          isOpen={this.state.isShareOpen}
+          onClose={() => this.setState({isShareOpen: false})}
+          title={t("Share your Project")}
+          className="share-dialog form-container u-text-center"
+        >
+
+          <h2 className="share-heading font-lg u-margin-bottom-off">
+            {t("ShareDirectLink.Label")}:
+          </h2>
+
+          {/* direct link */}
+          <div className="field-container share-direct-link-field-container u-margin-top-off u-margin-bottom-sm">
+            <ShareDirectLink link={shareLink} fontSize="font-md" linkLabel={false} />
+          </div>
+
+          {/* facebook */}
+          <div className="field-container u-margin-top-off">
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+              <FacebookIcon />
+              <span className="social-button-text">{ t("Project.Share") }</span>
+              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+            </a>
+          </div>
         </Dialog>
 
 
         {/* collab search */}
         <Dialog
-          isOpen={this.state.isOpen}
-          onClose={() => this.setState({isOpen: !this.state.isOpen})}
+          isOpen={this.state.isManageCollabsOpen}
+          onClose={() => this.setState({isManageCollabsOpen: !this.state.isManageCollabsOpen})}
           title=""
           className="form-container collab-form-container" >
           <CollabSearch currentProject={currentProject}/>

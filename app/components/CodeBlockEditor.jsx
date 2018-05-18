@@ -4,9 +4,12 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import PropTypes from "prop-types";
 import CodeEditor from "components/CodeEditor/CodeEditor";
-import {Alert, Button, EditableText, Intent, Popover, PopoverInteractionKind, Position, Tabs2, Tab2, Toaster} from "@blueprintjs/core";
+import {Alert, Button, Dialog, EditableText, Intent, Popover, PopoverInteractionKind, Position, Tabs2, Tab2, Toaster} from "@blueprintjs/core";
 
 import Loading from "components/Loading";
+import ShareDirectLink from "components/ShareDirectLink";
+
+import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
 import "./Studio.css";
 import "./CodeBlockEditor.css";
@@ -28,6 +31,7 @@ class CodeBlockEditor extends Component {
       filename: "",
       activeTabId: "codeblockeditor-prompt-tab"
     };
+    this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
   componentDidMount() {
@@ -40,6 +44,14 @@ class CodeBlockEditor extends Component {
       filename = this.props.island.codeBlock.snippetname;
     }
     this.setState({mounted: true, initialContent, filename, rulejson});
+
+    // start listening for keypress when entering the page
+    document.addEventListener("keypress", this.handleKey);
+  }
+
+  // stop listening for keypress when leaving the page
+  componentWillUnmount() {
+    document.removeEventListener("keypress", this.handleKey);
   }
 
   onFirstCompletion(winMessage) {
@@ -86,7 +98,8 @@ class CodeBlockEditor extends Component {
     const {username} = this.props.auth.user;
     const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
+      // browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
+
     }
     else {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
@@ -123,11 +136,11 @@ class CodeBlockEditor extends Component {
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
         if (this.editor) this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-        
+
         // Uncomment this to test Win Dialog
         // if (this.props.onFirstCompletion) this.props.onFirstCompletion();
         if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
-        
+
         if (codeBlock) {
           // If there's already a snippet, and we've saved new data down to the
           // database, we need to update our "in-memory" snippet to reflect the
@@ -151,9 +164,35 @@ class CodeBlockEditor extends Component {
     this.setState({activeTabId});
   }
 
+  handleKey(e) {
+    // cmd+s = save
+    // if (e.key === "s" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser save dialog
+    if (e.key === "s" && e.ctrlKey) {
+      e.preventDefault();
+      this.verifyAndSaveCode();
+    }
+    // else if (e.key === "e" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser URL bar focus
+    else if (e.key === "e" && e.ctrlKey) {
+      e.preventDefault();
+      this.executeCode(); // NOTE: doesn't work when editor has focus
+    }
+    // else if (e.key === "r" && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) { // should work, but doesn't override browser refresh
+    else if (e.key === "r" && e.ctrlKey) {
+      e.preventDefault();
+      this.attemptReset();
+    }
+  }
+
   render() {
-    const {t, island, title} = this.props;
+    const {t, island, readOnly, title} = this.props;
     const {activeTabId, execState, initialContent, rulejson} = this.state;
+
+    const {origin} = this.props.location;
+    const {username} = this.props.auth.user;
+
+    // get share link, if in edit view
+    let shareLink = "";
+    readOnly ? shareLink = "" : shareLink = encodeURIComponent(`${origin}/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
 
     if (!this.state.mounted) return <Loading />;
 
@@ -178,92 +217,112 @@ class CodeBlockEditor extends Component {
         {/* body */}
         <div className="studio-body codeblockeditor-body">
 
-          {/* controls */}
-          <div className="studio-controls">
+          {/* controls, if not read only */}
+          { !readOnly
+            ? <div className="studio-controls">
 
-            {/* page title */}
-            <h1 className="font-sm">{ island.name } { t("codeblock") }</h1>
+              {/* page title */}
+              <h1 className="font-sm">{ island.name } { t("codeblock") }</h1>
 
-            {/* codeblock title */}
-            {/* TODO: convert to editable text */}
-            <label
-              className="codeblockeditor-title studio-title heading font-lg"
-              htmlFor="codeblockeditor-title-edit" >
-              {this.state.filename}
-            </label>
+              {/* codeblock title */}
+              {/* TODO: convert to editable text */}
+              <label
+                className="codeblockeditor-title studio-title heading font-lg"
+                htmlFor="codeblockeditor-title-edit" >
+                {this.state.filename}
+              </label>
 
-            {/* make edit field available if codeblock isn't read only */}
-            {!this.props.readOnly &&
-              <div className="field-container font-sm">
-                <input
-                  className="codeblockeditor-filename u-margin-top-md font-sm"
-                  id="codeblockeditor-title-edit"
-                  type="text"
-                  value={this.state.filename}
-                  placeholder={ t("Codeblock Title") }
-                  onChange={this.changeFilename.bind(this)} />
+              {/* make edit field available if codeblock isn't read only */}
+              {!this.props.readOnly &&
+                <div className="field-container font-sm">
+                  <input
+                    className="codeblockeditor-filename u-margin-top-md font-sm"
+                    id="codeblockeditor-title-edit"
+                    type="text"
+                    value={this.state.filename}
+                    placeholder={ t("Codeblock Title") }
+                    onChange={this.changeFilename.bind(this)} />
+                </div>
+              }
+
+              {/* actions title */}
+              <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>
+
+              {/* list of actions */}
+              <ul className="studio-action-list font-xs u-list-reset">
+
+                {/* save & submit codeblock */}
+                <li className="studio-action-item">
+                  <button className="studio-action-button u-unbutton link" onClick={this.verifyAndSaveCode.bind(this)} key="save">
+                    <span className="studio-action-button-icon pt-icon pt-icon-floppy-disk" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ t("Save & Submit") }</span>
+                  </button>
+                </li>
+
+                {/* execute code */}
+                <li className="studio-action-item">
+                  <button
+                    className={ `studio-action-button u-unbutton link ${!execState && " is-disabled"}` }
+                    onClick={this.executeCode.bind(this)}
+                    tabIndex={!execState && "-1"}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-refresh" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Execute") }</span>
+                  </button>
+                </li>
+
+                {/* share codeblock */}
+                <li className="studio-action-item">
+                  <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isShareOpen: true})}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-share" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Share") }</span>
+                  </button>
+                </li>
+
+                {/* reset codeblock */}
+                <li className="studio-action-item">
+                  <button className="studio-action-button u-unbutton link danger-text" onClick={this.attemptReset.bind(this)}>
+                    <span className="studio-action-button-icon pt-icon pt-icon-undo" />
+                    <span className="studio-action-button-text u-hide-below-xxs">{t("CodeBlockEditor.Reset")}</span>
+                  </button>
+                </li>
+
+              </ul>
+
+
+              {/* help text */}
+              <div className="codeblockeditor-text font-xs">
+
+                {/* tab between prompt and cheatsheet */}
+                <Tabs2
+                  id="codeblockeditor-tabs"
+                  onChange={ this.handleTabChange.bind(this) }
+                  selectedTabId={activeTabId}>
+                  <Tab2 id="codeblockeditor-prompt-tab" title={ t("Prompt") } panel={ promptTab } />
+                  <Tab2 id="codeblockeditor-cheatsheet-tab" title={ t("Cheatsheet") } panel={ cheatsheetTab } />
+                  <Tabs2.Expander />
+                </Tabs2>
+
               </div>
-            }
-
-            {/* actions title */}
-            <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>
-
-            {/* list of actions */}
-            <ul className="studio-action-list font-xs u-list-reset">
-
-              {/* save & submit codeblock */}
-              <li className="studio-action-item">
-                <button className="studio-action-button u-unbutton link" onClick={this.verifyAndSaveCode.bind(this)} key="save">
-                  <span className="studio-action-button-icon pt-icon pt-icon-floppy-disk" />
-                  <span className="studio-action-button-text u-hide-below-xxs">{ t("Save & Submit") }</span>
-                </button>
-              </li>
-
-              {/* execute code */}
-              <li className="studio-action-item">
-                <button
-                  className={ `studio-action-button u-unbutton link ${!execState && " is-disabled"}` }
-                  onClick={this.executeCode.bind(this)}
-                  tabIndex={!execState && "-1"}>
-                  <span className="studio-action-button-icon pt-icon pt-icon-refresh" />
-                  <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Execute") }</span>
-                </button>
-              </li>
-
-              {/* share codeblock */}
-              <li className="studio-action-item">
-                <button className="studio-action-button u-unbutton link" onClick={this.shareCodeblock.bind(this)}>
-                  <span className="studio-action-button-icon pt-icon pt-icon-share" />
-                  <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Share") }</span>
-                </button>
-              </li>
-
-              {/* reset codeblock */}
-              <li className="studio-action-item">
-                <button className="studio-action-button u-unbutton link danger-text" onClick={this.attemptReset.bind(this)}>
-                  <span className="studio-action-button-icon pt-icon pt-icon-undo" />
-                  <span className="studio-action-button-text u-hide-below-xxs">{t("CodeBlockEditor.Reset")}</span>
-                </button>
-              </li>
-
-            </ul>
-
-
-            {/* help text */}
-            <div className="codeblockeditor-text font-xs">
-
-              {/* tab between prompt and cheatsheet */}
-              <Tabs2
-                id="codeblockeditor-tabs"
-                onChange={ this.handleTabChange.bind(this) }
-                selectedTabId={activeTabId}>
-                <Tab2 id="codeblockeditor-prompt-tab" title={ t("Prompt") } panel={ promptTab } />
-                <Tab2 id="codeblockeditor-cheatsheet-tab" title={ t("Cheatsheet") } panel={ cheatsheetTab } />
-                <Tabs2.Expander />
-              </Tabs2>
-
             </div>
-          </div>
+
+
+            // prompt only if readOnly
+            : <div className="studio-controls is-read-only">
+              <div className="codeblockeditor-text u-margin-top-sm">
+
+                {/* tab between prompt and cheatsheet */}
+                <Tabs2
+                  id="codeblockeditor-tabs"
+                  onChange={ this.handleTabChange.bind(this) }
+                  selectedTabId={activeTabId}>
+                  <Tab2 id="codeblockeditor-prompt-tab" title={ t("Prompt") } panel={ promptTab } />
+                  <Tab2 id="codeblockeditor-cheatsheet-tab" title={ t("Cheatsheet") } panel={ cheatsheetTab } />
+                  <Tabs2.Expander />
+                </Tabs2>
+
+              </div>
+            </div>
+          }
 
 
           {/* editor */}
@@ -294,6 +353,34 @@ class CodeBlockEditor extends Component {
           <p className="font-lg u-margin-top-off u-margin-bottom-md">{ t("Are you sure you want to reset the code to its original state?") }</p>
         </Alert>
 
+
+        {/* share dialog triggered by share button */}
+        <Dialog
+          isOpen={this.state.isShareOpen}
+          onClose={() => this.setState({isShareOpen: false})}
+          title={t("Share your Project")}
+          className="share-dialog form-container u-text-center"
+        >
+
+          <h2 className="share-heading font-lg u-margin-bottom-off">
+            {t("ShareDirectLink.Label")}:
+          </h2>
+
+          {/* direct link */}
+          <div className="field-container share-direct-link-field-container u-margin-top-off u-margin-bottom-sm">
+            <ShareDirectLink link={shareLink} fontSize="font-md" linkLabel={false} />
+          </div>
+
+          {/* facebook */}
+          <div className="field-container u-margin-top-off">
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+              <FacebookIcon />
+              <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
+              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
+            </a>
+          </div>
+        </Dialog>
+
       </div>
     );
   }
@@ -304,7 +391,8 @@ CodeBlockEditor.contextTypes = {
 };
 
 CodeBlockEditor = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(CodeBlockEditor);
 CodeBlockEditor = translate()(CodeBlockEditor);
 export default CodeBlockEditor;

@@ -398,6 +398,23 @@ label.pt-control  {
   background-color: var(--sky) !important;
 }
 
+.centered-switch-field-container {
+  display: inline-block;
+  width: auto;
+
+  & .pt-switch {
+    padding-left: 0;
+  }
+
+  & .pt-control-indicator {
+    display: inline-block;
+    vertical-align: middle; /* blueprint override */
+    top: -1px; /* minor vertical alignment adjustment */
+    position: relative;
+    margin-right: 0.5em;
+  }
+}
+
 /* close button */
 .pt-dialog-close-button,
 .pt-dialog .pt-dialog-header .pt-dialog-close-button {

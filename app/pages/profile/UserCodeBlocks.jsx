@@ -40,14 +40,18 @@ class UserCodeBlocks extends Component {
   }
 
   render() {
-    const {islands, t, user} = this.props;
+    const {islands, myProfile, t, user} = this.props;
     const {loading, codeBlocks} = this.state;
+
+    // set heading text
+    let heading = `${ user.name || user.username }’s ${ t("CodeBlocks") }`;
+    myProfile === true ? heading = `${ t("My")} ${ t("CodeBlocks") } ` : null;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 
     return (
       <div className="user-section">
-        <h2>{ user.username }’s { t("CodeBlocks") }</h2>
+        <h2>{ heading }</h2>
         <div className="card-list">
           { codeBlocks.length
             ? codeBlocks.map(cb => {

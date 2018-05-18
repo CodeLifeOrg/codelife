@@ -97,8 +97,7 @@ class Profile extends Component {
 
     // check if the user is viewing their own profile
     let myProfile = false;
-    loggedInUser.id || profileUser.id && // check for id first (prevents error screen)
-      loggedInUser.id === profileUser.id ? myProfile = true : null;
+    loggedInUser.id === profileUser.id ? myProfile = true : null; // NOTE: throws error on initial load
 
     // check for admin status
     let adminUser = false;
@@ -202,7 +201,7 @@ class Profile extends Component {
                     <Switch
                       className="profile-control"
                       checked={this.state.sharing}
-                      label={ t("Profile.Visible") }
+                      label={ t("UserProfile.Visible") }
                       onChange={this.handleChangeSharing.bind(this)}
                     />
                   }
@@ -214,12 +213,12 @@ class Profile extends Component {
 
         { sharing ?
           <content className="profile-info">
-            <UserCodeBlocks user={profileUser} />
-            <UserProjects user={profileUser} />
+            <UserProjects user={profileUser} myProfile={myProfile ? true : null} />
+            <UserCodeBlocks user={profileUser} myProfile={myProfile ? true : null} />
             {/* {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
             {profileUser.sid && profileUser.sid !== -1 ? <UsersList type="school" user={profileUser} /> : null} */}
           </content>
-          : <h2 className="u-text-center">{ t("Profile.HiddenContent") }</h2>
+          : <h2 className="u-text-center">{ t("UserProfile.HiddenContent") }</h2>
         }
       </div>
     );

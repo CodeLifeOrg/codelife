@@ -73,7 +73,7 @@ class IslandEditor extends Component {
 
     return (
       <div id="island-editor">
-        <button style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</button>
+        <button style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success">Save</button>
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
@@ -170,7 +170,7 @@ class IslandEditor extends Component {
             <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_victory")} type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.pt_victory} />
           </label> 
         </div>
-        <button onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</button>
+        <button onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success">Save</button>
       </div>
     );
   }

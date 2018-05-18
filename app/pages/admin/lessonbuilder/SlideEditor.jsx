@@ -148,9 +148,9 @@ class SlideEditor extends Component {
 
     return (
       <div id="slide-editor">
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview PT</Button>&nbsp;
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview</Button>&nbsp;
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
         <Dialog
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}
@@ -279,9 +279,9 @@ class SlideEditor extends Component {
             <RulePicker data={data} parentID={data.id} />
           </div> : null
         }
-        <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview PT</Button>&nbsp;
-        <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview</Button>&nbsp;
+        <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
+        <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
       </div>
     );
   }

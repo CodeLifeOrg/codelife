@@ -191,7 +191,7 @@ class GlossaryBuilder extends Component {
     return (
       <div id="GlossaryBuilder">
         {wordItems}
-        <Button type="pt-button" onClick={this.addWord.bind(this)} className="pt-button pt-fill pt-large pt-intent-success">Add Word</Button>
+        <Button type="pt-button" onClick={this.addWord.bind(this)} className="pt-button pt-fill pt-intent-success">Add Word</Button>
       </div>
     );
   }

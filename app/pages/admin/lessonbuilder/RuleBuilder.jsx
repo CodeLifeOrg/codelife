@@ -76,7 +76,7 @@ class RuleBuilder extends Component {
     return (
       <div id="RuleBuilder">
         {ruleItems}
-        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-fill pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-fill pt-intent-success">Save</Button>
       </div>
     );
   }

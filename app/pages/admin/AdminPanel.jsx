@@ -41,7 +41,7 @@ class AdminPanel extends Component {
     let path = "/admin/lesson-builder/";
     if (node.itemType === "island") {
       path += node.id;
-    } 
+    }
     else if (node.itemType === "level") {
       path += `${node.parent.id}/${node.id}`;
     }
@@ -58,7 +58,7 @@ class AdminPanel extends Component {
       this.setPath(this.state.currentNode);
     }
     else {
-      browserHistory.push(`/admin/${activeTabId}`);  
+      browserHistory.push(`/admin/${activeTabId}`);
     }
     this.setState({activeTabId});
   }
@@ -73,9 +73,9 @@ class AdminPanel extends Component {
     if (!mounted) return <Loading />;
 
     return (
-      <div>
+      <div className="admin content">
         <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-          <Tab2 id="lesson-builder" className="admin-tab" title={t("Lesson Builder")} panel={<LessonBuilder setPath={this.setPath.bind(this)} pathObj={pathObj} />}/>
+          <Tab2 id="lesson-builder" className="admin-tab lessonplan-admin-tab" title={t("Lesson Builder")} panel={<LessonBuilder setPath={this.setPath.bind(this)} pathObj={pathObj} />}/>
           <Tab2 id="rule-builder" className="admin-tab" title={t("Rule Builder")} panel={<RuleBuilder />} />
           <Tab2 id="glossary-builder" className="admin-tab" title={t("Glossary Builder")} panel={<GlossaryBuilder />} />
           { this.props.auth.user.role > 1 ? <Tab2 id="report-viewer" className="admin-tab" title={t("Flagged Content")} panel={<ReportViewer />} /> : null }

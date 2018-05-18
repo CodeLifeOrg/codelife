@@ -1,49 +1,86 @@
+@import '../../mixins.css';
+
+/* main admin container */
+.admin.content {
+  padding: 0; /* fullwidth on small screens */
+
+  /* add padding on bigger screens */
+  @add-mixin min-md {
+    padding: 0 var(--gutter-md);
+  }
+
+  /* set initial loading spinner height */
+  & .loading {
+    min-height: calc(100vh - 430px);
+  }
+}
+
+/* inner container, includes tabs and panels */
 .admin-tabs {
-  margin: 0 var(--gutter-lg) var(--gutter-md);
-  &>.pt-tab-list {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: -35px; /* offset footer margin */
+
+  /* border radius on bigger screens */
+  @add-mixin min-md {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  & > .pt-tab-list {
     background-color: var(--black);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    & .pt-tab-indicator {
+      background-color: var(--sky-dark);
+      height: 100%;
+      bottom: 0;
+    }
+
     & .pt-tab {
       color: rgba(255, 255, 255, 0.75);
       cursor: pointer;
       font-weight: bold;
       padding: var(--gutter-xs) var(--gutter-md);
       margin: 0;
-      transition: color 0.5s;
+      transition: color 0.2s;
+
       &[aria-expanded=true] {
-        color: rgba(255, 255, 255, 1);
-      }
-      &:before {
-        background-color: rgba(255, 255, 255, 0.65);
-        bottom: 0;
-        content: "";
-        height: var(--gutter-xxs);
-        left: 0;
-        position: absolute;
-        transition: background-color 0.5s;
-        width: 100%;
-        z-index: 1;
+        color: var(--white);
       }
       &[aria-expanded=true]:before {
         background-color: rgba(255, 255, 255, 0);
       }
       &[aria-expanded=false]:hover {
         color: var(--white);
+
         &:before {
-          background-color: var(--white);
+          background-color: var(--sky);
         }
       }
     }
-    & .pt-tab-indicator {
-      height: var(--gutter-xxs);
-    }
   }
-  &>.pt-tab-panel {
-    margin: 0;
+
+  & > .admin-tab {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    /* make sections scrollable */
+    &:not(.lessonplan-admin-tab),
+    & .lessonbuilder-tree,
+    & .item-editor {
+      min-height: calc(100vh - 430px);
+
+      /* limit height and set overflow on bigger screens */
+      @add-mixin min-md {
+        max-height: calc(100vh - 125px);
+        overflow-y: auto;
+      }
+    }
+
     &.pt-tab-panel {
       background-color: var(--white);
-      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
       padding: var(--gutter-md);
       &#pt-tab-panel_undefined_lesson-builder {
         padding: 0;

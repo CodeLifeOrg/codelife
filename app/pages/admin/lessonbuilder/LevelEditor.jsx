@@ -56,7 +56,7 @@ class LevelEditor extends Component {
     
     return (
       <div id="level-editor">
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success">Save</Button>
         <label className="pt-label">
           id
           <span className="pt-text-muted"> (required, auto-generated)</span>
@@ -82,7 +82,7 @@ class LevelEditor extends Component {
             <input className="pt-input" onChange={this.changeField.bind(this, "pt_description")} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.pt_description} />
           </label>
         </div>
-        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success">Save</Button>
       </div>
     );
   }

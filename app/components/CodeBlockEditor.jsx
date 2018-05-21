@@ -244,25 +244,6 @@ class CodeBlockEditor extends Component {
                 confirmOnEnterKey={true}
               />
 
-              {/* <label
-                className="codeblockeditor-title studio-title heading font-lg"
-                htmlFor="codeblockeditor-title-edit" >
-                {this.state.filename}
-              </label>*/}
-
-              {/* make edit field available if codeblock isn't read only */}
-              {/* !this.props.readOnly &&
-                <div className="field-container font-sm">
-                  <input
-                    className="codeblockeditor-filename u-margin-top-md font-sm"
-                    id="codeblockeditor-title-edit"
-                    type="text"
-                    value={this.state.filename}
-                    placeholder={ t("Codeblock Title") }
-                    onChange={this.changeFilename.bind(this)} />
-                </div>
-              */ }
-
               {/* actions title */}
               <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>
 

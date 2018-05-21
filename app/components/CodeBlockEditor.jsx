@@ -231,18 +231,18 @@ class CodeBlockEditor extends Component {
               <h1 className="font-sm">{ island.name } { t("codeblock") }</h1>
 
               {/* codeblock title */}
-              {/* TODO: convert to editable text */}
-              
-              <EditableText
-                value={filename}
-                selectAllOnFocus={true}
-                onChange={t => this.setState({filename: t})}
-                onCancel={() => this.setState({filename: originalFilename})}
-                onConfirm={this.changeCodeblockName.bind(this)}
-                multiline={true}
-                disabled={!canEditTitle}
-                confirmOnEnterKey={true}
-              />
+              <h2 className="studio-title font-lg">
+                <EditableText
+                  value={filename}
+                  selectAllOnFocus={true}
+                  onChange={t => this.setState({filename: t})}
+                  onCancel={() => this.setState({filename: originalFilename})}
+                  onConfirm={this.changeCodeblockName.bind(this)}
+                  multiline={true}
+                  disabled={!canEditTitle}
+                  confirmOnEnterKey={true}
+                />
+              </h2>
 
               {/* actions title */}
               <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>

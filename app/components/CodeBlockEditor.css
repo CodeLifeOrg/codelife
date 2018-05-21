@@ -34,29 +34,6 @@
 }
 
 
-/* codeblock title */
-.codeblockeditor-title {
-  @add-mixin edit-icon; /* add edit icon */
-  display: inline-block; /* honor margin-bottom */
-
-  /* interactions */
-  &:hover:after {
-    color: var(--sky-dark);
-  }
-}
-
-
-/* show / hide filename input */
-.codeblockeditor-filename {
-  @add-mixin visually-hidden;
-  top: -2rem; /* offset .studio-title margin */
-
-  &:focus {
-    @add-mixin reset-visually-hidden;
-  }
-}
-
-
 /* prompt & cheetsheet */
 .codeblockeditor-text {
   margin-top: 2rem;

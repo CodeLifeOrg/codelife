@@ -53,8 +53,6 @@ class LessonPlan extends Component {
     let levelSections = [];
     let levelTOC = [];
 
-    console.log("jimmy");
-
     // loop through levels
     if (lid) {
 

@@ -29,6 +29,8 @@ class CodeBlockEditor extends Component {
       rulejson: null,
       resetAlert: false,
       filename: "",
+      originalFilename: "",
+      canEditTitle: true,
       activeTabId: "codeblockeditor-prompt-tab"
     };
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
@@ -38,12 +40,14 @@ class CodeBlockEditor extends Component {
     const rulejson = JSON.parse(this.props.island.rulejson);
     let initialContent = "";
     let filename = "";
+    let originalFilename = "";
     if (this.props.island.initialcontent) initialContent = this.props.island.initialcontent;
     if (this.props.island.codeBlock) {
       initialContent = this.props.island.codeBlock.studentcontent;
       filename = this.props.island.codeBlock.snippetname;
+      originalFilename = filename;
     }
-    this.setState({mounted: true, initialContent, filename, rulejson});
+    this.setState({mounted: true, initialContent, filename, originalFilename, rulejson});
 
     // start listening for keypress when entering the page
     document.addEventListener("keypress", this.handleKey);
@@ -89,8 +93,11 @@ class CodeBlockEditor extends Component {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
-  changeFilename(e) {
-    this.setState({filename: e.target.value});
+  changeCodeblockName(newName) {
+    const canEditTitle = false;
+    const originalFilename = newName;
+    this.setState({originalFilename, canEditTitle});
+    this.verifyAndSaveCode.bind(this)();
   }
 
   shareCodeblock() {
@@ -99,7 +106,6 @@ class CodeBlockEditor extends Component {
     const {browserHistory} = this.context;
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       // browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
-
     }
     else {
       const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
@@ -118,6 +124,7 @@ class CodeBlockEditor extends Component {
     if (!this.editor.getWrappedInstance().getWrappedInstance().isPassing()) {
       const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
       toast.show({message: t("Can't save non-passing code!"), timeout: 1500, intent: Intent.DANGER});
+      this.setState({filename: this.state.originalFilename, canEditTitle: true});
       return;
     }
 
@@ -129,7 +136,6 @@ class CodeBlockEditor extends Component {
     let endpoint = "/api/codeBlocks/";
     codeBlock ? endpoint += "update" : endpoint += "new";
     const username = this.props.auth.user.username;
-    console.log(username);
     axios.post(endpoint, {uid, username, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
         this.setState({canEditTitle: true});
@@ -184,8 +190,8 @@ class CodeBlockEditor extends Component {
   }
 
   render() {
-    const {t, island, readOnly, title} = this.props;
-    const {activeTabId, execState, initialContent, rulejson} = this.state;
+    const {t, island, readOnly} = this.props;
+    const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, canEditTitle} = this.state;
 
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
@@ -226,14 +232,26 @@ class CodeBlockEditor extends Component {
 
               {/* codeblock title */}
               {/* TODO: convert to editable text */}
-              <label
+              
+              <EditableText
+                value={filename}
+                selectAllOnFocus={true}
+                onChange={t => this.setState({filename: t})}
+                onCancel={() => this.setState({filename: originalFilename})}
+                onConfirm={this.changeCodeblockName.bind(this)}
+                multiline={true}
+                disabled={!canEditTitle}
+                confirmOnEnterKey={true}
+              />
+
+              {/* <label
                 className="codeblockeditor-title studio-title heading font-lg"
                 htmlFor="codeblockeditor-title-edit" >
                 {this.state.filename}
-              </label>
+              </label>*/}
 
               {/* make edit field available if codeblock isn't read only */}
-              {!this.props.readOnly &&
+              {/* !this.props.readOnly &&
                 <div className="field-container font-sm">
                   <input
                     className="codeblockeditor-filename u-margin-top-md font-sm"
@@ -243,7 +261,7 @@ class CodeBlockEditor extends Component {
                     placeholder={ t("Codeblock Title") }
                     onChange={this.changeFilename.bind(this)} />
                 </div>
-              }
+              */ }
 
               {/* actions title */}
               <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>

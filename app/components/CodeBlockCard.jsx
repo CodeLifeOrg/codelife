@@ -107,7 +107,7 @@ class CodeBlockCard extends Component {
   componentDidMount() {
     const {codeBlock} = this.props;
     const initialLikeState = codeBlock.liked ? true : false;
-    const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 1000));
+    const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
     this.setState({initialLikeState, codeBlock, forkName});
   }
 
@@ -115,7 +115,7 @@ class CodeBlockCard extends Component {
     if (this.state.codeBlock && this.props.codeBlock.id !== this.state.codeBlock.id) {
       const {codeBlock} = this.props;
       const initialLikeState = codeBlock.liked ? true : false;
-      const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 1000));
+      const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
       this.setState({initialLikeState, codeBlock, forkName});
     }
   }
@@ -158,12 +158,8 @@ class CodeBlockCard extends Component {
       }
     }
 
-    // define image path
-    //const thumbnailURL = `/thumbnails/codeblocks/${thumbnailImg}`;
     thumbnailImg = true;
     const thumbnailURL = `/cb_images/${id}.png?v=${new Date().getTime()}`;
-
-
 
     return (
       <div className="card-container">

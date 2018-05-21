@@ -40,12 +40,12 @@ class Profile extends Component {
    * Grabs username from URL param, makes AJAX call to server and sets error
    * state (if no user is found) or profileUser (if one is).
    */
-  componentWillMount() {
+  componentDidMount() {
     const {username} = this.props.params;
     this.fetchUser(username);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.params.username !== this.props.params.username) {
       console.log("changed url!");
       this.setState({loading: true});
@@ -95,6 +95,10 @@ class Profile extends Component {
     const {t, user: loggedInUser} = this.props;
     const {error, loading, profileUser, sharing} = this.state;
 
+    if (loading || !profileUser) return <Loading />;
+
+    if (error) return <div className="content u-vertical-align-children u-text-center"><h1>{error}</h1></div>;
+
     // check if the user is viewing their own profile
     let myProfile = false;
     loggedInUser.id === profileUser.id ? myProfile = true : null; // NOTE: throws error on initial load
@@ -102,11 +106,7 @@ class Profile extends Component {
     // check for admin status
     let adminUser = false;
     this.props.user.role > 1 ? adminUser = true : null;
-
-    if (loading) return <Loading />;
-
-    if (error) return <div className="content u-vertical-align-children u-text-center"><h1>{error}</h1></div>;
-
+    
     return (
       <div className="content view-profile u-padding-top-off">
 

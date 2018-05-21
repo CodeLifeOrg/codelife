@@ -1,3 +1,5 @@
+@import '../../../mixins.css';
+
 .rulebuilder {
   padding: 0 0 var(--gutter-md) 0;
 

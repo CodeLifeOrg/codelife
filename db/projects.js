@@ -28,7 +28,8 @@ module.exports = function(sequelize, db) {
   );
 
   SequelizeSlugify.slugifyModel(p, {
-    source: ["name"]
+    source: ["name"],
+    overwrite: true
   });
 
   p.associate = models => {

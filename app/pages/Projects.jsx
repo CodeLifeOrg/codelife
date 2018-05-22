@@ -120,7 +120,7 @@ class Projects extends Component {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
-          this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, currentProject, projects, isNewOpen: false});
+          this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, projectName: "", currentProject, projects, isNewOpen: false});
           if (currentProject.slug) {
             browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.slug}/edit`);
           }
@@ -289,7 +289,6 @@ class Projects extends Component {
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
           this.setState({canEditTitle: true, isFirstSaveShareOpen});
-          console.log(updatedProject, updatedProject.slug);
           if (updatedProject.slug) {
             browserHistory.push(`/projects/${username}/${updatedProject.slug}/edit`);
           }

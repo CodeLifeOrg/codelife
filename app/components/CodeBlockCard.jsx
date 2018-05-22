@@ -132,14 +132,14 @@ class CodeBlockCard extends Component {
     if (!codeBlock) return <Loading />;
 
     const {t, userProgress, theme, icon, user} = this.props;
-    const {id, lid, liked, reported, likes, snippetname, studentcontent, username, featured} = codeBlock;
+    const {id, lid, liked, reported, likes, snippetname, slug, studentcontent, username, featured} = codeBlock;
 
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
     const done = userProgress ? userProgress.find(p => p.level === lid && p.status === "completed") !== undefined : true;
 
-    const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
+    const embedLink = `${ location.origin }/codeBlocks/${ username }/${ slug ? slug : snippetname }`;
     const userLink = `${ location.origin }/profile/${ username }`;
 
     // define thumbnail image as null

@@ -270,7 +270,10 @@ class Level extends Component {
     const {name, theme} = currentIsland;
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
-    const snippetname = currentIsland.codeBlock ? currentIsland.codeBlock.snippetname : "";
+    let snippetname = "";
+    if (currentIsland.codeBlock) {
+      snippetname = currentIsland.codeBlock.slug ? currentIsland.codeBlock.slug : currentIsland.codeBlock.snippetname;
+    }
 
     const shareLink = snippetname.length ? `${origin}/codeBlocks/${username}/${snippetname}` : origin;
 

@@ -41,7 +41,23 @@ module.exports = function(app) {
   // Used by Codeblock.jsx to save new Codeblocks
   app.post("/api/codeBlocks/new", isAuthenticated, (req, res) => {
     db.codeblocks.create({studentcontent: req.body.studentcontent, snippetname: req.body.name, uid: req.body.uid, lid: req.body.iid})
-      .then(u => res.json(u).end());
+      .then(u => {
+        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${req.body.name}?screenshot=true`;
+        const width = 600;
+        const height = 315;
+        const page = true;
+        const delay = 5000;
+        const xvfb = new Xvfb({timeout: 5000});
+        if (req.headers.host !== "localhost:3300") xvfb.startSync();
+        screenshot({url, width, height, page, delay}).then(img => {
+          const imgPath = path.join(process.cwd(), "/static/cb_images", `${u.toJSON().id}.png`);
+          fs.writeFile(imgPath, img.data, err => {
+            console.log("fs err", err);
+            if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+          });
+        });
+        res.json(u).end();
+      });
   });
 
   // Used by CodeBlock.jsx to update the CodeBlock Test
@@ -82,11 +98,6 @@ module.exports = function(app) {
   // Used by Home.jsx to get hand-picked featured blocks
   app.get("/api/codeBlocks/featured", (req, res)  => {
     db.codeblocks.findAll({
-      /*
-      where: {
-        [Op.or]: [{id: 834}, {id: 921}, {id: 30}]
-      },
-      */
       where: {featured: true},
       include: cbIncludes
     })
@@ -114,7 +125,7 @@ module.exports = function(app) {
   app.get("/api/codeBlocks/byUsernameAndFilename", (req, res) => {
     db.codeblocks.findAll({
       where: {
-        snippetname: req.query.filename
+        [Op.or]: [{slug: req.query.filename}, {snippetname: req.query.filename}]
       },
       include: cbIncludes.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
     })

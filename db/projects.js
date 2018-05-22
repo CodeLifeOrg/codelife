@@ -29,6 +29,7 @@ module.exports = function(sequelize, db) {
 
   SequelizeSlugify.slugifyModel(p, {
     source: ["name"],
+    suffixSource: ["id"],
     overwrite: true
   });
 

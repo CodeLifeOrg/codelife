@@ -120,8 +120,8 @@ class CollabSearch extends Component {
     }
 
     // available collaborators
-    const userList = usersWithoutCollabs.map(r =>
-      <li className="collab-item available-collab-item card-container" key={r.id}>
+    const userList = usersWithoutCollabs.map(r => {
+      return <li className="collab-item available-collab-item card-container" key={r.id}>
 
         {/* add collaborator button */}
         <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={this.addCollaborator.bind(this, r)}>
@@ -133,8 +133,8 @@ class CollabSearch extends Component {
 
           <span className="collab-avatar">
             {/* show user image if one is found */}
-            { r.user.img
-              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.user.img})`}} />
+            { r.img
+              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.img})`}} />
               : <span className="collab-avatar-icon pt-icon pt-icon-person" />
             }
             {/* action indicator */}
@@ -150,13 +150,12 @@ class CollabSearch extends Component {
             {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null} */}
           </span>
         </span>
-      </li>
+      </li>}
     );
 
     // current collaborators
     const collabList = collabs.map(r =>
       <li className="collab-item current-collab-item card-container" key={r.id}>
-
         {/* remove collaborator button */}
         <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={this.removeCollaborator.bind(this, r.uid)}>
           <span className="u-visually-hidden">{ t("Collab.Remove") }</span>
@@ -167,8 +166,8 @@ class CollabSearch extends Component {
 
           <span className="collab-avatar">
             {/* show user image if one is found */}
-            { r.user.img
-              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.user.img})`}} />
+            { r.img
+              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.img})`}} />
               : <span className="collab-avatar-icon pt-icon pt-icon-person" />
             }
             {/* action indicator */}

@@ -15,7 +15,7 @@ module.exports = function(app) {
   app.get("/api/searchusers", isAuthenticated, (req, res) => {
     const query = req.query.query;
     db.userprofiles.findAll({
-      attributes: ["uid", "gid", "sid"],
+      attributes: ["uid", "gid", "sid", "img"],
       include: [
         {
           association: "user", 

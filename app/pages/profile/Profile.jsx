@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
 import {Link} from "react-router";
 import {Switch} from "@blueprintjs/core";
 import Loading from "components/Loading";
@@ -94,6 +95,9 @@ class Profile extends Component {
   render() {
     const {t, user: loggedInUser} = this.props;
     const {error, loading, profileUser, sharing} = this.state;
+    const {browserHistory} = this.context;
+
+    if (!loggedInUser) browserHistory.push("/");
 
     if (loading || !profileUser) return <Loading />;
 
@@ -205,7 +209,7 @@ class Profile extends Component {
                       onChange={this.handleChangeSharing.bind(this)}
                     />
                   }
-                  </div>
+                </div>
                 : null }
             </div>
           </div>
@@ -224,6 +228,10 @@ class Profile extends Component {
     );
   }
 }
+
+Profile.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Profile = connect(state => ({
   user: state.auth.user

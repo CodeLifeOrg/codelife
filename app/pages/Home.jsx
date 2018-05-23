@@ -188,7 +188,7 @@ class Home extends Component {
             <div className="card-list codeblock-list">
               { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
                 const {theme, icon} = islands.find(i => i.id === c.lid);
-                return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;
+                return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon}/>;
               }) }
             </div>
           </div>

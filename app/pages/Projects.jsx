@@ -5,7 +5,6 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Alert, Dialog, EditableText, Intent, Position, Toaster} from "@blueprintjs/core";
 import {Link} from "react-router";
-import slugify from "slugify";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -42,7 +41,6 @@ class Projects extends Component {
       isManageCollabsOpen: false,
       isViewCollabsOpen: false
     };
-    this.slugOptions = {remove: /[$*_+~.()/#'"!\-:@]/g};
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 

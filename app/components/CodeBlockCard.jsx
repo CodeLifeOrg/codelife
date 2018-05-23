@@ -188,9 +188,13 @@ class CodeBlockCard extends Component {
             {/* author */}
             { username
               ? <span className="card-author font-xs">
-                { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
-                  { username ? displayname || username : t("anonymous user") }
-                </Link>
+                {t("Card.MadeBy")}&nbsp;
+                { this.props.user 
+                  ? <Link className="card-author-link link" to={`/profile/${username}`}>
+                    { username ? displayname || username : t("anonymous user") }
+                  </Link>
+                  : username ? displayname || username : t("anonymous user")
+                }
 
                 {/* show edit link if it's yours */}
                 {/* NOTE: codeblocks don't currently have a direct edit link though
@@ -250,9 +254,12 @@ class CodeBlockCard extends Component {
             {/* created by */}
             <p className="card-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
-              <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
-                { username ? displayname || username : t("anonymous user") }
-              </a>
+              {this.props.user 
+                ? <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
+                  { username ? displayname || username : t("anonymous user") }
+                </a>
+                : username ? displayname || username : t("anonymous user")
+              }
               <a href={ embedLink } target="_blank" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 

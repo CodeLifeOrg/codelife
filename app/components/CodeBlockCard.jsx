@@ -19,26 +19,24 @@ class CodeBlockCard extends Component {
     this.state = {
       open: false,
       codeBlock: null,
-      initialLikeState: false,
       forkName: ""
     };
   }
 
   toggleDialog() {
-    if (this.state.open) {
-      if (this.props.user && this.state.initialLikeState !== this.state.codeBlock.liked) {
-        axios.post("/api/likes/save", {type: "codeblock", liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
-          if (resp.status === 200) {
-            console.log("success");
-            if (this.props.reportLike) this.props.reportLike(this.state.codeBlock);
-          }
-          else {
-            console.log("error");
-          }
-        });
-      }
-    }
     this.setState({open: !this.state.open});
+  }
+
+  saveLikeStatus() {
+    axios.post("/api/likes/save", {type: "codeblock", liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
+      if (resp.status === 200) {
+        console.log("success");
+        if (this.props.reportLike) this.props.reportLike(this.state.codeBlock);
+      }
+      else {
+        console.log("error");
+      }
+    });
   }
 
   handleChange(e) {
@@ -104,19 +102,23 @@ class CodeBlockCard extends Component {
     this.setState({codeBlock});
   }
 
+  directLike() {
+    this.toggleLike.bind(this)();
+    this.saveLikeStatus.bind(this)();
+    this.forceUpdate();
+  }
+
   componentDidMount() {
     const {codeBlock} = this.props;
-    const initialLikeState = codeBlock.liked ? true : false;
     const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
-    this.setState({initialLikeState, codeBlock, forkName});
+    this.setState({codeBlock, forkName});
   }
 
   componentDidUpdate() {
     if (this.state.codeBlock && this.props.codeBlock.id !== this.state.codeBlock.id) {
       const {codeBlock} = this.props;
-      const initialLikeState = codeBlock.liked ? true : false;
       const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
-      this.setState({initialLikeState, codeBlock, forkName});
+      this.setState({codeBlock, forkName});
     }
   }
 
@@ -212,7 +214,7 @@ class CodeBlockCard extends Component {
             <p className="card-likes font-xs u-margin-top-off" id={`codeblock-card-${id}`}>
               <button
                 className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
-                onClick={ this.toggleLike.bind(this) }
+                onClick={ this.directLike.bind(this) }
                 aria-labelledby={`codeblock-card-${id}`} />
               <span className="card-likes-count">{ likes }</span>
               <span className="u-visually-hidden">&nbsp;
@@ -271,7 +273,7 @@ class CodeBlockCard extends Component {
                 <p className="card-dialog-footer-action codeblock-dialog-footer-action card-likes font-xs">
                   <button
                     className={ `card-likes-button pt-icon-standard u-unbutton ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
-                    onClick={ this.toggleLike.bind(this) } />
+                    onClick={ this.directLike.bind(this) } />
                   <span className="card-dialog-footer-action-text card-likes-count codeblock-dialog-footer-action-text">{ likes }</span>
                   <span className="u-visually-hidden">&nbsp;
                     { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }

@@ -241,8 +241,6 @@ class LessonPlan extends Component {
   }
 }
 
-// whut
-
 LessonPlan.need = [
   fetchData("islands", "/api/islands/nested?lang=<i18n.locale>")
 ];

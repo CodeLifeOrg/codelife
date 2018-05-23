@@ -67,7 +67,7 @@ class App extends Component {
 
     const authRoute = routes[0] === "login";
     const bareRoute = ["projects", "codeBlocks"].includes(routes[0]) && routes.length === 3;
-    const planRoute = this.props.router.location.pathname.includes("lessonplan");
+    const seoRoute = this.props.router.location.pathname.includes("lessonplan") || this.props.router.location.pathname.includes("glossary")
 
     const meta = header.meta.slice();
 
@@ -93,7 +93,7 @@ class App extends Component {
             ? <div className="devbar">Development Server. Do not edit content here!</div>
             : null
         }
-        { reduxLoaded && userInit && !auth.loading || authRoute || bareRoute || planRoute
+        { reduxLoaded && userInit && !auth.loading || authRoute || bareRoute || seoRoute
           ? bareRoute
             ? children
             : <div className="container">

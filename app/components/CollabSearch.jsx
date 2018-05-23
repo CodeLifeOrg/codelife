@@ -120,8 +120,8 @@ class CollabSearch extends Component {
     }
 
     // available collaborators
-    const userList = usersWithoutCollabs.map(r => {
-      return <li className="collab-item available-collab-item card-container" key={r.id}>
+    const userList = usersWithoutCollabs.map(r => 
+      <li className="collab-item available-collab-item card-container" key={r.id}>
 
         {/* add collaborator button */}
         <button className="card-trigger u-absolute-expand u-unbutton u-margin-top-off u-margin-bottom-off" onClick={this.addCollaborator.bind(this, r)}>
@@ -150,7 +150,7 @@ class CollabSearch extends Component {
             {r.school && r.school.name ? <p><Icon iconName="office" /> {r.school.name}</p> : null} */}
           </span>
         </span>
-      </li>}
+      </li>
     );
 
     // current collaborators

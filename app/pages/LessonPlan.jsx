@@ -143,7 +143,7 @@ class LessonPlan extends Component {
                 <span className="link-icon pt-icon pt-icon-arrow-left" />
                 <span className="link-text">{prevIsland.name}</span>
               </Link>
-            } 
+            }
 
             {/* island index */}
             <Link className="lessonplan-nav-link link" to="/lessonplan">
@@ -155,10 +155,10 @@ class LessonPlan extends Component {
             {/* next island */}
             {nextIsland &&
               <Link className="lessonplan-nav-link link" to={`/lessonplan/${nextIsland.id}`}>
-                <span className="link-icon pt-icon pt-icon-arrow-right" />
                 <span className="link-text">{nextIsland.name}</span>
+                <span className="link-icon pt-icon pt-icon-arrow-right" />
               </Link>
-            } 
+            }
 
           </nav>
 
@@ -176,7 +176,7 @@ class LessonPlan extends Component {
               {/* levels */}
               {levelSections}
 
-              {/* codeblock */}              
+              {/* codeblock */}
               <section className="overview-lessonplan-section lessonplan-section anchor" id="codeblock" >
                 <h2 className="lessonplan-section-heading font-xl">{t("Lessonplan.Codeblock")}</h2>
                 <div dangerouslySetInnerHTML={{__html: currentIsland.prompt}} />

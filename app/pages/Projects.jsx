@@ -109,7 +109,7 @@ class Projects extends Component {
 
   createNewProject(projectName) {
     const {browserHistory} = this.context;
-    // Trim leading and trailing whitespace and remove slashes from the project title
+    // Trim leading and trailing whitespace and remove URL-breakers from the project title
     projectName = projectName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     // const slug = slugify(projectName, this.slugOptions);
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {

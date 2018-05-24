@@ -18,7 +18,7 @@ class SelectSchool extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {sid} = this.props;
     if (sid) {
       axios.get(`/api/schoolsBySid?sid=${sid}`).then(schoolsResp => {

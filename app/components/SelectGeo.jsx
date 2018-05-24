@@ -21,7 +21,7 @@ class SelectGeo extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {gid} = this.props;
     if (gid) {
       const state = gid.substr(0, 3);

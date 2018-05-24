@@ -96,8 +96,10 @@ class CodeBlockEditor extends Component {
 
   changeCodeblockName(newName) {
     const canEditTitle = false;
+    newName = newName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     const originalFilename = newName;
-    this.setState({originalFilename, canEditTitle});
+    const filename = newName;
+    this.setState({originalFilename, filename, canEditTitle});
     this.verifyAndSaveCode.bind(this)();
   }
 
@@ -137,8 +139,8 @@ class CodeBlockEditor extends Component {
     this.saveProgress(iid);
 
     // todo: maybe replace this with findorupdate from userprogress?
-    // this regex trims leading and trailing spaces from the filename
-    if (this.state.filename !== "") name = this.state.filename.replace(/^\s+|\s+$/gm, "");
+    // this regex trims leading and trailing spaces from the filename and removes URL-breaking characters
+    if (this.state.filename !== "") name = this.state.filename.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     let endpoint = "/api/codeBlocks/";
     codeBlock ? endpoint += "update" : endpoint += "new";
     const username = this.props.auth.user.username;

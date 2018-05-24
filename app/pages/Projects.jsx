@@ -110,7 +110,7 @@ class Projects extends Component {
   createNewProject(projectName) {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace and remove slashes from the project title
-    projectName = projectName.replace(/^\s+|\s+$/gm, "").replace(/\//g, "");
+    projectName = projectName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     // const slug = slugify(projectName, this.slugOptions);
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
       axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
@@ -325,7 +325,7 @@ class Projects extends Component {
   changeProjectName(newName) {
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
-    newName = newName.replace(/^\s+|\s+$/gm, "").replace(/\//g, "");
+    newName = newName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     currentProject.name = newName;
     const cp = projects.find(p => p.id === currentProject.id);
     if (cp) {

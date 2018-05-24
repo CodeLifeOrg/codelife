@@ -2,6 +2,8 @@ npm-debug.log*
 node_modules
 static/assets
 static/reports
+static/cb_images
+static/pj_images
 static/uploads/*
 static/pj_images/*
 static/cb_images/*

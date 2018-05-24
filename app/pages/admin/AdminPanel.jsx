@@ -32,6 +32,9 @@ class AdminPanel extends Component {
     if (!this.props.params.tab) {
       this.handleTabChange("lesson-builder");
     }
+    else if (this.props.params.tab !== "lesson-builder") {
+      this.handleTabChange(this.props.params.tab);
+    }
     const mounted = true;
     this.setState({mounted});
   }

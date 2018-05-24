@@ -31,9 +31,9 @@ class GlossaryBuilder extends Component {
   }
 
   changeField(field, e) {
-    const {words, firstInput} = this.state;
+    const {words} = this.state;
     const word = words.find(w => w.id.toString() === e.target.id);
-    if (word && firstInput) {
+    if (word) {
       word[field] = e.target.value;
       word.touched = true;
     }
@@ -105,11 +105,29 @@ class GlossaryBuilder extends Component {
     });
   }
 
+  cancelWord(e) {
+    let {words} = this.state;
+    words = words.map(w => {
+      if (w.id.toString() === e.target.id) {
+        w = Object.assign({}, w.initialState);
+        w.touched = false;
+        w.initialState = undefined;
+        return w;
+      }
+      else {
+        return w;
+      }
+    });
+    this.setState({words});
+  }
+
   editWord(e) {
     const {words} = this.state;
     const word = words.find(w => w.id.toString() === e.target.id);
     if (word) {
       word.touched = true;
+      // To allow for canceling edits, capture the initial state for potential reset later.
+      word.initialState = Object.assign({}, word);
       this.setState({words});  
     }
   }
@@ -119,6 +137,8 @@ class GlossaryBuilder extends Component {
     const {words} = this.state;
 
     if (!words) return <Loading />;
+
+    console.log(words);
 
     const wordItems = words.map(w => 
       w.touched 
@@ -157,6 +177,7 @@ class GlossaryBuilder extends Component {
           </div>
           <div className="action-box">
             <button id={w.id} className="pt-button pt-intent-success glossary-button" onClick={this.saveWord.bind(this)}>Save</button><br/>
+            <button id={w.id} className="pt-button pt-intent-warning glossary-button" onClick={this.cancelWord.bind(this)}>Cancel</button><br/>
             <button id={w.id} className="pt-button pt-intent-danger glossary-button" onClick={this.deleteWord.bind(this)}>Delete</button><br/>
           </div>
         </div>
@@ -185,7 +206,7 @@ class GlossaryBuilder extends Component {
             <button id={w.id} className="pt-button pt-intent-warning glossary-button" onClick={this.editWord.bind(this)}>Edit</button>
           </div>
         </div>
-      );
+    );
 
 
     return (

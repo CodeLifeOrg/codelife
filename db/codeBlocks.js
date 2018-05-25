@@ -1,3 +1,5 @@
+const SequelizeSlugify = require("sequelize-slugify");
+
 module.exports = function(sequelize, db) {
 
   const cb = sequelize.define("codeblocks",
@@ -13,13 +15,23 @@ module.exports = function(sequelize, db) {
       lid: db.TEXT,
       uid: db.TEXT,
       status: db.TEXT,
-      featured: db.BOOLEAN
+      featured: db.BOOLEAN, 
+      slug: {
+        type: db.STRING,
+        unique: true
+      }
     }, 
     {
       freezeTableName: true,
       timestamps: false
     }
   );
+
+  SequelizeSlugify.slugifyModel(cb, {
+    source: ["snippetname"],
+    suffixSource: ["id"],
+    overwrite: true
+  });
 
   cb.associate = models => {
     cb.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});

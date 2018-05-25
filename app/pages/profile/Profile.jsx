@@ -2,6 +2,8 @@ import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {Link} from "react-router";
 import {Switch} from "@blueprintjs/core";
 import Loading from "components/Loading";
 
@@ -39,12 +41,12 @@ class Profile extends Component {
    * Grabs username from URL param, makes AJAX call to server and sets error
    * state (if no user is found) or profileUser (if one is).
    */
-  componentWillMount() {
+  componentDidMount() {
     const {username} = this.props.params;
     this.fetchUser(username);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.params.username !== this.props.params.username) {
       console.log("changed url!");
       this.setState({loading: true});
@@ -92,36 +94,144 @@ class Profile extends Component {
    */
   render() {
     const {t, user: loggedInUser} = this.props;
-    const {loading, error, profileUser} = this.state;
+    const {error, loading, profileUser, sharing} = this.state;
+    const {browserHistory} = this.context;
 
-    if (loading) return <Loading />;
+    if (!loggedInUser) browserHistory.push("/");
+
+    if (loading || !profileUser) return <Loading />;
 
     if (error) return <div className="content u-vertical-align-children u-text-center"><h1>{error}</h1></div>;
 
-    return (
-      <div className="profile" id="profile">
-        <aside className="profile-side">
+    // check if the user is viewing their own profile
+    let myProfile = false;
+    loggedInUser.id === profileUser.id ? myProfile = true : null; // NOTE: throws error on initial load
 
-          <UserInfo user={profileUser} loggedInUser={loggedInUser} />
-          { this.props.user.role > 1 ? <Switch checked={this.state.sharing} label="Sharing Enabled" onChange={this.handleChangeSharing.bind(this)} /> : null }
-          {/* <skillsList /> */}
-        </aside>
-        <content className="profile-info">
-          { profileUser.bio
-            ? <div className="user-section">
-              <h2>{t("About Me")}</h2>
-              <p className="bio">{ profileUser.bio }</p>
+    // check for admin status
+    let adminUser = false;
+    this.props.user.role > 1 ? adminUser = true : null;
+    
+    return (
+      <div className="content view-profile u-padding-top-off">
+
+        {/* header */}
+        <header className="header">
+          <div className={ profileUser.img ? "header-inner has-img" : "header-inner text-only" }>
+
+            {/* avatar */}
+            { profileUser.img &&
+              <div className="header-avatar">
+                <img className="header-avatar-img" src={ `/uploads/${ profileUser.img }?v=${ new Date().getTime() }` } alt="" />
+              </div>
+            }
+
+            {/* name & info */}
+            <div className="header-text">
+
+              {/* name / username */}
+              <h1 className="user-name font-xl u-margin-top-off u-margin-bottom-sm">
+                { profileUser.name || profileUser.username }
+                { !sharing && <span className="font-md"> ({ t("hidden") })</span> }
+              </h1>
+              {/* bio */}
+              { profileUser.bio &&
+                <p className="bio font-lg u-margin-top-xs">{ profileUser.bio }</p>
+              }
+
+
+              {/* meta info */}
+              <div className="profile-meta-list">
+
+                {/* location */}
+                { profileUser.gid &&
+                  <p className="location-profile-meta profile-meta">
+                    <span className="u-visually-hidden">{ t("City") }: </span>
+                    <span className="profile-meta-icon pt-icon-standard pt-icon-map-marker" />
+                    <span className="profile-meta-text">
+                      { profileUser.geoname && `${profileUser.geoname}, ${ profileUser.gid.substr(1, 2).toUpperCase() }` }
+                    </span>
+                  </p>
+                }
+                {/* school */}
+                { profileUser.schoolname &&
+                  <p className="school-profile-meta profile-meta">
+                    <span className="u-visually-hidden">{ t("School") }: </span>
+                    <span className="profile-meta-icon pt-icon-standard pt-icon-book" />
+                    <span className="profile-meta-text">
+                      { profileUser.schoolname }
+                    </span>
+                  </p>
+                }
+              </div>
+
+              {/* meta links */}
+              <div className="profile-meta-list">
+                {/* email address */}
+                { profileUser.email &&
+                  <p className="email-profile-meta profile-meta">
+                    <a className="profile-meta-link" href={`mailto:${ profileUser.email }`}>
+                      <span className="u-visually-hidden">{ t("LogIn.Email") }: </span>
+                      <span className="profile-meta-icon pt-icon-standard pt-icon-envelope" />
+                      <span className="profile-meta-text">
+                        { profileUser.email }
+                      </span>
+                    </a>
+                  </p>
+                }
+                {/* direct profile link */}
+                <p className="url-profile-meta profile-meta">
+                  <Link className="profile-meta-link" to={`/profile/${profileUser.username}/`}>
+                    <span className="u-visually-hidden">{ t("ShareDirectLink.Label") }: </span>
+                    <span className="profile-meta-icon pt-icon-standard pt-icon-link" />
+                    <span className="profile-meta-text">
+                      { `codelife.com/profile/${profileUser.username}` }
+                    </span>
+                  </Link>
+                </p>
+              </div>
+
+              {/* profile controls */}
+              { myProfile || adminUser ?
+                <div className="profile-control-list u-margin-top-md font-sm">
+                  {/* edit button */}
+                  { myProfile &&
+                    <Link className="profile-control pt-button pt-intent-primary edit-link" to={`/profile/${profileUser.username}/edit`}>
+                      <span className="pt-icon pt-icon-cog" />
+                      { t("Edit Profile") }
+                    </Link>
+                  }
+                  {/* profile visibility toggle */}
+                  { adminUser &&
+                    <Switch
+                      className="profile-control"
+                      checked={this.state.sharing}
+                      label={ t("UserProfile.Visible") }
+                      onChange={this.handleChangeSharing.bind(this)}
+                    />
+                  }
+                </div>
+                : null }
             </div>
-            : null }
-          <UserCodeBlocks user={profileUser} />
-          <UserProjects user={profileUser} />
-          {/* {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
-          {profileUser.sid && profileUser.sid !== -1 ? <UsersList type="school" user={profileUser} /> : null} */}
-        </content>
+          </div>
+        </header>
+
+        { sharing ?
+          <content className="profile-info">
+            <UserProjects user={profileUser} myProfile={myProfile ? true : null} />
+            <UserCodeBlocks user={profileUser} myProfile={myProfile ? true : null} />
+            {/* {profileUser.gid ? <UsersList type="geo" user={profileUser} /> : null}
+            {profileUser.sid && profileUser.sid !== -1 ? <UsersList type="school" user={profileUser} /> : null} */}
+          </content>
+          : <h2 className="u-text-center">{ t("UserProfile.HiddenContent") }</h2>
+        }
       </div>
     );
   }
 }
+
+Profile.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Profile = connect(state => ({
   user: state.auth.user

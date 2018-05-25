@@ -5,7 +5,6 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Alert, Dialog, EditableText, Intent, Position, Toaster} from "@blueprintjs/core";
 import {Link} from "react-router";
-import slugify from "slugify";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -39,10 +38,10 @@ class Projects extends Component {
       projects: [],
       collabs: [],
       showCodeblocks: false,
+      canPostToFacebook: true,
       isManageCollabsOpen: false,
       isViewCollabsOpen: false
     };
-    this.slugOptions = {remove: /[$*_+~.()/#'"!\-:@]/g};
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
@@ -90,6 +89,7 @@ class Projects extends Component {
   // stop listening for keypress when leaving the page
   componentWillUnmount() {
     document.removeEventListener("keypress", this.handleKey);
+    clearTimeout(this.timeout);
   }
 
   openProject(pid) {
@@ -111,16 +111,16 @@ class Projects extends Component {
 
   createNewProject(projectName) {
     const {browserHistory} = this.context;
-    // Trim leading and trailing whitespace from the project title
-    projectName = projectName.replace(/^\s+|\s+$/gm, "");
-    const slug = slugify(projectName, this.slugOptions);
+    // Trim leading and trailing whitespace and remove URL-breakers from the project title
+    projectName = projectName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
+    // const slug = slugify(projectName, this.slugOptions);
     if (this.state.projects.find(p => p.name === projectName) === undefined && projectName !== "") {
-      axios.post("/api/projects/new", {name: projectName, studentcontent: "", slug}).then(resp => {
+      axios.post("/api/projects/new", {name: projectName, studentcontent: ""}).then(resp => {
         if (resp.status === 200) {
           const projects = resp.data.projects;
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
-          this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, currentProject, projects, isNewOpen: false});
+          this.setState({currentTitle: currentProject.name, originalTitle: currentProject.name, projectName: "", currentProject, projects, isNewOpen: false});
           if (currentProject.slug) {
             browserHistory.push(`/projects/${this.props.auth.user.username}/${currentProject.slug}/edit`);
           }
@@ -269,22 +269,34 @@ class Projects extends Component {
   saveCodeToDB() {
     const {t} = this.props;
     const {currentProject} = this.state;
+    
 
     if (currentProject) {
       const id = currentProject.id;
       const name = currentProject.name;
-      const slug = slugify(name, this.slugOptions);
+      // const slug = slugify(name, this.slugOptions);
       const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
       const username = this.props.auth.user.username;
       let isFirstSaveShareOpen = !currentProject.prompted;
       if (this.state.optout || currentProject.userprofile.prompted) isFirstSaveShareOpen = false;
+      const canPostToFacebook = false;
       currentProject.prompted = true;
-      axios.post("/api/projects/update", {id, username, name, slug, studentcontent, prompted: true}).then (resp => {
+      axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
+          const updatedProject = resp.data;
+          const {browserHistory} = this.context;
+          const {username} = this.props.auth.user;
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-          this.setState({canEditTitle: true, isFirstSaveShareOpen});
+          this.setState({canEditTitle: true, isFirstSaveShareOpen, canPostToFacebook});
+          this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
+          if (updatedProject.slug) {
+            browserHistory.push(`/projects/${username}/${updatedProject.slug}/edit`);
+          }
+          else {
+            browserHistory.push(`/projects/${username}/${updatedProject.name}/edit`);
+          }
         }
       });
     }
@@ -315,26 +327,18 @@ class Projects extends Component {
   }
 
   changeProjectName(newName) {
-    const {browserHistory} = this.context;
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
-    const newSlug = slugify(newName, this.slugOptions);
+    newName = newName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     currentProject.name = newName;
-    currentProject.slug = newSlug;
     const cp = projects.find(p => p.id === currentProject.id);
     if (cp) {
       cp.name = newName;
-      cp.slug = newSlug;
     }
-    this.setState({currentProject, projects, canEditTitle});
+    const currentTitle = newName;
+    const originalTitle = newName;
+    this.setState({currentProject, projects, canEditTitle, currentTitle, originalTitle});
     this.saveCodeToDB.bind(this)();
-    if (newSlug) {
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${newSlug}/edit`);
-    }
-    else {
-      browserHistory.push(`/projects/${this.props.auth.user.username}/${newName}/edit`);
-    }
-
   }
 
   handleKey(e) {
@@ -390,8 +394,7 @@ class Projects extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {currentProject, canEditTitle, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
-    // const {filename} = this.props.params;
+    const {currentProject, canEditTitle, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks, canPostToFacebook} = this.state;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
@@ -519,12 +522,12 @@ class Projects extends Component {
                 </li> }
 
                 {/* share project */}
-                <li className="studio-action-item">
+                {<li className="studio-action-item">
                   <button className="studio-action-button link u-unbutton" onClick={() => this.setState({isShareOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                   </button>
-                </li>
+                </li>}
 
                 {/* delete / leave project */}
                 { currentProject ? <li className="studio-action-item">

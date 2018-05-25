@@ -411,15 +411,14 @@ class LessonBuilder extends Component {
     if (!nodes) return <Loading />;
 
     return (
-      <div className="lesson-builder" id="lesson-builder">
-        <div className="tree" id="tree">
-          <Tree
-            onNodeClick={this.handleNodeClick.bind(this)}
-            onNodeCollapse={this.handleNodeCollapse.bind(this)}
-            onNodeExpand={this.handleNodeExpand.bind(this)}
-            contents={nodes}
-          />
-        </div>
+      <div className="lessonbuilder" id="lesson-builder">
+        <Tree
+          className="lessonbuilder-tree font-sm"
+          onNodeClick={this.handleNodeClick.bind(this)}
+          onNodeCollapse={this.handleNodeCollapse.bind(this)}
+          onNodeExpand={this.handleNodeExpand.bind(this)}
+          contents={nodes}
+        />
         <div className="item-editor" id="item-editor">
           { currentNode
             ? currentNode.itemType === "island"

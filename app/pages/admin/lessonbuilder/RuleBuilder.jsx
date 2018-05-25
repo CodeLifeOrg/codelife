@@ -58,25 +58,28 @@ class RuleBuilder extends Component {
     if (!rules) return <Loading />;
 
     const ruleItems = rules.map(r => <div key={r.id} className="rule">
-      <h3 className="rule-title">{r.type}</h3>
-      <h4 className="translation-title">Portuguese Translation</h4>
-      <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
-      <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
-      <div>
-        <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
-        <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
+      <h3 className="rule-title font-lg u-margin-top-off u-margin-bottom-xxs">{r.type}</h3>
+      <p className="heading font-sm en-rule-subhead rule-subhead translation-title">English rule</p>
+      <p className="heading font-sm pt-rule-subhead rule-subhead translation-title">Portuguese translation</p>
+      <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
+      <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
+      <div className="rule-group u-margin-top-sm">
+        <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
+        <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
       </div>
-      <div>
-        <input className="pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
-        <input className="pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
+      <div className="rule-group u-margin-top-sm">
+        <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
+        <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
       </div>
     </div>);
 
 
     return (
-      <div id="RuleBuilder">
+      <div className="rulebuilder">
         {ruleItems}
-        <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-fill pt-large pt-intent-success">Save</Button>
+        <div className="field-container">
+          <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success font-md">Save</Button>
+        </div>
       </div>
     );
   }

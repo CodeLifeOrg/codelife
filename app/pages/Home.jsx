@@ -9,6 +9,7 @@ import IslandLink from "components/IslandLink";
 import AuthForm from "components/AuthForm";
 import CTA from "components/CTA";
 import {Dialog, Intent, Spinner} from "@blueprintjs/core";
+import Loading from "components/Loading";
 import "./Home.css";
 
 class Home extends Component {
@@ -21,6 +22,7 @@ class Home extends Component {
       progress: [],
       projects: false,
       isauthForm: false,
+      dbLoaded: false,
       formMode: "login"
     };
   }
@@ -35,7 +37,7 @@ class Home extends Component {
       axios.get("/api/userprogress/mine")
         .then(resp => {
           const {current, progress} = resp.data;
-          this.setState({current, progress});
+          this.setState({current, progress, dbLoaded: true});
         });
     }
     const codeBlocks = axios.get("/api/codeBlocks/featured");
@@ -49,13 +51,15 @@ class Home extends Component {
 
   render() {
 
-    const {locale, t, islands} = this.props;
-    const {codeBlocks, current, isauthForm, progress, projects} = this.state;
+    const {locale, t, islands, user} = this.props;
+    const {codeBlocks, current, isauthForm, progress, projects, dbLoaded} = this.state;
 
     const videos = {
       en: "3s2vPV-tRhI",
       pt: "9ImSvqDDQuc"
     };
+
+    if (user && !dbLoaded) return <Loading />;
 
     return (
       <div className="content home">
@@ -188,7 +192,7 @@ class Home extends Component {
             <div className="card-list codeblock-list">
               { !codeBlocks ? <Spinner intent={Intent.PRIMARY}/> : codeBlocks.map(c => {
                 const {theme, icon} = islands.find(i => i.id === c.lid);
-                return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon} />;
+                return <CodeBlockCard key={c.id} codeBlock={c} theme={theme} icon={icon}/>;
               }) }
             </div>
           </div>

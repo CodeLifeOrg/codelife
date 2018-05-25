@@ -19,7 +19,7 @@
 
 /* default colors */
 .footer {
-  margin-top: 150px; /* offset image */
+  margin-top: 120px; /* offset image */
   background: var(--black);
 
   & * {

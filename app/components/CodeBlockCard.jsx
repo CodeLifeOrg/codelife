@@ -19,26 +19,24 @@ class CodeBlockCard extends Component {
     this.state = {
       open: false,
       codeBlock: null,
-      initialLikeState: false,
       forkName: ""
     };
   }
 
   toggleDialog() {
-    if (this.state.open) {
-      if (this.props.user && this.state.initialLikeState !== this.state.codeBlock.liked) {
-        axios.post("/api/likes/save", {type: "codeblock", liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
-          if (resp.status === 200) {
-            console.log("success");
-            if (this.props.reportLike) this.props.reportLike(this.state.codeBlock);
-          }
-          else {
-            console.log("error");
-          }
-        });
-      }
-    }
     this.setState({open: !this.state.open});
+  }
+
+  saveLikeStatus() {
+    axios.post("/api/likes/save", {type: "codeblock", liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
+      if (resp.status === 200) {
+        console.log("success");
+        if (this.props.reportLike) this.props.reportLike(this.state.codeBlock);
+      }
+      else {
+        console.log("error");
+      }
+    });
   }
 
   handleChange(e) {
@@ -104,19 +102,23 @@ class CodeBlockCard extends Component {
     this.setState({codeBlock});
   }
 
+  directLike() {
+    this.toggleLike.bind(this)();
+    this.saveLikeStatus.bind(this)();
+    this.forceUpdate();
+  }
+
   componentDidMount() {
     const {codeBlock} = this.props;
-    const initialLikeState = codeBlock.liked ? true : false;
-    const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 1000));
-    this.setState({initialLikeState, codeBlock, forkName});
+    const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
+    this.setState({codeBlock, forkName});
   }
 
   componentDidUpdate() {
     if (this.state.codeBlock && this.props.codeBlock.id !== this.state.codeBlock.id) {
       const {codeBlock} = this.props;
-      const initialLikeState = codeBlock.liked ? true : false;
-      const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 1000));
-      this.setState({initialLikeState, codeBlock, forkName});
+      const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
+      this.setState({codeBlock, forkName});
     }
   }
 
@@ -132,14 +134,14 @@ class CodeBlockCard extends Component {
     if (!codeBlock) return <Loading />;
 
     const {t, userProgress, theme, icon, user} = this.props;
-    const {id, lid, liked, reported, likes, snippetname, studentcontent, username, featured} = codeBlock;
+    const {id, lid, liked, reported, likes, snippetname, slug, studentcontent, username, featured} = codeBlock;
 
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
     const done = userProgress ? userProgress.find(p => p.level === lid && p.status === "completed") !== undefined : true;
 
-    const embedLink = `${ location.origin }/codeBlocks/${ username }/${ snippetname }`;
+    const embedLink = `${ location.origin }/codeBlocks/${ username }/${ slug ? slug : snippetname }`;
     const userLink = `${ location.origin }/profile/${ username }`;
 
     // define thumbnail image as null
@@ -158,12 +160,8 @@ class CodeBlockCard extends Component {
       }
     }
 
-    // define image path
-    //const thumbnailURL = `/thumbnails/codeblocks/${thumbnailImg}`;
     thumbnailImg = true;
     const thumbnailURL = `/cb_images/${id}.png?v=${new Date().getTime()}`;
-
-
 
     return (
       <div className="card-container">
@@ -192,9 +190,13 @@ class CodeBlockCard extends Component {
             {/* author */}
             { username
               ? <span className="card-author font-xs">
-                { t("Card.MadeBy") } <Link className="card-author-link link" to={`/profile/${username}`}>
-                  { username ? displayname || username : t("anonymous user") }
-                </Link>
+                {t("Card.MadeBy")}&nbsp;
+                { this.props.user 
+                  ? <Link className="card-author-link link" to={`/profile/${username}`}>
+                    { username ? displayname || username : t("anonymous user") }
+                  </Link>
+                  : username ? displayname || username : t("anonymous user")
+                }
 
                 {/* show edit link if it's yours */}
                 {/* NOTE: codeblocks don't currently have a direct edit link though
@@ -212,7 +214,7 @@ class CodeBlockCard extends Component {
             <p className="card-likes font-xs u-margin-top-off" id={`codeblock-card-${id}`}>
               <button
                 className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
-                onClick={ this.toggleLike.bind(this) }
+                onClick={ this.directLike.bind(this) }
                 aria-labelledby={`codeblock-card-${id}`} />
               <span className="card-likes-count">{ likes }</span>
               <span className="u-visually-hidden">&nbsp;
@@ -254,9 +256,12 @@ class CodeBlockCard extends Component {
             {/* created by */}
             <p className="card-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
-              <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
-                { username ? displayname || username : t("anonymous user") }
-              </a>
+              {this.props.user 
+                ? <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
+                  { username ? displayname || username : t("anonymous user") }
+                </a>
+                : username ? displayname || username : t("anonymous user")
+              }
               <a href={ embedLink } target="_blank" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
@@ -268,7 +273,7 @@ class CodeBlockCard extends Component {
                 <p className="card-dialog-footer-action codeblock-dialog-footer-action card-likes font-xs">
                   <button
                     className={ `card-likes-button pt-icon-standard u-unbutton ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
-                    onClick={ this.toggleLike.bind(this) } />
+                    onClick={ this.directLike.bind(this) } />
                   <span className="card-dialog-footer-action-text card-likes-count codeblock-dialog-footer-action-text">{ likes }</span>
                   <span className="u-visually-hidden">&nbsp;
                     { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }

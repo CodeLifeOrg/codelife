@@ -6,7 +6,7 @@ import {fetchData} from "datawheel-canon";
 import {AnchorLink} from "datawheel-canon/src/components/AnchorLink";
 import "./LessonPlan.css";
 
-import CodeBlockEditor from "components/CodeBlockEditor";
+import CodeEditor from "components/CodeEditor/CodeEditor";
 import IslandLink from "components/IslandLink";
 import CTA from "components/CTA";
 
@@ -27,9 +27,7 @@ class LessonPlan extends Component {
     super(props);
     this.state = {
       islands: [],
-      currentIsland: {},
-      nextIsland: null,
-      prevIsland: null
+      currentIsland: {}
     };
   }
 
@@ -42,22 +40,13 @@ class LessonPlan extends Component {
     const {lid} = this.props.params;
     const {islands} = this.props.data;
     const {auth, t} = this.props;
-    // let {nextIsland, prevIsland} = this.state;
 
-    // NOTE: `islands.find` throws an error before rendering
     const currentIsland = islands.find(i => i.id === lid);
-
-    // next/prev links
-    /* NOTE: This technically works, but cause the console to yell about setting state in render
-       when using them. Also, the page slows down considerably. React is hard.
-
-       currentIsland ? nextIsland = islands.find(i => i.ordering === currentIsland.ordering + 1) : null;
-       currentIsland ? prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1) : null; */
-
-    const s = (a, b) => a.ordering - b.ordering;
+    const nextIsland = currentIsland ? islands.find(i => i.ordering === currentIsland.ordering + 1) : null;
+    const prevIsland = currentIsland ? islands.find(i => i.ordering === currentIsland.ordering - 1) : null;
 
     // list of island links
-    const islandList = islands.sort(s).map(island =>
+    const islandList = islands.map(island =>
       <IslandLink key={island.id} island={island} linkContext="lessonplan" />
     );
 
@@ -68,7 +57,7 @@ class LessonPlan extends Component {
     if (lid) {
 
       // generate level sections
-      levelSections = currentIsland.levels.sort(s).map(l =>
+      levelSections = currentIsland.levels.map(l =>
         <section id={l.id} className="lessonplan-section anchor" key={l.id}>
 
           <h2 className="lessonplan-section-heading font-xl" key={l.id}>
@@ -76,7 +65,7 @@ class LessonPlan extends Component {
           </h2>
 
           {/* loop through slides */}
-          {l.slides.sort(s).map(s => {
+          {l.slides.map(s => {
             const SlideComponent = compLookup[s.type];
             return <section className={`lessonplan-slide ${s.type}-lessonplan-slide`} key={s.id}>
               <SlideComponent {...s}
@@ -89,7 +78,7 @@ class LessonPlan extends Component {
       );
 
       // generate table of contents for islands
-      levelTOC = currentIsland.levels.sort(s).map(l =>
+      levelTOC = currentIsland.levels.map(l =>
         <li className="lessonplan-toc-item" key={l.id}>
           <AnchorLink className="lessonplan-toc-link link" to={l.id}>{l.name}</AnchorLink>
         </li>
@@ -149,23 +138,27 @@ class LessonPlan extends Component {
           <nav className="lessonplan-nav header-lessonplan-nav">
 
             {/* previous island */}
-            {/* hiding for now
-            {prevIsland
-              // island exists; link to it
-              ? <Link className="lessonplan-nav-link link" to={`/lessonplan/${prevIsland.id}`}>
+            {prevIsland &&
+              <Link className="lessonplan-nav-link link" to={`/lessonplan/${prevIsland.id}`}>
                 <span className="link-icon pt-icon pt-icon-arrow-left" />
                 <span className="link-text">{prevIsland.name}</span>
               </Link>
-              // island doesn't exist; show nothing
-              : null
-            } */}
+            }
 
             {/* island index */}
             <Link className="lessonplan-nav-link link" to="/lessonplan">
               {/* NOTE: replace arrow-left icon with map icon if next/prev links are added */}
-              <span className="link-icon pt-icon pt-icon-arrow-left" />
+              <span className="link-icon pt-icon pt-icon-map" />
               <span className="link-text">{t("Lessonplan.IslandIndex")}</span>
             </Link>
+
+            {/* next island */}
+            {nextIsland &&
+              <Link className="lessonplan-nav-link link" to={`/lessonplan/${nextIsland.id}`}>
+                <span className="link-text">{nextIsland.name}</span>
+                <span className="link-icon pt-icon pt-icon-arrow-right" />
+              </Link>
+            }
 
           </nav>
 
@@ -184,11 +177,13 @@ class LessonPlan extends Component {
               {levelSections}
 
               {/* codeblock */}
-              <section className="codeblock-lessonplan-section lessonplan-section anchor" id="codeblock">
+              <section className="overview-lessonplan-section lessonplan-section anchor" id="codeblock" >
                 <h2 className="lessonplan-section-heading font-xl">{t("Lessonplan.Codeblock")}</h2>
-                <CodeBlockEditor
-                  island={currentIsland}
-                  readOnly={true} />
+                <div dangerouslySetInnerHTML={{__html: currentIsland.prompt}} />
+                <CodeEditor
+                  initialValue={currentIsland.initialcontent}
+                  readOnly={true}
+                />
               </section>
             </div>
           </div>
@@ -245,8 +240,6 @@ class LessonPlan extends Component {
     }
   }
 }
-
-// whut
 
 LessonPlan.need = [
   fetchData("islands", "/api/islands/nested?lang=<i18n.locale>")

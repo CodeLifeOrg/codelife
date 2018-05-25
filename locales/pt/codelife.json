@@ -1,6 +1,7 @@
 {
   "404": "Página Não Encontrada",
   " collaborators": " collaborators",
+  " on Facebook": " on Facebook",
   "Abandon changes and open new file?": "Descartar as alterações e abrir um novo arquivo?",
   "About": "Sobre o CodeLife",
   "About ": "About ",
@@ -18,6 +19,7 @@
   },
   "Additional Comments": "Comentários adicionais",
   "Admin": "Admin",
+  "All": "All",
   "All Rules Passing": "Cumpre todas as regras",
   "Are you sure you want to leave": "Are you sure you want to leave",
   "Are you sure you want to leave this project?": "Are you sure you want to leave this project?",
@@ -31,6 +33,7 @@
   "Browse…": "Browse…",
   "Built by ": "Built by ",
   "Bullying or abuse": "Bullying or abuse",
+  "CODEBLOCKS": "CODEBLOCKS",
   "CPF": "CPF",
   "Can't save non-passing code!": "Não pode salvar o código com erros",
   "Cancel": "Cancelar",
@@ -55,6 +58,7 @@
   "Codeblock Name": "Nome do desafio",
   "Codeblock Title": "Título do desafio",
   "Codeblock's code will be shown after you complete the last level of this island": "O código será mostrado depois de completar o último nível desta ilha",
+  "CodeblockExplainer": "CodeblockExplainer",
   "Codeblocks": "Codeblocks",
   "Collab": {
     "Add": "Collab.Add",
@@ -156,7 +160,10 @@
   "Error": "Erro",
   "Execute": "Executar",
   "Explore": "Explore",
+  "Feature": "Feature",
+  "Featured": "Featured",
   "Featured CodeBlocks": "Desafios em destaque",
+  "Featured Pages": "Featured Pages",
   "Featured Projects": "Projetos em destaque",
   "Female": "Fêmea",
   "Flag Inappropriate Content": "Denunciar conteúdo inapropriado",
@@ -166,6 +173,7 @@
   "Glossary": "Glossário",
   "Glossary Builder": "Glossary Builder",
   "Help": "Ajuda",
+  "Hide": "Hide",
   "Hide Codeblocks": "Hide Codeblocks",
   "Hide Discussion": "Hide Discussion",
   "Home": {
@@ -286,6 +294,7 @@
   "Or": "Or",
   "Other Students' CodeBlocks": "CodeBlocks outros alunos",
   "Owner": "Owner",
+  "PROJECTS": "PROJECTS",
   "Partners": "Partners",
   "Platform currently in development": "Platform currently in development",
   "Please be as detailed as possible with your feedback": "Por favor, seja detalhado com sua resposta",
@@ -307,12 +316,16 @@
     "MyProjects": "Project.MyProjects",
     "Save": "Project.Save",
     "Share": "Project.Share",
+    "ShareBodyTextOnFirstSave": "Project.ShareBodyTextOnFirstSave",
+    "ShareHeadingOnFirstSave": "Project.ShareHeadingOnFirstSave",
+    "ShareOptOut": "Project.ShareOptOut",
     "SwitcherHeading": "Project.SwitcherHeading",
     "View": "Project.View"
   },
   "Project Owner - ": "Project Owner - ",
   "Project Title": "Título do projeto",
   "Project name": "Project name",
+  "ProjectExplainer": "ProjectExplainer",
   "Projects": "Projetos",
   "Projects (build your own site)": "Projetos (crie seu site)",
   "Prompt": "Prompt",
@@ -353,9 +366,16 @@
   },
   "Select a project first!": "Select a project first!",
   "Share": "Compartilhar",
+  "Share your Project": "Share your Project",
+  "ShareDirectLink": {
+    "Copied": "ShareDirectLink.Copied",
+    "CopyInstructions": "ShareDirectLink.CopyInstructions",
+    "Label": "ShareDirectLink.Label"
+  },
   "Show Discussion": "Show Discussion",
   "Show Less": "Mostre menos",
   "Show Me": "Show Me",
+  "Show More": "Show More",
   "Show {{x}} More": "Mostre mais {{x}}",
   "Sign Up": "Cadastre-Se",
   "SignUp": {
@@ -415,6 +435,10 @@
   "Upload new picture": "Upload de nova imagem",
   "User": "Usuário",
   "User Admin": "Usuário Administrador",
+  "UserProfile": {
+    "HiddenContent": "UserProfile.HiddenContent",
+    "Visible": "UserProfile.Visible"
+  },
   "Username": "Nome de usuário",
   "Very difficult": "Muito difícil",
   "Very easy": "Muito fácil",
@@ -545,6 +569,7 @@
     }
   },
   "go to island": "go to island",
+  "hidden": "hidden",
   "home": {
     "body": "",
     "continue": "Continue explorando",

@@ -303,6 +303,12 @@ shared collab item styles
   color: var(--white);
   background-color: var(--dark-1);
   border-radius: 50%;
+  overflow: hidden;
+
+  /* img sizing */
+  & .collab-avatar-img {
+    background-size: cover;
+  }
 
   /* action indicator defaults */
   & .action-indicator {

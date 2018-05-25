@@ -435,6 +435,10 @@
   "Upload new picture": "Upload new picture",
   "User": "User",
   "User Admin": "User admin",
+  "UserProfile": {
+    "HiddenContent": "This user's content is hidden",
+    "Visible": "Profile visibility"
+  },
   "Username": "Username",
   "Very difficult": "Very difficult",
   "Very easy": "Very easy",
@@ -565,6 +569,7 @@
     }
   },
   "go to island": "go to island",
+  "hidden": "hidden",
   "home": {
     "body": "",
     "continue": "Continue your adventure on {{island}}",

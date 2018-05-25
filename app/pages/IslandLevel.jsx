@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Button, Dialog, Intent, Popover, Position, Tooltip, Collapse, PopoverInteractionKind} from "@blueprintjs/core";
-import {Helmet} from "react-helmet";
 import CodeBlockEditor from "components/CodeBlockEditor";
 import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
@@ -35,6 +34,7 @@ class Level extends Component {
       school: null,
       checkpointOpen: false,
       winOpen: false,
+      canPostToFacebook: true,
       winMessage: "",
       showMore: false
     };
@@ -101,6 +101,10 @@ class Level extends Component {
     this.forceUpdate();
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
+
   toggleTest() {
     const {browserHistory} = this.context;
     const {pathname} = this.props.router.location;
@@ -133,7 +137,8 @@ class Level extends Component {
     // perhaps revisit if this is on the heavy DB-interaction side?
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
-    this.setState({winMessage, winOpen: true}, this.toggleTest.bind(this));
+    this.setState({winMessage, winOpen: true, canPostToFacebook: false}, this.toggleTest.bind(this));
+    this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
   }
 
   closeOverlay() {
@@ -266,11 +271,14 @@ class Level extends Component {
   buildWinPopover() {
 
     const {t} = this.props;
-    const {currentIsland} = this.state;
+    const {currentIsland, canPostToFacebook} = this.state;
     const {name, theme} = currentIsland;
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
-    const snippetname = currentIsland.codeBlock ? currentIsland.codeBlock.snippetname : "";
+    let snippetname = "";
+    if (currentIsland.codeBlock) {
+      snippetname = currentIsland.codeBlock.slug ? currentIsland.codeBlock.slug : currentIsland.codeBlock.snippetname;
+    }
 
     const shareLink = snippetname.length ? `${origin}/codeBlocks/${username}/${snippetname}` : origin;
 
@@ -363,7 +371,7 @@ class Level extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore, canPostToFacebook} = this.state;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");

@@ -1,17 +1,29 @@
-.lesson-builder {
+.lessonbuilder {
   display: flex;
+  height: 100%;
   width: 100%;
 
-  & .tree {
+  & .lessonbuilder-tree {
     background-color: var(--light-1);
-    border-bottom-left-radius: var(--radius-lg);
-    max-width: 250px;
-    min-width: 250px;
     padding: 0;
     width: 250px;
+    min-height: calc(100vh - 430px);
+
+    & .pt-tree {
+      width: 250px;
+    }
+
+    & .pt-tree-node-list {
+      padding-left: 0;
+    }
+
     & .pt-tree-node {
-      &:hover {
-        cursor: pointer;
+      cursor: pointer;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      &.pt-tree-node-selected > .pt-tree-node-content {
+        background-color: var(--sky-dark);
       }
     }
   }

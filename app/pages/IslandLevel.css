@@ -10,6 +10,13 @@ MAIN LAYOUT
   margin-bottom: var(--gutter-lg);
   text-align: center;
 
+  /* limit width on big screens */
+  @add-mixin min-md {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   /* -------------------------------
   Next/Prev codeblocks
   ------------------------------- */
@@ -56,8 +63,12 @@ MAIN LAYOUT
 
     /* gradually move up around the island on medium screens */
     @add-mixin min-sm {
-      margin-top: -12.5%;
+      margin-top: -2%;
       margin-bottom: -1%;
+    }
+
+    @add-mixin min-md {
+      margin-top: -4%;
     }
 
     /* switch to absolute positioning on large viewports */
@@ -91,9 +102,6 @@ STUDENT CODEBLOCKS
   padding: var(--gutter-lg) var(--gutter-sm);
   /* theming */
   color: var(--black);
-  /* show in front of .island-link-popovers */
-  /* NOTE: remove this once islands are positioned properly */
-  z-index: 2;
 
   /* NOTE: `transform: translateY(0px)` creates a new stacking context,
   which makes the inline codeblock dialog position itself relative
@@ -113,6 +121,11 @@ STUDENT CODEBLOCKS
     width: 1200px;
     padding: var(--gutter-lg) var(--gutter-md);
     margin: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  }
+
+  /* margin tweak when island links become absolutely positioned */
+  @add-mixin min-lg {
+    margin-top: 10rem;
   }
 
   & .card-list {

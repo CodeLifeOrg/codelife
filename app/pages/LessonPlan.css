@@ -72,7 +72,7 @@ Nav
     /* space out inline links on bigger screens */
     @add-mixin min-sm {
       &:not(:last-of-type) {
-        margin-right: 1rem;
+        margin-right: 2rem;
       }
     }
 
@@ -80,6 +80,12 @@ Nav
     & .link-icon {
       margin-right: var(--gutter-xxs);
       top: -1px; /* baseline adjustment */
+
+      /* right arrow is shown right of text; position accordingly */
+      &.pt-icon-arrow-right {
+        margin-right: 0;
+        margin-left: var(--gutter-xxs);
+      }
     }
   }
 }

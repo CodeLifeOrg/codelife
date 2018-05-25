@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
+import PropTypes from "prop-types";
 import {NonIdealState, Popover, PopoverInteractionKind} from "@blueprintjs/core";
 import Loading from "components/Loading";
 import {Link} from "react-router";
@@ -58,7 +59,10 @@ class Leaderboard extends Component {
   render() {
 
     const {mounted, flatProgress, sortBy} = this.state;
+    const {browserHistory} = this.context;
     const {t} = this.props;
+
+    if (!this.props.auth.user) browserHistory.push("/");
 
     if (!mounted) return <Loading />;
 
@@ -179,6 +183,10 @@ class Leaderboard extends Component {
     );
   }
 }
+
+Leaderboard.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Leaderboard = connect(state => ({
   auth: state.auth,

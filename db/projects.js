@@ -1,3 +1,5 @@
+const SequelizeSlugify = require("sequelize-slugify");
+
 module.exports = function(sequelize, db) {
 
   const p = sequelize.define("projects",
@@ -14,13 +16,22 @@ module.exports = function(sequelize, db) {
       status: db.TEXT,
       prompted: db.BOOLEAN,
       featured: db.BOOLEAN,
-      slug: db.STRING
+      slug: {
+        type: db.STRING,
+        unique: true
+      }
     }, 
     {
       freezeTableName: true,
       timestamps: false
     }
   );
+
+  SequelizeSlugify.slugifyModel(p, {
+    source: ["name"],
+    suffixSource: ["id"],
+    overwrite: true
+  });
 
   p.associate = models => {
     p.belongsTo(models.userprofiles, {foreignKey: "uid", targetKey: "uid", as: "userprofile"});

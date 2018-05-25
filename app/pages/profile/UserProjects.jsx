@@ -40,14 +40,18 @@ class UserProjects extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const {t, myProfile, user} = this.props;
     const {loading, projects} = this.state;
+
+    // set heading text
+    let heading = `${ user.name || user.username }’s ${ t("Projects") }`;
+    myProfile === true ? heading = `${ t("My")} ${ t("Projects") } ` : null;
 
     if (loading) return <h2>{ t("Loading projects") }...</h2>;
 
     return (
       <div className="user-section">
-        <h2>{ t("Projects") }</h2>
+        <h2>{ heading }</h2>
         { projects.length
           ? <div className="card-list">{ projects.map(p => <ProjectCard key={p.id} project={p} />)}</div>
           : <p>{ t("noProjects") }</p>

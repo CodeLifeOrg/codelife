@@ -284,7 +284,7 @@ class CodeBlockEditor extends Component {
                 </li>
 
                 {/* share codeblock */}
-                {shareLink && canPostToFacebook && <li className="studio-action-item">
+                {shareLink && <li className="studio-action-item">
                   <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isShareOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Share") }</span>

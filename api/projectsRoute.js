@@ -155,9 +155,10 @@ module.exports = function(app) {
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
-    db.projects.update({studentcontent: req.body.studentcontent, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, plain: true})
+    db.projects.update({studentcontent: req.body.studentcontent, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, individualHooks: true})
       .then(u => {
-        const url = `${req.headers.origin}/projects/${req.body.username}/${u[1].slug ? u[1].slug : req.body.name}?screenshot=true`;
+        const plainObj = u[1][0].toJSON();
+        const url = `${req.headers.origin}/projects/${req.body.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
         const width = 600;
         const height = 315;
         const page = true;
@@ -165,13 +166,13 @@ module.exports = function(app) {
         const xvfb = new Xvfb({timeout: 5000});
         if (req.headers.host !== "localhost:3300") xvfb.startSync();
         screenshot({url, width, height, page, delay}).then(img => {
-          const imgPath = path.join(process.cwd(), "/static/pj_images", `${u[1].id}.png`);
+          const imgPath = path.join(process.cwd(), "/static/pj_images", `${plainObj.id}.png`);
           fs.writeFile(imgPath, img.data, err => {
             console.log("fs err", err);
             if (req.headers.host !== "localhost:3300") xvfb.stopSync();
           });
         });
-        res.json(u).end();
+        res.json(plainObj).end();
       });
   });
 

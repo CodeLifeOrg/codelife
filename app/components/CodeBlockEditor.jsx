@@ -162,6 +162,7 @@ class CodeBlockEditor extends Component {
           // back into currentLesson.snippet, saving us a db call.
           codeBlock.studentcontent = studentcontent;
           codeBlock.snippetname = name;
+          codeBlock.slug = resp.data.slug;
         }
         else {
           codeBlock = resp.data;

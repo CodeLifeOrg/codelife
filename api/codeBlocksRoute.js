@@ -42,8 +42,8 @@ module.exports = function(app) {
   app.post("/api/codeBlocks/new", isAuthenticated, (req, res) => {
     db.codeblocks.create({studentcontent: req.body.studentcontent, snippetname: req.body.name, uid: req.body.uid, lid: req.body.iid})
       .then(u => {
-        const uRaw = u.toJSON();
-        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${uRaw.slug ? uRaw.slug : req.body.name}?screenshot=true`;
+        const plainObj = u.toJSON();
+        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
         const width = 600;
         const height = 315;
         const page = true;
@@ -51,7 +51,7 @@ module.exports = function(app) {
         const xvfb = new Xvfb({timeout: 5000});
         if (req.headers.host !== "localhost:3300") xvfb.startSync();
         screenshot({url, width, height, page, delay}).then(img => {
-          const imgPath = path.join(process.cwd(), "/static/cb_images", `${uRaw.id}.png`);
+          const imgPath = path.join(process.cwd(), "/static/cb_images", `${plainObj.id}.png`);
           fs.writeFile(imgPath, img.data, err => {
             console.log("fs err", err);
             if (req.headers.host !== "localhost:3300") xvfb.stopSync();
@@ -61,11 +61,12 @@ module.exports = function(app) {
       });
   });
 
-  // Used by CodeBlock.jsx to update the CodeBlock Test
+  // Used by CodeBlockEditor.jsx to update the CodeBlock Test
   app.post("/api/codeBlocks/update", isAuthenticated, (req, res) => {
-    db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.iid}, returning: true, plain: true})
+    db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.iid}, returning: true, individualHooks: true})
       .then(u => {
-        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${u[1].slug ? u[1].slug : req.body.name}?screenshot=true`;
+        const plainObj = u[1][0].toJSON();
+        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
         const width = 600;
         const height = 315;
         const page = true;
@@ -73,13 +74,13 @@ module.exports = function(app) {
         const xvfb = new Xvfb({timeout: 5000});
         if (req.headers.host !== "localhost:3300") xvfb.startSync();
         screenshot({url, width, height, page, delay}).then(img => {
-          const imgPath = path.join(process.cwd(), "/static/cb_images", `${u[1].id}.png`);
+          const imgPath = path.join(process.cwd(), "/static/cb_images", `${plainObj.id}.png`);
           fs.writeFile(imgPath, img.data, err => {
             console.log("fs err", err);
             if (req.headers.host !== "localhost:3300") xvfb.stopSync();
           });
         });
-        res.json(u).end();
+        res.json(plainObj).end();
       });
   });
 

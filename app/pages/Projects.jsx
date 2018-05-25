@@ -280,7 +280,7 @@ class Projects extends Component {
       currentProject.prompted = true;
       axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
-          const updatedProject = resp.data[1];
+          const updatedProject = resp.data;
           const {browserHistory} = this.context;
           const {username} = this.props.auth.user;
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});

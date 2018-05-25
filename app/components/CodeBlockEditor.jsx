@@ -29,6 +29,7 @@ class CodeBlockEditor extends Component {
       rulejson: null,
       resetAlert: false,
       saving: false,
+      canPostToFacebook: true,
       filename: "",
       originalFilename: "",
       canEditTitle: true,
@@ -57,6 +58,7 @@ class CodeBlockEditor extends Component {
   // stop listening for keypress when leaving the page
   componentWillUnmount() {
     document.removeEventListener("keypress", this.handleKey);
+    clearTimeout(this.timeout);
   }
 
   onFirstCompletion(winMessage) {
@@ -146,7 +148,8 @@ class CodeBlockEditor extends Component {
     const username = this.props.auth.user.username;
     axios.post(endpoint, {uid, username, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
-        this.setState({canEditTitle: true, saving: false});
+        this.setState({canEditTitle: true, saving: false, canPostToFacebook: false});
+        this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
         if (this.editor) this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
@@ -201,7 +204,7 @@ class CodeBlockEditor extends Component {
 
   render() {
     const {t, island, readOnly} = this.props;
-    const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, canEditTitle, saving} = this.state;
+    const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, canEditTitle, saving, canPostToFacebook} = this.state;
 
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
@@ -281,7 +284,7 @@ class CodeBlockEditor extends Component {
                 </li>
 
                 {/* share codeblock */}
-                {shareLink && <li className="studio-action-item">
+                {shareLink && canPostToFacebook && <li className="studio-action-item">
                   <button className="studio-action-button u-unbutton link" onClick={() => this.setState({isShareOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Share") }</span>

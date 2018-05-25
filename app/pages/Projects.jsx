@@ -38,6 +38,7 @@ class Projects extends Component {
       projects: [],
       collabs: [],
       showCodeblocks: false,
+      canPostToFacebook: true,
       isManageCollabsOpen: false,
       isViewCollabsOpen: false
     };
@@ -88,6 +89,7 @@ class Projects extends Component {
   // stop listening for keypress when leaving the page
   componentWillUnmount() {
     document.removeEventListener("keypress", this.handleKey);
+    clearTimeout(this.timeout);
   }
 
   openProject(pid) {
@@ -277,6 +279,7 @@ class Projects extends Component {
       const username = this.props.auth.user.username;
       let isFirstSaveShareOpen = !currentProject.prompted;
       if (this.state.optout || currentProject.userprofile.prompted) isFirstSaveShareOpen = false;
+      const canPostToFacebook = false;
       currentProject.prompted = true;
       axios.post("/api/projects/update", {id, username, name, studentcontent, prompted: true}).then (resp => {
         if (resp.status === 200) {
@@ -286,7 +289,8 @@ class Projects extends Component {
           const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
           toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
           this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
-          this.setState({canEditTitle: true, isFirstSaveShareOpen});
+          this.setState({canEditTitle: true, isFirstSaveShareOpen, canPostToFacebook});
+          this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
           if (updatedProject.slug) {
             browserHistory.push(`/projects/${username}/${updatedProject.slug}/edit`);
           }
@@ -390,8 +394,7 @@ class Projects extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {currentProject, canEditTitle, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks} = this.state;
-    // const {filename} = this.props.params;
+    const {currentProject, canEditTitle, originalTitle, currentTitle, deleteAlert, leaveAlert, execState, showCodeblocks, canPostToFacebook} = this.state;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
@@ -519,12 +522,12 @@ class Projects extends Component {
                 </li> }
 
                 {/* share project */}
-                <li className="studio-action-item">
+                {<li className="studio-action-item">
                   <button className="studio-action-button link u-unbutton" onClick={() => this.setState({isShareOpen: true})}>
                     <span className="studio-action-button-icon pt-icon pt-icon-share" />
                     <span className="studio-action-button-text u-hide-below-xxs">{ t("Project.Share") }</span>
                   </button>
-                </li>
+                </li>}
 
                 {/* delete / leave project */}
                 { currentProject ? <li className="studio-action-item">

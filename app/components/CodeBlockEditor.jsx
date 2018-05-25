@@ -8,8 +8,7 @@ import {Alert, Button, Dialog, EditableText, Intent, Popover, PopoverInteraction
 
 import Loading from "components/Loading";
 import ShareDirectLink from "components/ShareDirectLink";
-
-import FacebookIcon from "components/FacebookIcon.svg.jsx";
+import ShareFacebookLink from "components/ShareFacebookLink";
 
 import "./Studio.css";
 import "./CodeBlockEditor.css";
@@ -387,11 +386,7 @@ class CodeBlockEditor extends Component {
 
           {/* facebook */}
           <div className="field-container u-margin-top-off">
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
-              <FacebookIcon />
-              <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
-              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
-            </a>
+            <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={canPostToFacebook} />
           </div>
         </Dialog>
 

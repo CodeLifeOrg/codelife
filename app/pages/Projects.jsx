@@ -11,8 +11,7 @@ import CodeEditor from "components/CodeEditor/CodeEditor";
 import CollabList from "components/CollabList";
 import CollabSearch from "components/CollabSearch";
 import ShareDirectLink from "components/ShareDirectLink";
-
-import FacebookIcon from "components/FacebookIcon.svg.jsx";
+import ShareFacebookLink from "components/ShareFacebookLink";
 
 import "components/Studio.css";
 import "./Projects.css";
@@ -269,7 +268,7 @@ class Projects extends Component {
   saveCodeToDB() {
     const {t} = this.props;
     const {currentProject} = this.state;
-    
+
 
     if (currentProject) {
       const id = currentProject.id;
@@ -451,6 +450,8 @@ class Projects extends Component {
 
     return (
       <div className="studio projects-studio">
+
+        { console.log(canPostToFacebook) }
 
         <div className="studio-inner">
 
@@ -657,11 +658,7 @@ class Projects extends Component {
 
           {/* facebook */}
           <div className="field-container">
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
-              <FacebookIcon />
-              <span className="social-button-text">{ t("Project.Share") }</span>
-              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
-            </a>
+            <ShareFacebookLink context="project" shareLink={shareLink} screenshotReady={canPostToFacebook} />
           </div>
 
           {/* stop bothering me */}
@@ -697,11 +694,7 @@ class Projects extends Component {
 
           {/* facebook */}
           <div className="field-container u-margin-top-off">
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
-              <FacebookIcon />
-              <span className="social-button-text">{ t("Project.Share") }</span>
-              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
-            </a>
+            <ShareFacebookLink context="project" shareLink={shareLink} screenshotReady={canPostToFacebook} />
           </div>
         </Dialog>
 

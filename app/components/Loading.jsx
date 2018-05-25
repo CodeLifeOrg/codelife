@@ -7,7 +7,7 @@ import "./Loading.css";
 class Loading extends Component {
 
   render() {
-    const {t} = this.props;
+    const {label, t} = this.props;
 
     return (
       <div className="loading">
@@ -15,7 +15,9 @@ class Loading extends Component {
           <div className="loading-spinner-container">
             <Spinner intent={Intent.WARNING} />
           </div>
-          <h1 className="loading-title font-md">{ t("Loading") }...</h1>
+          { label &&
+            <h2 className="loading-title font-md">{ t("Loading") }...</h2>
+          }
         </div>
       </div>
     );
@@ -23,7 +25,8 @@ class Loading extends Component {
 }
 
 Loading.defaultProps = {
-  dark: false
+  dark: false,
+  label: true
 };
 
 export default translate()(Loading);

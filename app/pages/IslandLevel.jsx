@@ -10,7 +10,7 @@ import CodeBlockCard from "components/CodeBlockCard";
 import Checkpoint from "components/Checkpoint";
 import IslandLink from "components/IslandLink";
 
-import FacebookIcon from "components/FacebookIcon.svg.jsx";
+import ShareFacebookLink from "components/ShareFacebookLink";
 
 import "./IslandLevel.css";
 
@@ -296,11 +296,7 @@ class Level extends Component {
 
         <div className="share-button-group field-container">
           {/* facebook */}
-          <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
-            <FacebookIcon />
-            <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
-            <span className="u-visually-hidden">{ t(" on Facebook") }</span>
-          </a>
+          <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={canPostToFacebook} />
           {/* TODO: replace with smarter text, check for next island */}
           <Button
             className="share-button pt-button pt-button-primary font-md"

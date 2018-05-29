@@ -45,9 +45,8 @@ class Search extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // If the user changes pages by clicking a link *outside* the search results bar, reset and hide everything
-    if (this.props.linkObj !== nextProps.linkObj) {
+  componentDidUpdate(prevProps) {
+    if (this.props.linkObj !== prevProps.linkObj) {
       this.clearSearch();
     }
   }

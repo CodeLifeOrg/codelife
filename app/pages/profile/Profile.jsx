@@ -46,11 +46,11 @@ class Profile extends Component {
     this.fetchUser(username);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.params.username !== this.props.params.username) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.params.username !== this.props.params.username) {
       console.log("changed url!");
       this.setState({loading: true});
-      this.fetchUser(nextProps.params.username);
+      this.fetchUser(this.props.params.username);
     }
   }
 

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tab2, Tabs2} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import {UserAdmin} from "datawheel-canon";
 import LessonBuilder from "pages/admin/lessonbuilder/LessonBuilder";
 import RuleBuilder from "pages/admin/lessonbuilder/RuleBuilder";
@@ -80,7 +80,7 @@ class AdminPanel extends Component {
       <UserAdmin />
     </div>;
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     return (
       <div className="admin content">

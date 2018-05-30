@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import "moment/locale/pt-br";
 import moment from "moment";
 import {CPF} from "cpf_cnpj";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import {DateInput} from "@blueprintjs/datetime";
 import {Icon, Toaster, Position, Intent} from "@blueprintjs/core";
 import SelectGeo from "components/SelectGeo";
@@ -146,7 +146,7 @@ class ContestSignup extends Component {
 
   render() {
 
-    if (!this.state.profileUser) return <Loading />;
+    if (!this.state.profileUser) return <LoadingSpinner />;
 
     const {t} = this.props;
     const {cpf, dob, email, gid, sid} = this.state.profileUser;

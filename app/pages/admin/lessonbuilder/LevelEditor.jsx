@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import {Button, Toaster, Position, Intent} from "@blueprintjs/core";
 
 import "./LevelEditor.css";
@@ -52,7 +52,7 @@ class LevelEditor extends Component {
 
     const {data} = this.state;
 
-    if (!data) return <Loading />;
+    if (!data) return <LoadingSpinner />;
     
     return (
       <div id="level-editor">

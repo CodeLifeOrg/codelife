@@ -6,7 +6,7 @@ import {Button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
 import PropTypes from "prop-types";
 import Thread from "components/Thread";
 import Comment from "components/Comment";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import "./ReportViewer.css";
 
@@ -172,7 +172,7 @@ class ReportViewer extends Component {
     const {mounted, codeblockReports, projectReports, threadReports, commentReports} = this.state;
     const {t} = this.props;
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     const cbSorted = this.groupReports(codeblockReports);
     const pSorted = this.groupReports(projectReports);

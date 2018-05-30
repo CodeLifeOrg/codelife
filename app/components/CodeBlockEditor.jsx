@@ -6,10 +6,9 @@ import PropTypes from "prop-types";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Alert, Button, Dialog, EditableText, Intent, Popover, PopoverInteractionKind, Position, Tabs2, Tab2, Toaster} from "@blueprintjs/core";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import ShareDirectLink from "components/ShareDirectLink";
-
-import FacebookIcon from "components/FacebookIcon.svg.jsx";
+import ShareFacebookLink from "components/ShareFacebookLink";
 
 import "./Studio.css";
 import "./CodeBlockEditor.css";
@@ -214,7 +213,7 @@ class CodeBlockEditor extends Component {
     const {codeBlock} = this.props.island;
     readOnly || !codeBlock ? shareLink = "" : shareLink = encodeURIComponent(`${origin}/codeBlocks/${username}/${codeBlock.slug ? codeBlock.slug : codeBlock.snippetname}`);
 
-    if (!this.state.mounted) return <Loading />;
+    if (!this.state.mounted) return <LoadingSpinner />;
 
     // prompt
     const promptTab =
@@ -387,11 +386,7 @@ class CodeBlockEditor extends Component {
 
           {/* facebook */}
           <div className="field-container u-margin-top-off">
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
-              <FacebookIcon />
-              <span className="social-button-text">{ t("CodeBlockEditor.Share") }</span>
-              <span className="u-visually-hidden">{ t(" on Facebook") }</span>
-            </a>
+            <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={canPostToFacebook} />
           </div>
         </Dialog>
 

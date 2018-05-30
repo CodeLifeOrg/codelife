@@ -6,7 +6,7 @@ import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2} from "@blue
 import {merge} from "d3plus-common";
 import {Treemap} from "d3plus-react";
 import {nest} from "d3-collection";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import styles from "style.yml";
 
 import "./Statistics.css";
@@ -67,7 +67,7 @@ class Statistics extends Component {
     const {mounted, flatProgress, activeTabId, sortBy} = this.state;
     const {t} = this.props;
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     const visibleUsers = this.state.visibleUsers.sort((a, b) => {
       const prop1 = typeof a[sortBy.prop] === "string" ? a[sortBy.prop].toLowerCase() : a[sortBy.prop];

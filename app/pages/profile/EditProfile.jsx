@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Intent, Position, Toaster, Checkbox} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import UserInfo from "./UserInfo";
 import SelectGeo from "components/SelectGeo";
 import SelectSchool from "components/SelectSchool";
@@ -183,7 +183,7 @@ class EditProfile extends Component {
       inline: true
     };
 
-    if (loading) return <Loading />;
+    if (loading) return <LoadingSpinner />;
     if (error) return <h1>{error}</h1>;
 
     const {name, bio, cpf, dob, gender, gid, sid} = profileUser;

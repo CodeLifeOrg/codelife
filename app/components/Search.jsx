@@ -22,16 +22,7 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKey.bind(this));
-  }
-
-  handleKey(e) {
-    const left = e.keyCode === 37;
-    const up = e.keyCode === 38;
-    const right = e.keyCode === 39;
-    const down = e.keyCode === 40;
-    if (down) this.setState({selectedIndex: this.state.selectedIndex + 1});
-    if (up) this.setState({selectedIndex: this.state.selectedIndex - 1});
+    // document.addEventListener("keydown", this.onKeyDown.bind(this));
   }
 
   handleChange(e) {
@@ -45,9 +36,8 @@ class Search extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // If the user changes pages by clicking a link *outside* the search results bar, reset and hide everything
-    if (this.props.linkObj !== nextProps.linkObj) {
+  componentDidUpdate(prevProps) {
+    if (this.props.linkObj !== prevProps.linkObj) {
       this.clearSearch();
     }
   }
@@ -147,8 +137,7 @@ class Search extends Component {
           id={inputID}
           className="search-input font-sm"
           onChange={this.handleChange.bind(this)}
-          onKeyDown={this.onKeyDown.bind(this)}
-          // onBlur={() => this.setState({showResults: false})}
+          // onKeyDown={this.onKeyDown.bind(this)}
           value={query}
           placeholder={t("Search.Site")} />
 

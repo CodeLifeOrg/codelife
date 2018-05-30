@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import {Toaster, Intent, Position} from "@blueprintjs/core";
@@ -63,7 +63,7 @@ class IslandEditor extends Component {
 
     const {data, themes} = this.state;
 
-    if (!data || !themes) return <Loading />;
+    if (!data || !themes) return <LoadingSpinner />;
 
     const themeItems = themes.map(t => <option key={`island-${t}`} value={`island-${t}`}>{`island-${t}`}</option>);
 

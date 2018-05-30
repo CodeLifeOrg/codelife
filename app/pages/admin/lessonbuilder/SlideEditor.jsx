@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import QuizPicker from "pages/admin/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -133,7 +133,7 @@ class SlideEditor extends Component {
 
     const {data} = this.state;
 
-    if (!data) return <Loading />;
+    if (!data) return <LoadingSpinner />;
 
     this.quills = [];
 

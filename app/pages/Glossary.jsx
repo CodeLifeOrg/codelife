@@ -19,8 +19,6 @@ class Glossary extends Component {
     const {t} = this.props;
     const words = this.props.data.glossary;
 
-    if (!words) return null;
-
     const wordList = words.map(w => 
       <div key={w.id} id={w.word}>
         <h2>{w.word}</h2>
@@ -40,7 +38,7 @@ class Glossary extends Component {
 }
 
 Glossary.need = [
-  fetchData("glossary", "/api/glossary/all")
+  fetchData("glossary", "/api/glossary/all?lang=<i18n.locale>")
 ];
 
 const mapStateToProps = state => ({

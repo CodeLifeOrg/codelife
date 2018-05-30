@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tree, Tooltip} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import PropTypes from "prop-types";
 
 import "./Browser.css";
@@ -218,7 +218,7 @@ class Browser extends Component {
 
     const {nodes} = this.state;
 
-    if (!nodes) return <Loading />;
+    if (!nodes) return <LoadingSpinner />;
 
     return (
       <div className="tree" id="tree">

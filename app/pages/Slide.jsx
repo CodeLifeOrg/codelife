@@ -1,12 +1,13 @@
 import axios from "axios";
 import Confetti from "react-dom-confetti";
 import {connect} from "react-redux";
-import {Link, browserHistory} from "react-router";
+import {Link} from "react-router";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Position, Tooltip, Dialog} from "@blueprintjs/core";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import Discussion from "components/Discussion";
 
 import ImageText from "components/slidetypes/ImageText";
@@ -120,6 +121,7 @@ class Slide extends Component {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     const {slides, latestSlideCompleted} = this.state;
+    const {browserHistory} = this.context;
 
     const sget = axios.get(`/api/slides/all?mlid=${mlid}`);
     const upget = axios.get("/api/userprogress/mine");
@@ -155,11 +157,13 @@ class Slide extends Component {
 
   editSlide() {
     const {lid, mlid, sid} = this.props.params;
+    const {browserHistory} = this.context;
     browserHistory.push(`/admin/lesson-builder/${lid}/${mlid}/${sid}`);
   }
 
   advanceLevel(mlid) {
     const {lid} = this.props.params;
+    const {browserHistory} = this.context;
     browserHistory.push(`/island/${lid}/${mlid}`);
     if (window) window.location.reload();
   }
@@ -186,6 +190,7 @@ class Slide extends Component {
     const {auth, t} = this.props;
     const {lid, mlid, sid} = this.props.params;
     const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
+    const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -203,7 +208,7 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    if (!currentSlide || !currentIsland || !currentLevel) return <Loading />;
+    if (!currentSlide || !currentIsland || !currentLevel) return <LoadingSpinner />;
 
     const nextLevel = levels.find(l => l.ordering === currentLevel.ordering + 1);
 
@@ -279,6 +284,10 @@ class Slide extends Component {
     );
   }
 }
+
+Slide.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

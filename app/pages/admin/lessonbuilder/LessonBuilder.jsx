@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {NonIdealState, Tree} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import IslandEditor from "pages/admin/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/admin/lessonbuilder/LevelEditor";
 import SlideEditor from "pages/admin/lessonbuilder/SlideEditor";
@@ -408,7 +408,7 @@ class LessonBuilder extends Component {
 
     const {nodes, currentNode} = this.state;
 
-    if (!nodes) return <Loading />;
+    if (!nodes) return <LoadingSpinner />;
 
     return (
       <div className="lessonbuilder" id="lesson-builder">

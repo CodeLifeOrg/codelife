@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import "./ContestViewer.css";
 
@@ -35,7 +35,7 @@ class ContestViewer extends Component {
 
     const {mounted, entries, sortBy} = this.state;
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     console.log(sortBy);
 

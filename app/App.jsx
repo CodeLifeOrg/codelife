@@ -12,7 +12,7 @@ import "./Islands.css";
 import Clouds from "components/Clouds";
 import Footer from "components/Footer";
 import Nav from "components/Nav";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import axios from "axios";
 
@@ -84,12 +84,14 @@ class App extends Component {
     if (currentIsland) theme = currentIsland.theme;
 
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
-
+    // console.log(this.props.router.location.pathname);
+    // console.log(reduxLoaded, userInit, !auth.loading, authRoute, bareRoute, seoRoute);
+    // console.log(reduxLoaded && userInit && !auth.loading || authRoute || bareRoute || seoRoute);
     return (
       <Canon id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />
         {
-          location.href.includes("dev.") || location.href.includes("nightly.")
+          !bareRoute && (location.href.includes("dev.") || location.href.includes("nightly."))
             ? <div className="devbar">Development Server. Do not edit content here!</div>
             : null
         }
@@ -104,7 +106,7 @@ class App extends Component {
             </div>
           : <div className="container">
             <Clouds />
-            <Loading />
+            <LoadingSpinner />
           </div> }
       </Canon>
     );

@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {Link} from "react-router";
 import {Switch} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import UserInfo from "./UserInfo";
 import UserCodeBlocks from "./UserCodeBlocks";
@@ -46,11 +46,11 @@ class Profile extends Component {
     this.fetchUser(username);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.params.username !== this.props.params.username) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.params.username !== this.props.params.username) {
       console.log("changed url!");
       this.setState({loading: true});
-      this.fetchUser(nextProps.params.username);
+      this.fetchUser(this.props.params.username);
     }
   }
 
@@ -99,7 +99,7 @@ class Profile extends Component {
 
     if (!loggedInUser) browserHistory.push("/");
 
-    if (loading || !profileUser) return <Loading />;
+    if (loading || !profileUser) return <LoadingSpinner />;
 
     if (error) return <div className="content u-vertical-align-children u-text-center"><h1>{error}</h1></div>;
 

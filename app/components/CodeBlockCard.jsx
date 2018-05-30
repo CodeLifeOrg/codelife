@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import ReportBox from "components/ReportBox";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import "./CodeBlockCard.css";
 
 class CodeBlockCard extends Component {
@@ -131,7 +131,7 @@ class CodeBlockCard extends Component {
   render() {
     const {codeBlock, open} = this.state;
 
-    if (!codeBlock) return <Loading />;
+    if (!codeBlock) return <LoadingSpinner />;
 
     const {t, userProgress, theme, icon, user} = this.props;
     const {id, lid, liked, reported, likes, snippetname, slug, studentcontent, username, featured} = codeBlock;

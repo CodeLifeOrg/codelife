@@ -7,6 +7,7 @@ import ReportBox from "components/ReportBox";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import Logo from "components/Logo.svg";
 import {Helmet} from "react-helmet";
+import Error from "pages/Error";
 import {Position, Popover, PopoverInteractionKind, Intent, Button} from "@blueprintjs/core";
 import "./Share.css";
 
@@ -42,6 +43,8 @@ class Share extends Component {
     const contentType = pathname.includes("codeBlocks/") ? "codeblock" : "project";
 
     const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
+
+    if (!content) return <div style={{height: "100vh", backgroundColor: "#74c3b7"}}><Error /></div>;
 
     const {id} = content;
     const name = content.name || content.snippetname;

@@ -7,7 +7,7 @@ import ReportBox from "components/ReportBox";
 import "./Comment.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 class Comment extends Component {
 
@@ -65,7 +65,7 @@ class Comment extends Component {
     const {t: translate} = this.props;
     const {comment} = this.state;
 
-    if (!comment) return <Loading />;    
+    if (!comment) return <LoadingSpinner />;    
 
     return (
       <div className="comment">

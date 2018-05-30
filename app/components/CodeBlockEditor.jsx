@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import {Alert, Button, Dialog, EditableText, Intent, Popover, PopoverInteractionKind, Position, Tabs2, Tab2, Toaster} from "@blueprintjs/core";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import ShareDirectLink from "components/ShareDirectLink";
 import ShareFacebookLink from "components/ShareFacebookLink";
 
@@ -213,7 +213,7 @@ class CodeBlockEditor extends Component {
     const {codeBlock} = this.props.island;
     readOnly || !codeBlock ? shareLink = "" : shareLink = encodeURIComponent(`${origin}/codeBlocks/${username}/${codeBlock.slug ? codeBlock.slug : codeBlock.snippetname}`);
 
-    if (!this.state.mounted) return <Loading />;
+    if (!this.state.mounted) return <LoadingSpinner />;
 
     // prompt
     const promptTab =

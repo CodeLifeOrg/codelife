@@ -7,7 +7,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Position, Tooltip, Dialog} from "@blueprintjs/core";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import Discussion from "components/Discussion";
 
 import ImageText from "components/slidetypes/ImageText";
@@ -208,7 +208,7 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    if (!currentSlide || !currentIsland || !currentLevel) return <Loading />;
+    if (!currentSlide || !currentIsland || !currentLevel) return <LoadingSpinner />;
 
     const nextLevel = levels.find(l => l.ordering === currentLevel.ordering + 1);
 

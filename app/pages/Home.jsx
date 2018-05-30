@@ -9,7 +9,7 @@ import IslandLink from "components/IslandLink";
 import AuthForm from "components/AuthForm";
 import CTA from "components/CTA";
 import {Dialog, Intent, Spinner} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import "./Home.css";
 
 class Home extends Component {
@@ -59,7 +59,7 @@ class Home extends Component {
       pt: "9ImSvqDDQuc"
     };
 
-    if (user && !dbLoaded) return <Loading />;
+    if (user && !dbLoaded) return <LoadingSpinner />;
 
     return (
       <div className="content home">

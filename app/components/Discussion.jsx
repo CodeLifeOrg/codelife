@@ -7,7 +7,7 @@ import Thread from "components/Thread";
 import "./Discussion.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 class Discussion extends Component {
 
@@ -90,7 +90,7 @@ class Discussion extends Component {
     const {t: translate} = this.props;
     const {threads, threadTitle, threadContent} = this.state;
 
-    if (!threads) return <Loading />;
+    if (!threads) return <LoadingSpinner />;
 
     return (
       <div className="discussion-container" id="Discussion">

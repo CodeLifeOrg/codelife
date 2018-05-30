@@ -14,7 +14,7 @@ import ShareFacebookLink from "components/ShareFacebookLink";
 
 import "./IslandLevel.css";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 class Level extends Component {
 
@@ -371,7 +371,7 @@ class Level extends Component {
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
-    if (!currentIsland || !levels || !userProgress) return <Loading />;
+    if (!currentIsland || !levels || !userProgress) return <LoadingSpinner />;
 
     const islandProgress = this.hasUserCompleted(this.props.params.lid);
     const islandDone = islandProgress && islandProgress.status === "completed";

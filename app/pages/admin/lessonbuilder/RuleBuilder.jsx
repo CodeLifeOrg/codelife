@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import "./RuleBuilder.css";
 
@@ -55,7 +55,7 @@ class RuleBuilder extends Component {
 
     const {rules} = this.state;
 
-    if (!rules) return <Loading />;
+    if (!rules) return <LoadingSpinner />;
 
     const ruleItems = rules.map(r => <div key={r.id} className="rule">
       <h3 className="rule-title font-lg u-margin-top-off u-margin-bottom-xxs">{r.type}</h3>

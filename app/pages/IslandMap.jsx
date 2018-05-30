@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import "./IslandMap.css";
 import IslandLink from "components/IslandLink";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 /**
  * Displays all available islands
@@ -57,7 +57,7 @@ class Island extends Component {
 
     if (!auth.user) browserHistory.push("/");
 
-    if (islands === [] || !userProgress) return <Loading />;
+    if (islands === [] || !userProgress) return <LoadingSpinner />;
 
     const islandArray = islands.slice(0);
 

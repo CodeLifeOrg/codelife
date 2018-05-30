@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import PropTypes from "prop-types";
 import {NonIdealState, Popover, PopoverInteractionKind} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import {Link} from "react-router";
 
 import "./Leaderboard.css";
@@ -64,7 +64,7 @@ class Leaderboard extends Component {
 
     if (!this.props.auth.user) browserHistory.push("/");
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     const sortedUsers = this.state.users.sort((a, b) => {
       const prop1 = typeof a[sortBy.prop] === "string" ? a[sortBy.prop].toLowerCase() : a[sortBy.prop];

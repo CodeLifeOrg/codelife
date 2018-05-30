@@ -6,8 +6,9 @@ module.exports = function(app) {
 
   // Public resource for glossary definitions
   app.get("/api/glossary/all", (req, res) => {
+    const {lang} = req.query;
     db.glossarywords.findAll().then(u => {
-      u = translate(req.headers.host, "pt", u);
+      if (lang === "pt") u = translate("pt.", "pt", u);
       return res.json(u).end();
     });
   });

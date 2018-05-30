@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import "./GlossaryBuilder.css";
@@ -136,7 +136,7 @@ class GlossaryBuilder extends Component {
 
     const {words} = this.state;
 
-    if (!words) return <Loading />;
+    if (!words) return <LoadingSpinner />;
 
     console.log(words);
 

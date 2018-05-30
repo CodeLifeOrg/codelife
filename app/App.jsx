@@ -89,7 +89,7 @@ class App extends Component {
       <Canon id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />
         {
-          location.href.includes("dev.") || location.href.includes("nightly.")
+          !bareRoute && (location.href.includes("dev.") || location.href.includes("nightly."))
             ? <div className="devbar">Development Server. Do not edit content here!</div>
             : null
         }

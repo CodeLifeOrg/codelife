@@ -12,7 +12,7 @@ class UserCard extends Component {
     const {bio, id, img, name, username} = this.props.user;
 
     // define user image as null
-    let avatarURL = null;
+    let avatarURL = "/avatars/avatar-excited-cropped.jpg";
 
     // get corresponding user image
     if (img) {

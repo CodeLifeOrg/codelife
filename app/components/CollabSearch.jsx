@@ -120,7 +120,7 @@ class CollabSearch extends Component {
     }
 
     // available collaborators
-    const userList = usersWithoutCollabs.map(r => 
+    const userList = usersWithoutCollabs.map(r =>
       <li className="collab-item available-collab-item card-container" key={r.id}>
 
         {/* add collaborator button */}
@@ -133,10 +133,11 @@ class CollabSearch extends Component {
 
           <span className="collab-avatar">
             {/* show user image if one is found */}
-            { r.img
-              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.img})`}} />
-              : <span className="collab-avatar-icon pt-icon pt-icon-person" />
-            }
+            <span className="collab-avatar-img" style={
+              r.img
+                ? {backgroundImage: `url(/uploads/${r.img})`}
+                : {backgroundImage: "url(/avatars/avatar-excited-cropped.jpg)"}
+            } />
             {/* action indicator */}
             <span className="action-indicator">
               <span className="action-indicator-icon pt-icon pt-icon-plus" />
@@ -161,15 +162,18 @@ class CollabSearch extends Component {
           <span className="u-visually-hidden">{ t("Collab.Remove") }</span>
         </button>
 
+        { console.log(r.img) }
+
         {/* card inner */}
         <span className="card collab-inner">
 
           <span className="collab-avatar">
             {/* show user image if one is found */}
-            { r.img
-              ? <span className="collab-avatar-img" style={{backgroundImage: `url(/uploads/${r.img})`}} />
-              : <span className="collab-avatar-icon pt-icon pt-icon-person" />
-            }
+            <span className="collab-avatar-img" style={
+              r.img
+                ? {backgroundImage: `url(/uploads/${r.img})`}
+                : {backgroundImage: "url(/avatars/avatar-excited-cropped.jpg)"}
+            } />
             {/* action indicator */}
             <span className="action-indicator">
               <span className="action-indicator-icon pt-icon pt-icon-small-cross" />

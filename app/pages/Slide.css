@@ -164,23 +164,43 @@
       font-size: 18px;
       line-height: 24px;
       max-width: 600px;
+
+      /* bad content designer! */
+      & p:empty,
+      & p br {
+        display: none;
+      }
+
+      /* adjust first line */
+      & p:first-of-type {
+        @add-mixin font-lg;
+      }
+
+      /* adjust code samples */
+      & pre {
+        margin-bottom: 2rem; /* space out code & answers */
+      }
+
       & .questions {
         list-style: none;
         margin: var(--gutter-xs) 0;
         padding: 0;
         & .question {
           background-color: transparent;
+          border-radius: var(--radius-sm);
           counter-increment: item;
-          margin: 1px 0;
+          margin: 0.5em 0;
+          overflow: hidden;
           padding: var(--gutter-xs) var(--gutter-sm) var(--gutter-xs) 40px;
           text-align: left;
           transition: background-color 0.2s;
+          z-index: 1;
           &:before {
             background-color: rgba(0, 0, 0, 0.05);
             border-radius: var(--radius-md);
             content: counter(item, upper-alpha);
             display: inline-block;
-            font-size: 12px;
+            font-size: 0.75em;
             font-weight: bold;
             height: var(--gutter-md);
             left: var(--gutter-xs);
@@ -188,9 +208,10 @@
             padding-left: 1px;
             position: absolute;
             text-align: center;
-            top: 12px;
+            top: 0.75em;
             transition: background-color 0.2s;
             width: var(--gutter-md);
+            z-index: 2;
           }
           &.quiz-selected {
             background-color: rgba(0, 0, 0, 0.05);
@@ -203,6 +224,31 @@
             cursor: pointer;
             &:before {
               background-color: var(--sky);
+            }
+          }
+
+          & .quiz-button {
+            /* make absolute positioned :after element (bg effect) position itself relative to parent */
+            position: static;
+            /* override */
+            text-align: left;
+
+            /* :after bg effect sizing */
+            &:after {
+              @add-mixin absolute-expand;
+              content: '';
+              display: block;
+              z-index: -1; /* prevent from obscuring content */
+            }
+
+            /* focus */
+            &:focus:after {
+              background-color: var(--sky-light);
+            }
+
+            /* active */
+            &:active:after {
+              background-color: rgba(0, 0, 0, 0.05);
             }
           }
         }

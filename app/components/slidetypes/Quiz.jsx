@@ -53,7 +53,13 @@ class Quiz extends Component {
       qText = "Quiz Data is Unavailable.";
     }
 
-    const quizItems = qParse.map(question => <li className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
+    const quizItems = qParse.map(question =>
+      <li className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text}>
+        <button className="quiz-button u-unbutton" onClick={this.onChooseAnswer.bind(this, question)}>
+          {question.text}
+        </button>
+      </li>
+    );
 
     return (
       <div id="slide-content" className="slide-content quiz flex-row">

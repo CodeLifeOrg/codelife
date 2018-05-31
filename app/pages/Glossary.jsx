@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {fetchData} from "datawheel-canon";
+import "./Glossary.css";
 
 // Glossary Page
 //  - make sure all examples use HTML entities to escape reserve characters

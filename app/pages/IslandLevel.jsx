@@ -296,7 +296,7 @@ class Level extends Component {
 
         <div className="share-button-group field-container">
           {/* facebook */}
-          <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={canPostToFacebook} />
+          <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={true} />
           {/* TODO: replace with smarter text, check for next island */}
           <Button
             className="share-button pt-button pt-button-primary font-md"

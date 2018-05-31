@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
@@ -22,11 +22,11 @@ class ShareFacebookLink extends Component {
     const loadingText = t("Generating screenshot");
 
     return (
-      screenshotReady !== true
+      !screenshotReady
         // loading spinner
         ? <p className="font-md is-disabled u-margin-top-md" target="_blank">
           { loadingText }
-          <Loading label={false} />
+          <LoadingSpinner label={false} />
         </p>
         // facebook share link
         : <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">

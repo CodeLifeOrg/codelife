@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import PropTypes from "prop-types";
 import CodeEditor from "components/CodeEditor/CodeEditor";
-import {Alert, Button, Dialog, EditableText, Intent, Popover, PopoverInteractionKind, Position, Tabs2, Tab2, Toaster} from "@blueprintjs/core";
+import {Alert, Dialog, EditableText, Intent, Position, Tabs2, Tab2, Toaster} from "@blueprintjs/core";
 
 import LoadingSpinner from "components/LoadingSpinner";
 import ShareDirectLink from "components/ShareDirectLink";
@@ -31,13 +31,13 @@ class CodeBlockEditor extends Component {
       canPostToFacebook: true,
       filename: "",
       originalFilename: "",
-      canEditTitle: true,
       activeTabId: "codeblockeditor-prompt-tab"
     };
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
   componentDidMount() {
+    const {t} = this.props;
     const rulejson = JSON.parse(this.props.island.rulejson);
     let initialContent = "";
     let filename = "";
@@ -46,6 +46,10 @@ class CodeBlockEditor extends Component {
     if (this.props.island.codeBlock) {
       initialContent = this.props.island.codeBlock.studentcontent;
       filename = this.props.island.codeBlock.snippetname;
+      originalFilename = filename;
+    } 
+    else {
+      filename = t("myCodeblock", {islandName: this.props.island.name});
       originalFilename = filename;
     }
     this.setState({mounted: true, initialContent, filename, originalFilename, rulejson});
@@ -96,12 +100,10 @@ class CodeBlockEditor extends Component {
   }
 
   changeCodeblockName(newName) {
-    const canEditTitle = false;
     newName = newName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     const originalFilename = newName;
     const filename = newName;
-    this.setState({originalFilename, filename, canEditTitle});
-    this.verifyAndSaveCode.bind(this)();
+    this.setState({originalFilename, filename});
   }
 
   clickSave() {
@@ -123,6 +125,7 @@ class CodeBlockEditor extends Component {
   }
 
   verifyAndSaveCode() {
+    
     const {t} = this.props;
     const {id: uid} = this.props.auth.user;
     const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
@@ -133,7 +136,7 @@ class CodeBlockEditor extends Component {
     if (!this.editor.getWrappedInstance().getWrappedInstance().isPassing()) {
       const toast = Toaster.create({className: "submitToast", position: Position.TOP_CENTER});
       toast.show({message: t("Can't save non-passing code!"), timeout: 1500, intent: Intent.DANGER});
-      this.setState({filename: this.state.originalFilename, canEditTitle: true});
+      this.setState({filename: this.state.originalFilename, saving: false});
       return;
     }
 
@@ -147,7 +150,7 @@ class CodeBlockEditor extends Component {
     const username = this.props.auth.user.username;
     axios.post(endpoint, {uid, username, iid, name, studentcontent}).then(resp => {
       if (resp.status === 200) {
-        this.setState({canEditTitle: true, saving: false, canPostToFacebook: false});
+        this.setState({saving: false, canPostToFacebook: false});
         this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
         const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
@@ -203,7 +206,9 @@ class CodeBlockEditor extends Component {
 
   render() {
     const {t, island, readOnly} = this.props;
-    const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, canEditTitle, saving, canPostToFacebook} = this.state;
+    const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, saving, canPostToFacebook} = this.state;
+
+    console.log("saving: ", saving);
 
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
@@ -252,7 +257,7 @@ class CodeBlockEditor extends Component {
                   onCancel={() => this.setState({filename: originalFilename})}
                   onConfirm={this.changeCodeblockName.bind(this)}
                   multiline={true}
-                  disabled={!canEditTitle}
+                  // disabled={!canEditTitle}
                   confirmOnEnterKey={true}
                 />
               </h2>

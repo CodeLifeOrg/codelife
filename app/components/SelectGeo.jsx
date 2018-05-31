@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Classes, MenuItem} from "@blueprintjs/core";
+import {Button, MenuItem} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/labs";
 import STATES from "pages/profile/states";
 import "@blueprintjs/labs/dist/blueprint-labs.css";
@@ -45,17 +45,25 @@ class SelectGeo extends Component {
   changeState(e) {
     const {callback} = this.props;
     const state = e.target.value;
-    axios.get(`/api/geos/?state=${state}`).then(geosResp => {
-      const homeGeo = geosResp.data[0];
-      const geoQuery = homeGeo.name;
-      this.setState({
-        geos: geosResp.data,
-        filteredGeos: geosResp.data,
-        geoQuery,
-        homeGeo
+    if (state === "unspecified") {
+      /*this.setSelectedGeo({
+        id: "unspecified",
+        name: "Unspecified"
+      });*/
+    }
+    else {
+      axios.get(`/api/geos/?state=${state}`).then(geosResp => {
+        const homeGeo = geosResp.data[0];
+        const geoQuery = homeGeo.name;
+        this.setState({
+          geos: geosResp.data,
+          filteredGeos: geosResp.data,
+          geoQuery,
+          homeGeo
+        });
+        callback(homeGeo);
       });
-      callback(homeGeo);
-    });
+    }
   }
 
   filterGeos(e) {
@@ -68,6 +76,7 @@ class SelectGeo extends Component {
   }
 
   setSelectedGeo(selectedGeo) {
+    console.log(selectedGeo);
     const {callback} = this.props;
     this.setState({
       homeGeo: selectedGeo,
@@ -78,7 +87,7 @@ class SelectGeo extends Component {
 
   render() {
     const {gid, t, context} = this.props;
-    const {loading, error, geos, filteredGeos, geoQuery, homeGeo} = this.state;
+    const {loading, error, geos, filteredGeos, homeGeo} = this.state;
     const state = gid ? gid.substr(0, 3) : null;
     const filterGeos = this.filterGeos.bind(this);
     const setSelectedGeo = this.setSelectedGeo.bind(this);
@@ -107,7 +116,7 @@ class SelectGeo extends Component {
               id={`${context}-state-select`}
               value={state || ""}
               onChange={changeState}>
-              {/* <option value="unspecified" /> */}
+              {/*<option value="unspecified">{t("Unspecified")}</option>*/}
               {STATES.map(s =>
                 <option key={s.id} value={s.id}>
                   {`${s.id.substr(1, 2).toUpperCase()} - ${s.name}`}

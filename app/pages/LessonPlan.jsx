@@ -45,6 +45,8 @@ class LessonPlan extends Component {
     let levelSections = [];
     let levelTOC = [];
 
+
+
     // loop through levels
     if (lid) {
 
@@ -62,6 +64,7 @@ class LessonPlan extends Component {
             return <section className={`lessonplan-slide ${s.type}-lessonplan-slide`} key={s.id}>
               <SlideComponent {...s}
                 readOnly={true}
+                suppressJS={true}
                 island={currentIsland.theme} />
             </section>;
           })}

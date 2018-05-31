@@ -67,7 +67,9 @@ class App extends Component {
 
     const authRoute = routes[0] === "login";
     const bareRoute = ["projects", "codeBlocks"].includes(routes[0]) && routes.length === 3;
-    const seoRoute = this.props.router.location.pathname.includes("lessonplan") || this.props.router.location.pathname.includes("glossary")
+    
+    const seoPath = this.props.router.location.pathname;
+    const seoRoute = seoPath.includes("lessonplan") || seoPath.includes("glossary");
 
     const meta = header.meta.slice();
 
@@ -84,9 +86,6 @@ class App extends Component {
     if (currentIsland) theme = currentIsland.theme;
 
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
-    // console.log(this.props.router.location.pathname);
-    // console.log(reduxLoaded, userInit, !auth.loading, authRoute, bareRoute, seoRoute);
-    // console.log(reduxLoaded && userInit && !auth.loading || authRoute || bareRoute || seoRoute);
     return (
       <Canon id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />

@@ -110,7 +110,7 @@ class CodeEditor extends Component {
     const {initialValue} = this.props;
     if (iFrameLoaded && initialContent !== initialValue) {
       clearTimeout(this.myTimeout);
-      this.setState({initialContent: initialValue, currentText: initialValue}, this.renderText.bind(this, true));
+      this.setState({initialContent: initialValue, currentText: initialValue}, this.renderText.bind(this, !this.props.suppressJS));
     }
   }
 

@@ -26,14 +26,8 @@
 
     /* center image and text on bigger screens, if there's an image */
     @add-mixin min-sm {
-      &.has-img {
-        align-items: center;
-        justify-content: center;
-      }
-      &.text-only {
-        padding-left: var(--gutter-lg);
-        padding-right: var(--gutter-lg);
-      }
+      padding-left: var(--gutter-lg);
+      padding-right: var(--gutter-lg);
     }
   }
 
@@ -43,6 +37,7 @@
     border-radius: 50%;
     overflow: hidden;
     object-fit: cover; /* just in case */
+    background-color: var(--white);
     box-shadow: 0 1px 1em rgba(8, 26, 24, 0.1);
     /* sizing */
     width: 8rem;

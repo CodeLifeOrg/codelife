@@ -110,20 +110,22 @@ class Profile extends Component {
     // check for admin status
     let adminUser = false;
     this.props.user.role > 1 ? adminUser = true : null;
-    
+
+    // avatar image
+    let avatarImg = "/avatars/avatar-excited-cropped.jpg";
+    profileUser.img ? avatarImg = `/uploads/${ profileUser.img }?v=${ new Date().getTime() }` : null;
+
     return (
       <div className="content view-profile u-padding-top-off">
 
         {/* header */}
         <header className="header">
-          <div className={ profileUser.img ? "header-inner has-img" : "header-inner text-only" }>
+          <div className="header-inner">
 
             {/* avatar */}
-            { profileUser.img &&
-              <div className="header-avatar">
-                <img className="header-avatar-img" src={ `/uploads/${ profileUser.img }?v=${ new Date().getTime() }` } alt="" />
-              </div>
-            }
+            <div className="header-avatar">
+              <img className="header-avatar-img" src={ avatarImg } alt="" />
+            </div>
 
             {/* name & info */}
             <div className="header-text">
@@ -135,7 +137,7 @@ class Profile extends Component {
               </h1>
               {/* bio */}
               { profileUser.bio &&
-                <p className="bio font-lg u-margin-top-xs">{ profileUser.bio }</p>
+                <p className="bio font-md u-margin-top-xs">{ profileUser.bio }</p>
               }
 
 

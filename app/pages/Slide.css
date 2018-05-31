@@ -30,12 +30,29 @@
     text-decoration: underline;
   }
   & .slide-header {
-    min-height: 29px;
-    & .title {
-      font-size: 24px;
-      letter-spacing: 0.25px;
-      text-transform: uppercase;
+    width: 100%;
+    left: 0;
+    right: 0;
+
+    & .slide-title-edit {
+      top: -2px; /* fudge into place */
+      margin-left: 0.125em;
+
+      /* incon sizing and positioning */
+      & .slide-title-edit-icon:before {
+        font-size: 1.25em;
+        color: var(--gray);
+        transition: color 0.2s;
+      }
+
+      /* interactions */
+      &:hover, &:focus {
+        & .slide-title-edit-icon:before {
+          color: var(--sky-dark);
+        }
+      }
     }
+
     & .gems {
       font-weight: 600;
       left: 0;
@@ -51,8 +68,8 @@
     }
     & .return-link {
       position: absolute;
-      right: 0;
       top: 0;
+      right: 0;
     }
   }
   & .slide-content {
@@ -60,6 +77,7 @@
     margin-top: var(--gutter-xs);
     margin-bottom: var(--gutter-md);
     overflow: visible;
+
     & p {
       margin-bottom: 0;
     }
@@ -83,10 +101,10 @@
         max-height: 70vh; /* fallback */
         max-height: calc(100vh - 4em);
         overflow-y: auto;
-        /* space out from editors */
-        padding-right: 2.5em;
         /* scale up font size */
         font-size: 13px;
+        /* space out from editors */
+        padding-right: 2.5em; /* TODO: scope this to editor template */
       }
 
       @add-mixin min-md {
@@ -163,7 +181,11 @@
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
-      max-width: 600px;
+
+      @add-mixin min-sm {
+        width: 600px;
+        max-width: 100%;
+      }
 
       /* bad content designer! */
       & p:empty,
@@ -172,7 +194,8 @@
       }
 
       /* adjust first line */
-      & p:first-of-type {
+      & p:first-of-type,
+      & > div:first-of-type {
         @add-mixin font-lg;
       }
 
@@ -255,6 +278,8 @@
       }
     }
   }
+
+  /* footer */
   & .slide-footer {
     display: flex;
     justify-content: space-between;
@@ -290,7 +315,8 @@
       margin-bottom: 1.5em;
 
       &.wide {
-        max-width: 400px;
+        width: 38em;
+        max-width: 100%;
       }
     }
     &.cheatSheet .slide-text {
@@ -314,7 +340,70 @@
     justify-content: center;
     width: 100%;
   }
+
+
+  /* textText template */
+  & .textText {
+
+    /* undo flex-row styles on small screens */
+    @add-mixin max-lg {
+      align-items: center;
+      flex-direction: column;
+
+      & .slide-text.wide {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      & .slide-text + .slide-text {
+        margin-top: 2em;
+      }
+    }
+
+    & .slide-text.wide {
+      padding-right: 0;
+    }
+
+    @add-mixin min-lg {
+      & .slide-text + .slide-text {
+        margin-left: 2em;
+      }
+    }
+
+
+
+    & .slide-text {
+
+      & p + p {
+        margin-top: 1em;
+      }
+
+      /* bad content designer! */
+      &:empty,
+      & p:empty,
+      & br {
+        display: none;
+      }
+
+      @add-mixin min-md {
+        align-self: center;
+      }
+
+      & p {
+        @add-mixin font-md;
+      }
+    }
+  }
+
+  @add-mixin max-md {
+    & .slide-text {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 }
+
+
 
 /* slide completion */
 .confetti {

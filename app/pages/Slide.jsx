@@ -219,7 +219,6 @@ class Slide extends Component {
     return (
       <div className="slide-outer">
         <div id="slide" className={ `slide-inner ${currentIsland.theme}` }>
-          {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
           <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
           <Dialog
             iconName="warning"
@@ -243,7 +242,16 @@ class Slide extends Component {
             </div>
           </Dialog>
           <div className="slide-header" id="slide-head">
-            { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
+            { currentSlide.title
+              ? <h1 className="slide-title font-lg">{ currentSlide.title }
+                { this.props.auth.user.role > 0
+                  ? <button className="u-unbutton slide-title-edit" onClick={this.editSlide.bind(this)} >
+                    <span className="pt-icon-standard pt-icon-edit slide-title-edit-icon" />
+                    <span className="u-visually-hidden">Edit slide</span>
+                  </button>
+                  : null }
+              </h1>
+              : null }
 
             <Tooltip
               className="return-link"

@@ -62,6 +62,7 @@ class Level extends Component {
       const prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1);
 
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
+      // const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? true : false;
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -231,38 +232,43 @@ class Level extends Component {
     const {theme} = this.state.currentIsland;
     return (
       <Dialog
-        className={ theme }
+        className="form-container checkpoint-form-container text-center"
         isOpen={this.state.checkpointOpen}
         onClose={this.closeCheckpoint.bind(this)}
         title={ t("Survey") }
-        canEscapeClose={false}
-        canOutsideClickClose={false}
-        isCloseButtonShown={false}
-        iconName="clipboard"
+        iconName=""
       >
-        <div className="pt-dialog-body">
-          <Checkpoint completed={this.pickedSchool.bind(this)}/>
-        </div>
-        <div className="pt-dialog-footer">
-          <div className="pt-dialog-footer-actions">
-            <Button
-              intent={Intent.DANGER}
-              onClick={this.skipCheckpoint.bind(this)}
-              text={t("No")}
-            />
-            <Button
-              intent={Intent.WARNING}
-              onClick={this.skipCheckpoint.bind(this)}
-              text={t("I'd rather not say")}
-            />
-            <Button
-              intent={Intent.SUCCESS}
-              disabled={!this.state.school}
-              onClick={this.saveCheckpoint.bind(this)}
-              text={t("Save")}
-            />
 
+        {/* heading */}
+        <h2 className="checkpoint-heading u-text-center font-xl">{ t("Do you go to school in Minas Gerais?") }</h2>
+
+        {/* basically just a SelectSchool component */}
+        <Checkpoint completed={this.pickedSchool.bind(this)}/>
+
+        {/* no thanks */}
+        <div className="field-container pt-inline">
+          <div className="checkbox-container">
+            <label className="pt-control pt-checkbox font-xs u-margin-bottom-off">
+              <input type="checkbox" onClick={this.skipCheckpoint.bind(this)} />
+              <span className="pt-control-indicator" />
+              {t("I'd rather not say")}
+            </label>
           </div>
+        </div>
+
+        {/* save changes button */}
+        <div className="field-container">
+          {/* <button
+            className="pt-button pt-intent-primary font-sm"
+            onClick={this.skipCheckpoint.bind(this)} >
+            {t("No")}
+          </button> */}
+          <button
+            className="pt-button pt-intent-primary font-md"
+            disabled={!this.state.school}
+            onClick={this.saveCheckpoint.bind(this)} >
+            {t("Save changes")}
+          </button>
         </div>
       </Dialog>
     );
@@ -321,12 +327,12 @@ class Level extends Component {
     if (!this.allLevelsBeaten()) {
       return (
         <div className="editor-popover">
-          <div className="code-block" onClick={this.toggleTest.bind(this)}>
+          <button className="code-block" onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
             <div className="side left"></div>
             <div className="side front"></div>
-          </div>
+          </button>
         </div>
       );
     }
@@ -340,12 +346,12 @@ class Level extends Component {
           position={ next ? Position.BOTTOM : Position.TOP }
           content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
           tooltipClassName={ currentIsland.theme }>
-          <div className={ `code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
+          <button className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
             <div className="side left"></div>
             <div className="side front"><span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` }></span></div>
-          </div>
+          </button>
         </Tooltip>
         <Dialog
           className={ `codeblockeditor-dialog studio-inner ${ currentIsland.theme }` }
@@ -405,6 +411,8 @@ class Level extends Component {
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
+          openOnTargetFocus={false}
+          enforceFocus = {false}
         >
           <Link className="stop is-done" to={`/island/${lid}/${level.id}`}>
             {/* descriptive text for screen readers */}
@@ -421,6 +429,8 @@ class Level extends Component {
           interactionKind={PopoverInteractionKind.HOVER}
           popoverClassName={ `stop-popover pt-popover pt-tooltip ${ currentIsland.theme }` }
           position={Position.TOP}
+          openOnTargetFocus={false}
+          enforceFocus = {false}
         >
           <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}>
             {/* descriptive text for screen readers */}
@@ -432,7 +442,14 @@ class Level extends Component {
         </Popover>;
       }
       else if (level.isNext) {
-        return <Tooltip isOpen={!checkpointOpen} position={ Position.BOTTOM } content={ level.name } tooltipClassName={ currentIsland.theme }>
+        return <Tooltip
+          isOpen={!checkpointOpen}
+          position={ Position.BOTTOM }
+          content={ level.name }
+          tooltipClassName={ currentIsland.theme }
+          openOnTargetFocus={false}
+          enforceFocus = {false}
+        >
           <Link className="stop is-next" to={`/island/${lid}/${level.id}`}>
             {/* descriptive text for screen readers */}
             <span className="u-visually-hidden">

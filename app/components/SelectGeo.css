@@ -90,6 +90,10 @@
 }
 
 .geosearch-popover {
+  /* limit select list height, make it scrollable */
+  /* NOTE: increasing this further will cause part of it to be hidden in some dialogs */
+  max-height: 13.5rem;
+  overflow-y: auto;
 
   /* so much border radius, so little time 😒 */
   &, & .pt-popover-content {

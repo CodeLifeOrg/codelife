@@ -1156,6 +1156,7 @@ utility classes
 /* make children into a button group */
 .u-button-group > * {
   @add-mixin button-groupify;
+  width: auto; /* override for buttons nested in .field-container */
 }
 
 /* screen reader text */

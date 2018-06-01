@@ -345,8 +345,6 @@ Main island path
     display: inline-block;
     width: var(--path-xxs);
     height: var(--path-xxs);
-    /* positioning */
-    top: 8px; /* fudged */
     /* theming */
     transform: rotateX(-33deg)translateZ(-28px)translateX(2px);
     transform-style: preserve-3d;
@@ -357,12 +355,12 @@ Main island path
     @add-mixin min-xs {
       width: var(--path-xs);
       height: var(--path-xs);
-      top: 2px; /* fudged */
+      top: -8px; /* fudged */
     }
     @add-mixin min-sm {
       width: var(--path-sm);
       height: var(--path-sm);
-      top: -2px;
+      top: -16px; /* still fudged */
     }
 
     /* -------------------------------

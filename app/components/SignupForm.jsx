@@ -130,6 +130,8 @@ class SignupForm extends Component {
               name="password"
               onFocus={this.onChange}
               onChange={this.onChange}
+              required="true"
+              minLength="8"
               autoComplete="Off" />
             <span className="field-icon pt-icon pt-icon-key" />
           </div>
@@ -144,6 +146,8 @@ class SignupForm extends Component {
               name="passwordAgain"
               onFocus={this.onChange}
               onChange={this.onChange}
+              required="true"
+              minLength="8"
               autoComplete="Off" />
             <span className="field-icon pt-icon pt-icon-key" />
           </div>

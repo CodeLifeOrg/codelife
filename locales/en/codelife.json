@@ -170,6 +170,7 @@
   "Flagged Content": "Flagged content",
   "Forever": "Forever",
   "Gender": "Gender",
+  "Generating screenshot": "Generating screenshot",
   "Glossary": "Glossary",
   "Glossary Builder": "Glossary builder",
   "Help": "Help",
@@ -268,6 +269,7 @@
   "Modified on": "Modified on",
   "Monthly Flag Limit Reached": "Monthly flag limit reached",
   "Municipality": "Municipality",
+  "My": "My",
   "My Project": "My project",
   "My info": "My info",
   "My location": "My location",
@@ -431,10 +433,12 @@
   "Thread Posted!": "Thread posted!",
   "Toggle fullscreen mode": "Toggle fullscreen mode",
   "Unable to upload image!": "Unable to upload image!",
+  "Unspecified": "Unspecified",
   "Upload image": "Upload image",
   "Upload new picture": "Upload new picture",
   "User": "User",
   "User Admin": "User admin",
+  "User roles": "User roles",
   "UserProfile": {
     "HiddenContent": "This user's content is hidden",
     "Visible": "Profile visibility"

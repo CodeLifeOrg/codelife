@@ -1,7 +1,7 @@
 /* mixins */
 
 /* mobile first breakpoints */
-@define-mixin min-xl  { @media (min-width: 1800px) { @mixin-content; } }
+@define-mixin min-xl  { @media (min-width: 1400px) { @mixin-content; } }
 @define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
 @define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }
 @define-mixin min-sm  { @media (min-width: 768px)  { @mixin-content; } }
@@ -9,7 +9,7 @@
 @define-mixin min-xxs { @media (min-width: 325px)  { @mixin-content; } }
 
 /* max-width first */
-@define-mixin max-xl  { @media (max-width: 1799px) { @mixin-content; } }
+@define-mixin max-xl  { @media (max-width: 1399px) { @mixin-content; } }
 @define-mixin max-lg  { @media (max-width: 1199px) { @mixin-content; } }
 @define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
 @define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }

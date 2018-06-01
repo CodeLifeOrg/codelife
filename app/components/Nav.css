@@ -28,7 +28,7 @@
   }
 
   /* rebalance flex item widths */
-  @add-mixin min-lg {
+  @add-mixin min-xl {
     & > .logo,
     & > .link-list {
       flex: 2 2 0;
@@ -213,6 +213,14 @@
       /* sizing */
       padding: 0.25em var(--gutter-sm);
 
+      /* limit width */
+      & .limit-link-text-width {
+        @add-mixin overflow-ellipsis;
+        display: inline-block; /* honor `max-width` without breakding layout */
+        max-width: 9rem; /* limit width */
+        vertical-align: bottom; /* preserve alignment  */
+      }
+
       /* remove right padding, bring in toggle buttons */
       &.with-toggle {
         @add-mixin min-sm {
@@ -233,7 +241,7 @@
 
       /* show projects link on small screens and huge screens */
       &.projects-link {
-        @media (min-width: 768px) and (max-width: 1400px) {
+        @media (min-width: 768px) and (max-width: 900px) {
           display: none;
         }
       }

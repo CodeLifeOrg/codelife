@@ -327,7 +327,7 @@ class Level extends Component {
     if (!this.allLevelsBeaten()) {
       return (
         <div className="editor-popover">
-          <button className="code-block" onClick={this.toggleTest.bind(this)}>
+          <button className="code-block u-unbutton" onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>
             <div className="side top"></div>
             <div className="side left"></div>

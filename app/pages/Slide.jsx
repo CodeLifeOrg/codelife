@@ -223,7 +223,7 @@ class Slide extends Component {
           <Dialog
             iconName="warning"
             isOpen={this.state.confirmSkipOpen}
-            onClose={this.toggleSkip.bind(this)}
+            onClose={() => this.setState({confirmSkipOpen: false})}
             title="Are you sure?"
             canOutsideClickClose={false}
           >

@@ -486,7 +486,7 @@ STATES & INTERACTIONS
   /* next up */
   &.is-next {
     animation: bounceAndFlash 2s infinite;
-    background-color: var(--heylisten); /* fallback */
+    background-color: var(--sandstorm); /* fallback */
   }
 
   /* done */
@@ -519,7 +519,7 @@ STATES & INTERACTIONS
     /* make each side glow */
     & .side {
       animation: blockGlow 2s infinite;
-      background-color: var(--heylisten); /* fallback */
+      background-color: var(--sandstorm); /* fallback */
     }
   }
 
@@ -567,15 +567,15 @@ ANIMATIONS
 /* stop bounce and flash */
 @keyframes bounceAndFlash {
   0%, 40%, 50%, 65%, 100% {
-    background-color: var(--heylisten);
+    background-color: var(--sandstorm);
     transform: translateY(0)rotateX(50deg);
   }
   45% {
-    background-color: var(--heylisten-light);
+    background-color: var(--sandstorm-light);
     transform: translateY(-4px)rotateX(50deg);
   }
   55% {
-    background-color: var(--heylisten-light);
+    background-color: var(--sandstorm-light);
     transform: translateY(-2px)rotateX(50deg);
   }
 }
@@ -596,10 +596,10 @@ ANIMATIONS
 /* flashing block sides */
 @keyframes blockGlow {
   0%, 40%, 50%, 65%, 100% {
-    background-color: var(--heylisten);
+    background-color: var(--sandstorm);
   }
   45%, 55% {
-    background-color: var(--heylisten-light);
+    background-color: var(--sandstorm-light);
   }
 }
 

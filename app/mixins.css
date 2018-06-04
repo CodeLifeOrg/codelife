@@ -22,7 +22,7 @@
   line-height: 1;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 3.75rem; /* 60px */
+    font-size: 3.25rem; /* 52px */
   }
 }
 @define-mixin font-xl {
@@ -39,7 +39,7 @@
   line-height: 1.25;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 1.625rem; /* 26px */
+    font-size: 1.75rem; /* 28px */
   }
 }
 @define-mixin font-md {

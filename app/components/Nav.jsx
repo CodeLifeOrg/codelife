@@ -60,7 +60,7 @@ class Nav extends Component {
 
         {/* logo */}
         <div className="logo">
-          <Link className={isHome ? "logo-link" : "logo-link is-active"} to={"/"}>
+          <Link className={isHome ? "logo-link is-active" : "logo-link"} to={"/"}>
             {/* <span className="logo-tag font-xs">Beta</span> */}
             <span className="logo-text">
               <Logo />

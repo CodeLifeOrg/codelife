@@ -67,7 +67,7 @@ class App extends Component {
 
     const authRoute = routes[0] === "login";
     const bareRoute = ["projects", "codeBlocks"].includes(routes[0]) && routes.length === 3;
-    
+
     const seoPath = this.props.router.location.pathname;
     const seoRoute = seoPath.includes("lessonplan") || seoPath.includes("glossary");
 
@@ -86,6 +86,11 @@ class App extends Component {
     if (currentIsland) theme = currentIsland.theme;
 
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
+
+    // check if this is the home page
+    let isHome = false;
+    isHome = this.props.router.location.pathname == "/" ? true : false;
+
     return (
       <Canon id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />
@@ -98,13 +103,13 @@ class App extends Component {
           ? bareRoute
             ? children
             : <div className="container">
-              <Clouds />
-              <Nav currentPath={location.pathname} linkObj={this.props.params} isHome={ !this.props.router.location.pathname.includes("login") && this.props.router.location.pathname !== "/" } />
+              { !isHome ? <Clouds /> : null }
+              <Nav currentPath={location.pathname} linkObj={this.props.params} isHome={ isHome } />
               { children }
               <Footer currentPath={location.pathname} className={ theme } />
             </div>
           : <div className="container">
-            <Clouds />
+            { !isHome ? <Clouds /> : null }
             <LoadingSpinner />
           </div> }
       </Canon>

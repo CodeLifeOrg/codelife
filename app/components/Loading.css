@@ -39,7 +39,7 @@
     /* positioning */
     left: calc(0.4rem + 0.6vw); /* offset ellipsis; totally fudged */
     /* theming */
-    color: var(--white);
+    text-shadow: 0 1px 0.25em var(--sky);
   }
 
   /* spinner */

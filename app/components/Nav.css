@@ -42,40 +42,12 @@
   & .logo-link {
     display: inline-block; /* size img, contain tag */
     vertical-align: middle;
-    height: 20px;
+    height: 26px;
     /* transitions */
     transition:
       transform 0.2s,
       opacity 0.2s;
     opacity: 0.85;
-
-    /* huge logo (home page only) */
-    @add-mixin min-md {
-      &.is-huge {
-        transform: scale(1.75) translateX(15%);
-
-        & .logo-tag {
-          opacity: 0;
-        }
-      }
-    }
-
-    /* beta */
-    & .logo-tag {
-      /* positioning */
-      position: absolute;
-      top: -1.5em;
-      text-align: right;
-      /* sizing */
-      width: 100%; /* increase clickability */
-      /* typography */
-      font-weight: 800;
-      text-transform: uppercase;
-      /* theming */
-      color: var(--sky-dark);
-      /* transitions */
-      transition: opacity 0.2s;
-    }
 
     & .logo-text {
       max-height: 100%;
@@ -90,7 +62,8 @@
     }
 
     /* interactions */
-    &:hover, &:focus {
+    &:hover, &:focus,
+    &.is-active {
       opacity: 1;
 
       & .logo-text {

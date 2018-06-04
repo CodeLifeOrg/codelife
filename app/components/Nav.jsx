@@ -60,8 +60,8 @@ class Nav extends Component {
 
         {/* logo */}
         <div className="logo">
-          <Link className={isHome ? "logo-link" : "logo-link is-huge"} to={"/"}>
-            <span className="logo-tag font-xs">Beta</span>
+          <Link className={isHome ? "logo-link" : "logo-link is-active"} to={"/"}>
+            {/* <span className="logo-tag font-xs">Beta</span> */}
             <span className="logo-text">
               <Logo />
             </span>

@@ -31,8 +31,8 @@ class HomeLearn extends Component {
           </ul>
 
           {/* lessonplan link */}
-          <Link to="lessonplan" className="authform-button pt-button pt-intent-primary font-md">
-            {t("Lesson plan")}
+          <Link to="lessonplan" className="button inverted-button font-md">
+            {t("Home.LearnButton")}
           </Link>
         </figcaption>
       </figure>

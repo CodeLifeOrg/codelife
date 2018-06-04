@@ -55,6 +55,12 @@
   line-height: 1.666; /* 20px */
 }
 
+/* font smoothing */
+@define-mixin font-smoothing {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
 /* accessibly hidden text and elements */
 @define-mixin visually-hidden {
   clip: rect(1px, 1px, 1px, 1px);
@@ -134,7 +140,7 @@
 
 /* default button padding */
 @define-mixin button-padding {
-  padding: 0.35em 2em 0.55em 2em;
+  padding: 0.35em 1.75em 0.55em 1.75em;
 }
 /* default text input padding */
 @define-mixin text-input-padding {

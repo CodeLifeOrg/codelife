@@ -80,11 +80,11 @@ class Home extends Component {
 
               {/* buttons */}
               <div className="authform-button-group u-margin-bottom-off">
-                <button className="authform-button button button-inverted font-md" onClick={this.authForm.bind(this, "login")}>
+                <button className="authform-button button inverted-button font-md" onClick={this.authForm.bind(this, "login")}>
                   <span className="pt-icon pt-icon-log-in" />
                   {t("LogIn.Log_in")}
                 </button>
-                <button className="authform-button button button-inverted font-md" onClick={this.authForm.bind(this, "signup")}>
+                <button className="authform-button button inverted-button font-md" onClick={this.authForm.bind(this, "signup")}>
                   <span className="pt-icon pt-icon-new-person" />
                   { t("Sign Up")}
                 </button>
@@ -119,7 +119,6 @@ class Home extends Component {
 
         {/* about text & video */}
         <HomeAbout videos={videos} locale={locale} />
-
 
         {/* display CTA if logged out */}
         { !this.props.user ? <CTA context="home" /> : null }

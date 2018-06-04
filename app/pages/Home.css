@@ -12,6 +12,8 @@
     }
     /* side by side layout */
     @add-mixin min-xs {
+      min-width: 8.5em;
+
       &:first-of-type {
         margin-right: 2em;
       }

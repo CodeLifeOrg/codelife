@@ -117,6 +117,91 @@ p > a,
 }
 
 
+/* custom, non-blueprint button 💪🏼 */
+.button {
+  @add-mixin button-padding;
+  @add-mixin font-smoothing;
+  /* sizing */
+  display: inline-block;
+  /* typography */
+  font-weight: 700;
+  /* theming */
+  background-color: var(--sky-dark);
+  color: var(--white);
+  border: none;
+  border-radius: 2em; /* fully rounded */
+  /* transitions */
+  will-change:
+    background-color,
+    box-shadow,
+    color;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s,
+    color 0.2s;
+
+  /* space out icons and text */
+  & > .pt-icon {
+    margin-right: 0.5em;
+
+    &.button-icon-right {
+      margin-right: 0;
+      margin-left: 0.5em;
+    }
+  }
+
+  /* interactions */
+  &:hover, &:focus {
+    background-color: var(--sky-black);
+    color: var(--white);
+    box-shadow: 0 2px 1em rgba(35, 50, 51, 0.15);
+  }
+}
+
+/* inverted button */
+/* NOTE: requires .button class as well */
+.inverted-button {
+  background-color: var(--white);
+  color: var(--sky-dark);
+  box-shadow: 0 2px 0.75em rgba(35, 50, 51, 0.33);
+
+  /* interactions */
+  &:hover, &:focus {
+    background-color: var(--white);
+    color: var(--sky-black);
+    box-shadow: 0 2px 1em rgba(35, 50, 51, 0.5);
+  }
+}
+
+/* link styled as button */
+a.button {
+
+  /* automatic arrow icon */
+  &:after {
+    @add-mixin font-smoothing;
+    /* typography */
+    content: "→";
+    font-family: "Icons20";
+    font-weight: 400;
+    /* positioning */
+    display: inline-block;
+    margin-left: 0.5em;
+    /* transitions */
+    transition: transform 0.2s;
+  }
+
+  /* override default link style */
+  &:hover, &:focus {
+    text-decoration: none;
+
+    /* move arrow icon right */
+    &:after {
+      transform: translateX(0.125em);
+    }
+  }
+}
+
+
 /* -----------------------------------
 blueprint overrides
 ----------------------------------- */

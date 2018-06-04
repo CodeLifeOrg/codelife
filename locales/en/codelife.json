@@ -189,13 +189,14 @@
     "Feature2Caption": "From disussion boards to leaderboards, we've got the board for you.",
     "GetStarted": "get started",
     "Headline": "Learn to build websites",
-    "IntroText": "Codelife is a learning tool and code editor designed for Brazilian students, free and open to all",
+    "IntroText": "Codelife is a learning tool and code editor  designed for Brazilian students, free and open to all",
     "LearnHeading": "What you’ll learn",
     "LearnItem1": "HTML, CSS, & JavaScript",
     "LearnItem2": "Variables & operators",
     "LearnItem3": "Naming & grouping",
     "LearnItem4": "Functions, lists, arrays, & loops",
     "LearnItem5": "Best practices for coding & design",
+    "LearnButton": "view lesson plan",
     "MadeOnCodelife": "Made on Codelife",
     "AboutHeading": "About Codelife",
     "AboutParagraph1": "CodeLife is the product of the Code School Brazil Project of the State Funding Agency of Minas Gerais (FAPEMIG).",

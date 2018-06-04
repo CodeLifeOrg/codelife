@@ -28,8 +28,8 @@ class HomeAbout extends Component {
           <p className="font-md">{ t("Home.AboutParagraph2") }</p>
           <p className="font-md">{ t("Home.AboutParagraph3") }</p>
 
-          {/* login | signup button */}
-          <Link to="/about" className="cta-button pt-button pt-intent-primary font-md">
+          {/* about page link */}
+          <Link to="/about" className="button font-md">
             { t("Home.AboutButton") }
           </Link>
 

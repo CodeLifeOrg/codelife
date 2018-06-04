@@ -23,7 +23,7 @@ class SelectGeo extends Component {
 
   componentDidMount() {
     const {gid} = this.props;
-    if (gid) {
+    if (gid && gid !== "-1") {
       const state = gid.substr(0, 3);
       axios.get(`/api/geos/?state=${state}`).then(geosResp => {
         const homeGeo = geosResp.data[geosResp.data.findIndex(geo => geo.id === gid)];

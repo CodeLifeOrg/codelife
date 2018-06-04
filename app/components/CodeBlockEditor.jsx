@@ -208,8 +208,6 @@ class CodeBlockEditor extends Component {
     const {t, island, readOnly} = this.props;
     const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, saving, canPostToFacebook} = this.state;
 
-    console.log("saving: ", saving);
-
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
 

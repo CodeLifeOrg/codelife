@@ -48,6 +48,8 @@ class ProjectCard extends Component {
     const {location, project, t, user} = this.props;
     const {datemodified, id, likes, liked, name, studentcontent, username, reported, featured} = project;
 
+    
+
     const mine = this.props.user && project.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
@@ -72,10 +74,7 @@ class ProjectCard extends Component {
       }
     }
 
-    // define image path
-    //const thumbnailURL = `/thumbnails/projects/${thumbnailImg}`;
-
-    const thumbnailURL = `/pj_images/${id}.png?v=${new Date().getTime()}`;
+    const thumbnailURL = `/pj_images/${project.user.username}/${id}.png?v=${new Date().getTime()}`;
 
     thumbnailImg = true;
 

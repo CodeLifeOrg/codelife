@@ -48,8 +48,6 @@ class ProjectCard extends Component {
     const {location, project, t, user} = this.props;
     const {datemodified, id, likes, liked, name, studentcontent, username, reported, featured} = project;
 
-    
-
     const mine = this.props.user && project.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
@@ -58,25 +56,9 @@ class ProjectCard extends Component {
     const embedLink = `${ location.origin }/projects/${ username }/${ project.slug ? project.slug : project.name }`;
     const userLink = `${ location.origin }/profile/${ username }`;
 
-    // define thumbnail image as null
-    let thumbnailImg = null;
+    const thumbnailURL = `/pj_images/${project.user ? project.user.username : "error"}/${id}.png?v=${new Date().getTime()}`;
 
-    // get corresponding thumbnail image
-    if (username && name) {
-      if (username === "Guilherme Oliveira" && name === "mypage.html") {
-        thumbnailImg = "culinaria-brasileira-thumbnail@2x.jpg";
-      }
-      else if (username === "Richard Garcia" && name === "Site Gamer") {
-        thumbnailImg = "top-10-jogos-thumbnail@2x.jpg";
-      }
-      else if (username === "ana-caroline" && name === "mypage.html") {
-        thumbnailImg = "herois-thumbnail@2x.jpg";
-      }
-    }
-
-    const thumbnailURL = `/pj_images/${project.user.username}/${id}.png?v=${new Date().getTime()}`;
-
-    thumbnailImg = true;
+    const thumbnailImg = Boolean(project.user);
 
     return (
       <div className="card-container" key={id}>

@@ -154,6 +154,44 @@ module.exports = function(app) {
       );
   });
 
+  // Experimental endpoint to mass generate screenshots
+  /*
+  app.get("/api/projects/generate", isRole(2), (req, res) => {
+    db.projects.findAll().then(projects => {
+      projects.forEach(project => {
+        project = project.toJSON();
+        db.users.findOne({where: {id: project.uid}}).then(user => {
+          if (user) {
+            user = user.toJSON();
+            const url = `http://${req.headers.host}/projects/${user.username}/${project.slug ? project.slug : project.name}?screenshot=true`;
+            const width = 600;
+            const height = 315;
+            const page = true;
+            const delay = 5000;
+            const xvfb = new Xvfb({timeout: 5000});
+            console.log("attempting screenshot", url);
+            if (req.headers.host !== "localhost:3300") xvfb.startSync();
+            screenshot({url, width, height, page, delay}).then(img => {
+              const folder = `/static/pj_images/${user.username}`;
+              const folderPath = path.join(process.cwd(), folder);
+              const imgPath = path.join(process.cwd(), folder, `${project.id}.png`);
+              console.log("callback");
+              mkdirp(folderPath, err => {
+                console.log("mkdir err", err);
+                fs.writeFile(imgPath, img.data, err => {
+                  console.log("fs err", err);
+                  if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+                });  
+              });
+            });
+          }
+        });
+      });
+      res.json(projects).end();
+    });
+  });
+  */
+
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
     db.projects.update({studentcontent: req.body.studentcontent, prompted: req.body.prompted, name: req.body.name, datemodified: db.fn("NOW")}, {where: {id: req.body.id}, returning: true, individualHooks: true})

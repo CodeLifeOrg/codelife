@@ -29,7 +29,7 @@ class EditProfile extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {params, t} = this.props;
     const {username} = params;
     const {username: loggedInUsername} = this.props.user;
@@ -206,8 +206,6 @@ class EditProfile extends Component {
 
     // set DOB field classes based on validation
     const dobClasses = "date-picker-container field-container font-md has-icon";
-
-    console.log(optOutLocation);
 
     return (
       <div className="edit-profile" id="profile">

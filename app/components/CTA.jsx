@@ -30,7 +30,7 @@ class CTA extends Component {
     return (
       <div className="cta u-text-center">
 
-        <h2 className="cta-heading u-margin-top-off u-margin-bottom-off font-lg">
+        <h2 className="cta-heading u-margin-top-off u-margin-bottom-off font-xl">
           {/* home page cta; default */}
           { context === "home" ? t("Home.CTA") : null }
           {/* lesson plan cta */}

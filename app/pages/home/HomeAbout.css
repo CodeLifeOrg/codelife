@@ -1,0 +1,24 @@
+@import '../../mixins.css';
+
+
+/* flip video & intro text on smaller screens */
+@add-mixin max-md {
+  .home-about > .home-about-half-container {
+    @supports (order: 1) { /* but only if flex order is supported by the browser */
+      display: flex;
+      flex-direction: column;
+
+      & > .home-about-half {
+        width: 100%;
+
+        &:first-of-type {
+          order: 1;
+        }
+
+        &:last-of-type {
+          top: -2.5rem;
+        }
+      }
+    }
+  }
+}

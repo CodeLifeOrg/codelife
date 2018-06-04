@@ -1,0 +1,83 @@
+@import '../../mixins.css';
+
+/* three features */
+.feature-list {
+
+  /* icon */
+  & .feature-icon {
+    /* sizing */
+    width: 3.25rem;
+    height: 3.25rem;
+    /* base theming */
+    background: var(--light-1);
+    border-radius: 50%;
+    box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
+    overflow: hidden;
+    /* align icon & text */
+    vertical-align: middle;
+    /* center icon */
+    text-align: center;
+
+    /* the icon itself */
+    &:before {
+      font-size: 1.625em; /* size according to .feature-icon font size */
+      line-height: 3.25rem; /* container height */
+      /* base theme */
+      color: var(--dark-2);
+    }
+  }
+
+  /* stacked layout */
+  @add-mixin max-sm {
+    /* space out adjacent items */
+    & .feature-item + .feature-item {
+      margin-top: 2em;
+    }
+    /* space out text from icon */
+    & .feature-text {
+      /* sizing */
+      display: inline-block;
+      width: calc(100% - 3.25rem); /* account for icon */
+      /* positioning */
+      padding-left: 1rem;
+      vertical-align: middle;
+    }
+  }
+
+  /* 3 col layout */
+  @add-mixin min-sm {
+    & .feature-item {
+      /* sizing */
+      width: 30%; /* fallback */
+      width: calc(33.3% - 1rem);
+      /* positioning */
+      display: inline-block;
+      vertical-align: top; /* blueprint override */
+      /* center children */
+      text-align: center;
+
+      /* space out adjacent elements */
+      & + .feature-item {
+        margin-left: 1.5rem;
+      }
+
+      /* icon */
+      & .feature-icon {
+        /* sizing */
+        width: 4.5rem;
+        height: 4.5rem;
+        /* positioning */
+        margin-left: auto;
+        margin-right: auto;
+        /* make the text move to its own line */
+        display: block;
+        margin-bottom: 0.5em;
+
+        /* size the icon itself */
+        &:before {
+          line-height: 4.5rem; /* container height */
+        }
+      }
+    }
+  }
+}

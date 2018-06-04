@@ -6,7 +6,7 @@
   @add-mixin slide-theme;
   /* sizing */
   padding: 2.5rem var(--gutter-lg) 2rem var(--gutter-lg);
-  max-width: 35rem; /* 560px */
+  max-width: 47.5rem; /* 760px */
   /* positioning */
   margin-left: auto;
   margin-right: auto;

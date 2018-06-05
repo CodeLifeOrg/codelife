@@ -1,0 +1,38 @@
+@import '../../mixins.css';
+
+.home {
+
+  /* text directly following headline */
+  & .intro-text {
+    /* minor intro text alignment adjustments */
+    margin-top: 0.625em;
+    top: -2px;
+
+    /* limit line length and re-center when text-alignment switches */
+    @add-mixin min-sm {
+      max-width: 24em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* login/signup buttons */
+  & .authform-button {
+    text-transform: lowercase;
+
+    /* stacked layout */
+    @media (max-width: 399px) {
+      width: 100%;
+    }
+    /* side by side layout */
+    @media (min-width: 400px) {
+      min-width: 7.5em;
+      padding-left: 1em;
+      padding-right: 1em;
+
+      &:first-of-type {
+        margin-right: 1.5em;
+      }
+    }
+  }
+}

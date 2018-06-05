@@ -6,7 +6,12 @@ import "./HomeAbout.css";
 class HomeAbout extends Component {
 
   render() {
-    const {locale, t, videos} = this.props;
+    const {locale, t} = this.props;
+
+    const videos = {
+      en: "3s2vPV-tRhI",
+      pt: "9ImSvqDDQuc"
+    };
 
     return (
       <div className="content-section">

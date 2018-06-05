@@ -186,7 +186,7 @@
     "Feature2": "Free code editor",
     "Feature2Caption": "With collaborative functionality, validation, and fullscreen mode.",
     "Feature3": "All aboard",
-    "Feature2Caption": "From disussion boards to leaderboards, we've got the board for you.",
+    "Feature3Caption": "From disussion boards to leaderboards, we've got the board for you.",
     "GetStarted": "get started",
     "Headline": "Learn to build websites",
     "IntroText": "Codelife is a learning tool and code editor  designed for Brazilian students, free and open to all",
@@ -459,7 +459,7 @@
   "Very motivated": "Very motivated",
   "Very unlikely": "Very unlikely",
   "View profile": "View profile",
-  "DiscussionWarning": "Viewing user discussion can include some very helpful insights, but will mark this level as incomplete. Don't forget, you can always come back later and complete the island without any help to get full credit!", 
+  "DiscussionWarning": "Viewing user discussion can include some very helpful insights, but will mark this level as incomplete. Don't forget, you can always come back later and complete the island without any help to get full credit!",
   "Webpage": "Webpage",
   "What is CodeLife?": "What is CodeLife?",
   "What part of the site did you enjoy the most?": "What part of the site did you enjoy the most?",

@@ -10,10 +10,11 @@ class HomeFeatures extends Component {
 
     return (
       <div className="content-section">
-        <div className="feature-list u-list-reset">
 
-          {/* section heading */}
-          <h2 className="feature-list-heading font-xl">{t("Features")}</h2>
+        {/* section heading */}
+        <h2 className="feature-list-heading font-xl">{t("Features")}</h2>
+
+        <div className="feature-list u-list-reset u-margin-bottom-off-children">
 
           {/* feature 1 */}
           <section className="feature-item">
@@ -21,7 +22,7 @@ class HomeFeatures extends Component {
             <h3 className="feature-text font-lg">
               {t("Home.Feature1")}
             </h3>
-            <p className="feature-caption font-md">
+            <p className="feature-caption font-md u-margin-top-xs">
               {t("Home.Feature1Caption")}
             </p>
           </section>
@@ -32,7 +33,7 @@ class HomeFeatures extends Component {
             <h3 className="feature-text font-lg">
               {t("Home.Feature2")}
             </h3>
-            <p className="feature-caption font-md">
+            <p className="feature-caption font-md u-margin-top-xs">
               {t("Home.Feature2Caption")}
             </p>
           </section>
@@ -43,7 +44,7 @@ class HomeFeatures extends Component {
             <h3 className="feature-text font-lg">
               {t("Home.Feature3")}
             </h3>
-            <p className="feature-caption font-md">
+            <p className="feature-caption font-md u-margin-top-xs">
               {t("Home.Feature3Caption")}
             </p>
           </section>

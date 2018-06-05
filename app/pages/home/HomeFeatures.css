@@ -3,15 +3,23 @@
 /* three features */
 .feature-list {
 
-  /* icon */
+  /* feature container */
+  & .feature-item {
+    padding: var(--gutter-md);
+    /* theming */
+    background-color: var(--white);
+    box-shadow: 0 2px 0.75rem rgba(8, 26, 24, 0.25);
+    border-radius: var(--radius-md);
+  }
+
+  /* icon default styles */
   & .feature-icon {
     /* sizing */
     width: 3.25rem;
     height: 3.25rem;
     /* base theming */
-    background: var(--light-1);
+    background-color: var(--sky);
     border-radius: 50%;
-    box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
     overflow: hidden;
     /* align icon & text */
     vertical-align: middle;
@@ -20,11 +28,21 @@
 
     /* the icon itself */
     &:before {
-      font-size: 1.625em; /* size according to .feature-icon font size */
+      font-size: 2em; /* size according to .feature-icon font size */
       line-height: 3.25rem; /* container height */
       /* base theme */
-      color: var(--dark-2);
+      color: var(--white);
     }
+  }
+
+  /* theming for icons 2 & 3 */
+  & .feature-item:nth-of-type(2) .feature-icon {
+    background-color: var(--cyan);
+  }
+
+  /* theming for icons 2 & 3 */
+  & .feature-item:nth-of-type(3) .feature-icon {
+    background-color: var(--lilac);
   }
 
   /* stacked layout */
@@ -39,6 +57,7 @@
       display: inline-block;
       width: calc(100% - 3.25rem); /* account for icon */
       /* positioning */
+      margin-top: 2px; /* fudge vertical alignment */
       padding-left: 1rem;
       vertical-align: middle;
     }
@@ -46,10 +65,17 @@
 
   /* 3 col layout */
   @add-mixin min-sm {
+    display: flex;
+    justify-content: space-between;
+
+    & .feature-text {
+      margin-top: 0.5em;
+    }
+
     & .feature-item {
       /* sizing */
       width: 30%; /* fallback */
-      width: calc(33.3% - 1rem);
+      width: calc(33.3% - 1.65rem);
       /* positioning */
       display: inline-block;
       vertical-align: top; /* blueprint override */
@@ -58,7 +84,7 @@
 
       /* space out adjacent elements */
       & + .feature-item {
-        margin-left: 1.5rem;
+        margin-left: 2.5rem;
       }
 
       /* icon */

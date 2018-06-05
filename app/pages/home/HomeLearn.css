@@ -65,6 +65,7 @@
   /* 2 col layout */
   @add-mixin min-sm {
     padding-top: 10% !important; /* override */
+    margin-top: var(--gutter-lg);
     margin-bottom: var(--gutter-lg);
 
     & .learn-figure {

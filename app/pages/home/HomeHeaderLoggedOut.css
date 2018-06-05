@@ -9,7 +9,7 @@
     /* inner headline & button container */
     & .header-inner {
       margin-bottom: var(--gutter-xl);
-      z-index: 2; /* prevent island from obscuring button & text */
+      z-index: 3; /* prevent island from obscuring button & text */
 
       /* adjust margins on tiny screens; prevent island overlap */
       @add-mixin max-xs {
@@ -105,10 +105,10 @@
     /* sizing */
     width: 100vw;
     padding-top: 5rem; /* 80px */
-    min-height: 10rem;
-    max-height: 20vh;
+    max-height: 10rem;
     /* positioning */
     top: -10px; /* hide the elusive svg dead zone */
+    z-index: 2; /* position above HomeLearn clouds */
     /* theming */
     background: var(--white);
 
@@ -143,6 +143,7 @@
         position: absolute;
         top: 100%;
         left: 15%;
+        z-index: 5;
         /* theming */
         border-radius: 50%;
         background: var(--light-2);

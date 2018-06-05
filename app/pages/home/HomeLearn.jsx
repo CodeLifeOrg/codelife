@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
+import CloudDiagonalExponential from "components/CloudDiagonalExponential.svg.jsx";
 import "./HomeLearn.css";
 
 class HomeLearn extends Component {
@@ -10,6 +11,10 @@ class HomeLearn extends Component {
 
     return (
       <figure className="content-section learn-section">
+
+        <div className="learn-bg">
+          <CloudDiagonalExponential />
+        </div>
 
         <div className="learn-figure">
           <img className="learn-img"

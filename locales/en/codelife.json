@@ -459,9 +459,7 @@
   "Very motivated": "Very motivated",
   "Very unlikely": "Very unlikely",
   "View profile": "View profile",
-  "Viewing user discussion can include some very helpful insights, but will mark this level\n                as incomplete": {
-    " Don't forget, you can always come back later and complete the island without\n                any help to get full credit!": "Viewing user discussion can include some very helpful insights, but will mark this level\n                as incomplete. Don't forget, you can always come back later and complete the island without\n                any help to get full credit!"
-  },
+  "DiscussionWarning": "Viewing user discussion can include some very helpful insights, but will mark this level as incomplete. Don't forget, you can always come back later and complete the island without any help to get full credit!", 
   "Webpage": "Webpage",
   "What is CodeLife?": "What is CodeLife?",
   "What part of the site did you enjoy the most?": "What part of the site did you enjoy the most?",

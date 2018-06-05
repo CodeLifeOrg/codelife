@@ -224,14 +224,12 @@ class Slide extends Component {
             iconName="warning"
             isOpen={this.state.confirmSkipOpen}
             onClose={() => this.setState({confirmSkipOpen: false})}
-            title="Are you sure?"
+            title={t("Are you sure?")}
             canOutsideClickClose={false}
           >
             <div className="pt-dialog-body">
               {
-                t(`Viewing user discussion can include some very helpful insights, but will mark this level
-                as incomplete. Don't forget, you can always come back later and complete the island without
-                any help to get full credit!`)
+                t("DiscussionWarning")
               }
             </div>
             <div className="pt-dialog-footer">

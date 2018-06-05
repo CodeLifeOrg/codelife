@@ -1,6 +1,25 @@
 @import '../../mixins.css';
 
-.home {
+.home-header {
+
+  /* adjust flex orientation */
+  &.is-logged-out {
+    flex-direction: column;
+
+    /* inner headline & button container */
+    & .header-inner {
+      margin-bottom: var(--gutter-xl);
+      z-index: 2; /* prevent island from obscuring button & text */
+
+      /* adjust margins on tiny screens; prevent island overlap */
+      @add-mixin max-xs {
+        margin-top: -5rem;
+        margin-bottom: 8rem;
+      }
+    }
+  }
+
+
 
   /* text directly following headline */
   & .intro-text {
@@ -15,6 +34,7 @@
       margin-right: auto;
     }
   }
+
 
   /* login/signup buttons */
   & .authform-button {
@@ -32,6 +52,101 @@
 
       &:first-of-type {
         margin-right: 1.5em;
+      }
+    }
+  }
+
+
+  /* clouds */
+  & .home-header-clouds {
+    width: 100vw;
+
+    /* one cloud on small screens */
+    @add-mixin max-md {
+      & .cloud-half {
+        width: 100%;
+        height: auto;
+        /* flip horizontally */
+        transform: rotateY(180deg);
+
+        /* hide the second one */
+        &:nth-of-type(2) {
+          display: none;
+        }
+      }
+    }
+
+    /* fudge into place on awkward medium screens */
+    @media (min-width: 700px) and (max-width: 991px) {
+      margin-top: -15vw;
+    }
+
+    /* reflected clouds on bigger screens */
+    @add-mixin min-md {
+      & .cloud-half {
+        width: 50%;
+        height: auto;
+      }
+
+      /* flip horizontally */
+      & .cloud-half:nth-of-type(2) {
+        transform: rotateY(180deg);
+      }
+    }
+
+    /* fudge into place on ginormous screens */
+    @add-mixin min-lg { margin-top: -4vw; }
+    @add-mixin min-xl { margin-top: -8vw; }
+  }
+
+
+  /* island */
+  & .home-header-island {
+    /* sizing */
+    width: 100vw;
+    padding-top: 5rem; /* 80px */
+    min-height: 10rem;
+    max-height: 20vh;
+    /* positioning */
+    top: -10px; /* hide the elusive svg dead zone */
+    /* theming */
+    background: var(--white);
+
+    & .island-inner {
+      /* sizing */
+      max-width: 34rem;
+      margin-left: auto;
+      margin-right: auto;
+      /* positioning */
+      top: -23.5rem;
+
+      /* avatar peaking out from behind the island */
+      & .island-avatar-img {
+        /* sizing */
+        width: 11rem;
+        max-width: 36%;
+        /* positioning */
+        position: absolute;
+        right: 1%;
+        bottom: 42%;
+        transform: rotateZ(20deg);
+      }
+
+      /* island shadow */
+      &:after {
+        content: "";
+        /* sizing */
+        display: block;
+        width: 70%;
+        height: 30px;
+        /* positioning */
+        position: absolute;
+        top: 100%;
+        left: 15%;
+        /* theming */
+        border-radius: 50%;
+        background: var(--light-2);
+        filter: blur(0.75rem);
       }
     }
   }

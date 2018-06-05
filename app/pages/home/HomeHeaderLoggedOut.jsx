@@ -3,6 +3,7 @@ import {Link} from "react-router";
 import {translate} from "react-i18next";
 import AuthForm from "components/AuthForm";
 import {Dialog} from "@blueprintjs/core";
+import CloudHalf from "components/CloudHalf.svg.jsx";
 import "./HomeHeaderLoggedOut.css";
 
 class HomeHeaderLoggedOut extends Component {
@@ -28,7 +29,7 @@ class HomeHeaderLoggedOut extends Component {
     const {t} = this.props;
 
     return (
-      <div className="header home-header logged-out-home-header u-text-left-center">
+      <div className="header home-header is-logged-out u-text-left-center">
 
         {/* headline/signup/login */}
         <div className="header-inner">
@@ -48,6 +49,27 @@ class HomeHeaderLoggedOut extends Component {
               { t("Sign Up")}
             </button>
           </div>
+        </div>
+
+        {/* clouds */}
+        <div className="home-header-clouds">
+          <CloudHalf />
+          <CloudHalf />
+        </div>
+
+        {/* island container */}
+        <div className="home-header-island">
+
+          <div className="island-inner">
+            {/* avatar */}
+            <img className="island-avatar-img" alt=""
+              src="/avatars/avatar-excited-transparent.png"
+              srcSet="/avatars/avatar-excited-transparent.png 1x,
+                      /avatars/avatar-excited-transparent@2x.png 2x" />
+            {/* island */}
+            <img className="island-img" src="/islands/island-jungle.png" alt=""/>
+          </div>
+
         </div>
 
         {/* Authform */}

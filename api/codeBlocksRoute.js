@@ -1,6 +1,7 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
 const Op = require("sequelize").Op;
 const fs = require("fs");
+const mkdirp = require("mkdirp");
 const path = require("path");
 const Xvfb = require("xvfb");
 const screenshot = require("electron-screenshot-service");
@@ -43,21 +44,29 @@ module.exports = function(app) {
     db.codeblocks.create({studentcontent: req.body.studentcontent, snippetname: req.body.name, uid: req.body.uid, lid: req.body.iid})
       .then(u => {
         const plainObj = u.toJSON();
-        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
-        const width = 600;
-        const height = 315;
-        const page = true;
-        const delay = 5000;
-        const xvfb = new Xvfb({timeout: 5000});
-        if (req.headers.host !== "localhost:3300") xvfb.startSync();
-        screenshot({url, width, height, page, delay}).then(img => {
-          const imgPath = path.join(process.cwd(), "/static/cb_images", `${plainObj.id}.png`);
-          fs.writeFile(imgPath, img.data, err => {
-            console.log("fs err", err);
-            if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+        db.users.findOne({where: {id: plainObj.uid}}).then(user => {
+          user = user.toJSON();
+          const url = `${req.headers.origin}/codeBlocks/${user.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
+          const width = 600;
+          const height = 315;
+          const page = true;
+          const delay = 5000;
+          const xvfb = new Xvfb({timeout: 5000});
+          if (req.headers.host !== "localhost:3300") xvfb.startSync();
+          screenshot({url, width, height, page, delay}).then(img => {
+            const folder = `/static/cb_images/${user.username}`;
+            const folderPath = path.join(process.cwd(), folder);
+            const imgPath = path.join(process.cwd(), folder, `${plainObj.id}.png`);
+            mkdirp(folderPath, err => {
+              console.log("mkdir err", err);
+              fs.writeFile(imgPath, img.data, err => {
+                console.log("fs err", err);
+                if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+              });
+            });
           });
+          res.json(u).end();
         });
-        res.json(u).end();
       });
   });
 
@@ -66,21 +75,29 @@ module.exports = function(app) {
     db.codeblocks.update({studentcontent: req.body.studentcontent, snippetname: req.body.name}, {where: {uid: req.body.uid, lid: req.body.iid}, returning: true, individualHooks: true})
       .then(u => {
         const plainObj = u[1][0].toJSON();
-        const url = `${req.headers.origin}/codeBlocks/${req.body.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
-        const width = 600;
-        const height = 315;
-        const page = true;
-        const delay = 5000;
-        const xvfb = new Xvfb({timeout: 5000});
-        if (req.headers.host !== "localhost:3300") xvfb.startSync();
-        screenshot({url, width, height, page, delay}).then(img => {
-          const imgPath = path.join(process.cwd(), "/static/cb_images", `${plainObj.id}.png`);
-          fs.writeFile(imgPath, img.data, err => {
-            console.log("fs err", err);
-            if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+        db.users.findOne({where: {id: plainObj.uid}}).then(user => {
+          user = user.toJSON();
+          const url = `${req.headers.origin}/codeBlocks/${user.username}/${plainObj.slug ? plainObj.slug : req.body.name}?screenshot=true`;
+          const width = 600;
+          const height = 315;
+          const page = true;
+          const delay = 5000;
+          const xvfb = new Xvfb({timeout: 5000});
+          if (req.headers.host !== "localhost:3300") xvfb.startSync();
+          screenshot({url, width, height, page, delay}).then(img => {
+            const folder = `/static/cb_images/${user.username}`;
+            const folderPath = path.join(process.cwd(), folder);
+            const imgPath = path.join(process.cwd(), folder, `${plainObj.id}.png`);
+            mkdirp(folderPath, err => {
+              console.log("mkdir err", err);
+              fs.writeFile(imgPath, img.data, err => {
+                console.log("fs err", err);
+                if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+              });
+            });
           });
+          res.json(plainObj).end();
         });
-        res.json(plainObj).end();
       });
   });
 

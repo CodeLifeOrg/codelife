@@ -56,28 +56,9 @@ class ProjectCard extends Component {
     const embedLink = `${ location.origin }/projects/${ username }/${ project.slug ? project.slug : project.name }`;
     const userLink = `${ location.origin }/profile/${ username }`;
 
-    // define thumbnail image as null
-    let thumbnailImg = null;
+    const thumbnailURL = `/pj_images/${project.user ? project.user.username : "error"}/${id}.png?v=${new Date().getTime()}`;
 
-    // get corresponding thumbnail image
-    if (username && name) {
-      if (username === "Guilherme Oliveira" && name === "mypage.html") {
-        thumbnailImg = "culinaria-brasileira-thumbnail@2x.jpg";
-      }
-      else if (username === "Richard Garcia" && name === "Site Gamer") {
-        thumbnailImg = "top-10-jogos-thumbnail@2x.jpg";
-      }
-      else if (username === "ana-caroline" && name === "mypage.html") {
-        thumbnailImg = "herois-thumbnail@2x.jpg";
-      }
-    }
-
-    // define image path
-    //const thumbnailURL = `/thumbnails/projects/${thumbnailImg}`;
-
-    const thumbnailURL = `/pj_images/${id}.png?v=${new Date().getTime()}`;
-
-    thumbnailImg = true;
+    const thumbnailImg = Boolean(project.user);
 
     return (
       <div className="card-container" key={id}>

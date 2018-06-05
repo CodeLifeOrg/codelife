@@ -161,7 +161,7 @@ class CodeBlockCard extends Component {
     }
 
     thumbnailImg = true;
-    const thumbnailURL = `/cb_images/${id}.png?v=${new Date().getTime()}`;
+    const thumbnailURL = `/cb_images/${codeBlock.user.username}/${id}.png?v=${new Date().getTime()}`;
 
     return (
       <div className="card-container">

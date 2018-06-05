@@ -223,15 +223,13 @@ class Slide extends Component {
           <Dialog
             iconName="warning"
             isOpen={this.state.confirmSkipOpen}
-            onClose={this.toggleSkip.bind(this)}
-            title="Are you sure?"
+            onClose={() => this.setState({confirmSkipOpen: false})}
+            title={t("Are you sure?")}
             canOutsideClickClose={false}
           >
             <div className="pt-dialog-body">
               {
-                t(`Viewing user discussion can include some very helpful insights, but will mark this level
-                as incomplete. Don't forget, you can always come back later and complete the island without
-                any help to get full credit!`)
+                t("DiscussionWarning")
               }
             </div>
             <div className="pt-dialog-footer">
@@ -277,8 +275,8 @@ class Slide extends Component {
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
                 : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
               : nextLevel
-                ? <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
-                : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+                ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
+                : <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
             }
           </div>
         </div>

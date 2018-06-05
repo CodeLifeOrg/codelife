@@ -60,8 +60,8 @@ class Nav extends Component {
 
         {/* logo */}
         <div className="logo">
-          <Link className={isHome ? "logo-link" : "logo-link is-huge"} to={"/"}>
-            <span className="logo-tag font-xs">Beta</span>
+          <Link className={isHome ? "logo-link is-active" : "logo-link"} to={"/"}>
+            {/* <span className="logo-tag font-xs">Beta</span> */}
             <span className="logo-text">
               <Logo />
             </span>
@@ -100,7 +100,11 @@ class Nav extends Component {
             {/* account */}
             <Link className="link with-toggle" to={ `/profile/${ auth.user.username }` } id="account-nav-link">
               <span className="link-icon pt-icon-standard pt-icon-user" />
-              <span className="link-text u-hide-below-sm">{ auth.user.username }</span>
+              <span className="link-text u-hide-below-sm">
+                <span className="limit-link-text-width">
+                  { auth.user.username }
+                </span>
+              </span>
             </Link>
             {/* dropdown */}
             <Popover

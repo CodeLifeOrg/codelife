@@ -11,6 +11,6 @@
   & .pt-non-ideal-state-description {
     color: var(--white);
     font-weight: 700;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
   }
 }

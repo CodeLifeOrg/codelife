@@ -1,0 +1,34 @@
+@import '../../mixins.css';
+
+.home {
+
+  /* card layout */
+  & .card-list {
+    @add-mixin card-layout-base;
+
+    /* stacked cards */
+    @add-mixin max-xs {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 2 column layout */
+    @add-mixin min-xs {
+      @add-mixin card-layout-2col;
+    }
+
+    /* 3 column layout */
+    @add-mixin min-md {
+      @add-mixin card-layout-3col;
+    }
+
+    /* 4 column layout */
+    @add-mixin min-lg {
+      @add-mixin card-layout-4col;
+    }
+
+    /* hide any cards after the first 6 */
+    /* & .card-container:nth-of-type(n + 6) ~ .card-container  {
+      display: none !important;
+    } */
+  }
+}

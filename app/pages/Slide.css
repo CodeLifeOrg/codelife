@@ -91,9 +91,29 @@
       width: 100%;
     }
     & .slide-text {
-      font-size: 12px;
-      line-height: 1.3;
       white-space: pre-wrap;
+
+      /* space out adjacent elements */
+      & p + p {
+        margin-top: 1em;
+      }
+
+      & h2 {
+        @add-mixin font-md;
+        margin-top: 1.5em;
+      }
+
+      /* bad content designer! */
+      & *:empty,
+      & br {
+        display: none;
+      }
+
+      /* override blueprint style for lists */
+      & ul,
+      & ol {
+        padding-left: 1.25em;
+      }
 
       /* larger screens */
       @add-mixin min-sm {
@@ -115,11 +135,7 @@
         overflow-wrap: break-word;
       }
     }
-    &.cheatSheet .slide-text {
-      columns: 2;
-      max-height: 100%;
-      overflow-y: auto;
-    }
+
     & .slide-image-container {
       flex: 1;
       align-self: stretch; /* fill up the appropriate amount of vertical space */
@@ -178,19 +194,24 @@
         }
       }
     }
+
+
+    /* quiz template */
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
 
+      /* center text */
+      @add-mixin max-md {
+        & .slide-text {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
       @add-mixin min-sm {
         width: 600px;
         max-width: 100%;
-      }
-
-      /* bad content designer! */
-      & p:empty,
-      & p br {
-        display: none;
       }
 
       /* adjust first line */
@@ -342,6 +363,18 @@
   }
 
 
+  /* renderCode template */
+  & .renderCode {
+
+    /* prevents code-editor from breaking layout on medium-sized screens */
+    @add-mixin min-sm {
+      & .code-editor {
+      width: calc(100% - 300px);
+      }
+    }
+  }
+
+
   /* textText template */
   & .textText {
 
@@ -370,13 +403,37 @@
       }
     }
 
-
-
     & .slide-text {
 
-      & p + p {
-        margin-top: 1em;
+      @add-mixin min-md {
+        align-self: center;
       }
+
+      /* text sizing */
+      & p {
+        @add-mixin font-md;
+      }
+      & ul,
+      & ol {
+        font-size: 1.0625rem;
+        margin-top: 1.5em;
+
+        & li + li {
+          margin-top: 0.5em;
+        }
+      }
+    }
+  }
+
+
+  /* cheatSheet template */
+  & .cheatSheet {
+    justify-content: flex-start; /* .flew-row override */
+
+    /* single column, please */
+    & .slide-text {
+      max-width: 50rem;
+      margin-left: 0;
 
       /* bad content designer! */
       &:empty,
@@ -385,21 +442,15 @@
         display: none;
       }
 
-      @add-mixin min-md {
-        align-self: center;
+      /* space out adjacent elements */
+      & * + p {
+        margin-top: 1.25em;
       }
-
-      & p {
-        @add-mixin font-md;
+      & pre {
+        margin-bottom: 2rem;
       }
     }
-  }
 
-  @add-mixin max-md {
-    & .slide-text {
-      margin-left: auto;
-      margin-right: auto;
-    }
   }
 }
 

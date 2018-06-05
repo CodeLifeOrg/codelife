@@ -90,6 +90,10 @@
 }
 
 .geosearch-popover {
+  /* limit select list height, make it scrollable */
+  /* NOTE: increasing this further will cause part of it to be hidden in some dialogs */
+  max-height: 13.5rem;
+  overflow-y: auto;
 
   /* so much border radius, so little time 😒 */
   &, & .pt-popover-content {
@@ -115,6 +119,9 @@
     box-shadow: 0 1px 1em var(--white) !important;
     background-color: var(--sky-light);
     z-index: 1;
+    /* BUG: removes inline style */
+    /* NOTE: `padding-right` is being inlined somewhere, and obscures the text while typing. Thanks Blueprint...? */
+    padding-right: 0 !important;
   }
   /* adjust search and clear icons */
   & .pt-input-group > .pt-icon {

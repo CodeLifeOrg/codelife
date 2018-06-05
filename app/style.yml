@@ -39,7 +39,7 @@ button-double-width: "14em"
 # TYPOGRAPHY
 #############################
 
-heading-font: "'Overpass', 'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
+heading-font: "'Merriweather Sans', 'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
 body-font: "'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
 
 #############################
@@ -55,30 +55,39 @@ gray:    "#909696"
 dark-1:  "#747b7b"
 dark-2:  "#596161"
 dark-3:  "#2F3A3A"
-black:   "#222d2d"
+black:   "#233233"
 
 # UI
-danger: "#d74645"
-danger-light: "#ffc8cb"
-danger-dark: "#C40000"
+danger: "#D64747"
+danger-light: "#DF6F6F"
+danger-dark: "#A03535"
 
-caution: "#eec900"
-caution-dark: "#BCA000"
-caution-darker: "#826E00"
+caution: "#E6AA49"
+caution-light: "#EBBC70"
+caution-dark: "#AC7F36"
 
-success: "#436c31"
-
-rando-blue: "#2500CA"
-
-heylisten: "#f7e944"
-heylisten-light: "#faf085"
-
-
+success: "#3CB56A"
+success-light: "#66C58A"
+success-dark: "#2C874F"
 
 # theming
-sky: "#74c3b7"
-sky-light: "#9BD9D4"
-sky-dark: "#328f86"
+sky: "#3BD9CC"
+sky-light: "#73FFF1"
+sky-dark: "#0F807E"
+sky-black: "#0B5B5C"
+
+cyan: "#5599D9"
+cyan-light: "#63B5FF"
+cyan-dark: "#284F80"
+
+lilac: "#5B70D9"
+lilac-light: "#6C86FF"
+lilac-dark: "#2B3480"
+
+sandstorm: "#D9CB50"
+sandstorm-light: "#E1D676"
+sandstorm-dark: "#A2983B"
+
 
 # list of islands - necessary for admin menu logic & theming
 islands:

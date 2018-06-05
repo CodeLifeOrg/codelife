@@ -34,7 +34,7 @@
   & .discussion-heading {
     margin-bottom: var(--gutter-md);
     letter-spacing: 1px;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     top: 1px; /* fudge into place */
   }
 
@@ -143,7 +143,7 @@
       font-weight: bold;
       margin: var(--gutter-xs) 0;
       letter-spacing: 1px;
-      text-transform: uppercase;
+      /* text-transform: uppercase; */
     }
     & .pt-input {
       margin: 0 0 var(--gutter-xs);

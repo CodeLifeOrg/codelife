@@ -37,7 +37,7 @@ class Footer extends Component {
 
     // if logged in, add additional links to footer
     if (user) {
-      aboutLinks.push(surveyLink[0]);
+      // aboutLinks.push(surveyLink[0]); // outdated survey content
       exploreLinks.push(leaderboardLink[0]);
     }
 

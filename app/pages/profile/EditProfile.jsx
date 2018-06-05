@@ -24,11 +24,12 @@ class EditProfile extends Component {
       error: null,
       profileUser: null,
       optOut: false,
+      optOutLocation: false,
       img: null
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {params, t} = this.props;
     const {username} = params;
     const {username: loggedInUsername} = this.props.user;
@@ -50,7 +51,8 @@ class EditProfile extends Component {
         this.setState({
           loading: false,
           profileUser: userData,
-          optOut: userData.sid === -1
+          optOut: userData.sid === -1,
+          optOutLocation: userData.gid === "-1"
         });
       }
     });
@@ -79,6 +81,7 @@ class EditProfile extends Component {
       sid: profileUser.sid
     };
     if (this.state.optOut) userPostData.sid = -1;
+    if (this.state.optOutLocation) userPostData.gid = "-1";
     axios.post("/api/profile/", userPostData).then(resp => {
       const responseData = resp.data;
       if (responseData.error) {
@@ -170,7 +173,7 @@ class EditProfile extends Component {
    */
   render() {
     const {t, user: loggedInUser} = this.props;
-    const {error, loading, profileUser, optOut} = this.state;
+    const {error, loading, profileUser, optOut, optOutLocation} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
@@ -301,8 +304,13 @@ class EditProfile extends Component {
           {/* location & school */}
           <div className="field-container location-group-inner">
             {/* location */}
-            <h2 className="font-sm u-margin-bottom-off u-margin-top-md">{t("My location")}</h2>
-            <SelectGeo gid={gid} callback={setGid} />
+            <h2 className="font-sm u-margin-top-md">{t("My location")}</h2>
+            <Checkbox
+              checked={this.state.optOutLocation}
+              label={t("I'd rather not say")}
+              onChange={e => this.setState({optOutLocation: Boolean(e.target.checked)})}
+            />
+            { !optOutLocation && <SelectGeo gid={gid} callback={setGid} /> }
             {/* school */}
             <h2 className="font-sm u-margin-top-md">{t("My school")}</h2>
             <Checkbox

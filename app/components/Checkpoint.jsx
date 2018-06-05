@@ -24,10 +24,7 @@ class Checkpoint extends Component {
     const {sid} = this.state;
 
     return (
-      <div id="Checkpoint">
-        <h3>{ t("Do you go to school in Minas Gerais?") }</h3>
-        <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
-      </div>
+      <SelectSchool sid={sid} callback={this.setSid.bind(this)} />
     );
   }
 }

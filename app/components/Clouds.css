@@ -1,5 +1,8 @@
+#app {
+  background-image: linear-gradient(var(--sky) 0, var(--sky-light) 100%);
+}
+
 #clouds {
-  background-image: linear-gradient(var(--sky-light) 0, var(--sky) 100%);
   bottom: 0;
   height: 100vh;
   left: 0;
@@ -8,7 +11,8 @@
   right: 0;
   top: 0;
   width: 100vw;
-  z-index: -1;
+  z-index: 0;
+  pointer-events: none;
 
   & .cloud {
     background-position: 50% 0%;

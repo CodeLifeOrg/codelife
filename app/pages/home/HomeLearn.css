@@ -1,0 +1,42 @@
+@import '../../mixins.css';
+
+/* what you'll learn */
+.learn-section {
+
+  /* stacked layout */
+  @add-mixin max-sm {
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-lg);
+
+    & .learn-figure {
+      top: -1rem;
+    }
+  }
+
+  /* 2 col layout */
+  @add-mixin min-sm {
+    margin-top: var(--gutter-lg);
+    margin-bottom: var(--gutter-lg);
+
+    & .learn-caption {
+      width: 22.5rem;
+      padding-bottom: var(--gutter-xl);
+    }
+    & .learn-figure {
+      margin-left: auto;
+      width: calc(100% - 22.5rem);
+      text-align: center;
+      float: right;
+
+      & .learn-img {
+        min-width: 43rem;
+        top: -1.5rem;
+      }
+    }
+  }
+
+  /* offset default list item margin */
+  & .learn-list-item + .learn-list-item {
+    margin-top: -0.75em;
+  }
+}

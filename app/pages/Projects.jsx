@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Alert, Dialog, EditableText, Intent, Position, Toaster} from "@blueprintjs/core";
 import {Link} from "react-router";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import CodeBlockList from "components/CodeBlockList";
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -401,22 +402,18 @@ class Projects extends Component {
 
     if (!auth.user) browserHistory.push("/");
 
+    if (!currentProject) return <LoadingSpinner />;
+
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;
     const hasCollabs = currentProject && currentProject.collaborators.length;
-
-    // list of collabs, passed to collabList
-    let collabsList = [];
-    hasCollabs ? collabsList = currentProject.collaborators : null;
 
     const showDeleteButton = this.state.projects.length > 1;
 
     const {origin} = this.props.location;
-    const {username} = this.props.auth.user;
     const name = currentProject ? currentProject.name : "";
     const slug = currentProject ? currentProject.slug : "";
 
-    const shareLink = slug ? encodeURIComponent(`${origin}/projects/${username}/${slug}`) : encodeURIComponent(`${origin}/projects/${username}/${name}`);
-    // const relativeLink = slug ? `/projects/${username}/${slug}` : `/projects/${username}/${name}`;
+    const shareLink = slug ? encodeURIComponent(`${origin}/projects/${currentProject.user.username}/${slug}`) : encodeURIComponent(`${origin}/projects/${currentProject.user.username}/${name}`);
 
     const projectItems = this.state.projects.map(project =>
       <li className="project-switcher-item" key={project.id}>
@@ -424,7 +421,7 @@ class Projects extends Component {
           onClick={() => this.onClickProject.bind(this)(project)}
           className="project-switcher-link link">
           <span className="project-switcher-link-thumb">
-            <img className="project-switcher-link-thumb-img" src={`/pj_images/${project.id}.png?v=${new Date().getTime()}`} alt=""/>
+            <img className="project-switcher-link-thumb-img" src={`/pj_images/${project.user.username}/${project.id}.png?v=${new Date().getTime()}`} alt=""/>
           </span>
           <span className="project-switcher-link-text">
             { project.name }
@@ -439,7 +436,7 @@ class Projects extends Component {
           onClick={() => this.onClickProject.bind(this)(collab)}
           className="project-switcher-link link">
           <span className="project-switcher-link-thumb">
-            <img className="project-switcher-link-thumb-img" src={`/pj_images/${collab.id}.png?v=${new Date().getTime()}`} alt=""/>
+            <img className="project-switcher-link-thumb-img" src={`/pj_images/${collab.user.username}/${collab.id}.png?v=${new Date().getTime()}`} alt=""/>
           </span>
           <span className="project-switcher-link-text">
             { collab.name }

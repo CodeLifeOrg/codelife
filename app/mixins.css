@@ -1,7 +1,7 @@
 /* mixins */
 
 /* mobile first breakpoints */
-@define-mixin min-xl  { @media (min-width: 1800px) { @mixin-content; } }
+@define-mixin min-xl  { @media (min-width: 1400px) { @mixin-content; } }
 @define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
 @define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }
 @define-mixin min-sm  { @media (min-width: 768px)  { @mixin-content; } }
@@ -9,7 +9,7 @@
 @define-mixin min-xxs { @media (min-width: 325px)  { @mixin-content; } }
 
 /* max-width first */
-@define-mixin max-xl  { @media (max-width: 1799px) { @mixin-content; } }
+@define-mixin max-xl  { @media (max-width: 1399px) { @mixin-content; } }
 @define-mixin max-lg  { @media (max-width: 1199px) { @mixin-content; } }
 @define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
 @define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
@@ -22,7 +22,7 @@
   line-height: 1;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 3.75rem; /* 60px */
+    font-size: 3.25rem; /* 52px */
   }
 }
 @define-mixin font-xl {
@@ -39,7 +39,7 @@
   line-height: 1.25;
   /* scale up on bigger screens */
   @add-mixin min-sm {
-    font-size: 1.625rem; /* 26px */
+    font-size: 1.75rem; /* 28px */
   }
 }
 @define-mixin font-md {
@@ -53,6 +53,12 @@
 @define-mixin font-xs {
   font-size: 0.75rem; /* 12px */
   line-height: 1.666; /* 20px */
+}
+
+/* font smoothing */
+@define-mixin font-smoothing {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* accessibly hidden text and elements */
@@ -134,7 +140,7 @@
 
 /* default button padding */
 @define-mixin button-padding {
-  padding: 0.35em 2em 0.55em 2em;
+  padding: 0.35em 1.75em 0.55em 1.75em;
 }
 /* default text input padding */
 @define-mixin text-input-padding {

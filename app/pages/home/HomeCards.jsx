@@ -22,7 +22,7 @@ class HomeCards extends Component {
         <div className="project-section u-clearfix">
           <h2 className="heading projects-heading">
             { t("Projects") }
-            <Tooltip2 portalClassName="heading-explainer-tooltip" content={ t("ProjectExplainer")} defaultIsOpen={true} inheritDarkTheme={false}>
+            <Tooltip2 portalClassName="heading-explainer-tooltip" content={ t("ProjectExplainer")} inheritDarkTheme={false}>
               <span className="heading-explainer pt-icon pt-icon-help" />
             </Tooltip2>
           </h2>

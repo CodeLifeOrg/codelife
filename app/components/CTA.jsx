@@ -29,6 +29,12 @@ class CTA extends Component {
 
     return (
       <div className="cta u-text-center">
+        
+        {/* avatar */}
+        <img className="cta-avatar-img" alt=""
+          src="/avatars/avatar-excited-transparent.png"
+          srcSet="/avatars/avatar-excited-transparent.png 1x,
+                  /avatars/avatar-excited-transparent@2x.png 2x" />
 
         <h2 className="cta-heading u-margin-top-off u-margin-bottom-off font-xl">
           {/* home page cta; default */}

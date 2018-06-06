@@ -105,21 +105,32 @@ module.exports = function(app) {
   // Used by Studio to open a project by ID
   app.get("/api/projects/byid", isAuthenticated, (req, res) => {
 
-    /*
-    TODO: work constraint back in so that users can only read their own projects OR THEIR COLLABS
-    db.projects.findAll({where: {id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
-    */
-
     db.projects.findOne({
       where: {
         id: req.query.id
       },
       include: pInclude
-    }).then(p =>
-      res.json(flattenProject(req.user, p.toJSON())).end()
-    );
-
-    // db.projects.findAll({where: {id: req.query.id}}).then(u => res.json(u).end());
+    }).then(project => {
+      const plainProject = project.toJSON();
+      // if the project belongs to the logged in user, just send it back
+      if (plainProject.uid === req.user.id) {
+        res.json(plainProject).end();
+      } 
+      // otherwise, a collaborator may be opening it
+      else {
+        // find all the collaborators on this project
+        db.projects_userprofiles.findAll({where: {pid: plainProject.id}}).then(collabs => {
+          // if the logged in user is not in the collab list, return nothing
+          if (!collabs.map(c => c.toJSON().uid).includes(req.user.id)) {
+            res.json({}).end();
+          }
+          // otherwise they are on the collab list, return the project
+          else {
+            res.json(flattenProject(req.user, project.toJSON())).end();
+          } 
+        });
+      }
+    });
 
   });
 

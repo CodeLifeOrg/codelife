@@ -1,6 +1,7 @@
 @import '../../mixins.css';
 
 .cards-section {
+  padding-bottom: 15% !important; /* override .content .content-section from app.css */
 
   /* tweakpoints to make room for clouds */
   @media (min-width: 1120px) and (max-width: 1199px) {

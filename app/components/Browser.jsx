@@ -163,7 +163,6 @@ class Browser extends Component {
       else {
         console.log("error");
       }
-
     });
   }
 

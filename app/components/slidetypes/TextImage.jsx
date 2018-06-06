@@ -33,7 +33,7 @@ class TextImage extends Component {
         <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
         {/* <div className="slide-image" style={{backgroundImage: `url('/slide_images/${ id }.jpg')`}}></div> */}
         <div className="slide-image-container">
-          <img src={`/slide_images/${ id }.jpg`} alt="" className="slide-image"/>
+          <img src={path} alt="" className="slide-image"/>
         </div>
       </div>
     );

@@ -44,7 +44,7 @@ class Island extends Component {
     // TODO2: adding back in a hard blocker for November Beta.
     // TODO3: blocker incremented for December Island.
     // TODO4: blocker incremented for January Island.
-    if (milestone === "island-8b75") return false;
+    if (milestone === "island-8b75") return false;  // 8b75 is clock island - to make it the latest island, never let them "beat it" (so, return false)
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 

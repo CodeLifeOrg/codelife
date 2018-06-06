@@ -148,6 +148,7 @@ class Level extends Component {
     // TODO3: blocker incremented for december island
     // TODO4: DIDN'T update this blocker for January, because we don't have an island yet.  Update after new island is placed.
     // TODO5: Just updated this to the new space island now that they are added
+    // 21a4 is space island.  If the next island is space island, DONT go to it
     if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
@@ -302,7 +303,7 @@ class Level extends Component {
 
         <div className="share-button-group field-container">
           {/* facebook */}
-          <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={true} />
+          <ShareFacebookLink context="codeblock" shareLink={shareLink} screenshotReady={canPostToFacebook} />
           {/* TODO: replace with smarter text, check for next island */}
           <Button
             className="share-button pt-button pt-button-primary font-md"

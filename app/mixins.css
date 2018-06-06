@@ -281,22 +281,31 @@
 
 /* subtle background gradient for highlighted sections */
 @define-mixin section-bg-gradient {
-  @supports (left: -10vw) {
-    &:before {
-      content: '';
-      /* sizing */
-      display: block;
-      width: 200vw;
-      height: 100%;
-      /* positioning */
-      position: absolute;
-      left: -100vw;
-      /* theming */
+  &:before {
+    @add-mixin absolute-expand;
+    content: '';
+    /* sizing */
+    display: block;
+    width: 120%;
+    height: 140%;
+    /* positioning */
+    left: -10%;
+    top: -20%;
+    /* theming */
+    opacity: 0.5;
+    background-image:
+      linear-gradient(
+        transparent 0,
+        var(--sky-light) 50%,
+        transparent 100%
+      );
+    /* fallback */
+    @supports (background-image: radial-gradient(ellipse closest-side, transparent, transparent)) {
       background-image:
-      linear-gradient(-180deg,
-        rgba(255,255,255,0.00) 0%,
-        rgba(255,255,255,0.12) 50%,
-        rgba(255,255,255,0.00) 100%
+        radial-gradient(
+          ellipse closest-side,
+          var(--sky-light) 0,
+          transparent 100%
         );
     }
   }

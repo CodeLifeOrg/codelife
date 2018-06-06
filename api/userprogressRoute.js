@@ -22,6 +22,7 @@ module.exports = function(app) {
             // This is a blocker for november's beta.  Increment this with release of each new island
             // incremented this for december island.
             // incremented this for january island
+            // island 6 is city island. set latest to max out at 6 so that the "next" (current) island is always 7, the last island (clock)
             if (latestIsland >= 6) latestIsland = 6;
             const island = islands.find(i => i.ordering === latestIsland + 1);
             returnObj.current = island;

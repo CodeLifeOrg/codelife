@@ -95,12 +95,14 @@ class Projects extends Component {
   openProject(pid) {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
-      this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
-      if (resp.data.slug) {
-        browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
-      }
-      else {
-        browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
+      if (resp.data) {
+        this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
+        if (resp.data.slug) {
+          browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
+        }
+        else {
+          browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.name}/edit`);
+        }
       }
     });
   }

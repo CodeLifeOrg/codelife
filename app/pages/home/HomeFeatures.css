@@ -1,17 +1,141 @@
 @import '../../mixins.css';
 
+/* WARNING: extremely hacky positioning ahead */
+/* proceed at your own risk 😬 */
+
+.features-section {
+  margin-top: 5vw;
+
+  @add-mixin min-xl {
+    margin-top: 7.5vw;
+    margin-bottom: 5vw;
+  }
+
+  & .features-bg {
+    @add-mixin fullwidth-section;
+    content: "";
+    /* sizing */
+    width: 110vw;
+    height: 100%;
+    /* positioning */
+    position: absolute;
+    top: 15%;
+    left: -5%;
+    z-index: 1; /* position above previous section bg */
+
+    /* fudge into place as cloud image size increases */
+    @add-mixin min-lg {
+      top: calc(25% - 5vw);
+    }
+    /* tweakpoint for ginormous screens */
+    @add-mixin min-xl {
+      top: calc(25% - 7vw);
+    }
+
+    /* white background */
+    &:after {
+      content: '';
+      display: block;
+      /* sized via positioning */
+      position: absolute;
+      top: 10%;
+      bottom: 25%;
+      left: 0;
+      right: 0;
+      /* theming */
+      background-color: var(--white);
+
+      /* reposition on bigger screens */
+      @add-mixin min-sm {
+        top: 20%;
+        bottom: 30%;
+      }
+      @add-mixin min-md {
+        top: 25%;
+        bottom: 35%;
+      }
+      /* tweakpoint */
+      @media (min-width: 1120px) {
+        bottom: calc(13% + 5vw);
+      }
+      @add-mixin min-lg {
+        top: 50%;
+        bottom: 40%;
+      }
+    }
+
+    /* position cloud */
+    & .cloud-diagonal-gradual {
+      /* sizing */
+      width: 100%;
+      min-width: 60rem; /* never show in between sections */
+      height: auto;
+
+      @add-mixin min-lg {
+        left: 2.5%;
+      }
+
+      /* top cloud */
+      &:first-of-type {
+        top: -15%;
+
+        @add-mixin min-xl {
+          top: -20%;
+        }
+      }
+
+      /* bottom cloud */
+      &:last-of-type {
+        /* flip cloud upside down */
+        transform: translateY(-5px) rotateZ(177deg);
+        /* positioning */
+        position: absolute;
+        bottom: 0;
+
+        /* fudge into place as cloud image size increases */
+        @add-mixin min-sm {
+          position: relative; /* prevent overlap */
+          bottom: -13%;
+        }
+        @add-mixin min-md {
+          bottom: calc(-16% + 5vw);
+        }
+        @add-mixin min-lg {
+          bottom: calc(-2% + 10vw);
+        }
+      }
+    }
+  }
+}
+
+
+/* position content in front of clouds */
+.feature-list-heading,
+.feature-list {
+  z-index: 1;
+}
+
+
 /* three features */
 .feature-list {
 
-  /* icon */
+  /* feature container */
+  & .feature-item {
+    padding: var(--gutter-md);
+    /* theming */
+    background-color: var(--white);
+    box-shadow: 0 2px 0.75rem rgba(8, 26, 24, 0.25);
+    border-radius: var(--radius-md);
+  }
+
+  /* icon default styles */
   & .feature-icon {
     /* sizing */
     width: 3.25rem;
     height: 3.25rem;
     /* base theming */
-    background: var(--light-1);
+    background-color: var(--sky);
     border-radius: 50%;
-    box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
     overflow: hidden;
     /* align icon & text */
     vertical-align: middle;
@@ -20,11 +144,21 @@
 
     /* the icon itself */
     &:before {
-      font-size: 1.625em; /* size according to .feature-icon font size */
+      font-size: 2em; /* size according to .feature-icon font size */
       line-height: 3.25rem; /* container height */
       /* base theme */
-      color: var(--dark-2);
+      color: var(--white);
     }
+  }
+
+  /* theming for icons 2 & 3 */
+  & .feature-item:nth-of-type(2) .feature-icon {
+    background-color: var(--cyan);
+  }
+
+  /* theming for icons 2 & 3 */
+  & .feature-item:nth-of-type(3) .feature-icon {
+    background-color: var(--lilac);
   }
 
   /* stacked layout */
@@ -39,6 +173,7 @@
       display: inline-block;
       width: calc(100% - 3.25rem); /* account for icon */
       /* positioning */
+      margin-top: 2px; /* fudge vertical alignment */
       padding-left: 1rem;
       vertical-align: middle;
     }
@@ -46,10 +181,17 @@
 
   /* 3 col layout */
   @add-mixin min-sm {
+    display: flex;
+    justify-content: space-between;
+
+    & .feature-text {
+      margin-top: 0.5em;
+    }
+
     & .feature-item {
       /* sizing */
       width: 30%; /* fallback */
-      width: calc(33.3% - 1rem);
+      width: calc(33.3% - 1.65rem);
       /* positioning */
       display: inline-block;
       vertical-align: top; /* blueprint override */
@@ -58,7 +200,7 @@
 
       /* space out adjacent elements */
       & + .feature-item {
-        margin-left: 1.5rem;
+        margin-left: 2.5rem;
       }
 
       /* icon */
@@ -77,6 +219,21 @@
         &:before {
           line-height: 4.5rem; /* container height */
         }
+      }
+    }
+  }
+
+  /* scale down 3 column layout on medium viewports */
+  @media (min-width: 768px) and (max-width: 970px) {
+    & .feature-item {
+      text-align: left;
+
+      /* tweak font sizes */
+      & .feature-text {
+        font-size: 1.5rem; /* 20px */
+      }
+      & .feature-caption {
+        font-size: 1rem; /* 14px */
       }
     }
   }

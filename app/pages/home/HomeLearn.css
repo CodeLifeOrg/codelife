@@ -3,25 +3,71 @@
 /* what you'll learn */
 .learn-section {
 
+  /* theme overrides */
+  & .learn-heading,
+  & .learn-list {
+    color: var(--white);
+  }
+
+  & .learn-bg {
+    @add-mixin fullwidth-section;
+    content: "";
+    /* sizing */
+    width: 100vw;
+    height: 120%; /* fallback */
+    height: calc(100% + 16rem + 15vw);
+    /* positioning */
+    position: absolute;
+    z-index: 1;
+    top: -8rem;
+    /* theming */
+    background-color: var(--cyan); /* fallback */
+    background-image: linear-gradient(to top, var(--cyan-light) 0, var(--cyan) 100%);
+
+    /* position cloud */
+    & .cloud-diagonal-exponential {
+      /* sizing */
+      width: 100%;
+      min-width: 60rem; /* never show in between sections */
+      height: auto;
+      /* positioning */
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  & .learn-figure,
+  & .learn-caption {
+    z-index: 1;
+  }
+
+  /* keep caption visible */
+  & .learn-caption {
+    /* sizing */
+    width: 22.5rem;
+    /* positioning */
+    padding-top: 2.5rem;
+  }
+
   /* stacked layout */
   @add-mixin max-sm {
     margin-top: var(--gutter-md);
     margin-bottom: var(--gutter-lg);
 
-    & .learn-figure {
-      top: -1rem;
+    /* center */
+    & .learn-caption {
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
   /* 2 col layout */
   @add-mixin min-sm {
+    padding-top: 10% !important; /* override */
     margin-top: var(--gutter-lg);
     margin-bottom: var(--gutter-lg);
 
-    & .learn-caption {
-      width: 22.5rem;
-      padding-bottom: var(--gutter-xl);
-    }
     & .learn-figure {
       margin-left: auto;
       width: calc(100% - 22.5rem);
@@ -29,8 +75,9 @@
       float: right;
 
       & .learn-img {
-        min-width: 43rem;
-        top: -1.5rem;
+        min-width: auto;
+        max-width: none; /* override default `max-width: 100%;` */
+        top: -3rem;
       }
     }
   }

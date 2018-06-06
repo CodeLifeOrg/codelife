@@ -1301,6 +1301,13 @@ utility classes
 .u-text-center {
   text-align: center;
 }
+.u-text-left-center {
+  text-align: left;
+
+  @add-mixin min-sm {
+    text-align: center;
+  }
+}
 
 /* show/hide content */
 .u-hide-below-sm {

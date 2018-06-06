@@ -52,7 +52,7 @@
       }
       @add-mixin min-md {
         top: 25%;
-        bottom: 27%;
+        bottom: 35%;
       }
       /* tweakpoint */
       @media (min-width: 1120px) {
@@ -60,7 +60,7 @@
       }
       @add-mixin min-lg {
         top: 50%;
-        bottom: 50%;
+        bottom: 40%;
       }
     }
 

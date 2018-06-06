@@ -1,6 +1,51 @@
 @import '../../mixins.css';
 
-.home {
+.cards-section {
+
+  /* tweakpoints to make room for clouds */
+  @media (min-width: 1120px) and (max-width: 1199px) {
+    margin-top: calc(-1rem + 5vw);
+  }
+  @media (min-width: 1400px) and (max-width: 1739px) {
+    margin-top: calc(-12rem + 9vw);
+  }
+
+  & .heading {
+    color: var(--white);
+    z-index: 2; /* position above clouds */
+
+    /* tooltip icon */
+    & .heading-explainer {
+      vertical-align: baseline;
+      top: -0.175em; /* fudge into place */
+      font-size: 0.75em;
+      margin-left: 0.25em;
+      /* transitions */
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  &:before {
+    @add-mixin fullwidth-section;
+    content: "";
+    /* sizing */
+    width: 100vw;
+    height: 100%; /* fallback */
+    height: calc(100% + 10vw);
+    /* positioning */
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    top: calc(-10vw);
+    left: 0;
+    /* theming */
+    background-color: var(--lilac); /* fallback */
+    background-image: linear-gradient(to top, var(--lilac) 0, var(--lilac-light) 100%);
+  }
 
   /* card layout */
   & .card-list {
@@ -30,5 +75,32 @@
     /* & .card-container:nth-of-type(n + 6) ~ .card-container  {
       display: none !important;
     } */
+  }
+
+  /* override default card state */
+  & .card-img {
+    background-color: var(--lilac-dark);
+  }
+}
+
+
+/* style tooltip */
+.heading-explainer-tooltip {
+
+  & .pt-popover-arrow path {
+    fill: var(--lilac-dark);
+  }
+
+  & .pt-popover-content {
+    /* typography */
+    @add-mixin font-md;
+    @add-mixin font-smoothing;
+    font-family: var(--body-font);
+    /* theming */
+    background-color: var(--lilac-dark);
+    color: var(--white);
+    /* sizing */
+    padding: 0.75em 1em;
+    min-width: 25rem;
   }
 }

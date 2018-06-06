@@ -52,6 +52,7 @@ class Discussion extends Component {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "newThreadToast", position: Position.TOP_CENTER});
         toast.show({message: t("Thread Posted!"), timeout: 1500, intent: Intent.SUCCESS});
+        if (this.props.onNewThread) this.props.onNewThread(resp.data.newThread);
         this.setState({threads: resp.data.threads, threadTitle: "", threadContent: ""});
       }
     });

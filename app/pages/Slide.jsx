@@ -186,6 +186,13 @@ class Slide extends Component {
     }
   }
 
+  onNewThread(thread) {
+    const {currentSlide} = this.state;
+    if (currentSlide) {
+      currentSlide.threadlist.push(thread);
+    }
+  }
+
   render() {
     const {auth, t} = this.props;
     const {lid, mlid, sid} = this.props.params;
@@ -285,7 +292,7 @@ class Slide extends Component {
           { showDiscussion ? t("Hide Discussion") : `${t("Show Discussion")} (${this.state.currentSlide.threadlist.length})` }
           { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
         </button>
-        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" subjectId={currentSlide.id}/> : null }
+        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" onNewThread={this.onNewThread.bind(this)} subjectId={currentSlide.id}/> : null }
       </div>
     );
   }

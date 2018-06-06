@@ -212,9 +212,7 @@ module.exports = function(app) {
       .then(u => {
 
         // disabling email server while testing occurs
-        res.json(u).end();
-
-        /*
+        // res.json(u).end();
 
         const mailgun = new Mailgun({apiKey: mgApiKey, domain: mgDomain});
         const confirmEmailFilepath = path.join(__dirname, "../tools/report.html");
@@ -233,7 +231,7 @@ module.exports = function(app) {
 
         });
 
-        */
+        
     
       });
   });

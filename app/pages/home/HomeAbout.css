@@ -1,22 +1,28 @@
 @import '../../mixins.css';
 
+.home-about-section {
 
-/* flip video & intro text on smaller screens */
-@add-mixin max-md {
-  .home-about > .home-about-half-container {
-    @supports (order: 1) { /* but only if flex order is supported by the browser */
+  /* flex container */
+  & .home-about-half-container {
+
+    /* space out / position video */
+    & .home-about-half:last-of-type {
+      margin-top: 2.75rem;
+    }
+
+    /* two column layout */
+    @add-mixin min-sm {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
 
-      & > .home-about-half {
-        width: 100%;
+      & .home-about-half {
+        width: 50%;
+        width: calc(50% - var(--gutter-md));
 
-        &:first-of-type {
-          order: 1;
-        }
-
+        /* limit video width & pull right */
         &:last-of-type {
-          top: -2.5rem;
+          max-width: 35rem; /* 560px */
+          margin-left: auto;
         }
       }
     }

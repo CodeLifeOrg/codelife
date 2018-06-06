@@ -98,6 +98,7 @@ class CodeBlockList extends Component {
       // added this ordering blocker for november beta. Need to increment this as levels are unlocked.
       // incremented this for new december island
       // incremented this for new january island
+      // island 7 is clock island, so if its higher, don't show anything
       if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > 7) continue;
       codeBlockItems.push(
         <button className={`u-unbutton codeblock-browser-button ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>

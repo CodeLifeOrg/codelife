@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
+import CloudDiagonalGradual from "components/CloudDiagonalGradual.svg.jsx";
 import "./HomeFeatures.css";
 
 class HomeFeatures extends Component {
@@ -9,7 +10,13 @@ class HomeFeatures extends Component {
     const {t} = this.props;
 
     return (
-      <div className="content-section">
+      <div className="content-section features-section">
+
+        {/* clouds */}
+        <div className="features-bg">
+          <CloudDiagonalGradual />
+          <CloudDiagonalGradual />
+        </div>
 
         {/* section heading */}
         <h2 className="feature-list-heading font-xl">{t("Features")}</h2>

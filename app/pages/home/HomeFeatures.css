@@ -1,5 +1,121 @@
 @import '../../mixins.css';
 
+/* WARNING: extremely hacky positioning ahead */
+/* proceed at your own risk 😬 */
+
+.features-section {
+  margin-top: 5vw;
+
+  @add-mixin min-xl {
+    margin-top: 7.5vw;
+    margin-bottom: 5vw;
+  }
+
+  & .features-bg {
+    @add-mixin fullwidth-section;
+    content: "";
+    /* sizing */
+    width: 110vw;
+    height: 100%;
+    /* positioning */
+    position: absolute;
+    top: 15%;
+    left: -5%;
+    z-index: 1; /* position above previous section bg */
+
+    /* fudge into place as cloud image size increases */
+    @add-mixin min-lg {
+      top: calc(25% - 5vw);
+    }
+    /* tweakpoint for ginormous screens */
+    @add-mixin min-xl {
+      top: calc(25% - 7vw);
+    }
+
+    /* white background */
+    &:after {
+      content: '';
+      display: block;
+      /* sized via positioning */
+      position: absolute;
+      top: 10%;
+      bottom: 25%;
+      left: 0;
+      right: 0;
+      /* theming */
+      background-color: var(--white);
+
+      /* reposition on bigger screens */
+      @add-mixin min-sm {
+        top: 20%;
+        bottom: 30%;
+      }
+      @add-mixin min-md {
+        top: 25%;
+        bottom: 27%;
+      }
+      /* tweakpoint */
+      @media (min-width: 1120px) {
+        bottom: calc(13% + 5vw);
+      }
+      @add-mixin min-lg {
+        top: 50%;
+        bottom: 50%;
+      }
+    }
+
+    /* position cloud */
+    & .cloud-diagonal-gradual {
+      /* sizing */
+      width: 100%;
+      min-width: 60rem; /* never show in between sections */
+      height: auto;
+
+      @add-mixin min-lg {
+        left: 2.5%;
+      }
+
+      /* top cloud */
+      &:first-of-type {
+        top: -15%;
+
+        @add-mixin min-xl {
+          top: -20%;
+        }
+      }
+
+      /* bottom cloud */
+      &:last-of-type {
+        /* flip cloud upside down */
+        transform: translateY(-5px) rotateZ(177deg);
+        /* positioning */
+        position: absolute;
+        bottom: 0;
+
+        /* fudge into place as cloud image size increases */
+        @add-mixin min-sm {
+          position: relative; /* prevent overlap */
+          bottom: -13%;
+        }
+        @add-mixin min-md {
+          bottom: calc(-16% + 5vw);
+        }
+        @add-mixin min-lg {
+          bottom: calc(-2% + 10vw);
+        }
+      }
+    }
+  }
+}
+
+
+/* position content in front of clouds */
+.feature-list-heading,
+.feature-list {
+  z-index: 1;
+}
+
+
 /* three features */
 .feature-list {
 
@@ -103,6 +219,21 @@
         &:before {
           line-height: 4.5rem; /* container height */
         }
+      }
+    }
+  }
+
+  /* scale down 3 column layout on medium viewports */
+  @media (min-width: 768px) and (max-width: 970px) {
+    & .feature-item {
+      text-align: left;
+
+      /* tweak font sizes */
+      & .feature-text {
+        font-size: 1.5rem; /* 20px */
+      }
+      & .feature-caption {
+        font-size: 1rem; /* 14px */
       }
     }
   }

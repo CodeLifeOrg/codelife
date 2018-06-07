@@ -18,7 +18,7 @@
   }
   & .pt-spinner-head {
     stroke: var(--white) !important;
-    opacity: 0.75;
+    opacity: 0.9;
   }
 }
 

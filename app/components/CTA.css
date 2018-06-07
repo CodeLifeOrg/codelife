@@ -36,7 +36,7 @@
   }
 
   /* bring up other cta content in front of the "background" */
-  & .cta-avatar-img ~ * {
+  & *:not(.cta-avatar-img) {
     z-index: 1;
   }
 

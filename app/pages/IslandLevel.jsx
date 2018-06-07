@@ -469,7 +469,7 @@ class Level extends Component {
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
         <div className="island-image image">
-          <h1 className="island-title title" id="title">
+          <h1 className="island-title font-xl" id="title">
             { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }
             { currentIsland.name }
           </h1>
@@ -490,7 +490,7 @@ class Level extends Component {
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div className="student-codeblocks-container">
-            <h2 className="student-codeblocks-title">
+            <h2 className="student-codeblocks-title u-margin-bottom-md">
               {t("Other Students' CodeBlocks")}&nbsp;
               { !islandDone
                 ? <Popover

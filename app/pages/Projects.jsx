@@ -480,7 +480,7 @@ class Projects extends Component {
               </h2>
 
               {/* actions title */}
-              <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>
+              <h3 className="studio-subtitle font-xs u-margin-bottom-off">{t("Actions")}</h3>
 
               {/* list of actions */}
               <ul className="studio-action-list font-xs u-list-reset">
@@ -565,7 +565,7 @@ class Projects extends Component {
 
                 {/* created by user */}
                 <div className="my-project-switcher">
-                  <h3 className="project-switcher-subhead font-xs">{ t("Project.MyProjects") }</h3>
+                  <h3 className="project-switcher-subhead font-xs u-margin-bottom-sm">{ t("Project.MyProjects") }</h3>
                   <ul className="project-switcher-list u-list-reset">
                     {projectItems}
                   </ul>
@@ -575,7 +575,7 @@ class Projects extends Component {
                 { collabItems.length > 0
                   ? <div className="collab-project-switcher">
 
-                    <h3 className="project-switcher-subhead font-xs">{ t("Project.JoinedProjects") }</h3>
+                    <h3 className="project-switcher-subhead font-xs u-margin-bottom-sm">{ t("Project.JoinedProjects") }</h3>
 
                     <ul className="project-switcher-list u-list-reset">
                       {collabItems}

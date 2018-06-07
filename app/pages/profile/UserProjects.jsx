@@ -51,7 +51,7 @@ class UserProjects extends Component {
 
     return (
       <div className="user-section">
-        <h2>{ heading }</h2>
+        <h2 className="user-heading font-xl">{ heading }</h2>
         { projects.length
           ? <div className="card-list">{ projects.map(p => <ProjectCard key={p.id} project={p} />)}</div>
           : <p>{ t("noProjects") }</p>

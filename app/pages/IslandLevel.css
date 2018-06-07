@@ -95,6 +95,7 @@ STUDENT CODEBLOCKS
 .student-codeblocks-container {
   @add-mixin slide-theme; /* transparent white bg, rounded corners */
   /* sizing */
+  width: 100%;
   max-width: 100%; /* don't bleed off tiny screens */
   /* positioning */
   display: inline-block; /* honor text-align:center from .island */
@@ -205,33 +206,20 @@ MAIN ISLAND
 .island-title {
   /* sizing */
   display: inline-block;
-  padding: var(--gutter-xs) var(--gutter-md) 13px;
+  padding: 0.5em 1.25em;
   max-width: calc(62.5% - var(--gutter-md));
   /* positioning */
-  top: 4em;
-  /* typography */
-  line-height: 1.25em;
-  font-size: 20px;
+  top: 2.5em;
   /* theming */
   background-color: var(--dark-3);
   border-radius: var(--radius-lg);
   box-shadow: 0 3px var(--gutter-xs) rgba(0, 0, 0, 0.5);
   color: var(--white);
 
-  /* adjust on larger viewports */
-  @add-mixin min-xs {
-    font-size: 27px;
-    top: 3em;
-  }
-  @add-mixin min-md {
-    max-width: 600px;
-    font-size: 40px;
-    top: 2em;
-  }
-
   /* scale icon with title font size */
   & .pt-icon-large {
-    margin-right: 0.25em;
+    margin-right: 0.5em;
+    margin-left: -0.25em;
     font-size: 1em;
     opacity: 0.75;
   }

@@ -36,24 +36,26 @@
 
 /* popover container */
 .island-link-popover {
+  margin-top: 5em;
+  /* transitions */
   transition: height 0.2s, transform 0.2s;
-  max-width: 200px;
-  margin-top: 80px;
   z-index: 1; /* override blueprint */
 
   /* contains title and description; .pt-popover-content */
   & .island-link-label {
-    width: 200px;
+    width: 16em;
   }
 
   /* title */
   & .island-link-title {
-    /* typography */
-    letter-spacing: 0.25px;
-    text-transform: uppercase;
+    @add-mixin font-smoothing;
+    font-family: var(--heading-font);
 
     /* icon */
     & .pt-icon-standard {
+      font-size: 1em;
+      top: -1px; /* baseline adjustment */
+      margin-left: -0.5em;
       margin-right: 0.5em;
       opacity: 0.75;
     }
@@ -62,7 +64,8 @@
   /* description */
   & .island-link-description {
     /* typography */
-    font-size: var(--gutter-xs);
+    @add-mixin font-smoothing;
+    line-height: 1.25;
     /* transitions */
     max-height: 0;
     opacity: 0;

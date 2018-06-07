@@ -418,8 +418,7 @@
       "Exists": "Email ou nome de usuário já existente",
       "IncompleteFields": "Por favor preencha todos os campos",
       "PasswordMatch": "Senhas não conferem",
-      "TermsAgree": "Você deve concordar com os termos para continuar",
-      "UserExists": ""
+      "TermsAgree": "Você deve concordar com os termos para continuar"
     },
     "success": "Conta criada com sucesso"
   },

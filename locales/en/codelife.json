@@ -418,8 +418,7 @@
       "Exists": "E-mail or Username already in use",
       "IncompleteFields": "Please set all fields",
       "PasswordMatch": "Passwords don't match",
-      "TermsAgree": "Must agree to terms to continue",
-      "UserExists": ""
+      "TermsAgree": "Must agree to terms to continue"
     },
     "success": "Sign up successful"
   },

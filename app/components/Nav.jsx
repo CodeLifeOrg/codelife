@@ -74,7 +74,7 @@ class Nav extends Component {
       }
       else if (!auth.error) {
         if (auth.msg === "LOGIN_SUCCESS") {
-          toast.show({timeout, iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
+          // toast.show({timeout, iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
         }
         // TODO: on mount, its not known where we came from (i.e., signup or login) so generic "success" is shown
         // It would be nice to show a different message for a signup
@@ -110,8 +110,8 @@ class Nav extends Component {
 
     // language select links
     const languageLinks = [
-      {id: 1, title: "English", shortTitle: "En", link: `${protocol}//en.${hostSansSub}${currentPath}`},
-      {id: 2, title: "Portuguese", shortTitle: "Pt", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+      {id: 1, title: t("English"), shortTitle: "En", link: `${protocol}//en.${hostSansSub}${currentPath}`},
+      {id: 2, title: t("Portuguese"), shortTitle: "Pt", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
     ];
 
     return (

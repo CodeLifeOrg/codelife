@@ -54,8 +54,8 @@ class Footer extends Component {
 
     // language select links
     const languageLinks = [
-      {id: 1, title: "English", link: `${protocol}//en.${hostSansSub}${currentPath}`},
-      {id: 2, title: "Portuguese", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+      {id: 1, title: t("English"), link: `${protocol}//en.${hostSansSub}${currentPath}`},
+      {id: 2, title: t("Portuguese"), link: `${protocol}//pt.${hostSansSub}${currentPath}`}
     ];
 
 

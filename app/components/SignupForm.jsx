@@ -4,13 +4,9 @@ import {signup} from "datawheel-canon/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
 
-import {SIGNUP_EXISTS} from "datawheel-canon/src/consts";
-
 import TwitterIcon from "./TwitterIcon.svg.jsx";
 import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
-
-import axios from "axios";
 
 import "./SignupForm.css";
 
@@ -24,7 +20,6 @@ class SignupForm extends Component {
       password: "",
       passwordAgain: "",
       email: null,
-      submitted: false,
       toast: typeof window !== "undefined" ? Toaster.create() : null
     };
     this.onChange = this.onChange.bind(this);
@@ -40,45 +35,27 @@ class SignupForm extends Component {
     const {legal, redirect, t} = this.props;
     const {agreedToTerms, email, password, passwordAgain, username} = this.state;
 
-    // SIGNUP_EXISTS is not working until after submit (??) so this quick endpoint tests for existing usernames
-    axios.get(`/api/profile/doesProfileExist/${username}/${email}`).then(resp => {
-      if (resp.data === true) {
-        this.setState({error: {iconName: "error", message: t("SignUp.error.Exists")}});
-      }
-      else if (password !== passwordAgain) {
-        this.setState({error: {iconName: "lock", message: t("SignUp.error.PasswordMatch")}});
-      }
-      else if (!username || !email || !password) {
-        this.setState({error: {iconName: "id-number", message: t("SignUp.error.IncompleteFields")}});
-      }
-      // NOTE: disabling terms of service check until we have actual terms of service
-      // else if ((legal.privacy || legal.terms) && !agreedToTerms) {
-      //   this.setState({error: {iconName: "saved", message: t("SignUp.error.TermsAgree")}});
-      // }
-      else {
-        this.props.signup({username, email, password, redirect});
-        this.setState({submitted: true});
-      }
-    });
-
+    if (password !== passwordAgain) {
+      this.setState({error: {iconName: "lock", message: t("SignUp.error.PasswordMatch")}});
+    }
+    else if (!username || !email || !password) {
+      this.setState({error: {iconName: "id-number", message: t("SignUp.error.IncompleteFields")}});
+    }
+    // NOTE: disabling terms of service check until we have actual terms of service
+    // else if ((legal.privacy || legal.terms) && !agreedToTerms) {
+    //   this.setState({error: {iconName: "saved", message: t("SignUp.error.TermsAgree")}});
+    // }
+    else {
+      this.props.signup({username, email, password, redirect});
+      this.setState({submitted: true});
+    }
   }
 
   componentDidUpdate() {
     const {auth, t} = this.props;
     const {error, submitted} = this.state;
 
-    
-
-    if (submitted && !auth.loading) {
-      if (auth.error === SIGNUP_EXISTS) {
-        this.showToast(t("SignUp.error.Exists"), "blocked-person", Intent.WARNING);
-      }
-      else if (!auth.error) {
-        this.showToast(t("SignUp.success"), "endorsed", Intent.SUCCESS);
-      }
-      this.setState({submitted: false});
-    }
-    else if (error) {
+    if (error) {
       this.showToast(error.message, error.iconName, error.intent);
       this.setState({error: false});
     }

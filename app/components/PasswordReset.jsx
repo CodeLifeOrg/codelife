@@ -28,6 +28,7 @@ class PasswordReset extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props);
     const {location} = this.props.router;
     const {token} = location ? location.query : this.props;
     if (token) {
@@ -91,6 +92,8 @@ class PasswordReset extends Component {
 
     const {t} = this.props;
     const {email, password, passwordAgain, token} = this.state;
+
+    console.log("token", token);
 
     if (token) {
 

@@ -6,10 +6,20 @@ import Browser from "components/Browser";
 import Logo from "components/Logo.svg";
 import Search from "components/Search";
 import AuthForm from "components/AuthForm";
+import PropTypes from "prop-types";
+import {login, resetPassword} from "datawheel-canon/src/actions/auth";
+
+import {
+  RESET_SEND_FAILURE,
+  RESET_SEND_SUCCESS,
+  WRONG_PW,
+  SIGNUP_EXISTS
+} from "datawheel-canon/src/consts";
 
 import "./Nav.css";
 
-import {Popover, PopoverInteractionKind, Position, Dialog} from "@blueprintjs/core";
+import {Popover, PopoverInteractionKind, Position, Dialog, Intent, Toaster} from "@blueprintjs/core";
+
 
 // Nav Component
 // Contains a list of links in Footer format, inserted at the bottom of each page
@@ -20,8 +30,56 @@ class Nav extends Component {
     super(props);
     this.state = {
       showBrowser: false,
-      isLoginOpen: false
+      isLoginOpen: false,
+      toast: typeof window !== "undefined" ? Toaster.create() : null
     };
+  }
+
+  componentDidMount() {
+    const {auth, t} = this.props;
+    const {email, toast} = this.state;
+    const {browserHistory} = this.context;
+
+    if (!auth.loading) {
+
+      if (auth.error) {
+        this.setState({isLoginOpen: true});
+      }
+
+      if (auth.error === WRONG_PW) {
+        toast.show({
+          action: {
+            onClick: () => {
+              this.setState({isLoginOpen: false});
+              browserHistory.push("/reset");
+            },
+            text: t("Reset.button")
+          },
+          iconName: "error",
+          intent: Intent.DANGER,
+          message: t("Login.error"),
+          timeout: 2500
+        });
+      }
+      else if (auth.msg === RESET_SEND_SUCCESS) {
+        toast.show({timeout: 2500, iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
+      }
+      else if (auth.error === RESET_SEND_FAILURE) {
+        toast.show({timeout: 2500, iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_SEND_FAILURE")});
+      }
+      else if (auth.error === SIGNUP_EXISTS) {
+        this.setState({formMode: "signup"});
+        toast.show({timeout: 2500, iconName: "blocked-person", intent: Intent.WARNING, message: t("SignUp.error.Exists")});
+      }
+      else if (!auth.error) {
+        if (auth.msg === "LOGIN_SUCCESS") {
+          toast.show({iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
+        }
+        // TODO: on mount, its not known where we came from (i.e., signup or login) so generic "success" is shown
+        // It would be nice to show a different message for a signup
+        // this.showToast(t("SignUp.success"), "endorsed", Intent.SUCCESS);
+      }
+    }
   }
 
   /*
@@ -196,9 +254,26 @@ Nav.defaultProps = {
   isHome: true
 };
 
-Nav = connect(state => ({
+Nav.contextTypes = {
+  browserHistory: PropTypes.object
+};
+
+const mapStateToProps = state => ({
   auth: state.auth,
+  mailgun: state.mailgun,
+  social: state.social,
   serverLocation: state.location
-}))(Nav);
+});
+
+const mapDispatchToProps = dispatch => ({
+  login: userData => {
+    dispatch(login(userData));
+  },
+  resetPassword: email => {
+    dispatch(resetPassword(email));
+  }
+});
+
+Nav = connect(mapStateToProps, mapDispatchToProps)(Nav);
 Nav = translate()(Nav);
 export default Nav;

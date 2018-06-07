@@ -2,13 +2,6 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {login, resetPassword} from "datawheel-canon/src/actions/auth";
 import {translate} from "react-i18next";
-import {Intent, Toaster, Switch} from "@blueprintjs/core";
-
-import {
-  RESET_SEND_FAILURE,
-  RESET_SEND_SUCCESS,
-  WRONG_PW
-} from "datawheel-canon/src/consts";
 
 import TwitterIcon from "./TwitterIcon.svg.jsx";
 import FacebookIcon from "./FacebookIcon.svg.jsx";
@@ -22,9 +15,7 @@ class LoginForm extends Component {
     super(props);
     this.state = {
       password: "",
-      email: "",
-      submitted: false,
-      toast: typeof window !== "undefined" ? Toaster.create() : null
+      email: ""
     };
     this.onChange = this.onChange.bind(this);
   }
@@ -38,42 +29,6 @@ class LoginForm extends Component {
     const {redirect} = this.props;
     const {email, password} = this.state;
     this.props.login({email, password, redirect});
-    this.setState({submitted: true});
-  }
-
-  componentDidUpdate() {
-
-    const {auth, mailgun, t} = this.props;
-    const {email, submitted, toast} = this.state;
-
-    if (submitted && !auth.loading) {
-
-      if (auth.error === WRONG_PW) {
-        toast.show({
-          action: mailgun ? {
-            onClick: () => {
-              this.setState({submitted: true});
-              this.props.resetPassword(email);
-            },
-            text: t("Reset.button")
-          } : null,
-          iconName: "error",
-          intent: Intent.DANGER,
-          message: t("Login.error")
-        });
-      }
-      else if (auth.msg === RESET_SEND_SUCCESS) {
-        toast.show({iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
-      }
-      else if (auth.error === RESET_SEND_FAILURE) {
-        toast.show({iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_SEND_FAILURE")});
-      }
-      else if (!auth.error) {
-        toast.show({iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
-      }
-      this.setState({submitted: false});
-    }
-
   }
 
   render() {

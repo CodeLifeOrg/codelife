@@ -346,6 +346,7 @@ class Level extends Component {
           isOpen={ next ? true : undefined }
           position={ next ? Position.BOTTOM : Position.TOP }
           content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
+          portalClassName={ `codeblock-tooltip-portal ${ next ? "is-below" : "is-above" }` }
           tooltipClassName={ currentIsland.theme }>
           <button className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
             <div className="side bottom"></div>

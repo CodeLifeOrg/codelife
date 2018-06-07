@@ -533,6 +533,16 @@ STATES & INTERACTIONS
   }
 }
 
+/* reposition codeblock tooltip */
+.codeblock-tooltip-portal.is-below {
+  position: relative;
+  top: 15px;
+
+  /* account for scaled up path & codeblock */
+  @add-mixin min-xs { top: 20px; }
+  @add-mixin min-sm { top: 30px; }
+}
+
 /* -------------------------------
 SHARE / NEXT ISLAND DIALOG
 ------------------------------- */

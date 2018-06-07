@@ -24,7 +24,7 @@ class ResetPw extends Component {
       <div className="content u-vertical-align-children">
         <div className="form-container u-margin-auto">
           <h1 className="u-margin-top-off">{ t("Reset Password") }</h1>
-          <PasswordReset location={ location } />
+          <PasswordReset router={this.props.router} location={ location } />
         </div>
       </div>
     );

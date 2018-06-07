@@ -166,7 +166,7 @@ Sections
     top: -1rem;
     width: 100%;
     /* theming */
-    background: var(--sky-light);
+    background: var(--sky-dark);
     border-radius: var(--radius-sm);
   }
 }
@@ -191,6 +191,7 @@ Slides
       margin-top: 2rem;
     }
 
+    /* section divider */
     &:before {
       content: "";
       display: block;
@@ -202,7 +203,7 @@ Slides
       height: 1px;
       width: 100%;
       /* theming */
-      background: var(--sky-light);
+      background: var(--sky-dark);
       border-radius: var(--radius-sm);
       opacity: 0.5;
     }
@@ -285,7 +286,7 @@ Slides
 
     /* space out code editor */
     & .code-editor {
-      padding-left: 2rem;
+      min-height: 20rem;
       max-height: 80vh;
 
       /* overrides for fullscreen */

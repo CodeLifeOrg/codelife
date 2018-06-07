@@ -4,8 +4,6 @@ import {signup} from "datawheel-canon/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
 
-import {SIGNUP_EXISTS} from "datawheel-canon/src/consts";
-
 import TwitterIcon from "./TwitterIcon.svg.jsx";
 import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
@@ -22,7 +20,6 @@ class SignupForm extends Component {
       password: "",
       passwordAgain: "",
       email: null,
-      submitted: false,
       toast: typeof window !== "undefined" ? Toaster.create() : null
     };
     this.onChange = this.onChange.bind(this);
@@ -52,23 +49,13 @@ class SignupForm extends Component {
       this.props.signup({username, email, password, redirect});
       this.setState({submitted: true});
     }
-
   }
 
   componentDidUpdate() {
     const {auth, t} = this.props;
     const {error, submitted} = this.state;
 
-    if (submitted && !auth.loading) {
-      if (auth.error === SIGNUP_EXISTS) {
-        this.showToast(t("SignUp.error.Exists"), "blocked-person", Intent.WARNING);
-      }
-      else if (!auth.error) {
-        this.showToast(t("SignUp.success"), "endorsed", Intent.SUCCESS);
-      }
-      this.setState({submitted: false});
-    }
-    else if (error) {
+    if (error) {
       this.showToast(error.message, error.iconName, error.intent);
       this.setState({error: false});
     }

@@ -51,7 +51,7 @@ class UserCodeBlocks extends Component {
 
     return (
       <div className="user-section">
-        <h2>{ heading }</h2>
+        <h2 className="user-heading font-xl">{ heading }</h2>
         <div className="card-list">
           { codeBlocks.length
             ? codeBlocks.map(cb => {

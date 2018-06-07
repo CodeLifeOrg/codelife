@@ -39,8 +39,23 @@
   margin-top: 2rem;
   line-height: 1.325;
 
-  & p + p {
+  /* keep heading size reasonable */
+  & h1 {
+    @add-mixin font-md;
+  }
+  & h2, & h3, & h4, & h5, & h6 {
+    @add-mixin font-sm;
+  }
+
+  /* space out paragraphs & list items */
+  & p + p,
+  & li + li {
     margin-top: 1.25em;
+  }
+
+  /* adjust lists */
+  & ul, & ol {
+    padding-left: 2em;
   }
 
   /* bad content editor! 🙅‍ */

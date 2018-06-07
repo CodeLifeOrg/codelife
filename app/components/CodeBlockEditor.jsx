@@ -47,7 +47,7 @@ class CodeBlockEditor extends Component {
       initialContent = this.props.island.codeBlock.studentcontent;
       filename = this.props.island.codeBlock.snippetname;
       originalFilename = filename;
-    } 
+    }
     else {
       filename = t("myCodeblock", {islandName: this.props.island.name});
       originalFilename = filename;
@@ -125,7 +125,7 @@ class CodeBlockEditor extends Component {
   }
 
   verifyAndSaveCode() {
-    
+
     const {t} = this.props;
     const {id: uid} = this.props.auth.user;
     const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
@@ -261,7 +261,7 @@ class CodeBlockEditor extends Component {
               </h2>
 
               {/* actions title */}
-              <h3 className="studio-subtitle font-sm">{t("Actions")}</h3>
+              <h3 className="studio-subtitle font-xs u-margin-bottom-off">{t("Actions")}</h3>
 
               {/* list of actions */}
               <ul className="studio-action-list font-xs u-list-reset">
@@ -306,7 +306,7 @@ class CodeBlockEditor extends Component {
 
 
               {/* help text */}
-              <div className="codeblockeditor-text font-xs">
+              <div className="codeblockeditor-text font-xs u-margin-top-lg">
 
                 {/* tab between prompt and cheatsheet */}
                 <Tabs2

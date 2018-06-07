@@ -64,6 +64,10 @@ class PasswordReset extends Component {
     const {auth, t, router} = this.props;
     const {email, submitted, toast, token} = this.state;
 
+    const successMsg = t("Reset.actions.RESET_SEND_SUCCESS");
+    const failMsg = t("Reset.actions.RESET_SEND_FAILURE");
+    const tokenMsg = t("Reset.actions.RESET_TOKEN_FAILURE");
+
     if (!token && auth.msg === RESET_TOKEN_SUCCESS) {
       this.setState({token: true});
     }
@@ -72,15 +76,15 @@ class PasswordReset extends Component {
         router.push("/login");
       }
       else if (auth.msg === RESET_SEND_SUCCESS) {
-        toast.show({iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
+        toast.show({iconName: "inbox", intent: Intent.SUCCESS, message: successMsg});
         this.setState({submitted: false});
       }
       else if (auth.error === RESET_SEND_FAILURE) {
-        toast.show({iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_SEND_FAILURE", {email})});
+        toast.show({iconName: "error", intent: Intent.DANGER, message: failMsg});
         this.setState({submitted: false});
       }
       else if (auth.error === RESET_TOKEN_FAILURE) {
-        toast.show({iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_TOKEN_FAILURE")});
+        toast.show({iconName: "error", intent: Intent.DANGER, message: tokenMsg});
         this.setState({submitted: false});
       }
     }

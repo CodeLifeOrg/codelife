@@ -544,6 +544,15 @@ label.pt-control  {
   }
 }
 
+/* code / pre */
+code,
+pre {
+  background-color: var(--light-1);
+  color: var(--dark-1);
+  border: 1px solid var(--gray);
+  box-shadow: none;
+}
+
 /* NOTE: there are a bunch of overrides for the hideous blueprints lab Select component found in SelectGeo.css */
 
 /* -----------------------------------

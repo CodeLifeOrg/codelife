@@ -74,7 +74,7 @@ class Island extends Component {
           {/* hidden heading for accessibility */}
           <h1 className="u-visually-hidden">{t("Map")}</h1>
           {/* actual heading */}
-          <h2 className="u-margin-bottom-off font-xl">
+          <h2 className="u-margin-bottom-off font-xxl">
             {t("IslandMap.SelectIsland")}
           </h2>
         </div>

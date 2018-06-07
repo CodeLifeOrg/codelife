@@ -2,6 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const Op = require("sequelize").Op;
 const sequelize = require("sequelize");
 
 function flattenProfile(user, p) {

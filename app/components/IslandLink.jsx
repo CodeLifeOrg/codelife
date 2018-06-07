@@ -24,11 +24,11 @@ class IslandLink extends Component {
 
         <div className="island-link-popover pt-popover pt-tooltip">
           <div className={ `${ island.theme } island-link-label pt-popover-content` }>
-            <div className="island-link-title">
+            <div className="island-link-title font-md">
               { island.icon ? <span className={ `pt-icon-standard ${island.icon}` } /> : null }
               { island.name }
             </div>
-            { description ? <div className="island-link-description">{ island.description }</div> : null }
+            { description ? <p className="island-link-description font-xs u-margin-top-off u-margin-bottom-off">{ island.description }</p> : null }
           </div>
         </div>
       </Link>;
@@ -42,11 +42,11 @@ class IslandLink extends Component {
       <div className={ small ? "island-link-image island-link-image-small" : "island-link-image" } />
       <div className={ `island-link-popover pt-popover pt-tooltip ${ island.id }` }>
         <div className={ `${ island.theme } island-link-label pt-popover-content` }>
-          <div className="island-link-title">
+          <div className="island-link-title font-md">
             <span className="pt-icon-standard pt-icon-lock" />
             { island.name }
           </div>
-          { description ? <div className="island-link-description">{ island.description }</div> : null }
+          { description ? <p className="island-link-description font-xs u-margin-top-off u-margin-bottom-off">{ island.description }</p> : null }
         </div>
       </div>
     </div>;

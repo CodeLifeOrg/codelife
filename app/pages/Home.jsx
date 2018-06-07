@@ -68,7 +68,7 @@ class Home extends Component {
         { loggedOut && <HomeFeatures /> }
 
         {/* projects & codeblocks */}
-        <HomeCards codeBlocks={codeBlocks} projects={projects} islands={islands} />
+        <HomeCards codeBlocks={codeBlocks} projects={projects} islands={islands} loggedOut={loggedOut} />
 
         {/* about text & video */}
         <HomeAbout locale={locale} />

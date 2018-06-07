@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
+import CloudDiagonalGradual from "components/CloudDiagonalGradual.svg.jsx";
 import "./HomeAbout.css";
 
 class HomeAbout extends Component {
@@ -15,6 +16,14 @@ class HomeAbout extends Component {
 
     return (
       <div className="content-section home-about-section">
+
+        {/* clouds */}
+        <div className="home-about-bg">
+          <CloudDiagonalGradual />
+          <CloudDiagonalGradual />
+        </div>
+
+        {/* content */}
         <div className="home-about-half-container">
 
           {/* about blurb */}

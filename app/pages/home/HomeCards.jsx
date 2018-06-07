@@ -10,10 +10,10 @@ import "./HomeCards.css";
 class HomeCards extends Component {
 
   render() {
-    const {codeBlocks, islands, projects, t} = this.props;
+    const {codeBlocks, loggedOut, islands, projects, t} = this.props;
 
     return (
-      <div className="content-section cards-section">
+      <div className={`content-section cards-section ${loggedOut ? "is-logged-out" : "is-logged-in"}`}>
 
         {/* keep this a paragraph so that project and codeblock cards have the right heading level */}
         <p className="cards-heading heading font-xl">{t("Home.MadeOnCodelife")}</p>
@@ -22,7 +22,7 @@ class HomeCards extends Component {
         <div className="project-section u-clearfix">
           <h2 className="heading projects-heading">
             { t("Projects") }
-            <Tooltip2 portalClassName="heading-explainer-tooltip" content={ t("ProjectExplainer")} inheritDarkTheme={false}>
+            <Tooltip2 portalClassName={`heading-explainer-tooltip ${loggedOut ? "is-logged-out" : "is-logged-in"}`} content={ t("ProjectExplainer")}>
               <span className="heading-explainer pt-icon pt-icon-help" />
             </Tooltip2>
           </h2>
@@ -36,7 +36,7 @@ class HomeCards extends Component {
         <div className="codeblock-section u-clearfix">
           <h2 className="heading codeblocks-heading">
             { t("CodeBlocks") }
-            <Tooltip2 portalClassName="heading-explainer-tooltip" content={ t("CodeblockExplainer")}>
+            <Tooltip2 portalClassName={`heading-explainer-tooltip ${loggedOut ? "is-logged-out" : "is-logged-in"}`} content={ t("CodeblockExplainer")}>
               <span className="heading-explainer pt-icon pt-icon-help" />
             </Tooltip2>
           </h2>

@@ -2,6 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const Op = require("sequelize").Op;
 const sequelize = require("sequelize");
 
 function flattenProfile(user, p) {
@@ -38,6 +39,14 @@ module.exports = function(app) {
   app.post("/api/profile/setsharing", isRole(2), (req, res) => {
     const {uid} = req.body;
     db.userprofiles.update(req.body, {where: {uid}}).then(u => res.json(u).end());  
+  });
+
+  app.get("/api/profile/doesProfileExist/:username/:email", (req, res) => {
+    db.users.findOne({where: {
+      [Op.or]: [{username: req.params.username}, {email: req.params.email}]
+    }}).then(user => {
+      user ? res.json(true).end() : res.json(false).end();
+    });
   });
 
   app.get("/api/profile/:username", isAuthenticated, (req, res) => {

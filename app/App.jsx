@@ -88,8 +88,7 @@ class App extends Component {
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
 
     // check if this is the home page
-    let isHome = false;
-    isHome = this.props.router.location.pathname == "/" ? true : false;
+    const isHome = this.props.router.location.pathname == "/" ? true : false;
 
     return (
       <Canon id="app" className={bareRoute && "share-app"}>

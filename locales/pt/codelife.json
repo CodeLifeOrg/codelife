@@ -349,8 +349,8 @@
     "E-mail": "E-mail",
     "Password": "Nova senha",
     "actions": {
-      "RESET_SEND_FAILURE": "Nenhuma conta associada a {{email}}.",
-      "RESET_SEND_SUCCESS": "Um email para redefinição de senha foi enviado para{{email}}. Por favor, veja sua caixa de entrada.",
+      "RESET_SEND_FAILURE": "Nenhuma conta associada.",
+      "RESET_SEND_SUCCESS": "Um email para redefinição de senha foi enviado. Por favor, veja sua caixa de entrada.",
       "RESET_TOKEN_FAILURE": "Token para redefinição da senha inválido ou expirado."
     },
     "button": "Redefinir senha"

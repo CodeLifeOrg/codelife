@@ -39,6 +39,7 @@ class Nav extends Component {
     const {auth, t} = this.props;
     const {email, toast} = this.state;
     const {browserHistory} = this.context;
+    const timeout = 2500;
 
     if (!auth.loading) {
 
@@ -58,22 +59,22 @@ class Nav extends Component {
           iconName: "error",
           intent: Intent.DANGER,
           message: t("Login.error"),
-          timeout: 2500
+          timeout
         });
       }
       else if (auth.msg === RESET_SEND_SUCCESS) {
-        toast.show({timeout: 2500, iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
+        toast.show({timeout, iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
       }
       else if (auth.error === RESET_SEND_FAILURE) {
-        toast.show({timeout: 2500, iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_SEND_FAILURE")});
+        toast.show({timeout, iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_SEND_FAILURE")});
       }
       else if (auth.error === SIGNUP_EXISTS) {
         this.setState({formMode: "signup"});
-        toast.show({timeout: 2500, iconName: "blocked-person", intent: Intent.WARNING, message: t("SignUp.error.Exists")});
+        toast.show({timeout, iconName: "blocked-person", intent: Intent.WARNING, message: t("SignUp.error.Exists")});
       }
       else if (!auth.error) {
         if (auth.msg === "LOGIN_SUCCESS") {
-          toast.show({iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
+          toast.show({timeout, iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
         }
         // TODO: on mount, its not known where we came from (i.e., signup or login) so generic "success" is shown
         // It would be nice to show a different message for a signup

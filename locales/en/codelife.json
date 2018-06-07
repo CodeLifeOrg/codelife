@@ -349,8 +349,8 @@
     "E-mail": "E-mail",
     "Password": "New password",
     "actions": {
-      "RESET_SEND_FAILURE": "No account associated with {{email}}.",
-      "RESET_SEND_SUCCESS": "{{email}} has been sent a password reset. Please check your inbox.",
+      "RESET_SEND_FAILURE": "No account associated with that email.",
+      "RESET_SEND_SUCCESS": "Password reset sent. Please check your inbox.",
       "RESET_TOKEN_FAILURE": "Password reset token is invalid or has expired."
     },
     "button": "Reset password"

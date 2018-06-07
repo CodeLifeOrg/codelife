@@ -1,0 +1,30 @@
+@import "../../mixins.css";
+
+/* card layout */
+.featured .card-list {
+  @add-mixin card-layout-base;
+
+  /* stacked cards */
+  @add-mixin max-md {
+    @add-mixin card-layout-stacked;
+  }
+
+  /* 2 column layout */
+  /*
+  @add-mixin min-sm {
+    @add-mixin card-layout-2col;
+  }
+  */
+
+  /* 3 column layout */
+  /*
+  @add-mixin min-md {
+    @add-mixin card-layout-3col;
+  }
+  */
+
+  /* 4 column layout */
+  @add-mixin min-md {
+    @add-mixin card-layout-4col;
+  }
+}

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import axios from "axios";
 import {translate} from "react-i18next";
 import {RadioGroup, Radio, Intent, Position, Toaster} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 
 class Survey extends Component {
 
@@ -68,7 +68,7 @@ class Survey extends Component {
     const handleChange = this.handleChange.bind(this);
     const submit = this.submit.bind(this);
 
-    if (loading) return <Loading />;
+    if (loading) return <LoadingSpinner />;
     if (error) return <h1>{error}</h1>;
 
     return (

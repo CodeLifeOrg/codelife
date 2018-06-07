@@ -1,27 +1,26 @@
 import React, {Component} from "react";
-import {Intent, Spinner} from "@blueprintjs/core";
 import {translate} from "react-i18next";
+import LoadingSpinner from "components/LoadingSpinner";
+import Clouds from "components/Clouds";
 
 import "./Loading.css";
 
 class Loading extends Component {
 
   render() {
-    const {dark, t} = this.props;
 
     return (
-      <div id="loading" className={ dark ? "dark" : "light" }>
-        <Spinner intent={Intent.WARNING} />
-        <h1 className="title">{ t("Loading") }...</h1>
+      <div className="container">
+        <Clouds />
+        <LoadingSpinner />
       </div>
     );
-
   }
-
 }
 
 Loading.defaultProps = {
-  dark: false
+  dark: false,
+  label: true
 };
 
 export default translate()(Loading);

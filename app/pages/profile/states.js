@@ -1,4 +1,3 @@
-/*
 const STATES = [
   {id: "1ac", name: "Acre"},
   {id: "1am", name: "Amazonas"},
@@ -28,8 +27,5 @@ const STATES = [
   {id: "5rs", name: "Rio Grande do Sul"},
   {id: "5sc", name: "Santa Catarina"}
 ];
-*/
-
-const STATES = [{id: "4mg", name: "Minas Gerais"}];
 
 export default STATES;

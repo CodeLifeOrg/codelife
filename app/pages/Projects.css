@@ -1,0 +1,171 @@
+@import '../mixins.css';
+
+/* NOTE: shared styles between Projects and CodeBlockEditor found in `studio.css` */
+
+/* project switcher */
+.project-switcher {
+
+  /* main heading baseline adjustment */
+  & .project-switcher-heading {
+    margin-top: var(--gutter-md);
+
+    /* bigger margin on bigger screens */
+    @add-mixin min-sm {
+      margin-top: 2.625rem;
+    }
+  }
+
+  /* subhead baseline adjustment */
+  & .project-switcher-subhead {
+    top: 0.333em;
+  }
+
+  /* space out collab list */
+  & .collab-project-switcher {
+    margin-top: 1rem;
+  }
+
+  /* make links more clickable */
+  & .project-switcher-link {
+    display: block;
+    width: 100%;
+    margin-top: 0.75rem;
+
+    & .project-switcher-link-thumb,
+    & .project-switcher-link-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    & .project-switcher-link-thumb {
+      width: 3.25rem;
+      height: 1.675rem;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 1px 0.5em var(--light-2);
+    }
+
+    & .project-switcher-link-text {
+      width: calc(100% - 4rem); /* room for thumbanil & spacing */
+      left: 0.5rem;
+      top: -1px; /* fudge into alginment */
+      line-height: 1;
+    }
+
+  }
+
+  /* new project button */
+  & .new-project-button {
+    margin-top: var(--gutter-md);
+
+    /* bigger margin on bigger screens */
+    @add-mixin min-sm {
+      margin-top: var(--gutter-lg);
+    }
+  }
+}
+
+
+/* codeblock browser layout */
+.codeblock-browser {
+  min-height: 0;
+
+  & .content-section {
+    @add-mixin slide-theme;
+    min-height: 33.0625rem; /* fudged to height of all collapsed codeblocks */
+
+    /* override section padding; increase specificity */
+    &[class*="content-section"] {
+      padding: var(--gutter-md) var(--gutter-sm);
+
+      /* add margin on larger viewports */
+      @add-mixin min-md {
+        padding: var(--gutter-md);
+      }
+    }
+  }
+}
+
+/* heading */
+.codeblock-browser-heading {
+  text-transform: none;
+  letter-spacing: -0.5px;
+
+  /* hide icon */
+  & .codeblock-browser-hide-button {
+    /* positioning */
+    margin-left: 0.25em;
+    /* theming */
+    color: var(--sky-dark);
+    transform: 0.2s opacity;
+
+    &:hover, &:focus {
+      opacity: 0.875;
+    }
+  }
+}
+
+/* codeblock browser container */
+.codeblock-browser-list {
+
+  /* toggleable island titles */
+  & .codeblock-browser-button {
+    width: 100%;
+    /* space out islands */
+    /* theming */
+    border-radius: var(--radius-sm);
+    text-align: left;
+    /* transitions */
+    transition:
+      background-color 0.2s,
+      padding 0.1s;
+
+    /* interations */
+    &:hover, &:focus {
+      background-color: var(--sky-light);
+      padding-left: 0.5em;
+    }
+
+    & ~ .codeblock-browser-button {
+      margin-top: 0;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  /* card layout */
+  & .card-list > .pt-collapse-body {
+    @add-mixin card-layout-base;
+
+    /* NOTE: `transform: translateY(0px)` creates a new stacking context,
+    which makes the inline codeblock dialog position itself relative
+    to the card list, even though it's set to `position: fixed`.
+    WTF, blueprint. 😡 */
+    &[aria-hidden=false] {
+      transform: none !important; /* fix stacking context bug */
+    }
+
+    @add-mixin min-xs {
+      @add-mixin card-layout-2col;
+    }
+    @add-mixin min-sm {
+      @add-mixin card-layout-3col;
+    }
+  }
+
+  /* island icon */
+  & .codeblock-browser-button-icon {
+    height: var(--gutter-md);
+    margin-right: var(--gutter-xxs);
+    vertical-align: middle;
+    width: var(--gutter-md);
+  }
+}
+
+
+/* create new project dialog */
+.new-project-form-container {
+  max-width: 40rem;
+}

@@ -12,7 +12,8 @@ module.exports = function(sequelize, db) {
       comment: db.TEXT,
       report_id: db.INTEGER,
       type: db.TEXT,
-      status: db.TEXT
+      status: db.TEXT,
+      permalink: db.TEXT
     },
     {
       freezeTableName: true,
@@ -23,7 +24,9 @@ module.exports = function(sequelize, db) {
   r.associate = models => {
     // r.belongsTo(models.users, {foreignKey: "uid", targetKey: "id", as: "user"});
     r.belongsTo(models.codeblocks, {foreignKey: "report_id", targetKey: "id", as: "codeblock"});
-    r.belongsTo(models.projects, {foreignKey: "report_id", targetKey: "id", as: "project"});
+    r.belongsTo(models.projects, {foreignKey: "report_id", targetKey: "id", as: "project"}); 
+    r.belongsTo(models.threads, {foreignKey: "report_id", targetKey: "id", as: "thread"}); 
+    r.belongsTo(models.comments, {foreignKey: "report_id", targetKey: "id", as: "commentref"}); 
   };
 
   return r;

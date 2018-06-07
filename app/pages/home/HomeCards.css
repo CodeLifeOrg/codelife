@@ -1,0 +1,148 @@
+@import '../../mixins.css';
+
+.cards-section {
+  padding-bottom: 15% !important; /* override .content .content-section from app.css */
+
+  /* tooltip icon */
+  & .heading-explainer {
+    vertical-align: baseline;
+    top: -0.175em; /* fudge into place */
+    font-size: 0.75em;
+    margin-left: 0.25em;
+  }
+
+  /* card layout */
+  & .card-list {
+    @add-mixin card-layout-base;
+
+    /* stacked cards */
+    @add-mixin max-xs {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 2 column layout */
+    @add-mixin min-xs {
+      @add-mixin card-layout-2col;
+    }
+
+    /* 3 column layout */
+    @add-mixin min-md {
+      @add-mixin card-layout-3col;
+    }
+
+    /* 4 column layout */
+    @add-mixin min-lg {
+      @add-mixin card-layout-4col;
+    }
+
+    /* hide any cards after the first 6 */
+    /* & .card-container:nth-of-type(n + 6) ~ .card-container  {
+      display: none !important;
+    } */
+  }
+
+
+  /* logged in styles */
+  &.is-logged-in {
+    & .heading-explainer {
+      color: var(--sky-dark);
+
+      &:hover {
+        color: var(--sky-black);
+      }
+    }
+  }
+
+
+  /* logged out styles */
+  &.is-logged-out {
+    /* tweakpoints to make room for clouds */
+    @media (min-width: 1120px) and (max-width: 1199px) {
+      margin-top: calc(-1rem + 5vw);
+    }
+    @media (min-width: 1400px) and (max-width: 1739px) {
+      margin-top: calc(-12rem + 9vw);
+    }
+
+    /* tooltip icon theming */
+    & .heading-explainer {
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    /* logged out bg color */
+    &:before {
+      @add-mixin fullwidth-section;
+      content: "";
+      /* sizing */
+      width: 100vw;
+      height: 100%; /* fallback */
+      height: calc(100% + 10vw);
+      /* positioning */
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      top: calc(-10vw);
+      left: 0;
+      /* theming */
+      background-color: var(--lilac); /* fallback */
+      background-image: linear-gradient(to top, var(--lilac) 0, var(--lilac-light) 100%);
+    }
+
+    /* override default theme */
+    & .card-img {
+      background-color: var(--lilac-dark);
+    }
+    & .heading {
+      color: var(--white);
+      z-index: 2; /* position above clouds */
+    }
+  }
+}
+
+
+/* style tooltip */
+.heading-explainer-tooltip {
+
+  /* default popover style */
+  & .pt-popover-content {
+    /* typography */
+    @add-mixin font-md;
+    @add-mixin font-smoothing;
+    font-family: var(--body-font);
+    /* sizing */
+    padding: 0.75em 1em;
+    min-width: 25rem;
+  }
+
+  /* override default theme when logged in */
+  &.is-logged-in {
+
+    /* arrow color */
+    & .pt-popover-arrow path {
+      fill: var(--sky-black);
+    }
+    /* main popover */
+    & .pt-popover-content {
+      background-color: var(--sky-black);
+      color: var(--white);
+    }
+  }
+
+  /* override default theme when logged out */
+  &.is-logged-out {
+
+    /* arrow color */
+    & .pt-popover-arrow path {
+      fill: var(--lilac-dark);
+    }
+    /* main popover */
+    & .pt-popover-content {
+      background-color: var(--lilac-dark);
+      color: var(--white);
+    }
+  }
+}

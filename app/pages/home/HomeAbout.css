@@ -1,0 +1,108 @@
+@import '../../mixins.css';
+
+.home-about-section {
+  /* pull about section in closer to made on codelife section */
+  margin-top: -10vw;
+  margin-bottom: 10%;
+
+  @add-mixin min-md {
+    margin-top: -7vw;
+  }
+
+  /* flex container */
+  & .home-about-half-container {
+
+    /* space out / position video */
+    & .home-about-half:last-of-type {
+      margin-top: 2.75rem;
+    }
+
+    /* two column layout */
+    @add-mixin min-sm {
+      display: flex;
+      flex-direction: row;
+
+      & .home-about-half {
+        width: 50%;
+        width: calc(50% - var(--gutter-md));
+
+        /* limit video width & pull right */
+        &:last-of-type {
+          max-width: 35rem; /* 560px */
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}
+
+
+/* clouds */
+.home-about-bg {
+  @add-mixin fullwidth-section;
+  /* sizing */
+  width: 110vw;
+  height: 100%;
+  /* positioning */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5%;
+  right: 0;
+
+  &:after {
+    content: "";
+    /* sized via positioning */
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+  }
+
+  & .cloud-diagonal-gradual {
+    position: absolute;
+    width: 100%;
+    height: auto;
+
+    /* position clouds */
+    &:first-of-type {
+      transform: rotateZ(-10deg);
+      top: -1%;
+      left: -5%;
+    }
+    &:last-of-type {
+      transform: rotateZ(-190deg);
+      bottom: -1%;
+      left: 0;
+    }
+
+    /* fudge cloud positioning at bigger viewports */
+    @add-mixin min-xs {
+      &:first-of-type { top: -3.75%; }
+      &:last-of-type  { bottom: -3.75%; }
+    }
+    @add-mixin min-sm {
+      &:first-of-type { top: -10%; }
+      &:last-of-type  { bottom: -10%; }
+    }
+    @media (min-width: 900px) {
+      &:first-of-type { top: -15%; }
+      &:last-of-type  { bottom: -15%; }
+    }
+    @add-mixin min-md {
+      &:first-of-type { top: -20%; }
+      &:last-of-type  { bottom: -20%; }
+    }
+    @add-mixin min-lg {
+      &:first-of-type { top: -25%; }
+      &:last-of-type  { bottom: -25%; }
+    }
+    @add-mixin min-xl {
+      &:first-of-type { top: -35%; }
+      &:last-of-type  { bottom: -35%; }
+    }
+
+  }
+}

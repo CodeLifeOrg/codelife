@@ -1,56 +1,157 @@
-.admin-tabs {
-  margin: 0 50px 20px;
-  &>.pt-tab-list {
-    background-color: #323232;
-    border-radius: 10px 10px 0 0;
+@import '../../mixins.css';
+
+/* main admin container */
+.admin.content {
+  padding: 0; /* fullwidth on small screens */
+
+  /* add padding on bigger screens */
+  @add-mixin min-md {
+    padding: 0 var(--gutter-md);
+  }
+
+  /* set initial loading spinner height */
+  & .loading {
+    min-height: calc(100vh - 430px);
+    display: flex;
+    align-items: center;
     justify-content: center;
+  }
+}
+
+/* inner container, includes tabs and panels */
+.admin-tabs {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: -35px; /* offset footer margin */
+
+  /* border radius on bigger screens */
+  @add-mixin min-md {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  & > .pt-tab-list {
+    background-color: var(--black);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    & .pt-tab-indicator {
+      background-color: var(--sky-dark);
+      height: 100%;
+      bottom: 0;
+    }
+
     & .pt-tab {
       color: rgba(255, 255, 255, 0.75);
-      cursor: pointer;
       font-weight: bold;
-      padding: 10px 20px;
-      position: relative;
+      padding: var(--gutter-xs) var(--gutter-md);
       margin: 0;
-      transition: color 0.5s;
+      transition: color 0.2s;
+
       &[aria-expanded=true] {
-        color: rgba(255, 255, 255, 1);
-      }
-      &:before {
-        background-color: rgba(255, 255, 255, 0.65);
-        bottom: 0;
-        content: "";
-        height: 5px;
-        left: 0;
-        position: absolute;
-        transition: background-color 0.5s;
-        width: 100%;
-        z-index: 1;
+        color: var(--white);
       }
       &[aria-expanded=true]:before {
         background-color: rgba(255, 255, 255, 0);
       }
       &[aria-expanded=false]:hover {
-        color: white;
+        color: var(--white);
+
         &:before {
-          background-color: white;
+          background-color: var(--sky);
         }
       }
     }
-    & .pt-tab-indicator {
-      height: 5px;
-    }
   }
-  &>.pt-tab-panel {
-    margin: 0;
+
+  & > .admin-tab {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    /* make sections scrollable */
+    &:not(.lessonplan-admin-tab),
+    & .lessonbuilder-tree,
+    & .item-editor {
+      min-height: calc(100vh - 430px);
+
+      /* limit height and set overflow on bigger screens */
+      @add-mixin min-md {
+        max-height: calc(100vh - 125px);
+        overflow-y: auto;
+      }
+    }
+
     &.pt-tab-panel {
-      background-color: white;
-      border-radius: 0 0 10px 10px;
-      padding: 25px;
+      background-color: var(--white);
+      padding: var(--gutter-md);
       &#pt-tab-panel_undefined_lesson-builder {
         padding: 0;
       }
       & .pt-table {
         width: 100%;
+      }
+    }
+  }
+}
+
+
+/* user roles */
+/* NOTE: this is a canon component, so let's get hacky */
+.admin-role {
+
+  /* reset table elements */
+  & table,
+  & tbody,
+  & tr {
+    display: block;
+  }
+
+  & thead {
+    display: none;
+  }
+
+  & tbody {
+    /* multi-column layout */
+    @add-mixin min-sm {
+      column-width: 320px;
+      column-gap: var(--gutter-lg);
+      break-inside: avoid;
+    }
+
+    /* hide an otherwise unhideable border */
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      background: var(--white);
+      width: 100%;
+      height: 1px;
+      z-index: 1;
+    }
+
+    & tr {
+      display: flex;
+      justify-content: space-between; /* 1 column; justify */
+      break-inside: avoid;
+
+      /* more than 1 column; right align */
+      @add-mixin min-sm {
+        justify-content: flex-end;
+      }
+    }
+
+    & td {
+      background-color: transparent !important; /* override zebra stripes */
+      text-align: right; /* fix alignment of long names */
+    }
+
+    & select {
+      @add-mixin font-xs;
+      border: none;
+
+      &:hover, &:focus {
+        opacity: 1;
+        background-color: var(--sky-light);
       }
     }
   }

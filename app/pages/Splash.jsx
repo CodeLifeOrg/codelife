@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {browserHistory} from "react-router";
+import PropTypes from "prop-types";
 import {translate} from "react-i18next";
 import {AnchorLink, Login, SignUp} from "datawheel-canon";
 import Clouds from "components/Clouds";
@@ -22,6 +22,8 @@ class Splash extends Component {
 
     const {auth, t} = this.props;
     const {signup} = this.state;
+
+    const {browserHistory} = this.context;
 
     if (auth && auth.user) browserHistory.push("/");
 
@@ -62,6 +64,10 @@ class Splash extends Component {
 
   }
 }
+
+Splash.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 Splash = connect(state => ({
   auth: state.auth

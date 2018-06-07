@@ -6,14 +6,13 @@
 
   & .panel {
     align-items: center;
-    color: white;
+    color: var(--white);
     display: flex;
     flex-direction: column;
     height: 100vh;
     min-height: 625px;
     justify-content: center;
     margin-top: calc(var(--nav-height) * -1);
-    position: relative;
     width: 100%;
 
     &:last-child {
@@ -26,7 +25,6 @@
   & #entry {
     margin-bottom: 100px;
     max-width: 350px;
-    position: relative;
     text-align: center;
 
     & .island {
@@ -40,7 +38,6 @@
 
     & .logo {
       margin: 0 auto;
-      position: relative;
       width: 90%;
       z-index: 1;
     }
@@ -49,15 +46,14 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      height: 320px;
-      position: relative;
+      height: 325px;
       text-align: left;
       z-index: 1;
 
       & .pt-minimal {
         background-color: rgba(219, 55, 55, 0.6);
-        color: white;
-        margin-bottom: 10px;
+        color: var(--white);
+        margin-bottom: var(--gutter-xs);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 
         &:hover {
@@ -67,11 +63,11 @@
 
       & .pt-checkbox {
         font-size: 12px;
-        margin-left: 5px;
+        margin-left: var(--gutter-xxs);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 1);
 
         & .pt-control-indicator {
-          margin-left: 5px;
+          margin-left: var(--gutter-xxs);
         }
 
       }
@@ -79,16 +75,15 @@
     }
 
     & #socials {
-      margin-bottom: 10px;
-      position: relative;
+      margin-bottom: var(--gutter-xs);
       z-index: 1;
     }
 
   }
 
   & .about-anchor {
-    bottom: 25px;
-    color: white;
+    bottom: var(--gutter-md);
+    color: var(--white);
     font-size: 16px;
     font-weight: bold;
     position: absolute;
@@ -109,19 +104,19 @@
   & #about {
 
     & h2 {
-      color: white;
-      margin-bottom: 25px;
+      color: var(--white);
+      margin-bottom: var(--gutter-md);
       text-align: center;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 2px var(--gutter-xxs) rgba(0, 0, 0, 0.5);
     }
 
     & p {
-      color: white;
+      color: var(--white);
       font-size: 18px;
-      line-height: 30px;
+      line-height: var(--gutter-md);
       max-width: 500px;
       text-align: left;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 2px var(--gutter-xxs) rgba(0, 0, 0, 0.5);
       width: 100%;
     }
 
@@ -130,17 +125,16 @@
 }
 
 #beta {
-  color: #d74645;
-  font-size: 20px;
+  color: var(--danger);
+  font-size: var(--gutter-md);
   font-weight: 800;
   position: absolute;
-  right: 15px;
+  right: var(--gutter-sm);
   text-transform: uppercase;
-  top: -25px;
+  top: -var(--gutter-md);
 }
 
 #beta-text {
   font-size: 16px;
-  margin: 0 auto 50px;
-  position: relative;
+  margin: 0 auto var(--gutter-lg);
 }

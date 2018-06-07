@@ -1,44 +1,160 @@
-sky: "#74c3b7"
-nav-height: "86px"
-footer-height: "100px"
+#############################
+# MEASUREMENTS
+#############################
 
+# grid
+gutter-xxs: "5px"
+gutter-xs:  "10px"
+gutter-sm:  "15px"
+gutter-md:  "25px"
+gutter-lg:  "50px"
+gutter-xl:  "75px"
+
+# level path elements
+path-xxs: "20px"
+path-xs:  "30px"
+path-sm:  "40px"
+# side translate values — half of path sizes
+side-translate-xxs: "10px"
+side-translate-xs:  "15px"
+side-translate-sm:  "20px"
+# negative values — not ideal, but it complies
+side-translate-xxs-negative: "-10px"
+side-translate-xs-negative:  "-15px"
+side-translate-sm-negative:  "-20px"
+
+# border radius
+radius-lg: "8px"
+radius-md: "4px"
+radius-sm: "2px"
+
+# miscellaneous measurements
+nav-height: "60px"
+footer-height: "100px"
+button-min-width: "7em"
+button-double-width: "14em"
+
+
+#############################
+# TYPOGRAPHY
+#############################
+
+heading-font: "'Merriweather Sans', 'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
+body-font: "'Roboto', 'Franklin Gothic Medium', Tahoma, sans-serif"
+
+#############################
+# COLORS
+#############################
+
+# grayscale
+white:   "#ffffff"
+light-1: "#e3e4e4"
+light-2: "#c7caca"
+light-3: "#acb0b0"
+gray:    "#909696"
+dark-1:  "#747b7b"
+dark-2:  "#596161"
+dark-3:  "#2F3A3A"
+black:   "#233233"
+
+# UI
+danger: "#D64747"
+danger-light: "#DF6F6F"
+danger-dark: "#A03535"
+
+caution: "#E6AA49"
+caution-light: "#EBBC70"
+caution-dark: "#AC7F36"
+
+success: "#3CB56A"
+success-light: "#66C58A"
+success-dark: "#2C874F"
+
+# theming
+sky: "#3BD9CC"
+sky-light: "#73FFF1"
+sky-dark: "#0F807E"
+sky-black: "#0B5B5C"
+
+cyan: "#5599D9"
+cyan-light: "#63B5FF"
+cyan-dark: "#284F80"
+
+lilac: "#5B70D9"
+lilac-light: "#6C86FF"
+lilac-dark: "#2B3480"
+
+sandstorm: "#D9CB50"
+sandstorm-light: "#E1D676"
+sandstorm-dark: "#A2983B"
+
+
+# list of islands - necessary for admin menu logic & theming
 islands:
-  island-jungle:
-    dark: "#003E00"
-    light: "#90B857"
-  island-themepark:
-    dark: "#560000"
-    light: "#f901e6"
-  island-blizzard:
-    dark: "#043f51"
-    light: "#afe2e5"
-  island-desert:
-    dark: "#411100"
-    light: "#ffb863"
-  island-industry:
-    dark: "#321418"
-    light: "#d0acaf"
-  island-farm:
-    dark: "#02291a"
-    light: "#ba1c2e"
-  island-city:
-    dark: "#373844"
-    light: "#ed8e8a"
-  island-dark:
-    dark: "#13171d"
-    light: "#b2bbc4"
-  island-mountain:
-    dark: "#06334c"
-    light: "#f9f8b4"
-  island-beach:
-    dark: "#6f3100"
-    light: "#ddf1eb"
-  island-clock:
-    dark: "#5a0d00"
-    light: "#faac8c"
-  island-space:
-    dark: "#1e2b3c"
-    light: "#bad6e5"
-  island-trash:
-    dark: "#3a302a"
-    light: "#ebe4bc"
+  array:
+  - jungle
+  - themepark
+  - blizzard
+  - desert
+  - farm
+  - industry
+  - city
+  - clock
+  - trash
+  - space
+  - dark
+  - mountain
+  - beach
+
+# individual island themes
+jungle-island-dark: "#144800"
+jungle-island-medium: "#417A09"
+jungle-island-light: "#90B857"
+
+themepark-island-dark: "#5F0001"
+themepark-island-medium: "#BC2000"
+themepark-island-light: "#F7931E"
+
+blizzard-island-dark: "#043F51"
+blizzard-island-medium: "#1DA1AA"
+blizzard-island-light: "#AFE2E5"
+
+desert-island-dark: "#611A00"
+desert-island-medium: "#E76B01"
+desert-island-light: "#FFB863"
+
+farm-island-dark: "#02311E"
+farm-island-medium: "#056F4F"
+farm-island-light: "#71A96C"
+
+industry-island-dark: "#482128"
+industry-island-medium: "#804347"
+industry-island-light: "#D0ACAF"
+
+city-island-dark: "#302745"
+city-island-medium: "#6F6EB8"
+city-island-light: "#A7A3C5"
+
+clock-island-dark: "#5a0d00"
+clock-island-medium: "#B44201"
+clock-island-light: "#FAAC8C"
+
+trash-island-dark: "#3A302A"
+trash-island-medium: "#917F49"
+trash-island-light: "#EBE4BC"
+
+space-island-dark: "#1E2B3C"
+space-island-medium: "#50738F"
+space-island-light: "#BAD6E5"
+
+dark-island-dark: "#13171d"
+dark-island-medium: "#4D5F70"
+dark-island-light: "#b2bbc4"
+
+mountain-island-dark: "#06334c"
+mountain-island-medium: "#639466"
+mountain-island-light: "#f9f8b4"
+
+beach-island-dark: "#6f3100"
+beach-island-medium: "#A67B42"
+beach-island-light: "#ddf1eb"

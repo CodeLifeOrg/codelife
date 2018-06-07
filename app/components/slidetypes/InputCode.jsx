@@ -27,7 +27,7 @@ class InputCode extends Component {
     this.setState({mounted: true, rulejson, baseText});
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.rulejson !== this.props.rulejson) {
       const rulejson = this.props.rulejson ? JSON.parse(this.props.rulejson) : [];
       this.setState({rulejson});
@@ -69,11 +69,11 @@ class InputCode extends Component {
     const {titleText, rulejson, execState} = this.state;
 
     return (
-      <div id="slide-container" className="renderCode flex-column">
+      <div id="slide-content" className="slide-content renderCode flex-column">
         <Alert
           isOpen={ this.state.resetAlert }
           cancelButtonText={ t("Cancel") }
-          confirmButtonText={ t("Reset") }
+          confirmButtonText={ t("buttonReset") }
           intent={ Intent.DANGER }
           onCancel={ () => this.setState({resetAlert: false}) }
           onConfirm={ () => this.resetAnswer() }>
@@ -82,11 +82,11 @@ class InputCode extends Component {
         { titleText && titleText.length ? <div className="title-tab">{titleText}</div> : null }
         <div className="flex-row">
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
-          { this.state.mounted ? <CodeEditor island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor"></div> }
+          { this.state.mounted ? <CodeEditor suppressJS={this.props.suppressJS} readOnly={this.props.readOnly} island={island} setExecState={this.setExecState.bind(this)} rulejson={rulejson} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} initialValue={htmlcontent2} /> : <div className="slide-editor panel-content"></div> }
         </div>
-        <div className="validation">
-          <button className="pt-button" onClick={this.attemptReset.bind(this)}>{t("Reset")}</button>
-          { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
+        <div className={execState ? "validation three-buttons" : "validation"} >
+          <button className="pt-button pt-intent-danger" onClick={this.attemptReset.bind(this)}>{t("buttonReset")}</button>
+          { execState ? <button className="pt-button pt-intent-primary" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
           <button className="pt-button pt-intent-success" onClick={this.submitAnswer.bind(this)}>{t("Submit")}</button>
         </div>
       </div>

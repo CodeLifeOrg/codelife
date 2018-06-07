@@ -3,8 +3,10 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
-import {browserHistory} from "react-router";
-import Loading from "components/Loading";
+import PropTypes from "prop-types";
+import Thread from "components/Thread";
+import Comment from "components/Comment";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import "./ReportViewer.css";
 
@@ -16,6 +18,9 @@ class ReportViewer extends Component {
       mounted: false,
       projectReports: [],
       codeblockReports: [],
+      threadReports: [],
+      commentReports: [],
+      reports: [],
       isOpen: false
     };
   }
@@ -23,12 +28,18 @@ class ReportViewer extends Component {
   loadFromDB() {
     const cbget = axios.get("/api/reports/codeblocks/all");
     const pget = axios.get("/api/reports/projects/all");
+    const tget = axios.get("/api/reports/threads/all");
+    const cget = axios.get("/api/reports/comments/all");
+    const rget = axios.get("/api/reports/discussions");
 
-    Promise.all([cbget, pget]).then(resp => {
+    Promise.all([cbget, pget, tget, cget, rget]).then(resp => {
       const mounted = true;
       const codeblockReports = resp[0].data;
       const projectReports = resp[1].data;
-      this.setState({mounted, codeblockReports, projectReports});
+      const threadReports = resp[2].data;
+      const commentReports = resp[3].data;
+      const reports = resp[4].data;
+      this.setState({mounted, codeblockReports, projectReports, threadReports, commentReports, reports});
     });
   }
 
@@ -55,6 +66,7 @@ class ReportViewer extends Component {
 
   handleBan(type, report) {
     const {t} = this.props;
+    const {browserHistory} = this.context;
     if (type) {
       axios.post(`/api/${type}/setstatus`, {status: "banned", id: report.report_id}).then(resp => {
         if (resp.status === 200) {
@@ -75,8 +87,7 @@ class ReportViewer extends Component {
     }
   }
 
-
-  createRow(type, report) {
+  createPageRow(type, report) {
     const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
     let strReasons = "";
     let strComments = "";
@@ -89,6 +100,32 @@ class ReportViewer extends Component {
         </a>
       </td>
       <td>{report.username}</td>
+      <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
+      <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
+      <td>
+        <Tooltip content="Allow this Content" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
+        </Tooltip>
+        <Tooltip content="Ban this Content" position={Position.TOP}>
+          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
+        </Tooltip>
+      </td>
+    </tr>;
+  }
+
+  createDiscRow(type, report) {
+    // if (report.commentref) author = report.commentref.user.username;
+    // if (report.thread) author = report.thread.user.username;
+    let strReasons = "";
+    let strComments = "";
+    for (const r of report.reasons) strReasons += `${r}\n`;
+    for (const c of report.comments) strComments += `${c}\n`;
+    return <tr key={report.id}>
+      { 
+        type === "threads"
+          ? <Thread thread={report.thread} />
+          : <Comment comment={report.commentref} />
+      }
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
       <td>
@@ -116,10 +153,13 @@ class ReportViewer extends Component {
           ids: [report.id],
           report_id: report.report_id,
           username: report.username,
+          commentref: report.commentref,
+          thread: report.thread,
           email: report.email,
           filename: report.filename,
           reasons: [report.reason],
-          comments: [report.comment]
+          comments: [report.comment],
+          permalink: report.permalink
         };
         grouped.push(obj);
       }
@@ -129,16 +169,20 @@ class ReportViewer extends Component {
 
   render() {
 
-    const {mounted, codeblockReports, projectReports} = this.state;
+    const {mounted, codeblockReports, projectReports, threadReports, commentReports} = this.state;
     const {t} = this.props;
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     const cbSorted = this.groupReports(codeblockReports);
     const pSorted = this.groupReports(projectReports);
+    const tSorted = this.groupReports(threadReports);
+    const cSorted = this.groupReports(commentReports);
 
-    const codeblockItems = cbSorted.map(r => this.createRow("codeBlocks", r));
-    const projectItems = pSorted.map(r => this.createRow("projects", r));
+    const codeblockItems = cbSorted.map(r => this.createPageRow("codeBlocks", r));
+    const projectItems = pSorted.map(r => this.createPageRow("projects", r));
+    const threadItems = tSorted.map(r => this.createDiscRow("threads", r));
+    const commentItems = cSorted.map(r => this.createDiscRow("comments", r));
 
     return (
       <div id="ReportViewer">
@@ -168,10 +212,38 @@ class ReportViewer extends Component {
           </thead>
           <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
         </table>
+        <h2 className="report-title">Threads</h2>
+        <table className="pt-table pt-striped pt-interactive">
+          <thead>
+            <tr>
+              <th>Thread</th>
+              <th>Reason</th>
+              <th>Comments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{threadItems.length > 0 ? threadItems : t("No items are currently flagged")}</tbody>
+        </table>
+        <h2 className="report-title">Comments</h2>
+        <table className="pt-table pt-striped pt-interactive">
+          <thead>
+            <tr>
+              <th>Comment</th>
+              <th>Reason</th>
+              <th>Comments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{commentItems.length > 0 ? commentItems : t("No items are currently flagged")}</tbody>
+        </table>
       </div>
     );
   }
 }
+
+ReportViewer.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 ReportViewer = connect(state => ({
   auth: state.auth

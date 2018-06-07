@@ -1,0 +1,28 @@
+@import "../mixins.css";
+
+/* main container */
+.login-container {
+
+  & .reset-password-link {
+    position: absolute;
+    top: 0.75em;
+    right: 0;
+    z-index: 1;
+  }
+
+  /* adjust switch vertical alignment */
+  & .switch-field-container {
+    margin-top: 1.25em;
+    margin-bottom: -1.25em;
+  }
+}
+
+/* divider */
+.login-divider {
+  @add-mixin form-divider;
+
+  /* fudge divider height on larger screens */
+  @media (min-width: 840px) {
+    height: 17.5em;
+  }
+}

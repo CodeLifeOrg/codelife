@@ -1,0 +1,230 @@
+@import "../mixins.css";
+
+/* --------------------------------
+header
+-------------------------------- */
+/* limit header width & center */
+.contest-header > .header-inner {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* timeline baseline adjustment */
+.contest-timeline-definition {
+  top: -0.25em;
+}
+
+
+/* --------------------------------
+page layout
+-------------------------------- */
+/* default stacked page layout */
+.contest-prize-container {
+  @add-mixin max-lg {
+    margin-top: var(--gutter-lg);
+    padding-top: var(--gutter-lg);
+
+    /* divider */
+    &:before {
+      content: "";
+      display: block;
+      /* positioning */
+      position: absolute;
+      /* sizing */
+      height: 2px;
+      top: 0;
+      width: 100%;
+      /* theming */
+      background: var(--sky-light);
+      border-radius: var(--radius-sm);
+    }
+  }
+}
+/* layout for huge screens */
+@add-mixin min-lg {
+  .contest-step-container,
+  .contest-prize-container {
+    display: inline-block;
+    vertical-align: top; /* blueprint override */
+  }
+  .contest-step-container {
+    width: 60%;
+    padding-right: var(--gutter-lg);
+  }
+  .contest-prize-container {
+    width: 39.999%;
+    padding-left: var(--gutter-lg);
+  }
+}
+
+
+/* --------------------------------
+steps to enter
+-------------------------------- */
+/* steps to enter */
+.contest-step {
+  margin-top: 2rem;
+
+  /* space out steps on bigger screens */
+  @add-mixin min-sm {
+    margin-top: 3rem;
+  }
+
+  /* status indicator */
+  & .contest-step-status {
+    /* sizing */
+    display: block;
+    width: 1.55em;
+    height: 1.55em;
+    /* positioning */
+    position: absolute;
+    top: -0.7em;
+    left: 0;
+    /* position children */
+    line-height: 1.55;
+    text-align: center;
+    /* default theme */
+    color: var(--light-1);
+    background: var(--dark-1);
+    border-radius: 50%;
+    /* transitions */
+    transition: background-color 0.2s;
+
+    /* scale down status indicator on small screens */
+    @add-mixin max-sm {
+      transform: scale(0.75);
+    }
+
+    /* change background color and offset alignment if ticked */
+    &.is-ticked {
+      background-color: var(--sky);
+      top: -1.1em;
+    }
+
+    /* tick styles */
+    & .contest-step-tick {
+      color: var(--white);
+
+      /* bump up the small tick to big tick size */
+      &.pt-icon-small-tick {
+        transform: scale(1.25);
+      }
+
+      /* hide number if ticked */
+      & + .contest-step-number {
+        @add-mixin visually-hidden;
+      }
+    }
+  }
+
+  /* actions */
+  & .contest-step-action {
+    margin-top: 0.25em; /* space out from text */
+    display: none; /* default; overwritten if current step */
+  }
+
+  /* current step (doesn't apply to final step) */
+  &.is-current-step {
+
+    /* display the action */
+    & .contest-step-action {
+      display: block;
+    }
+
+    /* adjustments for active steps, but not the last step */
+    &:not(:last-child) {
+      /* set indicator background color */
+      & .contest-step-status {
+        background-color: var(--dark-3);
+      }
+      /* button margin adjustment */
+      & .contest-step-action {
+        margin-bottom: -0.5em;
+      }
+    }
+
+    /* reset positioning for last step, if completed */
+    &:last-child .contest-step-status {
+      top: -0.7em;
+    }
+  }
+
+  /* text content */
+  & .contest-step-content {
+    padding-left: 5rem;
+  }
+
+  /* make buttons full width on small screens */
+  & .contest-step-button {
+    @add-mixin max-sm {
+      min-width: 45%;
+      margin-right: 5%;
+    }
+    @add-mixin max-xs {
+      width: 100%;
+    }
+  }
+
+  /* space out "or" between login/signup buttons */
+  & .contest-button-or {
+    margin-left: 0.75em;
+    margin-right: 0.75em;
+  }
+}
+
+
+/* --------------------------------
+prizes
+-------------------------------- */
+.prize {
+
+  /* space out adjacent prizes */
+  & + .prize {
+    margin-top: 2.5rem;
+  }
+
+  /* default layout */
+  & .prize-figure,
+  & .prize-caption {
+    display: inline-block;
+    vertical-align: middle; /* blueprint override */
+  }
+  & .prize-figure {
+    width: 20%;
+    height: 20%;
+    /* theming */
+    padding: var(--gutter-xs);
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 2em rgba(8, 26, 24, 0.25);
+    transform: rotateZ(-2deg);
+
+    & > .prize-img {
+      max-height: 100%;
+      transform: rotateZ(2deg);
+    }
+  }
+
+  /* caption layout */
+  & .prize-caption {
+    display: inline-block;
+    width: 75%;
+    margin-left: 4.999%;
+  }
+
+  /* first place overrides */
+  &:first-of-type {
+    & > .prize-figure {
+      height: auto;
+
+      & > .prize-img {
+        transform: none;
+      }
+    }
+  }
+
+  /* override default header style for title span */
+  & .prize-title {
+    text-transform: none;
+  }
+}

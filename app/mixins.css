@@ -1,0 +1,573 @@
+/* mixins */
+
+/* mobile first breakpoints */
+@define-mixin min-xl  { @media (min-width: 1400px) { @mixin-content; } }
+@define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
+@define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }
+@define-mixin min-sm  { @media (min-width: 768px)  { @mixin-content; } }
+@define-mixin min-xs  { @media (min-width: 480px)  { @mixin-content; } }
+@define-mixin min-xxs { @media (min-width: 325px)  { @mixin-content; } }
+
+/* max-width first */
+@define-mixin max-xl  { @media (max-width: 1399px) { @mixin-content; } }
+@define-mixin max-lg  { @media (max-width: 1199px) { @mixin-content; } }
+@define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
+@define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
+@define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
+@define-mixin max-xxs { @media (max-width: 324px)  { @mixin-content; } }
+
+/* type scaling */
+@define-mixin font-xxl {
+  font-size: 2.5rem; /* 40px */
+  line-height: 1;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 3.25rem; /* 52px */
+  }
+}
+@define-mixin font-xl {
+  font-size: 1.75rem; /* 28px */
+  line-height: 1;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 2.375rem; /* 38px */
+    line-height: 1.25;
+  }
+}
+@define-mixin font-lg {
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.25;
+  /* scale up on bigger screens */
+  @add-mixin min-sm {
+    font-size: 1.75rem; /* 28px */
+  }
+}
+@define-mixin font-md {
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.5; /* 30px */
+}
+@define-mixin font-sm {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.42857; /* ~20px */
+}
+@define-mixin font-xs {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.666; /* 20px */
+}
+
+/* font smoothing */
+@define-mixin font-smoothing {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* accessibly hidden text and elements */
+@define-mixin visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+/* reset visually-hidden properties */
+@define-mixin reset-visually-hidden {
+  clip: auto;
+  position: relative !important;
+  height: auto;
+  width: 100%;
+  overflow: auto;
+}
+
+/* fill up all the space — make sure the parent has pos:rel */
+@define-mixin absolute-expand {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* center elements the dumb but sometimes useful way */
+@define-mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@define-mixin absolute-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+@define-mixin absolute-horizontal-center {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+/* list reset */
+@define-mixin list-reset {
+  list-style-type: none; /* remove bullets */
+  padding-left: 0; /* thanks blueprint */
+  margin-top: 0; /* thanks blueprint */
+  margin-bottom: 0; /* thanks blueprint */
+}
+
+/* disabled state */
+@define-mixin disable-field {
+  pointer-events: none;
+  cursor: default;
+  z-index: 0;
+}
+
+/* clearfix */
+@define-mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+
+/* ellipsis */
+/* NOTE: works best with defined width & height, 1 line of text */
+@define-mixin overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* default button padding */
+@define-mixin button-padding {
+  padding: 0.35em 1.75em 0.55em 1.75em;
+}
+/* default text input padding */
+@define-mixin text-input-padding {
+  padding: 0.35em 0.75em 0.55em;
+}
+/* default text input theming */
+@define-mixin text-input-theme {
+  height: auto; /* reset blueprint */
+  background-color: var(--light-1);
+  border: 1px solid var(--gray);
+  border-radius: var(--radius-sm);
+  /* transitions */
+  transition:
+    background-color 0.2s,
+    border 0.2s;
+
+  /* interactions */
+  &:hover {
+    background-color: var(--white);
+  }
+  &:focus {
+    background-color: var(--sky-light);
+    border-color: var(--sky-dark);
+
+    & + .field-icon {
+      color: var(--sky-dark);
+    }
+  }
+
+  /* placeholder text */
+  &:placeholder-shown {
+    color: var(--dark-1);
+  }
+  &:focus:placeholder-shown {
+    color: var(--sky-dark);
+  }
+}
+/* select menu padding */
+@define-mixin select-padding {
+  padding: 0.35em 2em 0.55em 0.75em;
+}
+/* select menu theming */
+@define-mixin select-theme {
+  border: 1px solid var(--light-2);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  background-color: var(--light-1);
+  background-image:
+    linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.25));
+  /* transitions */
+  transition:
+    0.2s background-color,
+    0.2s border-color;
+
+  /* interactions */
+  &:hover, &:focus {
+    background-color: var(--white);
+    border-color: var(--sky-dark);
+  }
+}
+/* select icon */
+@define-mixin select-icon-right {
+  /* sizing */
+  font-size: inherit;
+  line-height: 1.5;
+  /* positioning */
+  position: absolute;
+  z-index: 1;
+  top: auto; /* reset */
+  bottom: 0.5em;
+  right: 0.6em;
+  color: var(--gray);
+  /* transitions */
+  transition: color 0.2s;
+}
+
+/* button group; apply to pt-button, not parent */
+@define-mixin button-groupify {
+  margin: 0; /* smush buttons together */
+  min-width: var(--button-min-width); /* for buttons with small text, this will work nicely */
+
+  & > .button,
+  & > .pt-button {
+    display: inline-block;
+    width: auto;
+  }
+
+  /* first button, but not if it's the only button */
+  &:first-child:not(:last-child)  {
+    border-radius: 20em 0 0 20em;
+    padding-right: 1.25em;
+  }
+  /* middle buttons */
+  & + .pt-button:not(:last-child) {
+    border-radius: 0;
+    margin-left: -1px; /* obscure 1px inset box shadow on previous button */
+  }
+  /* final button, but not if it's the only button */
+  &:last-child:not(:first-child)  {
+    border-radius: 0 20em 20em 0;
+    padding-left: 1.25em;
+    margin-left: -1px; /* obscure 1px inset box shadow on previous button */
+  }
+}
+
+/* break out of container and be full width */
+@define-mixin fullwidth-section {
+  margin-left: auto;
+  margin-right: auto;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
+/* nav link */
+@define-mixin nav-link {
+  /* positioning */
+  display: inline-block;
+  /* typography */
+  color: var(--sky-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--black);
+  }
+}
+
+/* slide theme */
+@define-mixin slide-theme {
+  background-color: var(--white);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
+}
+
+/* subtle background gradient for highlighted sections */
+@define-mixin section-bg-gradient {
+  &:before {
+    @add-mixin absolute-expand;
+    content: '';
+    /* sizing */
+    display: block;
+    width: 120%;
+    height: 140%;
+    /* positioning */
+    left: -10%;
+    top: -20%;
+    /* theming */
+    opacity: 0.5;
+    background-image:
+      linear-gradient(
+        transparent 0,
+        var(--sky-light) 50%,
+        transparent 100%
+      );
+    /* fallback */
+    @supports (background-image: radial-gradient(ellipse closest-side, transparent, transparent)) {
+      background-image:
+        radial-gradient(
+          ellipse closest-side,
+          var(--sky-light) 0,
+          transparent 100%
+        );
+    }
+  }
+}
+
+/* slide sizing */
+@define-mixin slide-sizing {
+  /* positioning */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* sizing */
+  min-height: 85vh; /* fallback */
+  min-height: calc(100vh - 85px); /* fudged — accounts for .slide-inner padding and .nav height */
+  padding: var(--gutter-md) var(--gutter-sm);
+
+  /* no border radius on smaller viewports */
+  @add-mixin max-md {
+    border-radius: 0;
+  }
+
+  /* add margin on larger viewports */
+  @add-mixin min-md {
+    margin: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
+    padding: var(--gutter-md);
+  }
+}
+
+/* hide .pt-dialog-header title */
+@define-mixin hide-pt-dialog-header {
+  /* if you can't remove it, hide it */
+  & .pt-dialog-header {
+    /* positioning */
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1; /* ensure clickability */
+    /* blueprint theming overrides */
+    background-color: transparent;
+    box-shadow: none;
+
+    /* hide unnecessary elements */
+    & > span,
+    & > .pt-dialog-header-title {
+      display: none;
+    }
+  }
+}
+
+/* layout for login/signup forms */
+@define-mixin form-layout {
+  @add-mixin hide-pt-dialog-header;
+  /* positioning */
+  margin: 1rem;
+  /* sizing */
+  width: 100%;
+  max-width: 52rem;
+  max-height: 100vh; /* make it work on shorter screens */
+  overflow-y: auto;
+
+  &[class*=form-container] {
+    position: relative !important; /* thanks, blueprint */
+  }
+
+  /* close button positioning */
+  & .auth-form-close {
+    position: absolute;
+    top: -25px;
+    right: -25px;
+
+    @add-mixin min-sm {
+      top: -50px;
+      right: -50px;
+    }
+  }
+
+  /* horizontal layout on bigger viewports */
+  @media (min-width: 840px) {
+    & .form-inner,
+    & .form-divider,
+    & .social-button-list {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    & .form-inner,
+    & .social-button-list {
+      width: 42.5%; /* fallback */
+      width: calc(50% - 60px); /* make room for the line */
+    }
+  }
+
+  /* make sure social buttons don't break */
+  & .social-button {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+
+    /* account for icon sizing */
+    & .social-svg {
+      margin-left: -0.25em;
+    }
+  }
+}
+
+/* card layout mixins — add to .card-list container */
+@define-mixin card-layout-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  /* space out adjacent cards */
+  & > .card-container {
+    margin-bottom: 1.75rem;
+  }
+}
+@define-mixin card-layout-stacked {
+  flex-direction: column;
+}
+@define-mixin card-layout-2col {
+  & > .card-container {
+    width: 48%; /* fallback */
+    width: calc(50% - 0.875rem);
+  }
+}
+@define-mixin card-layout-3col {
+  & > .card-container {
+    width: 30%; /* fallback */
+    width: calc(33.333% - 1.2rem);
+
+    /* only 2 items */
+    &:nth-last-of-type(n+2):nth-last-of-type(-n+2):first-of-type, &:nth-last-of-type(n+2):nth-last-of-type(-n+2):first-of-type ~ .card-container,
+    /* only 2 items in the last row */
+    &:nth-of-type(3n):nth-last-of-type(-n+3) ~ .card-container {
+      width: calc(50% - 0.875rem);
+    }
+  }
+}
+@define-mixin card-layout-4col {
+  & > .card-container {
+
+    /* set / reset width */
+    &,
+    &:nth-of-type(3n):nth-last-of-type(-n+3) ~ .card-container {
+      width: 24%; /* fallback */
+      width: calc(25% - 1.375rem);
+    }
+
+    /* only 3 items */
+    &:nth-last-of-type(n+3):nth-last-of-type(-n+3):first-of-type, &:nth-last-of-type(n+3):nth-last-of-type(-n+3):first-of-type ~ .card-container,
+    /* only 3 items in the last row */
+    &:nth-of-type(4n):nth-last-of-type(-n+4) ~ .card-container {
+      width: calc(33.333% - 1.2rem);
+    }
+    /* only 2 items in the last row */
+    &:nth-of-type(4n):nth-last-of-type(-n+3) ~ .card-container {
+      width: calc(50% - 0.875rem);
+    }
+    /* only 1 item in the last row */
+    &:nth-of-type(4n):nth-last-of-type(-n+2) ~ .card-container {
+      width: calc(25% - 1.375rem);
+    }
+  }
+}
+
+/* cards with smaller margins */
+@define-mixin condensed-card-layout-base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  /* space out adjacent cards */
+  & > .card-container {
+    margin-bottom: 1rem;
+  }
+}
+@define-mixin condensed-card-layout-2col {
+  & > .card-container {
+    width: 48%; /* fallback */
+    width: calc(50% - 0.5rem);
+  }
+}
+@define-mixin condensed-card-layout-3col {
+  & > .card-container {
+    width: 30%; /* fallback */
+    width: calc(33.333% - 0.75rem);
+
+    /* only 2 items */
+    &:nth-last-of-type(n+2):nth-last-of-type(-n+2):first-of-type, &:nth-last-of-type(n+2):nth-last-of-type(-n+2):first-of-type ~ .card-container,
+    /* only 2 items in the last row */
+    &:nth-of-type(3n):nth-last-of-type(-n+3) ~ .card-container {
+      width: calc(50% - 0.5rem);
+    }
+  }
+}
+
+/* form divider */
+@define-mixin form-divider {
+  margin-bottom: -0.8em; /* offset button padding */
+
+  /* text */
+  & > .signup-divider-text {
+    /* positioning */
+    display: inline-block;
+    padding: 1em 0.5em; /* hide :before line */
+    margin-bottom: 0; /* blueprint override */
+    /* typography */
+    font-weight: 700;
+    /* theming */
+    background: var(--white); /* hide :before line */
+    color: var(--gray);
+  }
+
+  /* line */
+  &:before {
+    /* sizing */
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    /* positioning */
+    position: absolute;
+    top: 50%;
+    margin-top: -1px; /* account for 2px thickness */
+    /* theming */
+    background: var(--light-3);
+    border-radius: 1px;
+  }
+
+  /* horizontal layout on big enough viewports */
+  @media (min-width: 840px) {
+    width: 15%; /* fallback */
+    width: calc(120px);
+    margin-top: 1.9em;
+    margin-bottom: 0.1em;
+    /* remember to set height */
+
+    & > .signup-divider-text {
+      padding: 0.25em; /* hide :before line */
+      top: 43%; /* fudgy fallback */
+      top: calc(50% - 1.5em);
+    }
+
+    /* line becomes vertical */
+    &:before {
+      height: 100%;
+      width: 2px;
+      left: 50%;
+      top: 0;
+      margin-top: 0;
+      margin-left: -1px;
+    }
+  }
+}
+
+
+/* print stylesheet mixins */
+/* display an html attr as a pseudo element */
+@define-mixin print-attr {
+  display: block; /* needed to make content display */
+  /* positioning */
+  position: relative;
+  /* theming */
+  font-size: 0.5em;
+  color: var(--sky-dark); /* it's the link href, so give it the link color */
+  text-decoration: none; /* but it's small, so don't underline it */
+}

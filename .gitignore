@@ -5,6 +5,8 @@ static/reports
 static/cb_images
 static/pj_images
 static/uploads/*
+static/pj_images/*
+static/cb_images/*
 /index.js
 .env
 .envrc

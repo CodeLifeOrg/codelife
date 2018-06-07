@@ -2,6 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const sharp = require("sharp");
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const Op = require("sequelize").Op;
 const sequelize = require("sequelize");
 
 function flattenProfile(user, p) {
@@ -66,19 +67,25 @@ module.exports = function(app) {
       });
   });
 
-  app.get("/api/profile/share/:uid", (req, res) => {
-    const {uid} = req.params;
+  app.get("/api/profile/share/:username", (req, res) => {
+    const {username} = req.params;
   
-    db.userprofiles.findAll({
-      include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {id: uid}}) : i)
+    db.users.findOne({
+      where: {username},
+      attributes: ["id", "username", "name"]
     })
-      .then(users => {
-        if (!users.length) {
-          return res.json({error: "No user matched that uid."});
-        }
-        const user = flattenProfile(req.user, users[0].toJSON());
-        return res.json(user).end();
-      });
+      .then(user => 
+        res.json(user).end()
+      );
+  });
+
+  app.post("/api/user/email", isAuthenticated, (req, res) => {
+    const {email} = req.body;
+    db.users.update(
+      {email},
+      {where: {id: req.user.id}}
+    ).then(u => res.json(u).end());
+
   });
 
   app.get("/api/profileping", isAuthenticated, (req, res) => {

@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {NonIdealState, Tree} from "@blueprintjs/core";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import IslandEditor from "pages/admin/lessonbuilder/IslandEditor";
 import LevelEditor from "pages/admin/lessonbuilder/LevelEditor";
 import SlideEditor from "pages/admin/lessonbuilder/SlideEditor";
@@ -55,6 +55,7 @@ class LessonBuilder extends Component {
         i = this.fixNulls(i);
         const islandObj = {
           id: i.id,
+          className: i.id,
           hasCaret: true,
           iconName: "map",
           label: i.name,
@@ -72,6 +73,7 @@ class LessonBuilder extends Component {
         if (islandNode) {
           const levelObj = {
             id: l.id,
+            className: l.id,
             hasCaret: true,
             iconName: "multi-select",
             label: l.name,
@@ -94,6 +96,7 @@ class LessonBuilder extends Component {
         if (levelNode) {
           const slideObj = {
             id: s.id,
+            className: s.id,
             hasCaret: false,
             iconName: slideIcons[s.type],
             label: s.title,
@@ -106,7 +109,7 @@ class LessonBuilder extends Component {
         }
       }
       this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
-    });    
+    });
   }
 
   initFromProps(nodeFromProps) {
@@ -335,7 +338,9 @@ class LessonBuilder extends Component {
       obj.childNodes = [objLevel];
     }
     if (obj) {
+      console.log("before", nodes);
       arr.push(obj);
+      console.log("after", nodes);
       arr.sort((a, b) => a.data.ordering - b.data.ordering);
       // oh boy do i hate this TODO: generalize this array without breaking it
       if (n.itemType === "slide") this.newNode([obj]);
@@ -403,19 +408,18 @@ class LessonBuilder extends Component {
 
     const {nodes, currentNode} = this.state;
 
-    if (!nodes) return <Loading />;
+    if (!nodes) return <LoadingSpinner />;
 
     return (
-      <div id="lesson-builder">
-        <div id="tree">
-          <Tree
-            onNodeClick={this.handleNodeClick.bind(this)}
-            onNodeCollapse={this.handleNodeCollapse.bind(this)}
-            onNodeExpand={this.handleNodeExpand.bind(this)}
-            contents={nodes}
-          />
-        </div>
-        <div id="item-editor">
+      <div className="lessonbuilder" id="lesson-builder">
+        <Tree
+          className="lessonbuilder-tree font-sm"
+          onNodeClick={this.handleNodeClick.bind(this)}
+          onNodeCollapse={this.handleNodeCollapse.bind(this)}
+          onNodeExpand={this.handleNodeExpand.bind(this)}
+          contents={nodes}
+        />
+        <div className="item-editor" id="item-editor">
           { currentNode
             ? currentNode.itemType === "island"
               ? <IslandEditor data={currentNode.data} reportSave={this.reportSave.bind(this)} />

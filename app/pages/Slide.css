@@ -1,71 +1,83 @@
-.confetti {
-  position: absolute;
-  margin: 0 auto;
-  top: 0;
-  z-index: 1000;
+@import '../mixins.css';
+
+/* debugging */
+/*
+.slide-outer   { border: var(--gutter-xxs) solid blue; }
+.slide-inner   { border: var(--gutter-xxs) solid red; }
+.slide-content { border: var(--gutter-xxs) solid green; }
+*/
+
+/* outer container */
+.slide-outer {
+  /* max-height: 100vh; */
 }
 
-#slide {
-  background-color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 70vh;
-  margin: 0 25px 25px;
-  position: relative;
+/* inner container */
+.slide-inner {
+  @add-mixin slide-theme;
+  @add-mixin slide-sizing;
+
   &.pt-dialog-body {
     margin: 0;
-    & #slide-container {
-      margin-top: 25px;
+    & .slide-content {
+      margin-top: var(--gutter-md);
       & .validation {
         bottom: auto;
-        position: static;
       }
     }
   }
   & a:not(.pt-button) {
-    opacity: 1;
     text-decoration: underline;
-    transition: opacity 0.1s;
-    &:hover {
-      opacity: 0.85;
-    }
   }
-  & #slide-head {
-    margin: 25px 25px 10px;
-    min-height: 29px;
-    position: relative;
-    text-align: center;
-    & .title {
-      font-size: 24px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+  & .slide-header {
+    width: 100%;
+    left: 0;
+    right: 0;
+
+    & .slide-title-edit {
+      top: -2px; /* fudge into place */
+      margin-left: 0.125em;
+
+      /* incon sizing and positioning */
+      & .slide-title-edit-icon:before {
+        font-size: 1.25em;
+        color: var(--gray);
+        transition: color 0.2s;
+      }
+
+      /* interactions */
+      &:hover, &:focus {
+        & .slide-title-edit-icon:before {
+          color: var(--sky-dark);
+        }
+      }
     }
+
     & .gems {
       font-weight: 600;
       left: 0;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.25px;
       position: absolute;
       text-transform: uppercase;
       top: 0;
       & img {
-        margin-right: 5px;
+        margin-right: var(--gutter-xxs);
         vertical-align: top;
-        width: 20px;
+        width: var(--gutter-md);
       }
     }
     & .return-link {
       position: absolute;
-      right: 0;
       top: 0;
+      right: 0;
     }
   }
-  & #slide-container {
+  & .slide-content {
+    min-height: 0;
+    margin-top: var(--gutter-xs);
+    margin-bottom: var(--gutter-md);
     overflow: visible;
-    padding: 0 25px;
-    position: relative;
+
     & p {
       margin-bottom: 0;
     }
@@ -74,80 +86,176 @@
       column-break-inside: avoid;
       font-size: 12px;
       overflow-x: auto;
-      margin: 0;
       page-break-inside: avoid;
-      padding: 5px 10px;
+      padding: var(--gutter-xxs) var(--gutter-xs);
       width: 100%;
     }
     & .slide-text {
-      font-size: 16px;
-      line-height: 20px;
       white-space: pre-wrap;
+
+      /* space out adjacent elements */
+      & p + p {
+        margin-top: 1em;
+      }
+
+      & h2 {
+        @add-mixin font-md;
+        margin-top: 1.5em;
+      }
+
+      /* bad content designer! */
+      & *:empty,
+      & br {
+        display: none;
+      }
+
+      /* override blueprint style for lists */
+      & ul,
+      & ol {
+        padding-left: 1.25em;
+      }
+
+      /* larger screens */
+      @add-mixin min-sm {
+        /* hide extra long text overflow */
+        max-height: 70vh; /* fallback */
+        max-height: calc(100vh - 4em);
+        overflow-y: auto;
+        /* scale up font size */
+        font-size: 13px;
+        /* space out from editors */
+        padding-right: 2.5em; /* TODO: scope this to editor template */
+      }
+
+      @add-mixin min-md {
+        font-size: 14px;
+      }
+
       & code {
         overflow-wrap: break-word;
       }
     }
-    &.cheatSheet .slide-text {
-      columns: 2;
-      max-height: 100%;
-      overflow-y: auto;
-    }
-    & .slide-image {
-      align-self: stretch;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
+
+    & .slide-image-container {
       flex: 1;
-      margin: 25px 0;
+      align-self: stretch; /* fill up the appropriate amount of vertical space */
+      text-align: center; /* center align image within container */
+      width: 100%;
+
+      @add-mixin min-sm {
+        width: calc(100% - 300px); /* offset text */
+      }
+
+      & > .slide-image {
+        display: inline-block;
+        border-radius: var(--radius-md);
+        max-height: 50vh;
+
+        @add-mixin min-sm {
+          max-height: 60vh;
+        }
+      }
     }
     & .slide-editor {
       align-self: stretch;
       flex: 1;
     }
-    & #codeEditor {
+    & .codeEditor {
       align-self: stretch;
       flex: 2;
     }
     & .validation {
-      bottom: -45px;
-      position: absolute;
-      text-align: center;
+      position: absolute; /* take the validation buttons out of the flow */
+      bottom: -55px; /* fudge into place; offsets .slide-content margin and button height */
+      z-index: 1; /* prevent slide nav buttons from obscuring validation buttons */
+
+      /* treat as button group */
       & .pt-button {
-        margin: 0 5px;
+        @add-mixin button-groupify;
+      }
+
+      /* make buttons take up 50% width on tiny screens */
+      @add-mixin max-sm {
+        width: 100%; /* necessary due to pos:ab */
+
+        /* two buttons */
+        & .pt-button {
+          width: 50%;
+
+          /* one button (both first and last) */
+          &:first-of-type:last-of-type {
+            width: 100%;
+          }
+        }
+
+        /* three buttons */
+        &.three-buttons .pt-button {
+          width: 33.333%;
+        }
       }
     }
+
+
+    /* quiz template */
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
-      max-width: 600px;
+
+      /* center text */
+      @add-mixin max-md {
+        & .slide-text {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      @add-mixin min-sm {
+        width: 600px;
+        max-width: 100%;
+      }
+
+      /* adjust first line */
+      & p:first-of-type,
+      & > div:first-of-type {
+        @add-mixin font-lg;
+      }
+
+      /* adjust code samples */
+      & pre {
+        margin-bottom: 2rem; /* space out code & answers */
+      }
+
       & .questions {
         list-style: none;
-        margin: 10px 0;
+        margin: var(--gutter-xs) 0;
         padding: 0;
         & .question {
           background-color: transparent;
+          border-radius: var(--radius-sm);
           counter-increment: item;
-          margin: 1px 0;
-          padding: 10px 15px 10px 40px;
-          position: relative;
+          margin: 0.5em 0;
+          overflow: hidden;
+          padding: var(--gutter-xs) var(--gutter-sm) var(--gutter-xs) 40px;
           text-align: left;
           transition: background-color 0.2s;
+          z-index: 1;
           &:before {
             background-color: rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
+            border-radius: var(--radius-md);
             content: counter(item, upper-alpha);
             display: inline-block;
-            font-size: 12px;
+            font-size: 0.75em;
             font-weight: bold;
-            height: 20px;
-            left: 10px;
-            line-height: 20px;
+            height: var(--gutter-md);
+            left: var(--gutter-xs);
+            line-height: var(--gutter-md);
             padding-left: 1px;
             position: absolute;
             text-align: center;
-            top: 12px;
+            top: 0.75em;
             transition: background-color 0.2s;
-            width: 20px;
+            width: var(--gutter-md);
+            z-index: 2;
           }
           &.quiz-selected {
             background-color: rgba(0, 0, 0, 0.05);
@@ -162,14 +270,55 @@
               background-color: var(--sky);
             }
           }
+
+          & .quiz-button {
+            /* make absolute positioned :after element (bg effect) position itself relative to parent */
+            position: static;
+            /* override */
+            text-align: left;
+
+            /* :after bg effect sizing */
+            &:after {
+              @add-mixin absolute-expand;
+              content: '';
+              display: block;
+              z-index: -1; /* prevent from obscuring content */
+            }
+
+            /* focus */
+            &:focus:after {
+              background-color: var(--sky-light);
+            }
+
+            /* active */
+            &:active:after {
+              background-color: rgba(0, 0, 0, 0.05);
+            }
+          }
         }
       }
     }
   }
-  & #slide-foot {
+
+  /* footer */
+  & .slide-footer {
     display: flex;
     justify-content: space-between;
-    margin: 15px 25px 20px;
+
+    & .pt-button {
+      min-width: var(--button-min-width);
+    }
+
+    @add-mixin max-sm {
+      margin-top: var(--gutter-xxs);
+      justify-content: center;
+
+      & .pt-button {
+        @add-mixin button-groupify;
+        margin-top: var(--gutter-lg);
+        width: 50%;
+      }
+    }
   }
   & .flex-row {
     align-items: center;
@@ -179,26 +328,23 @@
     /* flex-wrap: wrap; */
     justify-content: center;
     width: 100%;
-    &>*:not(.flex-row):not(.flex-column) {
-      margin: 0 0 0 25px;
-    }
-    &>*:not(.flex-row):not(.flex-column):first-child {
-      margin-left: 0;
-    }
+
     & .slide-text {
       align-self: stretch;
       flex: none;
-      overflow: scroll;
       width: 300px;
+      margin-bottom: 1.5em;
+
       &.wide {
-        width: 400px;
+        width: 38em;
+        max-width: 100%;
       }
     }
     &.cheatSheet .slide-text {
       flex: 1;
       width: inherit;
     }
-    @media only screen and (max-width: 768px) {
+    @add-mixin max-sm {
       flex-direction: column;
       flex-wrap: nowrap;
       & .slide-text {
@@ -214,8 +360,106 @@
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    &>*:not(.flex-row):not(.flex-column) {
-      margin: 25px 25px 0;
+  }
+
+
+  /* renderCode template */
+  & .renderCode {
+
+    /* prevents code-editor from breaking layout on medium-sized screens */
+    @add-mixin min-sm {
+      & .code-editor {
+      width: calc(100% - 300px);
+      }
     }
   }
+
+
+  /* textText template */
+  & .textText {
+
+    /* undo flex-row styles on small screens */
+    @add-mixin max-lg {
+      align-items: center;
+      flex-direction: column;
+
+      & .slide-text.wide {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      & .slide-text + .slide-text {
+        margin-top: 2em;
+      }
+    }
+
+    & .slide-text.wide {
+      padding-right: 0;
+    }
+
+    @add-mixin min-lg {
+      & .slide-text + .slide-text {
+        margin-left: 2em;
+      }
+    }
+
+    & .slide-text {
+
+      @add-mixin min-md {
+        align-self: center;
+      }
+
+      /* text sizing */
+      & p {
+        @add-mixin font-md;
+      }
+      & ul,
+      & ol {
+        font-size: 1.0625rem;
+        margin-top: 1.5em;
+
+        & li + li {
+          margin-top: 0.5em;
+        }
+      }
+    }
+  }
+
+
+  /* cheatSheet template */
+  & .cheatSheet {
+    justify-content: flex-start; /* .flew-row override */
+
+    /* single column, please */
+    & .slide-text {
+      max-width: 50rem;
+      margin-left: 0;
+
+      /* bad content designer! */
+      &:empty,
+      & p:empty,
+      & br {
+        display: none;
+      }
+
+      /* space out adjacent elements */
+      & * + p {
+        margin-top: 1.25em;
+      }
+      & pre {
+        margin-bottom: 2rem;
+      }
+    }
+
+  }
+}
+
+
+
+/* slide completion */
+.confetti {
+  position: absolute;
+  margin: 0 auto;
+  top: 0;
+  z-index: 1000;
 }

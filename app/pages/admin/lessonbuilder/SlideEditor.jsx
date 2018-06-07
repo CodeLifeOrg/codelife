@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import QuizPicker from "pages/admin/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor/CodeEditor";
@@ -38,7 +38,7 @@ class SlideEditor extends Component {
 
   componentDidMount() {
     const {data} = this.props;
-    this.setState({data});   
+    this.setState({data});
   }
 
   componentDidUpdate() {
@@ -59,9 +59,9 @@ class SlideEditor extends Component {
   handleEditor(field, t) {
     const {data} = this.state;
     data[field] = t;
-    this.setState({data});  
+    this.setState({data});
   }
-  
+
   onImgUpdate(lang, e) {
     const img = e.target.files[0];
     const config = {headers: {"Content-Type": "multipart/form-data"}};
@@ -69,7 +69,7 @@ class SlideEditor extends Component {
     formData.append("file", img);
     if (lang === "pt") {
       formData.append("title", `pt_${this.state.data.id}`);
-    } 
+    }
     else {
       formData.append("title", `${this.state.data.id}`);
     }
@@ -92,7 +92,7 @@ class SlideEditor extends Component {
   }
 
   pt_previewSlide() {
-    this.setState({pt_isOpen: !this.state.pt_isOpen}); 
+    this.setState({pt_isOpen: !this.state.pt_isOpen});
   }
 
   closePreview() {
@@ -104,7 +104,7 @@ class SlideEditor extends Component {
     data.lax = e.target.checked ? true : false;
     this.setState({data});
   }
-  
+
   saveContent() {
     const {data} = this.state;
     if (this.props.reportSave) this.props.reportSave(data);
@@ -112,7 +112,7 @@ class SlideEditor extends Component {
       if (resp.status === 200) {
         const toast = Toaster.create({className: "slideSave", position: Position.TOP_CENTER});
         toast.show({message: "Slide saved.", intent: Intent.SUCCESS});
-      } 
+      }
       else {
         const toast = Toaster.create({className: "slideFail", position: Position.TOP_CENTER});
         toast.show({message: "Save Error.", intent: Intent.DANGER});
@@ -133,7 +133,7 @@ class SlideEditor extends Component {
 
     const {data} = this.state;
 
-    if (!data) return <Loading />;
+    if (!data) return <LoadingSpinner />;
 
     this.quills = [];
 
@@ -148,18 +148,13 @@ class SlideEditor extends Component {
 
     return (
       <div id="slide-editor">
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview PT</Button>&nbsp;
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview</Button>&nbsp;
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
+        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
         <Dialog
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}
           title={data.title}
-          style={{
-            height: "80vh",
-            maxHeight: "1000px",
-            width: "90%"
-          }}
         >
           <div id="slide" className="pt-dialog-body">
             <SlideComponent {...data} />
@@ -170,11 +165,6 @@ class SlideEditor extends Component {
           isOpen={this.state.pt_isOpen}
           onClose={this.closePreview.bind(this)}
           title={ptData.title}
-          style={{
-            height: "80vh",
-            maxHeight: "1000px",
-            width: "90%"
-          }}
         >
           <div id="slide" className="pt-dialog-body">
             <SlideComponent {...ptData} overrideLang="pt" />
@@ -193,7 +183,7 @@ class SlideEditor extends Component {
             <input className="pt-input" onChange={this.changeField.bind(this, "title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
           </label>
           <label className="pt-label">
-            pt Title 🇧🇷 
+            pt Title 🇧🇷
             <span className="pt-text-muted"> (required)</span>
             <input className="pt-input" onChange={this.changeField.bind(this, "pt_title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.pt_title} />
           </label>
@@ -219,35 +209,35 @@ class SlideEditor extends Component {
             htmlcontent1
             <QuillWrapper
               value={this.state.data.htmlcontent1}
-              onChange={this.handleEditor.bind(this, "htmlcontent1")} 
+              onChange={this.handleEditor.bind(this, "htmlcontent1")}
               ref={c => this.quills.push(c) }
             />
           </div>
           <div className="pt-label">
-            pt htmlcontent1  🇧🇷 
+            pt htmlcontent1  🇧🇷
             <QuillWrapper
               value={this.state.data.pt_htmlcontent1}
-              onChange={this.handleEditor.bind(this, "pt_htmlcontent1")} 
+              onChange={this.handleEditor.bind(this, "pt_htmlcontent1")}
               ref={c => this.quills.push(c) }
             />
           </div>
         </div>
         { showContent2
-          ? showAce2 
+          ? showAce2
             ? <div>
               <label className="pt-label">
                 htmlcontent2
-                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/> 
+                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/>
               </label>
               <label className="pt-label">
-                pt htmlcontent2  🇧🇷 
-                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/> 
+                pt htmlcontent2  🇧🇷
+                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/>
               </label>
             </div>
             : <div className="area-block">
               <div className="pt-label">
                 htmlcontent2
-                { showImg 
+                { showImg
                   ? <div className="image-area">
                     <img src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                     <label className="pt-file-upload">
@@ -257,14 +247,14 @@ class SlideEditor extends Component {
                   </div>
                   : <QuillWrapper
                     value={this.state.data.htmlcontent2}
-                    onChange={this.handleEditor.bind(this, "htmlcontent2")} 
+                    onChange={this.handleEditor.bind(this, "htmlcontent2")}
                     ref={c => this.quills.push(c) }
-                  /> 
+                  />
                 }
               </div>
               <div className="pt-label">
-                pt htmlcontent2  🇧🇷 
-                {showImg 
+                pt htmlcontent2  🇧🇷
+                {showImg
                   ? <div className="image-area">
                     <img src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
                     <label className="pt-file-upload">
@@ -274,24 +264,24 @@ class SlideEditor extends Component {
                   </div>
                   : <QuillWrapper
                     value={this.state.data.pt_htmlcontent2}
-                    onChange={this.handleEditor.bind(this, "pt_htmlcontent2")} 
+                    onChange={this.handleEditor.bind(this, "pt_htmlcontent2")}
                     ref={c => this.quills.push(c) }
-                  /> 
+                  />
                 }
               </div>
             </div>
           : null
         }
         { showQuiz ? <QuizPicker data={data} parentID={data.id} /> : null }
-        { showRules 
+        { showRules
           ? <div>
-            Lax Mode <Checkbox id="lax" checked={data.lax} onChange={this.handleLax.bind(this)} />        
+            Lax Mode <Checkbox id="lax" checked={data.lax} onChange={this.handleLax.bind(this)} />
             <RulePicker data={data} parentID={data.id} />
-          </div> : null 
+          </div> : null
         }
-        <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-large pt-intent-warning">Preview PT</Button>&nbsp;
-        <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-large pt-intent-success">Save</Button>
+        <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview</Button>&nbsp;
+        <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
+        <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
       </div>
     );
   }

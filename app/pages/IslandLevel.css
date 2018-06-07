@@ -1,0 +1,632 @@
+@import "../mixins.css";
+
+/* -------------------------------
+MAIN LAYOUT
+------------------------------- */
+
+/* main container */
+.island {
+  margin-top: var(--gutter-md);
+  margin-bottom: var(--gutter-lg);
+  text-align: center;
+
+  /* limit width on big screens */
+  @add-mixin min-md {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* -------------------------------
+  Next/Prev codeblocks
+  ------------------------------- */
+
+  /* NOTE: nesting these in .island is necessary, since they can appear on their own */
+  & .island-link {
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-md);
+
+    /* center em, but only on tiny viewports */
+    @add-mixin max-xs {
+      width: 100%;
+    }
+
+    /* tweakpoint to stagger them slightly on tiny viewports */
+    @media (min-width: 300px) and (max-width: 479px) {
+      &.is-prev {
+        left: -10%;
+      }
+      &.is-next {
+        right: -10%;
+      }
+      /* pull up the second one */
+      & + .is-next {
+        margin-top: -50px;
+      }
+    }
+
+    /* room for two */
+    @add-mixin min-xs {
+      max-width: 50%; /* make sure there is indeed room for two */
+      /* reset margin */
+      margin-top: 0;
+      margin-bottom: 0;
+
+      /* float them to the corresponding side */
+      &.is-prev {
+        float: left;
+      }
+      &.is-next {
+        float: right;
+      }
+    }
+
+    /* gradually move up around the island on medium screens */
+    @add-mixin min-sm {
+      margin-top: -2%;
+      margin-bottom: -1%;
+    }
+
+    @add-mixin min-md {
+      margin-top: -4%;
+    }
+
+    /* switch to absolute positioning on large viewports */
+    @add-mixin min-lg {
+      position: absolute;
+      top: 425px;
+      margin-top: 0; /* reset */
+
+      &.is-prev {
+        left: 3%;
+      }
+      &.is-next {
+        left: auto;
+        right: 3%;
+      }
+    }
+  }
+}
+
+/* -------------------------------
+STUDENT CODEBLOCKS
+------------------------------- */
+
+.student-codeblocks-container {
+  @add-mixin slide-theme; /* transparent white bg, rounded corners */
+  /* sizing */
+  width: 100%;
+  max-width: 100%; /* don't bleed off tiny screens */
+  /* positioning */
+  display: inline-block; /* honor text-align:center from .island */
+  margin-top: var(--gutter-md);
+  padding: var(--gutter-lg) var(--gutter-sm);
+  /* theming */
+  color: var(--black);
+
+  /* NOTE: `transform: translateY(0px)` creates a new stacking context,
+  which makes the inline codeblock dialog position itself relative
+  to the card list, even though it's set to `position: fixed`.
+  WTF, blueprint. 😡 */
+  & .pt-collapse-body[aria-hidden=false] {
+    transform: none !important; /* fix stacking context bug */
+  }
+
+  /* no border radius on smaller viewports */
+  @add-mixin max-md {
+    border-radius: 0;
+  }
+
+  /* sizing and positioning on larger viewports */
+  @add-mixin min-md {
+    width: 1200px;
+    padding: var(--gutter-lg) var(--gutter-md);
+    margin: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  }
+
+  /* margin tweak when island links become absolutely positioned */
+  @add-mixin min-lg {
+    margin-top: 10rem;
+  }
+
+  & .card-list {
+    @add-mixin card-layout-base;
+    text-align: left; /* override from .overworld */
+
+    /* stacked cards */
+    @media (max-width: 599px) {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 3 column layout */
+    @media (min-width: 600px) {
+      @add-mixin card-layout-3col;
+    }
+
+    & .card-list:not(.snippets-more) {
+      margin-top: var(--gutter-md);
+    }
+  }
+
+
+  /* -------------------------------
+  Student codeblocks toggle button
+  ------------------------------- */
+  & .toggle-show {
+    /* sizing */
+    min-width: var(--button-double-width);
+    /* positioning */
+    display: inline-block; /* honor text-align */
+    margin-top: var(--gutter-md);
+
+    /* icon */
+    & > .pt-icon-standard {
+      color: inherit;
+      margin-right: 0.25em;
+    }
+  }
+}
+
+/* -------------------------------
+MAIN ISLAND
+------------------------------- */
+
+/* main island image */
+.island-image {
+  /* sizing */
+  width: 160%;
+  height: 475px;
+  /* positioning */
+  left: -30%;
+  /* theming */
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  /* tweak the background position on very small screens */
+  @media (max-width: 396px) {
+    /* fudged so that the horizon stays in more or less the same place */
+    background-position: center 56%;
+  }
+
+  /* progressively scale down the background image */
+  @add-mixin min-xs {
+    width: 140%;
+    left: -20%;
+  }
+  @add-mixin min-sm {
+    width: 100%;
+    height: 600px;
+    left: 0;
+    background-position: center;
+  }
+}
+
+/* main island title */
+.island-title {
+  /* sizing */
+  display: inline-block;
+  padding: 0.5em 1.25em;
+  max-width: calc(62.5% - var(--gutter-md));
+  /* positioning */
+  top: 2.5em;
+  /* theming */
+  background-color: var(--dark-3);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 3px var(--gutter-xs) rgba(0, 0, 0, 0.5);
+  color: var(--white);
+
+  /* scale icon with title font size */
+  & .pt-icon-large {
+    margin-right: 0.5em;
+    margin-left: -0.25em;
+    font-size: 1em;
+    opacity: 0.75;
+  }
+}
+
+/* -------------------------------
+Main island path
+------------------------------- */
+
+/* path container */
+.island-path {
+  /* positioning */
+  position: absolute;
+  left: 25%;
+  top: 55%;
+  /* sizing */
+  width: 50%;
+  /* layout */
+  display: flex;
+  justify-content: space-between;
+  /* theming */
+  perspective: 500px;
+
+  /* override individual island path positioning on smaller screens */
+  @add-mixin max-sm {
+    /* top: 55%; */
+  }
+
+  /* account for scaled up elements */
+  @add-mixin min-xs {
+    left: 30%;
+    width: 40%;
+  }
+  /* static width on larger viewports */
+  @add-mixin min-sm {
+    left: 50%;
+    margin-left: -200px;
+    width: 400px;
+  }
+
+  /* -------------------------------
+  Path - line
+  ------------------------------- */
+
+  &:before {
+    display: block;
+    content: "";
+    /* sizing */
+    width: 90%; /* fudged */
+    height: var(--radius-sm);
+    /* positioning */
+    position: absolute;
+    top: 9px; /* fudged */
+    left: 5%;
+    /* theming */
+    transform: rotateX(50deg);
+    transform-style: preserve-3d;
+
+    @add-mixin min-xs {
+      height: var(--radius-md);
+      top: 13px; /* fudged */
+    }
+
+    /* static width on larger viewports */
+    @add-mixin min-sm {
+      width: 350px;
+      height: var(--radius-lg);
+      top: 16px;
+    }
+  }
+
+  /* -------------------------------
+  Path - dots
+  ------------------------------- */
+
+  & .stop {
+    /* sizing */
+    display: inline-block;
+    width: var(--path-xxs);
+    height: var(--path-xxs);
+    /* theming */
+    background-color: var(--dark-3);
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 100%;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    transform: rotateX(50deg);
+    transform-style: preserve-3d;
+    /* motion */
+    transition: margin 0.2s;
+
+    /* adjust dot size */
+    @add-mixin min-xs {
+      width: var(--path-xs);
+      height: var(--path-xs);
+      border-width: 4px;
+    }
+    @add-mixin min-sm {
+      width: var(--path-sm);
+      height: var(--path-sm);
+      border-width: var(--gutter-xxs);
+    }
+  }
+
+  /* -------------------------------
+  Path - cube
+  ------------------------------- */
+
+  & .code-block {
+    /* sizing */
+    display: inline-block;
+    width: var(--path-xxs);
+    height: var(--path-xxs);
+    /* theming */
+    transform: rotateX(-33deg)translateZ(-28px)translateX(2px);
+    transform-style: preserve-3d;
+    /* transitions */
+    transition: margin 0.2s;
+
+    /* adjust cube size */
+    @add-mixin min-xs {
+      width: var(--path-xs);
+      height: var(--path-xs);
+      top: -8px; /* fudged */
+    }
+    @add-mixin min-sm {
+      width: var(--path-sm);
+      height: var(--path-sm);
+      top: -16px; /* still fudged */
+    }
+
+    /* -------------------------------
+    Path - sides
+    ------------------------------- */
+
+    /* default side styles */
+    & .side {
+      /* positioning */
+      position: absolute;
+      /* sizing */
+      height: var(--path-xxs);
+      width: var(--path-xxs);
+      /* theming */
+      background-color: var(--black);
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.25);
+
+      /* adjust side size */
+      @add-mixin min-xs {
+        width: var(--path-xs);
+        height: var(--path-xs);
+      }
+      @add-mixin min-sm {
+        width: var(--path-sm);
+        height: var(--path-sm);
+      }
+
+      /* icon on front */
+      & .pt-icon-standard {
+        font-size: var(--gutter-xs);
+        line-height: calc(var(--path-xxs) - 4px);
+        top: -3px;
+
+        /* adjust side size */
+        @add-mixin min-xs {
+          font-size: var(--gutter-sm);
+          line-height: calc(var(--path-xs) - 4px);
+          top: 0;
+        }
+        @add-mixin min-sm {
+          font-size: var(--path-xxs);
+          line-height: calc(var(--path-sm) - 4px);
+        }
+
+        /* adjust icon size */
+        @add-mixin min-xs {
+          transform: translateZ(var(--side-translate-xs));
+        }
+        @add-mixin min-sm {
+          transform: translateZ(var(--side-translate-sm));
+        }
+      }
+
+      /* front side positioning */
+      &.front {
+        transform: translateZ(var(--side-translate-xxs));
+
+        /* adjust side positioning */
+        @add-mixin min-xs {
+          transform: translateZ(var(--side-translate-xs));
+        }
+        @add-mixin min-sm {
+          transform: translateZ(var(--side-translate-sm));
+        }
+      }
+
+      /* left side positioning */
+      &.left {
+        border-bottom-width: var(--gutter-xxs);
+        border-left-width: var(--gutter-xxs);
+        transform: rotateY(270deg)translateX(var(--side-translate-xxs-negative));
+        transform-origin: center left;
+
+        /* adjust side positioning */
+        @add-mixin min-xs {
+        transform: rotateY(270deg)translateX(var(--side-translate-xs-negative));
+        }
+        @add-mixin min-sm {
+        transform: rotateY(270deg)translateX(var(--side-translate-sm-negative));
+        }
+      }
+
+      /* top side positioning */
+      &.top {
+        transform: rotateX(-270deg)translateY(var(--side-translate-xxs-negative));
+        transform-origin: top center;
+
+        /* adjust side positioning */
+        @add-mixin min-xs {
+          transform: rotateX(-270deg)translateY(var(--side-translate-xs-negative));
+        }
+        @add-mixin min-sm {
+          transform: rotateX(-270deg)translateY(var(--side-translate-sm-negative));
+        }
+      }
+
+      /* bottom side positioning */
+      &.bottom {
+        box-shadow: 0 2px var(--gutter-sm) rgba(0, 0, 0, 0.75);
+        transform: rotateX(90deg)translateY(var(--side-translate-xxs));
+        transform-origin: bottom center;
+
+        /* adjust side positioning */
+        @add-mixin min-xs {
+          transform: rotateX(90deg)translateY(var(--side-translate-xs));
+        }
+        @add-mixin min-sm {
+          transform: rotateX(90deg)translateY(var(--side-translate-sm));
+        }
+      }
+    }
+  }
+}
+
+/* -------------------------------
+STATES & INTERACTIONS
+------------------------------- */
+
+/* Path dot states & interactions */
+.stop {
+
+  /* next up */
+  &.is-next {
+    animation: bounceAndFlash 2s infinite;
+    background-color: var(--sandstorm); /* fallback */
+  }
+
+  /* done */
+  &.is-done {
+    background-color: var(--success);
+
+    /* cheaty incomplete state */
+    &.is-incomplete {
+      animation: incompleteFlash 4s infinite;
+    }
+  }
+
+  /* next/finished :hover state */
+  &.is-next,
+  &.is-done {
+    &:hover, &:focus {
+      margin-top: -2px;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+/* Path codeblock states & interactions */
+.code-block {
+
+  /* next up */
+  &.is-next {
+    animation: blockBounce 2s infinite;
+
+    /* make each side glow */
+    & .side {
+      animation: blockGlow 2s infinite;
+      background-color: var(--sandstorm); /* fallback */
+    }
+  }
+
+  /* codeblock interactions */
+  &.is-next,
+  &.is-done {
+    &:hover, &:focus {
+      cursor: pointer; /* make this div feel more like a link */
+      margin-top: -2px; /* bounce that box (translate & top already in use) */
+    }
+  }
+}
+
+/* reposition codeblock tooltip */
+.codeblock-tooltip-portal.is-below {
+  position: relative;
+  top: 15px;
+
+  /* account for scaled up path & codeblock */
+  @add-mixin min-xs { top: 20px; }
+  @add-mixin min-sm { top: 30px; }
+}
+
+/* -------------------------------
+SHARE / NEXT ISLAND DIALOG
+------------------------------- */
+
+/* limit share dialog width */
+.share-dialog {
+  max-width: 42rem;
+}
+/* reset hover effect on facebook icon */
+.share-button[href*=facebook] {
+  &:hover, &:focus {
+    opacity: 0.9;
+  }
+}
+/* move buttons inline */
+.share-button-group {
+  @add-mixin min-sm {
+    & .share-button {
+      width: calc(50% - 1rem);
+
+      & + .share-button {
+        margin-left: 2rem;
+      }
+    }
+  }
+}
+
+/* -------------------------------
+ANIMATIONS
+------------------------------- */
+
+/* stop bounce and flash */
+@keyframes bounceAndFlash {
+  0%, 40%, 50%, 65%, 100% {
+    background-color: var(--sandstorm);
+    transform: translateY(0)rotateX(50deg);
+  }
+  45% {
+    background-color: var(--sandstorm-light);
+    transform: translateY(-4px)rotateX(50deg);
+  }
+  55% {
+    background-color: var(--sandstorm-light);
+    transform: translateY(-2px)rotateX(50deg);
+  }
+}
+
+/* bouncing block */
+@keyframes blockBounce {
+  0%, 40%, 50%, 65%, 100% {
+    transform: translateY(0)rotateX(-33deg)translateZ(-28px)translateX(2px);
+  }
+  45% {
+    transform: translateY(-4px)rotateX(-33deg)translateZ(-28px)translateX(2px);
+  }
+  55% {
+    transform: translateY(-2px)rotateX(-33deg)translateZ(-28px)translateX(2px);
+  }
+}
+
+/* flashing block sides */
+@keyframes blockGlow {
+  0%, 40%, 50%, 65%, 100% {
+    background-color: var(--sandstorm);
+  }
+  45%, 55% {
+    background-color: var(--sandstorm-light);
+  }
+}
+
+/* gray incomplete notifcation flash */
+@keyframes incompleteFlash {
+  5% {
+    background-color: var(--light-2);
+    border-color: var(--dark-2);
+  }
+}
+
+
+/* NOTE: as far as I can tell, the following is unused */
+/*
+.stop-popover {
+  text-align: center;
+  & .gems {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.25px;
+    line-height: 13px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    & img {
+      margin-right: var(--gutter-xxs);
+      vertical-align: top;
+      width: var(--gutter-sm);
+    }
+  }
+}
+*/

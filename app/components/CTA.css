@@ -1,0 +1,52 @@
+@import '../mixins.css';
+
+/* cta container */
+.cta {
+  /* sizing */
+  padding: 2.5rem var(--gutter-lg) 2rem var(--gutter-lg);
+  max-width: 47.5rem; /* 760px */
+  /* positioning */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10rem;
+
+  @add-mixin min-xs { margin-top: 15rem; }
+  @add-mixin min-sm { margin-top: 18rem; }
+  @add-mixin min-lg { margin-top: calc(15% + 10vh); }
+
+  /* position avatar */
+  & .cta-avatar-img {
+    margin-top: -15rem;
+    top: -1rem;
+    z-index: 0;
+    transform: rotateZ(2deg);
+  }
+
+  /* use a pseudo element to put the bg in front of the avatar, because z-index is stupid */
+  &:before {
+    /* sizing */
+    @add-mixin absolute-expand;
+    content: '';
+    display: block;
+    /* theming */
+    @add-mixin slide-theme;
+    background-color: var(--white);
+    /* positioning */
+    z-index: 1;
+  }
+
+  /* bring up other cta content in front of the "background" */
+  & *:not(.cta-avatar-img) {
+    z-index: 1;
+  }
+
+  /* un-all-caps CTA heading */
+  & .cta-heading {
+    text-transform: none;
+    letter-spacing: -1px;
+  }
+  /* enforce lowercase on button */
+  & .cta-button {
+    text-transform: lowercase;
+  }
+}

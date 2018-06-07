@@ -1,12 +1,14 @@
 import axios from "axios";
 import Confetti from "react-dom-confetti";
 import {connect} from "react-redux";
-import {Link, browserHistory} from "react-router";
+import {Link} from "react-router";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Position, Tooltip} from "@blueprintjs/core";
+import {Position, Tooltip, Dialog} from "@blueprintjs/core";
 
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
+import Discussion from "components/Discussion";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -32,6 +34,8 @@ class Slide extends Component {
       currentLevel: null,
       currentIsland: null,
       levels: null,
+      skipped: false,
+      showDiscussion: false,
       sentProgress: false,
       latestSlideCompleted: 0,
       islandComplete: false,
@@ -49,7 +53,8 @@ class Slide extends Component {
   }
 
   saveProgress(level) {
-    axios.post("/api/userprogress/save", {level}).then(resp => {
+    const status = this.state.skipped ? "skipped" : "completed";
+    axios.post("/api/userprogress/save", {level, status}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
     });
   }
@@ -68,6 +73,8 @@ class Slide extends Component {
         currentLevel: null,
         currentIsland: null,
         levels: null,
+        skipped: false,
+        showDiscussion: false,
         sentProgress: false,
         latestSlideCompleted: 0,
         islandComplete: false,
@@ -79,10 +86,12 @@ class Slide extends Component {
     // going to new slide
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
-      let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
-      if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
-      if (this.state.done) blocked = false;
-      this.setState({currentSlide: cs, blocked});
+      if (cs) {
+        let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
+        if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
+        if (this.state.done) blocked = false;
+        this.setState({currentSlide: cs, blocked, showDiscussion: false});
+      }
     }
 
     const i = slides.indexOf(currentSlide);
@@ -112,6 +121,7 @@ class Slide extends Component {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
     const {slides, latestSlideCompleted} = this.state;
+    const {browserHistory} = this.context;
 
     const sget = axios.get(`/api/slides/all?mlid=${mlid}`);
     const upget = axios.get("/api/userprogress/mine");
@@ -129,7 +139,7 @@ class Slide extends Component {
       const cs = slideList.find(slide => slide.id === sid);
 
       const up = resp[1].data.progress;
-      const done = up.find(p => p.level === mlid) !== undefined;
+      const done = up.find(p => p.level === mlid && p.status === "completed") !== undefined;
 
       const levels = this.props.levels.filter(l => l.lid === lid);
       const currentLevel = levels.find(l => l.id === mlid);
@@ -147,19 +157,47 @@ class Slide extends Component {
 
   editSlide() {
     const {lid, mlid, sid} = this.props.params;
+    const {browserHistory} = this.context;
     browserHistory.push(`/admin/lesson-builder/${lid}/${mlid}/${sid}`);
   }
 
   advanceLevel(mlid) {
     const {lid} = this.props.params;
+    const {browserHistory} = this.context;
     browserHistory.push(`/island/${lid}/${mlid}`);
     if (window) window.location.reload();
   }
 
+  toggleSkip() {
+    if (!this.state.skipped) {
+      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen, showDiscussion: true, skipped: true});
+    }
+    else {
+      this.setState({confirmSkipOpen: !this.state.confirmSkipOpen});
+    }
+  }
+
+  toggleDiscussion() {
+    if (!this.state.skipped) {
+      this.setState({confirmSkipOpen: true});
+    }
+    else {
+      this.setState({showDiscussion: !this.state.showDiscussion});
+    }
+  }
+
+  onNewThread(thread) {
+    const {currentSlide} = this.state;
+    if (currentSlide) {
+      currentSlide.threadlist.push(thread);
+    }
+  }
+
   render() {
     const {auth, t} = this.props;
-    const {lid, mlid} = this.props.params;
-    const {currentSlide, slides, levels, currentLevel, currentIsland} = this.state;
+    const {lid, mlid, sid} = this.props.params;
+    const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
+    const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
 
@@ -177,7 +215,7 @@ class Slide extends Component {
       decay: 0.93
     };
 
-    if (!currentSlide || !currentIsland || !currentLevel) return <Loading />;
+    if (!currentSlide || !currentIsland || !currentLevel) return <LoadingSpinner />;
 
     const nextLevel = levels.find(l => l.ordering === currentLevel.ordering + 1);
 
@@ -186,43 +224,83 @@ class Slide extends Component {
     SlideComponent = compLookup[sType];
 
     return (
-      <div id="slide" className={ currentIsland.theme }>
-        {this.props.auth.user.role > 0 ? <span style={{position: "absolute", left: "10px", top: "10px"}} onClick={this.editSlide.bind(this)} className="pt-icon-large pt-icon-edit" /> : null}
-        <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
-        <div id="slide-head">
-          { currentSlide.title ? <h1 className="title">{ currentSlide.title }</h1> : null }
-
-          <Tooltip className="return-link" content={ `${ t("Return to") } ${currentIsland.name}` } tooltipClassName={ currentIsland.theme } position={Position.TOP_RIGHT}>
-            <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-cross"></span></Link>
-          </Tooltip>
-        </div>
-
-        <SlideComponent
-          island={currentIsland.theme}
-          unblock={this.unblock.bind(this)}
-          {...currentSlide} />
-
-        <div id="slide-foot">
-          { prevSlug
-            ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
-            : <div className="pt-button pt-disabled">{t("Previous")}</div> }
-          { nextSlug
-            ? this.state.blocked
-              ? <div className="pt-button pt-disabled">{t("Next")}</div>
-              : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
-            : nextLevel
-              ? <div>
-                <Link style={{marginRight: "5px"}} className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
-                <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link> 
+      <div className="slide-outer">
+        <div id="slide" className={ `slide-inner ${currentIsland.theme}` }>
+          <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
+          <Dialog
+            iconName="warning"
+            isOpen={this.state.confirmSkipOpen}
+            onClose={() => this.setState({confirmSkipOpen: false})}
+            title={t("Are you sure?")}
+            canOutsideClickClose={false}
+          >
+            <div className="pt-dialog-body">
+              {
+                t("DiscussionWarning")
+              }
+            </div>
+            <div className="pt-dialog-footer">
+              <div className="pt-dialog-footer-actions">
+                <button className="pt-button" onClick={() => this.setState({confirmSkipOpen: false})}>{t("Cancel")}</button>
+                <button className="pt-button pt-intent-primary" onClick={this.toggleSkip.bind(this)}>{t("Show Me")}</button>
               </div>
-              : <Link className="pt-button pt-intent-success editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link> 
-          }
-        </div>
+            </div>
+          </Dialog>
+          <div className="slide-header" id="slide-head">
+            { currentSlide.title
+              ? <h1 className="slide-title font-lg">{ currentSlide.title }
+                { this.props.auth.user.role > 0
+                  ? <button className="u-unbutton slide-title-edit" onClick={this.editSlide.bind(this)} >
+                    <span className="pt-icon-standard pt-icon-edit slide-title-edit-icon" />
+                    <span className="u-visually-hidden">Edit slide</span>
+                  </button>
+                  : null }
+              </h1>
+              : null }
 
+            <Tooltip
+              className="return-link"
+              tooltipClassName={ currentIsland.theme }
+              content={ `${ t("Return to") } ${currentIsland.name}` }
+              position={Position.TOP_RIGHT}>
+              <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-layout-linear"></span></Link>
+            </Tooltip>
+          </div>
+
+          <SlideComponent
+            island={currentIsland.theme}
+            unblock={this.unblock.bind(this)}
+            {...currentSlide} />
+
+          <div className="slide-footer">
+            { prevSlug
+              ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
+              : <div className="pt-button pt-disabled">{t("Previous")}</div>
+            }
+            { nextSlug
+              ? this.state.blocked
+                ? <div className="pt-button pt-disabled">{t("Next")}</div>
+                : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
+              : nextLevel
+                ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
+                : <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+            }
+          </div>
+        </div>
+        {/* discussion */}
+        <button className={ `pt-button discussion-toggle ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
+          { showDiscussion ? t("Hide Discussion") : `${t("Show Discussion")} (${this.state.currentSlide.threadlist.length})` }
+          { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
+        </button>
+        { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" onNewThread={this.onNewThread.bind(this)} subjectId={currentSlide.id}/> : null }
       </div>
     );
   }
 }
+
+Slide.contextTypes = {
+  browserHistory: PropTypes.object
+};
 
 const mapStateToProps = state => ({
   auth: state.auth,

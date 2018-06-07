@@ -1,0 +1,174 @@
+@import '../mixins.css';
+
+/* discussion toggle button */
+.discussion-toggle {
+  display: block; /* make margin work as intended */
+  margin: var(--gutter-md) auto var(--gutter-xl);
+  min-width: var(--button-double-width);
+  top: var(--gutter-md);
+  z-index: 1;
+}
+
+/* main container */
+.discussion-container {
+  @add-mixin slide-theme;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: -105px var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  padding: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
+
+  @add-mixin min-sm {
+    padding-top: var(--gutter-md);
+  }
+
+  & .discussion-inner {
+    @add-mixin min-md {
+      width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* title */
+  & .discussion-heading {
+    margin-bottom: var(--gutter-md);
+    letter-spacing: 1px;
+    /* text-transform: uppercase; */
+    top: 1px; /* fudge into place */
+  }
+
+  /* sort by */
+  & .sort-bar {
+    margin-bottom: var(--gutter-md); /* space out content on small screens */
+    top: -var(--gutter-xs);
+
+    /* take button out of the flow and center */
+    @add-mixin min-xs {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    & .pt-select {
+      margin-left: var(--gutter-xs);
+    }
+  }
+  & .threads {
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-md);
+
+    & .thread {
+      padding: var(--gutter-sm) 0;
+
+      & + .thread {
+        border-top: 1px solid var(--light-1);
+      }
+
+      & .thread-header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        & .thread-content {
+          & .thread-title {
+            font-size: 18px;
+            font-weight: bold;
+          }
+          & .thread-user {
+            & .pt-icon-standard {
+              margin-right: var(--gutter-xxs);
+              opacity: 0.75;
+            }
+            & .thread-date {
+              font-size: 12px;
+              margin-left: var(--gutter-xxs);
+              opacity: 0.75;
+            }
+          }
+          & .thread-body {
+            margin: var(--gutter-xs) 0 0;
+          }
+        }
+        & .thread-actions {
+          display: flex;
+          align-items: center;
+
+          & > * {
+            display: inline-block;
+            margin-left: var(--gutter-xs);
+            vertical-align: top;
+          }
+        }
+      }
+      & .comments {
+        & .comment {
+          border-bottom: 1px solid var(--light-2);
+          padding: var(--gutter-xs) var(--gutter-md);
+          &:first-child {
+            border-top: 1px solid var(--light-2);
+            margin-top: var(--gutter-xs);
+          }
+          & .comment-title {
+            font-size: 14px;
+            font-weight: bold;
+          }
+          & .comment-user {
+            font-size: 12px;
+            & .pt-icon-standard {
+              font-size: 14px;
+              margin-right: var(--gutter-xxs);
+              opacity: 0.75;
+            }
+            & .comment-date {
+              font-size: 12px;
+              margin-left: var(--gutter-xxs);
+              opacity: 0.75;
+            }
+          }
+          & .comment-body {
+            margin: var(--gutter-xs) 0 0;
+          }
+          & .report-comment {
+            position: absolute;
+            right: var(--gutter-xs);
+            top: var(--gutter-xs);
+          }
+        }
+      }
+    }
+  }
+  & .new-comment, & .new-thread {
+    & .new-comment-title, & .new-thread-title {
+      font-weight: bold;
+      margin: var(--gutter-xs) 0;
+      letter-spacing: 1px;
+      /* text-transform: uppercase; */
+    }
+    & .pt-input {
+      margin: 0 0 var(--gutter-xs);
+      width: 100%;
+    }
+    & .quill {
+      margin-top: var(--gutter-xs);
+      margin-bottom: var(--gutter-md);
+
+      & .ql-toolbar {
+        background: var(--white);
+        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      }
+      & .ql-container {
+        background: var(--white);
+        border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+        min-height: 100px;
+      }
+    }
+    & .post-button-container {
+      text-align: left;
+
+      @add-mixin min-sm {
+        text-align: right;
+      }
+    }
+  }
+}

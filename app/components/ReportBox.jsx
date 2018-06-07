@@ -6,7 +6,7 @@ import {Button, RadioGroup, Radio, Toaster, Position, Intent} from "@blueprintjs
 import "./ReportBox.css";
 
 class ReportBox extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,20 +20,27 @@ class ReportBox extends Component {
 
   componentDidMount() {
     const {contentType, reportid} = this.props;
-    const path = contentType === "codeblock" ? `/api/reports/byCodeBlockid?id=${reportid}` : `/api/reports/byProjectid?id=${reportid}`;
-    let previousReport = null;
-    const rget = axios.get(path);
-    const uget = axios.get(`/api/profile/${this.props.auth.user.username}`);
-    Promise.all([rget, uget]).then(resp => {
-      
-      const reports = resp[0].data;
-      const userProfile = resp[1].data;
+    let path;
+    if (contentType === "codeblock") path = `/api/reports/byCodeBlockid?id=${reportid}`;
+    if (contentType === "project") path = `/api/reports/byProjectid?id=${reportid}`;
+    if (contentType === "thread") path = `/api/reports/byThreadid?id=${reportid}`;
+    if (contentType === "comment") path = `/api/reports/byCommentid?id=${reportid}`;
 
-      if (reports[0] && reports[0].type === contentType && reports[0].report_id === reportid) previousReport = reports[0];
-      const reason = previousReport ? previousReport.reason : this.state.reason;
-      const comment = previousReport ? previousReport.comment : this.state.comment;
-      this.setState({mounted: true, previousReport, reason, comment, userProfile});
-    });
+    if (path) {
+      let previousReport = null;
+      const rget = axios.get(path);
+      const uget = axios.get(`/api/profile/${this.props.auth.user.username}`);
+      Promise.all([rget, uget]).then(resp => {
+
+        const reports = resp[0].data;
+        const userProfile = resp[1].data;
+
+        if (reports[0] && reports[0].type === contentType && reports[0].report_id === reportid) previousReport = reports[0];
+        const reason = previousReport ? previousReport.reason : this.state.reason;
+        const comment = previousReport ? previousReport.comment : this.state.comment;
+        this.setState({mounted: true, previousReport, reason, comment, userProfile});
+      });
+    }
   }
 
   handleChangeReason(e) {
@@ -45,30 +52,36 @@ class ReportBox extends Component {
   }
 
   banPage() {
-    const {t} = this.props;
-    const type = this.props.contentType === "codeblock" ? "codeBlocks" : "projects";
-    axios.post(`/api/${type}/setstatus`, {status: "banned", id: this.props.reportid}).then(resp => {
-      if (resp.status === 200) {
-        const toast = Toaster.create({className: "BanToast", position: Position.TOP_CENTER});
-        toast.show({  
-          message: t("Content Banned"), 
-          intent: Intent.DANGER, 
-          action: {
-            text: "Refresh",
-            onClick: () => window.location.reload()
-          } 
-        });
-      }
-      else {
-        console.log("error");
-      }
-    });
+    const {t, contentType} = this.props;
+    let type;
+    if (contentType === "codeblock") type = "codeBlocks";
+    if (contentType === "project") type = "projects";
+    if (contentType === "thread") type = "threads";
+    if (contentType === "comment") type = "comments";
+    if (type) {
+      axios.post(`/api/${type}/setstatus`, {status: "banned", id: this.props.reportid}).then(resp => {
+        if (resp.status === 200) {
+          const toast = Toaster.create({className: "BanToast", position: Position.TOP_CENTER});
+          toast.show({
+            message: t("Content Banned"),
+            intent: Intent.DANGER,
+            action: {
+              text: "Refresh",
+              onClick: () => window.location.reload()
+            }
+          });
+        }
+        else {
+          console.log("error");
+        }
+      });
+    }
   }
 
   submitReport() {
     const {reason, comment, userProfile} = this.state;
-    const {reportid, contentType} = this.props;
-    const rpayload = {reason, comment, type: contentType, report_id: reportid};
+    const {reportid, contentType, permalink} = this.props;
+    const rpayload = {reason, comment, permalink, type: contentType, report_id: reportid};
     const rpost = axios.post("/api/reports/save", rpayload);
     const upost = axios.post("/api/profile/decrement");
 
@@ -77,7 +90,7 @@ class ReportBox extends Component {
         const previousReport = resp[0].data;
         if (this.props.handleReport) this.props.handleReport(previousReport);
         this.setState({previousReport});
-      } 
+      }
       else {
         console.log("error");
       }
@@ -93,34 +106,68 @@ class ReportBox extends Component {
     const isAdmin = this.props.auth.user.role === 2;
 
     return (
-      <div style={{color: "black"}}>
-        <div>
-          <div style={{fontSize: "16px", fontWeight: "bold", color: "red", marginBottom: "10px"}}>
-            {
-              userProfile 
-                ? userProfile.reports > 0 
-                  ? t("Flag Inappropriate Content") 
-                  : t("Monthly Flag Limit Reached")
-                : t("Loading")
+      <div className="report-popover-inner u-text-left">
+
+        {/* heading / alert */}
+        <h2 className="report-heading font-md">
+          { userProfile &&
+            userProfile.reports > 0
+            ? t("Flag Inappropriate Content")
+            : t("Monthly Flag Limit Reached")
+          }
+        </h2>
+
+        <div className={`report-popover-form${disabled ? " is-disabled" : ""}`}>
+
+          {/* reason for flagging */}
+          <div className="field-container font-sm">
+            <RadioGroup
+              label={previousReport ? t("reportReceive") : t("selectReason")}
+              name="group"
+              disabled={disabled}
+              onChange={this.handleChangeReason.bind(this)}
+              selectedValue={this.state.reason} >
+
+              {/* options */}
+              <Radio label={t("Inappropriate content")} value="inappropriate-content" />
+              <Radio label={t("Bullying or abuse")} value="bullying-abuse" />
+              <Radio label={t("Malicious content")} value="malicious-content" />
+            </RadioGroup>
+          </div>
+
+          {/* additional comments */}
+          <div className="field-container font-sm">
+            <label htmlFor="report-comments">
+              {t("Additional Comments")}
+            </label>
+            <textarea
+              className="pt-input"
+              value={comment}
+              disabled={disabled}
+              onChange={this.handleChangeComment.bind(this)} />
+          </div>
+
+          {/* submit / ban buttons */}
+          <div className="field-container">
+            <Button
+              className="pt-button pt-intent-primary"
+              disabled={disabled}
+              key="submit"
+              onClick={this.submitReport.bind(this)}>
+              {t("Submit Report")}
+            </Button>
+
+            {isAdmin &&
+              <Button
+                className="pt-button pt-intent-danger"
+                key="ban"
+                onClick={this.banPage.bind(this)}>
+                {t("Ban Content")}
+              </Button>
             }
           </div>
-          <RadioGroup
-            label={previousReport ? t("Your report was received.") : t("Please select a reason below.")}
-            name="group"
-            disabled={disabled}
-            onChange={this.handleChangeReason.bind(this)}
-            selectedValue={this.state.reason}
-          >
-            <Radio label="Inappropriate Content" value="inappropriate-content" />
-            <Radio label="Bullying or Abuse" value="bullying-abuse" />
-            <Radio label="Malicious Content" value="malicious-content" /><br/>
-          </RadioGroup>
-          {t("Additional Comments")}
-          <textarea className="pt-input" dir="auto" value={comment} disabled={disabled} onChange={this.handleChangeComment.bind(this)}></textarea><br/><br/>
-          <Button style={{marginRight: "10px"}}className="pt-button pt-intent-success" disabled={disabled} key="submit" onClick={this.submitReport.bind(this)}>{t("Submit Report")}</Button>
-          {isAdmin ? <Button className="pt-button pt-intent-danger" key="ban" onClick={this.banPage.bind(this)}>{t("Ban this Page")}</Button> : null }
         </div>
-      </div>  
+      </div>
     );
   }
 }

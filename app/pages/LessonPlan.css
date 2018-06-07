@@ -1,0 +1,300 @@
+@import "../mixins.css";
+
+/* -------------------------------
+Header
+------------------------------- */
+.lessonplan-header-image-container {
+  /* sizing */
+  width: 50%;
+  /* positioning */
+  margin: 0 auto 2rem auto;
+
+  /* position left of text on non-tiny screens */
+  @add-mixin min-sm {
+    @add-mixin absolute-vertical-center;
+    width: 30%;
+    left: -5%;
+
+    /* make room for image by adding padding to all following elements */
+    & ~ * {
+      padding-left: 25%;
+    }
+  }
+
+  /* remove padding from elements on big screens */
+  @add-mixin min-lg {
+    left: -7%;
+  }
+  @media (min-width: 1460px) {
+    width: 40%;
+    left: -17.5%;
+  }
+
+  /* image sizing */
+  & .lessonplan-header-image {
+    /* sizing */
+    width: 100%;
+    padding-top: 75%; /* 600 / 800 */
+    /* background sizing */
+    background-size: contain;
+    background-repeat: no-repeat; /* just in case */
+  }
+}
+
+
+/* -------------------------------
+Nav
+------------------------------- */
+.lessonplan-nav {
+
+  &.header-lessonplan-nav {
+    top: -0.875em;
+  }
+  &.footer-lessonplan-nav {
+    top: 0.875em;
+  }
+
+  /* center links on bigger screens */
+  @add-mixin min-sm {
+    text-align: center;
+  }
+
+
+  /* style like main nav links */
+  & .lessonplan-nav-link {
+    @add-mixin nav-link;
+
+    /* make links 100% width block elements on smaller screens */
+    @add-mixin max-sm {
+      width: 100%;
+    }
+
+    /* space out inline links on bigger screens */
+    @add-mixin min-sm {
+      &:not(:last-of-type) {
+        margin-right: 2rem;
+      }
+    }
+
+    /* space out icon & text */
+    & .link-icon {
+      margin-right: var(--gutter-xxs);
+      top: -1px; /* baseline adjustment */
+
+      /* right arrow is shown right of text; position accordingly */
+      &.pt-icon-arrow-right {
+        margin-right: 0;
+        margin-left: var(--gutter-xxs);
+      }
+    }
+  }
+}
+
+
+/* -------------------------------
+Sections
+------------------------------- */
+
+.lessonplan-section {
+
+  /* limit width and center */
+  @add-mixin min-lg {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* override .anchor */
+  &.anchor {
+    padding-top: 1rem;
+    margin-top: 4rem;
+
+    &:first-of-type {
+      margin-top: -2rem;
+    }
+  }
+
+  /* text sizing */
+  & p,
+  & code,
+  & .slide-text,
+  & .slide-quiz div {
+    @add-mixin font-sm;
+
+    @add-mixin min-sm {
+      @add-mixin font-md;
+    }
+  }
+  & ul,
+  & ol {
+    @add-mixin font-sm;
+  }
+
+  /* vertical margins */
+  & pre + *,
+  & ul + * {
+    margin-top: 2rem;
+  }
+  & ol {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* bad content editor! 🙅‍ */
+  & p:empty,
+  & br {
+    display: none !important;
+    pointer-events: none;
+  }
+
+  /* remove extra margin on first and last paragraphs */
+  & p:first-of-type {
+    margin-top: 0;
+  }
+  & p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  /* border between sections */
+  & + .lessonplan-section:before {
+    content: "";
+    display: block;
+    /* positioning */
+    position: absolute;
+    /* sizing */
+    height: 2px;
+    top: -1rem;
+    width: 100%;
+    /* theming */
+    background: var(--sky-dark);
+    border-radius: var(--radius-sm);
+  }
+}
+
+
+/* -------------------------------
+Slides
+------------------------------- */
+
+/* base styles */
+.lessonplan-slide {
+  @add-mixin clearfix;
+
+  /* border between sections */
+  & + .lessonplan-slide {
+    padding-top: 1rem;
+    margin-top: 1rem;
+
+    /* increase spacing between sections */
+    @add-mixin min-md {
+      padding-top: 2rem;
+      margin-top: 2rem;
+    }
+
+    /* section divider */
+    &:before {
+      content: "";
+      display: block;
+      /* positioning */
+      position: absolute;
+      top: -1rem;
+      margin-top: 1px;
+      /* sizing */
+      height: 1px;
+      width: 100%;
+      /* theming */
+      background: var(--sky-dark);
+      border-radius: var(--radius-sm);
+      opacity: 0.5;
+    }
+  }
+
+  /* images */
+  & .slide-image-container {
+    /* theming*/
+    border-radius: var(--radius-md);
+    overflow: hidden;
+
+    /* limit width */
+    @add-mixin min-sm {
+      width: 40%;
+    }
+  }
+
+  /* space out code editors */
+  & .code-editor {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  /* hide validation */
+  & .validation {
+    display: none;
+  }
+}
+
+/* text & image */
+.TextImage-lessonplan-slide,
+.ImageText-lessonplan-slide {
+
+  & .slide-image-container,
+  & .slide-text {
+    margin-bottom: 1.5rem;
+  }
+
+  @add-mixin min-sm {
+    & .slide-image-container {
+      float: left;
+    }
+    & .slide-text {
+      float: right;
+      padding-left: 2rem;
+      /* limit width */
+      width: 60%;
+
+      & > p:first-of-type {
+        margin-top: -0.25em;
+      }
+    }
+  }
+}
+
+/* codeblock */
+.codeblock-lessonplan-section {
+
+  /* override heading sizes style */
+  & .lesson-prompt {
+    & h1 {
+      @add-mixin font-lg;
+      margin-top: 0;
+    }
+
+    & h2 {
+      @add-mixin font-md;
+    }
+
+    & * + h2 {
+      margin-top: 1.5em;
+    }
+  }
+
+  @add-mixin min-md {
+    /* override margin */
+    & .codeBlock .codeBlock-text {
+      margin-top: 0;
+    }
+
+    /* space out code editor */
+    & .code-editor {
+      min-height: 20rem;
+      max-height: 80vh;
+
+      /* overrides for fullscreen */
+      &.is-fullscreen {
+        max-height: 100vh;
+        margin-top: 0;
+        padding-left: 0;
+      }
+    }
+  }
+}

@@ -6,7 +6,8 @@ import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2} from "@blue
 import {merge} from "d3plus-common";
 import {Treemap} from "d3plus-react";
 import {nest} from "d3-collection";
-import Loading from "components/Loading";
+import LoadingSpinner from "components/LoadingSpinner";
+import styles from "style.yml";
 
 import "./Statistics.css";
 
@@ -29,11 +30,6 @@ class Statistics extends Component {
 
     Promise.all([sget]).then(resp => {
       const mounted = true;
-      const users = resp[0].data.map(u => {
-        u.progressPercent = u.userprogress.length / 32 * 100;
-        if (u.progressPercent === 0) u.progressPercent = .01;
-        return u;
-      });
       const islands = this.props.islands.map(i => Object.assign({}, i)).sort((a, b) => a.ordering - b.ordering);
       const levels = this.props.levels.map(l => Object.assign({}, l));
       let flatProgress = [];
@@ -41,6 +37,11 @@ class Statistics extends Component {
         const myLevels = levels.filter(l => l.lid === i.id).sort((a, b) => a.ordering - b.ordering);
         flatProgress = flatProgress.concat(myLevels, i);
       }
+      const users = resp[0].data.map(u => {
+        u.progressPercent = u.userprogress.filter(up => up.status === "completed").length / flatProgress.length * 100;
+        if (u.progressPercent === 0) u.progressPercent = .01;
+        return u;
+      });
       this.setState({mounted, users, flatProgress}, this.handleTabChange.bind(this, "last-1"));
     });
   }
@@ -66,7 +67,7 @@ class Statistics extends Component {
     const {mounted, flatProgress, activeTabId, sortBy} = this.state;
     const {t} = this.props;
 
-    if (!mounted) return <Loading />;
+    if (!mounted) return <LoadingSpinner />;
 
     const visibleUsers = this.state.visibleUsers.sort((a, b) => {
       const prop1 = typeof a[sortBy.prop] === "string" ? a[sortBy.prop].toLowerCase() : a[sortBy.prop];
@@ -89,7 +90,7 @@ class Statistics extends Component {
       let latestTheme = "island-jungle";
 
       for (const fp of flatProgress) {
-        if (u.userprogress.find(up => up.level === fp.id)) {
+        if (u.userprogress.filter(up => up.status === "completed").find(up => up.level === fp.id)) {
           if (fp.theme) latestTheme = fp.theme;
           latestLevel = fp;
         }
@@ -100,10 +101,10 @@ class Statistics extends Component {
 
       let intent = "pt-intent-danger";
       if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
-      if (u.progressPercent > 60) intent = "pt-intent-success";
-      return <tr key={u.id}>
-        <td className="username">{u.username}</td>
-        <td className="progressPercent">
+      if (u.progressPercent > 60) intent = "pt-intent-primary";
+      return <tr className="statistics-table-row" key={u.id}>
+        <td className="statistics-table-cell username">{u.username}</td>
+        <td className="statistics-table-cell progress">
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div>
               <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
@@ -118,11 +119,11 @@ class Statistics extends Component {
             </div>
           </Popover>
         </td>
-        <td className="name">{u.name}</td>
-        <td className="email">{u.email}</td>
-        <td className="schoolname">{u.schoolname}</td>
-        <td className="geoname">{u.geoname}</td>
-        <td className="createdAt">{new Date(u.createdAt).toDateString()}</td>
+        <td className="statistics-table-cell name">{u.name}</td>
+        <td className="statistics-table-cell email">{u.email}</td>
+        <td className="statistics-table-cell schoolname">{u.schoolname}</td>
+        <td className="statistics-table-cell geoname">{u.geoname}</td>
+        <td className="statistics-table-cell created-at">{new Date(u.createdAt).toDateString()}</td>
       </tr>;
     });
 
@@ -147,9 +148,9 @@ class Statistics extends Component {
           <Tab2 id="last-999999" className="stat-tab" title={t("Forever")} />
         </Tabs2>
 
-        <div id="statistics">
+        <div id="statistics" className="statistics">
 
-          <div id="totals">
+          <div id="totals" className="totals">
             <span className="stat">Number of Students: <span className="value">{userList.length}</span></span>
             <span className="stat">Number of Schools: <span className="value">{vizData.length}</span></span>
           </div>
@@ -161,7 +162,7 @@ class Statistics extends Component {
               groupBy: "geoname",
               legend: false,
               shapeConfig: {
-                fill: () => "#ba1c2e",
+                fill: () => styles["sky-dark"],
                 labelConfig: {
                   fontFamily: "Overpass"
                 }
@@ -190,19 +191,47 @@ class Statistics extends Component {
           }
 
           { userList.length
-            ? <table className="pt-table pt-striped pt-interactive">
-              <thead>
-                <tr>
-                  <th className="username" onClick={this.handleHeaderClick.bind(this, "username")}><span className={ `pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Username</th>
-                  <th className="progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}><span className={ `pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Progress</th>
-                  <th className="name" onClick={this.handleHeaderClick.bind(this, "name")}><span className={ `pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Name</th>
-                  <th className="email" onClick={this.handleHeaderClick.bind(this, "email")}><span className={ `pt-icon-standard ${ sortBy.prop === "email" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Email</th>
-                  <th className="schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}><span className={ `pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>School</th>
-                  <th className="geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}><span className={ `pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Municipality</th>
-                  <th className="createdAt" onClick={this.handleHeaderClick.bind(this, "createdAt")}><span className={ `pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-caret-down" : "pt-icon-caret-up" : "pt-icon-double-caret-vertical" }` }></span>Joined on</th>
+            ? <table className="statistics-table pt-table">
+              <thead className="statistics-table-header">
+                <tr className="statistics-table-header-row statistics-table-row">
+                  {/* username */}
+                  <th className="statistics-table-heading statistics-table-cell username" onClick={this.handleHeaderClick.bind(this, "username")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Username")}
+                  </th>
+                  {/* progress */}
+                  <th className="statistics-table-heading statistics-table-cell progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-sort-desc" : "pt-icon-sort-asc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Progress")}
+                  </th>
+                  {/* name */}
+                  <th className="statistics-table-heading statistics-table-cell name" onClick={this.handleHeaderClick.bind(this, "name")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Name")}
+                  </th>
+                  {/* email */}
+                  <th className="statistics-table-heading statistics-table-cell email" onClick={this.handleHeaderClick.bind(this, "email")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "email" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Email")}
+                  </th>
+                  {/* school */}
+                  <th className="statistics-table-heading statistics-table-cell schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("School")}
+                  </th>
+                  {/* municipality */}
+                  <th className="statistics-table-heading statistics-table-cell geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Municipality")}
+                  </th>
+                  {/* joined on */}
+                  <th className="statistics-table-heading statistics-table-cell created-at" onClick={this.handleHeaderClick.bind(this, "createdAt")}>
+                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-sort-numerical" : "pt-icon-sort-numerical-desc" : "pt-icon-double-caret-vertical" }` } />
+                    {t("Joined on")}
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="statistics-table-body">
                 { userList }
               </tbody>
             </table>

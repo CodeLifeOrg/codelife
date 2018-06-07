@@ -1,50 +1,243 @@
-#footer {
-  align-items: center;
-  background-image: url("/ground.png");
-  background-repeat: repeat-x;
-  bottom: 0;
-  color: white;
-  display: flex;
-  height: var(--footer-height);
-  justify-content: space-between;
-  left: 0;
-  padding: 50px 25px 25px;
-  position: absolute;
+@import "../mixins.css";
+
+/* repeating image */
+.footer:before {
+  content: '';
+  display: block;
+  /* sizing */
   width: 100%;
+  height: 50px;
+  /* positioning */
+  position: absolute;
+  top: -50px; /* position bg image above .footer background */
+  /* background sizing and default image */
+  background-image: url("/ground.png");
+  background-size: contain;
+  background-position: -10% bottom;
+  background-repeat: repeat-x;
+}
 
-  & .links {
+/* default colors */
+.footer {
+  margin-top: 120px; /* offset image */
+  background: var(--black);
 
-    & .link {
-      color: white;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
+  & * {
+    color: var(--light-2);
+  }
+}
 
-    & .link:not(.language) {
-      margin-right: 15px;
-    }
+/* container */
+.footer-inner {
+  padding: var(--gutter-md);
 
+  /* space out content on bigger screens */
+  @add-mixin min-sm {
+    padding: var(--gutter-lg) var(--gutter-lg) var(--gutter-md) var(--gutter-lg);
   }
 
-  & .logos {
-    align-items: center;
+  /* tweakpoint to align links left, credits right on big screens */
+  @media (min-width: 1240px) {
     display: flex;
+    justify-content: space-between;
+  }
 
-    & .logo {
-      height: 30px;
-      margin: 0 15px;
-      opacity: 0.9;
-      transition: opacity 0.2s;
+  /* align links and credits */
+  & > * {
+    display: inline-block;
+    vertical-align: top;
+  }
+}
 
-      &.datawheel {
-        height: 40px;
+/* lists of links */
+.footer-list {
+  @add-mixin list-reset;
+  margin-top: -0.25rem; /* fudge into place */
+
+  /* full width links on mobile */
+  @add-mixin max-xs {
+    width: 100%;
+
+    & .footer-item + .footer-item {
+      border-top: 1px solid var(--dark-3);
+    }
+
+    & .footer-link {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  /* links (nested within list items) */
+  & .footer-link {
+    @add-mixin nav-link;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+
+    @add-mixin min-xs {
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
+    }
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--light-2);
+    }
+  }
+}
+
+/* list of lists */
+.footer-nav {
+  display: block;
+
+  /* let flex take over once that makes sense */
+  @add-mixin min-sm {
+    display: flex;
+    justify-content: center;
+  }
+
+  & .footer-list-container {
+    /* positioning */
+    display: inline-block; /* parent flexbox fallback */
+    vertical-align: top; /* thanks blueprint */
+    margin-bottom: var(--gutter-md);
+    /* sizing */
+    width: 100%;
+    max-width: 100%;
+
+    /* sizing and margin for bigger screens */
+    @add-mixin min-xs {
+      width: 11.5rem; /* 184px */
+      margin-right: var(--gutter-md); /* 40px */
+
+      /* reset margin on last item */
+      &:last-of-type {
+        margin-right: 0;
       }
+    }
+  }
+}
 
-      &:hover {
+/* credits */
+.footer-credits-container {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+
+  /* right align on big viewports */
+  @media (min-width: 1240px) {
+    text-align: right;
+    width: auto;
+  }
+
+  /* datawheel logo */
+  & .footer-logo-link {
+    height: var(--gutter-md);
+    /* increase clickable area */
+    padding-top: var(--gutter-md);
+    padding-bottom: var(--gutter-md);
+
+    /* offset height when side by side */
+    @add-mixin min-sm {
+      top: -10px; /* fudge into place */
+    }
+
+    /* vertically center built by datawheel */
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* space out "built by" and logo */
+    & > .footer-logo-text {
+      margin-right: 0.25em;
+    }
+
+    /* logo sizing */
+    & > .footer-logo-img {
+      height: var(--gutter-lg);
+      /* transitons */
+      opacity: 0.75;
+      transition: 0.2s opacity;
+    }
+
+    /* interactions */
+    &:hover, &:focus {
+      /* remove underline from "built by" */
+      text-decoration: none;
+
+      /* reset opacity on logo */
+      & > .footer-logo-img {
         opacity: 1;
       }
     }
-
   }
 
+  /* social links container */
+  & .footer-social-list {
+    margin-bottom: var(--gutter-md);
+    margin-top: 0.5rem;
+
+    /* adjustment on side by side footer layout */
+    @add-mixin min-lg {
+      margin-top: 0; /* reset */
+      /* account for built in svg padding */
+      right: -0.25rem;
+      top: -0.25rem;
+    }
+  }
+
+  /* social link list item layout */
+  & .footer-social-item {
+    display: inline-block;
+    vertical-align: middle;
+
+    & + .footer-social-item {
+      margin-left: var(--gutter-xs);
+    }
+  }
+
+  /* social link interactions */
+  & .footer-social-link {
+
+    /* svg sizing */
+    & .social-svg {
+      /* sizing */
+      height: 3rem;
+      /* theming */
+      fill: var(--dark-1);
+      /* transitions */
+      transition: fill 0.2s ease;
+    }
+
+    /* offset built-in svg padding */
+    &.youtube-footer-social-link .social-svg {
+      transform: scale(1.325); /* fudge youtube size */
+    }
+
+    /* adjust icon fill on hover */
+    &:hover, &:focus {
+      &.facebook-footer-social-link .social-svg  { fill: #3B5998; }
+      &.twitter-footer-social-link .social-svg   { fill: #00ACED; }
+      &.instagram-footer-social-link .social-svg { fill: #E4405F; }
+      &.youtube-footer-social-link .social-svg   { fill: #FF0000; }
+    }
+  }
+
+
+
+  /* credits */
+  & .footer-credits {
+
+    /* make partner links subtle */
+    & .footer-credits-link {
+      display: block;
+      margin-top: 0.25em;
+      color: var(--light-3);
+
+      &:hover, &:focus {
+        color: var(--light-2);
+      }
+    }
+  }
 }

@@ -1,0 +1,127 @@
+@import "mixins.css";
+
+@media print {
+  /* handle overflow */
+  body {
+    overflow-y: auto !important;
+  }
+  @supports (height: 100vh) {
+    #app {
+      overflow-y: hidden !important;
+      height: auto !important;
+    }
+  }
+  html {
+    font-size: 10pt;
+  }
+  /* reset everything to black on transparent */
+  * {
+    color: black !important;
+    background-color: transparent !important;
+  }
+
+  /* make background images printable by default */
+  [style*=background-image],
+  [class*=image] {
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* white background */
+  .island-link-label,
+  .island-title,
+  .stop, .side,
+  .pt-popover-content {
+    background-color: white !important;
+  }
+
+  /* black logo */
+  .logo-svg g {
+    fill: black;
+  }
+
+  /* display href attr */
+  a[href]:not([href="/"]):after {
+    @add-mixin print-attr;
+    content: "<" attr(href) ">";
+  }
+  a[href]:not([href*=http]):not([href="/"]):after {
+    @add-mixin print-attr;
+    content: "<http://codelife.com/" attr(href) ">";
+  }
+
+  /* override link href positioning */
+  .island-link:after {
+    position: absolute !important;
+    bottom: -1rem;
+  }
+  .card-trigger:after {
+    position: absolute !important;
+    bottom: -0.75rem;
+  }
+
+  /* reset padding on main content container */
+  .nav + .content {
+    width: 100% !imporatnt;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* limit image size */
+  .slide-image-container {
+    max-width: 33%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* add padding to header text */
+  .header-text {
+    padding-left: var(--gutter-md);
+    padding-right: var(--gutter-md);
+  }
+
+  /* code editor adjustments */
+  .code-editor {
+    max-height: 70vh;
+    flex-direction: row !important;
+
+    & .code,
+    & .render {
+      border-radius: 0 !important;
+      border: 1px solid var(--gray) !important;
+    }
+
+    & .code + .render {
+      border-left: none !important;
+    }
+  }
+  /* codeblock adjustments */
+  /* TODO: fix in codeblock */
+  .codeBlock-text {
+    max-width: none !important;
+    margin-bottom: 1rem;
+  }
+
+  /* section breaks */
+  .lessonplan-section:not(:first-of-type) {
+    page-break-before: always;
+  }
+  pre, code, ol, li,
+  .code-editor {
+    page-break-inside: avoid;
+  }
+
+  /* hide unuseful stuff */
+  button, input, textarea,
+  .nav .link-list,
+  .search-container,
+  .video-container,
+  .clouds, #clouds,
+  .cta,
+  .footer,
+  .footer-logo-img,
+  .lessonplan-nav,
+  .lessonplan-header-image-container,
+  .lessonplan-toc-link:after {
+    display: none !important;
+  }
+}

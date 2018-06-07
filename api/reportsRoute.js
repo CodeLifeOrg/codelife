@@ -1,4 +1,5 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
+const Op = require("sequelize").Op;
 const BuildMail = require("buildmail"),
       Mailgun = require("mailgun-js"),
       fs = require("fs"),
@@ -12,6 +13,8 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+  // TODO: Collapse these four into one get with params
+
   // Used in ReportBox to find if the logged in user has reported this codeblock before
   app.get("/api/reports/byCodeBlockid", isAuthenticated, (req, res) => {
     db.reports.findAll({where: {type: "codeblock", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
@@ -22,7 +25,71 @@ module.exports = function(app) {
     db.reports.findAll({where: {type: "project", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
   });
 
-  // Current Problem:  How do I join through a different association?
+  // Used in ReportBox to find if the logged in user has reported this thread before
+  app.get("/api/reports/byThreadid", isAuthenticated, (req, res) => {
+    db.reports.findAll({where: {type: "thread", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
+  });
+
+  // Used in ReportBox to find if the logged in user has reported this comment before
+  app.get("/api/reports/byCommentid", isAuthenticated, (req, res) => {
+    db.reports.findAll({where: {type: "comment", report_id: req.query.id, uid: req.user.id}}).then(u => res.json(u).end());
+  });
+
+  app.get("/api/reports/threads/all", isRole(2), (req, res) => {
+    db.reports.findAll({
+      where: {
+        type: "thread",
+        status: "new"
+      },
+      include: [
+        {
+          association: "thread",
+          include: [
+            { 
+              association: "commentlist", 
+              include: [
+                {
+                  association: "user", 
+                  attributes: ["name", "username", "id", "role"]
+                },
+                {
+                  association: "reportlist"
+                },
+                {
+                  association: "userprofile", 
+                  attributes: ["img"]
+                }
+              ]
+            },
+            {
+              association: "user",
+              attributes: ["username", "email", "name"]
+            }
+          ]
+        }
+      ]
+    }).then(u => res.json(u).end());
+  });
+
+  app.get("/api/reports/comments/all", isRole(2), (req, res) => {
+    db.reports.findAll({
+      where: {
+        type: "comment",
+        status: "new"
+      },
+      include: [
+        {
+          association: "commentref",
+          include: [
+            {
+              association: "user",
+              attributes: ["username", "email", "name"]
+            }
+          ]
+        }
+      ]
+    }).then(u => res.json(u).end());
+  });
 
   // Used in ReportViewer to get ALL codeblock reports for admins
   app.get("/api/reports/codeblocks/all", isRole(2), (req, res) => {
@@ -45,7 +112,7 @@ module.exports = function(app) {
       ]
     })
       .then(rRows => {
-        const resp = rRows.map(r => {
+        const resp = rRows.filter(c => c.codeblock).map(r => {
           const rj = r.toJSON();
           rj.username = rj.codeblock.user ? rj.codeblock.user.username : "";
           rj.email = rj.codeblock.user ? rj.codeblock.user.email : "";
@@ -78,8 +145,12 @@ module.exports = function(app) {
       ]
     })
       .then(rRows => {
-        const resp = rRows.map(r => {
+        // This filter catches reports whose target project has been deleted.
+        // TODO: The deletion of a project should not "wipe clean" a report - return a special "deleted"
+        // case that maintains the fact that this user was reported, but also shows their project was deleted.
+        const resp = rRows.filter(p => p.project).map(r => {
           const rj = r.toJSON();
+          console.log(rj);
           rj.username = rj.project.user ? rj.project.user.username : "";
           rj.email = rj.project.user ? rj.project.user.email : "";
           rj.name = rj.project.user ? rj.project.user.name : "";
@@ -93,12 +164,24 @@ module.exports = function(app) {
   // Used in Share to determine if this user has reported this content before
   app.get("/api/reports", (req, res) => {
     if (req.user) {
-      db.reports.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
+      db.reports.findAll({where: {[Op.or]: [{uid: req.user.id, type: "project"}, {uid: req.user.id, type: "codeblock"}]}}).then(u => res.json(u).end());  
     }
     else {
       res.json([]).end();
     }
   });
+
+  // Used in Share to determine if this user has reported this content before
+  app.get("/api/reports/discussions", (req, res) => {
+    if (req.user) {
+      db.reports.findAll({where: {[Op.or]: [{uid: req.user.id, type: "thread"}, {uid: req.user.id, type: "comment"}]}}).then(u => res.json(u).end());  
+    }
+    else {
+      res.json([]).end();
+    }
+  });
+
+  // TODO: collapse these four into one get with param
 
   // Used by UserProjects to get all reports submitted by this user, to determine which projects have already been reported
   app.get("/api/reports/projects", isAuthenticated, (req, res) => {
@@ -110,13 +193,26 @@ module.exports = function(app) {
     db.reports.findAll({where: {uid: req.user.id, type: "codeblock"}}).then(u => res.json(u).end());
   });
 
+  // Used by TBD
+  app.get("/api/reports/threads", isAuthenticated, (req, res) => {
+    db.reports.findAll({where: {uid: req.user.id, type: "thread"}}).then(u => res.json(u).end());
+  });
+
+  // Used by TBD
+  app.get("/api/reports/comments", isAuthenticated, (req, res) => {
+    db.reports.findAll({where: {uid: req.user.id, type: "comment"}}).then(u => res.json(u).end());
+  });
+
   // Used by ReportBox to process/save a report
   app.post("/api/reports/save", isAuthenticated, (req, res) => {
     const uid = req.user.id;
-    const {reason, comment, type} = req.body;
+    const {reason, comment, type, permalink} = req.body;
     const reportId = req.body.report_id;
-    db.reports.create({uid, reason, comment, report_id: reportId, type, status: "new"})
+    db.reports.create({uid, reason, comment, permalink, report_id: reportId, type, status: "new"})
       .then(u => {
+
+        // disabling email server while testing occurs
+        // res.json(u).end();
 
         const mailgun = new Mailgun({apiKey: mgApiKey, domain: mgDomain});
         const confirmEmailFilepath = path.join(__dirname, "../tools/report.html");
@@ -135,6 +231,8 @@ module.exports = function(app) {
 
         });
 
+        
+    
       });
   });
 

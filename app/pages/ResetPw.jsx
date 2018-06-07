@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Reset as CanonReset} from "datawheel-canon";
+import {PasswordReset} from "../components/PasswordReset";
 import "./ResetPw.css";
 
 class ResetPw extends Component {
@@ -21,10 +21,10 @@ class ResetPw extends Component {
     const {location, t} = this.props;
 
     return (
-      <div id="ResetPw">
-        <h1>{ t("Reset Password") }</h1>
-        <div>
-          <CanonReset location={ location } />
+      <div className="content u-vertical-align-children">
+        <div className="form-container u-margin-auto">
+          <h1 className="u-margin-top-off">{ t("Reset Password") }</h1>
+          <PasswordReset router={this.props.router} location={ location } />
         </div>
       </div>
     );

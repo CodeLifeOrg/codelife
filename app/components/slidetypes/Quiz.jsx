@@ -15,16 +15,18 @@ class Quiz extends Component {
   }
 
   onChooseAnswer(question) {
-    const {t} = this.props;
-    const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
-    if (question.isCorrect) {
-      toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
-      if (this.props.unblock) this.props.unblock();
+    if (!this.props.readOnly) {
+      const {t} = this.props;
+      const toast = Toaster.create({className: "quizToast", position: Position.TOP_CENTER});
+      if (question.isCorrect) {
+        toast.show({message: t("You got it right!"), timeout: 1500, intent: Intent.SUCCESS});
+        if (this.props.unblock) this.props.unblock();
+      }
+      else {
+        toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});
+      }
+      this.setState({activeQ: question.text});
     }
-    else {
-      toast.show({message: t("Sorry, Try again!"), timeout: 1500, intent: Intent.DANGER});
-    }
-    this.setState({activeQ: question.text});
   }
 
   componentDidMount() {
@@ -51,10 +53,16 @@ class Quiz extends Component {
       qText = "Quiz Data is Unavailable.";
     }
 
-    const quizItems = qParse.map(question => <li className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text} onClick={this.onChooseAnswer.bind(this, question)}>{question.text}</li>);
+    const quizItems = qParse.map(question =>
+      <li className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text}>
+        <button className="quiz-button u-unbutton" onClick={this.onChooseAnswer.bind(this, question)}>
+          {question.text}
+        </button>
+      </li>
+    );
 
     return (
-      <div id="slide-container" className="quiz flex-row">
+      <div id="slide-content" className="slide-content quiz flex-row">
         <div className="slide-quiz">
           <div dangerouslySetInnerHTML={{__html: qText}} />
           <ol className="questions">

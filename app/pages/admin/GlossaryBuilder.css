@@ -1,12 +1,12 @@
 .word {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: var(--gutter-md);
   border-bottom: 3px black solid;
 }
 
 .touched {
-  background-color: #FFE9EC;
+  background-color: var(--danger-light);
 }
 
 .glossary-button {
@@ -26,12 +26,12 @@
 
 .word-box {
   width: 200px;
-  margin: 5px;
+  margin: var(--gutter-xxs);
 }
 
 .definition-box {
-  margin: 5px;
-  background-color: white;
+  margin: var(--gutter-xxs);
+  background-color: var(--white);
 }
 
 .word-container-readonly {
@@ -41,16 +41,14 @@
 
 .word-box-readonly {
   width: 200px;
-  margin: 5px;
+  margin: var(--gutter-xxs);
   background-color:white;
-  padding: 5px;
+  padding: var(--gutter-xxs);
 }
 
 .definition-box-readonly {
-  margin: 5px;
-  background-color: white;
-  padding: 5px;
+  margin: var(--gutter-xxs);
+  background-color: var(--white);
+  padding: var(--gutter-xxs);
   width: 500px;
 }
-
-

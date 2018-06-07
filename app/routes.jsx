@@ -1,25 +1,28 @@
 import React from "react";
 import {Route, Redirect, IndexRoute, browserHistory} from "react-router";
 
-import App from "components/App";
+import App from "./App";
 
 import About from "pages/About";
 import EditProfile from "pages/profile/EditProfile";
 import Glossary from "pages/Glossary";
 import Home from "pages/Home";
-import Island from "pages/Island";
-import Level from "pages/Level";
+import IslandMap from "pages/IslandMap";
+import IslandLevel from "pages/IslandLevel";
 import Privacy from "pages/Privacy";
 import Profile from "pages/profile/Profile";
 import Share from "pages/Share";
 import Slide from "pages/Slide";
-import Studio from "pages/Studio";
+import Projects from "pages/Projects";
 import Survey from "pages/Survey";
 import LearnMore from "pages/LearnMore";
 import AdminPanel from "pages/admin/AdminPanel";
 import ResetPw from "pages/ResetPw";
+import LessonPlan from "pages/LessonPlan";
+import Leaderboard from "pages/Leaderboard";
 import Error from "pages/Error";
 
+//import Contest from "pages/Contest";
 
 export default function RouteCreate() {
 
@@ -28,13 +31,14 @@ export default function RouteCreate() {
 
       <IndexRoute component={Home} />
 
-      <Route path="island" component={Island} />
-      <Route path="island/:lid" component={Level} />
+      <Route path="island" component={IslandMap} />
+      <Route path="island/:lid" component={IslandLevel} />
+      <Route path="island/:lid/show" component={IslandLevel} />
       <Route path="island/:lid/:mlid(/:sid)" component={Slide} />
 
-      <Route path="projects/:username" component={Studio} />
+      <Route path="projects/:username" component={Projects} />
       <Route path="projects/:username/:filename" component={Share} />
-      <Route path="projects/:user/:filename/edit" component={Studio} />
+      <Route path="projects/:user/:filename/edit" component={Projects} />
 
       <Route path="profile/:username" component={Profile} />
       <Route path="profile/:username/edit" component={EditProfile} />
@@ -56,6 +60,13 @@ export default function RouteCreate() {
       <Route path="admin/:tab/:island/:level/:slide" component={AdminPanel} />
 
       <Route path="learnmore" component={LearnMore} />
+
+      {/* <Route path="contest" component={Contest} /> */}
+
+      <Route path="lessonplan" component={LessonPlan} />
+      <Route path="lessonplan/:lid" component={LessonPlan} />
+
+      <Route path="leaderboard" component={Leaderboard} />
 
       <Route path="reset" component={ResetPw} />
       <Redirect from="login" to="/" />

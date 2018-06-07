@@ -1,126 +1,165 @@
-#profile {
-  background-color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
-  display: flex;
-  margin: 0 25px 25px;
-  width: calc(100% - 50px);
+@import "../../mixins.css";
 
-  & .user-img {
-    background-size: cover;
-    background-position: 50% 0;
-    background-repeat: no-repeat;
+/* view mode */
+.view-profile {
+
+  /* side by side avatar and info */
+  & .header-inner {
+    @add-mixin slide-theme;
+    padding-top: var(--gutter-xl);
+    padding-bottom: var(--gutter-xl);
+
+    /* enable side by side layout when there's space for that */
+    @add-mixin min-xs {
+      display: flex;
+    }
+
+    /* fullwidth on small screens */
+    @add-mixin max-md {
+      @add-mixin fullwidth-section;
+      width: 100vw;
+      border-radius: 0;
+      margin-top: -1.75rem; /* offset .header padding */
+      padding-left: var(--gutter-md);
+      padding-right: var(--gutter-md);
+    }
+
+    /* center image and text on bigger screens, if there's an image */
+    @add-mixin min-sm {
+      padding-left: var(--gutter-lg);
+      padding-right: var(--gutter-lg);
+    }
+  }
+
+  /* avatar container */
+  & .header-avatar {
+    /* theming */
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    overflow: hidden;
+    object-fit: cover; /* just in case */
+    background-color: var(--white);
+    box-shadow: 0 1px 1em rgba(8, 26, 24, 0.1);
+    /* sizing */
+    width: 8rem;
+    min-width: 8rem; /* don't flex */
+    height: 8rem;
+
+    /* center avatar img on tiny screens */
+    @add-mixin max-xs {
+      margin-left: auto;
+      margin-right: auto;
+      top: -2rem;
+    }
+
+    /* scale up avatar */
+    @add-mixin min-xs {
+      width: 5rem;
+      min-width: 5rem; /* don't flex */
+      height: 5rem;
+    }
+    @add-mixin min-sm {
+      width: 9rem;
+      min-width: 9rem; /* don't flex */
+      height: 9rem;
+    }
+    @add-mixin min-md {
+      width: 12rem;
+      min-width: 12rem; /* don't flex */
+      height: 12rem;
+    }
+    @add-mixin min-lg {
+      width: 14rem;
+      min-width: 14rem; /* don't flex */
+      height: 14rem;
+    }
+
+    /* space out avatar and info */
+    & + .header-text {
+      @add-mixin min-xs {
+        margin-left: var(--gutter-md);
+      }
+      @add-mixin min-sm {
+        margin-left: var(--gutter-lg);
+      }
+      @add-mixin min-md {
+        margin-left: var(--gutter-xl);
+      }
+    }
   }
 
-  & .profile-side {
-    flex: none;
-    margin: 25px;
-    width: 300px;
+  /* inline meta info and controls */
+  & .profile-meta,
+  & .profile-control {
+    display: inline-block;
+    width: auto;
 
-    & .user-info {
-      text-align: center;
-
-      & .user-img {
-        margin: 0 auto 20px auto;
-        height: 200px;
-        width: 200px;
-      }
-
-      & .user-name {
-        line-height: 40px;
-        margin-bottom: 25px;
-      }
-
-      & .edit-link {
-        margin: 10px auto;
-      }
-
-      & .pt-icon-large {
-        font-size: 128px;
-        margin-bottom: 25px;
-      }
-
-      & p {
-        margin: 10px 0;
-        text-align: left;
-
-        & .pt-icon-standard {
-          opacity: 0.75;
-          width: 25px;
-        }
-
-      }
-
+    /* space out adjacent items */
+    &:not(:last-child) {
+      margin-right: 2em;
     }
 
+    /* space out icon and text */
+    & .profile-meta-icon {
+      font-size: 1.25rem;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* prevent link from breaking onto new line */
+    & .profile-meta-text {
+      @add-mixin overflow-ellipsis;
+      display: block; /* required for ellipsis to work */
+      padding-left: 1.5em;
+    }
+
+    /* make links visible on hover */
+    & .profile-meta-link {
+      &:hover, &:focus {
+        color: var(--dark-3);
+      }
+    }
+  }
+}
+
+/* edit mode */
+.edit-profile {
+
+  & .form-container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: calc(100% - 2rem);
+    max-height: none;
+
+    @add-mixin min-md {
+      max-width: 1220px; /* TODO: add to style.yml */
+    }
+  }
+}
+
+
+
+/* card layout */
+.view-profile .card-list {
+  @add-mixin card-layout-base;
+
+  /* stacked cards */
+  @add-mixin max-sm {
+    @add-mixin card-layout-stacked;
   }
 
-  & .profile-info {
-    flex: 1;
-    margin: 25px;
-
-    & .user-section {
-      margin-bottom: 25px;
-
-      & .flex-row {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-    }
-
-    & .user-section:last-child {
-      margin-bottom: 0;
-    }
-
-    & .pt-form-group {
-      align-items: center;
-      margin: 25px 0;
-
-      & .pt-label {
-        line-height: 16px;
-        width: 100px;
-      }
-
-      & .pt-input {
-        width: 200px;
-      }
-
-      & .pt-select {
-        display: block;
-        width: 200px;
-
-        & select {
-          width: 100%;
-        }
-
-      }
-
-      & .pt-button {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0;
-        margin-top: 5px;
-        padding-right: 7px;
-        width: 200px;
-      }
-
-    }
-
+  /* 2 column layout */
+  @add-mixin min-sm {
+    @add-mixin card-layout-2col;
   }
 
-  @media only screen and (max-width : 768px) {
-    flex-direction: column;
-    flex-wrap: nowrap;
-
-    & .profile-side {
-      width: auto;
-    }
-
+  /* 3 column layout */
+  @add-mixin min-md {
+    @add-mixin card-layout-3col;
   }
 
+  /* 4 column layout */
+  @add-mixin min-lg {
+    @add-mixin card-layout-4col;
+  }
 }

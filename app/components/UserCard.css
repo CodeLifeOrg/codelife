@@ -1,8 +1,67 @@
-.userCard {
+@import "../mixins.css";
 
-  & .box .icon .pt-icon-standard {
-    font-size: 50px;
-    line-height: 52px;
+.user-card {
+  /* account for absolutely positioned avatar */
+  min-height: 3.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /* user image */
+  & > .card-avatar {
+    /* sizing */
+    width: 2rem;
+    height: 2rem;
+    /* positioning */
+    left: var(--gutter-sm);
+    /* theming */
+    background: var(--sky-dark);
+    background-size: cover;
+    border-radius: 50%;
+    /* position fallback icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* transitions */
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+    will-change: opacity, transform;
+
+    /* theming for placehodler icon */
+    & > .card-avatar-icon {
+      color: var(--white);
+    }
   }
 
+  /* user info */
+  & > .card-caption {
+    /* make space for avatar */
+    padding-left: var(--gutter-xs); /* reset */
+    padding-right: var(--gutter-xs); /* reset */
+    width: calc(100% - 3rem);
+
+    /* title transition */
+    & .card-title {
+      transition: color 0.2s;
+    }
+    /* keep bio text from getting too long */
+    & .card-bio {
+      line-height: 1.4; /* squeeze in the line height a bit */
+      max-height: 3rem;
+      overflow: hidden;
+    }
+  }
+}
+
+/* interactions */
+.card-trigger:hover + .user-card,
+.card-trigger:focus + .user-card {
+  & .card-title {
+    color: var(--sky-dark);
+  }
+  & .card-avatar {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
 }

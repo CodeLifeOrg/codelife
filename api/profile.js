@@ -41,14 +41,6 @@ module.exports = function(app) {
     db.userprofiles.update(req.body, {where: {uid}}).then(u => res.json(u).end());  
   });
 
-  app.get("/api/profile/doesProfileExist/:username/:email", (req, res) => {
-    db.users.findOne({where: {
-      [Op.or]: [{username: req.params.username}, {email: req.params.email}]
-    }}).then(user => {
-      user ? res.json(true).end() : res.json(false).end();
-    });
-  });
-
   app.get("/api/profile/:username", isAuthenticated, (req, res) => {
     const {username} = req.params;
   

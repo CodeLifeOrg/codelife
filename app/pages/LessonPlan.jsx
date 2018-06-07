@@ -84,7 +84,7 @@ class LessonPlan extends Component {
         <div className={`lessonplan content u-padding-top-off ${currentIsland.theme}`}>
 
           {/* header */}
-          <header className="header lessonplan-header">
+          <header id="header" className="header lessonplan-header">
             <div className="header-inner">
 
               {/* island title & description */}
@@ -172,7 +172,7 @@ class LessonPlan extends Component {
               {levelSections}
 
               {/* codeblock */}
-              <section className="overview-lessonplan-section lessonplan-section anchor" id="codeblock" >
+              <section className="codeblock-lessonplan-section lessonplan-section anchor" id="codeblock" >
                 <h2 className="lessonplan-section-heading font-xl">{t("Lessonplan.Codeblock")}</h2>
                 <div dangerouslySetInnerHTML={{__html: currentIsland.prompt}} />
                 <CodeEditor
@@ -187,8 +187,16 @@ class LessonPlan extends Component {
           {/* footer nav */}
           <nav className="lessonplan-nav footer-lessonplan-nav">
 
+            {/* previous island */}
+            {prevIsland &&
+              <Link className="lessonplan-nav-link link" to={`/lessonplan/${prevIsland.id}`}>
+                <span className="link-icon pt-icon pt-icon-arrow-left" />
+                <span className="link-text">{prevIsland.name}</span>
+              </Link>
+            }
+
             {/* back to top */}
-            <AnchorLink className="lessonplan-nav-link link" to="app">
+            <AnchorLink className="lessonplan-nav-link link" to="header">
               <span className="link-icon pt-icon pt-icon-arrow-up" />
               <span className="link-text">{t("Back to top")}</span>
             </AnchorLink>
@@ -196,9 +204,17 @@ class LessonPlan extends Component {
             {/* island index */}
             <Link className="lessonplan-nav-link link" to="/lessonplan">
               {/* NOTE: replace arrow-left icon with map icon if next/prev links are added */}
-              <span className="link-icon pt-icon pt-icon-arrow-left" />
+              <span className="link-icon pt-icon pt-icon-map" />
               <span className="link-text">{t("Lessonplan.IslandIndex")}</span>
             </Link>
+
+            {/* next island */}
+            {nextIsland &&
+              <Link className="lessonplan-nav-link link" to={`/lessonplan/${nextIsland.id}`}>
+                <span className="link-text">{nextIsland.name}</span>
+                <span className="link-icon pt-icon pt-icon-arrow-right" />
+              </Link>
+            }
 
           </nav>
 
@@ -215,7 +231,7 @@ class LessonPlan extends Component {
           <div className="map u-text-center">
             {/* heading */}
             <div className="map-heading content-section">
-              <h1 className="lessonplan-heading u-margin-bottom-off">
+              <h1 className="lessonplan-heading font-xxl u-margin-bottom-off">
                 {t("Lessonplan.Headline")}
               </h1>
               <h2 className="font-md u-margin-bottom-off">

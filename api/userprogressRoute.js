@@ -1,4 +1,5 @@
 const {isAuthenticated} = require("../tools/api.js");
+const translate = require("../tools/translate.js");
 
 module.exports = function(app) {
 
@@ -12,6 +13,7 @@ module.exports = function(app) {
         const returnObj = {progress};
         db.islands.findAll()
           .then(islands => {
+            islands = translate(req.headers.host, "pt", islands);
             let latestIsland = -1;
             for (const up of progress) {
               const i = islands.find(i => i.id === up.level);

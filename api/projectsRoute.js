@@ -156,43 +156,38 @@ module.exports = function(app) {
       );
   });
 
-  // Experimental endpoint to mass generate screenshots (does not work - xfvb can't handle this many threads)
-  /*
-  app.get("/api/projects/generate", isRole(2), (req, res) => {
-    db.projects.findAll().then(projects => {
-      projects.forEach(project => {
-        project = project.toJSON();
-        db.users.findOne({where: {id: project.uid}}).then(user => {
-          if (user) {
-            user = user.toJSON();
-            const url = `http://${req.headers.host}/projects/${user.username}/${project.slug ? project.slug : project.name}?screenshot=true`;
-            const width = 600;
-            const height = 315;
-            const page = true;
-            const delay = 5000;
-            const xvfb = new Xvfb({timeout: 5000});
-            console.log("attempting screenshot", url);
-            if (req.headers.host !== "localhost:3300") xvfb.startSync();
-            screenshot({url, width, height, page, delay}).then(img => {
-              const folder = `/static/pj_images/${user.username}`;
-              const folderPath = path.join(process.cwd(), folder);
-              const imgPath = path.join(process.cwd(), folder, `${project.id}.png`);
-              console.log("callback");
-              mkdirp(folderPath, err => {
-                console.log("mkdir err", err);
-                fs.writeFile(imgPath, img.data, err => {
-                  console.log("fs err", err);
-                  if (req.headers.host !== "localhost:3300") xvfb.stopSync();
-                });  
-              });
-            });
-          }
+  app.post("/api/projects/generateScreenshot", isRole(2), (req, res) => {
+    const id = req.body.id;
+    db.projects.findOne({where: {id}}).then(project => {
+      const plainProject = project.toJSON();
+      db.users.findOne({where: {id: plainProject.uid}}).then(user => {
+        user = user.toJSON();
+        const url = `${req.headers.origin}/projects/${user.username}/${plainProject.slug ? plainProject.slug : plainProject.name}?screenshot=true`;
+        console.log(url);
+        const width = 600;
+        const height = 315;
+        const page = true;
+        const delay = 5000;
+        const xvfb = new Xvfb({timeout: 5000});
+        if (req.headers.host !== "localhost:3300") xvfb.startSync();
+        screenshot({url, width, height, page, delay}).then(img => {
+          const folder = `/static/pj_images/${user.username}`;
+          const folderPath = path.join(process.cwd(), folder);
+          const imgPath = path.join(process.cwd(), folder, `${plainProject.id}.png`);
+          mkdirp(folderPath, err => {
+            console.log("mkdir err", err);
+            fs.writeFile(imgPath, img.data, err => {
+              console.log("fs err", err);
+              if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+            });  
+          });
         });
       });
-      res.json(projects).end();
+      res.json(project).end();
     });
   });
-  */
+
+
 
   // Used by Studio to update a project
   app.post("/api/projects/update", isAuthenticated, (req, res) => {

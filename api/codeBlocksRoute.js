@@ -39,6 +39,36 @@ module.exports = function(app) {
     db.codeblocks.findAll({where: {uid: req.user.id}}).then(u => res.json(u).end());
   });
 
+  app.post("/api/codeBlocks/generateScreenshot", isRole(2), (req, res) => {
+    const id = req.body.id;
+    db.codeblocks.findOne({where: {id}}).then(codeblock => {
+      const plainCodeblock = codeblock.toJSON();
+      db.users.findOne({where: {id: plainCodeblock.uid}}).then(user => {
+        user = user.toJSON();
+        const url = `${req.headers.origin}/codeBlocks/${user.username}/${plainCodeblock.slug ? plainCodeblock.slug : plainCodeblock.snippetname}?screenshot=true`;
+        const width = 600;
+        const height = 315;
+        const page = true;
+        const delay = 5000;
+        const xvfb = new Xvfb({timeout: 5000});
+        if (req.headers.host !== "localhost:3300") xvfb.startSync();
+        screenshot({url, width, height, page, delay}).then(img => {
+          const folder = `/static/cb_images/${user.username}`;
+          const folderPath = path.join(process.cwd(), folder);
+          const imgPath = path.join(process.cwd(), folder, `${plainCodeblock.id}.png`);
+          mkdirp(folderPath, err => {
+            console.log("mkdir err", err);
+            fs.writeFile(imgPath, img.data, err => {
+              console.log("fs err", err);
+              if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+            });
+          });
+        });
+      });
+      res.json(codeblock).end();
+    });
+  });
+
   // Used by Codeblock.jsx to save new Codeblocks
   app.post("/api/codeBlocks/new", isAuthenticated, (req, res) => {
     db.codeblocks.create({studentcontent: req.body.studentcontent, snippetname: req.body.name, uid: req.body.uid, lid: req.body.iid})

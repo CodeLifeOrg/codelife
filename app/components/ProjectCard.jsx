@@ -37,6 +37,12 @@ class ProjectCard extends Component {
     this.forceUpdate();
   }
 
+  generateScreenshot() {
+    axios.post("/api/projects/generateScreenshot", {id: this.props.project.id}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
+  }
+
   handleReport(report) {
     const {project} = this.props;
     project.reported = true;
@@ -46,7 +52,7 @@ class ProjectCard extends Component {
   render() {
     const {open} = this.state;
     const {location, project, t, user} = this.props;
-    const {datemodified, id, likes, liked, name, studentcontent, username, reported, featured} = project;
+    const {id, name, studentcontent, username, reported, featured} = project;
 
     const mine = this.props.user && project.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
@@ -57,7 +63,6 @@ class ProjectCard extends Component {
     const userLink = `${ location.origin }/profile/${ username }`;
 
     const thumbnailURL = `/pj_images/${project.user ? project.user.username : "error"}/${id}.png?v=${new Date().getTime()}`;
-
     const thumbnailImg = Boolean(project.user);
 
     return (
@@ -80,7 +85,7 @@ class ProjectCard extends Component {
 
           {/* show thumbnail image if one is found */}
           { thumbnailImg
-            ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
+            ? <div className="card-img" style={{backgroundImage: `url("${thumbnailURL}")`}}>
               <span className={`card-action-icon pt-icon ${ !displayname ? "pt-icon-fullscreen" : "pt-icon-edit" }`} />
             </div>
             : null }
@@ -194,12 +199,19 @@ class ProjectCard extends Component {
 
                 {/* show feature button if user is admin */}
                 { user.role === 2 &&
-                  <button
-                    onClick={this.toggleFeature.bind(this)}
-                    className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
-                    { featured && <span className="pt-icon pt-icon-tick" /> }
-                    { featured ? t("Featured") : t("Feature") }
-                  </button>
+                  <div>
+                    <button
+                      onClick={this.toggleFeature.bind(this)}
+                      className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                      { featured && <span className="pt-icon pt-icon-tick" /> }
+                      { featured ? t("Featured") : t("Feature") }
+                    </button>
+                    <button
+                      onClick={this.generateScreenshot.bind(this)}
+                      className="pt-button pt-intent-primary">
+                      Screenshot <span className="pt-icon pt-icon-camera" />
+                    </button>
+                  </div>
                 }
               </div>
             }

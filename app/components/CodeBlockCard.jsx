@@ -43,6 +43,12 @@ class CodeBlockCard extends Component {
     this.setState({forkName: e.target.value});
   }
 
+  generateScreenshot() {
+    axios.post("/api/codeBlocks/generateScreenshot", {id: this.props.codeBlock.id}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
+  }
+
   selectFork() {
     this.forkInput.focus();
     this.forkInput.select();
@@ -176,7 +182,7 @@ class CodeBlockCard extends Component {
 
           {/* show thumbnail image if one is found */}
           { thumbnailImg
-            ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
+            ? <div className="card-img" style={{backgroundImage: `url("${thumbnailURL}")`}}>
               <span className="card-action-icon pt-icon pt-icon-fullscreen" />
             </div>
             : null }
@@ -357,12 +363,19 @@ class CodeBlockCard extends Component {
 
                 {/* show feature button if user is admin */}
                 { user.role === 2 &&
-                  <button
-                    onClick={this.toggleFeature.bind(this)}
-                    className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
-                    { featured && <span className="pt-icon pt-icon-tick" /> }
-                    { featured ? t("Featured") : t("Feature") }
-                  </button>
+                  <div>
+                    <button
+                      onClick={this.toggleFeature.bind(this)}
+                      className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                      { featured && <span className="pt-icon pt-icon-tick" /> }
+                      { featured ? t("Featured") : t("Feature") }
+                    </button>
+                    <button
+                      onClick={this.generateScreenshot.bind(this)}
+                      className="pt-button pt-intent-primary">
+                      Screenshot <span className="pt-icon pt-icon-camera" />
+                    </button>
+                  </div>
                 }
               </div>
             }

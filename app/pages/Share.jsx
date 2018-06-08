@@ -77,7 +77,8 @@ class Share extends Component {
           showEditor={false}
           ref={c => this.editor = c}
           tabs={false}
-          showConsole={false} />
+          showConsole={false}
+          suppressJS={isScreenshot} />
 
         {/* footer */}
         { !isScreenshot &&

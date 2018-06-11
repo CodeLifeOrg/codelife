@@ -153,11 +153,11 @@ class IslandEditor extends Component {
         </div>
         <label className="pt-label">
           Initial Codeblock State<br/><br/>
-          <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "initialcontent")} initialValue={data.initialcontent} ref={c => this.editor = c}/>       
+          <CodeEditor noZoom={true} style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "initialcontent")} initialValue={data.initialcontent} ref={c => this.editor = c}/>       
         </label>
         <label className="pt-label">
           pt Initial Codeblock State  🇧🇷 <br/><br/>
-          <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_initialcontent")} initialValue={data.pt_initialcontent} ref={c => this.pt_editor = c}/>       
+          <CodeEditor noZoom={true} style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_initialcontent")} initialValue={data.pt_initialcontent} ref={c => this.pt_editor = c}/>       
         </label>
         <RulePicker data={data} parentID={data.id}/>
         <div className="area-block">

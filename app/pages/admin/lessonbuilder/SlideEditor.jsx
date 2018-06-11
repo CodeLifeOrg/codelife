@@ -227,11 +227,11 @@ class SlideEditor extends Component {
             ? <div>
               <label className="pt-label">
                 htmlcontent2
-                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/>
+                <CodeEditor noZoom={true} style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/>
               </label>
               <label className="pt-label">
                 pt htmlcontent2  🇧🇷
-                <CodeEditor style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/>
+                <CodeEditor noZoom={true} style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/>
               </label>
             </div>
             : <div className="area-block">

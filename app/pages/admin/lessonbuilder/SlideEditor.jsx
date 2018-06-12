@@ -152,6 +152,7 @@ class SlideEditor extends Component {
         <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
         <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
         <Dialog
+          className="is-fullscreen"
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}
           title={data.title}
@@ -162,6 +163,7 @@ class SlideEditor extends Component {
         </Dialog>
 
         <Dialog
+          className="is-fullscreen"
           isOpen={this.state.pt_isOpen}
           onClose={this.closePreview.bind(this)}
           title={ptData.title}

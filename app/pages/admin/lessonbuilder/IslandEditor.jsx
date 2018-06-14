@@ -50,6 +50,7 @@ class IslandEditor extends Component {
     if (this.props.reportSave) this.props.reportSave(data);
     const toast = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
     axios.post("/api/builder/islands/save", data).then(resp => {
+      console.log(resp);
       if (resp.status === 200) {
         toast.show({message: "Saved!", intent: Intent.SUCCESS});
       } 

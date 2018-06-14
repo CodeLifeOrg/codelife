@@ -70,6 +70,15 @@
       position: absolute;
       top: 0;
       right: 0;
+      text-decoration: none;
+
+      & .pt-icon {
+        margin-left: 0.25em;
+
+        @add-mixin max-sm {
+          @add-mixin font-lg;
+        }
+      }
     }
   }
   & .slide-content {
@@ -163,36 +172,6 @@
     & .codeEditor {
       align-self: stretch;
       flex: 2;
-    }
-    & .validation {
-      position: absolute; /* take the validation buttons out of the flow */
-      bottom: -55px; /* fudge into place; offsets .slide-content margin and button height */
-      z-index: 1; /* prevent slide nav buttons from obscuring validation buttons */
-
-      /* treat as button group */
-      & .pt-button {
-        @add-mixin button-groupify;
-      }
-
-      /* make buttons take up 50% width on tiny screens */
-      @add-mixin max-sm {
-        width: 100%; /* necessary due to pos:ab */
-
-        /* two buttons */
-        & .pt-button {
-          width: 50%;
-
-          /* one button (both first and last) */
-          &:first-of-type:last-of-type {
-            width: 100%;
-          }
-        }
-
-        /* three buttons */
-        &.three-buttons .pt-button {
-          width: 33.333%;
-        }
-      }
     }
 
 
@@ -296,6 +275,55 @@
             }
           }
         }
+      }
+    }
+  }
+
+  /* validation / next slide button */
+  & .centered-buttons {
+    position: absolute; /* take the validation buttons out of the flow */
+    z-index: 1; /* prevent slide nav buttons from obscuring validation buttons */
+
+    /* fudge validation buttons into place; offsets .slide-content margin and button height */
+    &.validation {
+      bottom: -60px;
+    }
+
+    &.return {
+
+      @add-mixin max-sm {
+        position: relative;
+        bottom: 95px;
+      }
+
+      @add-mixin min-sm {
+        @add-mixin absolute-horizontal-center;
+        bottom: 25px;
+      }
+    }
+
+    /* treat as button group */
+    & .pt-button {
+      @add-mixin button-groupify;
+    }
+
+    /* make buttons take up 50% width on tiny screens */
+    @add-mixin max-sm {
+      width: 100%; /* necessary due to pos:ab */
+
+      /* two buttons */
+      & .pt-button {
+        width: 50%;
+
+        /* one button (both first and last) */
+        &:first-of-type:last-of-type {
+          width: 100%;
+        }
+      }
+
+      /* three buttons */
+      &.three-buttons .pt-button {
+        width: 33.333%;
       }
     }
   }

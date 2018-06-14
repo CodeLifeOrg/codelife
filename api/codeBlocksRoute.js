@@ -51,7 +51,8 @@ module.exports = function(app) {
         const page = true;
         const delay = 5000;
         const xvfb = new Xvfb({timeout: 5000});
-        if (req.headers.host !== "localhost:3300") xvfb.startSync();
+        const isLocal = ["localhost:3300", "en.localhost:3300", "pt.localhost:3300"].includes(req.headers.host);
+        if (!isLocal) xvfb.startSync();
         screenshot({url, width, height, page, delay}).then(img => {
           const folder = `/static/cb_images/${user.username}`;
           const folderPath = path.join(process.cwd(), folder);
@@ -60,7 +61,7 @@ module.exports = function(app) {
             console.log("mkdir err", err);
             fs.writeFile(imgPath, img.data, err => {
               console.log("fs err", err);
-              if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+              if (!isLocal) xvfb.stopSync();
             });
           });
         });
@@ -82,7 +83,8 @@ module.exports = function(app) {
           const page = true;
           const delay = 5000;
           const xvfb = new Xvfb({timeout: 5000});
-          if (req.headers.host !== "localhost:3300") xvfb.startSync();
+          const isLocal = ["localhost:3300", "en.localhost:3300", "pt.localhost:3300"].includes(req.headers.host);
+          if (!isLocal) xvfb.startSync();
           screenshot({url, width, height, page, delay}).then(img => {
             const folder = `/static/cb_images/${user.username}`;
             const folderPath = path.join(process.cwd(), folder);
@@ -91,7 +93,7 @@ module.exports = function(app) {
               console.log("mkdir err", err);
               fs.writeFile(imgPath, img.data, err => {
                 console.log("fs err", err);
-                if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+                if (!isLocal) xvfb.stopSync();
               });
             });
           });
@@ -113,7 +115,8 @@ module.exports = function(app) {
           const page = true;
           const delay = 5000;
           const xvfb = new Xvfb({timeout: 5000});
-          if (req.headers.host !== "localhost:3300") xvfb.startSync();
+          const isLocal = ["localhost:3300", "en.localhost:3300", "pt.localhost:3300"].includes(req.headers.host);
+          if (!isLocal) xvfb.startSync();
           screenshot({url, width, height, page, delay}).then(img => {
             const folder = `/static/cb_images/${user.username}`;
             const folderPath = path.join(process.cwd(), folder);
@@ -122,7 +125,7 @@ module.exports = function(app) {
               console.log("mkdir err", err);
               fs.writeFile(imgPath, img.data, err => {
                 console.log("fs err", err);
-                if (req.headers.host !== "localhost:3300") xvfb.stopSync();
+                if (!isLocal) xvfb.stopSync();
               });
             });
           });

@@ -44,7 +44,12 @@ class SlideEditor extends Component {
   componentDidUpdate() {
     if (this.props.data.id !== this.state.data.id) {
       for (const q of this.quills) {
-        if (q && q.quillRef) q.quillRef.getEditor().setSelection(0);
+        // For each Quill instance, reach into the Quill editor itself and clear the selection.
+        // This is to prevent a bug where formatting would "spread" from one quill to another when changing slides.
+        if (q && q.getWrappedInstance() && q.getWrappedInstance().quillRef) {
+          const editor = q.getWrappedInstance().quillRef.getEditor();
+          editor.setSelection(0);
+        }
       }
       this.setState({data: this.props.data});
     }
@@ -152,6 +157,7 @@ class SlideEditor extends Component {
         <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
         <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
         <Dialog
+          className="is-fullscreen"
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}
           title={data.title}
@@ -162,6 +168,7 @@ class SlideEditor extends Component {
         </Dialog>
 
         <Dialog
+          className="is-fullscreen"
           isOpen={this.state.pt_isOpen}
           onClose={this.closePreview.bind(this)}
           title={ptData.title}

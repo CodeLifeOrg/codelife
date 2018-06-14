@@ -105,5 +105,5 @@ const mapStateToProps = state => ({
   glossary: state.glossary
 });
 
-QuillWrapper = connect(mapStateToProps)(QuillWrapper);
+QuillWrapper = connect(mapStateToProps, null, null, {withRef: true})(QuillWrapper);
 export default QuillWrapper;

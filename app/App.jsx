@@ -44,6 +44,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const {location} = this.props;
+    const {hostname} = location;
+    // If the user navigates to codelife.com, redirect them to pt, unless they manually override.
+    if (!hostname.includes("en.") && !hostname.includes("pt.")) {
+      const url = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
+      if (window) window.location = url;
+    }
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
     const gget = axios.get("/api/glossary/all");

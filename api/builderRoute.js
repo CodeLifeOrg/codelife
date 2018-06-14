@@ -3,6 +3,10 @@ const path = require("path");
 const sharp = require("sharp");
 const {isRole} = require("../tools/api.js");
 
+/**
+ * Builder Route is the admin-only API for interacting directly with the lesson content in the CMS
+ */
+
 module.exports = function(app) {
 
   const {db} = app.settings;

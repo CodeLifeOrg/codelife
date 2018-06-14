@@ -138,8 +138,6 @@ class GlossaryBuilder extends Component {
 
     if (!words) return <LoadingSpinner />;
 
-    console.log(words);
-
     const wordItems = words.map(w => 
       w.touched 
         ? <div key={w.id} className={`word ${w.touched ? "touched" : ""}`}>

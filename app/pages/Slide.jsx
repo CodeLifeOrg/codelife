@@ -258,13 +258,12 @@ class Slide extends Component {
               </h1>
               : null }
 
-            <Tooltip
-              className="return-link"
-              tooltipClassName={ currentIsland.theme }
-              content={ `${ t("Return to") } ${currentIsland.name}` }
-              position={Position.TOP_RIGHT}>
-              <Link to={`/island/${lid}`}><span className="pt-icon-large pt-icon-layout-linear"></span></Link>
-            </Tooltip>
+            <Link className="return-link" to={`/island/${lid}`}>
+              <span className="font-sm u-hide-below-sm">
+                { t("Return to") } { currentIsland.name }
+              </span>
+              <span className="pt-icon pt-icon-cross" />
+            </Link>
           </div>
 
           <SlideComponent
@@ -282,13 +281,17 @@ class Slide extends Component {
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
                 : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
               : nextLevel
-                ? <div>
-                  <Link style={{marginRight: "5px"}} className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
-                  <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
-                </div>
+                ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
                 : <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
             }
           </div>
+          { !nextSlug && nextLevel &&
+            <div className="centered-buttons return">
+              <Link className="pt-button pt-intent-primary" to={`/island/${lid}`}>
+                {`${t("Return to")} ${currentIsland.name}`}
+              </Link>
+            </div>
+          }
         </div>
         {/* discussion */}
         <button className={ `pt-button discussion-toggle ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>

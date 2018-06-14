@@ -54,8 +54,8 @@ class Quiz extends Component {
     }
 
     const quizItems = qParse.map(question =>
-      <li className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text}>
-        <button className="quiz-button u-unbutton" onClick={this.onChooseAnswer.bind(this, question)}>
+      <li onClick={this.onChooseAnswer.bind(this, question)} className={this.state.activeQ === question.text ? "question quiz-selected" : "question"} key={question.text}>
+        <button className="quiz-button u-unbutton">
           {question.text}
         </button>
       </li>

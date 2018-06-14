@@ -33,7 +33,8 @@ class SignupForm extends Component {
   onSubmit(e) {
     e.preventDefault();
     const {legal, redirect, t} = this.props;
-    const {agreedToTerms, email, password, passwordAgain, username} = this.state;
+    const {agreedToTerms, email, password, passwordAgain} = this.state;
+    let {username} = this.state;
 
     if (password !== passwordAgain) {
       this.setState({error: {iconName: "lock", message: t("SignUp.error.PasswordMatch")}});
@@ -46,6 +47,8 @@ class SignupForm extends Component {
     //   this.setState({error: {iconName: "saved", message: t("SignUp.error.TermsAgree")}});
     // }
     else {
+      // strip the username of any leading or trailing spaces
+      username = username.replace(/^\s+|\s+$/gm, "");
       this.props.signup({username, email, password, redirect});
       this.setState({submitted: true});
     }

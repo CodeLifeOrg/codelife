@@ -16,7 +16,6 @@ module.exports = function(app) {
    * @param {string} query The query string of the request, used to limit the findAll query
    * @returns {Object[]} An array of the island, level, or slide objects
    */
-
   app.get("/api/builder/islands/all", isRole(1), (req, res) => {
     db.islands.findAll({where: req.query}).then(u => {
       res.json(u).end();

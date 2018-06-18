@@ -104,20 +104,25 @@ module.exports = function(app) {
     });    
   });
 
+  
+  /**
+   * Used by Glossary to list, add, update, or delete glossary words.
+   */
+
   app.get("/api/builder/glossary/all", isRole(1), (req, res) => {
     db.glossarywords.findAll({where: req.query}).then(u => {
       res.json(u).end();
     });
   });  
 
-  app.post("/api/builder/glossary/save", isRole(1), (req, res) => {
-    db.glossarywords.update(req.body, {where: {id: req.body.id}}).then(u => {
+  app.post("/api/builder/glossary/new", isRole(1), (req, res) => {
+    db.glossarywords.create(req.body).then(u => {
       res.json(u).end();
     });
   });
 
-  app.post("/api/builder/glossary/new", isRole(1), (req, res) => {
-    db.glossarywords.create(req.body).then(u => {
+  app.post("/api/builder/glossary/save", isRole(1), (req, res) => {
+    db.glossarywords.update(req.body, {where: {id: req.body.id}}).then(u => {
       res.json(u).end();
     });
   });
@@ -128,7 +133,7 @@ module.exports = function(app) {
     });    
   });
 
-
+  // Multer is a node.js middleware for handling image uploads for slides
   const upload = multer({
     fileFilter: (req, file, callback) => {
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -140,6 +145,11 @@ module.exports = function(app) {
 
   const imgUpload = upload.single("file");
 
+  /**
+   * Used by SlideEditor to upload new slide images.
+   * @param {string} req.body The body of the POST, which contains a file and title
+   * @returns {string} Diagnostic info
+   */
   app.post("/api/slideImgUpload/", isRole(1), (req, res) => {
     imgUpload(req, res, err => {
       if (err) return res.json({error: err});
@@ -150,6 +160,9 @@ module.exports = function(app) {
 
       const sampleFile = req.file;
       const title = req.body.title;
+      // The title passed in from the POST request will be the id of the slide to which this
+      // image refers, which is how they are looked up later. If the slide is for pt, the id
+      // is prepended with "pt_".
       const newFileName = `${title}.jpg`;
       const imgPath = path.join(process.cwd(), "/static/slide_images", newFileName);
 

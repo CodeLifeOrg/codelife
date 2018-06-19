@@ -9,6 +9,15 @@ const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
 const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 
 
+/**
+ * Given the logged-in user and a project, this function "flattens" the object by reaching
+ * into the associated tables queries (such as reports and likes) and bubbling them up to a top-level prop
+ * This type of function is really only used here and in codeblocksroute.  As codelife development progressed,
+ * the pattern shifted more to expect the nested nature of sequelize queries, meaning flattening wasn't necessary.
+ * @param {string} user The currently logged in user, as specified by datawheel-canon
+ * @param {Object} p The project to flatten
+ * @returns {Object} The "flattened" project, ready to be returned to the requester
+ */
 function flattenProject(user, p) {
   p.username = p.user ? p.user.username : "";
   p.sharing = p.userprofile ? p.userprofile.sharing : "false";
@@ -21,6 +30,7 @@ function flattenProject(user, p) {
   return p;
 }
 
+// Associations for sequelize queries
 const pInclude = [
   {association: "userprofile", attributes: ["bio", "sharing", "uid", "img", "prompted"]},
   {association: "user", attributes: ["username", "id", "name"]},
@@ -32,14 +42,20 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  // Used by Projects to get a list of users to collaborate with
+  /**
+   * Used by Projects to get a list of users to collaborate with
+   * @returns {Object[]} List of all users
+   */
   app.get("/api/projects/users", isAuthenticated, (req, res) => {
     db.userprofiles.findAll({
       include: [{association: "user"}]
     }).then(u => res.json(u).end());
   });
 
-  // Used by Featured.jsx to get a list of all projects
+  /**
+   * Used by Featured.jsx to get a list of all projects
+   * @returns {Object[]} List of all projects
+   */
   app.get("/api/projects/all", isRole(2), (req, res) => {
     db.projects.findAll({include: pInclude}).then(pRows => 
       res.json(pRows
@@ -48,7 +64,10 @@ module.exports = function(app) {
     );
   });
 
-  // Used by Projects to get a list of projects by the logged-in user
+  /**
+   * Used by Projects to get a list of projects by the logged-in user
+   * @returns {Object[]} List of all projects of the currently logged-in user
+   */
   app.get("/api/projects/mine", isAuthenticated, (req, res) => {
     db.projects.findAll({
       where: {
@@ -65,11 +84,17 @@ module.exports = function(app) {
       );
   });
 
+  /**
+   * For the logged-in user, fetch all of the projects on which that user is a collaborator.
+   * @returns {Object[]} List of all projects this user is a collaborator on
+   */
   app.get("/api/projects/collabs", isAuthenticated, (req, res) => {
     db.projects_userprofiles.findAll({
       where: {
         uid: req.user.id
       },
+      // Notice that the projects fetched use pInclude. This ensures that the returned projects
+      // will have all the necessary metadata (owner, reportlist, other collaborators, etc)
       include: [
         {association: "collabproj", include: pInclude}
       ]
@@ -83,7 +108,10 @@ module.exports = function(app) {
       );
   });
 
-  // Used by home for feature list.  No Authentication required.
+  /**
+   * Used by home for feature list.  No Authentication required.
+   * @returns {Object[]} returns featured projects
+   */
   app.get("/api/projects/featured", (req, res) => {
     db.projects.findAll({
       
@@ -102,7 +130,10 @@ module.exports = function(app) {
       );
   });
 
-  // Used by Studio to open a project by ID
+  /**
+   * Used by Studio to open a project by ID
+   * @returns {Object} the requested project
+   */
   app.get("/api/projects/byid", isAuthenticated, (req, res) => {
 
     db.projects.findOne({
@@ -125,7 +156,11 @@ module.exports = function(app) {
 
   });
 
-  // Used by UserProjects to get a project list for their profile
+  /**
+   * Used by UserProjects to get a project list for their profile
+   * @param {Object} req.query query string containing the uid to look up
+   * @returns {Object[]} the projects the provided user created
+   */
   app.get("/api/projects/byuser", isAuthenticated, (req, res) => {
     db.projects.findAll({
       where: {
@@ -142,10 +177,15 @@ module.exports = function(app) {
       );
   });
 
-  // Used by Share to fetch a project.  Public.
+  /**
+   * Used by Share to fetch a project.  Public.
+   * @param {Object} req.query query string containing query constraints
+   * @returns {Object} The requested project
+   */
   app.get("/api/projects/byUsernameAndFilename", (req, res) => {
     db.projects.findAll({
       where: {
+        // Slugs were not added until later in codelife. Lookup by either one
         [Op.or]: [{slug: req.query.filename}, {name: req.query.filename}]
       },
       include: pInclude.map(i => i.association === "user" ? Object.assign({}, i, {where: {username: req.query.username}}) : i)
@@ -156,6 +196,7 @@ module.exports = function(app) {
       );
   });
 
+  // Generate a screenshot, admin only. See codeblocksroute for an explanation of screenshotting.
   app.post("/api/projects/generateScreenshot", isRole(2), (req, res) => {
     const id = req.body.id;
     db.projects.findOne({where: {id}}).then(project => {
@@ -189,8 +230,11 @@ module.exports = function(app) {
   });
 
 
-
-  // Used by Studio to update a project
+  /**
+   * Used by Studio to update a project
+   * @param {Object} req.body body object containing new project fields
+   * @returns {Object} The updated project
+   */
   app.post("/api/projects/update", isAuthenticated, (req, res) => {
     
     db.projects.findOne({
@@ -239,7 +283,11 @@ module.exports = function(app) {
     });
   });
 
-  // Used by Admins in ReportBox and ReportViewer to Ban or Feature pages
+  /**
+   * Used by Admins in ReportBox and ReportViewer to Ban pages
+   * @param {Object} req.body body object containing query restraints
+   * @returns {number} affected rows
+   */
   app.post("/api/projects/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
     db.projects.update({status}, {where: {id}}).then(u => {
@@ -247,12 +295,21 @@ module.exports = function(app) {
     });
   });
 
+  /**
+   * Used by Admins to Feature Pages via Project Cards
+   * @param {Object} req.body body object containing query restraints
+   * @returns {number} affected rows
+   */
   app.post("/api/projects/setfeatured", isRole(2), (req, res) => {
     const {featured, id} = req.body;
     db.projects.update({featured}, {where: {id}}).then(u => res.json(u).end());
   });
 
-  // Used by Projects to create a new project
+  /**
+   * Used by Projects to create a new project
+   * @param {Object} req.body body object with new project fields
+   * @returns {Object} The new list of projects, as well as the one just updated
+   */
   app.post("/api/projects/new", isAuthenticated, (req, res) => {
     db.projects.create({studentcontent: req.body.studentcontent, name: req.body.name, uid: req.user.id, datemodified: db.fn("NOW")}).then(currentProject => {
       db.projects.findAll({
@@ -262,6 +319,8 @@ module.exports = function(app) {
         include: pInclude
       })
         .then(pRows => {
+          // return the list of projects so that the projects list on the front end can
+          // be updated with the "real" list of projects direct from the database 
           const resp = pRows
             .map(p => flattenProject(req.user, p.toJSON()))
             .filter(p => !p.hidden)
@@ -271,8 +330,14 @@ module.exports = function(app) {
     });
   });
 
+  /**
+   * Used by Projects to add or remove collaborators from a project
+   * @param {Object} req.body body object with new uid/pid fields
+   * @returns {number} affected rows
+   */
   app.post("/api/projects/addcollab", isAuthenticated, (req, res) => {
     const {uid, pid} = req.body;
+    // projects_userprofiles is an associative many to many table 
     db.projects_userprofiles.create({uid, pid}).then(u => {
       res.json(u).end();
     });
@@ -285,6 +350,8 @@ module.exports = function(app) {
     });
   });
 
+  // Add/remove (above) are for project owners to add/remove collaborators
+  // This leave function is so a collaborator can leave a project they were invited to
   app.post("/api/projects/leavecollab", isAuthenticated, (req, res) => {
     const {pid} = req.body;
     const uid = req.user.id;
@@ -293,7 +360,11 @@ module.exports = function(app) {
     });
   });
 
-  // Used by Projects to delete a project
+  /**
+   * Used by Projects to delete a project
+   * @param {Object} req.query query object with id of project to delete
+   * @returns {Object[]} new list of projects now that one is deleted
+   */
   app.delete("/api/projects/delete", isAuthenticated, (req, res) => {
     db.projects.destroy({where: {id: req.query.id, uid: req.user.id}}).then(() =>
       db.projects_userprofiles.destroy({where: {pid: req.query.id}}).then(() => {

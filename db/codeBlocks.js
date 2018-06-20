@@ -1,5 +1,9 @@
 const SequelizeSlugify = require("sequelize-slugify");
 
+/**
+ * codeBlocks are the final test of each island. There is only ever ONE per student per island. 
+ */
+
 module.exports = function(sequelize, db) {
 
   const cb = sequelize.define("codeblocks",
@@ -9,13 +13,21 @@ module.exports = function(sequelize, db) {
         primaryKey: true,
         autoIncrement: true
       },
+      // codeblocks used to be called snippets, so there is some naming cruft here
       snippetname: db.STRING,
+      // actual student code
       studentcontent: db.TEXT,
+      // previewblob is deprecated, screenshots are used now (see codeblocksroute)
       previewblob: db.BLOB,
+      // islands used to be called lessons, so "lid" is the island this codeblock belongs to
       lid: db.TEXT,
+      // user id
       uid: db.TEXT,
+      // codeblocks can be banned, track their status here
       status: db.TEXT,
+      // codeblocks can be featured by admins
       featured: db.BOOLEAN, 
+      // use sequelize-slugify for url-friendly names
       slug: {
         type: db.STRING,
         unique: true

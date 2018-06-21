@@ -197,7 +197,7 @@ class CodeBlockCard extends Component {
             { username
               ? <span className="card-author font-xs">
                 {t("Card.MadeBy")}&nbsp;
-                { this.props.user 
+                { this.props.user
                   ? <Link className="card-author-link link" to={`/profile/${username}`}>
                     { username ? displayname || username : t("anonymous user") }
                   </Link>
@@ -262,7 +262,7 @@ class CodeBlockCard extends Component {
             {/* created by */}
             <p className="card-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
-              {this.props.user 
+              {this.props.user
                 ? <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
                   { username ? displayname || username : t("anonymous user") }
                 </a>
@@ -361,19 +361,24 @@ class CodeBlockCard extends Component {
                 }
 
 
-                {/* show feature button if user is admin */}
+                {/* show feature & screenshot buttons if user is admin */}
                 { user.role === 2 &&
-                  <div>
+                  <div className="u-button-group">
                     <button
                       onClick={this.toggleFeature.bind(this)}
-                      className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                      className={`card-feature-button pt-button pt-intent-primary font-xs${ featured ? " is-featured" : "" }`}>
                       { featured && <span className="pt-icon pt-icon-tick" /> }
-                      { featured ? t("Featured") : t("Feature") }
+                      <span className="u-hide-below-md">
+                        { featured ? t("Featured") : t("Feature") }
+                      </span>
                     </button>
                     <button
                       onClick={this.generateScreenshot.bind(this)}
-                      className="pt-button pt-intent-primary">
-                      Screenshot <span className="pt-icon pt-icon-camera" />
+                      className="card-screenshot-button pt-button pt-intent-primary font-xs">
+                      <span className="pt-icon pt-icon-camera" />
+                      <span className="u-hide-below-md">
+                        {t("Screenshot")}
+                      </span>
                     </button>
                   </div>
                 }

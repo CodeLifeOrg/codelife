@@ -65,10 +65,10 @@
     }
     @add-mixin min-sm {
       & .user-link {
-        max-width: 20.5rem;
+        max-width: 13.5rem;
       }
       & .share-link {
-        max-width: 25rem;
+        max-width: 18rem;
       }
     }
 
@@ -97,6 +97,17 @@
       /* space out items */
       &:not(:last-child) {
         margin-right: 1rem;
+      }
+    }
+    & .pt-button {
+      height: 100%;
+
+      @add-mixin max-md {
+        min-width: 0;
+
+        & .pt-icon {
+          margin-right: 0;
+        }
       }
     }
   }

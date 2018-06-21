@@ -1,3 +1,7 @@
+/**
+ * schools is a list of brazilian schools, organized by their gid (geos table) 
+ */
+
 module.exports = function(sequelize, db) {
 
   const s = sequelize.define("schools",
@@ -6,6 +10,7 @@ module.exports = function(sequelize, db) {
         type: db.INTEGER,
         primaryKey: true
       },
+      // fk: geos
       gid: {
         type: db.STRING,
         references: {model: "geos", key: "id"}

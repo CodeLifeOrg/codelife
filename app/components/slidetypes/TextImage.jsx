@@ -2,6 +2,11 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 
+/**
+ * TextImage is text left, image right. Images are stored in /slide_images/{id}.jpg
+ * Images are uploaded through the CMS and a translated version is chosen here via locales
+ */
+
 class TextImage extends Component {
 
   constructor(props) {
@@ -14,7 +19,7 @@ class TextImage extends Component {
   componentDidMount() {
     this.setState({slideId: this.props.id});
   }
-
+  
   componentDidUpdate() {
     if (this.state.slideId !== this.props.id) {
       this.setState({slideId: this.props.id});
@@ -26,6 +31,8 @@ class TextImage extends Component {
     const {id, htmlcontent1} = this.props;
 
     let path = `/slide_images/${ id }.jpg?v=${new Date().getTime()}`;
+    // Use locale to change the path to pt if necessary. OverrideLang is used in the CMS
+    // where the locale may be en, but we want to show the pt version manually.
     if (this.props.locale === "pt" || this.props.overrideLang === "pt") path = `/slide_images/pt_${ id }.jpg?v=${new Date().getTime()}`;
 
     return (

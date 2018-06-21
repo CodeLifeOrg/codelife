@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 
+/**
+ * TextText is Text left, Text right. Used for heavy informational slides
+ */
+
 export default class TextText extends Component {
 
   render() {

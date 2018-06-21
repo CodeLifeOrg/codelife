@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 
+/**
+ * Cheatsheets are full-slide reference sheets of an entire island's content
+ */
+
 export default class CheatSheet extends Component {
 
   render() {

@@ -1,11 +1,48 @@
 #ReportViewer {
-  background-color: var(--white);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: var(--gutter-md);
+
   & .pt-table {
     width: 100%;
-    & .mod-button {
-      margin-right: var(--gutter-xxs);
+    table-layout: fixed;
+
+    td {
+      vertical-align: middle;
+    }
+
+    /* remove padding from first column */
+    & th:first-of-type,
+    & td:first-of-type {
+      padding-left: 0;
+    }
+
+    /* right align last column */
+    & th:last-of-type,
+    & td:last-of-type {
+      text-align: right;
+      padding-right: 0;
+    }
+
+    /* action buttons */
+    & .actions-cell-inner {
+      display: flex;
+      flex-wrap: nowrap;
+      max-width: 100%;
+      margin: 0;
+
+      & .button {
+        /* override button default */
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+        min-width: 0;
+        /* take up all available space */
+        flex: 1;
+
+        @add-mixin max-md {
+          & .pt-icon {
+            margin-right: 0;
+          }
+        }
+      }
     }
   }
 }

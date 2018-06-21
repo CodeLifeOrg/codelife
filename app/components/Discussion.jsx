@@ -96,7 +96,7 @@ class Discussion extends Component {
     return (
       <div className="discussion-container" id="Discussion">
         <div className="discussion-inner">
-          <h3 className="discussion-heading">{ translate("Discussion") }</h3>
+          <h2 className="discussion-heading">{ translate("Discussion") }</h2>
           <div className="sort-bar" id="sort-bar">
             Sort By
             <div className="pt-select">
@@ -118,8 +118,8 @@ class Discussion extends Component {
             <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={translate("Title")} />
             <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
             <div className="post-button-container">
-              <Button 
-                className="pt-intent-success post-button" 
+              <Button
+                className="pt-intent-success post-button"
                 onClick={this.newThread.bind(this)}
                 disabled={!threadTitle || !threadContent || threadContent === "<p><br></p>"}
               >

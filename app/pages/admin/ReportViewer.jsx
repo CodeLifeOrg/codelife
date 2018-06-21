@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
+import {button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
 import PropTypes from "prop-types";
 import Thread from "components/Thread";
 import Comment from "components/Comment";
@@ -102,13 +102,17 @@ class ReportViewer extends Component {
       <td>{report.username}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
-      <td>
-        <Tooltip content="Allow this Content" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
-        </Tooltip>
-        <Tooltip content="Ban this Content" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
-        </Tooltip>
+      <td className="actions-cell font-xs">
+        <span className="actions-cell-inner u-button-group">
+          <button className="inverted-button button success" onClick={this.handleOK.bind(this, type, report)}>
+            <span className="pt-icon pt-icon-tick" />
+            <span className="u-hide-below-md">allow</span>
+          </button>
+          <button className="inverted-button button danger-button" onClick={this.handleBan.bind(this, type, report)}>
+            <span className="pt-icon pt-icon-trash" />
+            <span className="u-hide-below-md">ban</span>
+          </button>
+        </span>
       </td>
     </tr>;
   }
@@ -121,20 +125,24 @@ class ReportViewer extends Component {
     for (const r of report.reasons) strReasons += `${r}\n`;
     for (const c of report.comments) strComments += `${c}\n`;
     return <tr key={report.id}>
-      { 
+      {
         type === "threads"
           ? <Thread thread={report.thread} />
           : <Comment comment={report.commentref} />
       }
       <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
       <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
-      <td>
-        <Tooltip content="Allow this Content" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-success pt-icon-tick" onClick={this.handleOK.bind(this, type, report)}></Button>
-        </Tooltip>
-        <Tooltip content="Ban this Content" position={Position.TOP}>
-          <Button className="mod-button pt-button pt-intent-danger pt-icon-delete" onClick={this.handleBan.bind(this, type, report)}></Button>
-        </Tooltip>
+      <td className="actions-cell font-xs">
+        <span className="actions-cell-inner u-button-group">
+          <button className="inverted-button button success" onClick={this.handleOK.bind(this, type, report)}>
+            <span className="pt-icon pt-icon-tick" />
+            <span className="u-hide-below-md">allow</span>
+          </button>
+          <button className="inverted-button button danger-button" onClick={this.handleBan.bind(this, type, report)}>
+            <span className="pt-icon pt-icon-trash" />
+            <span className="u-hide-below-md">ban</span>
+          </button>
+        </span>
       </td>
     </tr>;
   }
@@ -187,20 +195,20 @@ class ReportViewer extends Component {
     return (
       <div id="ReportViewer">
         <h2 className="report-title">Codeblocks</h2>
-        <table className="pt-table pt-striped pt-interactive">
+        <table className="pt-table">
           <thead>
             <tr>
               <th>Page</th>
               <th>Author</th>
               <th>Reasons</th>
               <th>Comments</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
         </table>
         <h2 className="report-title">Projects</h2>
-        <table className="pt-table pt-striped pt-interactive">
+        <table className="pt-table">
           <thead>
             <tr>
               <th>Page</th>
@@ -213,7 +221,7 @@ class ReportViewer extends Component {
           <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
         </table>
         <h2 className="report-title">Threads</h2>
-        <table className="pt-table pt-striped pt-interactive">
+        <table className="pt-table threads-table">
           <thead>
             <tr>
               <th>Thread</th>
@@ -225,7 +233,7 @@ class ReportViewer extends Component {
           <tbody>{threadItems.length > 0 ? threadItems : t("No items are currently flagged")}</tbody>
         </table>
         <h2 className="report-title">Comments</h2>
-        <table className="pt-table pt-striped pt-interactive">
+        <table className="pt-table comments-table">
           <thead>
             <tr>
               <th>Comment</th>

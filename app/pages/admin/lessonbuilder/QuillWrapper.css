@@ -6,3 +6,7 @@
   margin: var(--gutter-xs);
   display:inline-block;
 }
+
+.ql-toolbar .ql-formats {
+  display: inline-block !important;
+}

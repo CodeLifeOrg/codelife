@@ -76,6 +76,7 @@ class RuleBuilder extends Component {
 
     return (
       <div className="rulebuilder">
+        <h2 className="font-xl u-text-center u-margin-bottom-off">Rule builder</h2>
         {ruleItems}
         <div className="field-container">
           <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success font-md">Save</Button>

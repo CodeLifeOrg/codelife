@@ -1,17 +1,26 @@
 @import '../../../mixins.css';
 
 .rulebuilder {
-  padding: 0 0 var(--gutter-md) 0;
-
-  /* adjust padding on bigger screens */
-  @add-mixin min-md {
-    padding: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
-  }
 
   & .rule {
-    margin-top: var(--gutter-md);
-    margin-bottom: var(--gutter-lg);
+    margin-top: var(--gutter-sm);
+    padding: var(--gutter-md);
     width: 100%;
+    transition: background 0.2s;
+
+    @add-mixin max-md {
+      width: calc(100% + var(--gutter-md) + var(--gutter-md));
+      left: calc(0 - var(--gutter-md));
+    }
+
+    &:hover,
+    &:focus-within {
+      background-color: color(var(--light-1) a(25%))
+    }
+
+    & .rule-title {
+      text-transform: lowercase;
+    }
 
     /* side by side fields */
     & .rule-subhead,

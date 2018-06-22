@@ -4,6 +4,7 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/labs";
 import ReportBox from "components/ReportBox";
 import "./Comment.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
@@ -64,7 +65,7 @@ class Comment extends Component {
 
   render() {
 
-    const {t: translate} = this.props;
+    const {t} = this.props;
     const {comment} = this.state;
 
     if (!comment) return <LoadingSpinner />;
@@ -82,50 +83,63 @@ class Comment extends Component {
 
             {/* meta */}
             <span className="comment-thread-user thread-user font-xs">
-              { translate("by") } <Link className="link font-sm" to={ `/profile/${comment.user.username}`}>
+              { t("by") } <Link className="link font-sm" to={ `/profile/${comment.user.username}`}>
                 { comment.user.username }
                 {/* role */}
                 { comment.user.role !== 0 &&
                   <span className="comment-thread-user-role thread-user-role font-xs"> (
                     { comment.user.role === 1
-                      ? translate("Contributor")
+                      ? t("Contributor")
                       : comment.user.role === 2 &&
-                        translate("Admin")
+                        t("Admin")
                     })
                   </span>
                 }
               </Link>
               {/* date posted */}
               <span className="comment-thread-date thread-date">
-                { `${translate("on")} ${this.formatDate(comment.date)}` }
+                { `${t("on")} ${this.formatDate(comment.date)}` }
               </span>
             </span>
           </span>
 
-          <span className="comment-thread-actions thread-actions">
-            <span className="like-comment">
-              <Button
-                intent={ comment.liked ? Intent.WARNING : Intent.DEFAULT}
-                iconName={ `star${ comment.liked ? "" : "-empty"}` }
+          <span className="thread-actions">
+
+            {/* likes */}
+            <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${comment.id}`}>
+              <button
+                className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ comment.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ comment.likes ? "is-liked" : null }` }
                 onClick={ this.toggleLike.bind(this) }
-                text={ `${ comment.likes } ${ comment.likes === 1 ? translate("Like") : translate("Likes") }` }
+                aria-labelledby={`thread-${comment.id}`} />
+              <span className="card-likes-count">{ comment.likes }</span>
+              <span className="u-visually-hidden">&nbsp;
+                { comment.likes === 1 ? t("Like") : t("Likes") }
+              </span>
+            </p>
+
+            {/* flag content */}
+            <Popover2
+              className="card-dialog-flag-container"
+              popoverClassName="pt-popover-content-sizing"
+              interactionKind={PopoverInteractionKind.CLICK}
+              placement="bottom-end" >
+
+              {/* flag button */}
+              <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${comment.report && "is-flagged" } u-unbutton font-xs`}>
+                <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
+                  {comment.report ? "Flagged" : "Flag"}
+                </span>
+              </button>
+
+              {/* flag form */}
+              <ReportBox
+                reportid={comment.id}
+                contentType="thread"
+                handleReport={this.handleReport.bind(this)}
+                permalink={this.props.permalink}
               />
-            </span>
-            <span className="report-comment" style={{textAlign: "right"}}>
-              <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
-                inline={true}
-              >
-                <Button
-                  intent={comment.report ? Intent.DANGER : Intent.DEFAULT}
-                  iconName="flag"
-                  className={ `${comment.report ? "" : "pt-minimal"} pt-small` }
-                />
-                <ReportBox reportid={comment.id} permalink={this.props.permalink} contentType="comment" handleReport={this.handleReport.bind(this)} />
-              </Popover>
-            </span>
+            </Popover2>
           </span>
         </span>
 

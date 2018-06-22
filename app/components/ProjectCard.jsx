@@ -118,7 +118,7 @@ class ProjectCard extends Component {
               aria-labelledby={`project-card-${id}` } />
               <span className="card-likes-count">0</span>
               <span className="u-visually-hidden">&nbsp;
-                { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+                ${ likes === 1 ? t("Like") : t("Likes") }
               </span>
             </p> */}
 

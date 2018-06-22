@@ -4,6 +4,7 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/labs";
 import ReportBox from "components/ReportBox";
 import Comment from "components/Comment";
 import "./Thread.css";
@@ -128,35 +129,44 @@ class Thread extends Component {
           </span>
 
           <span className="thread-actions">
-            <span className="like-thread">
-              <Button
-                intent={thread.liked ? Intent.WARNING : Intent.DEFAULT}
-                iconName={ `star${ thread.liked ? "" : "-empty"}` }
+
+            {/* likes */}
+            <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${thread.id}`}>
+              <button
+                className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ thread.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ thread.likes ? "is-liked" : null }` }
                 onClick={ this.toggleLike.bind(this) }
-                text={ `${ thread.likes } ${ thread.likes === 1 ? t("Like") : t("Likes") }` }
-              />
-            </span>
-            <span className="report-thread">
-              <Popover
-                interactionKind={PopoverInteractionKind.CLICK}
-                popoverClassName="pt-popover-content-sizing"
-                position={Position.TOP_RIGHT}
-                inline={true}
-              >
-                <Button
-                  intent={thread.report ? Intent.DANGER : Intent.DEFAULT}
-                  iconName="flag"
-                  className={ thread.report ? "" : "pt-minimal" }
-                  text={ thread.report ? "Flagged" : "Flag"}
-                />
-                <span style={{textAlign: "left"}}>
-                  <ReportBox reportid={thread.id} permalink={this.props.permalink} contentType="thread" handleReport={this.handleReport.bind(this)} />
+                aria-labelledby={`thread-${thread.id}`} />
+              <span className="card-likes-count">{ thread.likes }</span>
+              <span className="u-visually-hidden">&nbsp;
+                { thread.likes === 1 ? t("Like") : t("Likes") }
+              </span>
+            </p>
+
+            {/* flag content */}
+            <Popover2
+              className="card-dialog-flag-container"
+              popoverClassName="pt-popover-content-sizing"
+              interactionKind={PopoverInteractionKind.CLICK}
+              placement="bottom-end" >
+
+              {/* flag button */}
+              <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${thread.report && "is-flagged" } u-unbutton font-xs`}>
+                <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
+                  {thread.report ? "Flagged" : "Flag"}
                 </span>
-              </Popover>
-            </span>
+              </button>
+
+              {/* flag form */}
+              <ReportBox
+                reportid={thread.id}
+                contentType="thread"
+                handleReport={this.handleReport.bind(this)}
+                permalink={this.props.permalink}
+              />
+            </Popover2>
           </span>
         </span>
-
 
         {/* post content */}
         <span className="thread-body" dangerouslySetInnerHTML={{__html: thread.content}} />

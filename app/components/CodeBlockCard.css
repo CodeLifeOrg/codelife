@@ -120,15 +120,15 @@
   & .card-dialog-footer-action-text {
     line-height: 2.125rem;
   }
+}
 
-  /* flag button theme */
-  & .flag-button {
-    transition: color 0.2s;
+/* flag button theme */
+.flag-button {
+  transition: color 0.2s;
 
-    /* interactions & flagged state */
-    &.is-flagged, &:hover, &:focus {
-      color: var(--danger);
-    }
+  /* interactions & flagged state */
+  &.is-flagged, &:hover, &:focus {
+    color: var(--danger);
   }
 }
 

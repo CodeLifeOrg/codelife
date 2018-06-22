@@ -77,7 +77,7 @@ class QuillWrapper extends Component {
         { this.props.hideGlossary
           ? null
           : <div>
-            <Suggest 
+            <Suggest
               id="search-box"
               inputValueRenderer={word => word.word}
               items={this.state.words}
@@ -86,10 +86,10 @@ class QuillWrapper extends Component {
               noResults={<MenuItem disabled={true} text="No results." />}
               onItemSelect={word => this.setState({currentWord: word})}
             />
-            <div 
+            <div
               id="insert-word"
               onClick={this.handleGlossaryClick.bind(this)}
-            > 
+            >
               Insert Glossary Word <span className="pt-icon pt-icon-circle-arrow-up" />
             </div>
           </div>

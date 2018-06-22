@@ -224,7 +224,7 @@ class CodeBlockCard extends Component {
                 aria-labelledby={`codeblock-card-${id}`} />
               <span className="card-likes-count">{ likes }</span>
               <span className="u-visually-hidden">&nbsp;
-                { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+                { likes === 1 ? t("Like") : t("Likes") }
               </span>
             </p>
 

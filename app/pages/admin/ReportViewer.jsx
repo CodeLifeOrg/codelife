@@ -207,7 +207,8 @@ class ReportViewer extends Component {
 
     return (
       <div id="ReportViewer">
-        <h2 className="report-title font-md u-margin-bottom-off">Codeblocks</h2>
+        <h2 className="font-xl u-text-center u-margin-bottom-off">Flagged content</h2>
+        <h3 className="report-title font-md u-margin-bottom-off">Codeblocks</h3>
         <table className="codeblock-report-table pt-table u-margin-bottom-lg">
           <thead>
             <tr>
@@ -220,7 +221,7 @@ class ReportViewer extends Component {
           </thead>
           <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
         </table>
-        <h2 className="report-title font-md u-margin-bottom-off">Projects</h2>
+        <h3 className="report-title font-md u-margin-bottom-off">Projects</h3>
         <table className="project-report-table pt-table u-margin-bottom-lg">
           <thead>
             <tr>
@@ -233,7 +234,7 @@ class ReportViewer extends Component {
           </thead>
           <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
         </table>
-        <h2 className="report-title font-md u-margin-bottom-off">Threads</h2>
+        <h3 className="report-title font-md u-margin-bottom-off">Threads</h3>
         <table className="thread-report-table pt-table u-margin-bottom-lg">
           <thead>
             <tr>
@@ -245,7 +246,7 @@ class ReportViewer extends Component {
           </thead>
           <tbody>{threadItems.length > 0 ? threadItems : t("No items are currently flagged")}</tbody>
         </table>
-        <h2 className="report-title font-md u-margin-bottom-off">Comments</h2>
+        <h3 className="report-title font-md u-margin-bottom-off">Comments</h3>
         <table className="comment-report-table pt-table">
           <thead>
             <tr>

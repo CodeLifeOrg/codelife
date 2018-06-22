@@ -106,17 +106,13 @@ class Statistics extends Component {
         <td className="statistics-table-cell username">{u.username}</td>
         <td className="statistics-table-cell progress">
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
-            <div>
-              <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
-                <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
-              </div>
+            <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
+              <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
             </div>
-            <div style={{padding: "8px"}}>
-              { latestLevel
-                ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } />{latestLevel.name}</div>
-                : <div>No Progress Yet</div>
-              }
-            </div>
+            { latestLevel
+              ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } />{latestLevel.name}</div>
+              : <div>No Progress Yet</div>
+            }
           </Popover>
         </td>
         <td className="statistics-table-cell name">{u.name}</td>
@@ -138,106 +134,112 @@ class Statistics extends Component {
       .entries(visibleUsers.filter(u => u.geoname));
 
     return (
+      <div id="statistics" className="statistics">
 
-      <div>
+        <h2 className="font-xl u-text-center u-margin-bottom-off">Usage statistics</h2>
 
-        <Tabs2 className="stat-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-          <Tab2 id="last-1" className="stat-tab" title={t("Last Day")} />
-          <Tab2 id="last-3" className="stat-tab" title={t("Last 3 Days")} />
-          <Tab2 id="last-7" className="stat-tab" title={t("Last 7 Days")} />
-          <Tab2 id="last-999999" className="stat-tab" title={t("Forever")} />
-        </Tabs2>
-
-        <div id="statistics" className="statistics">
-
-          <div id="totals" className="totals">
-            <span className="stat">Number of Students: <span className="value">{userList.length}</span></span>
-            <span className="stat">Number of Schools: <span className="value">{vizData.length}</span></span>
-          </div>
-
-          { vizData.length > 1
-            ? <Treemap config={{
-              height: 400,
-              data: vizData,
-              groupBy: "geoname",
-              legend: false,
-              shapeConfig: {
-                fill: () => styles["sky-dark"],
-                labelConfig: {
-                  fontFamily: "Overpass"
-                }
-              },
-              tooltipConfig: {
-                background: "white",
-                body: v => {
-                  const students = v.uid instanceof Array ? v.uid.length : 1;
-                  const schools = v.schoolname instanceof Array ? v.schoolname : [v.schoolname];
-                  return `<table class="school-tooltip-table">
-                            <tr><td>School${ schools.length > 1 ? "s" : "" }:</td><td>${schools.length}</tr>
-                            <tr><td>Student${ students > 1 ? "s" : "" }:</td><td>${students}</tr>
-                          </table>`;
-                },
-                bodyStyle: {
-                  "font-family": "Overpass"
-                },
-                borderRadius: "5px",
-                padding: "10px",
-                titleStyle: {
-                  "font-family": "Overpass"
-                }
-              }
-            }} />
-            : null
-          }
-
-          { userList.length
-            ? <table className="statistics-table pt-table">
-              <thead className="statistics-table-header">
-                <tr className="statistics-table-header-row statistics-table-row">
-                  {/* username */}
-                  <th className="statistics-table-heading statistics-table-cell username" onClick={this.handleHeaderClick.bind(this, "username")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("Username")}
-                  </th>
-                  {/* progress */}
-                  <th className="statistics-table-heading statistics-table-cell progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-sort-desc" : "pt-icon-sort-asc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("Progress")}
-                  </th>
-                  {/* name */}
-                  <th className="statistics-table-heading statistics-table-cell name" onClick={this.handleHeaderClick.bind(this, "name")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("Name")}
-                  </th>
-                  {/* email */}
-                  <th className="statistics-table-heading statistics-table-cell email" onClick={this.handleHeaderClick.bind(this, "email")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "email" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("Email")}
-                  </th>
-                  {/* school */}
-                  <th className="statistics-table-heading statistics-table-cell schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("School")}
-                  </th>
-                  {/* municipality */}
-                  <th className="statistics-table-heading statistics-table-cell geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("Municipality")}
-                  </th>
-                  {/* joined on */}
-                  <th className="statistics-table-heading statistics-table-cell created-at" onClick={this.handleHeaderClick.bind(this, "createdAt")}>
-                    <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-sort-numerical" : "pt-icon-sort-numerical-desc" : "pt-icon-double-caret-vertical" }` } />
-                    {t("Joined on")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="statistics-table-body">
-                { userList }
-              </tbody>
-            </table>
-            : <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." /> }
-
+        <div className="stat-tabs-container u-text-center">
+          <Tabs2 className="stat-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+            <Tab2 id="last-1" className="stat-tab" title={t("Last Day")} />
+            <Tab2 id="last-3" className="stat-tab" title={t("Last 3 Days")} />
+            <Tab2 id="last-7" className="stat-tab" title={t("Last 7 Days")} />
+            <Tab2 id="last-999999" className="stat-tab" title={t("Forever")} />
+          </Tabs2>
         </div>
+
+        <div id="totals" className="totals">
+          <p className="stat">
+            <span className="stat-value font-xxl">{userList.length} </span>
+            <span className="stat-label font-sm">Student{userList.length === 1 ? "" : "s"}</span>
+          </p>
+          <p className="stat">
+            <span className="stat-value font-xxl">{vizData.length} </span>
+            <span className="stat-label font-sm">School{userList.length === 1 ? "" : "s"}</span>
+          </p>
+        </div>
+
+        { vizData.length > 1
+          ? <Treemap config={{
+            height: 400,
+            data: vizData,
+            groupBy: "geoname",
+            legend: false,
+            shapeConfig: {
+              fill: () => styles["sky-dark"],
+              labelConfig: {
+                fontFamily: "Overpass"
+              }
+            },
+            tooltipConfig: {
+              background: "white",
+              body: v => {
+                const students = v.uid instanceof Array ? v.uid.length : 1;
+                const schools = v.schoolname instanceof Array ? v.schoolname : [v.schoolname];
+                return `<table class="school-tooltip-table">
+                          <tr><td>School${ schools.length > 1 ? "s" : "" }:</td><td>${schools.length}</tr>
+                          <tr><td>Student${ students > 1 ? "s" : "" }:</td><td>${students}</tr>
+                        </table>`;
+              },
+              bodyStyle: {
+                "font-family": "Overpass"
+              },
+              borderRadius: "5px",
+              padding: "10px",
+              titleStyle: {
+                "font-family": "Overpass"
+              }
+            }
+          }} />
+          : null
+        }
+
+        { userList.length
+          ? <table className="statistics-table pt-table">
+            <thead className="statistics-table-header">
+              <tr className="statistics-table-header-row statistics-table-row">
+                {/* username */}
+                <th className="statistics-table-heading statistics-table-cell username" onClick={this.handleHeaderClick.bind(this, "username")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "username" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("Username")}
+                </th>
+                {/* progress */}
+                <th className="statistics-table-heading statistics-table-cell progressPercent" onClick={this.handleHeaderClick.bind(this, "progressPercent")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "progressPercent" ? sortBy.desc ? "pt-icon-sort-desc" : "pt-icon-sort-asc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("Progress")}
+                </th>
+                {/* name */}
+                <th className="statistics-table-heading statistics-table-cell name" onClick={this.handleHeaderClick.bind(this, "name")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "name" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("Name")}
+                </th>
+                {/* email */}
+                <th className="statistics-table-heading statistics-table-cell email" onClick={this.handleHeaderClick.bind(this, "email")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "email" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("Email")}
+                </th>
+                {/* school */}
+                <th className="statistics-table-heading statistics-table-cell schoolname" onClick={this.handleHeaderClick.bind(this, "schoolname")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "schoolname" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("School")}
+                </th>
+                {/* municipality */}
+                <th className="statistics-table-heading statistics-table-cell geoname" onClick={this.handleHeaderClick.bind(this, "geoname")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "geoname" ? sortBy.desc ? "pt-icon-sort-alphabetical" : "pt-icon-sort-alphabetical-desc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("Municipality")}
+                </th>
+                {/* joined on */}
+                <th className="statistics-table-heading statistics-table-cell created-at" onClick={this.handleHeaderClick.bind(this, "createdAt")}>
+                  <span className={ `statistics-icon pt-icon-standard ${ sortBy.prop === "createdAt" ? sortBy.desc ? "pt-icon-sort-numerical" : "pt-icon-sort-numerical-desc" : "pt-icon-double-caret-vertical" }` } />
+                  {t("Joined on")}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="statistics-table-body">
+              { userList }
+            </tbody>
+          </table>
+          : <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." /> }
+
       </div>
     );
   }

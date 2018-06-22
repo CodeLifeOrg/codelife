@@ -1,22 +1,11 @@
 @import "../../mixins.css";
 
 /* statistics tabs */
-.stat-tabs .pt-tab-list {
-  background-color: var(--light-1);
-  border: 1px solid var(--light-3);
-  border-radius: var(--radius-md);
-  justify-content: center;
-  margin-bottom: var(--gutter-xs);
-  & .pt-tab {
-    margin: 0;
-    padding: 2px 13px 3px;
-    &[aria-selected="true"] {
-      background-color: var(--dark-1);
-      color: var(--white);
-    }
-  }
-  & .pt-tab-indicator {
-    display: none;
+.stat-tabs-container {
+
+  & .stat-tabs {
+    display: inline-block;
+    margin: var(--gutter-sm) auto var(--gutter-sm) auto;
   }
 }
 
@@ -26,14 +15,24 @@
 
   /* admin only */
   & .totals {
-    margin: var(--gutter-xs) 0;
+    margin: var(--gutter-sm) 0 var(--gutter-lg) 0;
     text-align: center;
 
     & .stat {
-      margin: 0 var(--gutter-xs);
+      display: inline-block;
+      margin: 0 1em;
 
-      & .value {
-        font-weight: bold;
+      & .stat-value,
+      & .stat-label {
+        display: block;
+      }
+
+      & .stat-value {
+        color: var(--sky-black);
+      }
+
+      & .stat-label {
+        text-transform: uppercase;
       }
     }
   }
@@ -57,6 +56,8 @@
 
   /* no longer a need to overflow */
   @add-mixin min-md {
+    display: table;
+    overflow: hidden;
     width: 100%;
   }
 

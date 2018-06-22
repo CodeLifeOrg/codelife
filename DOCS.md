@@ -1,9 +1,49 @@
 ## Classes
 
 <dl>
+<dt><a href="#AuthForm">AuthForm</a></dt>
+<dd><p>AuthForm is a wrapper component that switches between LoginForm and Signup Form
+It can be primed with a default via the initialMode prop.</p>
+</dd>
+<dt><a href="#Browser">Browser</a></dt>
+<dd><p>Browser is a drop-down menu embedded in Nav that lets the user jump to any
+level or island that they have beaten in the past</p>
+</dd>
+<dt><a href="#Checkpoint">Checkpoint</a></dt>
+<dd><p>Checkpoint is a one-time pop-up that asks the user to fill in his or her school/location
+Originally intended to be a more generic &quot;Checkpoint&quot; system that would support arbitrary 
+banners/messages, it is currently only used for gathering school info</p>
+</dd>
+<dt><a href="#CodeBlockCard">CodeBlockCard</a></dt>
+<dd><p>CodeBlockCards appear throughout the site as a way of previewing a student&#39;s codeblock
+It contains both the small clickable card with preview image AND the dialog box that pops
+up over the page and shows the full screen code editor.</p>
+</dd>
+<dt><a href="#CodeBlockEditor">CodeBlockEditor</a></dt>
+<dd><p>CodeBlockEditor is the popover that comes up for the final test of an island.
+It is mostly a wrapper around CodeEditor that provides the student with the test prompt,
+cheat sheet, and db routes to save their progress when they pass the test</p>
+</dd>
 <dt><a href="#CodeEditor">CodeEditor</a></dt>
 <dd><p>CodeEditor is a two-panel rendering component for student code.
 It uses AceEditor for the student panel (left), and a remote rendering iframe for the page preview (right).</p>
+</dd>
+<dt><a href="#InputCode">InputCode</a></dt>
+<dd><p>InputCode is a slide type that requires the student to complete a coding test
+The CodeEditor component is embedded with a series of rules, and the slide will 
+not unblock until the student submits a passing code section. It is mostly a wrapper
+for CodeEditor, with some controls to execute controls or unblock a slide.</p>
+</dd>
+<dt><a href="#Quiz">Quiz</a></dt>
+<dd><p>Quiz is a blocking multiple-choice question, powered by the quizjson column in the slides db</p>
+</dd>
+<dt><a href="#RenderCode">RenderCode</a></dt>
+<dd><p>RenderCode is similar to InputCode, but the CodeEditor is in readonly mode
+For showing code examples with explanations.</p>
+</dd>
+<dt><a href="#TextImage">TextImage</a></dt>
+<dd><p>TextImage is text left, image right. Images are stored in /slide_images/{id}.jpg
+Images are uploaded through the CMS and a translated version is chosen here via locales</p>
 </dd>
 <dt><a href="#Island">Island</a></dt>
 <dd><p>Displays all available islands</p>
@@ -30,6 +70,438 @@ This is shown on the public profile for a user and requires sending
 1 prop: a ref to the user</p>
 </dd>
 </dl>
+
+## Constants
+
+<dl>
+<dt><a href="#threadInclude">threadInclude</a></dt>
+<dd><p>threadsRoute is used for retrieving threads and their associated comments.
+Unlike islands, likes, and many of the other earlier data structures in development,
+threads make better use of Sequelize associations, implicitly including comments in the
+thread payloads they belong to. This is distinctly different from islands/levels/slides,
+which get entire lists from the tables and then compile them client side. Going forward,
+the hierarchical/sequelize-association method of delivering API data (without flattening)
+is the more correct one.
+Threads have entity_ids and types. Currently the only two types are comments and threads,
+however the intention was that discussions could expand to encompass projects/codeblocks or more</p>
+</dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#flattenCodeBlock">flattenCodeBlock(user, cb)</a> ⇒ <code>Object</code></dt>
+<dd><p>Given the logged-in user and a codeblock, this function &quot;flattens&quot; the object by reaching
+into the associated tables queries (such as reports and likes) and bubbling them up to a top-level prop
+This type of function is really only used here and in projectsRoute.  As codelife development progressed,
+the pattern shifted more to expect the nested nature of sequelize queries, meaning flattening wasn&#39;t necessary.</p>
+</dd>
+<dt><a href="#strip">strip()</a></dt>
+<dd><p>This route is specifically for the canon &quot;needs&quot; version of the glossary
+It has a lang switch because the glossary needs to be rendered server side
+for SEO optimization.</p>
+</dd>
+<dt><a href="#flattenProfile">flattenProfile(user, p)</a></dt>
+<dd><p>Similar to codeblocksroute, earlier in the project a lot of work was done to keep 
+the payloads returned by APIs as flat objects. Later routes trended more towards trusting
+sequelize to form the hierarchy via associations. This helper function bubbles up associations
+into top-level properties.</p>
+</dd>
+<dt><a href="#flattenProject">flattenProject(user, p)</a> ⇒ <code>Object</code></dt>
+<dd><p>Given the logged-in user and a project, this function &quot;flattens&quot; the object by reaching
+into the associated tables queries (such as reports and likes) and bubbling them up to a top-level prop
+This type of function is really only used here and in codeblocksroute.  As codelife development progressed,
+the pattern shifted more to expect the nested nature of sequelize queries, meaning flattening wasn&#39;t necessary.</p>
+</dd>
+<dt><a href="#pruneThread">pruneThread(user, t)</a> ⇒ <code>Object</code></dt>
+<dd><p>Given a user and a thread, prepare the thread to be returned to the requester.
+This involves a number of operations, including collating likes and reports, rewriting
+banned content, and deleting certain sensitive keys so they don&#39;t leak out through the API</p>
+</dd>
+</dl>
+
+<a name="AuthForm"></a>
+
+## AuthForm
+AuthForm is a wrapper component that switches between LoginForm and Signup Form
+It can be primed with a default via the initialMode prop.
+
+**Kind**: global class  
+
+* * *
+
+<a name="Browser"></a>
+
+## Browser
+Browser is a drop-down menu embedded in Nav that lets the user jump to any
+level or island that they have beaten in the past
+
+**Kind**: global class  
+
+* [Browser](#Browser)
+    * [.componentDidMount()](#Browser+componentDidMount)
+    * [.buildTree()](#Browser+buildTree)
+    * [.initFromProps(nodeFromProps)](#Browser+initFromProps)
+    * [.fixNulls(obj)](#Browser+fixNulls) ⇒ <code>Object</code>
+    * [.reloadProgress()](#Browser+reloadProgress)
+    * [.selectNodeFromProps()](#Browser+selectNodeFromProps)
+    * [.handleNodeClick(node)](#Browser+handleNodeClick)
+
+
+* * *
+
+<a name="Browser+componentDidMount"></a>
+
+### browser.componentDidMount()
+On mount, fetch all islands/levels/slides, sort them, and arrange them 
+hierarchically for use in the Blueprint Tree. Also grab the logged in user's progress
+so that the browser can lock unbeaten levels.
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+
+* * *
+
+<a name="Browser+buildTree"></a>
+
+### browser.buildTree()
+Builds the "nodes" object that will be used to populate the blueprint tree.
+The Blueprint Tree component requires lots of metadata and nesting, so a fair
+amount of crawling must be done to populate it properly
+Note: This is borrowed heavily from the tree in the CMS. Someday they should be merged
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+
+* * *
+
+<a name="Browser+initFromProps"></a>
+
+### browser.initFromProps(nodeFromProps)
+Given a blueprint tree node, saved during the buildTree function, expand and select
+the appropriate node to match the location
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| nodeFromProps | <code>Object</code> | A Blueprint Tree node |
+
+
+* * *
+
+<a name="Browser+fixNulls"></a>
+
+### browser.fixNulls(obj) ⇒ <code>Object</code>
+Helper function to avoid errors from accessing non-existent properties
+Longer term, database defaults values should be established to avoid this
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+**Returns**: <code>Object</code> - an object whose null/undefined params are changed to ""  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| obj | <code>Object</code> | the object to prune |
+
+
+* * *
+
+<a name="Browser+reloadProgress"></a>
+
+### browser.reloadProgress()
+As the user beats new levels, they are written to the db, but no redux-level store
+is updated. This public-facing function is invoked by Nav.jsx when the Browser is opened,
+resulting in a short loading screen while the latest progress is retrieved.
+See Nav.jsx for more details.
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+
+* * *
+
+<a name="Browser+selectNodeFromProps"></a>
+
+### browser.selectNodeFromProps()
+Similar to initNodeFromProps which expands the Blueprint Tree, this function selects
+the node that matches the LinkObj provided by Nav.
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+
+* * *
+
+<a name="Browser+handleNodeClick"></a>
+
+### browser.handleNodeClick(node)
+Callback for clicking a node. Uses browserhistory to navigate the user to the new page
+
+**Kind**: instance method of [<code>Browser</code>](#Browser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| node | <code>Object</code> | The blueprint node that was clicked |
+
+
+* * *
+
+<a name="Checkpoint"></a>
+
+## Checkpoint
+Checkpoint is a one-time pop-up that asks the user to fill in his or her school/location
+Originally intended to be a more generic "Checkpoint" system that would support arbitrary 
+banners/messages, it is currently only used for gathering school info
+
+**Kind**: global class  
+
+* * *
+
+<a name="CodeBlockCard"></a>
+
+## CodeBlockCard
+CodeBlockCards appear throughout the site as a way of previewing a student's codeblock
+It contains both the small clickable card with preview image AND the dialog box that pops
+up over the page and shows the full screen code editor.
+
+**Kind**: global class  
+
+* [CodeBlockCard](#CodeBlockCard)
+    * [.saveLikeStatus()](#CodeBlockCard+saveLikeStatus)
+    * [.generateScreenshot()](#CodeBlockCard+generateScreenshot)
+    * [.selectFork()](#CodeBlockCard+selectFork)
+    * [.toggleFeature()](#CodeBlockCard+toggleFeature)
+    * [.toggleFork()](#CodeBlockCard+toggleFork)
+    * [.toggleLike()](#CodeBlockCard+toggleLike)
+    * [.directLike()](#CodeBlockCard+directLike)
+    * [.componentDidMount()](#CodeBlockCard+componentDidMount)
+    * [.componentDidUpdate()](#CodeBlockCard+componentDidUpdate)
+    * [.handleReport()](#CodeBlockCard+handleReport)
+
+
+* * *
+
+<a name="CodeBlockCard+saveLikeStatus"></a>
+
+### codeBlockCard.saveLikeStatus()
+Write the current like status of this codeblock to the db.
+CodeBlockList must be informed when this happens so it can reorder the codeblocks
+(liked codeblocks come first) so props.reportLike on return.
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+generateScreenshot"></a>
+
+### codeBlockCard.generateScreenshot()
+Admin-only button callback that pings an API route to manually generate a screenshot
+for this codeblock (usually only happens when codeblock owner saves file)
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+selectFork"></a>
+
+### codeBlockCard.selectFork()
+When the forking sub-menu is opened, highlight and select the text for easy editing
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+toggleFeature"></a>
+
+### codeBlockCard.toggleFeature()
+Admin-only button callback that sets a codeblock as featured or not (featured codeblocks
+show up on the homepage)
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+toggleFork"></a>
+
+### codeBlockCard.toggleFork()
+Codeblocks can be forked into projects, so students may remix another student's work.
+This function creates that new project and populates it with the codeblock data
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+toggleLike"></a>
+
+### codeBlockCard.toggleLike()
+Switch that functions a like on and off. Note that this is front-end only
+and does not update the backend.
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+directLike"></a>
+
+### codeBlockCard.directLike()
+Toggles the like visually (toggleLike) and saves it to the db (saveLikeStatus)
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+componentDidMount"></a>
+
+### codeBlockCard.componentDidMount()
+On mount, grab the codeblock from props and create a unique placeholder fork name via epoch time
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+componentDidUpdate"></a>
+
+### codeBlockCard.componentDidUpdate()
+On Update, if new props have been loaded in, load the new codeblock into state and update fork title
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockCard+handleReport"></a>
+
+### codeBlockCard.handleReport()
+This method is passed down as a callback to ReportBox. When reportBox signals a report,
+it calls this function, which updates the embedded codeblock itself and forces a refresh
+
+**Kind**: instance method of [<code>CodeBlockCard</code>](#CodeBlockCard)  
+
+* * *
+
+<a name="CodeBlockEditor"></a>
+
+## CodeBlockEditor
+CodeBlockEditor is the popover that comes up for the final test of an island.
+It is mostly a wrapper around CodeEditor that provides the student with the test prompt,
+cheat sheet, and db routes to save their progress when they pass the test
+
+**Kind**: global class  
+
+* [CodeBlockEditor](#CodeBlockEditor)
+    * [.componentDidMount()](#CodeBlockEditor+componentDidMount)
+    * [.onFirstCompletion()](#CodeBlockEditor+onFirstCompletion)
+    * [.setExecState()](#CodeBlockEditor+setExecState)
+    * [.saveProgress()](#CodeBlockEditor+saveProgress)
+    * [.onChangeText()](#CodeBlockEditor+onChangeText)
+    * [.resetCodeBlock()](#CodeBlockEditor+resetCodeBlock)
+    * [.attemptReset()](#CodeBlockEditor+attemptReset)
+    * [.executeCode()](#CodeBlockEditor+executeCode)
+    * [.changeCodeblockName()](#CodeBlockEditor+changeCodeblockName)
+    * [.clickSave()](#CodeBlockEditor+clickSave)
+    * [.verifyAndSaveCode()](#CodeBlockEditor+verifyAndSaveCode)
+
+
+* * *
+
+<a name="CodeBlockEditor+componentDidMount"></a>
+
+### codeBlockEditor.componentDidMount()
+On Mount, parse various props passed down and add them to state.
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+onFirstCompletion"></a>
+
+### codeBlockEditor.onFirstCompletion()
+When a user passes a codeblock for the first time, the parent Island component
+must be informed so it can close the popover and show a the "next island" dialog.
+Pass this callback down to codeeditor to enable that
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+setExecState"></a>
+
+### codeBlockEditor.setExecState()
+Callback passed to CodeEditor so that CodeEditor can report when the user is using
+a script tag (therefore show an execute button in here in CodeBlockEditor)
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+saveProgress"></a>
+
+### codeBlockEditor.saveProgress()
+Write progress to db when codeblock is passed
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+onChangeText"></a>
+
+### codeBlockEditor.onChangeText()
+Callback passed down to the CodeEditor, allowing this parent component to respond
+to text changes if desired.
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+resetCodeBlock"></a>
+
+### codeBlockEditor.resetCodeBlock()
+Set codeblock back to original test prompt state
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+attemptReset"></a>
+
+### codeBlockEditor.attemptReset()
+Show popup warning (Are you sure?)
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+executeCode"></a>
+
+### codeBlockEditor.executeCode()
+Show popup warning (Are you sure?)
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+changeCodeblockName"></a>
+
+### codeBlockEditor.changeCodeblockName()
+Change codeblock name in place. Note that this doesn't save it to the db yet
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+clickSave"></a>
+
+### codeBlockEditor.clickSave()
+Intermediary function that blocks some editing functions until the save is complete
+This gets around a known bug where clicking save twice can write two copies to the db
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
+
+<a name="CodeBlockEditor+verifyAndSaveCode"></a>
+
+### codeBlockEditor.verifyAndSaveCode()
+When the user clicks save & submit, make sure the internal CodeEditor has verified that
+their code is passing. If so, write the codeblock and progress to the db, and update the 
+in-state version to reflect the new code
+
+**Kind**: instance method of [<code>CodeBlockEditor</code>](#CodeBlockEditor)  
+
+* * *
 
 <a name="CodeEditor"></a>
 
@@ -438,6 +910,183 @@ toggle fullscreen state
 
 * * *
 
+<a name="InputCode"></a>
+
+## InputCode
+InputCode is a slide type that requires the student to complete a coding test
+The CodeEditor component is embedded with a series of rules, and the slide will 
+not unblock until the student submits a passing code section. It is mostly a wrapper
+for CodeEditor, with some controls to execute controls or unblock a slide.
+
+**Kind**: global class  
+
+* [InputCode](#InputCode)
+    * [.componentDidMount()](#InputCode+componentDidMount)
+    * [.componentDidUpdate()](#InputCode+componentDidUpdate)
+    * [.setExecState()](#InputCode+setExecState)
+    * [.submitAnswer()](#InputCode+submitAnswer)
+    * [.resetAnswer()](#InputCode+resetAnswer)
+    * [.attemptReset()](#InputCode+attemptReset)
+    * [.executeCode()](#InputCode+executeCode)
+
+
+* * *
+
+<a name="InputCode+componentDidMount"></a>
+
+### inputCode.componentDidMount()
+Retrieve the rules and starting code from props and put them into state
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="InputCode+componentDidUpdate"></a>
+
+### inputCode.componentDidUpdate()
+If the user changes slides, update the rules
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="InputCode+setExecState"></a>
+
+### inputCode.setExecState()
+The Embedded CodeEditor itself knows whether the student has written any javascript
+in the editor window. Dynamically show and hide an "execute" button based on this
+callback function
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="InputCode+submitAnswer"></a>
+
+### inputCode.submitAnswer()
+Attempt to submit the current code state on click. Requires reaching into the 
+wrapped CodeEditor instance itself to call a public function, isPassing,
+which is managed by the CodeEditor. If the student passes, inform the parent 
+Slide component that this slide is unblocked and the student can continue
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="InputCode+resetAnswer"></a>
+
+### inputCode.resetAnswer()
+Reset CodeEditor to original testing state, again by reaching into the CodeEditor 
+instance itself and setting contents via a public method.
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="InputCode+attemptReset"></a>
+
+### inputCode.attemptReset()
+Display Are you sure? Dialog
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="InputCode+executeCode"></a>
+
+### inputCode.executeCode()
+Reach into the codeEditor and trigger javascript execution.
+
+**Kind**: instance method of [<code>InputCode</code>](#InputCode)  
+
+* * *
+
+<a name="Quiz"></a>
+
+## Quiz
+Quiz is a blocking multiple-choice question, powered by the quizjson column in the slides db
+
+**Kind**: global class  
+
+* [Quiz](#Quiz)
+    * [.onChooseAnswer()](#Quiz+onChooseAnswer)
+    * [.componentDidMount()](#Quiz+componentDidMount)
+    * [.componentDidUpdate()](#Quiz+componentDidUpdate)
+
+
+* * *
+
+<a name="Quiz+onChooseAnswer"></a>
+
+### quiz.onChooseAnswer()
+Callback for clicking an answer. Check ths JSON, and unblock the parent Slide if correct
+
+**Kind**: instance method of [<code>Quiz</code>](#Quiz)  
+
+* * *
+
+<a name="Quiz+componentDidMount"></a>
+
+### quiz.componentDidMount()
+On Mount, populate the quiz prompt from props
+
+**Kind**: instance method of [<code>Quiz</code>](#Quiz)  
+
+* * *
+
+<a name="Quiz+componentDidUpdate"></a>
+
+### quiz.componentDidUpdate()
+When the user changes slides, update the quizjson in state.
+
+**Kind**: instance method of [<code>Quiz</code>](#Quiz)  
+
+* * *
+
+<a name="RenderCode"></a>
+
+## RenderCode
+RenderCode is similar to InputCode, but the CodeEditor is in readonly mode
+For showing code examples with explanations.
+
+**Kind**: global class  
+
+* [RenderCode](#RenderCode)
+    * [.setExecState()](#RenderCode+setExecState)
+    * [.executeCode()](#RenderCode+executeCode)
+
+
+* * *
+
+<a name="RenderCode+setExecState"></a>
+
+### renderCode.setExecState()
+Callback for CodeEditor, when it reports that the student is using javascript,
+show an exec button on this slide.
+
+**Kind**: instance method of [<code>RenderCode</code>](#RenderCode)  
+
+* * *
+
+<a name="RenderCode+executeCode"></a>
+
+### renderCode.executeCode()
+When the execute button is clicked, pass the command down to the public method in CodeEditor
+
+**Kind**: instance method of [<code>RenderCode</code>](#RenderCode)  
+
+* * *
+
+<a name="TextImage"></a>
+
+## TextImage
+TextImage is text left, image right. Images are stored in /slide_images/{id}.jpg
+Images are uploaded through the CMS and a translated version is chosen here via locales
+
+**Kind**: global class  
+
+* * *
+
 <a name="Island"></a>
 
 ## Island
@@ -651,6 +1300,108 @@ Grabs user id from user prop, makes AJAX call to server and returns
 the list of snippets.
 
 **Kind**: instance method of [<code>UsersList</code>](#UsersList)  
+
+* * *
+
+<a name="threadInclude"></a>
+
+## threadInclude
+threadsRoute is used for retrieving threads and their associated comments.
+Unlike islands, likes, and many of the other earlier data structures in development,
+threads make better use of Sequelize associations, implicitly including comments in the
+thread payloads they belong to. This is distinctly different from islands/levels/slides,
+which get entire lists from the tables and then compile them client side. Going forward,
+the hierarchical/sequelize-association method of delivering API data (without flattening)
+is the more correct one.
+Threads have entity_ids and types. Currently the only two types are comments and threads,
+however the intention was that discussions could expand to encompass projects/codeblocks or more
+
+**Kind**: global constant  
+
+* * *
+
+<a name="flattenCodeBlock"></a>
+
+## flattenCodeBlock(user, cb) ⇒ <code>Object</code>
+Given the logged-in user and a codeblock, this function "flattens" the object by reaching
+into the associated tables queries (such as reports and likes) and bubbling them up to a top-level prop
+This type of function is really only used here and in projectsRoute.  As codelife development progressed,
+the pattern shifted more to expect the nested nature of sequelize queries, meaning flattening wasn't necessary.
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - The "flattened" codeblock, ready to be returned to the requester  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| user | <code>string</code> | The currently logged in user, as specified by datawheel-canon |
+| cb | <code>Object</code> | The codeblock to flatten |
+
+
+* * *
+
+<a name="strip"></a>
+
+## strip()
+This route is specifically for the canon "needs" version of the glossary
+It has a lang switch because the glossary needs to be rendered server side
+for SEO optimization.
+
+**Kind**: global function  
+
+* * *
+
+<a name="flattenProfile"></a>
+
+## flattenProfile(user, p)
+Similar to codeblocksroute, earlier in the project a lot of work was done to keep 
+the payloads returned by APIs as flat objects. Later routes trended more towards trusting
+sequelize to form the hierarchy via associations. This helper function bubbles up associations
+into top-level properties.
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| user | <code>Object</code> | The logged in user |
+| p | <code>Object</code> | the profile to flatten |
+
+
+* * *
+
+<a name="flattenProject"></a>
+
+## flattenProject(user, p) ⇒ <code>Object</code>
+Given the logged-in user and a project, this function "flattens" the object by reaching
+into the associated tables queries (such as reports and likes) and bubbling them up to a top-level prop
+This type of function is really only used here and in codeblocksroute.  As codelife development progressed,
+the pattern shifted more to expect the nested nature of sequelize queries, meaning flattening wasn't necessary.
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - The "flattened" project, ready to be returned to the requester  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| user | <code>string</code> | The currently logged in user, as specified by datawheel-canon |
+| p | <code>Object</code> | The project to flatten |
+
+
+* * *
+
+<a name="pruneThread"></a>
+
+## pruneThread(user, t) ⇒ <code>Object</code>
+Given a user and a thread, prepare the thread to be returned to the requester.
+This involves a number of operations, including collating likes and reports, rewriting
+banned content, and deleting certain sensitive keys so they don't leak out through the API
+
+**Kind**: global function  
+**Returns**: <code>Object</code> - the pruned thread  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| user | <code>Object</code> | The logged-in user |
+| t | <code>Object</code> | the Thread to be pruned |
+
 
 * * *
 

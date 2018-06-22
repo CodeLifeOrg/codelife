@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {button, Position, Toaster, Tooltip, Intent} from "@blueprintjs/core";
 import PropTypes from "prop-types";
@@ -88,20 +89,28 @@ class ReportViewer extends Component {
   }
 
   createPageRow(type, report) {
-    const shortFilename = report.filename.length > 20 ? `${report.filename.substring(0, 20)}...` : report.filename;
+    const shortFilename = report.filename.length > 35 ? `${report.filename.substring(0, 35)}...` : report.filename;
     let strReasons = "";
     let strComments = "";
-    for (const r of report.reasons) strReasons += `${r}\n`;
-    for (const c of report.comments) strComments += `${c}\n`;
+    for (const r of report.reasons) strReasons += `<li>${r}</li>`;
+    for (const c of report.comments) c.length ? strComments += `<li>${c}</li>` : null;
     return <tr key={report.id}>
       <td>
-        <a target="_blank" href={`/${type}/${report.username}/${report.filename}`}>
+        <Link target="_blank" to={`/${type}/${report.username}/${report.filename}`}>
           {shortFilename}
-        </a>
+        </Link>
       </td>
-      <td>{report.username}</td>
-      <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
-      <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
+      <td>
+        <Link to={`/profile/${report.username}`}>
+          {report.username}
+        </Link>
+      </td>
+      <td>
+        <ul className="font-xs u-margin-top-off u-margin-bottom-off" dangerouslySetInnerHTML={{__html: strReasons}} />
+      </td>
+      <td>
+        <ul className="font-xs u-margin-top-off u-margin-bottom-off" dangerouslySetInnerHTML={{__html: strComments}} />
+      </td>
       <td className="actions-cell font-xs">
         <span className="actions-cell-inner u-button-group">
           <button className="inverted-button button success" onClick={this.handleOK.bind(this, type, report)}>
@@ -122,16 +131,20 @@ class ReportViewer extends Component {
     // if (report.thread) author = report.thread.user.username;
     let strReasons = "";
     let strComments = "";
-    for (const r of report.reasons) strReasons += `${r}\n`;
-    for (const c of report.comments) strComments += `${c}\n`;
+    for (const r of report.reasons) strReasons += `<li>${r}</li>`;
+    for (const c of report.comments) c.length ? strComments += `<li>${c}</li>` : null;
     return <tr key={report.id}>
       {
         type === "threads"
-          ? <Thread thread={report.thread} />
-          : <Comment comment={report.commentref} />
+          ? <Thread thread={report.thread} context="admin" />
+          : <Comment comment={report.commentref} context="admin" />
       }
-      <td style={{whiteSpace: "pre-wrap"}}>{strReasons}</td>
-      <td style={{whiteSpace: "pre-wrap"}}>{strComments}</td>
+      <td>
+        <ul className="font-xs u-margin-top-off u-margin-bottom-off" dangerouslySetInnerHTML={{__html: strReasons}} />
+      </td>
+      <td>
+        <ul className="font-xs u-margin-top-off u-margin-bottom-off" dangerouslySetInnerHTML={{__html: strComments}} />
+      </td>
       <td className="actions-cell font-xs">
         <span className="actions-cell-inner u-button-group">
           <button className="inverted-button button success" onClick={this.handleOK.bind(this, type, report)}>
@@ -194,8 +207,8 @@ class ReportViewer extends Component {
 
     return (
       <div id="ReportViewer">
-        <h2 className="report-title">Codeblocks</h2>
-        <table className="pt-table">
+        <h2 className="report-title font-md u-margin-bottom-off">Codeblocks</h2>
+        <table className="codeblock-report-table pt-table u-margin-bottom-lg">
           <thead>
             <tr>
               <th>Page</th>
@@ -207,37 +220,37 @@ class ReportViewer extends Component {
           </thead>
           <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
         </table>
-        <h2 className="report-title">Projects</h2>
-        <table className="pt-table">
+        <h2 className="report-title font-md u-margin-bottom-off">Projects</h2>
+        <table className="project-report-table pt-table u-margin-bottom-lg">
           <thead>
             <tr>
               <th>Page</th>
               <th>Author</th>
-              <th>Reason</th>
+              <th>Reasons</th>
               <th>Comments</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
         </table>
-        <h2 className="report-title">Threads</h2>
-        <table className="pt-table threads-table">
+        <h2 className="report-title font-md u-margin-bottom-off">Threads</h2>
+        <table className="thread-report-table pt-table u-margin-bottom-lg">
           <thead>
             <tr>
               <th>Thread</th>
-              <th>Reason</th>
+              <th>Reasons</th>
               <th>Comments</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>{threadItems.length > 0 ? threadItems : t("No items are currently flagged")}</tbody>
         </table>
-        <h2 className="report-title">Comments</h2>
-        <table className="pt-table comments-table">
+        <h2 className="report-title font-md u-margin-bottom-off">Comments</h2>
+        <table className="comment-report-table pt-table">
           <thead>
             <tr>
               <th>Comment</th>
-              <th>Reason</th>
+              <th>Reasons</th>
               <th>Comments</th>
               <th>Actions</th>
             </tr>

@@ -90,125 +90,150 @@ class Thread extends Component {
 
   render() {
 
-    const {t: t} = this.props;
+    const {context, t} = this.props;
     const {thread, commentTitle, commentContent} = this.state;
 
     if (!thread) return <LoadingSpinner />;
 
     return (
-      <span className="thread">
-        <span className="thread-header">
+      context !== "admin"
+        ? <span className="thread">
+          <span className="thread-header">
 
-          <span className="thread-content">
+            <span className="thread-content">
 
-            {/* post title */}
-            <h3 className="thread-title u-margin-bottom-off">
-              { thread.title }
-            </h3>
+              {/* post title */}
+              <h3 className="thread-title u-margin-bottom-off">
+                { thread.title }
+              </h3>
 
-            {/* meta */}
-            <span className="thread-user font-xs">
-              { t("by") } <Link className="link font-sm" to={ `/profile/${thread.user.username}`}>
-                { thread.user.username }
-                {/* role */}
-                { thread.user.role !== 0 &&
-                  <span className="thread-user-role font-xs"> (
-                    { thread.user.role === 1
-                      ? t("Contributor")
-                      : thread.user.role === 2 &&
-                        t("Admin")
-                    })
-                  </span>
-                }
-              </Link>
-              {/* date posted */}
-              <span className="thread-date">
-                { `${t("on")} ${this.formatDate(thread.date)}` }
+              {/* meta */}
+              <span className="thread-user font-xs">
+                { t("by") } <Link className="link font-sm" to={ `/profile/${thread.user.username}`}>
+                  { thread.user.username }
+                  {/* role */}
+                  { thread.user.role !== 0 &&
+                    <span className="thread-user-role font-xs"> (
+                      { thread.user.role === 1
+                        ? t("Contributor")
+                        : thread.user.role === 2 &&
+                          t("Admin")
+                      })
+                    </span>
+                  }
+                </Link>
+                {/* date posted */}
+                <span className="thread-date">
+                  { `${t("on")} ${this.formatDate(thread.date)}` }
+                </span>
               </span>
+            </span>
+
+            <span className="thread-actions">
+
+              {/* likes */}
+              <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${thread.id}`}>
+                <button
+                  className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ thread.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ thread.likes ? "is-liked" : null }` }
+                  onClick={ this.toggleLike.bind(this) }
+                  aria-labelledby={`thread-${thread.id}`} />
+                <span className="card-likes-count">{ thread.likes }</span>
+                <span className="u-visually-hidden">&nbsp;
+                  { thread.likes === 1 ? t("Like") : t("Likes") }
+                </span>
+              </p>
+
+              {/* flag content */}
+              <Popover2
+                className="card-dialog-flag-container"
+                popoverClassName="pt-popover-content-sizing"
+                interactionKind={PopoverInteractionKind.CLICK}
+                placement="bottom-end" >
+
+                {/* flag button */}
+                <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${thread.report && "is-flagged" } u-unbutton font-xs`}>
+                  <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                  <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
+                    {thread.report ? "Flagged" : "Flag"}
+                  </span>
+                </button>
+
+                {/* flag form */}
+                <ReportBox
+                  reportid={thread.id}
+                  contentType="thread"
+                  handleReport={this.handleReport.bind(this)}
+                  permalink={this.props.permalink}
+                />
+              </Popover2>
             </span>
           </span>
 
-          <span className="thread-actions">
+          {/* post content */}
+          <span className="thread-body" dangerouslySetInnerHTML={{__html: thread.content}} />
 
-            {/* likes */}
-            <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${thread.id}`}>
-              <button
-                className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ thread.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ thread.likes ? "is-liked" : null }` }
-                onClick={ this.toggleLike.bind(this) }
-                aria-labelledby={`thread-${thread.id}`} />
-              <span className="card-likes-count">{ thread.likes }</span>
-              <span className="u-visually-hidden">&nbsp;
-                { thread.likes === 1 ? t("Like") : t("Likes") }
-              </span>
-            </p>
 
-            {/* flag content */}
-            <Popover2
-              className="card-dialog-flag-container"
-              popoverClassName="pt-popover-content-sizing"
-              interactionKind={PopoverInteractionKind.CLICK}
-              placement="bottom-end" >
+          {/* show / hide comments */}
+          <button className="link u-unbutton font-sm u-margin-top-xs" onClick={this.toggleComments.bind(this)}>
+            <span className="pt-icon pt-icon-chat" />
+            { this.state.showComments
+              // currently showing comments; hide them
+              ? t("hide comments")
+              // not currently showing comments; show them
+              : thread.commentlist.length
+                // we got comments; show comment count
+                ? `${ t("show") } ${ thread.commentlist.length } ${ thread.commentlist.length === 1 ? t("comment") : t("comments") }`
+                // no comments; prompt to add comment
+                : t("add comment")
+            }
+          </button>
 
-              {/* flag button */}
-              <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${thread.report && "is-flagged" } u-unbutton font-xs`}>
-                <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
-                <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
-                  {thread.report ? "Flagged" : "Flag"}
-                </span>
-              </button>
-
-              {/* flag form */}
-              <ReportBox
-                reportid={thread.id}
-                contentType="thread"
-                handleReport={this.handleReport.bind(this)}
-                permalink={this.props.permalink}
-              />
-            </Popover2>
+          {/* comments */}
+          <span className="comments">
+            <Collapse isOpen={this.state.showComments} component="span">
+              { thread.commentlist.map(c => <Comment key={c.id} comment={c} />) }
+              {
+                this.state.showComments &&
+                  <span className="new-comment">
+                    <h3 className="new-comment-title u-margin-top-md">{t("Post New Comment")}</h3>
+                    <input className="pt-input" value={this.state.commentTitle} onChange={e => this.setState({commentTitle: e.target.value})} placeholder={t("Title")} />
+                    <QuillWrapper hideGlossary={true} value={this.state.commentContent} onChange={tx => this.setState({commentContent: tx})} />
+                    <Button
+                      className="pt-intent-success post-button pt-fill"
+                      onClick={this.newComment.bind(this)}
+                      disabled={!commentTitle || !commentContent || commentContent === "<p><br></p>"}
+                    >
+                      {t("Post Comment")}
+                    </Button>
+                  </span>
+              }
+            </Collapse>
           </span>
         </span>
 
-        {/* post content */}
-        <span className="thread-body" dangerouslySetInnerHTML={{__html: thread.content}} />
+        // appears in admin ReportViewer.jsx
+        : <td className="thread">{/* post title */}
 
+          <span className="thread-title u-margin-bottom-off">
+            <span className="heading">{ thread.title }</span>
+            <span className="font-xs"> ({ thread.subject_id })</span>
+          </span>
 
-        {/* show / hide comments */}
-        <button className="link u-unbutton font-sm u-margin-top-xs" onClick={this.toggleComments.bind(this)}>
-          <span className="pt-icon pt-icon-chat" />
-          { this.state.showComments
-            // currently showing comments; hide them
-            ? t("hide comments")
-            // not currently showing comments; show them
-            : thread.commentlist.length
-              // we got comments; show comment count
-              ? `${ t("show") } ${ thread.commentlist.length } ${ thread.commentlist.length === 1 ? t("comment") : t("comments") }`
-              // no comments; prompt to add comment
-              : t("add comment")
-          }
-        </button>
+          {/* meta */}
+          <span className="thread-user font-xs">
+            { t("by") } <Link className="link" to={ `/profile/${thread.user.username}`}>
+              { thread.user.username }
+            </Link>
+            {/* date posted */}
+            <span className="thread-date">
+              { ` ${t("on")} ${this.formatDate(thread.date)}` }
+            </span>
+          </span>
 
-        {/* comments */}
-        <span className="comments">
-          <Collapse isOpen={this.state.showComments} component="span">
-            { thread.commentlist.map(c => <Comment key={c.id} comment={c} />) }
-            {
-              this.state.showComments &&
-                <span className="new-comment">
-                  <h3 className="new-comment-title u-margin-top-md">{t("Post New Comment")}</h3>
-                  <input className="pt-input" value={this.state.commentTitle} onChange={e => this.setState({commentTitle: e.target.value})} placeholder={t("Title")} />
-                  <QuillWrapper hideGlossary={true} value={this.state.commentContent} onChange={tx => this.setState({commentContent: tx})} />
-                  <Button
-                    className="pt-intent-success post-button pt-fill"
-                    onClick={this.newComment.bind(this)}
-                    disabled={!commentTitle || !commentContent || commentContent === "<p><br></p>"}
-                  >
-                    {t("Post Comment")}
-                  </Button>
-                </span>
-            }
-          </Collapse>
-        </span>
-      </span>
+          {/* comment */}
+          <span className="thread-comment font-sm" dangerouslySetInnerHTML={{__html: thread.content}} />
+
+        </td>
     );
   }
 }

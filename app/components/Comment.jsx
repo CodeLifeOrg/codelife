@@ -65,87 +65,112 @@ class Comment extends Component {
 
   render() {
 
-    const {t} = this.props;
+    const {context, t} = this.props;
     const {comment} = this.state;
 
-    if (!comment) return <LoadingSpinner />;
+    if (!comment) return <LoadingSpinner label="false" />;
 
     return (
-      <span className="comment-thread thread">
-        <span className="comment-thread-header thread-header">
+      context !== "admin"
+        ? <span className="comment-thread thread">
+          <span className="comment-thread-header thread-header">
 
-          <span className="comment-thread-content thread-content">
+            <span className="comment-thread-content thread-content">
 
-            {/* post title */}
-            <h4 className="comment-thread-title thread-title u-margin-bottom-off font-md">
-              { comment.title }
-            </h4>
+              {/* post title */}
+              <h4 className="comment-thread-title thread-title u-margin-bottom-off font-md">
+                { comment.title }
+              </h4>
 
-            {/* meta */}
-            <span className="comment-thread-user thread-user font-xs">
-              { t("by") } <Link className="link font-sm" to={ `/profile/${comment.user.username}`}>
-                { comment.user.username }
-                {/* role */}
-                { comment.user.role !== 0 &&
-                  <span className="comment-thread-user-role thread-user-role font-xs"> (
-                    { comment.user.role === 1
-                      ? t("Contributor")
-                      : comment.user.role === 2 &&
-                        t("Admin")
-                    })
-                  </span>
-                }
-              </Link>
-              {/* date posted */}
-              <span className="comment-thread-date thread-date">
-                { `${t("on")} ${this.formatDate(comment.date)}` }
+              {/* meta */}
+              <span className="comment-thread-user thread-user font-xs">
+                { t("by") } <Link className="link font-sm" to={ `/profile/${comment.user.username}`}>
+                  { comment.user.username }
+                  {/* role */}
+                  { comment.user.role !== 0 &&
+                    <span className="comment-thread-user-role thread-user-role font-xs"> (
+                      { comment.user.role === 1
+                        ? t("Contributor")
+                        : comment.user.role === 2 &&
+                          t("Admin")
+                      })
+                    </span>
+                  }
+                </Link>
+                {/* date posted */}
+                <span className="comment-thread-date thread-date">
+                  { `${t("on")} ${this.formatDate(comment.date)}` }
+                </span>
               </span>
+            </span>
+
+            <span className="thread-actions">
+
+              {/* likes */}
+              <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${comment.id}`}>
+                <button
+                  className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ comment.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ comment.likes ? "is-liked" : null }` }
+                  onClick={ this.toggleLike.bind(this) }
+                  aria-labelledby={`thread-${comment.id}`} />
+                <span className="card-likes-count">{ comment.likes }</span>
+                <span className="u-visually-hidden">&nbsp;
+                  { comment.likes === 1 ? t("Like") : t("Likes") }
+                </span>
+              </p>
+
+              {/* flag content */}
+              <Popover2
+                className="card-dialog-flag-container"
+                popoverClassName="pt-popover-content-sizing"
+                interactionKind={PopoverInteractionKind.CLICK}
+                placement="bottom-end" >
+
+                {/* flag button */}
+                <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${comment.report && "is-flagged" } u-unbutton font-xs`}>
+                  <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                  <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
+                    {comment.report ? "Flagged" : "Flag"}
+                  </span>
+                </button>
+
+                {/* flag form */}
+                <ReportBox
+                  reportid={comment.id}
+                  contentType="thread"
+                  handleReport={this.handleReport.bind(this)}
+                  permalink={this.props.permalink}
+                />
+              </Popover2>
             </span>
           </span>
 
-          <span className="thread-actions">
-
-            {/* likes */}
-            <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${comment.id}`}>
-              <button
-                className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ comment.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ comment.likes ? "is-liked" : null }` }
-                onClick={ this.toggleLike.bind(this) }
-                aria-labelledby={`thread-${comment.id}`} />
-              <span className="card-likes-count">{ comment.likes }</span>
-              <span className="u-visually-hidden">&nbsp;
-                { comment.likes === 1 ? t("Like") : t("Likes") }
-              </span>
-            </p>
-
-            {/* flag content */}
-            <Popover2
-              className="card-dialog-flag-container"
-              popoverClassName="pt-popover-content-sizing"
-              interactionKind={PopoverInteractionKind.CLICK}
-              placement="bottom-end" >
-
-              {/* flag button */}
-              <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${comment.report && "is-flagged" } u-unbutton font-xs`}>
-                <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
-                <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
-                  {comment.report ? "Flagged" : "Flag"}
-                </span>
-              </button>
-
-              {/* flag form */}
-              <ReportBox
-                reportid={comment.id}
-                contentType="thread"
-                handleReport={this.handleReport.bind(this)}
-                permalink={this.props.permalink}
-              />
-            </Popover2>
-          </span>
+          {/* post content */}
+          <span className="comment-thread-body thread-body" dangerouslySetInnerHTML={{__html: comment.content}} />
         </span>
 
-        {/* post content */}
-        <span className="comment-thread-body thread-body" dangerouslySetInnerHTML={{__html: comment.content}} />
-      </span>
+        // appears in admin ReportViewer.jsx
+        : <td className="thread">{/* post title */}
+
+          <span className="thread-title u-margin-bottom-off">
+            <span className="heading">{ comment.title }</span>
+            {/* <span className="font-xs"> ({ comment.subject_id })</span> */}
+          </span>
+
+          {/* meta */}
+          <span className="thread-user font-xs">
+            { t("by") } <Link className="link" to={ `/profile/${comment.user.username}`}>
+              { comment.user.username }
+            </Link>
+            {/* date posted */}
+            <span className="thread-date">
+              { ` ${t("on")} ${this.formatDate(comment.date)}` }
+            </span>
+          </span>
+
+          {/* comment */}
+          <span className="thread-comment font-sm" dangerouslySetInnerHTML={{__html: comment.content}} />
+
+        </td>
     );
   }
 }

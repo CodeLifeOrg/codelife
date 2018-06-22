@@ -1,6 +1,11 @@
 import React, {Component} from "react";
 import AceWrapper from "components/AceWrapper";
 
+/**
+ * TextCode is text-left, code right. This is different from RenderCode in that 
+ * The HTML page itself is not rendered - only the raw code is shown as an example
+ */
+
 export default class TextCode extends Component {
 
   constructor(props) {

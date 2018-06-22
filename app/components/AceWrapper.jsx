@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 
+/**
+ * AceWrapper wraps the react-ace Component, providing some site-wide themes and configurations.
+ */
+
 export default class AceWrapper extends Component {
 
   componentDidUpdate() {

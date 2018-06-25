@@ -1294,6 +1294,11 @@ utility classes
   @add-mixin clearfix;
 }
 
+/* 100% width */
+.u-fullwidth {
+  width: 100% !important;
+}
+
 /* vertical margin */
 .u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
 .u-margin-top-sm { margin-top: var(--gutter-sm) !important; }

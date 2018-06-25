@@ -94,6 +94,29 @@
   }
 }
 
+/* tabs within a tab */
+.admin-sub-tabs-container {
+  text-align: center;
+
+  & .admin-sub-tabs {
+    display: inline-block;
+    margin: var(--gutter-sm) auto var(--gutter-sm) auto;
+
+    & .pt-tab-list {
+      justify-content: center;
+    }
+
+    & .pt-tab {
+      @add-mixin font-sm;
+
+      &[aria-expanded=true] {
+        color: var(--sky-black);
+      }
+    }
+
+  }
+}
+
 
 /* user roles */
 /* NOTE: this is a canon component, so let's get hacky */

@@ -136,14 +136,17 @@ class Statistics extends Component {
     return (
       <div id="statistics" className="statistics">
 
-        <h2 className="font-xl u-text-center u-margin-bottom-off">Usage statistics</h2>
+        <h1 className="u-text-center u-margin-bottom-off">Usage statistics</h1>
 
-        <div className="stat-tabs-container u-text-center">
-          <Tabs2 className="stat-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
-            <Tab2 id="last-1" className="stat-tab" title={t("Last Day")} />
-            <Tab2 id="last-3" className="stat-tab" title={t("Last 3 Days")} />
-            <Tab2 id="last-7" className="stat-tab" title={t("Last 7 Days")} />
-            <Tab2 id="last-999999" className="stat-tab" title={t("Forever")} />
+        <div className="admin-sub-tabs-container">
+          <Tabs2 className="admin-sub-tabs"
+            onChange={this.handleTabChange.bind(this)}
+            selectedTabId={activeTabId}
+            defaultSelectedTabId="last-1">
+            <Tab2 id="last-1" className="admin-sub-tab" title={t("Last Day")} />
+            <Tab2 id="last-3" className="admin-sub-tab" title={t("Last 3 Days")} />
+            <Tab2 id="last-7" className="admin-sub-tab" title={t("Last 7 Days")} />
+            <Tab2 id="last-999999" className="admin-sub-tab" title={t("Forever")} />
           </Tabs2>
         </div>
 
@@ -167,11 +170,11 @@ class Statistics extends Component {
             shapeConfig: {
               fill: () => styles["sky-dark"],
               labelConfig: {
-                fontFamily: "Overpass"
+                fontFamily: styles["body-font"]
               }
             },
             tooltipConfig: {
-              background: "white",
+              background: styles.white,
               body: v => {
                 const students = v.uid instanceof Array ? v.uid.length : 1;
                 const schools = v.schoolname instanceof Array ? v.schoolname : [v.schoolname];
@@ -181,12 +184,12 @@ class Statistics extends Component {
                         </table>`;
               },
               bodyStyle: {
-                "font-family": "Overpass"
+                "font-family": styles["body-font"]
               },
-              borderRadius: "5px",
-              padding: "10px",
+              borderRadius: styles["radius-md"],
+              padding: styles["radius-lg"],
               titleStyle: {
-                "font-family": "Overpass"
+                "font-family": styles["body-font"]
               }
             }
           }} />

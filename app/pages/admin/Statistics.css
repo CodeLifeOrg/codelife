@@ -1,15 +1,5 @@
 @import "../../mixins.css";
 
-/* statistics tabs */
-.stat-tabs-container {
-
-  & .stat-tabs {
-    display: inline-block;
-    margin: var(--gutter-sm) auto var(--gutter-sm) auto;
-  }
-}
-
-
 /* statistics page */
 .statistics {
 

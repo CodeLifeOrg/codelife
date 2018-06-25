@@ -15,7 +15,7 @@
 
     &:hover,
     &:focus-within {
-      background-color: color(var(--light-1) a(25%))
+      background-color: color(var(--light-1) a(25%));
     }
 
     & .rule-title {

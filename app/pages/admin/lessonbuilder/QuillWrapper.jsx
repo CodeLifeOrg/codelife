@@ -76,9 +76,13 @@ class QuillWrapper extends Component {
         />
         { this.props.hideGlossary
           ? null
-          : <div>
+          : <div className="glossary-insert">
             <Suggest
+              className="glossary-insert-search"
               id="search-box"
+              inputProps={{
+                placeholder: "search glossary words…"
+              }}
               inputValueRenderer={word => word.word}
               items={this.state.words}
               itemRenderer={this.renderWord.bind(this)}
@@ -86,12 +90,12 @@ class QuillWrapper extends Component {
               noResults={<MenuItem disabled={true} text="No results." />}
               onItemSelect={word => this.setState({currentWord: word})}
             />
-            <div
-              id="insert-word"
-              onClick={this.handleGlossaryClick.bind(this)}
-            >
-              Insert Glossary Word <span className="pt-icon pt-icon-circle-arrow-up" />
-            </div>
+            <button
+              className="button inverted-button glossary-insert-button font-sm"
+              onClick={this.handleGlossaryClick.bind(this)} >
+              <span className="pt-icon pt-icon-circle-arrow-up" />
+              <span className="button-text">insert<span className="u-hide-below-sm"> word</span></span>
+            </button>
           </div>
         }
       </div>;

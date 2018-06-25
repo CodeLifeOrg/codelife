@@ -16,7 +16,18 @@
       "ACTIVATE_SEND_SUCCESS": " Um link de ativação foi enviado para {{email}}. Por favor, cheque sua caixa de mensagens.",
       "ACTIVATE_TOKEN_FAILURE": " Token de ativação inválido ou expirou."
     },
-    "button": "Enviar verificação"
+    "button": "Enviar verificação",
+    "mailgun": {
+      "body": "Obrigado por se registrar no {{site}}! Por favor, confirme seu endereço de email clicando no link abaixo.",
+      "button": "Clique para confirmar.",
+      "closing": "Ateciosamente,",
+      "footer": "Você está recebendo este email porque você criou uma nova conta no {{site}} ou adicionou algum novo endereço de email. Se não foi você quem fez isso, ignore esse email, por favor.",
+      "greeting": "Olá {{username}},",
+      "link": "Ou copie e o cole esse endereço no seu navegador: {{confirmLink}}",
+      "signature": "Equipe {{site}}",
+      "title": "E-mail Verification",
+      "welcome": "Welcome to {{site}}!"
+    }
   },
   "Additional Comments": "Comentários adicionais",
   "Admin": "Admin",
@@ -152,6 +163,7 @@
   "Delete": "Excluir",
   "Delete Project": "Excluir projeto",
   "Description of Codelife": "CodeLife é uma plataforma online direcionada para os jovens que desejam aprender ou aprimorar habilidades relacionadas ao idioma do futuro: a programação.",
+  "Discussion": "Discussion",
   "DiscussionWarning": "Ler as discussões dos usuários pode ser muito valioso, mas vai marcar essa fase como incompleta. Não se esqueça de que você sempre poderá voltar depois e completar a ilha sem ajuda para garantir seu crédito!",
   "Display name": "Mostrar nome",
   "Do you go to school in Minas Gerais?": "Sua escola é em Minas Gerais?",
@@ -317,6 +329,9 @@
   "Please be as detailed as possible with your feedback": "Por favor, seja detalhado com sua resposta",
   "Please select a reason below": "Por favor, escolha um motivo abaixo",
   "Portuguese": "Português",
+  "Post Comment": "Post Comment",
+  "Post New Comment": "Post New Comment",
+  "Post New Thread": "Post New Thread",
   "Previous": "Anterior",
   "Previous island": "Ilha anterior",
   "Privacy Policy": "Política de privacidade",
@@ -357,7 +372,13 @@
       "RESET_SEND_SUCCESS": "Um email para redefinição de senha foi enviado. Por favor, veja sua caixa de entrada.",
       "RESET_TOKEN_FAILURE": "Token para redefinição da senha inválido ou expirado."
     },
-    "button": "Redefinir senha"
+    "button": "Redefinir senha",
+    "mailgun": {
+      "body": "Recebemos uma solicitação de redefinição de senha da sua conta no {{site}}. Se não foi você quem solicitou, você pode simplesmente ignorar esse email e sua senha permanecerá a mesma.",
+      "button": "Redefinir minha senha",
+      "footer": "Ou acesse {{resetLink}} no seu navegador.",
+      "title": "Redefinição de Senha"
+    }
   },
   "Reset Password": "Redefinir senha",
   "Return to": "Voltar para",
@@ -372,6 +393,7 @@
   "Saved!": "Salvo!",
   "School": "Escola",
   "Schools list for this location is unavailable": "A lista de escolas para este local não está disponível",
+  "Screenshot": "Screenshot",
   "Search": {
     "KeepTyping": "Continue digitando",
     "NoResults": " Nenhum resultado 😞",
@@ -436,6 +458,8 @@
   "Somewhat unlikely": "Improvável",
   "Sorry, Try again!": "Descuple, tente novamente!",
   "Sorry, try again!": "Descuple, tente novamente!",
+  "Sort By": "Sort By",
+  "Start New Thread": "Start New Thread",
   "State": "Estado",
   "Statistics": "Estatísticas",
   "Submit": "Enviar",
@@ -447,6 +471,7 @@
   "This user doesn't have any code blocks yet": "Este usuário ainda não possui nenhum desafio concluído",
   "This user doesn't have any projects yet": "Este usuário ainda não possui nenhum projeto",
   "Thread Posted!": "Discussão postada!",
+  "Title": "Title",
   "Toggle fullscreen mode": "Alternar para o modo Tela Cheia",
   "Unable to upload image!": "Erro ao fazer upload da imagem",
   "Unspecified": "Unspecified",
@@ -484,12 +509,15 @@
   "aboutP3": " Por meio do CodeLife, você pode aprender por conta própria, em seu próprio ritmo e de onde quiser, a programar em HTML, CSS e JavaScript, linguagens muito utilizadas no desenvolvimento de webpages, por exemplo. Todo o conteúdo é oferecido em português e inglês.",
   "aboutP4": "aboutP4",
   "aboutP5": "aboutP5",
+  "add comment": "add comment",
   "anonymous user": "usuário anônimo",
   "at max": "no máximo",
   "buttonReset": "Restabelecer",
   "by": "por",
   "codeblock": "desafio",
   "codeblockWarn": "O código será mostrado depois de completar o último nível desta ilha",
+  "comment": "comment",
+  "comments": "comments",
   "create new project": "criar novo projeto",
   "deleteAlert": "Você tem certeza que quer deletar \"{{projectName}}\"? Esta ação não pode ser desfeita",
   "edit codeblock": "editar Desafio",
@@ -587,6 +615,7 @@
   },
   "go to island": "ir para Ilha",
   "hidden": "hidden",
+  "hide comments": "hide comments",
   "home": {
     "body": "",
     "continue": "Continuar explorando",
@@ -604,6 +633,7 @@
   "noProjects": "Este usuário ainda não possui nenhum projeto",
   "noResults": "Sem resultados",
   "noUsers": "Nenhum outro usuário encontrado",
+  "on": "on",
   "open": "abrir",
   "or": "ou",
   "privacy": {
@@ -664,6 +694,7 @@
   "saveWarning": "Salve suas alterações antes de abrir uma nova página",
   "schoolListUnavailable": "A lista de escolas para este local não está disponível",
   "selectReason": "Por favor, escolha um motivo abaixo",
+  "show": "show",
   "splashP1": " CodeLife é uma plataforma online direcionada aos jovens que desejam aprender uma das principais habilidades do futuro: a programação.",
   "splashP2": " O mundo está mudando e a tecnologia é um fator decisivo nesse processo, que tem gerado reflexos no mercado de trabalho. Muitas das profissões tradicionais estão deixando de existir. E outras tantas, que ainda nem conhecemos, serão criadas. A programação é parte substancial dessa mudança e os jovens que quiserem participar desse novo mundo precisam estar atentos a isso.",
   "splashP3": " Por meio do CodeLife, você pode aprender por conta própria, em seu próprio ritmo e de onde quiser, a programar em HTML, CSS e JavaScript, linguagens muito utilizadas no desenvolvimento de webpages, por exemplo. Todo o conteúdo é oferecido em português e inglês.",

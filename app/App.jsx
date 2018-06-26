@@ -35,20 +35,18 @@ class App extends Component {
     const {location} = this.props;
     const {hostname} = location;
     // If the user navigates to codelife.com, redirect them to pt, unless their profile says otherwise
-    console.log(userprofile);
-    if (userprofile) {
-      if (!hostname.includes("en.") && !hostname.includes("pt.")) {
+    if (!hostname.includes("en.") && !hostname.includes("pt.")) {
+      if (userprofile) {
         if (userprofile.lang === "en") {
           if (window) window.location = `${location.protocol}//en.${location.host}${location.pathname}${location.search}`;
         }
         else {
           if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
         }
-        
       }
-    }
-    else {
-      if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
+      else {
+        if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
+      }
     }
   }
 

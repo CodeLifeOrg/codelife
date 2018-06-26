@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
@@ -100,6 +101,19 @@ class Nav extends Component {
 
   authForm(mode) {
     this.setState({formMode: mode, isLoginOpen: !this.state.isLoginOpen});
+  }
+
+  selectLang(lang, path) {
+    axios.post("/api/profile/update", {lang}).then(resp => {
+      if (resp.status === 200) {
+        console.log("saved lang pref");
+        if (window) window.location = path;
+      }
+      else {
+        if (window) window.location = path;
+      }
+    });
+    
   }
 
   render() {
@@ -207,10 +221,10 @@ class Nav extends Component {
             <span className="link language-icon-container">
               <span className="link-icon pt-icon-standard pt-icon-globe" />
             </span>
-            <a className="link language-link" key={languageLinks[0].id} href={languageLinks[0].link}>
+            <a className="link language-link" onClick={this.selectLang.bind(this, "en", languageLinks[0].link)} key={languageLinks[0].id} /*href={languageLinks[0].link}*/>
               {languageLinks[0].shortTitle}
             </a>
-            <a className="link language-link" key={languageLinks[1].id} href={languageLinks[1].link}>{languageLinks[1].shortTitle}</a>
+            <a className="link language-link" onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)} key={languageLinks[1].id} /*href={languageLinks[1].link}*/>{languageLinks[1].shortTitle}</a>
           </div>
           : <div className="link-list font-sm">
 

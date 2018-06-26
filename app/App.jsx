@@ -31,31 +31,43 @@ class App extends Component {
     return {browserHistory: this.props.router};
   }
 
+  redirect(userprofile) {
+    const {location} = this.props;
+    const {hostname} = location;
+    // If the user navigates to codelife.com, redirect them to pt, unless their profile says otherwise
+    console.log(userprofile);
+    if (userprofile) {
+      if (!hostname.includes("en.") && !hostname.includes("pt.")) {
+        if (userprofile.lang === "en") {
+          if (window) window.location = `${location.protocol}//en.${location.host}${location.pathname}${location.search}`;
+        }
+        else {
+          if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
+        }
+        
+      }
+    }
+    else {
+      if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const {auth} = this.props;
     const {userInit} = this.state;
     if (!userInit && auth.loading) this.setState({userInit: true});
     if (!prevProps.auth.user && this.props.auth.user) {
-      axios.get("/api/profileping").then(userprofile => {
+      axios.get("/api/profileping").then(resp => {
         // On Mounting the app, we need to create a blank user in userprofiles that associates
         // with the user in canon's users.  This calls findOrCreate to make that happen.
-        const {location} = this.props;
-        const {hostname} = location;
-        // If the user navigates to codelife.com, redirect them to pt, unless their profile says otherwise
-        if (!hostname.includes("en.") && !hostname.includes("pt.")) {
-          if (userprofile.lang === "en") {
-            if (window) window.location = `${location.protocol}//en.${location.host}${location.pathname}${location.search}`;
-          }
-          else {
-            if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
-          }
-          
-        }
+        this.redirect.bind(this)(resp.data[0]);
       });
     }
   }
 
   componentDidMount() {
+    //this.redirect.bind(this)();
+
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
     const gget = axios.get("/api/glossary/all");

@@ -7,8 +7,9 @@ import "./CTA.css";
 
 import {Dialog} from "@blueprintjs/core";
 
-// Call To Action Component
-// Used to persuade users to use the site in useful ways
+/** 
+ * Call To Action Component, encourage users to sign up after visiting SEO-enable page
+ */
 
 class CTA extends Component {
 

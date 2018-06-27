@@ -13,6 +13,10 @@ import {
   RESET_TOKEN_SUCCESS
 } from "datawheel-canon/src/consts";
 
+/** 
+ * Wrapper Component for the reset password dispatch action of canon
+ */
+
 class PasswordReset extends Component {
 
   constructor(props) {
@@ -27,6 +31,9 @@ class PasswordReset extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
+  /** 
+   * On Mount, access the URL information from router and grab the token if it is there.
+   */
   componentDidMount() {
     const {location} = this.props.router;
     const {token} = location ? location.query : this.props;
@@ -40,6 +47,9 @@ class PasswordReset extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
+  /**
+   * Password field change handler, ensure passwords match before submitting dispatch
+   */
   changePassword(e) {
     e.preventDefault();
     const {t, router} = this.props;
@@ -59,6 +69,9 @@ class PasswordReset extends Component {
     this.setState({submitted: true});
   }
 
+  /** 
+   * Listen for changes to this.props.auth, and show a Toast message that reflects its state
+   */
   componentDidUpdate() {
 
     const {auth, t, router} = this.props;

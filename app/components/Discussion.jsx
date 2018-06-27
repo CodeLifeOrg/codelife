@@ -9,6 +9,11 @@ import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
+/** 
+ * Discussion Board wraps a list of threads (which in turn hosts a list of comments). Discussion boards 
+ * currently only apply to slides, but they are designed to be able to apply to anything (projects, codeblocks, etc)
+ */
+
 class Discussion extends Component {
 
   constructor(props) {
@@ -27,6 +32,9 @@ class Discussion extends Component {
     this.componentDidUpdate({});
   }
 
+  /**
+   * When the user changes slides, hit the API endpoind and fetch the new thread data
+   */ 
   componentDidUpdate(prevProps) {
     if (prevProps.subjectId !== this.props.subjectId) {
       const {subjectType, subjectId} = this.props;
@@ -39,7 +47,9 @@ class Discussion extends Component {
   }
 
 
-
+  /**
+   * Prepare payload and post a new thread to the db
+   */ 
   newThread() {
     const {t} = this.props;
     const threadPost = {
@@ -58,7 +68,9 @@ class Discussion extends Component {
     });
   }
 
-
+  /**
+   * On sort selection, sort the threads in state
+   */ 
   selectSort(method) {
     const {threads} = this.state;
     switch (method) {

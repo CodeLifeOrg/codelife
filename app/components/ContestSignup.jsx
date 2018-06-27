@@ -13,6 +13,11 @@ import SelectGeo from "components/SelectGeo";
 import SelectSchool from "components/SelectSchool";
 import "./ContestSignup.css";
 
+/**
+ * Signup page for (currently postponed) project contest. Signing up simply enters the user in the contest,
+ * users still must go to the ContestSubmit page to select a project and finalize the procedure.
+ */ 
+
 class ContestSignup extends Component {
 
   constructor(props) {
@@ -25,6 +30,9 @@ class ContestSignup extends Component {
     };
   }
 
+  /**
+   * On Mount, fetch the profile of the logged in user. 
+   */
   componentWillMount() {
     const {username} = this.props.user;
 
@@ -43,6 +51,9 @@ class ContestSignup extends Component {
     });
   }
 
+  /** 
+   * Formatting rules for Cadastro de Pessoas Físicas
+   */
   formatCPF(input) {
     // Strip all characters from the input except digits
     input = input.replace(/\D/g, "");
@@ -110,6 +121,10 @@ class ContestSignup extends Component {
     }
   }
 
+  /**
+   * Onclick handler that prepares entry payloads to various endpoints. Note that setting school id/ geo id in this
+   * contest entry page also updates the actual profile of the user. 
+   */
   enterContest(e) {
     e.preventDefault();
 

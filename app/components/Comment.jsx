@@ -9,6 +9,11 @@ import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
+/**
+ * Comments belong to Threads. Note that there is no text editor here - all posting is handled by Thread.jsx.
+ * This component is for displaying only.
+ */
+
 class Comment extends Component {
 
   constructor(props) {
@@ -18,6 +23,9 @@ class Comment extends Component {
     };
   }
 
+  /**
+   * The comment itself is passed in via props. Put it in state
+   */
   componentDidMount() {
     const {comment} = this.props;
     this.setState({comment});
@@ -33,6 +41,9 @@ class Comment extends Component {
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   }
 
+  /**
+   * Handle Liking and Unliking of comments
+   */
   toggleLike() {
     const {comment} = this.state;
     const liked = !comment.liked;
@@ -54,6 +65,10 @@ class Comment extends Component {
     });
   }
 
+  /**
+   * When the nested ReportBox component processes a report, This commment module needs to update the button to 
+   * reflect the new state. This callback handles that.
+   */
   handleReport(report) {
     const {comment} = this.state;
     comment.report = report;

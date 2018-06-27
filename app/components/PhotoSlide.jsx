@@ -1,6 +1,10 @@
 import React, {Component} from "react";
 import "./PhotoSlide.css";
 
+/**
+ * Slideshow of images for About page
+ */
+
 export default class About extends Component {
 
   render() {

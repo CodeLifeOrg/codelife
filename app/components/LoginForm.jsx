@@ -9,6 +9,10 @@ import InstagramIcon from "./InstagramIcon.svg.jsx";
 
 import "./LoginForm.css";
 
+/**
+ * Works alongside SignUpForm to log users in. Essentially a wrapper for the canon "login" action 
+ */
+
 class LoginForm extends Component {
 
   constructor(props) {
@@ -24,6 +28,9 @@ class LoginForm extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
+  /**
+   * The login dispatch is mapped to props and called here
+   */
   onSubmit(e) {
     e.preventDefault();
     const {redirect} = this.props;

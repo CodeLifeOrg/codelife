@@ -5,6 +5,12 @@ import {connect} from "react-redux";
 import {Button, RadioGroup, Radio, Toaster, Position, Intent} from "@blueprintjs/core";
 import "./ReportBox.css";
 
+/**
+ * ReportBox is a reusable component for reporting threads, comments, projects, and codeblocks for 
+ * inappropriate content. As with many data structures in codelife, it uses a SINGLE reports table, 
+ * with a "type" column that designates which table the report_id refers to.
+ */
+
 class ReportBox extends Component {
 
   constructor(props) {

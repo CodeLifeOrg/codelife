@@ -4,6 +4,11 @@ import {translate} from "react-i18next";
 
 import "./LoadingSpinner.css";
 
+/**
+ * Loading spinner for a huge number of components in Codelife, mostly used in render cycles while 
+ * waiting for axios to return with data
+ */
+
 class LoadingSpinner extends Component {
 
   render() {

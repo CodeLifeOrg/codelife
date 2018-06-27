@@ -207,57 +207,81 @@ class ReportViewer extends Component {
 
     return (
       <div id="ReportViewer">
-        <h2 className="font-xl u-text-center u-margin-bottom-off">Flagged content</h2>
-        <h3 className="report-title font-md u-margin-bottom-off">Codeblocks</h3>
-        <table className="codeblock-report-table pt-table u-margin-bottom-lg">
-          <thead>
-            <tr>
-              <th>Page</th>
-              <th>Author</th>
-              <th>Reasons</th>
-              <th>Comments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{codeblockItems.length > 0 ? codeblockItems : t("No items are currently flagged")}</tbody>
-        </table>
-        <h3 className="report-title font-md u-margin-bottom-off">Projects</h3>
-        <table className="project-report-table pt-table u-margin-bottom-lg">
-          <thead>
-            <tr>
-              <th>Page</th>
-              <th>Author</th>
-              <th>Reasons</th>
-              <th>Comments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{projectItems.length > 0 ? projectItems : t("No items are currently flagged")}</tbody>
-        </table>
-        <h3 className="report-title font-md u-margin-bottom-off">Threads</h3>
-        <table className="thread-report-table pt-table u-margin-bottom-lg">
-          <thead>
-            <tr>
-              <th>Thread</th>
-              <th>Reasons</th>
-              <th>Comments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{threadItems.length > 0 ? threadItems : t("No items are currently flagged")}</tbody>
-        </table>
-        <h3 className="report-title font-md u-margin-bottom-off">Comments</h3>
-        <table className="comment-report-table pt-table">
-          <thead>
-            <tr>
-              <th>Comment</th>
-              <th>Reasons</th>
-              <th>Comments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{commentItems.length > 0 ? commentItems : t("No items are currently flagged")}</tbody>
-        </table>
+        <h1 className="font-xl u-text-center u-margin-bottom-off">Flagged content</h1>
+
+        { codeblockItems.length === 0 && projectItems.length === 0 && threadItems.length === 0 && commentItems.length === 0 &&
+          <p className="font-md u-text-center u-margin-top-md">{t("No items are currently flagged")} 🙌</p>
+        }
+
+        { codeblockItems.length > 0 &&
+          <div className="report-section">
+            <h3 className="report-title font-md u-margin-bottom-off">Codeblocks</h3>
+            <table className="codeblock-report-table pt-table u-margin-bottom-lg">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Author</th>
+                  <th>Reasons</th>
+                  <th>Comments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{codeblockItems}</tbody>
+            </table>
+          </div>
+        }
+
+        { projectItems.length > 0 &&
+          <div className="report-section">
+            <h3 className="report-title font-md u-margin-bottom-off">Projects</h3>
+            <table className="project-report-table pt-table u-margin-bottom-lg">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Author</th>
+                  <th>Reasons</th>
+                  <th>Comments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{projectItems}</tbody>
+            </table>
+          </div>
+        }
+
+        { threadItems.length > 0 &&
+          <div className="report-section">
+            <h3 className="report-title font-md u-margin-bottom-off">Threads</h3>
+            <table className="thread-report-table pt-table u-margin-bottom-lg">
+              <thead>
+                <tr>
+                  <th>Thread</th>
+                  <th>Reasons</th>
+                  <th>Comments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{threadItems}</tbody>
+            </table>
+          </div>
+        }
+
+        { commentItems.length > 0 &&
+          <div className="report-section">
+            <h3 className="report-title font-md u-margin-bottom-off">Comments</h3>
+            <table className="comment-report-table pt-table u-margin-bottom-lg">
+              <thead>
+                <tr>
+                  <th>Comment</th>
+                  <th>Reasons</th>
+                  <th>Comments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{commentItems}</tbody>
+            </table>
+          </div>
+        }
       </div>
     );
   }

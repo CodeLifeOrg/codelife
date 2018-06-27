@@ -157,7 +157,7 @@ class Statistics extends Component {
           </p>
           <p className="stat">
             <span className="stat-value font-xxl">{vizData.length} </span>
-            <span className="stat-label font-sm">School{userList.length === 1 ? "" : "s"}</span>
+            <span className="stat-label font-sm">School{vizData.length === 1 ? "" : "s"}</span>
           </p>
         </div>
 

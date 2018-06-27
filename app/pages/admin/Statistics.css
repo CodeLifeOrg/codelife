@@ -29,13 +29,23 @@
 
   /* no users retreived */
   & .pt-non-ideal-state {
-    height: 300px;
+    padding-top: var(--gutter-sm);
     max-width: 100%;
+
+    & .pt-non-ideal-state-title {
+      @add-mixin font-md;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
   }
 }
 
 
 /* the table */
+.statistics-table-container {
+  display: inline-block;
+  max-width: 100%;
+}
 .statistics-table {
   display: block; /* make the table honor width */
   width: 110%; /* flow off the right edge of the page */
@@ -99,5 +109,13 @@
     &.created-at {
       min-width: 10rem;
     }
+  }
+}
+
+/* admin panel overrides */
+.admin .statistics-table {
+  /* keep table from spilling out of container */
+  @add-mixin min-md {
+    table-layout: fixed;
   }
 }

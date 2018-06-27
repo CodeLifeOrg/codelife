@@ -193,8 +193,6 @@ class ReportViewer extends Component {
     const {mounted, codeblockReports, projectReports, threadReports, commentReports} = this.state;
     const {t} = this.props;
 
-    if (!mounted) return <LoadingSpinner />;
-
     const cbSorted = this.groupReports(codeblockReports);
     const pSorted = this.groupReports(projectReports);
     const tSorted = this.groupReports(threadReports);
@@ -209,8 +207,12 @@ class ReportViewer extends Component {
       <div id="ReportViewer">
         <h1 className="font-xl u-text-center u-margin-bottom-off">Flagged content</h1>
 
-        { codeblockItems.length === 0 && projectItems.length === 0 && threadItems.length === 0 && commentItems.length === 0 &&
+        { mounted
+          // no flagged content in the queue
+          ? codeblockItems.length === 0 && projectItems.length === 0 && threadItems.length === 0 && commentItems.length === 0 &&
           <p className="font-md u-text-center u-margin-top-md">{t("No items are currently flagged")} 🙌</p>
+          // still loading
+          : <LoadingSpinner label={false} />
         }
 
         { codeblockItems.length > 0 &&

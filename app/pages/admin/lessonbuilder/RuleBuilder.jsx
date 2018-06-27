@@ -53,31 +53,31 @@ class RuleBuilder extends Component {
 
   render() {
 
-    const {rules} = this.state;
+    const {mounted, rules} = this.state;
+    let ruleItems = [];
 
-    if (!rules) return <LoadingSpinner />;
-
-    const ruleItems = rules.map(r => <div key={r.id} className="rule">
-      <h3 className="rule-title font-lg u-margin-top-off u-margin-bottom-xxs">{r.type}</h3>
-      <p className="heading font-sm en-rule-subhead rule-subhead translation-title">English rule</p>
-      <p className="heading font-sm pt-rule-subhead rule-subhead translation-title">Portuguese translation</p>
-      <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
-      <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
-      <div className="rule-group u-margin-top-sm">
-        <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
-        <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
-      </div>
-      <div className="rule-group u-margin-top-sm">
-        <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
-        <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
-      </div>
-    </div>);
-
+    if (mounted) {
+      ruleItems = rules.map(r => <div key={r.id} className="rule">
+        <h3 className="rule-title font-lg u-margin-top-off u-margin-bottom-xxs">{r.type}</h3>
+        <p className="heading font-sm en-rule-subhead rule-subhead translation-title">English rule</p>
+        <p className="heading font-sm pt-rule-subhead rule-subhead translation-title">Portuguese translation</p>
+        <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg} />
+        <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg} />
+        <div className="rule-group u-margin-top-sm">
+          <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_2} />
+          <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_2")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_2} />
+        </div>
+        <div className="rule-group u-margin-top-sm">
+          <input className="en-rule-input rule-input pt-input" id={r.id} onChange={this.changeField.bind(this, "error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.error_msg_3} />
+          <input className="pt-rule-input rule-input pt-input translation" id={r.id} onChange={this.changeField.bind(this, "pt_error_msg_3")} type="text" placeholder="Error Message" dir="auto" value={r.pt_error_msg_3} />
+        </div>
+      </div>);
+    }
 
     return (
       <div className="rulebuilder">
-        <h2 className="font-xl u-text-center u-margin-bottom-off">Rule builder</h2>
-        {ruleItems}
+        <h1 className="font-xl u-text-center u-margin-bottom-off">Rule builder</h1>
+        {mounted && rules !== null ? ruleItems : <LoadingSpinner />}
         <div className="field-container">
           <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success font-md">Save</Button>
         </div>

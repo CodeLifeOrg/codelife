@@ -5,6 +5,7 @@ import {translate} from "react-i18next";
 import CodeBlockCard from "components/CodeBlockCard";
 import ProjectCard from "components/ProjectCard";
 import {Collapse, Tabs2, Tab2} from "@blueprintjs/core";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import "./Featured.css";
 
@@ -118,7 +119,7 @@ class Featured extends Component {
       {/* featured Codeblocks */}
       <h2>{t("ShownOnHomepage")}</h2>
       <div className="featured-list card-list">
-        { featuredCodeBlocks }
+        { featuredCodeBlocks.length ? featuredCodeBlocks : <LoadingSpinner label={false} /> }
       </div>
 
       {/* not featured Codeblocks */}
@@ -142,7 +143,7 @@ class Featured extends Component {
       {/* featured projects */}
       <h2>{t("ShownOnHomepage")}</h2>
       <div className="featured-list card-list">
-        { featuredProjects }
+        { featuredProjects.length ? featuredProjects : <LoadingSpinner label={false} /> }
       </div>
 
       {/* not featured projects */}
@@ -165,12 +166,11 @@ class Featured extends Component {
         <h1 className="u-text-center u-margin-bottom-off">{t("FeaturedTitle")}</h1>
 
         <div className="admin-sub-tabs-container">
-          <Tabs2 className="admin-sub-tabs" defaultSelectedTabId="featured-codeblocks" large={true}>
+          <Tabs2 className="admin-sub-tabs" defaultSelectedTabId="featured-codeblocks">
             <Tab2 id="featured-codeblocks" className="admin-sub-tab" title={t("Codeblocks")} panel={codeblocksPanel} />
             <Tab2 id="featured-projects" className="admin-sub-tab" title={t("Projects")} panel={projectsPanel} />
           </Tabs2>
         </div>
-
       </div>
     );
   }

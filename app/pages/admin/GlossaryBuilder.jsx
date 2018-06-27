@@ -137,8 +137,6 @@ class GlossaryBuilder extends Component {
     const {t} = this.props;
     const {words} = this.state;
 
-    if (!words) return <LoadingSpinner />;
-
     const terms = words.map(w =>
       w.touched
         // editing
@@ -221,7 +219,7 @@ class GlossaryBuilder extends Component {
     return (
       <div className="admin-glossary">
         <h1 className="u-text-center u-margin-bottom-sm">{t("Glossary Builder")}</h1>
-        {terms}
+        {terms.length ? terms : <LoadingSpinner label={false} />}
         <button className="button font-md u-fullwidth u-margin-bottom-off" onClick={this.addWord.bind(this)}>Add Word</button>
       </div>
     );

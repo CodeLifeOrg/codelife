@@ -67,8 +67,6 @@ class Statistics extends Component {
     const {mounted, flatProgress, activeTabId, sortBy} = this.state;
     const {t} = this.props;
 
-    if (!mounted) return <LoadingSpinner />;
-
     const visibleUsers = this.state.visibleUsers.sort((a, b) => {
       const prop1 = typeof a[sortBy.prop] === "string" ? a[sortBy.prop].toLowerCase() : a[sortBy.prop];
       const prop2 = typeof b[sortBy.prop] === "string" ? b[sortBy.prop].toLowerCase() : b[sortBy.prop];
@@ -161,7 +159,7 @@ class Statistics extends Component {
           </p>
         </div>
 
-        { vizData.length > 1
+        { mounted && vizData.length > 1
           ? <Treemap config={{
             height: 400,
             data: vizData,
@@ -196,7 +194,7 @@ class Statistics extends Component {
           : null
         }
 
-        { userList.length
+        { mounted && userList.length
           ? <table className="statistics-table pt-table">
             <thead className="statistics-table-header">
               <tr className="statistics-table-header-row statistics-table-row">
@@ -241,7 +239,10 @@ class Statistics extends Component {
               { userList }
             </tbody>
           </table>
-          : <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." /> }
+          : mounted
+            ? <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." />
+            : <LoadingSpinner label={false} />
+        }
 
       </div>
     );

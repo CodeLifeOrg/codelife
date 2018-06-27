@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
+import {Link} from "react-router";
 import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2} from "@blueprintjs/core";
 import {merge} from "d3plus-common";
 import {Treemap} from "d3plus-react";
@@ -101,7 +102,9 @@ class Statistics extends Component {
       if (u.progressPercent > 30 && u.progressPercent <= 60) intent = "pt-intent-warning";
       if (u.progressPercent > 60) intent = "pt-intent-primary";
       return <tr className="statistics-table-row" key={u.id}>
-        <td className="statistics-table-cell username">{u.username}</td>
+        <td className="statistics-table-cell username">
+          <Link to={`/profile/${u.username}`} className="link">{u.username}</Link>
+        </td>
         <td className="statistics-table-cell progress">
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div className={`pt-progress-bar pt-no-stripes ${intent}`}>

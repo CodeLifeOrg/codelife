@@ -99,15 +99,15 @@
   text-align: center;
 
   & .admin-sub-tabs {
-    display: inline-block;
-    margin: var(--gutter-sm) auto var(--gutter-sm) auto;
 
     & .pt-tab-list {
-      justify-content: center;
+      display: block;
+      width: 100%;
     }
 
     & .pt-tab {
       @add-mixin font-sm;
+      display: inline-block;
 
       &[aria-expanded=true] {
         color: var(--sky-black);

@@ -80,11 +80,11 @@ class AdminPanel extends Component {
       <UserAdmin />
     </div>;
 
-    if (!mounted) return <LoadingSpinner />;
+    if (!mounted) return <LoadingSpinner label={false} />;
 
     return (
       <div className="admin content">
-        <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
+        <Tabs2 className="admin-tabs" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId} renderActiveTabPanelOnly={true}>
           <Tab2 id="lesson-builder" className="admin-tab lessonplan-admin-tab" title={t("Lesson Builder")} panel={<LessonBuilder setPath={this.setPath.bind(this)} pathObj={pathObj} />}/>
           <Tab2 id="rule-builder" className="admin-tab" title={t("Rule Builder")} panel={<RuleBuilder />} />
           <Tab2 id="glossary-builder" className="admin-tab" title={t("Glossary Builder")} panel={<GlossaryBuilder />} />

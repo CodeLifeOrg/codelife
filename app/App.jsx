@@ -111,6 +111,7 @@ class App extends Component {
 
     // check if this is the home page
     const isHome = this.props.router.location.pathname == "/" ? true : false;
+    const isAdmin = this.props.router.location.pathname.includes("admin") ? true : false;
 
     return (
       <Canon id="app" className={bareRoute && "share-app"}>
@@ -124,13 +125,13 @@ class App extends Component {
           ? bareRoute
             ? children
             : <div className="container">
-              { !isHome ? <Clouds /> : null }
+              { !isHome && !isAdmin ? <Clouds /> : null }
               <Nav currentPath={location.pathname} linkObj={this.props.params} isHome={ isHome } />
               { children }
               <Footer currentPath={location.pathname} className={ theme } />
             </div>
           : <div className="container">
-            { !isHome ? <Clouds /> : null }
+            { !isHome && !isAdmin ? <Clouds /> : null }
             <LoadingSpinner />
           </div> }
       </Canon>

@@ -3,11 +3,11 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Tab2, Tabs2} from "@blueprintjs/core";
 import LoadingSpinner from "components/LoadingSpinner";
-import {UserAdmin} from "datawheel-canon";
 import LessonBuilder from "pages/admin/lessonbuilder/LessonBuilder";
 import RuleBuilder from "pages/admin/lessonbuilder/RuleBuilder";
 import GlossaryBuilder from "pages/admin/GlossaryBuilder";
 import ReportViewer from "pages/admin/ReportViewer";
+import UserRoles from "pages/admin/UserRoles";
 import Statistics from "pages/admin/Statistics";
 import Featured from "pages/admin/Featured";
 import ContestViewer from "pages/admin/ContestViewer";
@@ -73,14 +73,7 @@ class AdminPanel extends Component {
     const pathObj = {island, level, slide};
     const {t} = this.props;
 
-    const userRoles =
-    <div className="admin-role">
-      <h2 className="font-xl u-text-center u-margin-bottom-off">User roles</h2>
-      <p className="font-sm u-text-center u-margin-bottom-lg">Cmd+F is recommended 😅</p>
-      <UserAdmin />
-    </div>;
-
-    if (!mounted) return <LoadingSpinner label={false} />;
+    if (!mounted) return <LoadingSpinner />;
 
     return (
       <div className="admin content">
@@ -89,7 +82,7 @@ class AdminPanel extends Component {
           <Tab2 id="rule-builder" className="admin-tab" title={t("Rule Builder")} panel={<RuleBuilder />} />
           <Tab2 id="glossary-builder" className="admin-tab" title={t("Glossary Builder")} panel={<GlossaryBuilder />} />
           { this.props.auth.user.role > 1 ? <Tab2 id="report-viewer" className="admin-tab" title={t("Flagged Content")} panel={<ReportViewer />} /> : null }
-          { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User roles")} panel={ userRoles } /> : null }
+          { this.props.auth.user.role > 1 ? <Tab2 id="user-admin" className="admin-tab" title={t("User roles")} panel={ <UserRoles /> } /> : null }
           { this.props.auth.user.role > 1 ? <Tab2 id="statistics" className="admin-tab" title={t("Statistics")} panel={<Statistics />} /> : null }
           { /*this.props.auth.user.role > 1 ? <Tab2 id="contest-viewer" className="admin-tab" title={t("Contest Viewer")} panel={<ContestViewer />} /> : null */ }
           { this.props.auth.user.role > 1 ? <Tab2 id="featured-pages" className="admin-tab" title={t("FeaturedTitle")} panel={<Featured />} /> : null }

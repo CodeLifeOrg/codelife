@@ -24,9 +24,65 @@ up over the page and shows the full screen code editor.</p>
 It is mostly a wrapper around CodeEditor that provides the student with the test prompt,
 cheat sheet, and db routes to save their progress when they pass the test</p>
 </dd>
+<dt><a href="#CodeBlockList">CodeBlockList</a></dt>
+<dd><p>CodeBlockList is used by Projects to display codeblocks to draw inspiration from.</p>
+</dd>
 <dt><a href="#CodeEditor">CodeEditor</a></dt>
 <dd><p>CodeEditor is a two-panel rendering component for student code.
 It uses AceEditor for the student panel (left), and a remote rendering iframe for the page preview (right).</p>
+</dd>
+<dt><a href="#CollabList">CollabList</a></dt>
+<dd><p>Provides a list of Collaborators for a project provided by props.</p>
+</dd>
+<dt><a href="#CollabSearch">CollabSearch</a></dt>
+<dd><p>Popover window so that project owners can find and add new users to collaborate on a given project</p>
+</dd>
+<dt><a href="#Comment">Comment</a></dt>
+<dd><p>Comments belong to Threads. Note that there is no text editor here - all posting is handled by Thread.jsx.
+This component is for displaying only.</p>
+</dd>
+<dt><a href="#ContestSignup">ContestSignup</a></dt>
+<dd><p>Signup page for (currently postponed) project contest. Signing up simply enters the user in the contest,
+users still must go to the ContestSubmit page to select a project and finalize the procedure.</p>
+</dd>
+<dt><a href="#ContestSubmit">ContestSubmit</a></dt>
+<dd><p>User selects a project for the contest and submits their entry.</p>
+</dd>
+<dt><a href="#CTA">CTA</a></dt>
+<dd><p>Call To Action Component, encourage users to sign up after visiting SEO-enable page</p>
+</dd>
+<dt><a href="#Discussion">Discussion</a></dt>
+<dd><p>Discussion Board wraps a list of threads (which in turn hosts a list of comments). Discussion boards 
+currently only apply to slides, but they are designed to be able to apply to anything (projects, codeblocks, etc)</p>
+</dd>
+<dt><a href="#IslandLink">IslandLink</a></dt>
+<dd><p>IslandLink is the zoomed-out picture of the island used in the overworld map, lesson plan, etc</p>
+</dd>
+<dt><a href="#Loading">Loading</a></dt>
+<dd><p>Loading is explicitly used by CANON itself for any page that has canon &quot;needs&quot;, which is why this
+is a full container page with <clouds>. The LoadingSpinner component was separated out for embedded use (no clouds)</p>
+</dd>
+<dt><a href="#LoadingSpinner">LoadingSpinner</a></dt>
+<dd><p>Loading spinner for a huge number of components in Codelife, mostly used in render cycles while 
+waiting for axios to return with data</p>
+</dd>
+<dt><a href="#LoginForm">LoginForm</a></dt>
+<dd><p>Works alongside SignUpForm to log users in. Essentially a wrapper for the canon &quot;login&quot; action</p>
+</dd>
+<dt><a href="#Nav">Nav</a></dt>
+<dd><p>Nav Component is the header of the page - containing login controls and the Island Browser</p>
+</dd>
+<dt><a href="#PasswordReset">PasswordReset</a></dt>
+<dd><p>Wrapper Component for the reset password dispatch action of canon</p>
+</dd>
+<dt><a href="#ProjectCard">ProjectCard</a></dt>
+<dd><p>ProjectCard, similar to CodeBlockCard, is a small visual container with a Dialog popover to showcase projects.
+It is used on the Homepage as well as in User Profiles to list their projects</p>
+</dd>
+<dt><a href="#ReportBox">ReportBox</a></dt>
+<dd><p>ReportBox is a reusable component for reporting threads, comments, projects, and codeblocks for 
+inappropriate content. As with many data structures in codelife, it uses a SINGLE reports table, 
+with a &quot;type&quot; column that designates which table the report_id refers to.</p>
 </dd>
 <dt><a href="#InputCode">InputCode</a></dt>
 <dd><p>InputCode is a slide type that requires the student to complete a coding test
@@ -503,6 +559,53 @@ in-state version to reflect the new code
 
 * * *
 
+<a name="CodeBlockList"></a>
+
+## CodeBlockList
+CodeBlockList is used by Projects to display codeblocks to draw inspiration from.
+
+**Kind**: global class  
+
+* [CodeBlockList](#CodeBlockList)
+    * [.componentDidMount()](#CodeBlockList+componentDidMount)
+    * [.reportLike()](#CodeBlockList+reportLike)
+    * [.handleFork()](#CodeBlockList+handleFork)
+
+
+* * *
+
+<a name="CodeBlockList+componentDidMount"></a>
+
+### codeBlockList.componentDidMount()
+On Mount, fetch all codeblocks, sort them by island, then separate into liked, unliked, and "mine" (logged in user's)
+Also fetch user progress so that unbeaten island codeblocks show as greyed out
+
+**Kind**: instance method of [<code>CodeBlockList</code>](#CodeBlockList)  
+
+* * *
+
+<a name="CodeBlockList+reportLike"></a>
+
+### codeBlockList.reportLike()
+Because a like can occur in a nested component (in this case, CodeBlockCard), this container component
+needs a callback function that can rearrange the items that exist in state.
+
+**Kind**: instance method of [<code>CodeBlockList</code>](#CodeBlockList)  
+
+* * *
+
+<a name="CodeBlockList+handleFork"></a>
+
+### codeBlockList.handleFork()
+Codeblocks have the ability to "fork" into a new project. For most embeddings of CodeBlockCards, this is as simple
+as creating the new project and using browserHistory to navigate the user to that page. However, as the user is 
+ALREADY ON the Projects page, a callback is required to tell the parent component (Projects.jsx) to make a new project
+and update itself accordingly
+
+**Kind**: instance method of [<code>CodeBlockList</code>](#CodeBlockList)  
+
+* * *
+
 <a name="CodeEditor"></a>
 
 ## CodeEditor
@@ -907,6 +1010,419 @@ Externally available method that components can use to set drawer visibility sta
 toggle fullscreen state
 
 **Kind**: instance method of [<code>CodeEditor</code>](#CodeEditor)  
+
+* * *
+
+<a name="CollabList"></a>
+
+## CollabList
+Provides a list of Collaborators for a project provided by props.
+
+**Kind**: global class  
+
+* * *
+
+<a name="CollabSearch"></a>
+
+## CollabSearch
+Popover window so that project owners can find and add new users to collaborate on a given project
+
+**Kind**: global class  
+
+* [CollabSearch](#CollabSearch)
+    * [.handleChange()](#CollabSearch+handleChange)
+    * [.addCollaborator()](#CollabSearch+addCollaborator)
+    * [.removeCollaborator()](#CollabSearch+removeCollaborator)
+
+
+* * *
+
+<a name="CollabSearch+handleChange"></a>
+
+### collabSearch.handleChange()
+Don't start hitting the database until the query is more than 2 characters long
+
+**Kind**: instance method of [<code>CollabSearch</code>](#CollabSearch)  
+
+* * *
+
+<a name="CollabSearch+addCollaborator"></a>
+
+### collabSearch.addCollaborator()
+Given a clicked collaborator, if the constraints are met, post it to userprofiles_profiles (collab table)
+
+**Kind**: instance method of [<code>CollabSearch</code>](#CollabSearch)  
+
+* * *
+
+<a name="CollabSearch+removeCollaborator"></a>
+
+### collabSearch.removeCollaborator()
+Given a uid and the pid of the current project, remove the matching row from userprofiles_profiles
+
+**Kind**: instance method of [<code>CollabSearch</code>](#CollabSearch)  
+
+* * *
+
+<a name="Comment"></a>
+
+## Comment
+Comments belong to Threads. Note that there is no text editor here - all posting is handled by Thread.jsx.
+This component is for displaying only.
+
+**Kind**: global class  
+
+* [Comment](#Comment)
+    * [.componentDidMount()](#Comment+componentDidMount)
+    * [.toggleLike()](#Comment+toggleLike)
+    * [.handleReport()](#Comment+handleReport)
+
+
+* * *
+
+<a name="Comment+componentDidMount"></a>
+
+### comment.componentDidMount()
+The comment itself is passed in via props. Put it in state
+
+**Kind**: instance method of [<code>Comment</code>](#Comment)  
+
+* * *
+
+<a name="Comment+toggleLike"></a>
+
+### comment.toggleLike()
+Handle Liking and Unliking of comments
+
+**Kind**: instance method of [<code>Comment</code>](#Comment)  
+
+* * *
+
+<a name="Comment+handleReport"></a>
+
+### comment.handleReport()
+When the nested ReportBox component processes a report, This commment module needs to update the button to 
+reflect the new state. This callback handles that.
+
+**Kind**: instance method of [<code>Comment</code>](#Comment)  
+
+* * *
+
+<a name="ContestSignup"></a>
+
+## ContestSignup
+Signup page for (currently postponed) project contest. Signing up simply enters the user in the contest,
+users still must go to the ContestSubmit page to select a project and finalize the procedure.
+
+**Kind**: global class  
+
+* [ContestSignup](#ContestSignup)
+    * [.componentWillMount()](#ContestSignup+componentWillMount)
+    * [.formatCPF()](#ContestSignup+formatCPF)
+    * [.enterContest()](#ContestSignup+enterContest)
+
+
+* * *
+
+<a name="ContestSignup+componentWillMount"></a>
+
+### contestSignup.componentWillMount()
+On Mount, fetch the profile of the logged in user.
+
+**Kind**: instance method of [<code>ContestSignup</code>](#ContestSignup)  
+
+* * *
+
+<a name="ContestSignup+formatCPF"></a>
+
+### contestSignup.formatCPF()
+Formatting rules for Cadastro de Pessoas Físicas
+
+**Kind**: instance method of [<code>ContestSignup</code>](#ContestSignup)  
+
+* * *
+
+<a name="ContestSignup+enterContest"></a>
+
+### contestSignup.enterContest()
+Onclick handler that prepares entry payloads to various endpoints. Note that setting school id/ geo id in this
+contest entry page also updates the actual profile of the user.
+
+**Kind**: instance method of [<code>ContestSignup</code>](#ContestSignup)  
+
+* * *
+
+<a name="ContestSubmit"></a>
+
+## ContestSubmit
+User selects a project for the contest and submits their entry.
+
+**Kind**: global class  
+
+* [ContestSubmit](#ContestSubmit)
+    * [.componentDidMount()](#ContestSubmit+componentDidMount)
+    * [.submit()](#ContestSubmit+submit)
+
+
+* * *
+
+<a name="ContestSubmit+componentDidMount"></a>
+
+### contestSubmit.componentDidMount()
+On Mount, fetch all the projects of the currently logged-in user, as well as their entry status
+
+**Kind**: instance method of [<code>ContestSubmit</code>](#ContestSubmit)  
+
+* * *
+
+<a name="ContestSubmit+submit"></a>
+
+### contestSubmit.submit()
+On Click, prepare contest payload and post it to the endpoint
+
+**Kind**: instance method of [<code>ContestSubmit</code>](#ContestSubmit)  
+
+* * *
+
+<a name="CTA"></a>
+
+## CTA
+Call To Action Component, encourage users to sign up after visiting SEO-enable page
+
+**Kind**: global class  
+
+* * *
+
+<a name="Discussion"></a>
+
+## Discussion
+Discussion Board wraps a list of threads (which in turn hosts a list of comments). Discussion boards 
+currently only apply to slides, but they are designed to be able to apply to anything (projects, codeblocks, etc)
+
+**Kind**: global class  
+
+* [Discussion](#Discussion)
+    * [.componentDidUpdate()](#Discussion+componentDidUpdate)
+    * [.newThread()](#Discussion+newThread)
+    * [.selectSort()](#Discussion+selectSort)
+
+
+* * *
+
+<a name="Discussion+componentDidUpdate"></a>
+
+### discussion.componentDidUpdate()
+When the user changes slides, hit the API endpoind and fetch the new thread data
+
+**Kind**: instance method of [<code>Discussion</code>](#Discussion)  
+
+* * *
+
+<a name="Discussion+newThread"></a>
+
+### discussion.newThread()
+Prepare payload and post a new thread to the db
+
+**Kind**: instance method of [<code>Discussion</code>](#Discussion)  
+
+* * *
+
+<a name="Discussion+selectSort"></a>
+
+### discussion.selectSort()
+On sort selection, sort the threads in state
+
+**Kind**: instance method of [<code>Discussion</code>](#Discussion)  
+
+* * *
+
+<a name="IslandLink"></a>
+
+## IslandLink
+IslandLink is the zoomed-out picture of the island used in the overworld map, lesson plan, etc
+
+**Kind**: global class  
+
+* * *
+
+<a name="Loading"></a>
+
+## Loading
+Loading is explicitly used by CANON itself for any page that has canon "needs", which is why this
+is a full container page with <clouds>. The LoadingSpinner component was separated out for embedded use (no clouds)
+
+**Kind**: global class  
+
+* * *
+
+<a name="LoadingSpinner"></a>
+
+## LoadingSpinner
+Loading spinner for a huge number of components in Codelife, mostly used in render cycles while 
+waiting for axios to return with data
+
+**Kind**: global class  
+
+* * *
+
+<a name="LoginForm"></a>
+
+## LoginForm
+Works alongside SignUpForm to log users in. Essentially a wrapper for the canon "login" action
+
+**Kind**: global class  
+
+* * *
+
+<a name="LoginForm+onSubmit"></a>
+
+### loginForm.onSubmit()
+The login dispatch is mapped to props and called here
+
+**Kind**: instance method of [<code>LoginForm</code>](#LoginForm)  
+
+* * *
+
+<a name="Nav"></a>
+
+## Nav
+Nav Component is the header of the page - containing login controls and the Island Browser
+
+**Kind**: global class  
+
+* [Nav](#Nav)
+    * [.componentDidMount()](#Nav+componentDidMount)
+    * [.reportClick()](#Nav+reportClick)
+
+
+* * *
+
+<a name="Nav+componentDidMount"></a>
+
+### nav.componentDidMount()
+When Nav Mounts, it is almost always because the page/app is being loaded from scratch, either because 
+the user is visiting for the first time, OR a login has been attempted, and the result must be handled.
+As such, there is a fairly length decision tree here so that feedback can be shown.
+
+**Kind**: instance method of [<code>Nav</code>](#Nav)  
+
+* * *
+
+<a name="Nav+reportClick"></a>
+
+### nav.reportClick()
+When the user clicks an island/location in the embedded Browser component, they have chosen to navigate to a
+new page. This callback is needed so the Browser's wrapping component (this one) can hide the Browser.
+
+**Kind**: instance method of [<code>Nav</code>](#Nav)  
+
+* * *
+
+<a name="PasswordReset"></a>
+
+## PasswordReset
+Wrapper Component for the reset password dispatch action of canon
+
+**Kind**: global class  
+
+* [PasswordReset](#PasswordReset)
+    * [.componentDidMount()](#PasswordReset+componentDidMount)
+    * [.changePassword()](#PasswordReset+changePassword)
+    * [.componentDidUpdate()](#PasswordReset+componentDidUpdate)
+
+
+* * *
+
+<a name="PasswordReset+componentDidMount"></a>
+
+### passwordReset.componentDidMount()
+On Mount, access the URL information from router and grab the token if it is there.
+
+**Kind**: instance method of [<code>PasswordReset</code>](#PasswordReset)  
+
+* * *
+
+<a name="PasswordReset+changePassword"></a>
+
+### passwordReset.changePassword()
+Password field change handler, ensure passwords match before submitting dispatch
+
+**Kind**: instance method of [<code>PasswordReset</code>](#PasswordReset)  
+
+* * *
+
+<a name="PasswordReset+componentDidUpdate"></a>
+
+### passwordReset.componentDidUpdate()
+Listen for changes to this.props.auth, and show a Toast message that reflects its state
+
+**Kind**: instance method of [<code>PasswordReset</code>](#PasswordReset)  
+
+* * *
+
+<a name="ProjectCard"></a>
+
+## ProjectCard
+ProjectCard, similar to CodeBlockCard, is a small visual container with a Dialog popover to showcase projects.
+It is used on the Homepage as well as in User Profiles to list their projects
+
+**Kind**: global class  
+
+* [ProjectCard](#ProjectCard)
+    * [.toggleDialog()](#ProjectCard+toggleDialog)
+    * [.toggleFeature()](#ProjectCard+toggleFeature)
+    * [.generateScreenshot()](#ProjectCard+generateScreenshot)
+    * [.handleReport()](#ProjectCard+handleReport)
+
+
+* * *
+
+<a name="ProjectCard+toggleDialog"></a>
+
+### projectCard.toggleDialog()
+Project Cards, though small visually, are responsible for containing and controlling their own Dialog
+Popover that shows the entirety of the project and its code
+
+**Kind**: instance method of [<code>ProjectCard</code>](#ProjectCard)  
+
+* * *
+
+<a name="ProjectCard+toggleFeature"></a>
+
+### projectCard.toggleFeature()
+Admin Only function to promote the given project to featured
+
+**Kind**: instance method of [<code>ProjectCard</code>](#ProjectCard)  
+
+* * *
+
+<a name="ProjectCard+generateScreenshot"></a>
+
+### projectCard.generateScreenshot()
+Admin only function to generate a screenshot for this project (usually so it can be featured on the homepage)
+
+**Kind**: instance method of [<code>ProjectCard</code>](#ProjectCard)  
+
+* * *
+
+<a name="ProjectCard+handleReport"></a>
+
+### projectCard.handleReport()
+Projects embed a ReportBox to allow for flagging. If a user uses that box to report the content, this
+callback notifies its parent (this component) that the project has been reported, so state can be updated
+
+**Kind**: instance method of [<code>ProjectCard</code>](#ProjectCard)  
+
+* * *
+
+<a name="ReportBox"></a>
+
+## ReportBox
+ReportBox is a reusable component for reporting threads, comments, projects, and codeblocks for 
+inappropriate content. As with many data structures in codelife, it uses a SINGLE reports table, 
+with a "type" column that designates which table the report_id refers to.
+
+**Kind**: global class  
 
 * * *
 

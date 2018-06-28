@@ -55,7 +55,11 @@ Codelife has two additional admin-specific env vars, `FLAG_COUNT_HIDE` and `FLAG
 
 Codelife contains a CodeEditor that students may use to make websites in the browser. The code that students write is executed on another domain (codelife.tech) to bolster security. The student code is passed to a landing page on codelife.tech via [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) and injected into an iframe on that page. 
 
-The landing pages are named such that the origin of the `postMessage` can be automatically routed to an appropriately named page (e.g. en.codelife.com -> en-codelife-com.html).  
+The landing pages (contained in `/sandbox`, but hosted on codelife.tech) are named such that the origin of the `postMessage` can be automatically routed to an appropriately named page (e.g. en.codelife.com -> en-codelife-com.html). This is to ensure that ONLY codelife.com and its language subdomains can send code to be executed.  
+
+The landing page makes use of [loop-protect](https://github.com/jsbin/loop-protect) to prevent students from crashing their page session with infinite loops.
 
 ### XVFB
+
+Codelife makes use of the `electron-screenshot-service` module, which requires that `xvfb` be installed on the ubuntu server. 
 

@@ -179,7 +179,7 @@
 
 
 /* translations */
-.translation-field-group {
+.field-group {
   padding: var(--gutter-xs) var(--gutter-sm) var(--gutter-sm) var(--gutter-sm);
   /* account for padding */
   width: calc(100% + var(--gutter-md));
@@ -192,20 +192,10 @@
   /* transitions */
   transition: background 0.2s;
 
-  /* pt fields first if using pt.codelife.com */
-  &.pt {
-    flex-direction: column-reverse;
-  }
-
   /* 2 column layout */
   @add-mixin min-md {
     justify-content: space-between;
     flex-direction: row;
-
-    /* pt fields first if using pt.codelife.com */
-    &.pt {
-      flex-direction: row-reverse;
-    }
 
     /* 2 column layout */
     & .field-container {
@@ -219,7 +209,7 @@
   }
 
   /* space out adjacent field groups */
-  & + .translation-field-group {
+  & + .field-group {
     margin-top: var(--gutter-xs);
   }
 
@@ -227,5 +217,14 @@
   &:hover,
   &:focus-within {
     background-color: color(var(--light-1) a(25%));
+  }
+
+  /* pt fields first if using pt.codelife.com */
+  &.translation-field-group.pt {
+    flex-direction: column-reverse;
+
+    @add-mixin min-md {
+      flex-direction: row-reverse;
+    }
   }
 }

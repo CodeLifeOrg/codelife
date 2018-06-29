@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
+import {Link} from "react-router";
 import LoadingSpinner from "components/LoadingSpinner";
 import CodeEditor from "components/CodeEditor/CodeEditor";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
@@ -63,62 +64,113 @@ class IslandEditor extends Component {
 
     const {data, themes} = this.state;
 
+    // grab en/pt subdomain from url
+    const locale = window.location.host.split(".")[0];
+
     if (!data || !themes) return <LoadingSpinner />;
 
-    const themeItems = themes.map(t => <option key={`island-${t}`} value={`island-${t}`}>{`island-${t}`}</option>);
+    const themeItems = themes.map(t => <option key={`island-${t}`} value={`island-${t}`}>{`${t} island`}</option>);
 
     const dark = `${data.theme.split("-")[1]}-island-dark`;
     const medium = `${data.theme.split("-")[1]}-island-medium`;
     const light = `${data.theme.split("-")[1]}-island-light`;
 
     return (
-      <div id="island-editor">
+      <div id="island-editor" className={data.theme}>
         <div className="item-editor-inner">
-          <label className="pt-label">
-            id
-            <span className="pt-text-muted"> (required, auto-generated)</span>
-            <input className="pt-input" disabled type="text" placeholder="Enter a unique page id e.g. island-1" dir="auto" value={data.id} />
-          </label>
-          <label className="pt-label">
-            <span>
-              Theme:&nbsp;&nbsp;
-              <span className="island-swatch" style={{backgroundColor: styleyml[dark]}} />
-              <span className="island-swatch" style={{backgroundColor: styleyml[medium]}} />
-              <span className="island-swatch" style={{backgroundColor: styleyml[light]}} />
-            </span>
-            <div className="pt-select">
-              <select value={data.theme} onChange={this.changeField.bind(this, "theme")} >
-                {themeItems}
-              </select>
+
+          <div className="item-editor-meta">
+
+            {/* title display */}
+            <h1 className="font-lg u-margin-top-xs u-margin-bottom-off">
+              { locale === "en"
+                ? `${data.name} / ${data.pt_name}`
+                : `${data.pt_name} / ${data.name}`
+              }
+            </h1>
+            <p className="font-xs">
+              <Link to={`island/${data.id}`}>
+                codelife.com/island/{data.id}
+              </Link>
+            </p>
+
+            {/* title fields */}
+            <div className={`translation-field-group field-group ${locale}`}>
+              {/* en */}
+              <div className="field-container font-md">
+                <label className="font-sm" htmlFor="title-en">Title (En)</label>
+                <input className="field-input"
+                  id="title-en"
+                  name="title-en"
+                  value={data.name}
+                  onChange={this.changeField.bind(this, "name")}
+                  autoFocus={ locale !== "pt" ? true : false} />
+              </div>
+              {/* pt */}
+              <div className="field-container font-md">
+                <label className="font-sm" htmlFor="title-pt">Title (Pt)</label>
+                <input className="field-input"
+                  id="title-pt"
+                  name="title-pt"
+                  value={data.pt_name}
+                  onChange={this.changeField.bind(this, "pt_name")}
+                  autoFocus={ locale === "pt" ? true : false} />
+              </div>
             </div>
-          </label>
-          <div className="input-block">
-            <label className="pt-label">
-              Icon:&nbsp;&nbsp;
-              <span className={`pt-icon-standard ${data.icon}`} />
-              <input className="pt-input" onChange={this.changeField.bind(this, "icon")} type="text" placeholder="Enter an Icon Name" dir="auto" value={data.icon}/>
-            </label>
+
+            {/* description */}
+            <div className={`translation-field-group field-group ${locale}`}>
+              {/* en */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="description-en">Description (En)</label>
+                <input className="field-input"
+                  id="description-en"
+                  name="description-en"
+                  value={data.description}
+                  onChange={this.changeField.bind(this, "description")}
+                  placeholder="Describe this island in a few words" />
+              </div>
+              {/* pt */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="description-pt">Description (Pt)</label>
+                <input className="field-input"
+                  id="description-pt"
+                  name="description-pt"
+                  value={data.pt_description}
+                  onChange={this.changeField.bind(this, "pt_description")}
+                  placeholder="Describe this island in a few words" />
+              </div>
+            </div>
+
+            {/* theme & icon */}
+            <div className="field-group">
+              {/* theme */}
+              <div className="field-container font-sm">
+                <label htmlFor="theme" className="label">Theme: </label>
+                <div className="pt-select">
+                  <select className="field-input" id="theme" name="theme" value={data.theme} onChange={this.changeField.bind(this, "theme")} >
+                    {themeItems}
+                  </select>
+                </div>
+              </div>
+              {/* icon */}
+              <div className="field-container has-icon font-sm">
+                <label className="label" htmlFor="icon">Icon:</label>
+                <input className="input"
+                  id="icon"
+                  onChange={this.changeField.bind(this, "icon")} placeholder="Enter an Icon Name"
+                  value={data.icon}/>
+                <span className={`field-icon pt-icon ${data.icon}`} />
+              </div>
+
+            </div>
           </div>
-          <div className="input-block">
-            <label className="pt-label">
-              Name
-              <input className="pt-input" onChange={this.changeField.bind(this, "name")} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.name}/>
-            </label>
-            <label className="pt-label">
-              pt Name  🇧🇷
-              <input className="pt-input" onChange={this.changeField.bind(this, "pt_name")} type="text" placeholder="Enter the name of this Island" dir="auto" value={data.pt_name}/>
-            </label>
-          </div>
-          <div className="input-block">
-            <label className="pt-label">
-              Description
-              <input className="pt-input" onChange={this.changeField.bind(this, "description")} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.description} />
-            </label>
-            <label className="pt-label">
-              pt Description  🇧🇷
-              <input className="pt-input" onChange={this.changeField.bind(this, "pt_description")} type="text" placeholder="Describe this island in a few words" dir="auto" value={data.pt_description} />
-            </label>
-          </div>
+
+          {/* <span className="island-swatch" style={{backgroundColor: styleyml[dark]}} />
+          <span className="island-swatch" style={{backgroundColor: styleyml[medium]}} />
+          <span className="island-swatch" style={{backgroundColor: styleyml[light]}} /> */}
+
+
           <div className="area-block">
             <div className="pt-label">
               Cheat Sheet

@@ -176,3 +176,56 @@
     width: 100%;
   }
 }
+
+
+/* translations */
+.translation-field-group {
+  padding: var(--gutter-xs) var(--gutter-sm) var(--gutter-sm) var(--gutter-sm);
+  /* account for padding */
+  width: calc(100% + var(--gutter-md));
+  left: calc(0 - var(--gutter-sm));
+  /* stacked layout */
+  display: flex;
+  flex-direction: column;
+  /* theming */
+  border-radius: var(--radius-md);
+  /* transitions */
+  transition: background 0.2s;
+
+  /* pt fields first if using pt.codelife.com */
+  &.pt {
+    flex-direction: column-reverse;
+  }
+
+  /* 2 column layout */
+  @add-mixin min-md {
+    justify-content: space-between;
+    flex-direction: row;
+
+    /* pt fields first if using pt.codelife.com */
+    &.pt {
+      flex-direction: row-reverse;
+    }
+
+    /* 2 column layout */
+    & .field-container {
+      width: calc(50% - var(--gutter-sm));
+
+      /* reset margin */
+      & + .field-container {
+        margin-top: 0;
+      }
+    }
+  }
+
+  /* space out adjacent field groups */
+  & + .translation-field-group {
+    margin-top: var(--gutter-xs);
+  }
+
+  /* interactions */
+  &:hover,
+  &:focus-within {
+    background-color: color(var(--light-1) a(25%));
+  }
+}

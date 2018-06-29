@@ -11,7 +11,7 @@
 
   /* set initial loading spinner height */
   & .loading {
-    min-height: calc(100vh - 430px);
+    min-height: calc(100vh - 240px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,11 +72,29 @@
     &:not(.lessonplan-admin-tab),
     & .lessonbuilder-tree,
     & .item-editor {
-      min-height: calc(100vh - 430px);
+      min-height: calc(100vh - 120px);
+    }
 
-      /* limit height and set overflow on bigger screens */
-      @add-mixin min-md {
+    & .lessonbuilder-tree {
+      z-index: 1;
+    }
+
+    & .item-editor-inner {
+      padding: var(--gutter-md);
+    }
+
+    /* limit height and set overflow on bigger screens */
+    @add-mixin min-md {
+      &:not(.lessonplan-admin-tab),
+      & .lessonbuilder-tree {
         max-height: calc(100vh - 125px);
+        overflow-y: auto;
+      }
+
+      /* offset fixed action bar */
+      & .item-editor-inner {
+        min-height: 0;
+        height: calc(100vh - 120px - var(--nav-height));
         overflow-y: auto;
       }
     }
@@ -114,5 +132,47 @@
       }
     }
 
+  }
+}
+
+
+/* fixed actions bar */
+.admin-actions-bar {
+  /* sizing */
+  width: 100%;
+  height: var(--nav-height);
+  /* position children */
+  padding: 0 var(--gutter-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* theming */
+  background-color: var(--white);
+
+  /* stuck to bottom on big screens */
+  @add-mixin min-md {
+    /* positioning */
+    position: absolute;
+    bottom: calc(0 - var(--nav-height));
+    left: 0;
+    right: 0;
+    /* theming */
+    box-shadow: 0 0 1em rgba(8, 26, 24, 0.125);
+  }
+
+  /* override p defaults */
+  & .admin-actions-preview {
+    display: inline-block;
+    margin: 0;
+    top: -1px; /* fudge baseline */
+
+    & .link {
+      margin-left: 0.5em;
+    }
+  }
+
+  /* just one button */
+  & .button:first-child:last-child {
+    width: 100%;
   }
 }

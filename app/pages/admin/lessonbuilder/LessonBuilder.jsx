@@ -17,7 +17,7 @@ const slideIcons = {
   CheatSheet: "clipboard",
   ImageText: "media",
   InputCode: "code-block",
-  Quiz: "help",
+  Quiz: "properties",
   RenderCode: "application",
   TextCode: "code",
   TextImage: "media",
@@ -57,7 +57,7 @@ class LessonBuilder extends Component {
           id: i.id,
           className: i.id,
           hasCaret: true,
-          iconName: "map",
+          iconName: "map-marker",
           label: i.name,
           itemType: "island",
           parent: {childNodes: nodes},
@@ -291,7 +291,7 @@ class LessonBuilder extends Component {
     const objIsland = {
       id: islandUUID,
       hasCaret: true,
-      iconName: "map",
+      iconName: "map-marker",
       label: "New Island",
       itemType: "island",
       parent: n.parent,
@@ -406,19 +406,22 @@ class LessonBuilder extends Component {
 
   render() {
 
-    const {nodes, currentNode} = this.state;
+    const {nodes, currentNode, mounted} = this.state;
 
-    if (!nodes) return <LoadingSpinner />;
+    // if (!nodes) return <LoadingSpinner />;
 
     return (
       <div className="lessonbuilder" id="lesson-builder">
-        <Tree
-          className="lessonbuilder-tree font-sm"
-          onNodeClick={this.handleNodeClick.bind(this)}
-          onNodeCollapse={this.handleNodeCollapse.bind(this)}
-          onNodeExpand={this.handleNodeExpand.bind(this)}
-          contents={nodes}
-        />
+        {nodes
+          ? <Tree
+            className="lessonbuilder-tree font-sm"
+            onNodeClick={this.handleNodeClick.bind(this)}
+            onNodeCollapse={this.handleNodeCollapse.bind(this)}
+            onNodeExpand={this.handleNodeExpand.bind(this)}
+            contents={nodes}
+          />
+          : <div className="lessonbuilder-tree" />
+        }
         <div className="item-editor" id="item-editor">
           { currentNode
             ? currentNode.itemType === "island"
@@ -428,7 +431,9 @@ class LessonBuilder extends Component {
                 : currentNode.itemType === "slide"
                   ? <SlideEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/>
                   : null
-            : <NonIdealState title="No Island Selected" description="Please select an island from the menu on the left." visual="path-search" />
+            : mounted
+              ? <NonIdealState title="No Island Selected" description="Please select an island from the menu on the left." visual="path-search" />
+              : <LoadingSpinner label={false} />
           }
         </div>
       </div>

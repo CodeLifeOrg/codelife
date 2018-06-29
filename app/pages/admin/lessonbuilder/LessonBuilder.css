@@ -6,11 +6,12 @@
   & .lessonbuilder-tree {
     background-color: var(--light-1);
     padding: 0;
-    width: 250px;
     min-height: calc(100vh - 430px);
 
+    &,
     & .pt-tree {
       width: 250px;
+      max-width: 25vw;
     }
 
     & .pt-tree-node-list {
@@ -32,7 +33,6 @@
     background-color: var(--white);
     border-top-right-radius: var(--radius-lg);
     flex: 1;
-    padding: var(--gutter-md);
     & .input-block, & .area-block {
       width: 100%;
       display: flex;

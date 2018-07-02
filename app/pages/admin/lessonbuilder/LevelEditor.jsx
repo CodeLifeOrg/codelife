@@ -126,9 +126,11 @@ class LevelEditor extends Component {
             </div>
           </div>
         </div>
+
+        <h2 className="u-visually-hidden">Actions: </h2>
         <div className="admin-actions-bar">
           <button className="button" onClick={this.saveContent.bind(this)}>
-            Save
+            Save changes
           </button>
         </div>
       </div>

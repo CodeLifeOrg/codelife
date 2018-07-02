@@ -1,1 +1,44 @@
+.rule-table {
+  border-spacing: var(--gutter-sm) 0;
+  width: 100%;
+  /* account for border spacing */
+  width: calc(100% + var(--gutter-sm) + var(--gutter-sm));
+  left: calc(0 - var(--gutter-sm));
 
+  /* space out header row */
+  & .rule-row:first-of-type {
+    height: 2em;
+  }
+
+  /* default table cell style */
+  & .rule-cell {
+    text-align: left;
+    vertical-align: baseline;
+
+    /* first column */
+    &.type-select-rule-cell {
+      width: 12rem;
+    }
+
+    /* space out 2nd column */
+    &.en-rule-cell {
+      padding-left: var(--gutter-xs);
+    }
+
+    /* last column */
+    &.actions-rule-cell {
+      width: 6.5rem;
+      text-align: center;
+    }
+
+    /* size & position inputs */
+    & input {
+      width: 33%;
+      width: calc(33.33% - var(--gutter-xs));
+
+      & + input {
+        margin-left: var(--gutter-xs);
+      }
+    }
+  }
+}

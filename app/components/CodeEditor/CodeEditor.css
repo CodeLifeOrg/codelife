@@ -250,7 +250,8 @@
 
 
 /* slide context */
-.slide-content {
+.slide-content,
+.admin {
   & .panel-content {
     min-height: 40vh;
   }

@@ -78,8 +78,12 @@ class RuleBuilder extends Component {
       <div className="rulebuilder">
         <h1 className="font-xl u-text-center u-margin-bottom-off">Rule builder</h1>
         {mounted && rules !== null ? ruleItems : <LoadingSpinner label={false} />}
+
+        <h2 className="u-visually-hidden">Actions: </h2>
         <div className="field-container">
-          <Button type="button" onClick={this.saveContent.bind(this)} className="pt-button pt-intent-success font-md">Save</Button>
+          <button className="button" onClick={this.saveContent.bind(this)}>
+            Save changes
+          </button>
         </div>
       </div>
     );

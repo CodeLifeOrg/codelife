@@ -182,7 +182,7 @@
 .field-group {
   padding: var(--gutter-xs) var(--gutter-sm) var(--gutter-sm) var(--gutter-sm);
   /* account for padding */
-  width: calc(100% + var(--gutter-md));
+  width: calc(100% + 30px);
   left: calc(0 - var(--gutter-sm));
   /* stacked layout */
   display: flex;

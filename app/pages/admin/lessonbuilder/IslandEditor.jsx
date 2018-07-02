@@ -71,9 +71,11 @@ class IslandEditor extends Component {
 
     const themeItems = themes.map(t => <option key={`island-${t}`} value={`island-${t}`}>{`${t} island`}</option>);
 
-    const dark = `${data.theme.split("-")[1]}-island-dark`;
-    const medium = `${data.theme.split("-")[1]}-island-medium`;
-    const light = `${data.theme.split("-")[1]}-island-light`;
+    // const dark = `${data.theme.split("-")[1]}-island-dark`;
+    // const medium = `${data.theme.split("-")[1]}-island-medium`;
+    // const light = `${data.theme.split("-")[1]}-island-light`;
+
+    const fieldGroupClasses = `translation-field-group field-group ${locale}`;
 
     return (
       <div id="island-editor" className={data.theme}>
@@ -95,7 +97,7 @@ class IslandEditor extends Component {
             </p>
 
             {/* title fields */}
-            <div className={`translation-field-group field-group ${locale}`}>
+            <div className={fieldGroupClasses}>
               {/* en */}
               <div className="field-container font-md">
                 <label className="font-sm" htmlFor="title-en">Title (En)</label>
@@ -119,7 +121,7 @@ class IslandEditor extends Component {
             </div>
 
             {/* description */}
-            <div className={`translation-field-group field-group ${locale}`}>
+            <div className={fieldGroupClasses}>
               {/* en */}
               <div className="field-container font-sm">
                 <label className="font-sm" htmlFor="description-en">Description (En)</label>
@@ -152,6 +154,9 @@ class IslandEditor extends Component {
                     {themeItems}
                   </select>
                 </div>
+                {/* <span className="island-swatch" style={{backgroundColor: styleyml[dark]}} />
+                <span className="island-swatch" style={{backgroundColor: styleyml[medium]}} />
+                <span className="island-swatch" style={{backgroundColor: styleyml[light]}} /> */}
               </div>
               {/* icon */}
               <div className="field-container has-icon font-sm">
@@ -166,66 +171,110 @@ class IslandEditor extends Component {
             </div>
           </div>
 
-          {/* <span className="island-swatch" style={{backgroundColor: styleyml[dark]}} />
-          <span className="island-swatch" style={{backgroundColor: styleyml[medium]}} />
-          <span className="island-swatch" style={{backgroundColor: styleyml[light]}} /> */}
+
+          {/* Codeblock config */}
+          <div className="item-editor-codeblock">
+
+            <h2 className="font-md u-margin-top-lg">{data.name} Codeblock</h2>
+
+            {/* prompt */}
+            <div className={fieldGroupClasses}>
+              {/* en */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="prompt-en">Prompt (En)</label>
+                <QuillWrapper
+                  id="prompt-en"
+                  value={this.state.data.prompt}
+                  onChange={this.handleEditor.bind(this, "prompt")}
+                />
+              </div>
+              {/* pt */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="prompt-pt">Prompt (Pt)</label>
+                <QuillWrapper
+                  id="prompt-pt"
+                  value={this.state.data.pt_prompt}
+                  onChange={this.handleEditor.bind(this, "pt_prompt")}
+                />
+              </div>
+            </div>
+
+            {/* cheat sheet */}
+            <div className={fieldGroupClasses}>
+              {/* en */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="cheatsheet-en">Cheat sheet (En)</label>
+                <QuillWrapper
+                  id="cheatsheet-en"
+                  value={this.state.data.cheatsheet}
+                  onChange={this.handleEditor.bind(this, "cheatsheet")}
+                />
+              </div>
+              {/* pt */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="cheatsheet-pt">Cheat sheet (Pt)</label>
+                <QuillWrapper
+                  id="cheatsheet-pt"
+                  value={this.state.data.pt_cheatsheet}
+                  onChange={this.handleEditor.bind(this, "pt_cheatsheet")}
+                />
+              </div>
+            </div>
+
+            {/* Codeblock initial state */}
+            <div className={fieldGroupClasses}>
+              {/* en */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="codeblock-initial-state-en">Initial state (En)</label>
+                <CodeEditor
+                  id="codeblock-initial-state-en"
+                  onChangeText={this.handleEditor.bind(this, "initialcontent")} initialValue={data.initialcontent}
+                  ref={c => this.editor = c} />
+              </div>
+              {/* pt */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="codeblock-initial-state-pt">Initial state (Pt)</label>
+                <CodeEditor
+                  id="codeblock-initial-state-pt"
+                  onChangeText={this.handleEditor.bind(this, "pt_initialcontent")} initialValue={data.pt_initialcontent}
+                  ref={c => this.pt_editor = c} />
+              </div>
+            </div>
+
+            {/* rules */}
+            <RulePicker data={data} parentID={data.id} locale={locale} />
+          </div>
 
 
-          <div className="area-block">
-            <div className="pt-label">
-              Cheat Sheet
-              <QuillWrapper
-                value={this.state.data.cheatsheet}
-                onChange={this.handleEditor.bind(this, "cheatsheet")}
-              />
+          {/* victory message */}
+          <div className={fieldGroupClasses}>
+            {/* en */}
+            <div className="field-container font-sm">
+              <label className="font-sm" htmlFor="victory-en">Victory text (En)</label>
+              <textarea className="field-textarea"
+                id="victory-en"
+                name="victory-en"
+                value={data.victory}
+                onChange={this.changeField.bind(this, "victory")}
+                placeholder="Congratulatory text upon island completion" />
             </div>
-            <div className="pt-label">
-              pt Cheat Sheet  🇧🇷
-              <QuillWrapper
-                value={this.state.data.pt_cheatsheet}
-                onChange={this.handleEditor.bind(this, "pt_cheatsheet")}
-              />
+            {/* pt */}
+            <div className="field-container font-sm">
+              <label className="font-sm" htmlFor="victory-pt">Victory text (Pt)</label>
+              <textarea className="field-textarea"
+                id="victory-pt"
+                name="victory-pt"
+                value={data.pt_victory}
+                onChange={this.changeField.bind(this, "pt_victory")}
+                placeholder="Congratulatory text upon island completion" />
             </div>
-          </div>
-          <div className="area-block">
-            <div className="pt-label">
-              Final Codeblock Prompt
-              <QuillWrapper
-                value={this.state.data.prompt}
-                onChange={this.handleEditor.bind(this, "prompt")}
-              />
-            </div>
-            <div className="pt-label">
-              pt Final Codeblock Prompt  🇧🇷
-              <QuillWrapper
-                value={this.state.data.pt_prompt}
-                onChange={this.handleEditor.bind(this, "pt_prompt")}
-              />
-            </div>
-          </div>
-          <label className="pt-label">
-            Initial Codeblock State<br/><br/>
-            <CodeEditor noZoom={true} onChangeText={this.handleEditor.bind(this, "initialcontent")} initialValue={data.initialcontent} ref={c => this.editor = c}/>
-          </label>
-          <label className="pt-label">
-            pt Initial Codeblock State  🇧🇷 <br/><br/>
-            <CodeEditor noZoom={true} onChangeText={this.handleEditor.bind(this, "pt_initialcontent")} initialValue={data.pt_initialcontent} ref={c => this.pt_editor = c}/>
-          </label>
-          <RulePicker data={data} parentID={data.id}/>
-          <div className="area-block">
-            <label className="pt-label">
-              Victory Text
-              <textarea className="pt-input" onChange={this.changeField.bind(this, "victory")} type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.victory} />
-            </label>
-            <label className="pt-label">
-              pt Victory Text  🇧🇷
-              <textarea className="pt-input" onChange={this.changeField.bind(this, "pt_victory")} type="text" placeholder="Enter congratulatory text for when this island is completed" dir="auto" value={data.pt_victory} />
-            </label>
           </div>
         </div>
+
+        <h2 className="u-visually-hidden">Actions: </h2>
         <div className="admin-actions-bar">
           <button className="button" onClick={this.saveContent.bind(this)}>
-            Save
+            Save changes
           </button>
         </div>
       </div>

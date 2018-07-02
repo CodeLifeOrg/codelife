@@ -53,6 +53,7 @@ class QuillWrapper extends Component {
   }
 
   render() {
+    const {id} = this.props;
     if (typeof window !== "undefined" && this.state.words) {
       const Quill = require("react-quill");
       require("react-quill/dist/quill.snow.css");

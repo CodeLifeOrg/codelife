@@ -16,6 +16,11 @@ import "./IslandLevel.css";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
+/**
+ * Main Level-viewing component (e.g., Jungle Island). It shows a list of the levels available as well as the ending codeblock test.
+ * Codeblocks by other users are listed underneath the island
+ */
+
 class Level extends Component {
 
   constructor(props) {
@@ -40,12 +45,15 @@ class Level extends Component {
     };
   }
 
-  // TODO: Merge this with the one in CodeBlockList, they do the same thing.
+  /**
+   * On Mount, or Update (meaning the user switched islands) Load the necessary progress/codeblock data from the db.
+   */
   loadFromDB() {
     const {params} = this.props;
     const {lid} = params;
     const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
+    // This was written before realizing that the userprofile is passed in via props from canon - this could be refactored
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
 
     Promise.all([uget, cbget, pget]).then(resp => {
@@ -53,16 +61,17 @@ class Level extends Component {
       const allCodeBlocks = resp[1].data;
       const profile = resp[2].data;
 
+      // Islands and levels are retrieved from the redux store, which was populated in App.jsx's Mount
       const islands = this.props.islands.slice(0);
       const levels = this.props.levels.filter(l => l.lid === lid);
 
       const currentIsland = islands.find(i => i.id === lid);
-      // TODO: add an exception for level 10.
       const nextIsland = islands.find(i => i.ordering === currentIsland.ordering + 1);
       const prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1);
 
+      // If the user hasn't filled in their school, and they are on ANY island other than the first, prompt them to fill
+      // it in via Checkpoint.jsx. 
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
-      // const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? true : false;
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -85,11 +94,18 @@ class Level extends Component {
     });
   }
 
+  /** 
+   * The presence of `/show` in the URL is a permalink to open the codeblock. Was originally intended so that codeblockcards could directly link
+   * to a user's own codeblock and automatically open it, but this feature was postponed.
+   */ 
   maybeTriggerCodeblock() {
     const testOpen = location.pathname.includes("/show") && this.allLevelsBeaten();
     this.setState({testOpen});
   }
 
+  /**
+   * When the user changes pages, flush the state and reload from the database
+   */
   componentDidUpdate() {
     const {location} = this.props.router;
     const {currentIsland, loading} = this.state;
@@ -98,14 +114,24 @@ class Level extends Component {
     }
   }
 
+  /**
+   * The code to load from DB already exists in ComponentDidUpdate, this dedupes that logic by just manually calling update on mount.
+   */
   componentDidMount() {
     this.forceUpdate();
   }
 
+  /**
+   * A timeout is registered on Codeblock completion to process the screenshot, ensuring that it is complete before allowing fb sharing.
+   * Clear this timeout if the user leaves the page
+   */
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
 
+  /**
+   * Hide or Show the codeblock test popover. Adjust the URL accordingly
+   */
   toggleTest() {
     const {browserHistory} = this.context;
     const {pathname} = this.props.router.location;
@@ -123,10 +149,11 @@ class Level extends Component {
     }
   }
 
+  /**
+   * Callback for CodeBlockEditor on save. The CodeBlockEditor passes its codeblock back out to Level so that its
+   * Codeblock can be set.  
+   */
   handleSave(newCodeBlock) {
-    // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
-    // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
-    // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
     const {currentIsland} = this.state;
     if (!currentIsland.codeBlock) currentIsland.codeBlock = newCodeBlock;
     this.setState({currentIsland});

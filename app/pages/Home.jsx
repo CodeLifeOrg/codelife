@@ -14,6 +14,10 @@ import HomeFeatures from "./home/HomeFeatures";
 import HomeCards from "./home/HomeCards";
 import HomeAbout from "./home/HomeAbout";
 
+/**
+ * Homepage component - mostly a wrapper for other smaller components (cards, features, etc)
+ */
+
 class Home extends Component {
 
   constructor() {
@@ -27,6 +31,10 @@ class Home extends Component {
     };
   }
 
+  /** 
+   * On mount, fetch the users progress so that a "continue your adventure" placard can be shown.
+   * Whether the user is logged or not, fetch the featured cb/projects
+   */
   componentDidMount() {
     const {user} = this.props;
     if (user) {

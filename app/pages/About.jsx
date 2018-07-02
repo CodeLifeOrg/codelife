@@ -17,6 +17,10 @@ const schools = [
   {name: "CELSO MACHADO", location: "Belo Horizonte, MG", slug: "celso-machado", photos: ["1"]}
 ];
 
+/** 
+ * About page - contains translated about text and a simple photoslide component from Datawheel's first visit to Minas
+ */
+
 class About extends Component {
 
   constructor(props) {

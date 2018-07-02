@@ -10,6 +10,10 @@ import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
+/** 
+ * A thread is the top-level child of a Discussion. Discussions have many threads, threads have many comments.
+ */
+
 class Thread extends Component {
 
   constructor(props) {
@@ -22,6 +26,9 @@ class Thread extends Component {
     };
   }
 
+  /**
+   * On Mount, retrieve the thread from props
+   */
   componentDidMount() {
     const {thread} = this.props;
     this.setState({thread});
@@ -52,6 +59,10 @@ class Thread extends Component {
     });
   }
 
+  /**
+   * A thread can only have one text window open at a time for a new comment to be added. Keep the details of
+   * this comment in state, and post it to the endpoint on submit
+   */
   newComment() {
     const {t} = this.props;
     const {thread, commentTitle, commentContent} = this.state;
@@ -79,6 +90,9 @@ class Thread extends Component {
     return `${day}/${month}/${year} - ${hours}:${minutes}`;
   }
 
+  /**
+   * A report, handled by the sub-component ReportBox, uses this callback to tell Thread that the user has submitted a report
+   */
   handleReport(report) {
     const {thread} = this.state;
     thread.report = report;

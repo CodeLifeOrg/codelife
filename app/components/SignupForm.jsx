@@ -10,6 +10,10 @@ import InstagramIcon from "./InstagramIcon.svg.jsx";
 
 import "./SignupForm.css";
 
+/** 
+ * Sister component to AuthForm, this component wraps the Canon "signup" action and does appropriate error checking
+ */
+
 class SignupForm extends Component {
 
   constructor(props) {
@@ -30,6 +34,9 @@ class SignupForm extends Component {
     this.setState({[e.target.name]: val});
   }
 
+  /**
+   * When the user clicks submit, verify some info before calling datawheel-canon's `signup` action
+   */
   onSubmit(e) {
     e.preventDefault();
     const {legal, redirect, t} = this.props;

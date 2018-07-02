@@ -4,10 +4,13 @@ import {translate} from "react-i18next";
 import {fetchData} from "datawheel-canon";
 import "./Glossary.css";
 
-// Glossary Page
-//  - make sure all examples use HTML entities to escape reserve characters
-//  - like '<' or '>'
-//  - use this site for help: https://mothereff.in/html-entities
+/** 
+ * The Glossary component retrieves words 
+ * It is worth noting that the storage of glossary words is somewhat split-brained. Here in Glossary.jsx, canon's "need" functionality
+ * is used to ensure that words are rendered server-side and therefore indexable by search engines. However, glossary words used to live 
+ * in the Redux Store (and in QuillWrapper, this is still how they are loaded). Both places use the same API endpoint - but one 
+ * uses canon needs, the other puts the data into redux in App.jsx's mount method.
+ */
 
 class Glossary extends Component {
 

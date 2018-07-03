@@ -41,7 +41,6 @@ class App extends Component {
     
     // if there is a user
     if (userprofile) {
-      //console.log("redirecting with", userprofile.lang);
       // and their profile is set to en and we're not there, send them there
       if (userprofile.lang === "en" && !isEN) {
         if (window) window.location = `${location.protocol}//en.${roothost}${location.pathname}${location.search}`;

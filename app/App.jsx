@@ -34,19 +34,30 @@ class App extends Component {
   redirect(userprofile) {
     const {location} = this.props;
     const {hostname} = location;
-    // If the user navigates to codelife.com, redirect them to pt, unless their profile says otherwise
-    if (!hostname.includes("en.") && !hostname.includes("pt.")) {
-      if (userprofile) {
-        if (userprofile.lang === "en") {
-          if (window) window.location = `${location.protocol}//en.${location.host}${location.pathname}${location.search}`;
-        }
-        else {
-          if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
-        }
+    const roothost = location.host.replace("pt.", "").replace("en.", "");
+    const isEN = hostname.includes("en.");
+    const isPT = hostname.includes("pt.");
+    const isRoot = !hostname.includes("en.") && !hostname.includes("pt.");
+    
+    // if there is a user
+    if (userprofile) {
+      //console.log("redirecting with", userprofile.lang);
+      // and their profile is set to en and we're not there, send them there
+      if (userprofile.lang === "en" && !isEN) {
+        if (window) window.location = `${location.protocol}//en.${roothost}${location.pathname}${location.search}`;
       }
-      else {
-        if (window) window.location = `${location.protocol}//pt.${location.host}${location.pathname}${location.search}`;
+      // or if their profile is set to pt and we're not there, send them there instead
+      else if (userprofile.lang === "pt" && !isPT) {
+        if (window) window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
       }
+      // if the profile has nothing set, and we're not already on PT, go to PT
+      else if (isRoot && !userprofile.lang && !isPT) {
+        if (window) window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
+      }
+    }
+    // if there's no user, and we're not on pt, send them to pt
+    else if (isRoot) {
+      if (window) window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
     }
   }
 
@@ -54,12 +65,20 @@ class App extends Component {
     const {auth} = this.props;
     const {userInit} = this.state;
     if (!userInit && auth.loading) this.setState({userInit: true});
-    if (!prevProps.auth.user && this.props.auth.user) {
-      axios.get("/api/profileping").then(resp => {
-        // On Mounting the app, we need to create a blank user in userprofiles that associates
-        // with the user in canon's users.  This calls findOrCreate to make that happen.
-        this.redirect.bind(this)(resp.data[0]);
-      });
+    // if we were loading, and now we are not loading
+    if (prevProps.auth.loading && !this.props.auth.loading) {
+      //if that resulted in a user, do the profile ping and redirect
+      if (this.props.auth.user) {
+        axios.get("/api/profileping").then(resp => {
+          // On Mounting the app, we need to create a blank user in userprofiles that associates
+          // with the user in canon's users.  This calls findOrCreate to make that happen.
+          this.redirect.bind(this)(resp.data[0]);
+        });
+      }
+      // if it did not result in a user, send them to pt
+      else {
+        this.redirect.bind(this)();
+      }
     }
   }
 

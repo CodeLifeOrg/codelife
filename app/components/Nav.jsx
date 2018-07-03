@@ -104,15 +104,20 @@ class Nav extends Component {
   }
 
   selectLang(lang, path) {
-    axios.post("/api/profile/update", {lang}).then(resp => {
-      if (resp.status === 200) {
-        console.log("saved lang pref");
-        if (window) window.location = path;
-      }
-      else {
-        if (window) window.location = path;
-      }
-    });
+    if (this.props.auth.user) {
+      axios.post("/api/profile/update", {lang}).then(resp => {
+        if (resp.status === 200) {
+          console.log("saved lang pref");
+          if (window) window.location = path;
+        }
+        else {
+          if (window) window.location = path;
+        }
+      });
+    }
+    else {
+      if (window) window.location = path;
+    }
     
   }
 
@@ -245,11 +250,11 @@ class Nav extends Component {
             </Link>
 
             {/* language select */}
-            <a className="link language-link" key={languageLinks[0].id} href={languageLinks[0].link}>
+            <a className="link language-link" key={languageLinks[0].id} onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}>
               <span className="link-icon pt-icon-standard pt-icon-globe" />
               {languageLinks[0].title}
             </a>
-            <a className="link language-link" key={languageLinks[1].id} href={languageLinks[1].link}>{languageLinks[1].title}</a>
+            <a className="link language-link" key={languageLinks[1].id} onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}>{languageLinks[1].title}</a>
           </div> }
         <Dialog
           className="form-container"

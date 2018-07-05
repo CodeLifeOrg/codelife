@@ -149,7 +149,9 @@ class Level extends Component {
     // TODO4: DIDN'T update this blocker for January, because we don't have an island yet.  Update after new island is placed.
     // TODO5: Just updated this to the new space island now that they are added
     // 21a4 is space island.  If the next island is space island, DONT go to it
-    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
+    const latestIsland = this.props.islands.find(i => i.is_latest === true);
+    // if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.ordering <= latestIsland.ordering) {  
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -397,6 +399,9 @@ class Level extends Component {
       levelStatuses[l].isNext = l === 0 && !done || l > 0 && !done && (levelStatuses[l - 1].isDone || levelStatuses[l - 1].isSkipped);
     }
 
+    const latestIsland = this.props.islands.find(i => i.is_latest === true);
+    //console.log(latestIsland.ordering);
+
     const otherCodeBlockItemsBeforeFold = [];
     const otherCodeBlockItemsAfterFold = [];
     let top = 3;
@@ -485,8 +490,8 @@ class Level extends Component {
         { /* TODO3: incremented blocker for December Island */}
         { /* TODO4: incremented blocker for January Island */}
 
-        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) && <h2 className="u-visually-hidden">{`${t("Next island")}: `}</h2>}
-        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { nextIsland && Number(nextIsland.ordering) <= latestIsland.ordering  && this.hasUserCompleted(currentIsland.id) && <h2 className="u-visually-hidden">{`${t("Next island")}: `}</h2>}
+        { nextIsland && Number(nextIsland.ordering) <= latestIsland.ordering  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div className="student-codeblocks-container">

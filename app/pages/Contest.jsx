@@ -32,10 +32,9 @@ class Contest extends Component {
       const islands = this.props.islands.map(i => Object.assign({}, i)).sort((a, b) => a.ordering - b.ordering);
       const levels = this.props.levels.map(l => Object.assign({}, l));
       let flatProgress = [];
+      const latestIslandIndex = this.props.islands.find(i => i.is_latest === true).ordering;
       for (const i of islands) {
-        // This filters out non-yet released islands
-        // TODO: Longer term solution for active/inactive islands
-        if (!["island-21a4", "island-bacb"].includes(i.id)) {
+        if (i.ordering <= latestIslandIndex) {
           const myLevels = levels.filter(l => l.lid === i.id).sort((a, b) => a.ordering - b.ordering);
           flatProgress = flatProgress.concat(myLevels, i);
         }

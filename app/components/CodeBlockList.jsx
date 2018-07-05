@@ -94,12 +94,14 @@ class CodeBlockList extends Component {
 
     const codeBlockItems = [];
 
+    const latestIsland = islands.find(i => i.is_latest === true);
+
     for (const i of islands) {
       // added this ordering blocker for november beta. Need to increment this as levels are unlocked.
       // incremented this for new december island
       // incremented this for new january island
       // island 7 is clock island, so if its higher, don't show anything
-      if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > 7) continue;
+      if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > latestIsland.ordering) continue;
       codeBlockItems.push(
         <button className={`u-unbutton codeblock-browser-button ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>
           <img className="codeblock-browser-button-icon" src={`/islands/${i.theme}-small.png`} />{ i.name }

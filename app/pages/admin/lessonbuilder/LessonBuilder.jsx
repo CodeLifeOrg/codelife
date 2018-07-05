@@ -57,7 +57,7 @@ class LessonBuilder extends Component {
           id: i.id,
           className: i.id,
           hasCaret: true,
-          iconName: "map-marker",
+          iconName: i.is_latest ? "take-action" : "map-marker",
           label: i.name,
           itemType: "island",
           parent: {childNodes: nodes},
@@ -150,6 +150,29 @@ class LessonBuilder extends Component {
         resp.status === 200 ? console.log("saved") : console.log("error");
       });
     }
+  }
+
+  setLatest(node) {
+    axios.post("/api/builder/setlatest", {latest: node.id}).then(resp => {
+      if (resp.status === 200) { 
+        const {nodes} = this.state;
+        nodes.forEach(n => {
+          if (n.id === node.id) {
+            n.data.is_latest = true;
+            n.iconName = "take-action";
+          }
+          else {
+            n.data.is_latest = false;
+            n.iconName = "map-marker";
+          }
+
+        });
+        this.setState({nodes});
+      } 
+      else {
+        console.log("error");
+      }
+    });
   }
 
   newNode(nodes) {
@@ -374,12 +397,12 @@ class LessonBuilder extends Component {
     const {currentNode} = this.state;
     if (!currentNode) {
       node.isSelected = true;
-      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
+      node.secondaryLabel = <CtxMenu node={node} setLatest={this.setLatest.bind(this)} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
     }
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
       currentNode.isSelected = false;
-      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
+      node.secondaryLabel = <CtxMenu node={node} setLatest={this.setLatest.bind(this)} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
       currentNode.secondaryLabel = null;
     }
     node.isExpanded = !node.isExpanded;

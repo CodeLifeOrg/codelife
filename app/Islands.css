@@ -95,6 +95,12 @@ then add the theme name to the @each loop below */
       background-color: color( var(--$(theme)-island-light) l(+33%) ) !important; /* bad content editor! 🙅‍ */
       color: var(--$(theme)-island-dark) !important; /* bad quill editor! 🙅 */
       border-color: var(--$(theme)-island-light);
+      &.blurry-text {
+        color: transparent !important;
+        pointer-events: none;
+        text-shadow: 0 0 var(--gutter-xxs) var(--$(theme)-island-dark);
+        user-select: none;
+      }
     }
     /* set svg fill */
     &.pt-tooltip .pt-popover-arrow-fill {

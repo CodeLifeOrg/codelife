@@ -57,6 +57,7 @@ class RulePicker extends Component {
 
   updateJSON() {
     const {data, rules} = this.state;
+    const {locale} = this.state;
     const json = [];
     const langjson = [];
     if (rules) {
@@ -130,6 +131,7 @@ class RulePicker extends Component {
   render() {
 
     const {rules, ruleTypes} = this.state;
+    const {locale} = this.props;
 
     if (!rules || !ruleTypes) return null;
 
@@ -155,41 +157,73 @@ class RulePicker extends Component {
 
     if (rules) {
       ruleItems = rules.map(r =>
-        <div key={r.id} className="rule-section">
-          <div className="pt-select rule-select" style={{width: "210px"}}>
-            <select value={r.type} id={r.id} onChange={this.changeField.bind(this, "type")}>{ruleTypeList}</select>
-          </div>
-          <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
-          { param2[r.type] 
-            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} /> 
-            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
-          }
-          { param3[r.type] 
-            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} /> 
-            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
-          }
-           🇧🇷 
-          <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "pt_needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.pt_needle} />
-          { param2[r.type] 
-            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param2[r.type]}`)} type="text" placeholder={param2[r.type]} dir="auto" value={r[`pt_${param2[r.type]}`]} /> 
-            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
-          }
-          { param3[r.type] 
-            ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param3[r.type]}`)} type="text" placeholder={param3[r.type]} dir="auto" value={r[`pt_${param3[r.type]}`]} /> 
-            : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
-          }
-          <button style={{marginTop: "3px"}} className="pt-button pt-intent-danger pt-icon-delete" type="button" id={r.id} onClick={this.removeRule.bind(this)}></button>
-        </div>
+        <tr key={r.id} className="rule-row">
+
+          <td className="rule-cell type-select-rule-cell pt-select rule-select">
+            <select className="u-fullwidth" value={r.type} id={r.id} onChange={this.changeField.bind(this, "type")}>{ruleTypeList}</select>
+          </td>
+
+          <td className="rule-cell en-rule-cell">
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.needle} />
+
+            { param2[r.type]
+              ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param2[r.type])} type="text" placeholder={param2[r.type]} dir="auto" value={r[param2[r.type]]} />
+              : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+            }
+
+            { param3[r.type]
+              ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, param3[r.type])} type="text" placeholder={param3[r.type]} dir="auto" value={r[param3[r.type]]} />
+              : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+            }
+          </td>
+
+          <td className="rule-cell pt-rule-cell">
+            <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, "pt_needle")} type="text" placeholder="Tag to Match" dir="auto" value={r.pt_needle} />
+
+            { param2[r.type]
+              ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param2[r.type]}`)} type="text" placeholder={param2[r.type]} dir="auto" value={r[`pt_${param2[r.type]}`]} />
+              : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+            }
+
+            { param3[r.type]
+              ? <input className="pt-input rule-param" id={r.id} onChange={this.changeField.bind(this, `pt_${param3[r.type]}`)} type="text" placeholder={param3[r.type]} dir="auto" value={r[`pt_${param3[r.type]}`]} />
+              : <input className="pt-input pt-disabled rule-param" id={r.id} type="text" placeholder="N/A" value="" />
+            }
+          </td>
+
+          <td className="rule-cell actions-rule-cell">
+            <button className="button inverted-button danger-button font-xs u-margin-top-off"
+              id={r.id}
+              onClick={this.removeRule.bind(this)}>
+              <span className="pt-icon pt-icon-trash" />
+              remove
+            </button>
+          </td>
+
+        </tr>
       );
     }
 
     return (
-      <div id="rule-picker">
-        <label className="pt-label">
-          Passing Rules<br/>
+      <div className="rule-picker u-margin-top-md">
+
+        <h3 className="font-sm">Passing Rules</h3>
+
+        <table className={`rule-table ${locale}-rule-table`}>
+          <tr className="rule-row font-xs">
+            <th className="rule-cell type-select-rule-cell">Rule type</th>
+            <th className="rule-cell en-rule-cell">Params (En)</th>
+            <th className="rule-cell pt-rule-cell">Params (Pt)</th>
+            <th className="rule-cell actions-rule-cell">Actions</th>
+          </tr>
           {ruleItems}
-          <button className="pt-button pt-intent-success pt-icon-add" type="button" onClick={this.addRule.bind(this)}>Add Rule</button>
-        </label>
+        </table>
+
+        <button className="button font-sm u-text-right"
+          onClick={this.addRule.bind(this)}>
+          <span className="pt-icon pt-icon-add" />
+          add rule
+        </button>
       </div>
     );
   }

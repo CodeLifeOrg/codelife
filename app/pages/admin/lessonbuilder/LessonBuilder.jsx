@@ -17,7 +17,7 @@ const slideIcons = {
   CheatSheet: "clipboard",
   ImageText: "media",
   InputCode: "code-block",
-  Quiz: "help",
+  Quiz: "properties",
   RenderCode: "application",
   TextCode: "code",
   TextImage: "media",
@@ -51,14 +51,16 @@ class LessonBuilder extends Component {
 
       const nodes = [];
 
+      const isPT = this.props.location.hostname.includes("pt.");
+
       for (let i of islands) {
         i = this.fixNulls(i);
         const islandObj = {
           id: i.id,
           className: i.id,
           hasCaret: true,
-          iconName: "map",
-          label: i.name,
+          iconName: i.is_latest ? "take-action" : "map-marker",
+          label: isPT ? i.pt_name : i.name,
           itemType: "island",
           parent: {childNodes: nodes},
           childNodes: [],
@@ -76,7 +78,7 @@ class LessonBuilder extends Component {
             className: l.id,
             hasCaret: true,
             iconName: "multi-select",
-            label: l.name,
+            label: isPT ? l.pt_name : l.name,
             itemType: "level",
             parent: islandNode,
             childNodes: [],
@@ -99,7 +101,7 @@ class LessonBuilder extends Component {
             className: s.id,
             hasCaret: false,
             iconName: slideIcons[s.type],
-            label: s.title,
+            label: isPT ? s.pt_title : s.title,
             itemType: "slide",
             parent: levelNode,
             data: s
@@ -150,6 +152,29 @@ class LessonBuilder extends Component {
         resp.status === 200 ? console.log("saved") : console.log("error");
       });
     }
+  }
+
+  setLatest(node) {
+    axios.post("/api/builder/setlatest", {latest: node.id}).then(resp => {
+      if (resp.status === 200) { 
+        const {nodes} = this.state;
+        nodes.forEach(n => {
+          if (n.id === node.id) {
+            n.data.is_latest = true;
+            n.iconName = "take-action";
+          }
+          else {
+            n.data.is_latest = false;
+            n.iconName = "map-marker";
+          }
+
+        });
+        this.setState({nodes});
+      } 
+      else {
+        console.log("error");
+      }
+    });
   }
 
   newNode(nodes) {
@@ -291,7 +316,7 @@ class LessonBuilder extends Component {
     const objIsland = {
       id: islandUUID,
       hasCaret: true,
-      iconName: "map",
+      iconName: "map-marker",
       label: "New Island",
       itemType: "island",
       parent: n.parent,
@@ -374,12 +399,12 @@ class LessonBuilder extends Component {
     const {currentNode} = this.state;
     if (!currentNode) {
       node.isSelected = true;
-      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
+      node.secondaryLabel = <CtxMenu node={node} setLatest={this.setLatest.bind(this)} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
     }
     else if (node.id !== currentNode.id) {
       node.isSelected = true;
       currentNode.isSelected = false;
-      node.secondaryLabel = <CtxMenu node={node} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
+      node.secondaryLabel = <CtxMenu node={node} setLatest={this.setLatest.bind(this)} moveItem={this.moveItem.bind(this)} addItem={this.addItem.bind(this)} deleteItem={this.deleteItem.bind(this)} />;
       currentNode.secondaryLabel = null;
     }
     node.isExpanded = !node.isExpanded;
@@ -399,26 +424,31 @@ class LessonBuilder extends Component {
 
   reportSave(newData) {
     const {currentNode} = this.state;
-    if (currentNode.itemType === "island" || currentNode.itemType === "level") currentNode.label = newData.name;
-    if (currentNode.itemType === "slide") currentNode.label = newData.title;
+    const isPT = this.props.location.hostname.includes("pt.");
+    if (currentNode.itemType === "island" || currentNode.itemType === "level") currentNode.label = isPT ? newData.pt_name : newData.name;
+    if (currentNode.itemType === "slide") currentNode.label = isPT ? newData.pt_title : newData.title;
     this.setState({currentNode});
   }
 
   render() {
 
-    const {nodes, currentNode} = this.state;
+    const {nodes, currentNode, mounted} = this.state;
+    const {t} = this.props;
 
-    if (!nodes) return <LoadingSpinner />;
+    // if (!nodes) return <LoadingSpinner />;
 
     return (
       <div className="lessonbuilder" id="lesson-builder">
-        <Tree
-          className="lessonbuilder-tree font-sm"
-          onNodeClick={this.handleNodeClick.bind(this)}
-          onNodeCollapse={this.handleNodeCollapse.bind(this)}
-          onNodeExpand={this.handleNodeExpand.bind(this)}
-          contents={nodes}
-        />
+        {nodes
+          ? <Tree
+            className="lessonbuilder-tree font-sm"
+            onNodeClick={this.handleNodeClick.bind(this)}
+            onNodeCollapse={this.handleNodeCollapse.bind(this)}
+            onNodeExpand={this.handleNodeExpand.bind(this)}
+            contents={nodes}
+          />
+          : <div className="lessonbuilder-tree" />
+        }
         <div className="item-editor" id="item-editor">
           { currentNode
             ? currentNode.itemType === "island"
@@ -428,7 +458,9 @@ class LessonBuilder extends Component {
                 : currentNode.itemType === "slide"
                   ? <SlideEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/>
                   : null
-            : <NonIdealState title="No Island Selected" description="Please select an island from the menu on the left." visual="path-search" />
+            : mounted
+              ? <NonIdealState title={t("No Island Selected")} description={t("Please select an island from the menu on the left")} visual="path-search" />
+              : <LoadingSpinner label={false} />
           }
         </div>
       </div>
@@ -437,7 +469,8 @@ class LessonBuilder extends Component {
 }
 
 LessonBuilder = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(LessonBuilder);
 LessonBuilder = translate()(LessonBuilder);
 export default LessonBuilder;

@@ -53,6 +53,7 @@ class QuillWrapper extends Component {
   }
 
   render() {
+    const {id} = this.props;
     if (typeof window !== "undefined" && this.state.words) {
       const Quill = require("react-quill");
       require("react-quill/dist/quill.snow.css");
@@ -76,9 +77,13 @@ class QuillWrapper extends Component {
         />
         { this.props.hideGlossary
           ? null
-          : <div>
-            <Suggest 
+          : <div className="glossary-insert">
+            <Suggest
+              className="glossary-insert-search"
               id="search-box"
+              inputProps={{
+                placeholder: "search glossary words…"
+              }}
               inputValueRenderer={word => word.word}
               items={this.state.words}
               itemRenderer={this.renderWord.bind(this)}
@@ -86,12 +91,12 @@ class QuillWrapper extends Component {
               noResults={<MenuItem disabled={true} text="No results." />}
               onItemSelect={word => this.setState({currentWord: word})}
             />
-            <div 
-              id="insert-word"
-              onClick={this.handleGlossaryClick.bind(this)}
-            > 
-              Insert Glossary Word <span className="pt-icon pt-icon-circle-arrow-up" />
-            </div>
+            <button
+              className="button inverted-button glossary-insert-button font-sm"
+              onClick={this.handleGlossaryClick.bind(this)} >
+              <span className="pt-icon pt-icon-circle-arrow-up" />
+              <span className="button-text">insert<span className="u-hide-below-sm"> word</span></span>
+            </button>
           </div>
         }
       </div>;
@@ -105,5 +110,5 @@ const mapStateToProps = state => ({
   glossary: state.glossary
 });
 
-QuillWrapper = connect(mapStateToProps)(QuillWrapper);
+QuillWrapper = connect(mapStateToProps, null, null, {withRef: true})(QuillWrapper);
 export default QuillWrapper;

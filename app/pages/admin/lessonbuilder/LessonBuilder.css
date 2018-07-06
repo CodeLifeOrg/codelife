@@ -6,11 +6,13 @@
   & .lessonbuilder-tree {
     background-color: var(--light-1);
     padding: 0;
-    width: 250px;
     min-height: calc(100vh - 430px);
 
+    &,
     & .pt-tree {
       width: 250px;
+      min-width: 180px;
+      max-width: 25vw;
     }
 
     & .pt-tree-node-list {
@@ -28,11 +30,15 @@
     }
   }
 
+  & textarea {
+    min-height: 4rem;
+  }
+
   & .item-editor {
     background-color: var(--white);
     border-top-right-radius: var(--radius-lg);
     flex: 1;
-    padding: var(--gutter-md);
+
     & .input-block, & .area-block {
       width: 100%;
       display: flex;
@@ -55,6 +61,9 @@
           & .ql-container {
             border-radius: 0 0 var(--radius-md) var(--radius-md);
           }
+          & .ql-tooltip {
+            z-index: 1; /* position inserted term tooltip above other elements */
+          }
         }
         & .image-area {
           & img {
@@ -64,24 +73,4 @@
       }
     }
   }
-}
-
-.rule-section {
-  display: flex;
-}
-
-.rule-select {
-  width: 260px;
-  margin: var(--gutter-xxs);
-}
-
-.rule-param {
-  flex: 1;
-  margin: var(--gutter-xxs);
-  width: 0;
-}
-
-.rule-error {
-  width: 350px;
-  margin: var(--gutter-xxs);
 }

@@ -76,6 +76,7 @@ h5, .font-xs  { @add-mixin font-xs;  }
 
 /* default link style */
 p > a,
+td > a,
 .link {
   color: var(--sky-dark);
   cursor: pointer;
@@ -85,6 +86,9 @@ p > a,
   /* interactions */
   &:hover, &:focus {
     color: var(--sky);
+  }
+  &:active {
+    color: var(--sky-black);
   }
 
   /* danger text */
@@ -155,6 +159,18 @@ p > a,
     background-color: var(--sky-black);
     color: var(--white);
     box-shadow: 0 2px 1em rgba(35, 50, 51, 0.15);
+    z-index: 1;
+  }
+}
+
+/* danger button */
+/* NOTE: requires .button class as well */
+.danger-button {
+  background-color: var(--danger);
+
+  /* interactions */
+  &:hover, &:focus {
+    background-color: var(--danger-dark);
   }
 }
 
@@ -170,6 +186,15 @@ p > a,
     background-color: var(--white);
     color: var(--sky-black);
     box-shadow: 0 2px 1em rgba(35, 50, 51, 0.5);
+  }
+
+  &.danger-button {
+    color: var(--danger-dark);
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--danger);
+    }
   }
 }
 
@@ -234,9 +259,9 @@ blueprint overrides
   }
 
   /* space out icons from text */
-  & > .pt-icon + * {
+  /* & > .pt-icon + * {
     margin-left: 0.5em;
-  }
+  } */
 
   /* override blueprint disabled style */
   &:disabled {
@@ -619,9 +644,6 @@ body {
     /* no padding on first and last sections */
     &:first-of-type {
       padding-top: 0;
-    }
-    &:last-of-type {
-      padding-bottom: 0;
     }
   }
 
@@ -1272,6 +1294,11 @@ utility classes
   @add-mixin clearfix;
 }
 
+/* 100% width */
+.u-fullwidth {
+  width: 100% !important;
+}
+
 /* vertical margin */
 .u-margin-top-xs { margin-top: var(--gutter-xs) !important; }
 .u-margin-top-sm { margin-top: var(--gutter-sm) !important; }
@@ -1319,6 +1346,16 @@ utility classes
 }
 
 /* show/hide content */
+.u-hide-below-lg {
+  @add-mixin max-lg {
+    display: none !important;
+  }
+}
+.u-hide-below-md {
+  @add-mixin max-md {
+    display: none !important;
+  }
+}
 .u-hide-below-sm {
   @add-mixin max-sm {
     display: none !important;

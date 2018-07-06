@@ -39,12 +39,18 @@ class Island extends Component {
   hasUserCompleted(milestone) {
     // Unlock all islands for admins
     if (this.props.auth.user.role > 0) return true;
-
+    const latestIsland = this.props.islands.find(i => i.is_latest === true);
     // TODO: this is a blocking short-circuit for August. remove after Beta (done)
     // TODO2: adding back in a hard blocker for November Beta.
     // TODO3: blocker incremented for December Island.
     // TODO4: blocker incremented for January Island.
-    if (milestone === "island-8b75") return false;  // 8b75 is clock island - to make it the latest island, never let them "beat it" (so, return false)
+    // if (milestone === "island-8b75") return false;  // 8b75 is clock island - to make it the latest island, never let them "beat it" (so, return false)
+    
+    // Don't let the user have ever "truly beaten" the latest island, as doing so implicitly
+    // unlocks the next, which may be unreleased
+    if (milestone === latestIsland.id) return false;
+    
+
     return this.state.userProgress.find(up => up.level === milestone) !== undefined;
   }
 

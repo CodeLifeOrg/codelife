@@ -44,8 +44,8 @@ class UserCodeBlocks extends Component {
     const {loading, codeBlocks} = this.state;
 
     // set heading text
-    let heading = `${ user.name || user.username }’s ${ t("CodeBlocks") }`;
-    myProfile === true ? heading = `${ t("My")} ${ t("CodeBlocks") } ` : null;
+    let heading = t("UserCodeBlocksList", {username: user.name || user.username});
+    myProfile === true ? heading = t("My CodeBlocks") : null;
 
     if (loading) return <h2>{ t("Loading codeblocks") }...</h2>;
 

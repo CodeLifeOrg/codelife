@@ -22,7 +22,8 @@ module.exports = function(sequelize, db) {
       ordering: db.INTEGER,
       theme: db.TEXT,
       icon: db.TEXT,
-      pt_rulejson: db.TEXT
+      pt_rulejson: db.TEXT,
+      is_latest: db.BOOLEAN
     },
     {
       freezeTableName: true,

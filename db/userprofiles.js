@@ -28,7 +28,8 @@ module.exports = function(sequelize, db) {
       sharing: db.TEXT,
       reports: db.INTEGER,
       last_upped: db.DATE,
-      prompted: db.BOOLEAN
+      prompted: db.BOOLEAN,
+      lang: db.STRING
     },
     {
       freezeTableName: true,

@@ -51,13 +51,18 @@ then add the theme name to the @each loop below */
     /* set color */
     & .island-path .code-block.is-done .side,
     & .pt-dialog-header-title,
-    & .lessonplan-toc > * {
+
+    & .lessonplan-toc > *,
+    & .item-editor-inner h1,
+    & .item-editor-inner h2 {
       color: var(--$(theme)-island-dark);
     }
     &.slide-inner a:not(.pt-button),
+    & .inverted-button:not(.danger-button),
     & .lessonplan-toc-link,
     & .codeblock-dialog-link,
-    & .fork-button {
+    & .fork-button,
+    & .item-editor-inner a {
       color: var(--$(theme)-island-medium);
       /* interactions */
       &:hover, &:focus {
@@ -72,6 +77,7 @@ then add the theme name to the @each loop below */
     & .island-path .code-block .side {
       border-color: var(--$(theme)-island-dark);
     }
+    & .button:not(.inverted-button):not(.danger-button),
     &.pt-button,
     & .pt-button {
       background-color: var(--$(theme)-island-medium);
@@ -87,8 +93,14 @@ then add the theme name to the @each loop below */
     & code,
     & pre {
       background-color: color( var(--$(theme)-island-light) l(+33%) ) !important; /* bad content editor! 🙅‍ */
-      color: var(--$(theme)-island-dark);
+      color: var(--$(theme)-island-dark) !important; /* bad quill editor! 🙅 */
       border-color: var(--$(theme)-island-light);
+      &.blurry-text {
+        color: transparent !important;
+        pointer-events: none;
+        text-shadow: 0 0 var(--gutter-xxs) var(--$(theme)-island-dark);
+        user-select: none;
+      }
     }
     /* set svg fill */
     &.pt-tooltip .pt-popover-arrow-fill {

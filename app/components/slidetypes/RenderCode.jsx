@@ -38,7 +38,7 @@ class RenderCode extends Component {
           <div className="slide-text" dangerouslySetInnerHTML={{__html: htmlcontent1}} />
           { this.state.mounted ? <CodeEditor suppressJS={this.props.suppressJS} island={island} setExecState={this.setExecState.bind(this)} initialValue={htmlcontent2} lax={lax} className="slide-editor panel-content" ref={c => this.editor = c} readOnly={true} /> : <div className="slide-editor panel-content"></div> }
         </div>
-        <div className="validation">
+        <div className="centered-buttons validation">
           { execState ? <button className="pt-button pt-intent-warning" onClick={this.executeCode.bind(this)}>{t("Execute")}</button> : null }
         </div>
       </div>

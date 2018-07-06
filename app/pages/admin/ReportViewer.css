@@ -1,11 +1,117 @@
+@import "../../mixins.css";
+
 #ReportViewer {
-  background-color: var(--white);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: var(--gutter-md);
+
   & .pt-table {
     width: 100%;
-    & .mod-button {
-      margin-right: var(--gutter-xxs);
+
+    td {
+      vertical-align: middle;
+    }
+
+    /* remove padding from first column */
+    & th:first-of-type,
+    & td:first-of-type {
+      padding-left: 0;
+    }
+
+    /* right align last column */
+    & th:last-of-type,
+    & td:last-of-type {
+      text-align: right;
+      padding-right: 0;
+    }
+
+    & .actions-cell {
+      width: 8rem;
+
+      @add-mixin min-md {
+        min-width: 10rem;
+      }
+    }
+
+    /* action buttons */
+    & .actions-cell-inner {
+      display: flex;
+      flex-wrap: nowrap;
+      max-width: 100%;
+      margin: 0;
+
+      & .button {
+        /* override button default */
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+        min-width: 0;
+        /* take up all available space */
+        flex: 1;
+
+        @add-mixin max-md {
+          & .pt-icon {
+            margin-right: 0;
+          }
+        }
+      }
     }
   }
+
+  /* table row hover effect */
+  & tbody tr {
+    transition: background 0.2s;
+
+    /* interactions */
+    &:hover,
+    &:focus-within {
+      background-color: color(var(--light-1) a(33.333%));
+    }
+  }
+
+  /* reduce list item spacing */
+  & ul li {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  /* border between adjacent rows */
+  & tr + tr > td {
+    border-top: 1px solid var(--light-1);
+  }
+
+  /* limit comment height */
+  & .thread-comment {
+    max-height: 10vh;
+    overflow: scroll;
+  }
+
+  /* stack thread author and meta */
+  & .thread-user {
+    display: block;
+  }
+
+  /* project & codeblock table layouts */
+  & .codeblock-report-table,
+  & .project-report-table {
+    /* 1st column */
+    & td:first-of-type {
+      width: 30%;
+    }
+    /* columns 2 - 4 */
+    & td:nth-of-type(5n + 1) ~ td:not(:last-of-type) {
+      width: 20%;
+    }
+  }
+
+  /* thread & comment table layouts */
+  & .thread-report-table,
+  & .comment-report-table {
+    /* 1st column */
+    & td:first-of-type {
+      width: 40%;
+    }
+    /* columns 2 - 3 */
+    & td:nth-of-type(4n + 1) ~ td:not(:last-of-type) {
+      width: 25%;
+    }
+  }
+
 }

@@ -1,30 +1,61 @@
 @import "../../mixins.css";
 
 /* card layout */
-.featured .card-list {
-  @add-mixin card-layout-base;
+.featured-admin {
 
-  /* stacked cards */
-  @add-mixin max-md {
-    @add-mixin card-layout-stacked;
-  }
-
-  /* 2 column layout */
-  /*
-  @add-mixin min-sm {
-    @add-mixin card-layout-2col;
-  }
-  */
-
-  /* 3 column layout */
-  /*
   @add-mixin min-md {
-    @add-mixin card-layout-3col;
+    padding-left: var(--gutter-md);
+    padding-right: var(--gutter-md);
   }
-  */
 
-  /* 4 column layout */
-  @add-mixin min-md {
-    @add-mixin card-layout-4col;
+  /* same view as home */
+  & .featured-list {
+    @add-mixin card-layout-base;
+
+    /* stacked cards */
+    @add-mixin max-xs {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 2 column layout */
+    @add-mixin min-xs {
+      @add-mixin card-layout-2col;
+    }
+
+    /* 3 column layout */
+    @add-mixin min-md {
+      @add-mixin card-layout-3col;
+    }
+
+    /* 4 column layout */
+    @add-mixin min-lg {
+      @add-mixin card-layout-4col;
+    }
+  }
+
+  /* more compact */
+  & .browse-list:not(.pt-collapse),
+  & .browse-list > .pt-collapse-body {
+    @add-mixin card-layout-base;
+
+    /* stacked cards */
+    @add-mixin max-xs {
+      @add-mixin card-layout-stacked;
+    }
+
+    /* 2 column layout */
+    @add-mixin min-xs {
+      @add-mixin card-layout-2col;
+    }
+
+    /* 3 column layout */
+    @add-mixin min-sm {
+      @add-mixin card-layout-3col;
+    }
+
+    /* 4 column layout */
+    @add-mixin min-md {
+      @add-mixin card-layout-4col;
+    }
   }
 }

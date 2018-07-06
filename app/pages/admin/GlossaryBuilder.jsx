@@ -22,7 +22,7 @@ class GlossaryBuilder extends Component {
     axios.get("/api/builder/glossary/all").then(resp => {
       if (resp.status === 200) {
         const words = resp.data;
-        this.setState({words});  
+        this.setState({words});
       }
       else {
         console.log("error");
@@ -32,7 +32,7 @@ class GlossaryBuilder extends Component {
 
   changeField(field, e) {
     const {words} = this.state;
-    const word = words.find(w => w.id.toString() === e.target.id);
+    const word = words.find(w => w.id.toString() === e.target.dataset.id);
     if (word) {
       word[field] = e.target.value;
       word.touched = true;
@@ -61,7 +61,7 @@ class GlossaryBuilder extends Component {
       if (resp.status === 200) {
         const newWord = resp.data;
         const words = this.state.words.concat(newWord);
-        this.setState({words});  
+        this.setState({words});
       }
       else {
         console.log("error");
@@ -71,7 +71,7 @@ class GlossaryBuilder extends Component {
 
   saveWord(e) {
     const {words} = this.state;
-    const word = words.find(w => w.id.toString() === e.target.id);
+    const word = words.find(w => w.id.toString() === e.target.dataset.id);
     if (word) {
       const payload = {
         id: word.id,
@@ -84,13 +84,13 @@ class GlossaryBuilder extends Component {
         resp.status === 200 ? console.log("success") : console.log("error");
       });
       word.touched = false;
-      this.setState({words});  
+      this.setState({words});
     }
-    
+
   }
 
   deleteWord(e) {
-    const id = e.target.id;
+    const id = e.target.dataset.id;
     const payload = {
       params: {id}
     };
@@ -106,9 +106,10 @@ class GlossaryBuilder extends Component {
   }
 
   cancelWord(e) {
+    console.log(e.target.dataset.id);
     let {words} = this.state;
     words = words.map(w => {
-      if (w.id.toString() === e.target.id) {
+      if (w.id.toString() === e.target.dataset.id) {
         w = Object.assign({}, w.initialState);
         w.touched = false;
         w.initialState = undefined;
@@ -123,94 +124,103 @@ class GlossaryBuilder extends Component {
 
   editWord(e) {
     const {words} = this.state;
-    const word = words.find(w => w.id.toString() === e.target.id);
+    const word = words.find(w => w.id.toString() === e.target.dataset.id);
     if (word) {
       word.touched = true;
       // To allow for canceling edits, capture the initial state for potential reset later.
       word.initialState = Object.assign({}, word);
-      this.setState({words});  
+      this.setState({words});
     }
   }
 
   render() {
-
+    const {t} = this.props;
     const {words} = this.state;
 
-    if (!words) return <LoadingSpinner />;
+    const terms = words.map(w =>
+      w.touched
+        // editing
+        ? <div key={w.id} className="term-container is-editing">
 
-    const wordItems = words.map(w => 
-      w.touched 
-        ? <div key={w.id} className={`word ${w.touched ? "touched" : ""}`}>
-          <div className="word-container">
-            <input 
-              className="word-box" 
-              id={w.id} 
-              onChange={this.changeField.bind(this, "word")} 
-              type="text" 
-              placeholder="Term" 
-              value={w.word} 
-            />
+          {/* English term & definition */}
+          <div className="term-column">
+            <h2 className="font-md u-margin-top-off">English term</h2>
+            <div className="field-container">
+              <input
+                className="term-input"
+                id={w.id}
+                onChange={this.changeField.bind(this, "word")}
+                type="text"
+                placeholder="Term"
+                value={w.word} />
+            </div>
             <QuillWrapper
-              className="definition-box"
+              className="definition-box u-margin-top-sm"
               id={w.id.toString()}
               value={w.definition}
-              onChange={this.handleEditor.bind(this, w.id.toString(), "definition")} 
-            />
+              onChange={this.handleEditor.bind(this, w.id.toString(), "definition")} />
           </div>
-          <div className="word-container">
-            <input 
-              className="word-box" 
-              id={w.id} 
-              onChange={this.changeField.bind(this, "pt_word")} 
-              type="text" 
-              placeholder="Palavra" 
-              value={w.pt_word} 
-            />
+
+          {/* Portuguese term & definition */}
+          <div className="term-column">
+            <h2 className="font-md u-margin-top-off">Portuguese translation</h2>
+            <div className="field-container">
+              <input
+                className="term-input"
+                id={w.id}
+                onChange={this.changeField.bind(this, "pt_word")}
+                type="text"
+                placeholder="Palavra"
+                value={w.pt_word} />
+            </div>
             <QuillWrapper
-              className="definition-box"
+              className="definition-box u-margin-top-sm"
               id={w.id.toString()}
               value={w.pt_definition}
-              onChange={this.handleEditor.bind(this, w.id.toString(), "pt_definition")} 
+              onChange={this.handleEditor.bind(this, w.id.toString(), "pt_definition")}
             />
           </div>
-          <div className="action-box">
-            <button id={w.id} className="pt-button pt-intent-success glossary-button" onClick={this.saveWord.bind(this)}>Save</button><br/>
-            <button id={w.id} className="pt-button pt-intent-warning glossary-button" onClick={this.cancelWord.bind(this)}>Cancel</button><br/>
-            <button id={w.id} className="pt-button pt-intent-danger glossary-button" onClick={this.deleteWord.bind(this)}>Delete</button><br/>
+
+          <div className="actions-container u-text-center u-margin-top-md">
+            <button data-id={w.id} className="button danger-button" onClick={this.deleteWord.bind(this)}>
+              <span data-id={w.id} className="pt-icon pt-icon-trash" />
+              <span data-id={w.id} className="u-hide-below-md">delete word</span>
+            </button>
+            <button data-id={w.id} className="button success" onClick={this.saveWord.bind(this)}>
+              <span data-id={w.id} className="pt-icon pt-icon-tick" />
+              <span data-id={w.id} className="u-hide-below-md">save changes</span>
+            </button>
+          </div>
+
+          <div className="term-mode">
+            <button data-id={w.id} className="mode-toggle-button u-unbutton font-lg u-margin-top-xs" onClick={this.cancelWord.bind(this)}>
+              <span data-id={w.id} className="u-visually-hidden">{t("Cancel")}</span>
+              <span data-id={w.id} className="mode-toggle-icon pt-icon pt-icon-cross" />
+            </button>
           </div>
         </div>
-        : <div key={w.id} className={`word ${w.touched ? "touched" : ""}`}>
-          <div className="word-container-readonly">
-            <div className="word-box-readonly" id={w.id}>
-              {w.word} 
-            </div>
-            <div 
-              className="definition-box-readonly" 
-              id={w.id.toString()}
-              dangerouslySetInnerHTML={{__html: w.definition}}
-            />
-          </div>
-          <div className="word-container-readonly">
-            <div className="word-box-readonly" id={w.id}>
-              {w.pt_word} 
-            </div>
-            <div 
-              className="definition-box-readonly" 
-              id={w.id.toString()}
-              dangerouslySetInnerHTML={{__html: w.pt_definition}}
-            />
-          </div>
-          <div className="action-box">
-            <button id={w.id} className="pt-button pt-intent-warning glossary-button" onClick={this.editWord.bind(this)}>Edit</button>
+        // not editing
+        : <div key={w.id} className="term-container">
+          <h2 className="term-input font-lg u-margin-top-off u-margin-bottom-xxs" id={w.id.toString()}>
+            { w.word === w.pt_word ? w.word : `${w.word} / ${w.pt_word}`}
+          </h2>
+          <div className="term-column" id={w.id.toString()} dangerouslySetInnerHTML={{__html: w.definition}} />
+          <div className="term-column" id={w.id.toString()} dangerouslySetInnerHTML={{__html: w.pt_definition}} />
+          <div className="term-mode">
+            <button data-id={w.id} className="mode-toggle-button u-unbutton font-lg u-margin-top-xs" onClick={this.editWord.bind(this)}>
+              <span data-id={w.id} className="u-visually-hidden">{t("Edit")}</span>
+              <span data-id={w.id} className="mode-toggle-icon pt-icon pt-icon-cog" />
+            </button>
           </div>
         </div>
     );
 
 
     return (
-      <div id="GlossaryBuilder">
-        {wordItems}
-        <Button type="pt-button" onClick={this.addWord.bind(this)} className="pt-button pt-fill pt-intent-success">Add Word</Button>
+      <div className="admin-glossary">
+        <h1 className="u-text-center u-margin-bottom-sm">{t("Glossary Builder")}</h1>
+        {terms.length ? terms : <LoadingSpinner label={false} />}
+        <button className="button font-md u-fullwidth u-margin-bottom-off" onClick={this.addWord.bind(this)}>Add Word</button>
       </div>
     );
   }
@@ -221,4 +231,5 @@ const mapStateToProps = state => ({
 });
 
 GlossaryBuilder = connect(mapStateToProps)(GlossaryBuilder);
+GlossaryBuilder = translate()(GlossaryBuilder);
 export default translate()(GlossaryBuilder);

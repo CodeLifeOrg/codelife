@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, {Component} from "react";
+import {Link} from "react-router";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import LoadingSpinner from "components/LoadingSpinner";
 import RulePicker from "pages/admin/lessonbuilder/RulePicker";
 import QuizPicker from "pages/admin/lessonbuilder/QuizPicker";
 import CodeEditor from "components/CodeEditor/CodeEditor";
-import {Button, Dialog, Toaster, Position, Intent, Checkbox} from "@blueprintjs/core";
+import {Button, Dialog, Toaster, Position, Intent, Switch} from "@blueprintjs/core";
 
 import ImageText from "components/slidetypes/ImageText";
 import InputCode from "components/slidetypes/InputCode";
@@ -138,6 +139,15 @@ class SlideEditor extends Component {
 
     const {data} = this.state;
 
+    // grab en/pt subdomain from url
+    const locale = window.location.host.split(".")[0];
+    const fieldGroupClasses = `translation-field-group field-group ${locale}`;
+
+    // grab island URL
+    const currentUrl = window.location.pathname.split("/");
+    const slideUrlIsland = currentUrl[3];
+    const slideUrlLevel = currentUrl[4];
+
     if (!data) return <LoadingSpinner />;
 
     this.quills = [];
@@ -147,21 +157,253 @@ class SlideEditor extends Component {
     const showContent2 = ["Quiz", "CheatSheet"].indexOf(data.type) === -1;
     const showAce2 = ["TextCode", "RenderCode", "InputCode"].indexOf(data.type) !== -1;
     const showImg = ["TextImage", "ImageText"].indexOf(data.type) !== -1;
+    const showText2 = data.type === "TextText";
     const SlideComponent = compLookup[data.type];
 
     const ptData = this.translateData("pt", data);
 
     return (
       <div id="slide-editor">
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
-        <Button type="button" style={{marginBottom: "10px"}} onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
+        <div className="item-editor-inner">
+
+          <div className="item-editor-meta">
+
+            {/* title display */}
+            <h1 className="font-lg u-margin-top-xs u-margin-bottom-off">
+              { locale === "en"
+                ? `${data.title} / ${data.pt_title}`
+                : `${data.pt_title} / ${data.title}`
+              }
+            </h1>
+            <p className="font-xs">
+              <Link to={`island/${slideUrlIsland}/${slideUrlLevel}/${data.id}`}>
+                codelife.com/island/{slideUrlIsland}/{slideUrlLevel}/{data.id}
+              </Link>
+            </p>
+
+            {/* title fields */}
+            <div className={fieldGroupClasses}>
+              {/* en */}
+              <div className="field-container font-md">
+                <label className="font-sm" htmlFor="title-en">Title (En)</label>
+                <input className="field-input"
+                  id="title-en"
+                  name="title-en"
+                  value={data.title}
+                  onChange={this.changeField.bind(this, "title")}
+                  autoFocus={ locale !== "pt" ? true : false} />
+              </div>
+              {/* pt */}
+              <div className="field-container font-md">
+                <label className="font-sm" htmlFor="title-pt">Title (Pt)</label>
+                <input className="field-input"
+                  id="title-pt"
+                  name="title-pt"
+                  value={data.pt_title}
+                  onChange={this.changeField.bind(this, "pt_title")}
+                  autoFocus={ locale === "pt" ? true : false} />
+              </div>
+            </div>
+
+            {/* slide layout */}
+            <div className="field-container font-sm">
+              <label htmlFor="slide-layout" className="label">Slide layout: </label>
+              <div className="pt-select">
+                {/* select menu */}
+                <select className="field-input slide-layout-select"
+                  id="slide-layout"
+                  name="slide-layout"
+                  value={data.type}
+                  onChange={this.changeField.bind(this, "type")} >
+                  <option value="TextImage">Text left, image right</option>
+                  <option value="ImageText">Image left, text right</option>
+                  <option value="TextCode">Text left, code right</option>
+                  <option value="TextText">Text left, text right</option>
+                  <option value="RenderCode">Code example (read only)</option>
+                  <option value="InputCode">Code input (interactive)</option>
+                  <option value="Quiz">Quiz</option>
+                  <option value="CheatSheet">Cheat sheet</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          {/* Slide content */}
+          <div className="item-editor-slide-content">
+
+            <h2 className="font-md u-margin-top-lg">Slide content</h2>
+
+            {/* text */}
+            <div className={fieldGroupClasses}>
+              {/* en */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="htmlcontent1-en">
+                  Text {showText2 ? "left" : "content"} (En)
+                </label>
+                <QuillWrapper
+                  id="htmlcontent1-en"
+                  value={this.state.data.htmlcontent1}
+                  onChange={this.handleEditor.bind(this, "htmlcontent1")}
+                  ref={c => this.quills.push(c)}
+                />
+              </div>
+              {/* pt */}
+              <div className="field-container font-sm">
+                <label className="font-sm" htmlFor="htmlcontent1-pt">
+                  Text {showText2 ? "left" : "content"} (Pt)
+                </label>
+                <QuillWrapper
+                  id="htmlcontent1-pt"
+                  value={this.state.data.pt_htmlcontent1}
+                  onChange={this.handleEditor.bind(this, "pt_htmlcontent1")}
+                  ref={c => this.quills.push(c)}
+                />
+              </div>
+            </div>
+
+
+            {/* text & text */}
+            { showText2 &&
+              <div className={fieldGroupClasses}>
+                {/* en */}
+                <div className="field-container font-sm">
+                  <label className="font-sm" htmlFor="htmlcontent2-en">
+                    Text right (En)
+                  </label>
+                  <QuillWrapper
+                    id="htmlcontent2-en"
+                    value={this.state.data.htmlcontent2}
+                    onChange={this.handleEditor.bind(this, "htmlcontent2")}
+                    ref={c => this.quills.push(c)}
+                  />
+                </div>
+                {/* pt */}
+                <div className="field-container font-sm">
+                  <label className="font-sm" htmlFor="htmlcontent2-pt">
+                    Text right (Pt)
+                  </label>
+                  <QuillWrapper
+                    id="htmlcontent2-pt"
+                    value={this.state.data.pt_htmlcontent2}
+                    onChange={this.handleEditor.bind(this, "pt_htmlcontent2")}
+                    ref={c => this.quills.push(c)}
+                  />
+                </div>
+              </div>
+            }
+
+
+            {/* code editor */}
+            { showAce2 &&
+              <div className={fieldGroupClasses}>
+                {/* en */}
+                <div className="field-container font-sm">
+                  <label className="font-small">
+                    Code snippet (En)
+                  </label>
+                  <CodeEditor
+                    onChangeText={this.handleEditor.bind(this, "htmlcontent2")}
+                    initialValue={data.htmlcontent2}
+                    ref={c => this.editor = c}/>
+                </div>
+                {/* pt */}
+                <div className="field-container font-sm">
+                  <label className="font-small">
+                    Code snippet (Pt)
+                  </label>
+                  <CodeEditor
+                    onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")}
+                    initialValue={data.pt_htmlcontent2}
+                    ref={c => this.pt_editor = c}/>
+                </div>
+              </div>
+            }
+            { showRules &&
+              <div className="field-container font-sm u-margin-top-sm">
+                <Switch
+                  id="lax"
+                  checked={data.lax}
+                  onChange={this.handleLax.bind(this)}>
+                  Lax mode
+                </Switch>
+                <RulePicker data={data} parentID={data.id} />
+              </div>
+            }
+
+
+            {/* image */}
+            { showImg &&
+              <div className={fieldGroupClasses}>
+                {/* en */}
+                <div className="field-container">
+                  <img src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} />
+
+
+                  <div className="field-container has-icon font-md u-fullwidth u-margin-top-xs">
+                    <div className="file-select-container">
+                      {/* real field; set to 0 opacity by default, but clickable */}
+                      <input className="field-input" id="profile-photo-select" onChange={this.onImgUpdate.bind(this, "en")} type="file" />
+                      {/* icon */}
+                      <span className="field-icon pt-icon pt-icon-media" />
+                      {/* fake field; :after element used for the "button" */}
+                      <span className="fake-file-select field-input font-md"
+                        data-button-text-sm="Upload image (En)" data-button-text-lg="Browse...">
+                        Upload image (En)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                {/* pt */}
+                <div className="field-container">
+                  <img src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} />
+
+                  <div className="field-container has-icon font-md u-fullwidth u-margin-top-xs">
+                    <div className="file-select-container">
+                      {/* real field; set to 0 opacity by default, but clickable */}
+                      <input className="field-input" id="profile-photo-select" onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
+                      {/* icon */}
+                      <span className="field-icon pt-icon pt-icon-media" />
+                      {/* fake field; :after element used for the "button" */}
+                      <span className="fake-file-select field-input font-md"
+                        data-button-text-sm="Upload image (Pt)" data-button-text-lg="Browse...">
+                        Upload image (Pt)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+
+            {/* quiz */}
+            { showQuiz &&
+              <QuizPicker data={data} parentID={data.id} />
+            }
+
+          </div>
+        </div>
+
+        {/* actions */}
+        <div className="admin-actions-bar">
+          <h2 className="u-visually-hidden">Actions: </h2>
+          <p className="admin-actions-preview font-sm">Preview:
+            <button className="link u-unbutton font-sm" onClick={this.previewSlide.bind(this)}>
+              <span className="u-visually-hidden">preview slide in </span>English
+            </button>
+            <button className="link u-unbutton font-sm" onClick={this.pt_previewSlide.bind(this)}>
+              <span className="u-visually-hidden">preview slide in </span>Portuguese
+            </button>
+          </p>
+          <button className="button" onClick={this.saveContent.bind(this)}>Save</button>
+        </div>
+
+        {/* preview slide */}
         <Dialog
           className="is-fullscreen"
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}
-          title={data.title}
-        >
+          title={data.title}>
           <div id="slide" className="pt-dialog-body">
             <SlideComponent {...data} />
           </div>
@@ -171,124 +413,11 @@ class SlideEditor extends Component {
           className="is-fullscreen"
           isOpen={this.state.pt_isOpen}
           onClose={this.closePreview.bind(this)}
-          title={ptData.title}
-        >
+          title={ptData.title}>
           <div id="slide" className="pt-dialog-body">
             <SlideComponent {...ptData} overrideLang="pt" />
           </div>
         </Dialog>
-
-        <label className="pt-label">
-          id
-          <span className="pt-text-muted"> (required, auto-generated)</span>
-          <input className="pt-input" disabled type="text" placeholder="Enter a unique slide id e.g. slide-1" dir="auto" value={data.id} />
-        </label>
-        <div className="input-block">
-          <label className="pt-label">
-            Title
-            <span className="pt-text-muted"> (required)</span>
-            <input className="pt-input" onChange={this.changeField.bind(this, "title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.title} />
-          </label>
-          <label className="pt-label">
-            pt Title 🇧🇷
-            <span className="pt-text-muted"> (required)</span>
-            <input className="pt-input" onChange={this.changeField.bind(this, "pt_title")} type="text" placeholder="Enter a title for this slide" dir="auto" value={data.pt_title} />
-          </label>
-        </div>
-        <label className="pt-label">
-          Type
-          <span className="pt-text-muted"> (required)</span>
-          <div className="pt-select">
-            <select value={data.type} onChange={this.changeField.bind(this, "type")}>
-              <option value="TextImage">Text Left, Image Right</option>
-              <option value="ImageText">Image Left, Text Right</option>
-              <option value="TextCode">Text Left, Code Right</option>
-              <option value="TextText">Text Left, Text Right</option>
-              <option value="RenderCode">Code Example (non blocking)</option>
-              <option value="InputCode">Code Input (blocking test)</option>
-              <option value="Quiz">Quiz</option>
-              <option value="CheatSheet">Cheat Sheet</option>
-            </select>
-          </div>
-        </label>
-        <div className="area-block">
-          <div className="pt-label">
-            htmlcontent1
-            <QuillWrapper
-              value={this.state.data.htmlcontent1}
-              onChange={this.handleEditor.bind(this, "htmlcontent1")}
-              ref={c => this.quills.push(c) }
-            />
-          </div>
-          <div className="pt-label">
-            pt htmlcontent1  🇧🇷
-            <QuillWrapper
-              value={this.state.data.pt_htmlcontent1}
-              onChange={this.handleEditor.bind(this, "pt_htmlcontent1")}
-              ref={c => this.quills.push(c) }
-            />
-          </div>
-        </div>
-        { showContent2
-          ? showAce2
-            ? <div>
-              <label className="pt-label">
-                htmlcontent2
-                <CodeEditor noZoom={true} style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "htmlcontent2")} initialValue={data.htmlcontent2} ref={c => this.editor = c}/>
-              </label>
-              <label className="pt-label">
-                pt htmlcontent2  🇧🇷
-                <CodeEditor noZoom={true} style={{height: "400px"}} onChangeText={this.handleEditor.bind(this, "pt_htmlcontent2")} initialValue={data.pt_htmlcontent2} ref={c => this.pt_editor = c}/>
-              </label>
-            </div>
-            : <div className="area-block">
-              <div className="pt-label">
-                htmlcontent2
-                { showImg
-                  ? <div className="image-area">
-                    <img src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
-                    <label className="pt-file-upload">
-                      <input onChange={this.onImgUpdate.bind(this, "en")} type="file" />
-                      <span className="pt-file-upload-input">Upload</span>
-                    </label>
-                  </div>
-                  : <QuillWrapper
-                    value={this.state.data.htmlcontent2}
-                    onChange={this.handleEditor.bind(this, "htmlcontent2")}
-                    ref={c => this.quills.push(c) }
-                  />
-                }
-              </div>
-              <div className="pt-label">
-                pt htmlcontent2  🇧🇷
-                {showImg
-                  ? <div className="image-area">
-                    <img src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} /><br/>
-                    <label className="pt-file-upload">
-                      <input onChange={this.onImgUpdate.bind(this, "pt")} type="file" />
-                      <span className="pt-file-upload-input">Upload</span>
-                    </label>
-                  </div>
-                  : <QuillWrapper
-                    value={this.state.data.pt_htmlcontent2}
-                    onChange={this.handleEditor.bind(this, "pt_htmlcontent2")}
-                    ref={c => this.quills.push(c) }
-                  />
-                }
-              </div>
-            </div>
-          : null
-        }
-        { showQuiz ? <QuizPicker data={data} parentID={data.id} /> : null }
-        { showRules
-          ? <div>
-            Lax Mode <Checkbox id="lax" checked={data.lax} onChange={this.handleLax.bind(this)} />
-            <RulePicker data={data} parentID={data.id} />
-          </div> : null
-        }
-        <Button type="button" onClick={this.previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview</Button>&nbsp;
-        <Button type="button" onClick={this.pt_previewSlide.bind(this)} className="pt-button pt-intent-warning">Preview PT</Button>&nbsp;
-        <Button type="button" onClick={this.saveContent.bind(this)}  className="pt-button pt-intent-success">Save</Button>
       </div>
     );
   }

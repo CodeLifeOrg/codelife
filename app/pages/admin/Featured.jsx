@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import CodeBlockCard from "components/CodeBlockCard";
 import ProjectCard from "components/ProjectCard";
-import {Collapse} from "@blueprintjs/core";
+import {Collapse, Tabs2, Tab2} from "@blueprintjs/core";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import "./Featured.css";
 
@@ -36,107 +37,150 @@ class Featured extends Component {
 
   render() {
 
-    const {t} = this.props;
+    const {islands, t} = this.props;
     const {codeBlocks, projects, isCodeBlocksOpen, isProjectsOpen} = this.state;
+    const slice = 12;
 
     const featuredCodeBlocks = codeBlocks
       .filter(cb => cb.featured)
-      .map(cb => 
-        <CodeBlockCard 
-          key={cb.id} 
-          codeBlock={cb} 
-          onToggleFeature={this.onToggleFeature.bind(this)}
-        />
-      );
+      .map(cb => {
+        const {theme, icon} = islands.find(i => i.id === cb.lid);
+        return <CodeBlockCard
+          key={cb.id}
+          codeBlock={cb}
+          theme={theme}
+          icon={icon}
+          onToggleFeature={this.onToggleFeature.bind(this)} />;
+      });
 
     const codeBlocksHead = codeBlocks
       .filter(cb => !cb.featured)
-      .slice(0, 10)
-      .map(cb =>
-        <CodeBlockCard 
-          key={cb.id} 
-          codeBlock={cb} 
-          onToggleFeature={this.onToggleFeature.bind(this)}
-        />
-      );
+      .slice(0, slice)
+      .map(cb => {
+        const {theme, icon} = islands.find(i => i.id === cb.lid);
+        return <CodeBlockCard
+          key={cb.id}
+          codeBlock={cb}
+          theme={theme}
+          icon={icon}
+          onToggleFeature={this.onToggleFeature.bind(this)} />;
+      });
 
     const codeBlocksRest = codeBlocks
       .filter(cb => !cb.featured)
-      .slice(11)
-      .map(cb =>
-        <CodeBlockCard 
-          key={cb.id} 
-          codeBlock={cb} 
-          onToggleFeature={this.onToggleFeature.bind(this)}
-        />
-      );
+      .slice(slice + 1)
+      .map(cb => {
+        const {theme, icon} = islands.find(i => i.id === cb.lid);
+        return <CodeBlockCard
+          key={cb.id}
+          codeBlock={cb}
+          theme={theme}
+          icon={icon}
+          onToggleFeature={this.onToggleFeature.bind(this)} />;
+      });
 
 
     const featuredProjects = projects
       .filter(p => p.featured)
-      .map(p => 
-        <ProjectCard 
-          key={p.id} 
-          project={p} 
+      .map(p =>
+        <ProjectCard
+          key={p.id}
+          project={p}
           onToggleFeature={this.onToggleFeature.bind(this)}
         />
       );
 
     const projectsHead = projects
       .filter(p => !p.featured)
-      .slice(0, 10)
-      .map(p => 
-        <ProjectCard 
-          key={p.id} 
-          project={p} 
+      .slice(0, slice)
+      .map(p =>
+        <ProjectCard
+          key={p.id}
+          project={p}
           onToggleFeature={this.onToggleFeature.bind(this)}
         />
       );
 
     const projectsRest = projects
       .filter(p => !p.featured)
-      .slice(11)
-      .map(p => 
-        <ProjectCard 
-          key={p.id} 
-          project={p} 
+      .slice(slice + 1)
+      .map(p =>
+        <ProjectCard
+          key={p.id}
+          project={p}
           onToggleFeature={this.onToggleFeature.bind(this)}
         />
       );
 
+
+    // Codeblocks panel content
+    const codeblocksPanel =
+    <div className="featured-codeblocks u-margin-top-lg u-text-left">
+      {/* featured Codeblocks */}
+      <h2>{t("ShownOnHomepage")}</h2>
+      <div className="featured-list card-list">
+        { featuredCodeBlocks.length ? featuredCodeBlocks : <LoadingSpinner label={false} /> }
+      </div>
+
+      {/* not featured Codeblocks */}
+      <h2>{t("AddToHomepage")}</h2>
+      <div className="browse-list card-list">
+        { codeBlocksHead }
+      </div>
+
+      <Collapse className="browse-list" isOpen={isCodeBlocksOpen}>
+        { codeBlocksRest }
+      </Collapse>
+
+      {/* show / hide all Codeblocks button */}
+      <button className="button font-md u-fullwidth u-margin-bottom-off" onClick={() => this.setState({isCodeBlocksOpen: !isCodeBlocksOpen})}>{isCodeBlocksOpen ? t("Hide") : t("Show More")} {t("Codeblocks")}</button>
+    </div>;
+
+
+    // Projects panel content
+    const projectsPanel =
+    <div className="featured-projects u-margin-top-lg u-text-left">
+      {/* featured projects */}
+      <h2>{t("ShownOnHomepage")}</h2>
+      <div className="featured-list card-list">
+        { featuredProjects.length ? featuredProjects : <LoadingSpinner label={false} /> }
+      </div>
+
+      {/* not featured projects */}
+      <h2>{t("AddToHomepage")}</h2>
+      <div className="browse-list card-list">
+        { projectsHead }
+      </div>
+      <Collapse className="browse-list" isOpen={isProjectsOpen}>
+        { projectsRest }
+      </Collapse>
+
+      {/* show / hide all projects button */}
+      <button className="button font-md u-fullwidth u-margin-bottom-off" onClick={() => this.setState({isProjectsOpen: !isProjectsOpen})}>{isProjectsOpen ? t("Hide") : t("Show More")} {t("Projects")}</button>
+    </div>;
+
+
     return (
-      <div className="featured content">
-        <h1>{t("CODEBLOCKS")}</h1>
-        <h3>{t("Featured")}</h3>
-        <div className="codeblock-browser-list card-list">
-          { featuredCodeBlocks }
-        </div>
-        <h3>{t("All")}</h3>
-        <div className="codeblock-browser-list card-list">
-          { codeBlocksHead }
-          <button onClick={() => this.setState({isCBOpen: !isCodeBlocksOpen})}>{isCodeBlocksOpen ? t("Hide") : t("Show More")}</button>
-          <Collapse isOpen={isCodeBlocksOpen}>
-            { codeBlocksRest }
-          </Collapse>
-        </div>
-        <h1>{t("PROJECTS")}</h1>
-        <h3>{t("Featured")}</h3>
-        <div className="codeblock-browser-list card-list">
-          { featuredProjects }
-        </div>
-        <h3>{t("All")}</h3>
-        <div className="codeblock-browser-list card-list">
-          { projectsHead }
-          <button onClick={() => this.setState({isProjectsOpen: !isProjectsOpen})}>{isProjectsOpen ? t("Hide") : t("Show More")}</button>
-          <Collapse isOpen={isProjectsOpen}>
-            { projectsRest }
-          </Collapse>
+      <div className="featured-admin">
+
+        <h1 className="u-text-center u-margin-bottom-off">{t("FeaturedTitle")}</h1>
+
+        <div className="admin-sub-tabs-container">
+          <Tabs2 className="admin-sub-tabs" defaultSelectedTabId="featured-codeblocks">
+            <Tab2 id="featured-codeblocks" className="admin-sub-tab" title={t("Codeblocks")} panel={codeblocksPanel} />
+            <Tab2 id="featured-projects" className="admin-sub-tab" title={t("Projects")} panel={projectsPanel} />
+          </Tabs2>
         </div>
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  islands: state.islands
+});
+
+Featured = connect(mapStateToProps)(Featured);
 Featured = connect(state => ({
   auth: state.auth
 }))(Featured);

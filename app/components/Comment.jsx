@@ -1,8 +1,10 @@
 import axios from "axios";
 import {connect} from "react-redux";
 import React, {Component} from "react";
+import {Link} from "react-router";
 import {translate} from "react-i18next";
 import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Popover2} from "@blueprintjs/labs";
 import ReportBox from "components/ReportBox";
 import "./Comment.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
@@ -28,9 +30,10 @@ class Comment extends Component {
     const year = date.getFullYear();
     const month = `0${date.getMonth() + 1}`.slice(-2);
     const day = `0${date.getDate()}`.slice(-2);
-    const hours = `0${date.getHours()}`.slice(-2);
-    const minutes = `0${date.getMinutes()}`.slice(-2);
-    return `${day}/${month}/${year} - ${hours}:${minutes}`;
+    // const hours = `0${date.getHours()}`.slice(-2);
+    // const minutes = `0${date.getMinutes()}`.slice(-2);
+    // return `${day}/${month}/${year} - ${hours}:${minutes}`;
+    return `${day}/${month}/${year}`;
   }
 
   toggleLike() {
@@ -62,51 +65,112 @@ class Comment extends Component {
 
   render() {
 
-    const {t: translate} = this.props;
+    const {context, t} = this.props;
     const {comment} = this.state;
 
-    if (!comment) return <LoadingSpinner />;    
+    if (!comment) return <LoadingSpinner label="false" />;
 
     return (
-      <div className="comment">
-        <div className="comment-title">
-          { comment.title }
-        </div>
-        <div className="comment-user">
-          { comment.user.role === 1 ? <Tooltip content={ translate("Contributor") }><span className="pt-icon-standard pt-icon-book pt-intent-success"></span></Tooltip>
-            : comment.user.role === 2 ? <Tooltip content={ translate("Admin") }><span className="pt-icon-standard pt-icon-star pt-intent-warning"></span></Tooltip>
-              : null }
-          { comment.user.username }
-          <span className="comment-date">
-            { translate("posted on") } { `${this.formatDate(comment.date)}` }
+      context !== "admin"
+        ? <span className="comment-thread thread">
+          <span className="comment-thread-header thread-header">
+
+            <span className="comment-thread-content thread-content">
+
+              {/* post title */}
+              <h4 className="comment-thread-title thread-title u-margin-bottom-off font-md">
+                { comment.title }
+              </h4>
+
+              {/* meta */}
+              <span className="comment-thread-user thread-user font-xs">
+                { t("by") } <Link className="link font-sm" to={ `/profile/${comment.user.username}`}>
+                  { comment.user.username }
+                  {/* role */}
+                  { comment.user.role !== 0 &&
+                    <span className="comment-thread-user-role thread-user-role font-xs"> (
+                      { comment.user.role === 1
+                        ? t("Contributor")
+                        : comment.user.role === 2 &&
+                          t("Admin")
+                      })
+                    </span>
+                  }
+                </Link>
+                {/* date posted */}
+                <span className="comment-thread-date thread-date">
+                  { `${t("on")} ${this.formatDate(comment.date)}` }
+                </span>
+              </span>
+            </span>
+
+            <span className="thread-actions">
+
+              {/* likes */}
+              <p className="card-likes font-xs u-margin-top-off u-margin-bottom-off" id={`thread-${comment.id}`}>
+                <button
+                  className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ comment.liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ comment.likes ? "is-liked" : null }` }
+                  onClick={ this.toggleLike.bind(this) }
+                  aria-labelledby={`thread-${comment.id}`} />
+                <span className="card-likes-count">{ comment.likes }</span>
+                <span className="u-visually-hidden">&nbsp;
+                  { comment.likes === 1 ? t("Like") : t("Likes") }
+                </span>
+              </p>
+
+              {/* flag content */}
+              <Popover2
+                className="card-dialog-flag-container"
+                popoverClassName="pt-popover-content-sizing"
+                interactionKind={PopoverInteractionKind.CLICK}
+                placement="bottom-end" >
+
+                {/* flag button */}
+                <button className={`card-dialog-footer-action codeblock-dialog-footer-action flag-button ${comment.report && "is-flagged" } u-unbutton font-xs`}>
+                  <span className="card-dialog-footer-action-icon codeblock-dialog-footer-action-icon flag-button-icon pt-icon pt-icon-flag" />
+                  <span className="card-dialog-footer-action-text codeblock-dialog-footer-action-text">
+                    {comment.report ? "Flagged" : "Flag"}
+                  </span>
+                </button>
+
+                {/* flag form */}
+                <ReportBox
+                  reportid={comment.id}
+                  contentType="thread"
+                  handleReport={this.handleReport.bind(this)}
+                  permalink={this.props.permalink}
+                />
+              </Popover2>
+            </span>
           </span>
-        </div>
-        <div className="comment-body" dangerouslySetInnerHTML={{__html: comment.content}} />
-        <div className="like-thread">
-          <Button
-            intent={ comment.liked ? Intent.WARNING : Intent.DEFAULT}
-            iconName={ `star${ comment.liked ? "" : "-empty"}` }
-            onClick={ this.toggleLike.bind(this) }
-            text={ `${ comment.likes } ${ comment.likes === 1 ? translate("Like") : translate("Likes") }` }
-          />
-        </div>
-        <div className="report-comment" style={{textAlign: "right"}}>
-          <Popover
-            interactionKind={PopoverInteractionKind.CLICK}
-            popoverClassName="pt-popover-content-sizing"
-            position={Position.TOP_RIGHT}
-            inline={true}
-          >
-            <Button
-              intent={comment.report ? Intent.DANGER : Intent.DEFAULT}
-              iconName="flag"
-              className={ `${comment.report ? "" : "pt-minimal"} pt-small` }
-            />
-            <ReportBox reportid={comment.id} permalink={this.props.permalink} contentType="comment" handleReport={this.handleReport.bind(this)} />
-          </Popover>
-        </div>
-      </div>
-    
+
+          {/* post content */}
+          <span className="comment-thread-body thread-body" dangerouslySetInnerHTML={{__html: comment.content}} />
+        </span>
+
+        // appears in admin ReportViewer.jsx
+        : <td className="thread">{/* post title */}
+
+          <span className="thread-title u-margin-bottom-off">
+            <span className="heading">{ comment.title }</span>
+            {/* <span className="font-xs"> ({ comment.subject_id })</span> */}
+          </span>
+
+          {/* meta */}
+          <span className="thread-user font-xs">
+            { t("by") } <Link className="link" to={ `/profile/${comment.user.username}`}>
+              { comment.user.username }
+            </Link>
+            {/* date posted */}
+            <span className="thread-date">
+              { ` ${t("on")} ${this.formatDate(comment.date)}` }
+            </span>
+          </span>
+
+          {/* comment */}
+          <span className="thread-comment font-sm" dangerouslySetInnerHTML={{__html: comment.content}} />
+
+        </td>
     );
   }
 }

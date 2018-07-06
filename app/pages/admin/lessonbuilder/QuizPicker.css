@@ -2,17 +2,19 @@
   align-items: center;
   display: flex;
   margin-bottom: var(--gutter-xs);
-  & .pt-input {
+
+  & > *:not(:last-child) {
+    margin-right: var(--gutter-md);
+  }
+
+  & .pt-switch {
+    width: 3rem;
+    margin-right: var(--gutter-sm);
+  }
+  & .field-container {
     flex: 1;
-    margin-right: var(--gutter-xs);
-    &.en {
-      margin-right: var(--gutter-md);
-    }
   }
-  & .pt-checkbox {
-    margin: 0 var(--gutter-xs);
-  }
-  & .pt-button {
-    margin: 0 var(--gutter-xxs);
+  & .quiz-actions {
+    width: 7.5rem;
   }
 }

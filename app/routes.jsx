@@ -22,7 +22,7 @@ import LessonPlan from "pages/LessonPlan";
 import Leaderboard from "pages/Leaderboard";
 import Error from "pages/Error";
 
-//import Contest from "pages/Contest";
+// import Contest from "pages/Contest";
 
 export default function RouteCreate() {
 

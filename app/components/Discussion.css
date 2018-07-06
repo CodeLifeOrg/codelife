@@ -5,8 +5,19 @@
   display: block; /* make margin work as intended */
   margin: var(--gutter-md) auto var(--gutter-xl);
   min-width: var(--button-double-width);
-  top: var(--gutter-md);
+  top: calc(var(--gutter-lg) + 1px);
   z-index: 1;
+
+  @add-mixin max-sm {
+    top: 1.5em;
+  }
+
+  /* space out the footer on big screens */
+  @add-mixin min-sm {
+    &.is-inactive {
+      margin-bottom: 10rem;
+    }
+  }
 }
 
 /* main container */
@@ -16,10 +27,10 @@
   flex-direction: column;
   justify-content: space-between;
   margin: -105px var(--gutter-md) var(--gutter-md) var(--gutter-md);
-  padding: var(--gutter-xl) var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  padding: var(--gutter-lg) var(--gutter-md);
 
   @add-mixin min-sm {
-    padding-top: var(--gutter-md);
+    padding-top: var(--gutter-lg);
   }
 
   & .discussion-inner {
@@ -30,18 +41,44 @@
     }
   }
 
-  /* title */
   & .discussion-heading {
-    margin-bottom: var(--gutter-md);
-    letter-spacing: 1px;
-    /* text-transform: uppercase; */
-    top: 1px; /* fudge into place */
+    margin-bottom: var(--gutter-sm);
+    margin-top: 1rem;
+
+    /* fudge title into place */
+    @add-mixin min-sm {
+      margin-top: -0.5rem;
+      margin-bottom: var(--gutter-md);
+    }
   }
 
   /* sort by */
   & .sort-bar {
-    margin-bottom: var(--gutter-md); /* space out content on small screens */
-    top: -var(--gutter-xs);
+
+    & .sort-bar-label,
+    & .sort-bar-select {
+      display: inline-block;
+      width: auto;
+    }
+
+    & .sort-bar-label {
+      left: -10px; /* offset blueprint */
+    }
+
+    /* blueprint override */
+    & .pt-select:after {
+      right: 1.5em;
+    }
+
+    @add-mixin max-sm {
+      margin-top: 1.625em;
+    }
+
+    /* stacked layout */
+    @add-mixin max-xs {
+      margin-bottom: var(--gutter-md);
+      margin-top: -0.5em; /* override above */
+    }
 
     /* take button out of the flow and center */
     @add-mixin min-xs {
@@ -51,117 +88,127 @@
     }
 
     & .pt-select {
+
       margin-left: var(--gutter-xs);
     }
   }
   & .threads {
-    margin-top: var(--gutter-md);
-    margin-bottom: var(--gutter-md);
+    z-index: 1; /* make popovers appear above hide discussion button */
+  }
 
-    & .thread {
-      padding: var(--gutter-sm) 0;
+  & .thread {
+    padding: var(--gutter-md);
+    background-color: var(--white);
+
+    &:not(.comment-thread) {
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 1em rgba(8, 26, 24, 0.25);
 
       & + .thread {
-        border-top: 1px solid var(--light-1);
+        margin-top: var(--gutter-sm);
       }
+    }
 
-      & .thread-header {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    & .pt-icon {
+      margin-right: var(--gutter-xxs);
+    }
 
-        & .thread-content {
-          & .thread-title {
-            font-size: 18px;
-            font-weight: bold;
-          }
-          & .thread-user {
-            & .pt-icon-standard {
-              margin-right: var(--gutter-xxs);
-              opacity: 0.75;
-            }
-            & .thread-date {
-              font-size: 12px;
-              margin-left: var(--gutter-xxs);
-              opacity: 0.75;
-            }
-          }
-          & .thread-body {
-            margin: var(--gutter-xs) 0 0;
-          }
-        }
-        & .thread-actions {
-          display: flex;
-          align-items: center;
+    /* reset span display */
+    &, & span {
+      display: block;
+    }
 
-          & > * {
-            display: inline-block;
-            margin-left: var(--gutter-xs);
-            vertical-align: top;
+    & .pt-button > span,
+    & .link > span,
+    & .card-likes *,
+    & .flag-button * {
+      display: inline-block;
+    }
+
+    & .thread-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+
+      & .thread-content {
+        & .thread-user {
+
+         & * {
+          display: inline;
+         }
+          & .thread-date {
+            margin-left: var(--gutter-xxs);
           }
         }
       }
-      & .comments {
-        & .comment {
-          border-bottom: 1px solid var(--light-2);
-          padding: var(--gutter-xs) var(--gutter-md);
-          &:first-child {
-            border-top: 1px solid var(--light-2);
-            margin-top: var(--gutter-xs);
-          }
-          & .comment-title {
-            font-size: 14px;
-            font-weight: bold;
-          }
-          & .comment-user {
-            font-size: 12px;
-            & .pt-icon-standard {
-              font-size: 14px;
-              margin-right: var(--gutter-xxs);
-              opacity: 0.75;
-            }
-            & .comment-date {
-              font-size: 12px;
-              margin-left: var(--gutter-xxs);
-              opacity: 0.75;
-            }
-          }
-          & .comment-body {
-            margin: var(--gutter-xs) 0 0;
-          }
-          & .report-comment {
-            position: absolute;
-            right: var(--gutter-xs);
-            top: var(--gutter-xs);
-          }
+      & .thread-actions {
+
+        & > * {
+          display: inline-block;
+          margin-left: var(--gutter-sm);
+          vertical-align: middle;
         }
+
+        & .card-likes {
+          text-transform: lowercase;
+        }
+      }
+
+    }
+    & .thread-body {
+      padding-top: var(--gutter-xs);
+    }
+    & .comment-thread {
+      /* sizing */
+      padding: var(--gutter-xxs) var(--gutter-sm);
+      /* theming */
+      border-left: var(--gutter-xxs) solid var(--sky-black);
+      /* transitions */
+      transition:
+        background 0.2s,
+        border-color 0.2s;
+
+      &:first-of-type {
+        margin-top: var(--gutter-sm);
+      }
+
+      /* interactions */
+      &:hover,
+      &:focus-within {
+        background-color: color(var(--light-1) a(33.333%));
+        border-left-color: var(--sky-dark);
       }
     }
   }
-  & .new-comment, & .new-thread {
-    & .new-comment-title, & .new-thread-title {
-      font-weight: bold;
-      margin: var(--gutter-xs) 0;
-      letter-spacing: 1px;
-      /* text-transform: uppercase; */
-    }
-    & .pt-input {
-      margin: 0 0 var(--gutter-xs);
-      width: 100%;
-    }
-    & .quill {
-      margin-top: var(--gutter-xs);
-      margin-bottom: var(--gutter-md);
 
-      & .ql-toolbar {
-        background: var(--white);
-        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-      }
-      & .ql-container {
-        background: var(--white);
-        border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-        min-height: 100px;
-      }
+  /* style inputs */
+  & .pt-input {
+    margin: 0 0 var(--gutter-xs);
+    width: 100%;
+  }
+  & .quill {
+    margin-top: var(--gutter-xs);
+    margin-bottom: var(--gutter-md);
+
+    & .ql-toolbar {
+      background: var(--white);
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+    & .ql-container {
+      background: var(--white);
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      min-height: 100px;
+    }
+  }
+  & .new-thread {
+    @add-mixin min-xs {
+      margin-top: var(--gutter-lg);
+    }
+
+    & .new-thread-title {
+      margin: var(--gutter-xs) 0;
+      /* text-transform: uppercase; */
     }
     & .post-button-container {
       text-align: left;

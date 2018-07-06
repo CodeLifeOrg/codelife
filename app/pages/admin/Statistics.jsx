@@ -137,7 +137,7 @@ class Statistics extends Component {
     return (
       <div id="statistics" className="statistics">
 
-        <h1 className="u-text-center u-margin-bottom-off">Usage statistics</h1>
+        <h1 className="u-text-center u-margin-bottom-off">{t("Statistics")}</h1>
 
         <div className="admin-sub-tabs-container">
           <Tabs2 className="admin-sub-tabs"
@@ -243,7 +243,7 @@ class Statistics extends Component {
             </tbody>
           </table>
           : mounted
-            ? <NonIdealState visual="time" title="No Data Available" description="There were no new accounts created during the selected period." />
+            ? <NonIdealState visual="time" title={t("No Data Available")} description={t("There were no new accounts created during the selected period")} />
             : <LoadingSpinner label={false} />
         }
 

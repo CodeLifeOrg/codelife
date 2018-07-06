@@ -205,7 +205,7 @@ class ReportViewer extends Component {
 
     return (
       <div id="ReportViewer">
-        <h1 className="font-xl u-text-center u-margin-bottom-off">Flagged content</h1>
+        <h1 className="font-xl u-text-center u-margin-bottom-off">{t("Flagged Content")}</h1>
 
         { mounted
           // no flagged content in the queue

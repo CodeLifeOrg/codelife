@@ -51,6 +51,8 @@ class LessonBuilder extends Component {
 
       const nodes = [];
 
+      const isPT = this.props.location.hostname.includes("pt.");
+
       for (let i of islands) {
         i = this.fixNulls(i);
         const islandObj = {
@@ -58,7 +60,7 @@ class LessonBuilder extends Component {
           className: i.id,
           hasCaret: true,
           iconName: i.is_latest ? "take-action" : "map-marker",
-          label: i.name,
+          label: isPT ? i.pt_name : i.name,
           itemType: "island",
           parent: {childNodes: nodes},
           childNodes: [],
@@ -76,7 +78,7 @@ class LessonBuilder extends Component {
             className: l.id,
             hasCaret: true,
             iconName: "multi-select",
-            label: l.name,
+            label: isPT ? l.pt_name : l.name,
             itemType: "level",
             parent: islandNode,
             childNodes: [],
@@ -99,7 +101,7 @@ class LessonBuilder extends Component {
             className: s.id,
             hasCaret: false,
             iconName: slideIcons[s.type],
-            label: s.title,
+            label: isPT ? s.pt_title : s.title,
             itemType: "slide",
             parent: levelNode,
             data: s
@@ -422,14 +424,16 @@ class LessonBuilder extends Component {
 
   reportSave(newData) {
     const {currentNode} = this.state;
-    if (currentNode.itemType === "island" || currentNode.itemType === "level") currentNode.label = newData.name;
-    if (currentNode.itemType === "slide") currentNode.label = newData.title;
+    const isPT = this.props.location.hostname.includes("pt.");
+    if (currentNode.itemType === "island" || currentNode.itemType === "level") currentNode.label = isPT ? newData.pt_name : newData.name;
+    if (currentNode.itemType === "slide") currentNode.label = isPT ? newData.pt_title : newData.title;
     this.setState({currentNode});
   }
 
   render() {
 
     const {nodes, currentNode, mounted} = this.state;
+    const {t} = this.props;
 
     // if (!nodes) return <LoadingSpinner />;
 
@@ -455,7 +459,7 @@ class LessonBuilder extends Component {
                   ? <SlideEditor data={currentNode.data} reportSave={this.reportSave.bind(this)}/>
                   : null
             : mounted
-              ? <NonIdealState title="No Island Selected" description="Please select an island from the menu on the left." visual="path-search" />
+              ? <NonIdealState title={t("No Island Selected")} description={t("Please select an island from the menu on the left")} visual="path-search" />
               : <LoadingSpinner label={false} />
           }
         </div>
@@ -465,7 +469,8 @@ class LessonBuilder extends Component {
 }
 
 LessonBuilder = connect(state => ({
-  auth: state.auth
+  auth: state.auth,
+  location: state.location
 }))(LessonBuilder);
 LessonBuilder = translate()(LessonBuilder);
 export default LessonBuilder;

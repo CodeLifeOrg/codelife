@@ -54,6 +54,7 @@ class RuleBuilder extends Component {
   render() {
 
     const {mounted, rules} = this.state;
+    const {t} = this.props;
     let ruleItems = [];
 
     if (mounted) {
@@ -76,13 +77,13 @@ class RuleBuilder extends Component {
 
     return (
       <div className="rulebuilder">
-        <h1 className="font-xl u-text-center u-margin-bottom-off">Rule builder</h1>
+        <h1 className="font-xl u-text-center u-margin-bottom-off">{t("Rule Builder")}</h1>
         {mounted && rules !== null ? ruleItems : <LoadingSpinner label={false} />}
 
         <h2 className="u-visually-hidden">Actions: </h2>
         <div className="field-container">
           <button className="button" onClick={this.saveContent.bind(this)}>
-            Save changes
+            {t("Save changes")}
           </button>
         </div>
       </div>

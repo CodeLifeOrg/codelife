@@ -31,6 +31,16 @@ class App extends Component {
     return {browserHistory: this.props.router};
   }
 
+  simpleRedirect() {
+    const {location} = this.props;
+    const {hostname} = location;
+    const roothost = location.host.replace("pt.", "").replace("en.", "");
+    const isRoot = !hostname.includes("en.") && !hostname.includes("pt.");
+    if (isRoot && window) {
+      window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
+    } 
+  }
+
   redirect(userprofile) {
     const {location} = this.props;
     const {hostname} = location;
@@ -71,18 +81,18 @@ class App extends Component {
         axios.get("/api/profileping").then(resp => {
           // On Mounting the app, we need to create a blank user in userprofiles that associates
           // with the user in canon's users.  This calls findOrCreate to make that happen.
-          this.redirect.bind(this)(resp.data[0]);
+          // this.redirect.bind(this)(resp.data[0]);
         });
       }
       // if it did not result in a user, send them to pt
       else {
-        this.redirect.bind(this)();
+        // this.redirect.bind(this)();
       }
     }
   }
 
   componentDidMount() {
-    //this.redirect.bind(this)();
+    this.simpleRedirect.bind(this)();
 
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");

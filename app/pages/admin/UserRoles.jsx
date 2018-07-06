@@ -45,7 +45,7 @@ class UserRoles extends Component {
 
     return (
       <div className="admin-roles">
-        <h1 className="font-xl u-text-center u-margin-bottom-off">User roles</h1>
+        <h1 className="font-xl u-text-center u-margin-bottom-off">{t("User roles")}</h1>
 
         { !users.length && <LoadingSpinner label={false} /> }
 
@@ -53,7 +53,7 @@ class UserRoles extends Component {
           <div className="admin-user-column">
             { adminUsers.length
               ? <div className="admin-user-group">
-                <h2 className="admin-user-heading u-margin-top-lg u-margin-bottom-sm">Admins</h2>
+                <h2 className="admin-user-heading u-margin-top-lg u-margin-bottom-sm">{t("Admin")}</h2>
                 <ul className="admin-user-list font-sm u-list-reset">
                   { adminUsers.map(user =>
                     <li className="admin-user-item" key={ user.id } data-username={ `${user.username} ${user.name ? user.name : null }` }>
@@ -76,7 +76,7 @@ class UserRoles extends Component {
 
             { contributorUsers.length
               ? <div className="admin-user-group">
-                <h2 className="admin-user-heading u-margin-top-lg u-margin-bottom-sm">Contributors</h2>
+                <h2 className="admin-user-heading u-margin-top-lg u-margin-bottom-sm">{t("Contributor")}</h2>
                 <ul className="admin-user-list font-sm u-list-reset">
                   { contributorUsers.map(user =>
                     <li className="admin-user-item" key={ user.id } data-username={ `${user.username} ${user.name ? user.name : null }` }>
@@ -101,7 +101,7 @@ class UserRoles extends Component {
           { basicUsers.length
             ? <div className="admin-user-column">
               <div className="admin-user-group">
-                <h2 className="admin-user-heading u-margin-top-lg u-margin-bottom-sm">Users</h2>
+                <h2 className="admin-user-heading u-margin-top-lg u-margin-bottom-sm">{t("User")}</h2>
                 <ul className="basic-admin-user-list admin-user-list font-sm u-list-reset">
                   { basicUsers.map(user =>
                     <li className="admin-user-item" key={ user.id } data-username={ `${user.username} ${user.name}` }>

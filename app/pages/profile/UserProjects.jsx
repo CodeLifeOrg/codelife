@@ -44,8 +44,8 @@ class UserProjects extends Component {
     const {loading, projects} = this.state;
 
     // set heading text
-    let heading = `${ user.name || user.username }’s ${ t("Projects") }`;
-    myProfile === true ? heading = `${ t("My")} ${ t("Projects") } ` : null;
+    let heading = t("UserProjectsList", {username: user.name || user.username});
+    myProfile === true ? heading = t("My Projects") : null;
 
     if (loading) return <h2>{ t("Loading projects") }...</h2>;
 

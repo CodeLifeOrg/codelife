@@ -226,10 +226,10 @@ class Nav extends Component {
             <span className="link language-icon-container">
               <span className="link-icon pt-icon-standard pt-icon-globe" />
             </span>
-            <a className="link language-link" onClick={this.selectLang.bind(this, "en", languageLinks[0].link)} key={languageLinks[0].id} /*href={languageLinks[0].link}*/>
+            <a className="link language-link" onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)} key={languageLinks[1].id}>{languageLinks[1].shortTitle}</a>
+            <a className="link language-link" onClick={this.selectLang.bind(this, "en", languageLinks[0].link)} key={languageLinks[0].id}>
               {languageLinks[0].shortTitle}
             </a>
-            <a className="link language-link" onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)} key={languageLinks[1].id} /*href={languageLinks[1].link}*/>{languageLinks[1].shortTitle}</a>
           </div>
           : <div className="link-list font-sm">
 
@@ -250,11 +250,11 @@ class Nav extends Component {
             </Link>
 
             {/* language select */}
+            <a className="link language-link" key={languageLinks[1].id} onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}>{languageLinks[1].title}</a>
             <a className="link language-link" key={languageLinks[0].id} onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}>
               <span className="link-icon pt-icon-standard pt-icon-globe" />
               {languageLinks[0].title}
             </a>
-            <a className="link language-link" key={languageLinks[1].id} onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}>{languageLinks[1].title}</a>
           </div> }
         <Dialog
           className="form-container"

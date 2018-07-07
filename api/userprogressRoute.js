@@ -25,6 +25,7 @@ module.exports = function(app) {
 
             // Do not set the currentIsland to an unreleased island.
             if (latestUserIslandIndex >= latestReleasedIsland.ordering) latestUserIslandIndex = latestReleasedIsland.ordering;
+            if (latestUserIslandIndex <= 0) latestUserIslandIndex = 0;
 
             const currentIsland = islands.find(i => i.ordering === latestUserIslandIndex);
             returnObj.current = currentIsland;

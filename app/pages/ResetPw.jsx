@@ -4,6 +4,10 @@ import {translate} from "react-i18next";
 import {PasswordReset} from "../components/PasswordReset";
 import "./ResetPw.css";
 
+/**
+ * Very small wrapper class for PasswordReset Component
+ */
+
 class ResetPw extends Component {
 
   constructor(props) {

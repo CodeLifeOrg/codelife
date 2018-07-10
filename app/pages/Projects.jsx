@@ -134,7 +134,12 @@ class Projects extends Component {
     this.setState({execState});
   }
 
-  
+  /**
+   * Callback for the create new project button. Trims the name of URL-breakers and whitespace,
+   * posts an empty project to the API endpoint, and refreshes the project list from that API
+   * payload so the Project List accurately reflects the new project collection. Update the URL
+   * when the project is finished opening.
+   */ 
   createNewProject(projectName) {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace and remove URL-breakers from the project title
@@ -165,8 +170,14 @@ class Projects extends Component {
     }
   }
 
+  /**
+   * Opens the popover to name the project (which eventually calles createNewProject)
+   */
   clickNewProject() {
     const {t} = this.props;
+    // As explained in CodeEditor, the editor itself is the only place where it is known
+    // if the user has changed the file. Reach in (using withRef:true) directly to a public
+    // function there to ask the editor if changes have been made.
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       this.setState({isNewOpen: true});
     }
@@ -176,6 +187,9 @@ class Projects extends Component {
     }
   }
 
+  /**
+   * Deprecated / unused function
+   */
   shareProject() {
     const {t} = this.props;
     const {username} = this.props.auth.user;
@@ -190,6 +204,12 @@ class Projects extends Component {
     }
   }
 
+  /**
+   * The alerts in this component have two states, false, or "truthy," that is, leaveAlert=false
+   * means that the window closed, and setting leaveAlert to *what you want the alert to say* 
+   * makes it truthy, and therefore open. This click callback is the "are you sure" dialogue
+   * for leaving a collaboration
+   */
   showLeaveAlert(collab) {
     const {t} = this.props;
     const leaveAlert = {
@@ -199,6 +219,11 @@ class Projects extends Component {
     this.setState({leaveAlert});
   }
 
+  /** 
+   * Upon confirming that this user wants to leave a collab, remove that user from
+   * the collabs tabel. Additionally, filter it out in state. Either way, close the 
+   * leaveAlert 
+   */
   leaveCollab() {
     const {collab} = this.state.leaveAlert;
     const {projects} = this.state;
@@ -222,14 +247,26 @@ class Projects extends Component {
     }
   }
 
+  /** 
+   * Though users are normally invited to share new projects on facebook, they may elect to 
+   * opt out and "never show this again" which needs to write to their userprofile
+   */
   handleCheckbox() {
     this.setState({optout: !this.state.optout});
   }
 
+  /** 
+   * Delete a given project. The argument here is confusing - originally clicking delete would
+   * delete the project immediately. The addition of a deleteAlert (similar to leaveAlert) stores
+   * the project to be deleted in the deleteAlert.
+   */
   deleteProject(project) {
     const {t} = this.props;
     const {browserHistory} = this.context;
 
+    // If the user has clicked "Yes I'm Sure" in the dialog box, then this method is invoked
+    // with true as the argument. Retrieve the project id from the deleteAlert, post it to the API,
+    // and refresh the project list.
     if (project === true) {
       const {deleteAlert} = this.state;
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
@@ -260,6 +297,9 @@ class Projects extends Component {
         }
       });
     }
+    // If project is not true, then it is a project object. Open the "Are you sure" deleteAlert,
+    // and save the project there (this method will be called again later, with true as the 
+    // argument, when the user clicks OK)
     else {
       this.setState({deleteAlert: {
         project,
@@ -270,12 +310,10 @@ class Projects extends Component {
 
   }
 
-  // TODO: i'm loading studentcontent twice.  once when we instantiate projects, and then again
-  // when you click a project.  I did this so that clicks would respect new writes, but i should
-  // find a way to only ever ask for studentcontent once, on-demand only.
-
-  // Also, the return value here is because Projects.jsx needs to know if I clicked confirm or not.
-
+  /**
+   * When a user clicks a project, attempt to open it. Reach into the CodeEditor and check 
+   * if changes have been made, and if so, block the opening attempt until they save.
+   */
   onClickProject(project) {
     const {t} = this.props;
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
@@ -292,10 +330,15 @@ class Projects extends Component {
     }
   }
 
+  /** 
+   * Prepare a payload containing the filename, id, content, etc to be sent to the update api.
+   * If this is the first time the user is saving a project, offer to share it on Facebook.
+   * Note that this is one of the many places in Codelife where a 5 second timer is used to allow
+   * the screenshot time to process
+   */
   saveCodeToDB() {
     const {t} = this.props;
     const {currentProject} = this.state;
-
 
     if (currentProject) {
       const id = currentProject.id;
@@ -334,6 +377,10 @@ class Projects extends Component {
     }
   }
 
+  /**
+   * Callback for closing the share window, save the users preference if they asked 
+   * not to be asked again.
+   */
   closeFirstTimeShare() {
     if (this.state.optout) {
       axios.post("/api/profile/update", {prompted: true}).then(resp => {
@@ -343,10 +390,20 @@ class Projects extends Component {
     this.setState({isFirstSaveShareOpen: false});
   }
 
+  /**
+   * Reach into the CodeEditor and call the executeCode function. This requires manual 
+   * execution - otherwise if the user was writing something like "alert()" then it would 
+   * render every single keystroke
+   */ 
   executeCode() {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
+  /**
+   * On most parts of the site, forking a codeblock is as easy as creating the project
+   * and navigating the user to that page. However, if a user forks a codeblock from HERE
+   * on the project page, a slightly different behavior is required
+   */
   handleFork(newid, projects) {
     this.setState({projects}, this.openProject.bind(this, newid));
   }
@@ -355,6 +412,10 @@ class Projects extends Component {
     this.setState({showCodeblocks: !this.state.showCodeblocks});
   }
 
+  /** 
+   * Rename a project. Set title editability to false temporarily and prune URL-breakers
+   * and leading/trailing whitespace from the new name. Write the project to the db and update state
+   */ 
   changeProjectName(newName) {
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
@@ -370,6 +431,9 @@ class Projects extends Component {
     this.saveCodeToDB.bind(this)();
   }
 
+  /** 
+   * Keyboard callbacks
+   */
   handleKey(e) {
     const {currentProject} = this.state;
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;

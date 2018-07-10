@@ -5,7 +5,7 @@ import {Link} from "react-router";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Position, Tooltip, Dialog} from "@blueprintjs/core";
+import {Dialog} from "@blueprintjs/core";
 
 import LoadingSpinner from "components/LoadingSpinner";
 import Discussion from "components/Discussion";
@@ -21,7 +21,15 @@ import CheatSheet from "components/slidetypes/CheatSheet";
 
 import "./Slide.css";
 
+// A component cannot be dynamically instantiated via a string unless references to the 
+// classes are stored directly in a lookup object such as this one.
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
+
+/**
+ * The slide component is the wrapper for all the various slidetypes in Codelife. However, 
+ * it interacts a great deal with the db and greater site, as reaching the last slide 
+ * updates user progress, and each slide has a Discussion board beneath it.
+ */
 
 class Slide extends Component {
 

@@ -21,6 +21,13 @@ import CheatSheet from "components/slidetypes/CheatSheet";
 
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
 
+/**
+ * A public-facing listing of all slides and quizzes, to be used by teachers as a lesson plan,
+ * students as a reference guide, and to aid in directing users to the site via search engines.
+ * Lesson plan uses Canon's "Needs" to render the page serverside, so that the page is indexable
+ * by SEO bots
+ */
+ 
 class LessonPlan extends Component {
 
   constructor(props) {
@@ -44,8 +51,6 @@ class LessonPlan extends Component {
 
     let levelSections = [];
     let levelTOC = [];
-
-
 
     // loop through levels
     if (lid) {
@@ -252,6 +257,8 @@ class LessonPlan extends Component {
   }
 }
 
+// This is a canon "need" - ensuring this data will be rendered serverside and appear in the 
+// source code. Canon allows for variables inside <> marks, use this to set the language.
 LessonPlan.need = [
   fetchData("islands", "/api/islands/nested?lang=<i18n.locale>")
 ];

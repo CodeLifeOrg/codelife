@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Link} from "react-router";
 import {translate} from "react-i18next";
 import axios from "axios";
 import CTA from "components/CTA";
@@ -55,7 +54,7 @@ class Home extends Component {
 
   render() {
 
-    const {islands, locale, t, user} = this.props;
+    const {islands, locale, user} = this.props;
     const {codeBlocks, current, dbLoaded, progress, projects} = this.state;
 
     let loggedOut = true;

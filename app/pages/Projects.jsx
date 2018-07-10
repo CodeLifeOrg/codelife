@@ -17,6 +17,11 @@ import ShareFacebookLink from "components/ShareFacebookLink";
 import "components/Studio.css";
 import "./Projects.css";
 
+/**
+ * Projects is one of the largest Pages in codelife - It is responsible for all CRUD
+ * operations of projects, processing screenshots, and listing user codeblocks for inspiration.
+ * Longer term, this should be refactored into smaller components.
+ */
 class Projects extends Component {
 
   constructor(props) {
@@ -45,6 +50,10 @@ class Projects extends Component {
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
+  /**
+   * On Mount, retrieve all projects by the logged in user, as well as the projects by OTHER users
+   * with whom the logged in user is listed as a collaborator, and put these in state.
+   */
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
     const cget = axios.get("/api/projects/collabs");
@@ -55,6 +64,7 @@ class Projects extends Component {
       const collabs = resp[1].data;
 
       let {currentProject} = this.state;
+      // The URL holds direct links to projects. If the URL has a project link, try to open it
       const {filename} = this.props.params;
       if (filename) {
         currentProject = projects.find(p => p.slug === filename);
@@ -63,9 +73,12 @@ class Projects extends Component {
         this.setState({currentProject, projects, collabs}, this.openProject.bind(this, currentProject.id));
       }
       else {
+        // if the URL had no filename, and the API gave no projects, this user has never made a
+        // project, so auto-open their first one.
         if (projects.length === 0) {
           this.createNewProject.bind(this)(t("My Project"));
         }
+        // If this user HAS projects, open the one most recently modified.
         else {
           let latestIndex = 0;
           let latestDate = projects[0].datemodified;
@@ -92,11 +105,16 @@ class Projects extends Component {
     clearTimeout(this.timeout);
   }
 
+  /**
+   * Given a project id, open the project itself by fetching it from the database and loading it
+   * into state. Set the URL so it continues to match the open project permalink
+   */
   openProject(pid) {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       if (resp.data) {
         this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
+        // Slugs were added later in codelife, and some projects don't have them. Try a slug, otherwise use name
         if (resp.data.slug) {
           browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
         }
@@ -107,10 +125,16 @@ class Projects extends Component {
     });
   }
 
+  /**
+   * The embedded CodeEditor is the only component that knows if the user has used javascript
+   * in their project. When this changes in CodeEditor, it bubbles that up via this callback
+   * so that Projects can dynamically show and hide an "Execute Code" button
+   */
   setExecState(execState) {
     this.setState({execState});
   }
 
+  
   createNewProject(projectName) {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace and remove URL-breakers from the project title

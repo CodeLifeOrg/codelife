@@ -159,16 +159,24 @@ class Level extends Component {
     this.setState({currentIsland});
   }
 
+  /**
+   * Called when the user finishes an island for the first time. Calls a refresh on the data
+   * to unlock codeblocks, shows the victory message, and invites the user to the next island.
+   */
   onFirstCompletion() {
-    // TODO: i'm reloading everything here because after the first completion, we need to
-    // unlock all codeblocks AND show your brand-new written one at the top of the list.
-    // perhaps revisit if this is on the heavy DB-interaction side?
+    // Upon beating the level, the user needs all codeblocks to unlock, as well as add theirs
+    // to the top of the list. It's a little db-heavy to hit the db here, maybe revisit this.
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
     this.setState({winMessage, winOpen: true, canPostToFacebook: false}, this.toggleTest.bind(this));
+    // As documented in codeblocksroute, screenshots take a bit of time to be processed.
+    // This timeout ensures that the user doesn't share a picture before it's processed.
     this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
   }
 
+  /**
+   * Upon Closing the winning pop-up, send the player to the next island. 
+   */
   closeOverlay() {
     // TODO: take out island 4 catcher after august (completed)
     // TODO2: blocker added back in for november
@@ -184,10 +192,18 @@ class Level extends Component {
     }
   }
 
+  /**
+   * Levels and Islands are mixed together in a single array - so this can be used to test if
+   * a user has beaten a level (e.g. hello-world) or an entire island (e.g. island-1).
+   */
   hasUserCompleted(milestone) {
     return this.state.userProgress.find(up => up.level === milestone);
   }
 
+  /** 
+   * The codeblocks underneath the island need to be informed via a callback when they are 
+   * liked or unliked, as this affects the sorting.
+   */ 
   reportLike(codeBlock) {
     let likedCodeBlocks = this.state.likedCodeBlocks.slice(0);
     let unlikedCodeBlocks = this.state.unlikedCodeBlocks.slice(0);
@@ -205,6 +221,9 @@ class Level extends Component {
     this.setState({likedCodeBlocks, unlikedCodeBlocks});
   }
 
+  /**
+   * Used to determine if the final test should be shown.
+   */
   allLevelsBeaten() {
     const {levels} = this.state;
     if (levels && levels.length) {
@@ -219,6 +238,10 @@ class Level extends Component {
     }
   }
 
+  /**
+   * If a user has beaten all the levels on this island, but has NOT created a codeblock yet,
+   * they are in the state were the codeblock need be prompted
+   */
   promptFinalTest() {
     return this.allLevelsBeaten() && !this.state.currentIsland.codeBlock;
   }
@@ -231,6 +254,10 @@ class Level extends Component {
     this.setState({checkpointOpen: false});
   }
 
+  /**
+   * Checkpoint is a pop-up that appears after level 1, asking the user to share their
+   * school. This is the api callback to update their profile
+   */
   saveCheckpoint() {
     if (this.state.school && this.state.school.id) {
       axios.post("/api/profile/update", {sid: this.state.school.id}).then(resp => {
@@ -240,6 +267,10 @@ class Level extends Component {
     this.setState({checkpointOpen: false});
   }
 
+  /**
+   * If the user elects not to provide their school, write a hard-coded -1 to their sid.
+   * This saves the "prefer not to answer" choice and prevents future popups.
+   */
   skipCheckpoint() {
     axios.post("/api/profile/update", {sid: -1}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
@@ -255,6 +286,11 @@ class Level extends Component {
 
   }
 
+  /** 
+   * This was written early in the project, before the Component nesting of React was 
+   * fully put to use. This method encapsulates the checkpoint popover - but this should
+   * obviously be moved to a component, not a method.
+   */
   buildCheckpointPopover() {
     const {t} = this.props;
     const {theme} = this.state.currentIsland;
@@ -302,6 +338,11 @@ class Level extends Component {
     );
   }
 
+  /** 
+   * This was written early in the project, before the Component nesting of React was 
+   * fully put to use. This method encapsulates the "You Win" popover - but this should
+   * obviously be moved to a component, not a method.
+   */
   buildWinPopover() {
 
     const {t} = this.props;
@@ -310,6 +351,7 @@ class Level extends Component {
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
     let snippetname = "";
+    // Slugs were not introduced until later in Codelife - if one doesn't exist, fall back to name
     if (currentIsland.codeBlock) {
       snippetname = currentIsland.codeBlock.slug ? currentIsland.codeBlock.slug : currentIsland.codeBlock.snippetname;
     }
@@ -346,6 +388,11 @@ class Level extends Component {
     );
   }
 
+  /** 
+   * This was written early in the project, before the Component nesting of React was 
+   * fully put to use. This method encapsulates the test popover - but this should
+   * obviously be moved to a component, not a method.
+   */
   buildTestPopover() {
     const {t} = this.props;
     const {currentIsland} = this.state;

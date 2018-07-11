@@ -4,6 +4,11 @@ import {translate} from "react-i18next";
 import {RadioGroup, Radio, Intent, Position, Toaster} from "@blueprintjs/core";
 import LoadingSpinner from "components/LoadingSpinner";
 
+/**
+ * Completed/Deprecated Survey Module from a 2017 Survey that followed a beta test in 
+ * Minas Gerais. Consists of Radio buttons and a DB post.
+ */
+
 class Survey extends Component {
 
   constructor(props) {
@@ -55,8 +60,7 @@ class Survey extends Component {
 
   submit() {
     console.log("submitting:", this.state);
-    axios.post("/api/survey/", {survey: this.state}).then(resp => {
-      const responseData = resp.data;
+    axios.post("/api/survey/", {survey: this.state}).then(() => {
       const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
       t.show({message: "Survey saved!", intent: Intent.SUCCESS});
     });

@@ -9,7 +9,7 @@
     "docs": "jsdoc2md '+(api|app|db|tools)/**/*.+(js|jsx)' --separators > DOCS.md",
     "locales": "canon-locales",
     "start": "canon-start",
-    "test": "eslint --color api/*.js api/**/*.js app/*.js app/**/*.js db/*.js db/**/*.js tools/*.js tools/**/*.js"
+    "test": "eslint --color api/*.js api/**/*.js app/*.jsx app/*.js app/**/*.jsx app/**/*.js db/*.js db/**/*.js tools/*.js tools/**/*.js"
   },
   "repository": {
     "type": "git",

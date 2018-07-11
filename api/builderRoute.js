@@ -3,42 +3,21 @@ const path = require("path");
 const sharp = require("sharp");
 const {isRole} = require("../tools/api.js");
 
+/**
+ * Builder Route is the admin-only API for interacting directly with the lesson content in the CMS
+ */
+
 module.exports = function(app) {
 
   const {db} = app.settings;
 
+  /**
+   * Used by LessonBuilder to fetch all islands, levels, or slides from the islands table.
+   * @param {string} query The query string of the request, used to limit the findAll query
+   * @returns {Object[]} An array of the island, level, or slide objects
+   */
   app.get("/api/builder/islands/all", isRole(1), (req, res) => {
     db.islands.findAll({where: req.query}).then(u => {
-      res.json(u).end();
-    });
-  });
-
-  app.post("/api/builder/islands/save", isRole(1), (req, res) => {
-    db.islands.update(req.body, {where: {id: req.body.id}}).then(u => {
-      res.json(u).end();
-    });
-  });  
-
-  app.post("/api/builder/islands/new", isRole(1), (req, res) => {  
-    db.islands.create(req.body).then(u => {
-      res.json(u).end();
-    });
-  });
-
-  app.delete("/api/builder/islands/delete", isRole(1), (req, res) => {
-    db.islands.destroy({where: {id: req.query.id}}).then(u => {
-      res.json(u).end();
-    });    
-  });
-
-  app.post("/api/builder/levels/save", isRole(1), (req, res) => {
-    db.levels.update(req.body, {where: {id: req.body.id}}).then(u => {
-      res.json(u).end();
-    });
-  });
-
-  app.post("/api/builder/levels/new", isRole(1), (req, res) => {
-    db.levels.create(req.body).then(u => {
       res.json(u).end();
     });
   });
@@ -49,20 +28,25 @@ module.exports = function(app) {
     });
   });
 
-  app.delete("/api/builder/levels/delete", isRole(1), (req, res) => {
-    db.levels.destroy({where: {id: req.query.id}}).then(u => {
-      res.json(u).end();
-    });    
-  });
-
   app.get("/api/builder/slides/all", isRole(1), (req, res) => {
     db.slides.findAll({where: req.query}).then(u => {
       res.json(u).end();
     });
   });  
 
-  app.post("/api/builder/slides/save", isRole(1), (req, res) => {
-    db.slides.update(req.body, {where: {id: req.body.id}}).then(u => {
+  /**
+   * Used by LessonBuilder to add a new island, level, or slide to its respective table
+   * @param {Object} req.body The updated entity
+   * @returns {Object} The new row from the table
+   */
+  app.post("/api/builder/islands/new", isRole(1), (req, res) => {  
+    db.islands.create(req.body).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  app.post("/api/builder/levels/new", isRole(1), (req, res) => {
+    db.levels.create(req.body).then(u => {
       res.json(u).end();
     });
   });
@@ -73,11 +57,56 @@ module.exports = function(app) {
     });
   });
 
+  /**
+   * Used by IslandEditor, LevelEditor, and SlideEditor to save an updated island/level/slide
+   * @param {Object} req.body The updated island/level/slide
+   * @returns {number} The number of affected rows (hopefully 1)
+   */
+  app.post("/api/builder/islands/save", isRole(1), (req, res) => {
+    db.islands.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+  });  
+
+  app.post("/api/builder/levels/save", isRole(1), (req, res) => {
+    db.levels.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  app.post("/api/builder/slides/save", isRole(1), (req, res) => {
+    db.slides.update(req.body, {where: {id: req.body.id}}).then(u => {
+      res.json(u).end();
+    });
+  });
+
+  /**
+   * Used by LessonBuilder to delete an island, level, or slide from its respective table
+   * @param {number} id The id of the island/level/slide to delete
+   * @returns {number} The number of affected rows (hopefully 1)
+   */
+  app.delete("/api/builder/islands/delete", isRole(1), (req, res) => {
+    db.islands.destroy({where: {id: req.query.id}}).then(u => {
+      res.json(u).end();
+    });    
+  });
+
+  app.delete("/api/builder/levels/delete", isRole(1), (req, res) => {
+    db.levels.destroy({where: {id: req.query.id}}).then(u => {
+      res.json(u).end();
+    });    
+  });
+
   app.delete("/api/builder/slides/delete", isRole(1), (req, res) => {
     db.slides.destroy({where: {id: req.query.id}}).then(u => {
       res.json(u).end();
     });    
   });
+
+  
+  /**
+   * Used by Glossary to list, add, update, or delete glossary words.
+   */
 
   app.get("/api/builder/glossary/all", isRole(1), (req, res) => {
     db.glossarywords.findAll({where: req.query}).then(u => {
@@ -85,14 +114,14 @@ module.exports = function(app) {
     });
   });  
 
-  app.post("/api/builder/glossary/save", isRole(1), (req, res) => {
-    db.glossarywords.update(req.body, {where: {id: req.body.id}}).then(u => {
+  app.post("/api/builder/glossary/new", isRole(1), (req, res) => {
+    db.glossarywords.create(req.body).then(u => {
       res.json(u).end();
     });
   });
 
-  app.post("/api/builder/glossary/new", isRole(1), (req, res) => {
-    db.glossarywords.create(req.body).then(u => {
+  app.post("/api/builder/glossary/save", isRole(1), (req, res) => {
+    db.glossarywords.update(req.body, {where: {id: req.body.id}}).then(u => {
       res.json(u).end();
     });
   });
@@ -111,7 +140,7 @@ module.exports = function(app) {
     });
   });
 
-
+  // Multer is a node.js middleware for handling image uploads for slides
   const upload = multer({
     fileFilter: (req, file, callback) => {
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -123,6 +152,11 @@ module.exports = function(app) {
 
   const imgUpload = upload.single("file");
 
+  /**
+   * Used by SlideEditor to upload new slide images.
+   * @param {string} req.body The body of the POST, which contains a file and title
+   * @returns {string} Diagnostic info
+   */
   app.post("/api/slideImgUpload/", isRole(1), (req, res) => {
     imgUpload(req, res, err => {
       if (err) return res.json({error: err});
@@ -133,6 +167,9 @@ module.exports = function(app) {
 
       const sampleFile = req.file;
       const title = req.body.title;
+      // The title passed in from the POST request will be the id of the slide to which this
+      // image refers, which is how they are looked up later. If the slide is for pt, the id
+      // is prepended with "pt_".
       const newFileName = `${title}.jpg`;
       const imgPath = path.join(process.cwd(), "/static/slide_images", newFileName);
 

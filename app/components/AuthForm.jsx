@@ -4,6 +4,11 @@ import LoginForm from "components/LoginForm";
 import SignupForm from "components/SignupForm";
 import {connect} from "react-redux";
 
+/**
+ * AuthForm is a wrapper component that switches between LoginForm and Signup Form
+ * It can be primed with a default via the initialMode prop.
+ */
+
 class AuthForm extends Component {
 
   constructor(props) {

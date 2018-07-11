@@ -17,6 +17,11 @@ import ShareFacebookLink from "components/ShareFacebookLink";
 import "components/Studio.css";
 import "./Projects.css";
 
+/**
+ * Projects is one of the largest Pages in codelife - It is responsible for all CRUD
+ * operations of projects, processing screenshots, and listing user codeblocks for inspiration.
+ * Longer term, this should be refactored into smaller components.
+ */
 class Projects extends Component {
 
   constructor(props) {
@@ -45,6 +50,10 @@ class Projects extends Component {
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
+  /**
+   * On Mount, retrieve all projects by the logged in user, as well as the projects by OTHER users
+   * with whom the logged in user is listed as a collaborator, and put these in state.
+   */
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
     const cget = axios.get("/api/projects/collabs");
@@ -55,6 +64,7 @@ class Projects extends Component {
       const collabs = resp[1].data;
 
       let {currentProject} = this.state;
+      // The URL holds direct links to projects. If the URL has a project link, try to open it
       const {filename} = this.props.params;
       if (filename) {
         currentProject = projects.find(p => p.slug === filename);
@@ -63,9 +73,12 @@ class Projects extends Component {
         this.setState({currentProject, projects, collabs}, this.openProject.bind(this, currentProject.id));
       }
       else {
+        // if the URL had no filename, and the API gave no projects, this user has never made a
+        // project, so auto-open their first one.
         if (projects.length === 0) {
           this.createNewProject.bind(this)(t("My Project"));
         }
+        // If this user HAS projects, open the one most recently modified.
         else {
           let latestIndex = 0;
           let latestDate = projects[0].datemodified;
@@ -92,11 +105,16 @@ class Projects extends Component {
     clearTimeout(this.timeout);
   }
 
+  /**
+   * Given a project id, open the project itself by fetching it from the database and loading it
+   * into state. Set the URL so it continues to match the open project permalink
+   */
   openProject(pid) {
     const {browserHistory} = this.context;
     axios.get(`/api/projects/byid?id=${pid}`).then(resp => {
       if (resp.data) {
         this.setState({currentProject: resp.data, currentTitle: resp.data.name, originalTitle: resp.data.name});
+        // Slugs were added later in codelife, and some projects don't have them. Try a slug, otherwise use name
         if (resp.data.slug) {
           browserHistory.push(`/projects/${this.props.auth.user.username}/${resp.data.slug}/edit`);
         }
@@ -107,10 +125,21 @@ class Projects extends Component {
     });
   }
 
+  /**
+   * The embedded CodeEditor is the only component that knows if the user has used javascript
+   * in their project. When this changes in CodeEditor, it bubbles that up via this callback
+   * so that Projects can dynamically show and hide an "Execute Code" button
+   */
   setExecState(execState) {
     this.setState({execState});
   }
 
+  /**
+   * Callback for the create new project button. Trims the name of URL-breakers and whitespace,
+   * posts an empty project to the API endpoint, and refreshes the project list from that API
+   * payload so the Project List accurately reflects the new project collection. Update the URL
+   * when the project is finished opening.
+   */ 
   createNewProject(projectName) {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace and remove URL-breakers from the project title
@@ -141,8 +170,14 @@ class Projects extends Component {
     }
   }
 
+  /**
+   * Opens the popover to name the project (which eventually calles createNewProject)
+   */
   clickNewProject() {
     const {t} = this.props;
+    // As explained in CodeEditor, the editor itself is the only place where it is known
+    // if the user has changed the file. Reach in (using withRef:true) directly to a public
+    // function there to ask the editor if changes have been made.
     if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
       this.setState({isNewOpen: true});
     }
@@ -152,29 +187,26 @@ class Projects extends Component {
     }
   }
 
-  shareProject() {
-    const {t} = this.props;
-    const {username} = this.props.auth.user;
-    const {browserHistory} = this.context;
-    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
-
-    }
-    else {
-      const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
-      toast.show({message: t("Save your webpage before sharing!"), timeout: 1500, intent: Intent.WARNING});
-    }
-  }
-
+  /**
+   * The alerts in this component have two states, false, or "truthy," that is, leaveAlert=false
+   * means that the window closed, and setting leaveAlert to *what you want the alert to say* 
+   * makes it truthy, and therefore open. This click callback is the "are you sure" dialogue
+   * for leaving a collaboration
+   */
   showLeaveAlert(collab) {
     const {t} = this.props;
     const leaveAlert = {
       collab,
-      text: `${t("Are you sure you want to leave")} “${collab.name}”?`
+      text: `${t("Are you sure you want to leave")} "${collab.name}"?`
     };
     this.setState({leaveAlert});
   }
 
+  /** 
+   * Upon confirming that this user wants to leave a collab, remove that user from
+   * the collabs tabel. Additionally, filter it out in state. Either way, close the 
+   * leaveAlert 
+   */
   leaveCollab() {
     const {collab} = this.state.leaveAlert;
     const {projects} = this.state;
@@ -198,14 +230,26 @@ class Projects extends Component {
     }
   }
 
+  /** 
+   * Though users are normally invited to share new projects on facebook, they may elect to 
+   * opt out and "never show this again" which needs to write to their userprofile
+   */
   handleCheckbox() {
     this.setState({optout: !this.state.optout});
   }
 
+  /** 
+   * Delete a given project. The argument here is confusing - originally clicking delete would
+   * delete the project immediately. The addition of a deleteAlert (similar to leaveAlert) stores
+   * the project to be deleted in the deleteAlert.
+   */
   deleteProject(project) {
     const {t} = this.props;
     const {browserHistory} = this.context;
 
+    // If the user has clicked "Yes I'm Sure" in the dialog box, then this method is invoked
+    // with true as the argument. Retrieve the project id from the deleteAlert, post it to the API,
+    // and refresh the project list.
     if (project === true) {
       const {deleteAlert} = this.state;
       axios.delete("/api/projects/delete", {params: {id: deleteAlert.project.id}}).then(resp => {
@@ -236,6 +280,9 @@ class Projects extends Component {
         }
       });
     }
+    // If project is not true, then it is a project object. Open the "Are you sure" deleteAlert,
+    // and save the project there (this method will be called again later, with true as the 
+    // argument, when the user clicks OK)
     else {
       this.setState({deleteAlert: {
         project,
@@ -246,12 +293,10 @@ class Projects extends Component {
 
   }
 
-  // TODO: i'm loading studentcontent twice.  once when we instantiate projects, and then again
-  // when you click a project.  I did this so that clicks would respect new writes, but i should
-  // find a way to only ever ask for studentcontent once, on-demand only.
-
-  // Also, the return value here is because Projects.jsx needs to know if I clicked confirm or not.
-
+  /**
+   * When a user clicks a project, attempt to open it. Reach into the CodeEditor and check 
+   * if changes have been made, and if so, block the opening attempt until they save.
+   */
   onClickProject(project) {
     const {t} = this.props;
     const toast = Toaster.create({className: "blockToast", position: Position.TOP_CENTER});
@@ -268,10 +313,15 @@ class Projects extends Component {
     }
   }
 
+  /** 
+   * Prepare a payload containing the filename, id, content, etc to be sent to the update api.
+   * If this is the first time the user is saving a project, offer to share it on Facebook.
+   * Note that this is one of the many places in Codelife where a 5 second timer is used to allow
+   * the screenshot time to process
+   */
   saveCodeToDB() {
     const {t} = this.props;
     const {currentProject} = this.state;
-
 
     if (currentProject) {
       const id = currentProject.id;
@@ -310,6 +360,10 @@ class Projects extends Component {
     }
   }
 
+  /**
+   * Callback for closing the share window, save the users preference if they asked 
+   * not to be asked again.
+   */
   closeFirstTimeShare() {
     if (this.state.optout) {
       axios.post("/api/profile/update", {prompted: true}).then(resp => {
@@ -319,10 +373,20 @@ class Projects extends Component {
     this.setState({isFirstSaveShareOpen: false});
   }
 
+  /**
+   * Reach into the CodeEditor and call the executeCode function. This requires manual 
+   * execution - otherwise if the user was writing something like "alert()" then it would 
+   * render every single keystroke
+   */ 
   executeCode() {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
+  /**
+   * On most parts of the site, forking a codeblock is as easy as creating the project
+   * and navigating the user to that page. However, if a user forks a codeblock from HERE
+   * on the project page, a slightly different behavior is required
+   */
   handleFork(newid, projects) {
     this.setState({projects}, this.openProject.bind(this, newid));
   }
@@ -331,6 +395,10 @@ class Projects extends Component {
     this.setState({showCodeblocks: !this.state.showCodeblocks});
   }
 
+  /** 
+   * Rename a project. Set title editability to false temporarily and prune URL-breakers
+   * and leading/trailing whitespace from the new name. Write the project to the db and update state
+   */ 
   changeProjectName(newName) {
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
@@ -346,6 +414,9 @@ class Projects extends Component {
     this.saveCodeToDB.bind(this)();
   }
 
+  /** 
+   * Keyboard callbacks
+   */
   handleKey(e) {
     const {currentProject} = this.state;
     const isMine = currentProject && currentProject.uid === this.props.auth.user.id;

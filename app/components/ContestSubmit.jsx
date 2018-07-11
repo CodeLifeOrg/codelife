@@ -5,6 +5,10 @@ import {Toaster, Intent, Position} from "@blueprintjs/core";
 import {connect} from "react-redux";
 import "./ContestSubmit.css";
 
+/** 
+ * User selects a project for the contest and submits their entry.
+ */
+
 class ContestSubmit extends Component {
 
   constructor(props) {
@@ -17,6 +21,9 @@ class ContestSubmit extends Component {
     };
   }
 
+  /**
+   * On Mount, fetch all the projects of the currently logged-in user, as well as their entry status
+   */
   componentDidMount() {
     const pget = axios.get("/api/projects/mine");
     const cget = axios.get("/api/contest/status");
@@ -45,6 +52,9 @@ class ContestSubmit extends Component {
     if (selectedProject) this.setState({selectedProject});
   }
 
+  /**
+   * On Click, prepare contest payload and post it to the endpoint
+   */
   submit(event) {
     event.preventDefault(); // prevent page reload
     const {selectedProject, description} = this.state;
@@ -54,7 +64,7 @@ class ContestSubmit extends Component {
         project_id: selectedProject,
         description
       };
-      console.log("sending", contestPayload);
+      // console.log("sending", contestPayload);
       axios.post("/api/contest", contestPayload).then(resp => {
         if (resp.status === 200) {
           const toast = Toaster.create({className: "contestToast", position: Position.TOP_CENTER});

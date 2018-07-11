@@ -12,6 +12,11 @@ import CodeEditor from "components/CodeEditor/CodeEditor";
 
 import "components/ProjectCard.css";
 
+/**
+ * ProjectCard, similar to CodeBlockCard, is a small visual container with a Dialog popover to showcase projects.
+ * It is used on the Homepage as well as in User Profiles to list their projects
+ */
+
 class ProjectCard extends Component {
 
   constructor(props) {
@@ -23,10 +28,17 @@ class ProjectCard extends Component {
     };
   }
 
+  /**
+   * Project Cards, though small visually, are responsible for containing and controlling their own Dialog
+   * Popover that shows the entirety of the project and its code
+   */
   toggleDialog() {
     this.setState({open: !this.state.open});
   }
 
+  /** 
+   * Admin Only function to promote the given project to featured
+   */
   toggleFeature() {
     const {project} = this.props;
     project.featured = !project.featured;
@@ -37,13 +49,20 @@ class ProjectCard extends Component {
     this.forceUpdate();
   }
 
+  /** 
+   * Admin only function to generate a screenshot for this project (usually so it can be featured on the homepage)
+   */
   generateScreenshot() {
     axios.post("/api/projects/generateScreenshot", {id: this.props.project.id}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
     });
   }
 
-  handleReport(report) {
+  /**
+   * Projects embed a ReportBox to allow for flagging. If a user uses that box to report the content, this
+   * callback notifies its parent (this component) that the project has been reported, so state can be updated
+   */
+  handleReport() {
     const {project} = this.props;
     project.reported = true;
     this.forceUpdate();
@@ -54,6 +73,7 @@ class ProjectCard extends Component {
     const {location, project, t, user} = this.props;
     const {id, name, studentcontent, username, reported, featured} = project;
 
+    // If this project was created by the logged in user, use "you" instead of the project owner's name
     const mine = this.props.user && project.uid === this.props.user.id;
     const displayname = mine ? t("you!") : false;
 
@@ -63,6 +83,7 @@ class ProjectCard extends Component {
     const userLink = `${ location.origin }/profile/${ username }`;
 
     const thumbnailURL = `/pj_images/${project.user ? project.user.username : "error"}/${id}.png?v=${new Date().getTime()}`;
+    // In the extremely rare case where a project still exists for which there is no longer a user, don't show a thumbnail
     const thumbnailImg = Boolean(project.user);
 
     return (
@@ -167,7 +188,7 @@ class ProjectCard extends Component {
                 </span>
               }
 
-              <a href={ embedLink } target="_blank" className="project-dialog-link share-link font-xs">{ embedLink }</a>
+              <a href={ embedLink } target="_blank" rel="noopener noreferrer" className="project-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
             {/* show actions if logged in */}

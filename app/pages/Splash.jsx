@@ -7,6 +7,10 @@ import Clouds from "components/Clouds";
 
 import "./Splash.css";
 
+/**
+ * Simple splash page that lists about text for the Codelife Project
+ */
+
 class Splash extends Component {
 
   constructor() {

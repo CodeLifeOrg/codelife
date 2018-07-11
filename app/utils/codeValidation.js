@@ -1,12 +1,30 @@
 import css from "css";
 
+/**
+ * In order to check a student's codebase, each InputCode or Codeblock has its own set 
+ * of rules. These are things like "CONTAINS h1" (html contains h1) or "JS_EQUALS total 10"
+ * (a running of the js results in the variable total being set to 10). When checking the 
+ * student's code in CodeEditor, it makes use of these helper functions to determine whether
+ * the student has successfully passed this rule.
+ */
+
+/**
+ * Given a rule and a block of code, check the Javascript and perform an exact match
+ * check on the regex. Used for things like "code must contain getElementById"
+ */ 
 export const cvMatch = (rule, payload) => {
   const haystack = payload.theJS;
   return haystack.search(new RegExp(rule.regex)) >= 0;
 };
 
+/**
+ * Given a rule and a block of code, check that a given tag is nested inside another
+ * tag. Used for things like "html nests body." Note that this does not currently
+ * account for subsequent occurences (only checks for first occurences)
+ */
 export const cvNests = (rule, payload) => {
   const haystack = payload.theText;
+  // get positions of the outer and inner tags, and ensure that they are in order
   const reOuter = new RegExp(`<${rule.outer}[^>]*>`, "g");
   const outerOpen = haystack.search(reOuter);
   const outerClose = haystack.indexOf(`</${rule.outer}>`);
@@ -17,6 +35,11 @@ export const cvNests = (rule, payload) => {
           outerOpen < innerOpen && innerOpen < innerClose && innerClose < outerClose && outerOpen < outerClose;
 };
 
+/**
+ * Given a rule and a block of code, use a hard-coded regex to check for a SPECIFIC
+ * pattern. Example include a for block "for (;;) {}", ifelse "if () {} else {}"
+ * or a generic invocation of a function "functionName(){}"
+ */
 export const cvUses = (rule, payload) => {
   const haystack = payload.theJS;
   let re;
@@ -33,6 +56,13 @@ export const cvUses = (rule, payload) => {
   return haystack.search(re) >= 0;
 };
 
+/**
+ * Given a needle (like h1), an attribute (like color), a value (like red), and a JSON
+ * representation of the code as prepared by himalaya (HTML parser), recursively climb
+ * down the nested json tree, testing at each node for the presence of the needle,
+ * and if provided, whether that node has an attribute, and, if provided, whether that 
+ * attribute's value exactly matches the provided value.
+ */
 export const attrCount = (needle, attribute, value, json) => {
   let count = 0;
   if (json.length === 0) return 0;
@@ -58,6 +88,10 @@ export const attrCount = (needle, attribute, value, json) => {
   return count;
 };
 
+/**
+ * Given a rule and a block of code, search for a self closing tag such as <img />
+ * Optionally run attrCount to check for extra rules (such as requiring "src")
+ */
 export const cvContainsSelfClosingTag = (rule, payload) => {
   const html = payload.theText;
   const json = payload.theJSON;
@@ -70,6 +104,10 @@ export const cvContainsSelfClosingTag = (rule, payload) => {
   return open !== -1 && hasAttr;
 };
 
+/**
+ * Given a rule and a block of code, ensure that the given needle (such as <html>)
+ * occurs once and only once in the code (useful for tags like body, head, html)
+ */
 export const cvContainsOne = (rule, payload) => {
   const html = payload.theText;
   const re = new RegExp(`<${rule.needle}[^>]*>`, "g");
@@ -78,6 +116,10 @@ export const cvContainsOne = (rule, payload) => {
   return count === 1;
 };
 
+/**
+ * Given a rule and a block of code, check if a given tag (such as <p>) is included in the 
+ * code. Optionally, use attrCount to match any provided attributes or values in the rule.
+ */
 export const cvContainsTag = (rule, payload) => {
   const html = payload.theText;
   const json = payload.theJSON;
@@ -92,6 +134,11 @@ export const cvContainsTag = (rule, payload) => {
   return tagClosed && hasAttr;
 };
 
+/**
+ * Given a rule and a block of code, using the "css" module to turn the css into a crawlable
+ * object. Fold over that generated parsed object and drill down to check if the rule's property
+ * matches the property and value of the css entered by the student.
+ */
 export const cvContainsStyle = (rule, payload) => {
   const haystack = payload.theJSON;
   const needle = rule.needle;
@@ -99,9 +146,11 @@ export const cvContainsStyle = (rule, payload) => {
   const value = rule.value;
   let head, html, style = null;
   let styleContent = "";
+  // First, crawl through the students html to find the style tag
   if (haystack) html = haystack.find(e => e.tagName === "html");
   if (html) head = html.children.find(e => e.tagName === "head");
   if (head) style = head.children.find(e => e.tagName === "style");
+  // Grab the CSS out of the style tag and parse it
   if (style && style.children && style.children[0]) styleContent = style.children[0].content;
   if (!styleContent) styleContent = "";
   const obj = css.parse(styleContent, {silent: true});

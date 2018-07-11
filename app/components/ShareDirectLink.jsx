@@ -5,6 +5,10 @@ import {translate} from "react-i18next";
 
 import "components/ShareDirectLink.css";
 
+/** 
+ * Popover Component for sharing a link to a students project/codeblock. Copies url to clipboard.
+ */
+
 class ShareDirectLink extends Component {
   constructor(props) {
     super(props);

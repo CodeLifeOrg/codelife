@@ -4,12 +4,15 @@ import {Link} from "react-router";
 
 import "./UserCard.css";
 
+/**
+ * UserCard is a component used on a profile page to display other users that share the logged in user's school or location
+ */
+
 class UserCard extends Component {
 
   render() {
 
-    const {t} = this.props;
-    const {bio, id, img, name, username} = this.props.user;
+    const {bio, img, name, username} = this.props.user;
 
     // define user image as null
     let avatarURL = "/avatars/avatar-excited-cropped.jpg";

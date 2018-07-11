@@ -1,9 +1,23 @@
 const {isAuthenticated, isRole} = require("../tools/api.js");
-const sequelize = require("sequelize");
+// const sequelize = require("sequelize");
 // const translate = require("../tools/translate.js");
 const FLAG_COUNT_HIDE = process.env.FLAG_COUNT_HIDE;
 const FLAG_COUNT_BAN = process.env.FLAG_COUNT_BAN;
 
+/**
+ * threadsRoute is used for retrieving threads and their associated comments.
+ * Unlike islands, likes, and many of the other earlier data structures in development,
+ * threads make better use of Sequelize associations, implicitly including comments in the
+ * thread payloads they belong to. This is distinctly different from islands/levels/slides,
+ * which get entire lists from the tables and then compile them client side. Going forward,
+ * the hierarchical/sequelize-association method of delivering API data (without flattening)
+ * is the more correct one.
+ * Threads have entity_ids and types. Currently the only two types are comments and threads,
+ * however the intention was that discussions could expand to encompass projects/codeblocks or more
+ */
+
+// A thread has lots of dependencies. For a given thread id, this include statement will 
+// crawl down through all the comments, users, reports, and likes to build the thread client side
 const threadInclude = [
   { 
     association: "commentlist", 
@@ -41,7 +55,14 @@ const threadInclude = [
 ];
 
 
-
+/** 
+ * Given a user and a thread, prepare the thread to be returned to the requester.
+ * This involves a number of operations, including collating likes and reports, rewriting
+ * banned content, and deleting certain sensitive keys so they don't leak out through the API
+ * @param {Object} user The logged-in user
+ * @param {Object} t the Thread to be pruned
+ * @returns {Object} the pruned thread 
+ */
 function pruneThread(user, t) {
   t = t.toJSON();
   t.reportlist = t.reportlist.filter(r => r.status === "new" && r.type === "thread");
@@ -89,19 +110,11 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
-  // Used by level to get counts of threads and comments for an entity
-  
-  /*
-  app.get("/api/threads/count", (req, res) => {
-    db.threads.count({
-      where: req.query
-    }).then(c => {
-      res.json(c).end();
-    })
-  });
-  */
-
-  // Used in Discussion to retrieve threads for a given entity id
+  /** 
+   * Retrieves all threads for a given query
+   * @param {Object} req.query query containing constraints for the find
+   * @returns {Object[]} list of threads for this entity
+   */
   app.get("/api/threads/all", (req, res) => {
     db.threads.findAll({
       where: req.query,
@@ -115,7 +128,11 @@ module.exports = function(app) {
     });
   });
 
-  // Used by ReportBox and ReportViewer to ban threads, Admin Only
+  /** 
+   * Used by ReportBox and ReportViewer to ban threads, Admin Only
+   * @param {Object} req.body body containing id and status to update
+   * @returns {number} Affected rows
+   */
   app.post("/api/threads/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
     db.threads.update({status}, {where: {id}}).then(u => {
@@ -123,7 +140,11 @@ module.exports = function(app) {
     });
   });
 
-  // Used by ReportBox and ReportViewer to ban comments, Admin Only
+  /** 
+   * Used by ReportBox and ReportViewer to ban comments, Admin Only
+   * @param {Object} req.body body containing id and status to update
+   * @returns {number} Affected rows
+   */
   app.post("/api/comments/setstatus", isRole(2), (req, res) => {
     const {status, id} = req.body;
     db.comments.update({status}, {where: {id}}).then(u => {
@@ -131,7 +152,11 @@ module.exports = function(app) {
     });
   });
 
-  // Used in Discussion to start a new thread
+  /** 
+   * Used in Discussion to add a new thread
+   * @param {Object} req.body body containing the details of the new thread
+   * @returns {Object[]} A list of all threads so the client can update its current state
+   */
   app.post("/api/threads/new", isAuthenticated, (req, res) => {
     db.threads.create({
       title: req.body.title, 
@@ -157,6 +182,11 @@ module.exports = function(app) {
     });
   });
 
+  /** 
+   * Used in Discussion to add a new comment
+   * @param {Object} req.body body containing the details of the new comment
+   * @returns {Object} The entirety of the parent thread for client-side updating
+   */
   app.post("/api/comments/new", isAuthenticated, (req, res) => {
     db.comments.create({
       title: req.body.title,
@@ -164,7 +194,7 @@ module.exports = function(app) {
       date: db.fn("NOW"),
       thread_id: req.body.thread_id,
       uid: req.user.id
-    }).then(newComment => { 
+    }).then(() => { 
       db.threads.findOne({
         where: {
           id: req.body.thread_id

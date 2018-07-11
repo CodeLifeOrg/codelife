@@ -6,6 +6,10 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import "./Search.css";
 
+/**
+ * The Search component is embedded in Nav and is used to search users and projects. It utilizes postgres trigrams serverside (see readme)
+ */
+
 class Search extends Component {
 
   constructor(props) {
@@ -25,9 +29,13 @@ class Search extends Component {
     // document.addEventListener("keydown", this.onKeyDown.bind(this));
   }
 
+  /**
+   * On keystroke, hit the search API endpoint
+   */
   handleChange(e) {
     const query = e.target.value;
     const searchid = this.state.searchid + 1;
+    // Only search if query string has reached a meaningful length
     if (query.length > 2) {
       this.setState({query, searchid}, this.search.bind(this));
     }
@@ -36,6 +44,11 @@ class Search extends Component {
     }
   }
 
+  /**
+   * Search is not a top-level component in routes.jsx, so it doesn't have access to the Router object that would indicate
+   * what page the user is on. This makes it difficult to collapse the search results if the user clicks a link outside the
+   * results. To get around this, a linkObj is passed down from App to Nav to here, and search is collapsed on URL change.
+   */
   componentDidUpdate(prevProps) {
     if (this.props.linkObj !== prevProps.linkObj) {
       this.clearSearch();
@@ -46,6 +59,10 @@ class Search extends Component {
     this.setState({selectedIndex: null, query: "", results: {users: [], projects: []}});
   }
 
+  /**
+   * onKeyDown is meant to capture inputs - but the arrow up/down aren't currently functional (user can use tabs and 
+   * Enter key to go through links however). This UX could be improved.
+   */
   onKeyDown(e) {
     const {selectedIndex, results} = this.state;
     const allResults = results.users.concat(results.projects);
@@ -76,10 +93,14 @@ class Search extends Component {
     }
   }
 
+  /**
+   * Send search query to API endpoint
+   */
   search() {
     const {query, searchid} = this.state;
     axios.get(`/api/search/?query=${query}&searchid=${searchid}`).then(resp => {
       if (resp.status === 200) {
+        // Fix a bug where results were coming in out of order by sending an incrementing counter with the payload
         if (Number(resp.data.searchid) >= this.state.searchid) {
           this.setState({results: resp.data});
         }

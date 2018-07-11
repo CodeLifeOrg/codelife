@@ -1,5 +1,7 @@
 module.exports = function(app) {
 
+  // DEPRECATED / UNUSED - FROM BETA
+
   const {db} = app.settings;
 
   app.get("/api/survey/", (req, res) => {

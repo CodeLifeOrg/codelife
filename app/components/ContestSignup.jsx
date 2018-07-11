@@ -1,17 +1,21 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
 import {connect} from "react-redux";
 import "moment/locale/pt-br";
 import moment from "moment";
 import {CPF} from "cpf_cnpj";
 import LoadingSpinner from "components/LoadingSpinner";
 import {DateInput} from "@blueprintjs/datetime";
-import {Icon, Toaster, Position, Intent} from "@blueprintjs/core";
+import {Toaster, Position, Intent} from "@blueprintjs/core";
 import SelectGeo from "components/SelectGeo";
 import SelectSchool from "components/SelectSchool";
 import "./ContestSignup.css";
+
+/**
+ * Signup page for (currently postponed) project contest. Signing up simply enters the user in the contest,
+ * users still must go to the ContestSubmit page to select a project and finalize the procedure.
+ */ 
 
 class ContestSignup extends Component {
 
@@ -25,6 +29,9 @@ class ContestSignup extends Component {
     };
   }
 
+  /**
+   * On Mount, fetch the profile of the logged in user. 
+   */
   componentWillMount() {
     const {username} = this.props.user;
 
@@ -43,6 +50,9 @@ class ContestSignup extends Component {
     });
   }
 
+  /** 
+   * Formatting rules for Cadastro de Pessoas Físicas
+   */
   formatCPF(input) {
     // Strip all characters from the input except digits
     input = input.replace(/\D/g, "");
@@ -69,7 +79,7 @@ class ContestSignup extends Component {
 
   onCpfUpdate(e) {
     const cpf = this.formatCPF(e.target.value);
-    const cpfValid = CPF.isValid(cpf);
+    // const cpfValid = CPF.isValid(cpf);
     this.setState({profileUser: Object.assign(this.state.profileUser, {cpf})});
   }
 
@@ -110,6 +120,10 @@ class ContestSignup extends Component {
     }
   }
 
+  /**
+   * Onclick handler that prepares entry payloads to various endpoints. Note that setting school id/ geo id in this
+   * contest entry page also updates the actual profile of the user. 
+   */
   enterContest(e) {
     e.preventDefault();
 

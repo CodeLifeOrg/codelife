@@ -1,12 +1,21 @@
 const {isAuthenticated} = require("../tools/api.js");
 const translate = require("../tools/translate.js");
 
+/**
+ * userProgressRoute fetches and sets user progress through the codelife content. It maintains a single list of 
+ * "beaten" entities, with levels and islands mixed together. The list is not ordered - when an entity is beaten,
+ * its id is written to the list. In the future, implicit ordering may helpful for things like tallying progress.
+ */ 
+
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-  // Used in CodeBlock, CodeblockList, Home, Island, Level, and Slide to determine this user's list of beaten items
-  // Note: "current" is used only for Home.jsx to fill in a "continue your journey" link
+  /** 
+   * Used in CodeBlock, CodeblockList, Home, Island, Level, and Slide to determine this user's list of beaten items
+   * Note: "current" is used only for Home.jsx to fill in a "continue your journey" link
+   * @returns {Object} The entirety of the parent thread for client-side updating
+   */
   app.get("/api/userprogress/mine", isAuthenticated, (req, res) => {
     db.userprogress.findAll({where: {uid: req.user.id}})
       .then(progress => {
@@ -35,7 +44,11 @@ module.exports = function(app) {
 
   });
 
-  // Used in CodeBlock and Slide to report when a user beats an Island or a Level, respectively
+  /** 
+   * Used in CodeBlock and Slide to report when a user beats an Island or a Level, respectively
+   * @param {Object} req.body body object containing the beaten level and its status
+   * @returns {Object[]} The newly updated userprogress list
+   */
   app.post("/api/userprogress/save", isAuthenticated, (req, res) => {
     const {id: uid} = req.user;
     const {level, status} = req.body;

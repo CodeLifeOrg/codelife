@@ -5,7 +5,7 @@ import {Link} from "react-router";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Position, Tooltip, Dialog} from "@blueprintjs/core";
+import {Dialog} from "@blueprintjs/core";
 
 import LoadingSpinner from "components/LoadingSpinner";
 import Discussion from "components/Discussion";
@@ -21,7 +21,19 @@ import CheatSheet from "components/slidetypes/CheatSheet";
 
 import "./Slide.css";
 
+// A component cannot be dynamically instantiated via a string unless references to the 
+// classes are stored directly in a lookup object such as this one.
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
+
+/**
+ * The slide component is the wrapper for all the various slidetypes in Codelife. However, 
+ * it interacts a great deal with the db and greater site, as reaching the last slide 
+ * updates user progress, and each slide has a Discussion board beneath it. It's important
+ * to note that currently a Level must be beaten all at once - the "latestSlideCompleted" 
+ * variable in state is not persisted anywhere, and leaving the lesson does not restart the
+ * user halfway through a level. Longer term, more granular tracking of user location would
+ * be a nice enhancement.
+ */
 
 class Slide extends Component {
 
@@ -44,6 +56,10 @@ class Slide extends Component {
     };
   }
 
+  /**
+   * InputCode and Quiz slides are "blockers" in that they do not allow progress until a correct
+   * answer is provided. This function is called when the user beats a slide.
+   */
   unblock() {
     const {slides, currentSlide, latestSlideCompleted} = this.state;
     const i = slides.indexOf(currentSlide);
@@ -52,6 +68,12 @@ class Slide extends Component {
     if (this.state.mounted) this.setState({latestSlideCompleted: newlatest, blocked: false});
   }
 
+  /**
+   * When the user reaches the final slide, write the level to the userprogress table.
+   * If the user looks at the discussion board, this level is marked as "skipped", which
+   * ultimately does not count towards overall completion%. Completing the level without
+   * help marks the level as completed.
+   */
   saveProgress(level) {
     const status = this.state.skipped ? "skipped" : "completed";
     axios.post("/api/userprogress/save", {level, status}).then(resp => {
@@ -59,12 +81,18 @@ class Slide extends Component {
     });
   }
 
+  /**
+   * Slide.jsx handles all the transitions from slide to slide, so a lot of work need be done
+   * when the user changes slides. The simplest case is beating a single slide, but they also
+   * may have beaten this lesson (db write), reached a blocking slide, or be changing levels entirely
+   */
   componentDidUpdate() {
+    // The level id (mlid) and slide id (sid) come in via URL params
     const {mlid, sid} = this.props.params;
     const {user} = this.props.auth;
     const {currentSlide, currentLevel, slides, sentProgress, latestSlideCompleted} = this.state;
 
-    // going to new level
+    // going to new level, reset most elements of state
     if (currentLevel && currentLevel.id !== mlid) {
       this.setState({
         slides: [],
@@ -87,8 +115,10 @@ class Slide extends Component {
     if (currentSlide && currentSlide.id !== sid) {
       const cs = slides.find(slide => slide.id === sid);
       if (cs) {
+        // if the new slide is inputcode/quiz, block the student from advancing
         let blocked = ["InputCode", "Quiz"].indexOf(cs.type) !== -1;
         if (slides.indexOf(cs) <= latestSlideCompleted) blocked = false;
+        // ... unless they have beaten it in the past
         if (this.state.done) blocked = false;
         this.setState({currentSlide: cs, blocked, showDiscussion: false});
       }
@@ -109,6 +139,9 @@ class Slide extends Component {
     }
   }
 
+  /** 
+   * On mount, hit the DB and add the keyboard listener
+   */
   componentDidMount() {
     this.setState({mounted: true});
 
@@ -117,6 +150,10 @@ class Slide extends Component {
     document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
+  /**
+   * Given the island / level / slide (lid, mlid, sid) from the URL params
+   * Fetch the slides and userprogress from the db and start from the first slides
+   */ 
   hitDB() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
@@ -155,12 +192,19 @@ class Slide extends Component {
     e.keyCode === 96 && this.props.auth.user.role > 0 ? this.unblock(this) : null;
   }
 
+  /**
+   * Admin-only direct link to the CMS to edit a slide's content
+   */
   editSlide() {
     const {lid, mlid, sid} = this.props.params;
     const {browserHistory} = this.context;
     browserHistory.push(`/admin/lesson-builder/${lid}/${mlid}/${sid}`);
   }
 
+  /**
+   * When the user goes to the next level, push the new URL and hard-reload. This should 
+   * be refactored to a more React-y state reset.
+   */
   advanceLevel(mlid) {
     const {lid} = this.props.params;
     const {browserHistory} = this.context;
@@ -168,6 +212,9 @@ class Slide extends Component {
     if (window) window.location.reload();
   }
 
+  /**
+   * Show or hide the "show discussion" confirm/deny menu
+   */
   toggleSkip() {
     if (!this.state.skipped) {
       this.setState({confirmSkipOpen: !this.state.confirmSkipOpen, showDiscussion: true, skipped: true});
@@ -177,6 +224,9 @@ class Slide extends Component {
     }
   }
 
+  /**
+   * Reveal or hide the discussion component.
+   */
   toggleDiscussion() {
     if (!this.state.skipped) {
       this.setState({confirmSkipOpen: true});
@@ -186,6 +236,10 @@ class Slide extends Component {
     }
   }
 
+  /**
+   * When a Discussion board posts a new thread, Slide needs to know this has happened.
+   * This callback pushes the new thread onto the list so the "thread count" updates
+   */
   onNewThread(thread) {
     const {currentSlide} = this.state;
     if (currentSlide) {
@@ -195,7 +249,7 @@ class Slide extends Component {
 
   render() {
     const {auth, t} = this.props;
-    const {lid, mlid, sid} = this.props.params;
+    const {lid, mlid} = this.props.params;
     const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
     const {browserHistory} = this.context;
 
@@ -207,6 +261,7 @@ class Slide extends Component {
 
     let SlideComponent = null;
 
+    // config for confetti 
     const config = {
       angle: 270,
       spread: 180,
@@ -221,6 +276,9 @@ class Slide extends Component {
 
     const sType = currentSlide.type;
 
+    // As mentioned earlier, there is no way to dynamically instantiate a component via
+    // a string identifier. As such, we look up the reference in a lookup table and 
+    // instantiate it later 
     SlideComponent = compLookup[sType];
 
     return (
@@ -264,7 +322,12 @@ class Slide extends Component {
 
           <SlideComponent
             island={currentIsland.theme}
+            // If this slide component is InputCode or Quiz, hook up the callback 
+            // to unblock Slide.jsx when the user gets it right
             unblock={this.unblock.bind(this)}
+            // This may be confusing, it is the only place in codelife where the data is 
+            // DIRECTLY prop'd into the component as opposed to something like slideData=currentSlide.
+            // This means the properties are available directly in this.props inside each slide.
             {...currentSlide} />
 
           <div className="slide-footer">

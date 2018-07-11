@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
-import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Collapse, Button, Toaster, Position, Intent, PopoverInteractionKind} from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/labs";
 import ReportBox from "components/ReportBox";
 import Comment from "components/Comment";
@@ -11,6 +11,10 @@ import "./Thread.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
+
+/** 
+ * A thread is the top-level child of a Discussion. Discussions have many threads, threads have many comments.
+ */
 
 class Thread extends Component {
 
@@ -24,6 +28,9 @@ class Thread extends Component {
     };
   }
 
+  /**
+   * On Mount, retrieve the thread from props
+   */
   componentDidMount() {
     const {thread} = this.props;
     this.setState({thread});
@@ -54,6 +61,10 @@ class Thread extends Component {
     });
   }
 
+  /**
+   * A thread can only have one text window open at a time for a new comment to be added. Keep the details of
+   * this comment in state, and post it to the endpoint on submit
+   */
   newComment() {
     const {t} = this.props;
     const {thread, commentTitle, commentContent} = this.state;
@@ -82,6 +93,9 @@ class Thread extends Component {
     return `${day}/${month}/${year}`;
   }
 
+  /**
+   * A report, handled by the sub-component ReportBox, uses this callback to tell Thread that the user has submitted a report
+   */
   handleReport(report) {
     const {thread} = this.state;
     thread.report = report;

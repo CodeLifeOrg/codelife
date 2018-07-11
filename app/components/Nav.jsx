@@ -22,8 +22,9 @@ import "./Nav.css";
 import {Popover, PopoverInteractionKind, Position, Dialog, Intent, Toaster} from "@blueprintjs/core";
 
 
-// Nav Component
-// Contains a list of links in Footer format, inserted at the bottom of each page
+/**
+ * Nav Component is the header of the page - containing login controls and the Island Browser
+ */
 
 class Nav extends Component {
 
@@ -36,6 +37,11 @@ class Nav extends Component {
     };
   }
 
+  /**
+   * When Nav Mounts, it is almost always because the page/app is being loaded from scratch, either because 
+   * the user is visiting for the first time, OR a login has been attempted, and the result must be handled.
+   * As such, there is a fairly length decision tree here so that feedback can be shown.
+   */
   componentDidMount() {
     const {auth, t} = this.props;
     const {email, toast} = this.state;
@@ -95,6 +101,10 @@ class Nav extends Component {
     if (this.browser) this.browser.getWrappedInstance().getWrappedInstance().reloadProgress();
   }
 
+  /**
+   * When the user clicks an island/location in the embedded Browser component, they have chosen to navigate to a
+   * new page. This callback is needed so the Browser's wrapping component (this one) can hide the Browser.
+   */
   reportClick() {
     this.setState({showBrowser: false});
   }

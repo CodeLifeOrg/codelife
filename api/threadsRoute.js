@@ -194,7 +194,7 @@ module.exports = function(app) {
       date: db.fn("NOW"),
       thread_id: req.body.thread_id,
       uid: req.user.id
-    }).then(newComment => { 
+    }).then(() => { 
       db.threads.findOne({
         where: {
           id: req.body.thread_id

@@ -132,6 +132,14 @@ module.exports = function(app) {
     });    
   });
 
+  app.post("/api/builder/setlatest", isRole(1), (req, res) => {
+    db.islands.update({is_latest: false}, {where: {}}).then(() => {
+      db.islands.update({is_latest: true}, {where: {id: req.body.latest}}).then(u => {
+        res.json(u).end();
+      });
+    });
+  });
+
   // Multer is a node.js middleware for handling image uploads for slides
   const upload = multer({
     fileFilter: (req, file, callback) => {

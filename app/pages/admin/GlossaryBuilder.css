@@ -1,54 +1,98 @@
-.word {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--gutter-md);
-  border-bottom: 3px black solid;
-}
+@import "../../mixins.css";
 
-.touched {
-  background-color: var(--danger-light);
-}
+.admin-glossary {
 
-.glossary-button {
-  margin: 3px;
-}
+  @add-mixin max-md {
+    margin: 0 calc(0 - var(--gutter-md));
+  }
 
-.action-box {
-  text-align: center;
-  margin-top: 40px;
-  width: 10%;
-}
+  & .term-container {
+    padding: var(--gutter-md);
+    transition: background 0.2s;
 
-.word-container {
-  width: 45%;
-  display: inline-block;
-}
+    /* space out adjacent terms */
+    & + .term-container {
+      margin-top: var(--gutter-md);
+    }
 
-.word-box {
-  width: 200px;
-  margin: var(--gutter-xxs);
-}
+    & .term-column {
+      z-index: 1;
+    }
 
-.definition-box {
-  margin: var(--gutter-xxs);
-  background-color: var(--white);
-}
+    /* two column layout on larger screens */
+    @add-mixin min-md {
+      border-radius: var(--radius-md);
 
-.word-container-readonly {
-  width: 45%;
-  display: inline-block;
-}
+      & .term-column {
+        display: inline-block;
+        width: 50%;
+        width: calc(50% - var(--gutter-md));
+        vertical-align: top;
 
-.word-box-readonly {
-  width: 200px;
-  margin: var(--gutter-xxs);
-  background-color:white;
-  padding: var(--gutter-xxs);
-}
+        & + .term-column {
+          left: var(--gutter-lg);
+        }
+      }
+    }
 
-.definition-box-readonly {
-  margin: var(--gutter-xxs);
-  background-color: var(--white);
-  padding: var(--gutter-xxs);
-  width: 500px;
+    /* mode switch container */
+    & .term-mode {
+      @add-mixin absolute-expand;
+
+      /* icon theming */
+      & .mode-toggle-icon {
+        color: var(--sky-dark);
+        transition: color 0.1s;
+
+        &.pt-icon-cog {
+          transform: scale(0.75);
+        }
+      }
+
+      /* position button */
+      & .mode-toggle-button {
+        /* position at top right */
+        position: absolute;
+        top: calc(0 - var(--gutter-sm));
+        right: 0;
+        z-index: 1;
+        /* make button more clickable */
+        padding: 0.5em;
+        /* transitions */
+        opacity: 0;
+        transform:
+          rotateZ(30deg)
+          scale(0.5);
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
+
+        &:hover .mode-toggle-icon,
+        &:focus .mode-toggle-icon {
+          color: var(--sky-black);
+        }
+      }
+    }
+
+    /* interactions */
+    &:hover,
+    &:focus-within,
+    &.is-editing {
+      background-color: color(var(--light-1) a(25%));
+
+      & .mode-toggle-button {
+        transform: none;
+        opacity: 1;
+      }
+    }
+  }
+
+  /* delete / save changes */
+  & .actions-container {
+    z-index: 3;
+
+    & .button:not(:last-of-type) {
+      margin-right: 1.5em;
+    }
+  }
 }

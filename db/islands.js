@@ -40,7 +40,8 @@ module.exports = function(sequelize, db) {
       theme: db.TEXT,
       // which blueprint icon to use http://blueprintjs.com/docs/v2/#icons
       icon: db.TEXT,
-      pt_rulejson: db.TEXT
+      pt_rulejson: db.TEXT,
+      is_latest: db.BOOLEAN
     },
     {
       freezeTableName: true,

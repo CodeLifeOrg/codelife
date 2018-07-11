@@ -286,22 +286,18 @@ class Slide extends Component {
         <div id="slide" className={ `slide-inner ${currentIsland.theme}` }>
           <Confetti className="confetti" config={config} active={ this.state.islandComplete } />
           <Dialog
+            className="form-container u-text-center"
             iconName="warning"
             isOpen={this.state.confirmSkipOpen}
             onClose={() => this.setState({confirmSkipOpen: false})}
-            title={t("Are you sure?")}
-            canOutsideClickClose={false}
-          >
-            <div className="pt-dialog-body">
-              {
-                t("DiscussionWarning")
-              }
-            </div>
-            <div className="pt-dialog-footer">
-              <div className="pt-dialog-footer-actions">
-                <button className="pt-button" onClick={() => this.setState({confirmSkipOpen: false})}>{t("Cancel")}</button>
-                <button className="pt-button pt-intent-primary" onClick={this.toggleSkip.bind(this)}>{t("Show Me")}</button>
-              </div>
+            title="" >
+            <h2 className="font-lg">{t("Are you sure?")}</h2>
+            <p className="font-md">
+              { t("DiscussionWarning") }
+            </p>
+            <div className="font-sm u-button-group u-margin-top-sm">
+              <button className="button inverted-button" onClick={() => this.setState({confirmSkipOpen: false})}>{t("Cancel")}</button>
+              <button className="button" onClick={this.toggleSkip.bind(this)}>{t("Show Me")}</button>
             </div>
           </Dialog>
           <div className="slide-header" id="slide-head">
@@ -357,9 +353,9 @@ class Slide extends Component {
           }
         </div>
         {/* discussion */}
-        <button className={ `pt-button discussion-toggle ${ showDiscussion ? "pt-active" : "" }` } onClick={this.toggleDiscussion.bind(this)}>
+        <button className={ `button inverted-button discussion-toggle font-sm ${ showDiscussion ? "is-active" : "is-inactive" }` } onClick={this.toggleDiscussion.bind(this)}>
+          <span className={`pt-icon ${ showDiscussion ? "pt-icon-eye-off" : "pt-icon-chat" }`} />
           { showDiscussion ? t("Hide Discussion") : `${t("Show Discussion")} (${this.state.currentSlide.threadlist.length})` }
-          { showDiscussion ? <span className="pt-icon-standard pt-icon-eye-off pt-align-right"></span> : <span className="pt-icon-standard pt-icon-comment pt-align-right"></span> }
         </button>
         { showDiscussion ? <Discussion permalink={this.props.router.location.pathname} subjectType="slide" onNewThread={this.onNewThread.bind(this)} subjectId={currentSlide.id}/> : null }
       </div>

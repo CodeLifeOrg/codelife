@@ -612,7 +612,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, showConsole, island, readOnly, t, tabs} = this.props;
+    const {codeTitle, id, island, readOnly, showConsole, t, tabs} = this.props;
     const {baseRules, titleText, currentText, embeddedConsole, fullscreenEditor, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
@@ -635,7 +635,7 @@ class CodeEditor extends Component {
     });
 
     return (
-      <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id="codeEditor">
+      <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id={id || "codeEditor"}>
         {!this.props.noZoom &&
           <button
             className="code-editor-fullscreen-button pt-button pt-intent-primary"

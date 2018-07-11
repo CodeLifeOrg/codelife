@@ -11,7 +11,7 @@
 
   /* set initial loading spinner height */
   & .loading {
-    min-height: calc(100vh - 430px);
+    min-height: calc(100vh - 240px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,11 +72,29 @@
     &:not(.lessonplan-admin-tab),
     & .lessonbuilder-tree,
     & .item-editor {
-      min-height: calc(100vh - 430px);
+      min-height: calc(100vh - 120px);
+    }
 
-      /* limit height and set overflow on bigger screens */
-      @add-mixin min-md {
+    & .lessonbuilder-tree {
+      z-index: 1;
+    }
+
+    & .item-editor-inner {
+      padding: var(--gutter-md);
+    }
+
+    /* limit height and set overflow on bigger screens */
+    @add-mixin min-md {
+      &:not(.lessonplan-admin-tab),
+      & .lessonbuilder-tree {
         max-height: calc(100vh - 125px);
+        overflow-y: auto;
+      }
+
+      /* offset fixed action bar */
+      & .item-editor-inner {
+        min-height: 0;
+        height: calc(100vh - 120px - var(--nav-height));
         overflow-y: auto;
       }
     }
@@ -94,65 +112,119 @@
   }
 }
 
+/* tabs within a tab */
+.admin-sub-tabs-container {
+  text-align: center;
 
-/* user roles */
-/* NOTE: this is a canon component, so let's get hacky */
-.admin-role {
+  & .admin-sub-tabs {
 
-  /* reset table elements */
-  & table,
-  & tbody,
-  & tr {
-    display: block;
-  }
-
-  & thead {
-    display: none;
-  }
-
-  & tbody {
-    /* multi-column layout */
-    @add-mixin min-sm {
-      column-width: 320px;
-      column-gap: var(--gutter-lg);
-      break-inside: avoid;
-    }
-
-    /* hide an otherwise unhideable border */
-    &:before {
-      content: '';
+    & .pt-tab-list {
       display: block;
-      position: absolute;
-      background: var(--white);
       width: 100%;
-      height: 1px;
-      z-index: 1;
     }
 
-    & tr {
-      display: flex;
-      justify-content: space-between; /* 1 column; justify */
-      break-inside: avoid;
+    & .pt-tab {
+      @add-mixin font-sm;
+      display: inline-block;
 
-      /* more than 1 column; right align */
-      @add-mixin min-sm {
-        justify-content: flex-end;
+      &[aria-expanded=true] {
+        color: var(--sky-black);
       }
     }
 
-    & td {
-      background-color: transparent !important; /* override zebra stripes */
-      text-align: right; /* fix alignment of long names */
+  }
+}
+
+
+/* fixed actions bar */
+.admin-actions-bar {
+  /* sizing */
+  width: 100%;
+  height: var(--nav-height);
+  /* position children */
+  padding: 0 var(--gutter-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* theming */
+  background-color: var(--white);
+
+  /* stuck to bottom on big screens */
+  @add-mixin min-md {
+    /* positioning */
+    position: absolute;
+    bottom: calc(0 - var(--nav-height));
+    left: 0;
+    right: 0;
+    /* theming */
+    box-shadow: 0 0 1em rgba(8, 26, 24, 0.125);
+  }
+
+  /* override p defaults */
+  & .admin-actions-preview {
+    display: inline-block;
+    margin: 0;
+    top: -1px; /* fudge baseline */
+
+    & .link {
+      margin-left: 0.5em;
     }
+  }
 
-    & select {
-      @add-mixin font-xs;
-      border: none;
+  /* just one button */
+  & .button:first-child:last-child {
+    width: 100%;
+  }
+}
 
-      &:hover, &:focus {
-        opacity: 1;
-        background-color: var(--sky-light);
+
+/* translations */
+.field-group {
+  padding: var(--gutter-xs) var(--gutter-sm) var(--gutter-sm) var(--gutter-sm);
+  /* account for padding */
+  width: calc(100% + 30px);
+  left: calc(0 - var(--gutter-sm));
+  /* stacked layout */
+  display: flex;
+  flex-direction: column;
+  /* theming */
+  border-radius: var(--radius-md);
+  /* transitions */
+  transition: background 0.2s;
+
+  /* 2 column layout */
+  @add-mixin min-md {
+    justify-content: space-between;
+    flex-direction: row;
+
+    /* 2 column layout */
+    & .field-container {
+      width: calc(50% - var(--gutter-sm));
+
+      /* reset margin */
+      & + .field-container {
+        margin-top: 0;
       }
+    }
+  }
+
+  /* space out adjacent field groups */
+  & + .field-group {
+    margin-top: var(--gutter-xs);
+  }
+
+  /* interactions */
+  &:hover,
+  &:focus-within {
+    background-color: color(var(--light-1) a(25%));
+  }
+
+  /* pt fields first if using pt.codelife.com */
+  &.translation-field-group.pt {
+    flex-direction: column-reverse;
+
+    @add-mixin min-md {
+      flex-direction: row-reverse;
     }
   }
 }

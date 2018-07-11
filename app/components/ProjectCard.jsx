@@ -122,8 +122,8 @@ class ProjectCard extends Component {
             {/* author */}
             { username &&
               <span className="card-author font-xs">
-                { t("Card.MadeBy") }&nbsp; 
-                {user 
+                { t("Card.MadeBy") }&nbsp;
+                {user
                   ? <Link className="card-author-link link" to={`/profile/${username}`}>
                     { username ? displayname || username : t("anonymous user") }
                   </Link>
@@ -139,7 +139,7 @@ class ProjectCard extends Component {
               aria-labelledby={`project-card-${id}` } />
               <span className="card-likes-count">0</span>
               <span className="u-visually-hidden">&nbsp;
-                { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+                ${ likes === 1 ? t("Like") : t("Likes") }
               </span>
             </p> */}
 
@@ -172,7 +172,7 @@ class ProjectCard extends Component {
             {/* created by */}
             <p className="card-dialog-footer-byline project-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
-              {user 
+              {user
                 ? <a href={userLink} className="project-dialog-link user-link">
                   { username ? displayname || username : t("anonymous user") }
                 </a>
@@ -218,19 +218,24 @@ class ProjectCard extends Component {
                   />
                 </Popover2>
 
-                {/* show feature button if user is admin */}
+                {/* show feature & screenshot buttons if user is admin */}
                 { user.role === 2 &&
-                  <div>
+                  <div className="u-button-group">
                     <button
                       onClick={this.toggleFeature.bind(this)}
-                      className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
+                      className={`card-feature-button pt-button pt-intent-primary font-xs${ featured ? " is-featured" : "" }`}>
                       { featured && <span className="pt-icon pt-icon-tick" /> }
-                      { featured ? t("Featured") : t("Feature") }
+                      <span className="u-hide-below-md">
+                        { featured ? t("Featured") : t("Feature") }
+                      </span>
                     </button>
                     <button
                       onClick={this.generateScreenshot.bind(this)}
-                      className="pt-button pt-intent-primary">
-                      Screenshot <span className="pt-icon pt-icon-camera" />
+                      className="card-screenshot-button pt-button pt-intent-primary font-xs">
+                      <span className="pt-icon pt-icon-camera" />
+                      <span className="u-hide-below-md">
+                        {t("Screenshot")}
+                      </span>
                     </button>
                   </div>
                 }

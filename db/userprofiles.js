@@ -44,7 +44,8 @@ module.exports = function(sequelize, db) {
       // calculation of "per month" is stored here
       last_upped: db.DATE,
       // in Projects, has this user clicked "Never Show this Again" when prompted to share on fb?
-      prompted: db.BOOLEAN
+      prompted: db.BOOLEAN,
+      lang: db.STRING
     },
     {
       freezeTableName: true,

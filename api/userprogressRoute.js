@@ -23,20 +23,21 @@ module.exports = function(app) {
         db.islands.findAll()
           .then(islands => {
             islands = translate(req.headers.host, "pt", islands);
-            let latestIsland = -1;
+            let latestUserIslandIndex = -1;
             for (const up of progress) {
               const i = islands.find(i => i.id === up.level);
-              if (i && i.ordering > latestIsland) {
-                latestIsland = i.ordering;
+              if (i && i.ordering > latestUserIslandIndex) {
+                latestUserIslandIndex = i.ordering;
               }
             }
-            // This is a blocker for november's beta.  Increment this with release of each new island
-            // incremented this for december island.
-            // incremented this for january island
-            // island 6 is city island. set latest to max out at 6 so that the "next" (current) island is always 7, the last island (clock)
-            if (latestIsland >= 6) latestIsland = 6;
-            const island = islands.find(i => i.ordering === latestIsland + 1);
-            returnObj.current = island;
+            const latestReleasedIsland = islands.find(i => i.is_latest === true);
+
+            // Do not set the currentIsland to an unreleased island.
+            if (latestUserIslandIndex >= latestReleasedIsland.ordering) latestUserIslandIndex = latestReleasedIsland.ordering;
+            if (latestUserIslandIndex <= 0) latestUserIslandIndex = 0;
+
+            const currentIsland = islands.find(i => i.ordering === latestUserIslandIndex);
+            returnObj.current = currentIsland;
             res.json(returnObj).end();
           });
       });

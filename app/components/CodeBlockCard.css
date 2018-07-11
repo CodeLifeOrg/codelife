@@ -65,10 +65,10 @@
     }
     @add-mixin min-sm {
       & .user-link {
-        max-width: 20.5rem;
+        max-width: 13.5rem;
       }
       & .share-link {
-        max-width: 25rem;
+        max-width: 18rem;
       }
     }
 
@@ -99,6 +99,17 @@
         margin-right: 1rem;
       }
     }
+    & .pt-button {
+      height: 100%;
+
+      @add-mixin max-md {
+        min-width: 0;
+
+        & .pt-icon {
+          margin-right: 0;
+        }
+      }
+    }
   }
 
   /* space out icon and text */
@@ -109,15 +120,15 @@
   & .card-dialog-footer-action-text {
     line-height: 2.125rem;
   }
+}
 
-  /* flag button theme */
-  & .flag-button {
-    transition: color 0.2s;
+/* flag button theme */
+.flag-button {
+  transition: color 0.2s;
 
-    /* interactions & flagged state */
-    &.is-flagged, &:hover, &:focus {
-      color: var(--danger);
-    }
+  /* interactions & flagged state */
+  &.is-flagged, &:hover, &:focus {
+    color: var(--danger);
   }
 }
 

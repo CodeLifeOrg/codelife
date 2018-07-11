@@ -1,0 +1,97 @@
+@import "../../mixins.css";
+
+/* list */
+.admin-roles {
+  z-index: 1; /* make column links clickable (?!) */
+
+  @add-mixin min-md {
+    padding: 0 var(--gutter-md) var(--gutter-md) var(--gutter-md);
+  }
+
+  /* column layout */
+  @add-mixin min-xs {
+    & .admin-roles-inner {
+      display: flex;
+      justify-content: space-between;
+
+      & .admin-user-column:first-of-type {
+        min-width: 18rem;
+      }
+    }
+  }
+
+  /* list reset */
+  & .admin-user-list {
+    padding-left: 0;
+    left: -0.5em; /* offset padding */
+
+    &:not(:last-of-type) {
+      margin-right: var(--gutter-sm);
+    }
+
+    &.basic-admin-user-list {
+      columns: 5;
+      column-width: 16rem;
+    }
+  }
+
+  /* individual user */
+  & .admin-user-item {
+    /* reset margin & padding */
+    margin: 0;
+    padding: 0;
+    line-height: 1.75;
+    /* theming */
+    border-radius: var(--radius-md);
+    max-width: 18rem;
+    will-change: background-color;
+
+    /* fix css columns bug */
+    & > * {
+      display: inline-block;
+    }
+
+    /* name & link to profile */
+    & .admin-user-link {
+      margin: 0;
+      padding: 0.375em 0.5em;
+      line-height: 1;
+    }
+
+    /* role select */
+    & .admin-user-role {
+      @add-mixin font-xs;
+      /* positioning */
+      position: absolute;
+      right: 0.25em;
+      top: 0.25em;
+      /* theming */
+      background-color: var(--light-1);
+      border: none;
+      /* transitions */
+      will-change: opacity, transform;
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    /* interactions */
+    &:hover,
+    &:focus-within {
+      background-color: color(var(--light-1) a(25%));
+
+      /* reveal role select */
+      & .admin-user-role {
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          color 0.1s ease-out,
+          opacity 0.1s ease-out,
+          transform 0.1s ease-out;
+
+        &:hover, &:focus {
+          background-color: var(--sky-light);
+        }
+      }
+    }
+  }
+}

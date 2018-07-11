@@ -3,6 +3,13 @@ import {translate} from "react-i18next";
 
 import "./DrawerValidation.css";
 
+/**
+ * The CodeEditor is responsible for handling violation of the rules set out for a given
+ * programming challenge. A list of errors is passed in as a prop - this component is 
+ * responsible for creating a readable sentence form of what is wrong with the student's code.
+ * For example, "Your HTML code is missing an <h1> tag". The format of this language is stored in
+ * the database as "Your {{p1}} is missing {{p2}}." (Note that this need be translated by lang)
+ */
 class DrawerValidation extends Component {
 
   getErrorForRule(rule) {
@@ -58,6 +65,11 @@ class DrawerValidation extends Component {
         <tbody>
           { sortedRules.map((rule, i) => {
             const first = i === rules.indexOf(rules.find(r => r.needle === rule.needle));
+            // for a given "needle" in a "haystack", group the rules underneath ONE needle.
+            // This is so things can be built like:
+            // h1:  not included
+            //      not nested inside body
+            //      needs styling
             const family = sortedRules.filter(r => r.needle === rule.needle);
             const passing = 0;
             // const passing = family.filter(rule => rule.passing).length;

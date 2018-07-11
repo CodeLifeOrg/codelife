@@ -12,8 +12,7 @@ class UserCard extends Component {
 
   render() {
 
-    const {t} = this.props;
-    const {bio, id, img, name, username} = this.props.user;
+    const {bio, img, name, username} = this.props.user;
 
     // define user image as null
     let avatarURL = "/avatars/avatar-excited-cropped.jpg";

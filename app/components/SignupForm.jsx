@@ -39,8 +39,8 @@ class SignupForm extends Component {
    */
   onSubmit(e) {
     e.preventDefault();
-    const {legal, redirect, t} = this.props;
-    const {agreedToTerms, email, password, passwordAgain} = this.state;
+    const {redirect, t} = this.props;
+    const {email, password, passwordAgain} = this.state;
     let {username} = this.state;
 
     if (password !== passwordAgain) {
@@ -62,8 +62,7 @@ class SignupForm extends Component {
   }
 
   componentDidUpdate() {
-    const {auth, t} = this.props;
-    const {error, submitted} = this.state;
+    const {error} = this.state;
 
     if (error) {
       this.showToast(error.message, error.iconName, error.intent);
@@ -78,8 +77,7 @@ class SignupForm extends Component {
   }
 
   render() {
-    const {auth, legal, social, t} = this.props;
-    const {agreedToTerms} = this.state;
+    const {auth, social, t} = this.props;
     const email = this.state.email === null ? auth.error && auth.error.email ? auth.error.email : "" : this.state.email;
 
     return (

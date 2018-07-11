@@ -133,7 +133,6 @@ class Leaderboard extends Component {
         <td className="statistics-table-cell schoolname">{u.schoolname}</td>
         <td className="statistics-table-cell geoname">{u.geoname}</td>
         <td className="statistics-table-cell created-at">{this.formatDate(u.createdAt)}</td>
-        {/*<td className="statistics-table-cell updated-at">{new Date(u.updatedAt).toDateString()}</td>*/}
       </tr>;
     });
 

@@ -85,7 +85,7 @@ class ReportBox extends Component {
   }
 
   submitReport() {
-    const {reason, comment, userProfile} = this.state;
+    const {reason, comment} = this.state;
     const {reportid, contentType, permalink} = this.props;
     const rpayload = {reason, comment, permalink, type: contentType, report_id: reportid};
     const rpost = axios.post("/api/reports/save", rpayload);
@@ -106,7 +106,7 @@ class ReportBox extends Component {
   render() {
 
     const {t} = this.props;
-    const {mounted, previousReport, comment, userProfile} = this.state;
+    const {previousReport, comment, userProfile} = this.state;
 
     const disabled = previousReport || !userProfile || userProfile.reports <= 0;
     const isAdmin = this.props.auth.user.role === 2;

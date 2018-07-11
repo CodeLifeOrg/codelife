@@ -249,7 +249,7 @@ class Slide extends Component {
 
   render() {
     const {auth, t} = this.props;
-    const {lid, mlid, sid} = this.props.params;
+    const {lid, mlid} = this.props.params;
     const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
     const {browserHistory} = this.context;
 

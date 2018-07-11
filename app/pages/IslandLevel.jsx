@@ -295,7 +295,6 @@ class Level extends Component {
    */
   buildCheckpointPopover() {
     const {t} = this.props;
-    const {theme} = this.state.currentIsland;
     return (
       <Dialog
         className="form-container checkpoint-form-container text-center"
@@ -451,7 +450,7 @@ class Level extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore, canPostToFacebook} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
@@ -474,7 +473,7 @@ class Level extends Component {
     }
 
     const latestIsland = this.props.islands.find(i => i.is_latest === true);
-    //console.log(latestIsland.ordering);
+    // console.log(latestIsland.ordering);
 
     const otherCodeBlockItemsBeforeFold = [];
     const otherCodeBlockItemsAfterFold = [];

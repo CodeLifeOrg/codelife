@@ -188,23 +188,6 @@ class Projects extends Component {
   }
 
   /**
-   * Deprecated / unused function
-   */
-  shareProject() {
-    const {t} = this.props;
-    const {username} = this.props.auth.user;
-    const {browserHistory} = this.context;
-    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/projects/${username}/${this.state.currentProject.name}`);
-
-    }
-    else {
-      const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
-      toast.show({message: t("Save your webpage before sharing!"), timeout: 1500, intent: Intent.WARNING});
-    }
-  }
-
-  /**
    * The alerts in this component have two states, false, or "truthy," that is, leaveAlert=false
    * means that the window closed, and setting leaveAlert to *what you want the alert to say* 
    * makes it truthy, and therefore open. This click callback is the "are you sure" dialogue
@@ -214,7 +197,7 @@ class Projects extends Component {
     const {t} = this.props;
     const leaveAlert = {
       collab,
-      text: `${t("Are you sure you want to leave")} “${collab.name}”?`
+      text: `${t("Are you sure you want to leave")} "${collab.name}"?`
     };
     this.setState({leaveAlert});
   }

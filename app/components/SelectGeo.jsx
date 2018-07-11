@@ -132,7 +132,7 @@ class SelectGeo extends Component {
               id={`${context}-state-select`}
               value={state || ""}
               onChange={changeState}>
-              {/*<option value="unspecified">{t("Unspecified")}</option>*/}
+              {/* <option value="unspecified">{t("Unspecified")}</option> */}
               {STATES.map(s =>
                 <option key={s.id} value={s.id}>
                   {`${s.id.substr(1, 2).toUpperCase()} - ${s.name}`}

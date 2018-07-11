@@ -21,9 +21,12 @@ class Footer extends Component {
       {id: 2, title: t("Partners"), link: "/learnmore"},
       {id: 3, title: t("Privacy Policy"), link: "/privacy"}
     ];
+    
+    /*
     const surveyLink = [
       {id: 4, title: t("Survey"), link: "/survey"}
     ];
+    */
 
     // explore link array (to be added as necessary)
     const exploreLinks = [

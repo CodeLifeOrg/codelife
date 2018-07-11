@@ -75,7 +75,7 @@ class PasswordReset extends Component {
   componentDidUpdate() {
 
     const {auth, t, router} = this.props;
-    const {email, submitted, toast, token} = this.state;
+    const {submitted, toast, token} = this.state;
 
     const successMsg = t("Reset.actions.RESET_SEND_SUCCESS");
     const failMsg = t("Reset.actions.RESET_SEND_FAILURE");

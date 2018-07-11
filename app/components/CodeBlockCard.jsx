@@ -190,7 +190,7 @@ class CodeBlockCard extends Component {
 
     if (!codeBlock) return <LoadingSpinner />;
 
-    const {t, userProgress, theme, icon, user} = this.props;
+    const {t, userProgress, theme, user} = this.props;
     const {id, lid, liked, reported, likes, snippetname, slug, studentcontent, username, featured} = codeBlock;
 
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
@@ -320,7 +320,7 @@ class CodeBlockCard extends Component {
                 </a>
                 : username ? displayname || username : t("anonymous user")
               }
-              <a href={ embedLink } target="_blank" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
+              <a href={ embedLink } target="_blank" rel="noopener noreferrer" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
             {/* show actions if logged in */}

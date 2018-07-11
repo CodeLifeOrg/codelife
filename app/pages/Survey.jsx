@@ -60,8 +60,7 @@ class Survey extends Component {
 
   submit() {
     console.log("submitting:", this.state);
-    axios.post("/api/survey/", {survey: this.state}).then(resp => {
-      const responseData = resp.data;
+    axios.post("/api/survey/", {survey: this.state}).then(() => {
       const t = Toaster.create({className: "saveToast", position: Position.TOP_CENTER});
       t.show({message: "Survey saved!", intent: Intent.SUCCESS});
     });

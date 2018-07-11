@@ -35,7 +35,7 @@ class ShareFacebookLink extends Component {
           <LoadingSpinner label={false} />
         </p>
         // facebook share link
-        : <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+        : <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank" rel="noopener noreferrer">
           <FacebookIcon />
           <span className="social-button-text">{ buttonLabel }</span>
           <span className="u-visually-hidden">{ t(" on Facebook") }</span>

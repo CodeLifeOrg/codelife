@@ -104,7 +104,7 @@ class CodeBlockEditor extends Component {
    * Callback passed down to the CodeEditor, allowing this parent component to respond
    * to text changes if desired.
    */
-  onChangeText(theText) {
+  onChangeText() {
     // nothing yet
   }
 
@@ -152,20 +152,6 @@ class CodeBlockEditor extends Component {
   clickSave() {
     const saving = true;
     this.setState({saving}, this.verifyAndSaveCode.bind(this));
-  }
-
-  // Deprecated / unused
-  shareCodeblock() {
-    const {t} = this.props;
-    const {username} = this.props.auth.user;
-    const {browserHistory} = this.context;
-    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
-    }
-    else {
-      const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
-      toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
-    }
   }
 
   /** 

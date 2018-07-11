@@ -2,7 +2,7 @@ import axios from "axios";
 import {connect} from "react-redux";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Button, Toaster, Position, Intent} from "@blueprintjs/core";
 import Thread from "components/Thread";
 import "./Discussion.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";

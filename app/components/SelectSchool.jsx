@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Classes, MenuItem} from "@blueprintjs/core";
+import {Button, MenuItem} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/labs";
 import SelectGeo from "components/SelectGeo";
 
@@ -99,7 +99,7 @@ class SelectSchool extends Component {
 
   render() {
     const {t} = this.props;
-    const {loading, error, mySchool, schools, filteredSchools, schoolQuery} = this.state;
+    const {loading, error, mySchool, schools, filteredSchools} = this.state;
 
     if (loading) return <div className="school-geosearch-container"></div>;
 

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
-import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Collapse, Button, Toaster, Position, Intent, PopoverInteractionKind} from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/labs";
 import ReportBox from "components/ReportBox";
 import Comment from "components/Comment";

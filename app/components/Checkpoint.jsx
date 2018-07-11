@@ -26,7 +26,6 @@ class Checkpoint extends Component {
 
   render() {
 
-    const {t} = this.props;
     const {sid} = this.state;
 
     return (

@@ -1,14 +1,13 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Link} from "react-router";
 import {connect} from "react-redux";
 import "moment/locale/pt-br";
 import moment from "moment";
 import {CPF} from "cpf_cnpj";
 import LoadingSpinner from "components/LoadingSpinner";
 import {DateInput} from "@blueprintjs/datetime";
-import {Icon, Toaster, Position, Intent} from "@blueprintjs/core";
+import {Toaster, Position, Intent} from "@blueprintjs/core";
 import SelectGeo from "components/SelectGeo";
 import SelectSchool from "components/SelectSchool";
 import "./ContestSignup.css";
@@ -80,7 +79,7 @@ class ContestSignup extends Component {
 
   onCpfUpdate(e) {
     const cpf = this.formatCPF(e.target.value);
-    const cpfValid = CPF.isValid(cpf);
+    // const cpfValid = CPF.isValid(cpf);
     this.setState({profileUser: Object.assign(this.state.profileUser, {cpf})});
   }
 

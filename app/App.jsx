@@ -76,9 +76,9 @@ class App extends Component {
     if (!userInit && auth.loading) this.setState({userInit: true});
     // if we were loading, and now we are not loading
     if (prevProps.auth.loading && !this.props.auth.loading) {
-      //if that resulted in a user, do the profile ping and redirect
+      // if that resulted in a user, do the profile ping and redirect
       if (this.props.auth.user) {
-        axios.get("/api/profileping").then(resp => {
+        axios.get("/api/profileping").then(() => {
           // On Mounting the app, we need to create a blank user in userprofiles that associates
           // with the user in canon's users.  This calls findOrCreate to make that happen.
           // this.redirect.bind(this)(resp.data[0]);
@@ -138,7 +138,7 @@ class App extends Component {
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
 
     // check if this is the home page
-    const isHome = this.props.router.location.pathname == "/" ? true : false;
+    const isHome = this.props.router.location.pathname === "/" ? true : false;
     const isAdmin = this.props.router.location.pathname.includes("admin") ? true : false;
 
     return (

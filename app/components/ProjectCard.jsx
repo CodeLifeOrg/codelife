@@ -62,7 +62,7 @@ class ProjectCard extends Component {
    * Projects embed a ReportBox to allow for flagging. If a user uses that box to report the content, this
    * callback notifies its parent (this component) that the project has been reported, so state can be updated
    */
-  handleReport(report) {
+  handleReport() {
     const {project} = this.props;
     project.reported = true;
     this.forceUpdate();
@@ -188,7 +188,7 @@ class ProjectCard extends Component {
                 </span>
               }
 
-              <a href={ embedLink } target="_blank" className="project-dialog-link share-link font-xs">{ embedLink }</a>
+              <a href={ embedLink } target="_blank" rel="noopener noreferrer" className="project-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
             {/* show actions if logged in */}

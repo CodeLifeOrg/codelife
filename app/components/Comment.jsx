@@ -3,11 +3,10 @@ import {connect} from "react-redux";
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {translate} from "react-i18next";
-import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {PopoverInteractionKind} from "@blueprintjs/core";
 import {Popover2} from "@blueprintjs/labs";
 import ReportBox from "components/ReportBox";
 import "./Comment.css";
-import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
 

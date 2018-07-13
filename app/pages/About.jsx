@@ -45,13 +45,13 @@ class About extends Component {
 
         <h1>{ t("About") }</h1>
 
-        <p>{ t("splashP1") }</p>
+        
         <p>{ t("aboutP1") }</p>
         <p>{ t("aboutP2") }</p>
         <p>{ t("aboutP3") }</p>
         <p>{ t("aboutP4") }</p>
         <p>{ t("aboutP5") }</p>
-        <p>{ t("splashP2") }</p>
+        <p>{ t("aboutP6") }</p>
 
         { showStudents ? <Tabs2 className="about-photos" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
           { schools.map((s, i) => <Tab2 key={i} id={ s.slug } title={ i + 1 } panel={ <PhotoSlide {...s} /> } />) }

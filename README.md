@@ -4,6 +4,12 @@
 
 A React application based on `datawheel-canon` that provides a framework for teaching high school students how to code.
 
+## Required Software
+* PostgreSQL (database)
+* Node (serverside runtime env)
+* NPM (node package manager, comes with most node installations)
+* xvfb (for screenshots)
+
 ## Quick Dev Spin Up
 
 1. Clone the repo
@@ -31,6 +37,12 @@ export CANON_LOGLOCALE=false
 export CANON_API=http://localhost:3300
 export FLAG_COUNT_HIDE=3
 export FLAG_COUNT_BAN=5
+```
+
+4. Edit local hosts (`/etc/hosts` on a mac) file to add the following language subdomains
+```
+127.0.0.1 en.localhost
+127.0.0.1 pt.localhost
 ```
 
 4. Run dev version of site

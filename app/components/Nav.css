@@ -28,7 +28,7 @@
   }
 
   /* rebalance flex item widths */
-  @add-mixin min-xl {
+  @add-mixin min-xxl {
     & > .logo,
     & > .link-list {
       flex: 2 2 0;
@@ -260,12 +260,57 @@
         }
       }
     }
+
+    /* social links container */
+    & .nav-social-list {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: var(--gutter-sm);
+    }
+
+    /* social link list item layout */
+    & .nav-social-item {
+      display: inline-block;
+      vertical-align: middle;
+
+      & + .nav-social-item {
+        margin-left: 0.25em;
+      }
+    }
+
+    /* social link interactions */
+    & .nav-social-link {
+
+      /* svg sizing */
+      & .social-svg {
+        /* sizing */
+        height: 2rem;
+        /* theming */
+        fill: var(--sky-dark);
+        /* transitions */
+        transition: fill 0.2s ease;
+      }
+
+      /* offset built-in svg padding */
+      &.youtube-nav-social-link .social-svg {
+        transform: scale(1.325); /* fudge youtube size */
+      }
+
+      /* adjust icon fill on hover */
+      &:hover, &:focus {
+        &.facebook-nav-social-link .social-svg  { fill: #3B5998; }
+        &.twitter-nav-social-link .social-svg   { fill: #00ACED; }
+        &.instagram-nav-social-link .social-svg { fill: #E4405F; }
+        &.youtube-nav-social-link .social-svg   { fill: #FF0000; }
+      }
+    }
   }
 }
 
 /* slide browser */
 .link-toggle-container {
   display: inline-block;
+  vertical-align: middle;
 
   /* chevron toggle button */
   & .link-toggle-button {

@@ -1,6 +1,7 @@
 /* mixins */
 
 /* mobile first breakpoints */
+@define-mixin min-xxl { @media (min-width: 1600px) { @mixin-content; } }
 @define-mixin min-xl  { @media (min-width: 1400px) { @mixin-content; } }
 @define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
 @define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }

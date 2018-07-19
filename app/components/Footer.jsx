@@ -19,7 +19,8 @@ class Footer extends Component {
     const aboutLinks = [
       {id: 1, title: t("About"), link: "/about"},
       {id: 2, title: t("Partners"), link: "/learnmore"},
-      {id: 3, title: t("Privacy Policy"), link: "/privacy"}
+      {id: 3, title: t("Privacy Policy"), link: "/privacy"},
+      {id: 4, title: t("Contact"), link: "/contact"}
     ];
     
     /*

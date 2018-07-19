@@ -148,7 +148,7 @@ class Profile extends Component {
                 { profileUser.gid &&
                   <p className="location-profile-meta profile-meta">
                     <span className="u-visually-hidden">{ t("City") }: </span>
-                    <span className="profile-meta-icon pt-icon-standard pt-icon-map-marker" />
+                    {profileUser.geoname && <span className="profile-meta-icon pt-icon-standard pt-icon-map-marker" />}
                     <span className="profile-meta-text">
                       { profileUser.geoname && `${profileUser.geoname}, ${ profileUser.gid.substr(1, 2).toUpperCase() }` }
                     </span>

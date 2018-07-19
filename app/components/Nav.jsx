@@ -10,6 +10,10 @@ import AuthForm from "components/AuthForm";
 import PropTypes from "prop-types";
 import {login, resetPassword} from "datawheel-canon/src/actions/auth";
 
+import FacebookIcon from "./FacebookIcon.svg.jsx";
+import InstagramIcon from "./InstagramIcon.svg.jsx";
+import YoutubeIcon from "./YoutubeIcon.svg.jsx";
+
 import {
   RESET_SEND_FAILURE,
   RESET_SEND_SUCCESS,
@@ -38,7 +42,7 @@ class Nav extends Component {
   }
 
   /**
-   * When Nav Mounts, it is almost always because the page/app is being loaded from scratch, either because 
+   * When Nav Mounts, it is almost always because the page/app is being loaded from scratch, either because
    * the user is visiting for the first time, OR a login has been attempted, and the result must be handled.
    * As such, there is a fairly length decision tree here so that feedback can be shown.
    */
@@ -128,7 +132,7 @@ class Nav extends Component {
     else {
       if (window) window.location = path;
     }
-    
+
   }
 
   render() {
@@ -142,6 +146,26 @@ class Nav extends Component {
       {id: 1, title: t("English"), shortTitle: "En", link: `${protocol}//en.${hostSansSub}${currentPath}`},
       {id: 2, title: t("Portuguese"), shortTitle: "Pt", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
     ];
+
+
+    // social links
+    const socialLinks = [
+      {id: 1, title: "facebook", link: "https://www.facebook.com/CodeLifeBR/"},
+      {id: 2, title: "youtube", link: "https://www.youtube.com/channel/UCR6iTxyV9jdSy21eqS1Ovyg"},
+      {id: 3, title: "instagram", link: "https://www.instagram.com/codelifebr/"}
+    ];
+
+    // social links
+    const socialLinkItems = socialLinks.map(socialLink =>
+      <li className="nav-social-item" key={socialLink.id}>
+        <a className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`} href={socialLink.link} target="_blank" rel="noopener noreferrer">
+          <span className="u-visually-hidden">{t(socialLink.title)}</span>
+          { socialLink.title === "facebook" && <FacebookIcon /> }
+          { socialLink.title === "youtube" && <YoutubeIcon /> }
+          { socialLink.title === "instagram" && <InstagramIcon /> }
+        </a>
+      </li>
+    );
 
     return (
       <div className="nav" id="nav">
@@ -240,6 +264,10 @@ class Nav extends Component {
             <a className="link language-link" onClick={this.selectLang.bind(this, "en", languageLinks[0].link)} key={languageLinks[0].id}>
               {languageLinks[0].shortTitle}
             </a>
+            {/* social links */}
+            <ul className="nav-social-list u-list-reset u-hide-below-lg">
+              { socialLinkItems }
+            </ul>
           </div>
           : <div className="link-list font-sm">
 
@@ -265,6 +293,10 @@ class Nav extends Component {
               <span className="link-icon pt-icon-standard pt-icon-globe" />
               {languageLinks[0].title}
             </a>
+            {/* social links */}
+            <ul className="nav-social-list u-list-reset u-hide-below-md">
+              { socialLinkItems }
+            </ul>
           </div> }
         <Dialog
           className="form-container"

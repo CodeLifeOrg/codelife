@@ -10,14 +10,15 @@ import "./Contact.css";
 class Contact extends Component {
 
   render() {
-
+    const {t} = this.props;
     const email = "contato@codelife.com";
 
     return (
-      <div className="contact">
-
-        <a href={`mailto:${email}`}>{email}</a>
-
+      <div className="content u-vertical-align-children">
+        <div className="form-container u-margin-auto u-text-center">
+          <h1 className="u-margin-top-off">{ t("Contact") }</h1>
+          <a className="link font-lg" href={`mailto:${email}`}>{email}</a>
+        </div>
       </div>
     );
   }

@@ -20,6 +20,7 @@ import AdminPanel from "pages/admin/AdminPanel";
 import ResetPw from "pages/ResetPw";
 import LessonPlan from "pages/LessonPlan";
 import Leaderboard from "pages/Leaderboard";
+import Contact from "pages/Contact";
 import Error from "pages/Error";
 
 // import Contest from "pages/Contest";
@@ -62,6 +63,8 @@ export default function RouteCreate() {
       <Route path="learnmore" component={LearnMore} />
 
       {/* <Route path="contest" component={Contest} /> */}
+
+      <Route path="contact" component={Contact} />
 
       <Route path="lessonplan" component={LessonPlan} />
       <Route path="lessonplan/:lid" component={LessonPlan} />

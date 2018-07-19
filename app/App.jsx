@@ -125,8 +125,8 @@ class App extends Component {
 
     if (i18n.locale === "en" || i18n.locale === "en-US") {
       meta.find(d => d.property === "og:image").content = "https://codelife.com/social/codelife-share-en.jpg";
-      meta.find(d => d.property === "og:description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
-      meta.find(d => d.name === "description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
+      meta.find(d => d.property === "og:description").content = "Codelife is a learning tool and code editor designed for Brazilian students, free and open to all";
+      meta.find(d => d.name === "description").content = "Codelife is a learning tool and code editor designed for Brazilian students, free and open to all";
     }
     meta.push({property: "og:locale", content: i18n.locale});
 

@@ -89,7 +89,7 @@ class Share extends Component {
           <meta property="og:url" content={url} />
           <meta property="og:type" content="website" />
           <meta property="og:title" content={`${name} - ${t("A CodeLife Project")}`} />
-          <meta property="og:description" content={t("Description of Codelife")} />
+          <meta property="og:description" content={t("Home.IntroText")} />
           <meta property="og:image" content={img} />
           <meta property="og:updated_time" content={new Date().toISOString()} />
         </Helmet>

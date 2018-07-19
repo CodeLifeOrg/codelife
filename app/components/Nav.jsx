@@ -158,7 +158,7 @@ class Nav extends Component {
     // social links
     const socialLinkItems = socialLinks.map(socialLink =>
       <li className="nav-social-item" key={socialLink.id}>
-        <a className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`} href={socialLink.link}>
+        <a className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`} href={socialLink.link} target="_blank" rel="noopener noreferrer">
           <span className="u-visually-hidden">{t(socialLink.title)}</span>
           { socialLink.title === "facebook" && <FacebookIcon /> }
           { socialLink.title === "youtube" && <YoutubeIcon /> }

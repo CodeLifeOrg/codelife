@@ -14,7 +14,16 @@ then add the theme name to the @each loop below */
   space,
   dark,
   mountain,
-  beach {
+  beach,
+  dinosaur,
+  volcano,
+  fruit,
+  movie,
+  music,
+  ruins,
+  soccer,
+  tropical,
+  underwater {
   .island-$(theme) {
     /* set background image paths */
     & .island-image,
@@ -192,4 +201,40 @@ then add the theme name to the @each loop below */
 /* 🏖🏖🏖 */
 .island-beach .island-path {
   margin-top: 35px;
+}
+/* 🦖 🦕 */
+.island-dinosaur .island-path {
+  margin-top: -20px;
+}
+/* 🔥🌋🔥 */
+.island-volcano .island-path {
+  margin-top: 40px;
+}
+/* 🍍🥝🍌 */
+.island-fruit .island-path {
+  margin-top: 40px;
+}
+/* 🎥 🎬 */
+.island-movie .island-path {
+  margin-top: 10px;
+}
+/* 🎵🎸🎶 */
+.island-music .island-path {
+  margin-top: 65px;
+}
+/* 📜 📜 */
+.island-ruins  .island-path {
+  margin-top: 30px;
+}
+/* ⚽⚽⚽ */
+.island-soccer .island-path {
+  margin-top: -20px;
+}
+/* 🌴🐠🍹 */
+.island-tropical .island-path {
+  margin-top: -20px;
+}
+/* 🌊 🐟 */
+.island-underwater .island-path {
+  margin-top: 50px;
 }

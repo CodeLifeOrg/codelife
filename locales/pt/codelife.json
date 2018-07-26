@@ -417,9 +417,9 @@
   "Share": "Compartilhar",
   "Share your Project": "Share your Project",
   "ShareDirectLink": {
-    "Copied": "ShareDirectLink.Copied",
-    "CopyInstructions": "ShareDirectLink.CopyInstructions",
-    "Label": "ShareDirectLink.Label"
+    "Copied": "URL Copiada",
+    "CopyInstructions": "Ctrl + C para copiar!",
+    "Label": "link direto"
   },
   "Show Discussion": "Mostrar Discussão",
   "Show Less": "Mostrar menos",

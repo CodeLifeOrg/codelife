@@ -1,0 +1,26 @@
+/* make slide previews look like slides */
+.slide-preview-container {
+  /* override .pt-dialog styles */
+  padding: 0;
+  background: none;
+
+  /* position the frickin' close header/button, again */
+  & .pt-dialog-header {
+    /* take out of document flow */
+    position: absolute;
+    right: 25px;
+    /* them overrides */
+    background: none;
+    box-shadow: none;
+    /* keep button clickable */
+    z-index: 1;
+  }
+
+  /* make slide take up all the space within the dialog */
+  & .slide-inner {
+    margin: 0;
+    height: 100%;
+    /* account for validation buttons */
+    padding-bottom: var(--gutter-lg);
+  }
+}

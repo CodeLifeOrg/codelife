@@ -400,21 +400,33 @@ class SlideEditor extends Component {
 
         {/* preview slide */}
         <Dialog
-          className="is-fullscreen"
+          className="is-fullscreen slide-preview-container"
           isOpen={this.state.isOpen}
           onClose={this.closePreview.bind(this)}
-          title={data.title}>
-          <div id="slide" className="pt-dialog-body">
+          title="">
+
+          <div id="slide" className="slide-inner">
+            <div className="slide-header" id="slide-head">
+              { data.title &&
+                <h1 className="slide-title font-lg">{ data.title }</h1>
+              }
+            </div>
             <SlideComponent {...data} />
           </div>
         </Dialog>
 
         <Dialog
-          className="is-fullscreen"
+          className="is-fullscreen slide-preview-container"
           isOpen={this.state.pt_isOpen}
           onClose={this.closePreview.bind(this)}
-          title={ptData.title}>
-          <div id="slide" className="pt-dialog-body">
+          title="">
+
+          <div id="slide" className="slide-inner">
+            <div className="slide-header" id="slide-head">
+              { data.title &&
+                <h1 className="slide-title font-lg">{ data.pt_title }</h1>
+              }
+            </div>
             <SlideComponent {...ptData} overrideLang="pt" />
           </div>
         </Dialog>

@@ -38,4 +38,15 @@
   & .ql-toolbar .ql-formats {
     display: inline-block !important;
   }
+
+  /* prevent text cursor from dissapearing
+     inside <code> elements (issue #489) */
+  & .ql-editor {
+    z-index: 1; /* keep <code> visible even when pushed back */
+
+    & code {
+      padding: 0; /* easier to tell when the cursor is on the edge */
+      z-index: -1; /* don't obsure the cursor */
+    }
+  }
 }

@@ -311,6 +311,7 @@
 .link-toggle-container {
   display: inline-block;
   vertical-align: middle;
+  top: -0.125em; /* when vertical-align: middle isn't middle enough */
 
   /* chevron toggle button */
   & .link-toggle-button {

@@ -101,12 +101,12 @@ CREATE INDEX projects_on_name_idx ON projects USING GIN(name gin_trgm_ops);
 
 ## Authors
 
-* **Datawheel** [datawheel.us](https://www.datawheel.us/)
-* **FAPEMIG** [fapemig.br](http://www.fapemig.br/)
-* **Governo de Minas Gerais** [mg.gov.br](http://mg.gov.br/)
+* **Datawheel** - [datawheel.us](https://www.datawheel.us/)
+* **FAPEMIG** - [fapemig.br](http://www.fapemig.br/)
+* **Governo de Minas Gerais** - [mg.gov.br](http://mg.gov.br/)
 
 See also the list of [contributors](https://github.com/datawheel/codelife/graphs/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details

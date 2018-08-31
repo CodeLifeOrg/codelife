@@ -16,7 +16,7 @@ A React application based on `canon` that provides a framework for teaching high
 
 ### Database Initialization 
 
-Codelife runs on a Postgres Database, already set up and running at codelife.com, so additional steps should not be required. Connecting to the database for development is accomplished by setting `canon` environment variables (below). This should be all you need to get started.
+Codelife runs on a Postgres Database, already set up and running at codelife.com, so additional setup/configuration steps should not be required. Connecting to the database for development is accomplished by setting `canon` environment variables (below). This should be all you need to get started.
 
 Should it be necessary to recreate the database from scratch, its configuration is represented via the Sequelize models contained in the [db](/db) folder. A schema dump is also made available here.
 
@@ -69,7 +69,7 @@ http://localhost:3300/
 
 ### The `canon` Framework
 
-A great deal of Codelife's functionality and structure, including its user management, API configuration, page routing, and social media integration are all handled through Datawheel project known as `canon`. It is highly recommended that you familiarize yourself with the `canon` documentation, as it provides reasoning behind much of the file structure of codelife. These sections of the readme are of particular importance:
+A great deal of Codelife's functionality and structure, including its user management, API configuration, page routing, and social media integration are all handled through Datawheel framework known as `canon`. It is highly recommended that you familiarize yourself with the `canon` documentation, as it provides reasoning behind much of the file structure of codelife. These sections of the README are of particular importance:
 
 * [User Management](https://github.com/datawheel/canon#user-management) Explains how users are added and authenticated, as well as the concept of "roles".
 * [Custom API Routes](https://github.com/datawheel/canon#custom-api-routes) Explains the purpose of the `/api` folder, and how canon automatically scans for routes.

@@ -2,15 +2,25 @@
 
 [![Build Status](https://travis-ci.org/Datawheel/codelife.svg?branch=master)](https://travis-ci.org/Datawheel/codelife) [![Dependency Status](https://david-dm.org/datawheel/codelife.svg)](https://david-dm.org/datawheel/codelife)
 
-A React application based on `datawheel-canon` that provides a framework for teaching high school students how to code.
+A React application based on `canon` that provides a framework for teaching high school students how to code.
 
-## Required Software
+## Getting Started
+
+### Required Software
 * PostgreSQL (database)
 * Node (serverside runtime env)
 * NPM (node package manager, comes with most node installations)
 * xvfb (for screenshots)
 
-## Quick Dev Spin Up
+## Installation
+
+### Step 1 - Database Initialization 
+
+Codelife runs on a Postgres Database, already set up and running at codelife.com. Connecting to the database for development is accomplished by setting `canon` environment variables (below). This should be all you need to do to connect to the database.
+
+Should it be necessary to recreate the database from scratch, its configuration is represented via the Sequelize models contained in the [db](/db) folder. A schema dump is also made available here.
+
+### Step 2 - Local Development Setup
 
 1. Clone the repo
 ```bash
@@ -55,17 +65,17 @@ npm run dev
 http://localhost:3300/
 ```
 
-## Additional Env Vars
+## Additional Technical Information
 
-All environment variables prepended with `CANON_` are documented in the `datawheel-canon` repo [here](https://github.com/Datawheel/datawheel-canon).
+### Explanation of Env Vars
+
+All environment variables prepended with `CANON_` are documented in the `canon` repo [here](https://github.com/Datawheel/canon).
 
 Codelife has two additional admin-specific env vars, `FLAG_COUNT_HIDE` and `FLAG_COUNT_BAN`, which set the number of user reports on a piece of content required to hide the content (remove from listings/profiles) and ban it automatically, respectively.  
 
-## Additional Setup Steps
-
 ### Remote Rendering 
 
-Codelife contains a CodeEditor that students may use to make websites in the browser. The code that students write is executed on another domain (codelife.tech) to bolster security. The student code is passed to a landing page on codelife.tech via [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) and injected into an iframe on that page. 
+Codelife contains a CodeEditor that students may use to make websites in the browser. The code that students write is executed on another domain (codelife.tech) to improve security. The student code is passed to a landing page on codelife.tech via [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) and injected into an iframe on that page. 
 
 The landing pages (contained in `/sandbox`, but hosted on codelife.tech) are named such that the origin of the `postMessage` can be automatically routed to an appropriately named page (e.g. en.codelife.com -> en-codelife-com.html). This is to ensure that ONLY codelife.com and its language subdomains can send code to be executed.  
 

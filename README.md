@@ -14,13 +14,13 @@ A React application based on `canon` that provides a framework for teaching high
 
 ## Installation
 
-### Step 1 - Database Initialization 
+### Database Initialization 
 
-Codelife runs on a Postgres Database, already set up and running at codelife.com. Connecting to the database for development is accomplished by setting `canon` environment variables (below). This should be all you need to do to connect to the database.
+Codelife runs on a Postgres Database, already set up and running at codelife.com, so additional steps should not be required. Connecting to the database for development is accomplished by setting `canon` environment variables (below). This should be all you need to get started.
 
 Should it be necessary to recreate the database from scratch, its configuration is represented via the Sequelize models contained in the [db](/db) folder. A schema dump is also made available here.
 
-### Step 2 - Local Development Setup
+### Local Development Setup
 
 1. Clone the repo
 ```bash
@@ -33,7 +33,7 @@ cd codelife
 npm i
 ```
 
-3. Set environment variables
+3. Set environment variables ([more info](#explanation-of-env-vars))
 ```
 export CANON_LANGUAGES=en,pt
 export CANON_LANGUAGE_DEFAULT=pt
@@ -67,6 +67,14 @@ http://localhost:3300/
 
 ## Additional Technical Information
 
+### The `canon` Framework
+
+A great deal of Codelife's functionality and structure, including its user management, API configuration, page routing, and social media integration are all handled through Datawheel project known as `canon`. It is highly recommended that you familiarize yourself with the `canon` documentation, as it provides reasoning behind much of the file structure of codelife. These sections of the readme are of particular importance:
+
+* [User Management](https://github.com/datawheel/canon#user-management) Explains how users are added and authenticated, as well as the concept of "roles".
+* [Custom API Routes](https://github.com/datawheel/canon#custom-api-routes) Explains the purpose of the `/api` folder, and how canon automatically scans for routes.
+* [Custom Database Models](https://github.com/datawheel/canon#custom-database-models) Explains the purpose of the `/db` folder, and how canon automatically builds and associates models.
+
 ### Explanation of Env Vars
 
 All environment variables prepended with `CANON_` are documented in the `canon` repo [here](https://github.com/Datawheel/canon).
@@ -75,9 +83,9 @@ Codelife has two additional admin-specific env vars, `FLAG_COUNT_HIDE` and `FLAG
 
 ### Remote Rendering 
 
-Codelife contains a CodeEditor that students may use to make websites in the browser. The code that students write is executed on another domain (codelife.tech) to improve security. The student code is passed to a landing page on codelife.tech via [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) and injected into an iframe on that page. 
+Codelife contains a CodeEditor that students may use to make websites in the browser. The code that students write is executed on another domain (codelife.tech) to improve security. The student code is passed to a landing page on codelife.tech via [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) and injected into an iframe on that page. A deeper documentation of how this process works is included in the [CodeEditor](/app/components/CodeEditor/CodeEditor.jsx) file itself. 
 
-The landing pages (contained in `/sandbox`, but hosted on codelife.tech) are named such that the origin of the `postMessage` can be automatically routed to an appropriately named page (e.g. en.codelife.com -> en-codelife-com.html). This is to ensure that ONLY codelife.com and its language subdomains can send code to be executed.  
+The landing pages themselves (source-controlled here in `/sandbox`, but hosted on codelife.tech) are named such that the origin of the `postMessage` can be automatically routed to an appropriately named page (e.g. en.codelife.com makes requests to codelife.tech/en-codelife-com.html). This is to ensure that ONLY codelife.com and its whitelisted language subdomains can send code to be executed.  
 
 The landing page makes use of [loop-protect](https://github.com/jsbin/loop-protect) to prevent students from crashing their page session with infinite loops.
 

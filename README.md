@@ -55,15 +55,23 @@ export FLAG_COUNT_BAN=5
 127.0.0.1 pt.localhost
 ```
 
-4. Run dev version of site
+5. Run dev version of site
 ```
 npm run dev
 ```
 
-5. Visit the Page
+6. Visit the Page
 ```
 http://localhost:3300/
 ```
+
+### Deployment
+
+The production build of codelife.com always points to the `master` branch. To deploy the latest version on the production server:
+
+1) `git pull origin master` in the `codelife` directory to pull the latest updates from the repo
+2) `npm run build` to create the build
+3) `sudo systemctl restart codelife` to restart the codelife service
 
 ## Additional Technical Information
 

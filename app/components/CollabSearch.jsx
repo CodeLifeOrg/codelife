@@ -226,7 +226,7 @@ class CollabSearch extends Component {
     }
 
     return (
-      <div className="collab-container">
+      <div className="collab-container" role="form">
 
         {/* heading */}
         <h2 className="collab-heading font-xl u-text-center">{t("Collab.Manage")}</h2>

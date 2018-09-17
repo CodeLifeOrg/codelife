@@ -14,15 +14,14 @@ class Footer extends Component {
     const {protocol, host} = serverLocation;
     const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
 
-
     // about link array
     const aboutLinks = [
       {id: 1, title: t("About"), link: "/about"},
-      {id: 2, title: t("Partners"), link: "/learnmore"},
-      {id: 3, title: t("Privacy Policy"), link: "/privacy"},
+      {id: 2, title: t("Privacy Policy"), link: "/privacy"},
+      {id: 3, title: t("Partners"), link: "/learnmore"},
       {id: 4, title: t("Contact"), link: "/contact"}
     ];
-    
+
     /*
     const surveyLink = [
       {id: 4, title: t("Survey"), link: "/survey"}
@@ -39,13 +38,6 @@ class Footer extends Component {
     ];
 
 
-    // if logged in, add additional links to footer
-    if (user) {
-      // aboutLinks.push(surveyLink[0]); // outdated survey content
-      exploreLinks.push(leaderboardLink[0]);
-    }
-
-
     // account link array — must be logged in
     const username = user ? user.username : "";
 
@@ -55,11 +47,27 @@ class Footer extends Component {
       {id: 3, title: t("Log out"), link: "/auth/logout"}
     ];
 
+    const adminLink = [
+      {id: 4, title: t("Admin"), link: "/admin"}
+    ];
+
+
+    // if logged in, add additional links to footer
+    if (user) {
+      // aboutLinks.push(surveyLink[0]); // outdated survey content
+      exploreLinks.push(leaderboardLink[0]);
+
+      // if admin, add admin link to footer
+      if (user.role > 0) {
+        accountLinks.push(adminLink[0]);
+      }
+    }
+
 
     // language select links
     const languageLinks = [
-      {id: 1, title: t("English"), link: `${protocol}//en.${hostSansSub}${currentPath}`},
-      {id: 2, title: t("Portuguese"), link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+      {id: 1, title: t("Portuguese"), link: `${protocol}//pt.${hostSansSub}${currentPath}`},
+      {id: 2, title: t("English"), link: `${protocol}//en.${hostSansSub}${currentPath}`}
     ];
 
 
@@ -119,7 +127,7 @@ class Footer extends Component {
           <h2 className="u-visually-hidden">{ t("Navigation") }</h2>
 
           {/* list of links */}
-          <nav className="footer-nav">
+          <nav className="footer-nav" role="navigation">
 
             {/* about links */}
             <div className="footer-list-container">
@@ -154,7 +162,7 @@ class Footer extends Component {
             </div>
           </nav>
 
-          <div className="footer-credits-container">
+          <div className="footer-credits-container" role="contentinfo">
 
             {/* social links */}
             <ul className="footer-social-list u-list-reset">

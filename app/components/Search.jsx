@@ -60,7 +60,7 @@ class Search extends Component {
   }
 
   /**
-   * onKeyDown is meant to capture inputs - but the arrow up/down aren't currently functional (user can use tabs and 
+   * onKeyDown is meant to capture inputs - but the arrow up/down aren't currently functional (user can use tabs and
    * Enter key to go through links however). This UX could be improved.
    */
   onKeyDown(e) {
@@ -145,7 +145,7 @@ class Search extends Component {
     );
 
     return (
-      <div className="search-container">
+      <div className="search-container" role="search">
 
         {/* icon as label */}
         <label className="search-label" htmlFor={inputID}>
@@ -158,12 +158,15 @@ class Search extends Component {
           id={inputID}
           className="search-input font-sm"
           onChange={this.handleChange.bind(this)}
-          // onKeyDown={this.onKeyDown.bind(this)}
+          onKeyDown={this.onKeyDown.bind(this)}
           value={query}
           placeholder={t("Search.Site")} />
 
         {/* text input */}
-        <div className={query.length > 0 ? "search-results-outer" : "search-results-outer is-hidden"}>
+        <div
+          className={query.length > 0 ? "search-results-outer" : "search-results-outer is-hidden"}
+          aria-hidden={query.length ? false : true}
+        >
 
           {/* Message: keep typing */}
           <p className={query.length <= 2 ? "heading search-results-message font-lg u-margin-bottom-off u-text-center" : "heading search-results-message is-hidden"}>{t("Search.KeepTyping")}</p>
@@ -192,7 +195,12 @@ class Search extends Component {
           </div>
 
           {/* close button */}
-          <button className="search-reset-button pt-dialog-close-button pt-icon-small-cross" onClick={this.clearSearch.bind(this)} aria-label="Close" />
+          <button
+            className="search-reset-button pt-dialog-close-button pt-icon-small-cross"
+            onClick={this.clearSearch.bind(this)}
+            aria-label="Close"
+            tabIndex={query.length ? 0 : -1}
+          />
         </div>
       </div>
     );

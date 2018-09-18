@@ -84,8 +84,13 @@ td > a,
   transition: color 0.2s;
 
   /* interactions */
-  &:hover, &:focus {
+  &:hover {
     color: var(--sky);
+  }
+  /* increase visiblility when focusing via keyboard */
+  &:focus {
+    color: var(--sky-black);
+    text-decoration: underline;
   }
   &:active {
     color: var(--sky-black);

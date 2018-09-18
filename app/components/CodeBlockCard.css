@@ -18,6 +18,31 @@
   background-size: cover;
 }
 
+/* button = star icon */
+.card-likes-button {
+  font-size: 0.875rem; /* 14px */
+  padding: 0.2em; /* increase clickability */
+  /* theming */
+  color: var(--gray);
+  /* position above cover button */
+  z-index: 2;
+  /* transitions */
+  transition: color 0.2s;
+
+  &:hover,
+  &:focus {
+    color: var(--caution);
+  }
+
+  /* make accessibility text visible on focus */
+  &:focus +.card-likes-count > .u-visually-hidden {
+    position: relative !important;
+    clip: auto;
+    height: auto;
+    width: auto;
+  }
+}
+
 
 /* inline card dialog */
 .card-container .pt-overlay-inline {

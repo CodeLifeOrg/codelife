@@ -61,6 +61,27 @@
       }
     }
 
+    /* underline */
+    &:after {
+      content: '';
+      /* sizing */
+      width: 100%;
+      height: 2px;
+      /* positioning */
+      position: absolute;
+      bottom: -0.5em;
+      left: 0;
+      /* theming */
+      background-color: var(--sky-light);
+      border-radius: 1px;
+      /* transitions */
+      opacity: 0;
+      transform: scaleX(0);
+      transition:
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out;
+    }
+
     /* interactions */
     &:hover, &:focus,
     &.is-active {
@@ -69,6 +90,12 @@
       & .logo-text {
         transform: scale(1.1);
       }
+    }
+
+    /* make focus state more obvious */
+    &:focus:after {
+      opacity: 1;
+      transform: none;
     }
   }
 

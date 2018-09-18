@@ -70,7 +70,7 @@ class Level extends Component {
       const prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1);
 
       // If the user hasn't filled in their school, and they are on ANY island other than the first, prompt them to fill
-      // it in via Checkpoint.jsx. 
+      // it in via Checkpoint.jsx.
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
 
       const myCodeBlocks = [];
@@ -94,10 +94,10 @@ class Level extends Component {
     });
   }
 
-  /** 
+  /**
    * The presence of `/show` in the URL is a permalink to open the codeblock. Was originally intended so that codeblockcards could directly link
    * to a user's own codeblock and automatically open it, but this feature was postponed.
-   */ 
+   */
   maybeTriggerCodeblock() {
     const testOpen = location.pathname.includes("/show") && this.allLevelsBeaten();
     this.setState({testOpen});
@@ -151,7 +151,7 @@ class Level extends Component {
 
   /**
    * Callback for CodeBlockEditor on save. The CodeBlockEditor passes its codeblock back out to Level so that its
-   * Codeblock can be set.  
+   * Codeblock can be set.
    */
   handleSave(newCodeBlock) {
     const {currentIsland} = this.state;
@@ -175,7 +175,7 @@ class Level extends Component {
   }
 
   /**
-   * Upon Closing the winning pop-up, send the player to the next island. 
+   * Upon Closing the winning pop-up, send the player to the next island.
    */
   closeOverlay() {
     // TODO: take out island 4 catcher after august (completed)
@@ -186,7 +186,7 @@ class Level extends Component {
     // 21a4 is space island.  If the next island is space island, DONT go to it
     const latestIsland = this.props.islands.find(i => i.is_latest === true);
     // if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
-    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.ordering <= latestIsland.ordering) {  
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.ordering <= latestIsland.ordering) {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -202,10 +202,10 @@ class Level extends Component {
     return this.state.userProgress.find(up => up.level === milestone);
   }
 
-  /** 
-   * The codeblocks underneath the island need to be informed via a callback when they are 
+  /**
+   * The codeblocks underneath the island need to be informed via a callback when they are
    * liked or unliked, as this affects the sorting.
-   */ 
+   */
   reportLike(codeBlock) {
     let likedCodeBlocks = this.state.likedCodeBlocks.slice(0);
     let unlikedCodeBlocks = this.state.unlikedCodeBlocks.slice(0);
@@ -288,8 +288,8 @@ class Level extends Component {
 
   }
 
-  /** 
-   * This was written early in the project, before the Component nesting of React was 
+  /**
+   * This was written early in the project, before the Component nesting of React was
    * fully put to use. This method encapsulates the checkpoint popover - but this should
    * obviously be moved to a component, not a method.
    */
@@ -339,8 +339,8 @@ class Level extends Component {
     );
   }
 
-  /** 
-   * This was written early in the project, before the Component nesting of React was 
+  /**
+   * This was written early in the project, before the Component nesting of React was
    * fully put to use. This method encapsulates the "You Win" popover - but this should
    * obviously be moved to a component, not a method.
    */
@@ -389,8 +389,8 @@ class Level extends Component {
     );
   }
 
-  /** 
-   * This was written early in the project, before the Component nesting of React was 
+  /**
+   * This was written early in the project, before the Component nesting of React was
    * fully put to use. This method encapsulates the test popover - but this should
    * obviously be moved to a component, not a method.
    */
@@ -403,11 +403,15 @@ class Level extends Component {
     if (!this.allLevelsBeaten()) {
       return (
         <div className="editor-popover">
-          <button className="code-block u-unbutton" onClick={this.toggleTest.bind(this)}>
-            <div className="side bottom"></div>
-            <div className="side top"></div>
-            <div className="side left"></div>
-            <div className="side front"></div>
+          <button
+            className="code-block u-unbutton"
+            onClick={this.toggleTest.bind(this)}
+          >
+            <span className="u-visually-hidden">{t("Lessonplan.Codeblock")}</span>
+            <div className="side bottom" />
+            <div className="side top" />
+            <div className="side left" />
+            <div className="side front" />
           </button>
         </div>
       );
@@ -423,11 +427,20 @@ class Level extends Component {
           content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
           portalClassName={ `codeblock-tooltip-portal ${ next ? "is-below" : "is-above" }` }
           tooltipClassName={ currentIsland.theme }>
-          <button className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
-            <div className="side bottom"></div>
-            <div className="side top"></div>
-            <div className="side left"></div>
-            <div className="side front"><span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` }></span></div>
+
+          <button
+            className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` }
+            onClick={this.toggleTest.bind(this)}>
+            <span className="u-visually-hidden">
+              {t("Lessonplan.Codeblock")}
+            </span>
+            <div className="side bottom" />
+            <div className="side top" />
+            <div className="side left" />
+            <div className="side front" />
+            <div className="side front" >
+              <span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` } />
+            </div>
           </button>
         </Tooltip>
         <Dialog

@@ -184,6 +184,12 @@
       /* sizing */
       padding: 0.25em var(--gutter-sm);
 
+      /* pass text-decoration style to inner wrappers */
+      & .link-text,
+      & .limit-link-text-width {
+        text-decoration: inherit;
+      }
+
       /* limit width */
       & .limit-link-text-width {
         @add-mixin overflow-ellipsis;

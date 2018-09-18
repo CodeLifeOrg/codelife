@@ -157,6 +157,7 @@
 
   /* stacked layout on non-tiny screens */
   @add-mixin min-xxs {
+
     /* extend button clickability */
     & .studio-action-button {
       padding-top: 0.375em;
@@ -176,6 +177,27 @@
       font-size: 1.1666em;
       margin-right: 0.5em;
       vertical-align: middle;
+    }
+  }
+
+  /* sticky actions on big screens */
+  @add-mixin min-sm {
+    /* prevent actions from hiding title */
+    & .studio-subtitle {
+      z-index: 2;
+    }
+    & .studio-action-list {
+      /* positioning */
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      /* adjust spacing */
+      margin-top: -0.75rem;
+      margin-bottom: -1rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      /* theming */
+      background-color: var(--white);
     }
   }
 }

@@ -38,6 +38,7 @@ class HomeAbout extends Component {
             {/* about page link */}
             <Link to="/about" className="button font-md">
               { t("Home.AboutButton") }
+              <span className="u-visually-hidden"> {t("Home.AboutHeading")}</span>
             </Link>
           </div>
 

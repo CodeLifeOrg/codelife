@@ -108,6 +108,7 @@ class CodeBlockList extends Component {
 
   render() {
     const {islands, userProgress} = this.state;
+    const {t} = this.props;
 
     if (!islands || !userProgress) return null;
 
@@ -123,7 +124,9 @@ class CodeBlockList extends Component {
       if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > latestIsland.ordering) continue;
       codeBlockItems.push(
         <button className={`u-unbutton codeblock-browser-button ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>
-          <img className="codeblock-browser-button-icon" src={`/islands/${i.theme}-small.png`} alt="" />{ i.name }
+          <img className="codeblock-browser-button-icon" src={`/islands/${i.theme}-small.png`} alt="" />
+          { i.name }
+          <span className="u-visually-hidden"> {t("CODEBLOCKS")}</span>
         </button>
       );
       const thisIslandItems = [];

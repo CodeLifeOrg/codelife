@@ -334,7 +334,7 @@ Main island path
     width: var(--path-xxs);
     height: var(--path-xxs);
     /* theming */
-    transform: rotateX(-33deg)translateZ(-28px)translateX(2px);
+    transform: rotateX(-33deg) translateZ(-28px) translateX(2px);
     transform-style: preserve-3d;
     /* transitions */
     transition: margin 0.2s;
@@ -381,7 +381,7 @@ Main island path
       & .pt-icon-standard {
         font-size: var(--gutter-xs);
         line-height: calc(var(--path-xxs) - 4px);
-        top: -3px;
+        top: -5px;
 
         /* adjust side size */
         @add-mixin min-xs {
@@ -418,46 +418,53 @@ Main island path
 
       /* left side positioning */
       &.left {
-        border-bottom-width: var(--gutter-xxs);
         border-left-width: var(--gutter-xxs);
-        transform: rotateY(270deg)translateX(var(--side-translate-xxs-negative));
+        /* NOTE: 270.001deg is a hack to get the render the front face instead of the back face */
+        /* See issue #500 */
+        transform:
+          rotateY(270.001deg)
+          translateX(var(--side-translate-xxs-negative));
         transform-origin: center left;
 
         /* adjust side positioning */
         @add-mixin min-xs {
-        transform: rotateY(270deg)translateX(var(--side-translate-xs-negative));
+          transform:
+            rotateY(270.001deg)
+            translateX(var(--side-translate-xs-negative));
         }
         @add-mixin min-sm {
-        transform: rotateY(270deg)translateX(var(--side-translate-sm-negative));
+          transform:
+            rotateY(270.001deg)
+            translateX(var(--side-translate-sm-negative));
         }
       }
 
       /* top side positioning */
       &.top {
-        transform: rotateX(-270deg)translateY(var(--side-translate-xxs-negative));
+        transform: rotateX(-270deg) translateY(var(--side-translate-xxs-negative));
         transform-origin: top center;
 
         /* adjust side positioning */
         @add-mixin min-xs {
-          transform: rotateX(-270deg)translateY(var(--side-translate-xs-negative));
+          transform: rotateX(-270deg) translateY(var(--side-translate-xs-negative));
         }
         @add-mixin min-sm {
-          transform: rotateX(-270deg)translateY(var(--side-translate-sm-negative));
+          transform: rotateX(-270deg) translateY(var(--side-translate-sm-negative));
         }
       }
 
       /* bottom side positioning */
       &.bottom {
         box-shadow: 0 2px var(--gutter-sm) rgba(0, 0, 0, 0.75);
-        transform: rotateX(90deg)translateY(var(--side-translate-xxs));
+        transform: rotateX(90deg) translateY(var(--side-translate-xxs));
         transform-origin: bottom center;
 
         /* adjust side positioning */
         @add-mixin min-xs {
-          transform: rotateX(90deg)translateY(var(--side-translate-xs));
+          transform: rotateX(90deg) translateY(var(--side-translate-xs));
         }
         @add-mixin min-sm {
-          transform: rotateX(90deg)translateY(var(--side-translate-sm));
+          transform: rotateX(90deg) translateY(var(--side-translate-sm));
         }
       }
     }

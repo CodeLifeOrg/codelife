@@ -652,8 +652,9 @@ class CodeEditor extends Component {
           </button>
         }
         {
-          this.props.showEditor
-            ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>
+          this.props.showEditor &&
+            <label className={ `code ${readOnly ? "is-read-only" : ""}` }>
+              <span className="u-visually-hidden">{t("Code Editor")}</span>
               { tabs
                 ? <div className="panel-title font-sm">
                   <span className="favicon pt-icon-standard pt-icon-code"></span>
@@ -689,8 +690,7 @@ class CodeEditor extends Component {
                   <DrawerValidation rules={ baseRules.concat(rulejson) } errors={ ruleErrors } />
                 </div>
                 : null }
-            </div>
-            : null
+            </label>
         }
         <div className="render">
           { tabs

@@ -6,7 +6,7 @@ import {Collapse} from "@blueprintjs/core";
 import CodeBlockCard from "components/CodeBlockCard";
 import "./CodeBlockList.css";
 
-/** 
+/**
  * CodeBlockList is used by Projects to display codeblocks to draw inspiration from.
  */
 
@@ -21,7 +21,7 @@ class CodeBlockList extends Component {
     };
   }
 
-  /** 
+  /**
    * On Mount, fetch all codeblocks, sort them by island, then separate into liked, unliked, and "mine" (logged in user's)
    * Also fetch user progress so that unbeaten island codeblocks show as greyed out
    */
@@ -66,7 +66,7 @@ class CodeBlockList extends Component {
 
   /**
    * Because a like can occur in a nested component (in this case, CodeBlockCard), this container component
-   * needs a callback function that can rearrange the items that exist in state. 
+   * needs a callback function that can rearrange the items that exist in state.
    */
   reportLike(codeBlock) {
     const island = this.state.islands.find(l => l.id === codeBlock.lid);
@@ -98,9 +98,9 @@ class CodeBlockList extends Component {
 
   /**
    * Codeblocks have the ability to "fork" into a new project. For most embeddings of CodeBlockCards, this is as simple
-   * as creating the new project and using browserHistory to navigate the user to that page. However, as the user is 
+   * as creating the new project and using browserHistory to navigate the user to that page. However, as the user is
    * ALREADY ON the Projects page, a callback is required to tell the parent component (Projects.jsx) to make a new project
-   * and update itself accordingly 
+   * and update itself accordingly
    */
   handleFork(newid, projects) {
     if (this.props.handleFork) this.props.handleFork(newid, projects);
@@ -123,7 +123,7 @@ class CodeBlockList extends Component {
       if (i.likedCodeBlocks.length + i.unlikedCodeBlocks.length + i.myCodeBlocks.length === 0 || i.ordering > latestIsland.ordering) continue;
       codeBlockItems.push(
         <button className={`u-unbutton codeblock-browser-button ${i.theme}`} key={i.id} onClick={this.handleClick.bind(this, i.id)}>
-          <img className="codeblock-browser-button-icon" src={`/islands/${i.theme}-small.png`} />{ i.name }
+          <img className="codeblock-browser-button-icon" src={`/islands/${i.theme}-small.png`} alt="" />{ i.name }
         </button>
       );
       const thisIslandItems = [];

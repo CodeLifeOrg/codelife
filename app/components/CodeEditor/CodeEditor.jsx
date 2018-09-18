@@ -696,7 +696,7 @@ class CodeEditor extends Component {
           { tabs
             ? <div className="panel-title font-sm">
               { island
-                ? <img className="favicon" src={ `/islands/${island}-small.png` } />
+                ? <img className="favicon" src={ `/islands/${island}-small.png` } alt="" />
                 : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
               { titleText }
             </div>

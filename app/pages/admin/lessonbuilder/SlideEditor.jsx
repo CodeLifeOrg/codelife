@@ -337,7 +337,7 @@ class SlideEditor extends Component {
               <div className={fieldGroupClasses}>
                 {/* en */}
                 <div className="field-container">
-                  <img src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} />
+                  <img src={`/slide_images/${data.id}.jpg?v=${new Date().getTime()})`} alt="" />
 
 
                   <div className="field-container has-icon font-md u-fullwidth u-margin-top-xs">
@@ -356,7 +356,7 @@ class SlideEditor extends Component {
                 </div>
                 {/* pt */}
                 <div className="field-container">
-                  <img src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} />
+                  <img src={`/slide_images/pt_${data.id}.jpg?v=${new Date().getTime()})`} alt="" />
 
                   <div className="field-container has-icon font-md u-fullwidth u-margin-top-xs">
                     <div className="file-select-container">

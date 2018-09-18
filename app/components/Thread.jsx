@@ -12,7 +12,7 @@ import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
-/** 
+/**
  * A thread is the top-level child of a Discussion. Discussions have many threads, threads have many comments.
  */
 
@@ -108,6 +108,11 @@ class Thread extends Component {
     const {thread, commentTitle, commentContent} = this.state;
 
     if (!thread) return <LoadingSpinner />;
+
+    const threadInvalid =
+        !thread.title || !this.state.commentContent || this.state.commentContent === "<p><br></p>"
+          ? true
+          : false;
 
     return (
       context !== "admin"
@@ -210,10 +215,13 @@ class Thread extends Component {
                 this.state.showComments &&
                   <span className="new-comment">
                     <h3 className="new-comment-title u-margin-top-md">{t("Post New Comment")}</h3>
-                    <input className="pt-input" value={this.state.commentTitle} onChange={e => this.setState({commentTitle: e.target.value})} placeholder={t("Title")} />
+                    <label>
+                      <span className="u-visually-hidden">{t("comment")} {t("Title")}</span>
+                      <input className="pt-input" value={this.state.commentTitle} onChange={e => this.setState({commentTitle: e.target.value})} placeholder={t("Title")} />
+                    </label>
                     <QuillWrapper hideGlossary={true} value={this.state.commentContent} onChange={tx => this.setState({commentContent: tx})} />
                     <Button
-                      className="pt-intent-success post-button pt-fill"
+                      className={`post-button pt-button pt-fill${ threadInvalid ? "" : " pt-intent-success" }`}
                       onClick={this.newComment.bind(this)}
                       disabled={!commentTitle || !commentContent || commentContent === "<p><br></p>"}
                     >

@@ -174,11 +174,8 @@
   /* main nav list */
   & .link-list {
     text-align: right; /* keep link-list on the right */
-
     /* align links with content edge */
-    @add-mixin min-sm {
-      margin-right: 0.5em;
-    }
+    margin-right: 0.5em;
 
     /* individual links */
     & .link {

@@ -120,8 +120,7 @@ then add the theme name to the @each loop below */
       color: var(--$(theme)-island-dark);
 
       /* interactions */
-      /* NOTE: it's a div, so there's no :focus */
-      &:hover {
+      &:hover, &:focus {
         color: var(--$(theme)-island-medium);
       }
     }

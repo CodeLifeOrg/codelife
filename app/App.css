@@ -560,8 +560,7 @@ label.pt-control  {
     color: var(--sky-dark);
 
     /* interactions */
-    /* NOTE: it's a div, so there's no :focus */
-    &:hover {
+    &:hover, &:focus {
       color: var(--sky);
     }
   }

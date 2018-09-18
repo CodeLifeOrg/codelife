@@ -139,7 +139,7 @@ class Projects extends Component {
    * posts an empty project to the API endpoint, and refreshes the project list from that API
    * payload so the Project List accurately reflects the new project collection. Update the URL
    * when the project is finished opening.
-   */ 
+   */
   createNewProject(projectName) {
     const {browserHistory} = this.context;
     // Trim leading and trailing whitespace and remove URL-breakers from the project title
@@ -189,7 +189,7 @@ class Projects extends Component {
 
   /**
    * The alerts in this component have two states, false, or "truthy," that is, leaveAlert=false
-   * means that the window closed, and setting leaveAlert to *what you want the alert to say* 
+   * means that the window closed, and setting leaveAlert to *what you want the alert to say*
    * makes it truthy, and therefore open. This click callback is the "are you sure" dialogue
    * for leaving a collaboration
    */
@@ -202,10 +202,10 @@ class Projects extends Component {
     this.setState({leaveAlert});
   }
 
-  /** 
+  /**
    * Upon confirming that this user wants to leave a collab, remove that user from
-   * the collabs tabel. Additionally, filter it out in state. Either way, close the 
-   * leaveAlert 
+   * the collabs tabel. Additionally, filter it out in state. Either way, close the
+   * leaveAlert
    */
   leaveCollab() {
     const {collab} = this.state.leaveAlert;
@@ -230,15 +230,15 @@ class Projects extends Component {
     }
   }
 
-  /** 
-   * Though users are normally invited to share new projects on facebook, they may elect to 
+  /**
+   * Though users are normally invited to share new projects on facebook, they may elect to
    * opt out and "never show this again" which needs to write to their userprofile
    */
   handleCheckbox() {
     this.setState({optout: !this.state.optout});
   }
 
-  /** 
+  /**
    * Delete a given project. The argument here is confusing - originally clicking delete would
    * delete the project immediately. The addition of a deleteAlert (similar to leaveAlert) stores
    * the project to be deleted in the deleteAlert.
@@ -281,7 +281,7 @@ class Projects extends Component {
       });
     }
     // If project is not true, then it is a project object. Open the "Are you sure" deleteAlert,
-    // and save the project there (this method will be called again later, with true as the 
+    // and save the project there (this method will be called again later, with true as the
     // argument, when the user clicks OK)
     else {
       this.setState({deleteAlert: {
@@ -294,7 +294,7 @@ class Projects extends Component {
   }
 
   /**
-   * When a user clicks a project, attempt to open it. Reach into the CodeEditor and check 
+   * When a user clicks a project, attempt to open it. Reach into the CodeEditor and check
    * if changes have been made, and if so, block the opening attempt until they save.
    */
   onClickProject(project) {
@@ -313,7 +313,7 @@ class Projects extends Component {
     }
   }
 
-  /** 
+  /**
    * Prepare a payload containing the filename, id, content, etc to be sent to the update api.
    * If this is the first time the user is saving a project, offer to share it on Facebook.
    * Note that this is one of the many places in Codelife where a 5 second timer is used to allow
@@ -361,7 +361,7 @@ class Projects extends Component {
   }
 
   /**
-   * Callback for closing the share window, save the users preference if they asked 
+   * Callback for closing the share window, save the users preference if they asked
    * not to be asked again.
    */
   closeFirstTimeShare() {
@@ -374,10 +374,10 @@ class Projects extends Component {
   }
 
   /**
-   * Reach into the CodeEditor and call the executeCode function. This requires manual 
-   * execution - otherwise if the user was writing something like "alert()" then it would 
+   * Reach into the CodeEditor and call the executeCode function. This requires manual
+   * execution - otherwise if the user was writing something like "alert()" then it would
    * render every single keystroke
-   */ 
+   */
   executeCode() {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
@@ -391,14 +391,20 @@ class Projects extends Component {
     this.setState({projects}, this.openProject.bind(this, newid));
   }
 
+  // set codeblock browser state
   toggleCodeblocks() {
     this.setState({showCodeblocks: !this.state.showCodeblocks});
+
+    // handle focus
+    this.state.showCodeblocks
+      ? this.refs.showCodeblocksButton.focus()
+      : this.refs.hideCodeblocksButton.focus();
   }
 
-  /** 
+  /**
    * Rename a project. Set title editability to false temporarily and prune URL-breakers
    * and leading/trailing whitespace from the new name. Write the project to the db and update state
-   */ 
+   */
   changeProjectName(newName) {
     const {currentProject, projects} = this.state;
     const canEditTitle = false;
@@ -414,7 +420,7 @@ class Projects extends Component {
     this.saveCodeToDB.bind(this)();
   }
 
-  /** 
+  /**
    * Keyboard callbacks
    */
   handleKey(e) {
@@ -492,7 +498,8 @@ class Projects extends Component {
       <li className="project-switcher-item" key={project.id}>
         <Link
           onClick={() => this.onClickProject.bind(this)(project)}
-          className="project-switcher-link link">
+          className="project-switcher-link link"
+          tabIndex="0">
           <span className="project-switcher-link-thumb">
             <img className="project-switcher-link-thumb-img" src={`/pj_images/${project.user.username}/${project.id}.png?v=${new Date().getTime()}`} alt=""/>
           </span>
@@ -507,7 +514,8 @@ class Projects extends Component {
       <li to={collab.id} className="project-switcher-item" key={collab.id}>
         <Link
           onClick={() => this.onClickProject.bind(this)(collab)}
-          className="project-switcher-link link">
+          className="project-switcher-link link"
+          tabIndex="0">
           <span className="project-switcher-link-thumb">
             <img className="project-switcher-link-thumb-img" src={`/pj_images/${collab.user.username}/${collab.id}.png?v=${new Date().getTime()}`} alt=""/>
           </span>
@@ -656,7 +664,7 @@ class Projects extends Component {
                 }
 
                 {/* new project */}
-                <button className="new-project-button pt-button pt-intent-primary" onClick={this.clickNewProject.bind(this)}>
+                <button className="new-project-button button font-sm" onClick={this.clickNewProject.bind(this)}>
                   <span className="pt-icon pt-icon-application" />
                   { t("create new project") }
                 </button>
@@ -676,35 +684,48 @@ class Projects extends Component {
         </div>
 
 
-        {/* show / hide codeblocks */}
-        { !showCodeblocks
-          // show the button
-          ? <div className="cta u-text-center u-margin-top-lg u-margin-bottom-off">
+        {/* show codeblocks */}
+        <div
+          className="projects-cta cta u-text-center u-margin-top-lg u-margin-bottom-off"
+          aria-hidden={showCodeblocks}>
 
-            <h2 className="cta-heading u-margin-top-off u-margin-bottom-off font-lg">
-              { t("Need inspiration?") }
+          <h2 className="cta-heading u-margin-top-off u-margin-bottom-off font-lg">
+            { t("Need inspiration?") }
+          </h2>
+
+          {/* show codeblocks button */}
+          <button
+            className="cta-button button font-md u-margin-top-md u-margin-bottom-sm"
+            onClick={this.toggleCodeblocks.bind(this)}
+            ref="showCodeblocksButton"
+            tabIndex={showCodeblocks ? "-1" : "0"}
+          >
+            { t("Browse Codeblocks") }
+          </button>
+        </div>
+
+        {/* hide codeblocks */}
+        <div
+          className="projects-cta codeblock-browser content u-padding-bottom-off"
+          aria-hidden={!showCodeblocks}>
+          <div className="content-section">
+            <h2 className="codeblock-browser-heading u-margin-top-off">{ t("Browse Codeblocks") }
+              {/* hide codeblocks button */}
+              <button
+                className="codeblock-browser-hide-button u-unbutton u-margin-top-off u-margin-bottom-off"
+                onClick={this.toggleCodeblocks.bind(this)}
+                ref="hideCodeblocksButton"
+                tabIndex={!showCodeblocks ? "-1" : "0"}
+              >
+                <span className="pt-icon pt-icon-eye-off" />
+                <span className="u-visually-hidden">{ t("Hide Codeblocks") }</span>
+              </button>
             </h2>
-
-            {/* login | signup button */}
-            <button className="cta-button pt-button pt-intent-primary font-md u-margin-top-md" onClick={this.toggleCodeblocks.bind(this)}>
-              { t("Browse Codeblocks") }
-            </button>
-          </div>
-          // show the codeblocks
-          : <div className="codeblock-browser content u-padding-bottom-off">
-            <div className="content-section">
-              <h2 className="codeblock-browser-heading u-margin-top-off">{ t("Browse Codeblocks") }
-                <button
-                  className="codeblock-browser-hide-button u-unbutton u-margin-top-off u-margin-bottom-off"
-                  onClick={this.toggleCodeblocks.bind(this)}>
-                  <span className="pt-icon pt-icon-eye-off" />
-                  <span className="u-visually-hidden">{ t("Hide Codeblocks") }</span>
-                </button>
-              </h2>
+            { showCodeblocks &&
               <CodeBlockList blockFork={this.editor && this.editor.getWrappedInstance().getWrappedInstance().changesMade()} handleFork={this.handleFork.bind(this)} />
-            </div>
+            }
           </div>
-        }
+        </div>
 
         {/* first time share */}
         <Dialog

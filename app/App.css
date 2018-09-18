@@ -84,13 +84,13 @@ td > a,
   transition: color 0.2s;
 
   /* interactions */
-  &:hover {
-    color: var(--sky);
-  }
   /* increase visiblility when focusing via keyboard */
   &:focus {
     color: var(--sky-black);
     text-decoration: underline;
+  }
+  &:hover {
+    color: var(--sky);
   }
   &:active {
     color: var(--sky-black);
@@ -99,8 +99,7 @@ td > a,
   /* danger text */
   &.danger-text:hover,
   &.danger-text:focus {
-    color: var(--danger);
-    opacity: 0.8; /* approximate sky color value */
+    color: var(--danger-dark);
   }
 }
 

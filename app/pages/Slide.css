@@ -72,12 +72,20 @@
       right: 0;
       text-decoration: none;
 
+      /* icon positioning */
       & .pt-icon {
         margin-left: 0.25em;
+        transition: transform 0.2s ease-out;
 
         @add-mixin max-sm {
           @add-mixin font-lg;
         }
+      }
+
+      /* interactions */
+      &:hover .pt-icon,
+      &:focus .pt-icon {
+        transform: scale(1.5);
       }
     }
   }

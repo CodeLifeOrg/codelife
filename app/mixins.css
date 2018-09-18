@@ -262,9 +262,10 @@
   /* positioning */
   display: inline-block;
   /* typography */
-  color: var(--sky-dark);
+  color: var(--sky-black);
   font-weight: 700;
   text-transform: uppercase;
+  /* background-color: var(--sky); */ /* accessibility testing */
 
   /* interactions */
   &:hover, &:focus {

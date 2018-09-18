@@ -176,6 +176,7 @@
     text-align: right; /* keep link-list on the right */
     /* align links with content edge */
     margin-right: 0.5em;
+    opacity: 0.925; /* reduce contrast as much as WCAG will allow */
 
     /* individual links */
     & .link {
@@ -234,7 +235,7 @@
 
         &:last-of-type {
           padding-left: 0.5em;
-          border-left: 1px solid var(--sky-dark);
+          border-left: 1px solid var(--sky-black);
         }
       }
 
@@ -283,7 +284,7 @@
         /* sizing */
         height: 2rem;
         /* theming */
-        fill: var(--sky-dark);
+        fill: var(--sky-black);
         /* transitions */
         transition: fill 0.2s ease;
       }
@@ -295,10 +296,13 @@
 
       /* adjust icon fill on hover */
       &:hover, &:focus {
-        &.facebook-nav-social-link .social-svg  { fill: #3B5998; }
+        & .social-svg {
+          fill: var(--black);
+        }
+        /* &.facebook-nav-social-link .social-svg  { fill: #3B5998; }
         &.twitter-nav-social-link .social-svg   { fill: #00ACED; }
         &.instagram-nav-social-link .social-svg { fill: #E4405F; }
-        &.youtube-nav-social-link .social-svg   { fill: #FF0000; }
+        &.youtube-nav-social-link .social-svg   { fill: #FF0000; } */
       }
     }
   }
@@ -315,10 +319,14 @@
     @add-mixin nav-link;
     padding: 0.25em 0.75em;
     margin-left: -0.5em; /* offset padding */
+    /* it's a button, not a link */
+    cursor: default;
 
     /* interactions */
     &:hover, &:focus {
       color: var(--black);
+      transform: scale(1.1);
+      transform-origin: bottom center;
     }
   }
 }

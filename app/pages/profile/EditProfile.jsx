@@ -110,6 +110,7 @@ class EditProfile extends Component {
               const toast = Toaster.create({className: "company-saved-toast", position: Position.TOP_CENTER});
               toast.show({message: t("Unable to upload image!"), intent: Intent.DANGER});
             }
+            browserHistory.push(`/profile/${profileUser.username}`);
             return Promise.reject(error.response);
           });
         }

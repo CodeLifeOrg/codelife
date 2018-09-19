@@ -191,10 +191,14 @@ class EditProfile extends Component {
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
     const setBday = this.setBday.bind(this);
-    const popoverProps = {
+    const dobPopoverProps = {
       popoverClassName: "calendar-popover pt-minimal",
       inline: true,
       isOpen: dobPopoverOpen
+    };
+    // pass ID to input so the DOB label can reference it
+    const dobInputProps = {
+      id: "profile-dob"
     };
 
     if (loading) return <LoadingSpinner />;
@@ -274,9 +278,9 @@ class EditProfile extends Component {
             >
               <label className="font-sm" htmlFor="profile-dob">{ t("DOB") }</label>
               <DateInput
-                popoverProps={popoverProps}
+                popoverProps={dobPopoverProps}
+                inputProps={dobInputProps}
                 className="field-input font-sm"
-                id="profile-dob"
                 name="dob"
                 onChange={setBday}
                 openOnFocus={false}

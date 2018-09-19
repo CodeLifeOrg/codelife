@@ -1133,13 +1133,24 @@ form field layout
     padding-top: 0.25em;
     padding-bottom: 0.375em;
     opacity: 0;
+
+    /* hover & focus states */
+    &:hover ~ .fake-file-select:after,
+    &:focus ~ .fake-file-select:after {
+      background-color: var(--sky-black);
+    }
+
+    /* focus state */
+    &:focus ~ .fake-file-select {
+      background-color: var(--sky-light);
+    }
   }
   /* make real field and fake field take up width of container */
   & .field-input {
     width: 100%;
 
     /* interactions */
-    &:hover, &:focus {
+    &:hover {
       & ~ .fake-file-select {
         background-color: var(--white);
         border-color: var(--sky-dark);
@@ -1200,6 +1211,10 @@ form field layout
       text-align: center;
       border-radius: 1.5em;
     }
+    @add-mixin min-md {
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
   }
 }
 
@@ -1229,6 +1244,11 @@ form field layout
   /* reset the font size after unsetting it so the popover isn't huge 😡 */
   &.font-md input {
     @add-mixin font-md;
+  }
+
+  /* icon color on :focus */
+  &:focus-within .pt-icon-calendar {
+    color: var(--sky-dark);
   }
 
   /* THE PICKER */

@@ -398,6 +398,10 @@
     width: 100%;
   }
 
+  /* set code editor max height */
+  & .code-editor:not(.is-fullscreen) {
+    max-height: 75vh;
+  }
 
   /* renderCode template */
   & .renderCode {
@@ -405,7 +409,7 @@
     /* prevents code-editor from breaking layout on medium-sized screens */
     @add-mixin min-sm {
       & .code-editor {
-      width: calc(100% - 300px);
+        width: calc(100% - 300px);
       }
     }
   }

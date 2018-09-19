@@ -642,6 +642,8 @@ class CodeEditor extends Component {
             onClick={ this.fullscreenEditorToggle.bind(this) }
             aria-labelledby="fullscreen-icon-label" >
 
+            <span className="code-editor-fullscreen-text u-hide-above-md font-sm">{ t("Fullscreen recommended") } </span>
+
             {/* hidden label text for accessibility */}
             <span className="u-visually-hidden" id="fullscreen-icon-label">{ t("Toggle fullscreen mode") }</span>
 

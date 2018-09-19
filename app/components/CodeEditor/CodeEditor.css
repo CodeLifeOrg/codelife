@@ -293,19 +293,36 @@
 /* fullscreen toggle */
 .code-editor-fullscreen-button {
   /* sizing */
-  width: 2.5rem; /* 40px */
+  width: auto;
   height: 2.5rem; /* 40px */
   padding: 0; /* override button default */
   /* positioning */
   position: absolute; /* take out of the flow */
   top: -0.375em;
   right: 1em;
-  z-index: 1; /* position above code editor */
+  z-index: 2; /* position above code editor & code highlight */
   /* theming */
   text-align: center;
   /* transitions */
   &.pt-button { /* increase specificity */
     transition: box-shadow 0.2s;
+  }
+
+  /* hide the hint on big screens */
+  @add-mixin min-md {
+    width: 2.5rem;
+  }
+
+  & .code-editor-fullscreen-text {
+    line-height: 2.5rem;
+    top: -1px;
+    padding-left: 1rem;
+  }
+
+  & .code-editor-fullscreen-text,
+  & .code-editor-fullscreen-icon {
+    display: inline-block;
+    vertical-align: middle;
   }
 
   /* icon sizing */
@@ -316,6 +333,11 @@
     top: -1px; /* baseline adjustment */
     /* transitons */
     transition: transform 0.2s ease-out;
+
+    @add-mixin max-md {
+      padding-left: 0.5rem;
+      padding-right: 1rem;
+    }
   }
 
   /* interactions */
@@ -325,8 +347,10 @@
       box-shadow: 0 2px 1em rgba(8, 26, 24, 0.2) !important; /* override override, feels bad man */
 
       /* yo dawg I heard you like transforms */
+      @add-mixin min-md {
       & .code-editor-fullscreen-icon {
         transform: scale(1.15);
+      }
       }
     }
   }
@@ -350,6 +374,12 @@
   /* position above navbar */
   z-index: 20;
 
+  /* kill border radius */
+  & .code,
+  & .render {
+    border-radius: 0;
+  }
+
   /* fullscreen editor layout dictated by device orientation */
   @media (orientation: landscape) {
     flex-direction: row;
@@ -358,12 +388,16 @@
     flex-direction: column;
   }
 
-  /* opposite button icon scaling */
-  & .code-editor-fullscreen-button .code-editor-fullscreen-icon,
-  & .code-editor-fullscreen-button:active .code-editor-fullscreen-icon {
-    transform: scale(1.15);
-  }
-  & .code-editor-fullscreen-button:hover .code-editor-fullscreen-icon {
-    transform: none;
+  & .code-editor-fullscreen-button {
+    width: 2.5rem;
+    top: 0.5rem;
+
+    & .code-editor-fullscreen-text {
+      display: none;
+    }
+    & .code-editor-fullscreen-icon {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }

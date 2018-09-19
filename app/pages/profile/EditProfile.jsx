@@ -104,6 +104,13 @@ class EditProfile extends Component {
               toast.show({message: t("Profile saved!"), intent: Intent.SUCCESS});
               browserHistory.push(`/profile/${profileUser.username}`);
             }
+          }).catch(error => {
+            // Do something with response error
+            if (error.response.status === 413) {
+              const toast = Toaster.create({className: "company-saved-toast", position: Position.TOP_CENTER});
+              toast.show({message: t("Unable to upload image!"), intent: Intent.DANGER});
+            }
+            return Promise.reject(error.response);
           });
         }
         else {

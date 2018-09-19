@@ -494,7 +494,7 @@
   "UserCodeBlocksList": "Desafios de {{username}}",
   "UserProfile": {
     "HiddenContent": "UserProfile.HiddenContent",
-    "Visible": "UserProfile.Visible"
+    "Visible": "Visível"
   },
   "UserProjectsList": "Projetos de {{username}}",
   "Username": "Nome de usuário",

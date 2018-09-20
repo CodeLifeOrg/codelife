@@ -120,6 +120,10 @@
       /* positioning */
       top: -23.5rem;
 
+      @add-mixin max-xs {
+        top: -90vw;
+      }
+
       /* avatar peaking out from behind the island */
       & .island-avatar-img {
         /* sizing */

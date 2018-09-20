@@ -11,12 +11,16 @@
 
   /* flex container */
   & .home-about-half-container {
+    z-index: 1;
 
     /* space out / position video */
     & .home-about-half:last-of-type {
       margin-top: 2.75rem;
       margin-bottom: 2rem;
     }
+
+    /* apply extra white background on small screens */
+    @add-mixin cloud-safe-area;
 
     /* two column layout */
     @add-mixin min-sm {

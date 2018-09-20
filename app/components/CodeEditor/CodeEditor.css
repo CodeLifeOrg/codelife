@@ -23,6 +23,11 @@
     border: 1px solid var(--black);
     background-color: var(--dark-3); /* no sneaky white pixels when zoomed, please */
 
+    /* prevent zoom on mobile */
+    & textarea {
+      font-size: 16px;
+    }
+
     /* editor highlight line; used for both themes */
     & .ace_marker-layer > .ace_active-line {
       background-color: var(--gray);
@@ -194,10 +199,6 @@
 .panel-content.ace_dark {
   background-color: var(--dark-3);
 
-  & textarea {
-    font-size: 16px;
-  }
-
   & + .drawer > .title {
     background-color: var(--dark-3);
     border-bottom: none;
@@ -216,6 +217,7 @@
   min-width: 0; /* fixes overflow bug on smaller screens */
   border: 1px solid var(--light-2);
   background-color: var(--light-1); /* no sneaky white pixels when zoomed, please */
+
   & .panel-title {
     align-self: flex-start;
     background-color: var(--light-1);
@@ -267,6 +269,8 @@
   /* stacked layout */
   & .code {
     border-radius: var(--radius-md) var(--radius-md) 0 0;
+
+
   }
   & .render {
     border-radius: 0 0 var(--radius-md) var(--radius-md);

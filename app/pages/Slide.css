@@ -138,6 +138,8 @@
         max-height: 70vh; /* fallback */
         max-height: calc(100vh - 4em);
         overflow-y: auto;
+        /* enable inertia scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
         /* scale up font size */
         font-size: 13px;
         /* space out from editors */

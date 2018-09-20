@@ -46,6 +46,8 @@
       overflow-y: auto;
       padding: var(--gutter-xs) var(--gutter-sm);
       white-space: pre-wrap;
+      /* enable inertia scrolling on mobile */
+      -webkit-overflow-scrolling: touch;
     }
     & .codeBlockTooltip {
       left: 50%;
@@ -129,6 +131,8 @@
     background-color: var(--white);
     height: 0;
     overflow-y: scroll;
+    /* enable inertia scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
     transition: height 0.35s;
     & .log {
       border-bottom: 1px solid var(--light-1);

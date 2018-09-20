@@ -367,6 +367,8 @@
   max-width: 52rem;
   max-height: 100vh; /* make it work on shorter screens */
   overflow-y: auto;
+  /* enable inertia scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
 
   &[class*=form-container] {
     position: relative !important; /* thanks, blueprint */

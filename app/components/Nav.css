@@ -147,6 +147,8 @@
       max-height: calc(100vh - 120px);
       overflow-y: auto;
       padding: var(--gutter-sm);
+      /* enable inertia scrolling on mobile */
+      -webkit-overflow-scrolling: touch;
       /* theming */
       background-color: var(--white);
       border-radius: var(--radius-md);

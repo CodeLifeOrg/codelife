@@ -601,6 +601,8 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100vh;
+    /* enable inertia scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
   }
 }
 

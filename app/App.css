@@ -277,7 +277,8 @@ blueprint overrides
   } */
 
   /* override blueprint disabled style */
-  &:disabled {
+  &:disabled,
+  &.pt-disabled {
     color: var(--white) !important;
     background-color: var(--light-2) !important;
   }

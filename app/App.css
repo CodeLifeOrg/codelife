@@ -239,6 +239,15 @@ blueprint overrides
   background-color: rgba(245, 245, 255, 0.7);
 }*/
 
+.pt-overlay {
+  z-index: 100;
+
+  /* give rando div a z-index so the content isn't hidden on mobile (wtf blueprint) */
+  & div:not([class]) {
+    z-index: 1;
+  }
+}
+
 .pt-input {
   border-radius: var(--radius-sm);
 }

@@ -370,6 +370,11 @@
   /* enable inertia scrolling on mobile */
   -webkit-overflow-scrolling: touch;
 
+  /* no padding on small screens */
+  @add-mixin max-sm {
+    margin: 2px;
+  }
+
   &[class*=form-container] {
     position: relative !important; /* thanks, blueprint */
   }

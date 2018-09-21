@@ -161,6 +161,13 @@
       text-align: center; /* center align image within container */
       width: 100%;
 
+      /* center image within container */
+      @add-mixin max-sm {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       @add-mixin min-sm {
         width: calc(100% - 300px); /* offset text */
       }
@@ -303,7 +310,7 @@
 
       @add-mixin max-sm {
         position: relative;
-        bottom: 95px;
+        top: 10px;
       }
 
       @add-mixin min-sm {
@@ -338,6 +345,13 @@
     }
   }
 
+  /* make space for validation buttons on mobile */
+  @add-mixin max-sm {
+    & .inputCode + .slide-footer .pt-button {
+      margin-top: var(--gutter-lg);
+    }
+  }
+
   /* footer */
   & .slide-footer {
     display: flex;
@@ -353,7 +367,6 @@
 
       & .pt-button {
         @add-mixin button-groupify;
-        margin-top: var(--gutter-lg);
         width: 50%;
       }
     }

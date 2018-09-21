@@ -8,7 +8,7 @@ import Logo from "components/Logo.svg";
 import Search from "components/Search";
 import AuthForm from "components/AuthForm";
 import PropTypes from "prop-types";
-import {login, resetPassword} from "datawheel-canon/src/actions/auth";
+import {login, resetPassword} from "@datawheel/canon-core/src/actions/auth";
 
 import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
@@ -19,7 +19,7 @@ import {
   RESET_SEND_SUCCESS,
   WRONG_PW,
   SIGNUP_EXISTS
-} from "datawheel-canon/src/consts";
+} from "@datawheel/canon-core/src/consts";
 
 import "./Nav.css";
 

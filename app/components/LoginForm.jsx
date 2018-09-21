@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {login, resetPassword} from "datawheel-canon/src/actions/auth";
+import {login, resetPassword} from "@datawheel/canon-core/src/actions/auth";
 import {translate} from "react-i18next";
 
 import TwitterIcon from "./TwitterIcon.svg.jsx";

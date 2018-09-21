@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
 import {Link} from "react-router";
-import {fetchData} from "datawheel-canon";
-import {AnchorLink} from "datawheel-canon/src/components/AnchorLink";
+import {fetchData} from "@datawheel/canon-core";
+import {AnchorLink} from "@datawheel/canon-core/src/components/AnchorLink";
 import "./LessonPlan.css";
 
 import CodeEditor from "components/CodeEditor/CodeEditor";

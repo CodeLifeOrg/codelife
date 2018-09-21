@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Canon, isAuthenticated} from "datawheel-canon";
+import {Canon, isAuthenticated} from "@datawheel/canon-core";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
@@ -142,7 +142,7 @@ class App extends Component {
     const isAdmin = this.props.router.location.pathname.includes("admin") ? true : false;
 
     return (
-      <Canon id="app" className={bareRoute && "share-app"}>
+      <div id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />
         {
           !bareRoute && (location.href.includes("dev.") || location.href.includes("nightly."))
@@ -162,7 +162,7 @@ class App extends Component {
             { !isHome && !isAdmin ? <Clouds /> : null }
             <LoadingSpinner />
           </div> }
-      </Canon>
+      </div>
     );
 
   }

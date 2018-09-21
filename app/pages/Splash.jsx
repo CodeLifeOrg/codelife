@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {translate} from "react-i18next";
-import {AnchorLink, Login, SignUp} from "datawheel-canon";
+import {AnchorLink, Login, SignUp} from "@datawheel/canon-core";
 import Clouds from "components/Clouds";
 
 import "./Splash.css";

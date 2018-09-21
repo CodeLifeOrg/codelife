@@ -1,3 +1,7 @@
+/**
+ * comments are blocks of text added to threads. Many comments to one thread
+ */ 
+
 module.exports = function(sequelize, db) {
 
   const c = sequelize.define("comments",
@@ -7,11 +11,17 @@ module.exports = function(sequelize, db) {
         primaryKey: true,
         autoIncrement: true
       },
+      // user id
       uid: db.STRING,
+      // date of entry
       date: db.DATE,
+      // comment title
       title: db.TEXT,
+      // submitted text
       content: db.TEXT,
+      // thread to which this comment belongs
       thread_id: db.INTEGER,
+      // comments can be banned by admins, track the status here
       status: db.TEXT     
     },
     {

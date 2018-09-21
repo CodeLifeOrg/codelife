@@ -28,7 +28,7 @@
   }
 
   /* rebalance flex item widths */
-  @add-mixin min-xl {
+  @add-mixin min-xxl {
     & > .logo,
     & > .link-list {
       flex: 2 2 0;
@@ -61,6 +61,27 @@
       }
     }
 
+    /* underline */
+    &:after {
+      content: '';
+      /* sizing */
+      width: 100%;
+      height: 2px;
+      /* positioning */
+      position: absolute;
+      bottom: -0.5em;
+      left: 0;
+      /* theming */
+      background-color: var(--sky-light);
+      border-radius: 1px;
+      /* transitions */
+      opacity: 0;
+      transform: scaleX(0);
+      transition:
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out;
+    }
+
     /* interactions */
     &:hover, &:focus,
     &.is-active {
@@ -70,6 +91,12 @@
         transform: scale(1.1);
       }
     }
+
+    /* make focus state more obvious */
+    &:focus:after {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* search bar placement */
@@ -78,21 +105,13 @@
     /* positioned above the rest on small viewports */
     @add-mixin max-xs {
       position: absolute;
-      bottom: var(--gutter-xs);
+      bottom: 7px;
       left: var(--gutter-sm);
-      width: 100%;
+      right: var(--gutter-sm);
+      width: calc(100% - var(--gutter));
 
-      & .search-label,
       & .search-input {
-        font-size: 0.75rem;
-      }
-      & .search-label {
-        top: 0.55em;
-        z-index: 3;
-      }
-      & .search-input {
-        width: calc(100% - 30px);
-        z-index: 2;
+        width: 100%;
       }
     }
 
@@ -104,6 +123,7 @@
       /* width dictated by flex */
       & .search-input {
         width: 100%;
+        flex: 0 0 auto;
       }
     }
 
@@ -120,6 +140,8 @@
       max-height: calc(100vh - 120px);
       overflow-y: auto;
       padding: var(--gutter-sm);
+      /* enable inertia scrolling on mobile */
+      -webkit-overflow-scrolling: touch;
       /* theming */
       background-color: var(--white);
       border-radius: var(--radius-md);
@@ -174,17 +196,21 @@
   /* main nav list */
   & .link-list {
     text-align: right; /* keep link-list on the right */
-
     /* align links with content edge */
-    @add-mixin min-sm {
-      margin-right: 0.5em;
-    }
+    margin-right: 0.5em;
+    opacity: 0.925; /* reduce contrast as much as WCAG will allow */
 
     /* individual links */
     & .link {
       @add-mixin nav-link;
       /* sizing */
       padding: 0.25em var(--gutter-sm);
+
+      /* pass text-decoration style to inner wrappers */
+      & .link-text,
+      & .limit-link-text-width {
+        text-decoration: inherit;
+      }
 
       /* limit width */
       & .limit-link-text-width {
@@ -237,7 +263,7 @@
 
         &:last-of-type {
           padding-left: 0.5em;
-          border-left: 1px solid var(--sky-dark);
+          border-left: 1px solid var(--sky-black);
         }
       }
 
@@ -260,22 +286,75 @@
         }
       }
     }
+
+    /* social links container */
+    & .nav-social-list {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: var(--gutter-sm);
+    }
+
+    /* social link list item layout */
+    & .nav-social-item {
+      display: inline-block;
+      vertical-align: middle;
+
+      & + .nav-social-item {
+        margin-left: 0.25em;
+      }
+    }
+
+    /* social link interactions */
+    & .nav-social-link {
+
+      /* svg sizing */
+      & .social-svg {
+        /* sizing */
+        height: 2rem;
+        /* theming */
+        fill: var(--sky-black);
+        /* transitions */
+        transition: fill 0.2s ease;
+      }
+
+      /* offset built-in svg padding */
+      &.youtube-nav-social-link .social-svg {
+        transform: scale(1.325); /* fudge youtube size */
+      }
+
+      /* adjust icon fill on hover */
+      &:hover, &:focus {
+        & .social-svg {
+          fill: var(--black);
+        }
+        /* &.facebook-nav-social-link .social-svg  { fill: #3B5998; }
+        &.twitter-nav-social-link .social-svg   { fill: #00ACED; }
+        &.instagram-nav-social-link .social-svg { fill: #E4405F; }
+        &.youtube-nav-social-link .social-svg   { fill: #FF0000; } */
+      }
+    }
   }
 }
 
 /* slide browser */
 .link-toggle-container {
   display: inline-block;
+  vertical-align: middle;
+  top: -0.125em; /* when vertical-align: middle isn't middle enough */
 
   /* chevron toggle button */
   & .link-toggle-button {
     @add-mixin nav-link;
     padding: 0.25em 0.75em;
     margin-left: -0.5em; /* offset padding */
+    /* it's a button, not a link */
+    cursor: default;
 
     /* interactions */
     &:hover, &:focus {
       color: var(--black);
+      transform: scale(1.1);
+      transform-origin: bottom center;
     }
   }
 }

@@ -9,6 +9,10 @@ import {Link} from "react-router";
 
 import "./Leaderboard.css";
 
+/**
+ * Leaderboard is a sortable table that lists users by their in-game progress.
+ */
+
 class Leaderboard extends Component {
 
   constructor(props) {
@@ -21,6 +25,10 @@ class Leaderboard extends Component {
     };
   }
 
+  /**
+   * On Mount, retrieve stats from the API, calculate what percentage of completion this refers
+   * to, given the state of currently released islands, and update state.
+   */
   componentDidMount() {
     const sget = axios.get("/api/stats/public");
 
@@ -46,6 +54,9 @@ class Leaderboard extends Component {
     });
   }
 
+  /**
+   * On selection of a sorting property, sort the users accordingly
+   */
   handleHeaderClick(sortProp) {
     const sortBy = {prop: sortProp, desc: sortProp === this.state.sortBy.prop ? !this.state.sortBy.desc : false};
     this.setState({sortBy});
@@ -70,6 +81,7 @@ class Leaderboard extends Component {
       const prop1 = typeof a[sortBy.prop] === "string" ? a[sortBy.prop].toLowerCase() : a[sortBy.prop];
       const prop2 = typeof b[sortBy.prop] === "string" ? b[sortBy.prop].toLowerCase() : b[sortBy.prop];
 
+      // Manual comparisons so that all BLANK fields end up at the top or bottom depending on sort
       if (prop1 && !prop2) return -1;
       if (!prop1 && prop2) return 1;
       if (!prop1 && !prop2) return 0;
@@ -86,6 +98,7 @@ class Leaderboard extends Component {
       let latestLevel = null;
       let latestTheme = "island-jungle";
 
+      // Find the latest island this user has beaten, and place a small theme icon next to their progress
       for (const fp of flatProgress) {
         if (u.userprogress.filter(up => up.status === "completed").find(up => up.level === fp.id)) {
           if (fp.theme) latestTheme = fp.theme;
@@ -104,6 +117,9 @@ class Leaderboard extends Component {
           <Link to={`/profile/${u.username}`}>{u.username}</Link>
         </td>
         <td className="statistics-table-cell progress">
+          <span className="u-visually-hidden">
+            { Math.round(u.progressPercent) }%
+          </span>
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
               <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
@@ -120,7 +136,6 @@ class Leaderboard extends Component {
         <td className="statistics-table-cell schoolname">{u.schoolname}</td>
         <td className="statistics-table-cell geoname">{u.geoname}</td>
         <td className="statistics-table-cell created-at">{this.formatDate(u.createdAt)}</td>
-        {/*<td className="statistics-table-cell updated-at">{new Date(u.updatedAt).toDateString()}</td>*/}
       </tr>;
     });
 

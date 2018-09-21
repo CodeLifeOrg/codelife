@@ -34,7 +34,7 @@
         }
         &.complete {}
         &.error {
-          background-color: var(--danger-light);
+          background-color: color(var(--danger-light) a(0.25));
           color: var(--danger);
           & .rule-name {
             font-weight: bold;

@@ -8,8 +8,12 @@
   /* positioning */
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10rem;
+  margin-top: 12rem;
 
+  /* decrease padding on small screens */
+  @add-mixin max-xs { padding: 1rem; }
+
+  /* scale up margin */
   @add-mixin min-xs { margin-top: 15rem; }
   @add-mixin min-sm { margin-top: 18rem; }
   @add-mixin min-lg { margin-top: calc(15% + 10vh); }

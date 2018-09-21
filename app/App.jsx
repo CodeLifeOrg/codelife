@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Canon, isAuthenticated} from "datawheel-canon";
+import {Canon, isAuthenticated} from "@datawheel/canon-core";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
@@ -31,19 +31,69 @@ class App extends Component {
     return {browserHistory: this.props.router};
   }
 
+  simpleRedirect() {
+    const {location} = this.props;
+    const {hostname} = location;
+    const roothost = location.host.replace("pt.", "").replace("en.", "");
+    const isRoot = !hostname.includes("en.") && !hostname.includes("pt.");
+    if (isRoot && window) {
+      window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
+    } 
+  }
+
+  redirect(userprofile) {
+    const {location} = this.props;
+    const {hostname} = location;
+    const roothost = location.host.replace("pt.", "").replace("en.", "");
+    const isEN = hostname.includes("en.");
+    const isPT = hostname.includes("pt.");
+    const isRoot = !hostname.includes("en.") && !hostname.includes("pt.");
+    
+    // if there is a user
+    if (userprofile) {
+      // and their profile is set to en and we're not there, send them there
+      if (userprofile.lang === "en" && !isEN) {
+        if (window) window.location = `${location.protocol}//en.${roothost}${location.pathname}${location.search}`;
+      }
+      // or if their profile is set to pt and we're not there, send them there instead
+      else if (userprofile.lang === "pt" && !isPT) {
+        if (window) window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
+      }
+      // if the profile has nothing set, and we're not already on PT, go to PT
+      else if (isRoot && !userprofile.lang && !isPT) {
+        if (window) window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
+      }
+    }
+    // if there's no user, and we're not on pt, send them to pt
+    else if (isRoot) {
+      if (window) window.location = `${location.protocol}//pt.${roothost}${location.pathname}${location.search}`;
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const {auth} = this.props;
     const {userInit} = this.state;
     if (!userInit && auth.loading) this.setState({userInit: true});
-    if (!prevProps.auth.user && this.props.auth.user) {
-      axios.get("/api/profileping").then(() => {
-        // No op.  On Mounting the app, we need to create a blank user in userprofiles that associates
-        // with the user in canon's users.  This calls findOrCreate to make that happen.
-      });
+    // if we were loading, and now we are not loading
+    if (prevProps.auth.loading && !this.props.auth.loading) {
+      // if that resulted in a user, do the profile ping and redirect
+      if (this.props.auth.user) {
+        axios.get("/api/profileping").then(() => {
+          // On Mounting the app, we need to create a blank user in userprofiles that associates
+          // with the user in canon's users.  This calls findOrCreate to make that happen.
+          // this.redirect.bind(this)(resp.data[0]);
+        });
+      }
+      // if it did not result in a user, send them to pt
+      else {
+        // this.redirect.bind(this)();
+      }
     }
   }
 
   componentDidMount() {
+    this.simpleRedirect.bind(this)();
+
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
     const gget = axios.get("/api/glossary/all");
@@ -75,8 +125,8 @@ class App extends Component {
 
     if (i18n.locale === "en" || i18n.locale === "en-US") {
       meta.find(d => d.property === "og:image").content = "https://codelife.com/social/codelife-share-en.jpg";
-      meta.find(d => d.property === "og:description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
-      meta.find(d => d.name === "description").content = "Code School Brazil is a free online resource for high school students in Brazil to learn skills relevant to work in Brazil’s IT sector.";
+      meta.find(d => d.property === "og:description").content = "Codelife is a learning tool and code editor designed for Brazilian students, free and open to all";
+      meta.find(d => d.name === "description").content = "Codelife is a learning tool and code editor designed for Brazilian students, free and open to all";
     }
     meta.push({property: "og:locale", content: i18n.locale});
 
@@ -88,10 +138,11 @@ class App extends Component {
     const reduxLoaded = Boolean(this.props.islands.length && this.props.levels.length && this.props.glossary.length);
 
     // check if this is the home page
-    const isHome = this.props.router.location.pathname == "/" ? true : false;
+    const isHome = this.props.router.location.pathname === "/" ? true : false;
+    const isAdmin = this.props.router.location.pathname.includes("admin") ? true : false;
 
     return (
-      <Canon id="app" className={bareRoute && "share-app"}>
+      <div id="app" className={bareRoute && "share-app"}>
         <Helmet link={ header.link } meta={ meta } />
         {
           !bareRoute && (location.href.includes("dev.") || location.href.includes("nightly."))
@@ -102,16 +153,16 @@ class App extends Component {
           ? bareRoute
             ? children
             : <div className="container">
-              { !isHome ? <Clouds /> : null }
+              { !isHome && !isAdmin ? <Clouds /> : null }
               <Nav currentPath={location.pathname} linkObj={this.props.params} isHome={ isHome } />
               { children }
               <Footer currentPath={location.pathname} className={ theme } />
             </div>
           : <div className="container">
-            { !isHome ? <Clouds /> : null }
+            { !isHome && !isAdmin ? <Clouds /> : null }
             <LoadingSpinner />
           </div> }
-      </Canon>
+      </div>
     );
 
   }

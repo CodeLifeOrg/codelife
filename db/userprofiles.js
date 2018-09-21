@@ -1,3 +1,9 @@
+/**
+ * userprofiles is a sister table to the canon-provided table users. In order to avoid changing the db
+ * structure of the underlying canon users table, this 1:1 table stores all "codelife-specific" user
+ * profile details and matches on uid
+ */
+
 module.exports = function(sequelize, db) {
 
   const up = sequelize.define("userprofiles",
@@ -10,25 +16,36 @@ module.exports = function(sequelize, db) {
       bio: db.TEXT,
       img: db.STRING,
       gender: db.INTEGER,
+      // coins is unused/deprecated - was intended to track xp
       coins: db.INTEGER,
+      // streak is unused - intent is to track successive logins (your 15th day in a row!)
       streak: db.INTEGER,
       dob: db.DATE,
+      // school id (schools table)
       sid: {
         type: db.INTEGER,
         references: {model: "schools", key: "id"}
       },
+      // location id (geos table)
       gid: {
         type: db.STRING,
         references: {model: "geos", key: "id"}
       },
+      // Cadastro de Pessoas Físicas - id number for taxes
       cpf: db.STRING,
+      // survey answers from beta
       survey: db.JSONB,
       survey2: db.JSONB,
       getinvolved: db.JSONB,
+      // sharing can be turned off by an admin in case of abuse
       sharing: db.TEXT,
+      // users get 5 reports a month, decrement and refresh those here
       reports: db.INTEGER,
+      // calculation of "per month" is stored here
       last_upped: db.DATE,
-      prompted: db.BOOLEAN
+      // in Projects, has this user clicked "Never Show this Again" when prompted to share on fb?
+      prompted: db.BOOLEAN,
+      lang: db.STRING
     },
     {
       freezeTableName: true,

@@ -14,7 +14,16 @@ then add the theme name to the @each loop below */
   space,
   dark,
   mountain,
-  beach {
+  beach,
+  dinosaur,
+  volcano,
+  fruit,
+  movie,
+  music,
+  ruins,
+  soccer,
+  tropical,
+  underwater {
   .island-$(theme) {
     /* set background image paths */
     & .island-image,
@@ -50,14 +59,19 @@ then add the theme name to the @each loop below */
     }
     /* set color */
     & .island-path .code-block.is-done .side,
+    & .island-path .code-block.is-next .side,
     & .pt-dialog-header-title,
-    & .lessonplan-toc > * {
+    & .lessonplan-toc > *,
+    & .item-editor-inner h1,
+    & .item-editor-inner h2 {
       color: var(--$(theme)-island-dark);
     }
     &.slide-inner a:not(.pt-button),
+    & .inverted-button:not(.danger-button),
     & .lessonplan-toc-link,
     & .codeblock-dialog-link,
-    & .fork-button {
+    & .fork-button,
+    & .item-editor-inner a {
       color: var(--$(theme)-island-medium);
       /* interactions */
       &:hover, &:focus {
@@ -72,6 +86,7 @@ then add the theme name to the @each loop below */
     & .island-path .code-block .side {
       border-color: var(--$(theme)-island-dark);
     }
+    & .button:not(.inverted-button):not(.danger-button),
     &.pt-button,
     & .pt-button {
       background-color: var(--$(theme)-island-medium);
@@ -87,8 +102,14 @@ then add the theme name to the @each loop below */
     & code,
     & pre {
       background-color: color( var(--$(theme)-island-light) l(+33%) ) !important; /* bad content editor! 🙅‍ */
-      color: var(--$(theme)-island-dark);
+      color: var(--$(theme)-island-dark) !important; /* bad quill editor! 🙅 */
       border-color: var(--$(theme)-island-light);
+      &.blurry-text {
+        color: transparent !important;
+        pointer-events: none;
+        text-shadow: 0 0 var(--gutter-xxs) var(--$(theme)-island-dark);
+        user-select: none;
+      }
     }
     /* set svg fill */
     &.pt-tooltip .pt-popover-arrow-fill {
@@ -99,8 +120,7 @@ then add the theme name to the @each loop below */
       color: var(--$(theme)-island-dark);
 
       /* interactions */
-      /* NOTE: it's a div, so there's no :focus */
-      &:hover {
+      &:hover, &:focus {
         color: var(--$(theme)-island-medium);
       }
     }
@@ -180,4 +200,40 @@ then add the theme name to the @each loop below */
 /* 🏖🏖🏖 */
 .island-beach .island-path {
   margin-top: 35px;
+}
+/* 🦖 🦕 */
+.island-dinosaur .island-path {
+  margin-top: -20px;
+}
+/* 🔥🌋🔥 */
+.island-volcano .island-path {
+  margin-top: 40px;
+}
+/* 🍍🥝🍌 */
+.island-fruit .island-path {
+  margin-top: 40px;
+}
+/* 🎥 🎬 */
+.island-movie .island-path {
+  margin-top: 10px;
+}
+/* 🎵🎸🎶 */
+.island-music .island-path {
+  margin-top: 65px;
+}
+/* 📜 📜 */
+.island-ruins  .island-path {
+  margin-top: 30px;
+}
+/* ⚽⚽⚽ */
+.island-soccer .island-path {
+  margin-top: -20px;
+}
+/* 🌴🐠🍹 */
+.island-tropical .island-path {
+  margin-top: -20px;
+}
+/* 🌊 🐟 */
+.island-underwater .island-path {
+  margin-top: 50px;
 }

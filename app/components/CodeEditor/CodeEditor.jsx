@@ -612,7 +612,7 @@ class CodeEditor extends Component {
   /* End of external functions */
 
   render() {
-    const {codeTitle, showConsole, island, readOnly, t, tabs} = this.props;
+    const {codeTitle, id, island, readOnly, showConsole, t, tabs} = this.props;
     const {baseRules, titleText, currentText, embeddedConsole, fullscreenEditor, goodRatio, intent, openConsole, openRules, rulejson, ruleErrors, sandbox} = this.state;
 
     const consoleText = embeddedConsole.map((args, i) => {
@@ -635,12 +635,14 @@ class CodeEditor extends Component {
     });
 
     return (
-      <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id="codeEditor">
+      <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id={id || "codeEditor"}>
         {!this.props.noZoom &&
           <button
             className="code-editor-fullscreen-button pt-button pt-intent-primary"
             onClick={ this.fullscreenEditorToggle.bind(this) }
             aria-labelledby="fullscreen-icon-label" >
+
+            <span className="code-editor-fullscreen-text u-hide-above-md font-sm">{ t("Fullscreen recommended") } </span>
 
             {/* hidden label text for accessibility */}
             <span className="u-visually-hidden" id="fullscreen-icon-label">{ t("Toggle fullscreen mode") }</span>
@@ -652,8 +654,9 @@ class CodeEditor extends Component {
           </button>
         }
         {
-          this.props.showEditor
-            ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>
+          this.props.showEditor &&
+            <label className={ `code ${readOnly ? "is-read-only" : ""}` }>
+              <span className="u-visually-hidden">{t("Code Editor")}</span>
               { tabs
                 ? <div className="panel-title font-sm">
                   <span className="favicon pt-icon-standard pt-icon-code"></span>
@@ -689,14 +692,13 @@ class CodeEditor extends Component {
                   <DrawerValidation rules={ baseRules.concat(rulejson) } errors={ ruleErrors } />
                 </div>
                 : null }
-            </div>
-            : null
+            </label>
         }
         <div className="render">
           { tabs
             ? <div className="panel-title font-sm">
               { island
-                ? <img className="favicon" src={ `/islands/${island}-small.png` } />
+                ? <img className="favicon" src={ `/islands/${island}-small.png` } alt="" />
                 : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
               { titleText }
             </div>

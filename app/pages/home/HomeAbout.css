@@ -11,11 +11,16 @@
 
   /* flex container */
   & .home-about-half-container {
+    z-index: 1;
 
     /* space out / position video */
     & .home-about-half:last-of-type {
       margin-top: 2.75rem;
+      margin-bottom: 2rem;
     }
+
+    /* apply extra white background on small screens */
+    @add-mixin cloud-safe-area;
 
     /* two column layout */
     @add-mixin min-sm {
@@ -69,40 +74,23 @@
     /* position clouds */
     &:first-of-type {
       transform: rotateZ(-10deg);
-      top: -1%;
-      left: -5%;
+      transform-origin: bottom right;
+      top: -12.5vw;
+
+      /* fudge cloud positioning at bigger viewports */
+      @add-mixin min-xs { top: -15vw; }
+      @add-mixin min-sm { top: -17.5vw; }
+      @add-mixin min-lg { top: -20vw; }
     }
     &:last-of-type {
       transform: rotateZ(-190deg);
-      bottom: -1%;
-      left: 0;
-    }
+      transform-origin: top;
+      top: 100%;
 
-    /* fudge cloud positioning at bigger viewports */
-    @add-mixin min-xs {
-      &:first-of-type { top: -3.75%; }
-      &:last-of-type  { bottom: -3.75%; }
+      /* fudge cloud positioning at bigger viewports */
+      @add-mixin min-xs { margin-top: 5vw; }
+      @add-mixin min-sm { margin-top: 10vw; }
+      @add-mixin min-md { margin-top: 10vw; }
     }
-    @add-mixin min-sm {
-      &:first-of-type { top: -10%; }
-      &:last-of-type  { bottom: -10%; }
-    }
-    @media (min-width: 900px) {
-      &:first-of-type { top: -15%; }
-      &:last-of-type  { bottom: -15%; }
-    }
-    @add-mixin min-md {
-      &:first-of-type { top: -20%; }
-      &:last-of-type  { bottom: -20%; }
-    }
-    @add-mixin min-lg {
-      &:first-of-type { top: -25%; }
-      &:last-of-type  { bottom: -25%; }
-    }
-    @add-mixin min-xl {
-      &:first-of-type { top: -35%; }
-      &:last-of-type  { bottom: -35%; }
-    }
-
   }
 }

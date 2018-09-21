@@ -19,6 +19,11 @@ const slideIcons = {
   TextText: "label"
 };
 
+/**
+ * Browser is a drop-down menu embedded in Nav that lets the user jump to any
+ * level or island that they have beaten in the past
+ */
+
 class Browser extends Component {
 
   constructor(props) {
@@ -30,6 +35,11 @@ class Browser extends Component {
     };
   }
 
+  /** 
+   * On mount, fetch all islands/levels/slides, sort them, and arrange them 
+   * hierarchically for use in the Blueprint Tree. Also grab the logged in user's progress
+   * so that the browser can lock unbeaten levels.
+   */
   componentDidMount() {
     const iget = axios.get("/api/islands/all");
     const lget = axios.get("/api/levels/all");
@@ -48,6 +58,12 @@ class Browser extends Component {
     });
   }
 
+  /**
+   * Builds the "nodes" object that will be used to populate the blueprint tree.
+   * The Blueprint Tree component requires lots of metadata and nesting, so a fair
+   * amount of crawling must be done to populate it properly
+   * Note: This is borrowed heavily from the tree in the CMS. Someday they should be merged
+   */
   buildTree() {
     const {islands, levels, slides, progress, current} = this.state;
     const nodes = [];
@@ -56,6 +72,8 @@ class Browser extends Component {
         <span className="pt-icon-standard pt-icon-lock"/>
       </Tooltip>;
 
+    // Nav.jsx passes down an object that parses args the URL. Use this later to 
+    // automatically highlight the node with the page the user is actually on.
     const pathObj = {
       island: this.props.linkObj.lid,
       level: this.props.linkObj.mlid,
@@ -75,7 +93,9 @@ class Browser extends Component {
         childNodes: [],
         data: i
       };
-      if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;
+      // if the path object designates that the user is on this island (and not a level or slide)
+      // save this node as the one to highlight as the current location
+      if (pathObj && pathObj.island && !pathObj.level && !pathObj.slide && pathObj.island === islandObj.id) nodeFromProps = islandObj;      
       islandObj.hasBeaten = progress.find(p => p.level === i.id) || i.id === current.id;
       if (!islandObj.hasBeaten) islandObj.secondaryLabel = blockLabel, islandObj.className = "is-locked";
       nodes.push(islandObj);
@@ -117,6 +137,8 @@ class Browser extends Component {
           iconName: slideIcons[s.type],
           label: s.title,
           itemType: "slide",
+          // "parent" is not a required param of a blueprint tree node, but it is used internally
+          // to "crawl back out" from any given node. See selectNodeFromProps for usage.
           parent: levelNode,
           data: s
         };
@@ -127,6 +149,11 @@ class Browser extends Component {
     this.setState({mounted: true, nodes}, this.initFromProps.bind(this, nodeFromProps));
   }
 
+  /**
+   * Given a blueprint tree node, saved during the buildTree function, expand and select
+   * the appropriate node to match the location
+   * @param {Object} nodeFromProps A Blueprint Tree node 
+   */
   initFromProps(nodeFromProps) {
     if (nodeFromProps) {
       if (nodeFromProps.itemType === "island") {
@@ -146,6 +173,12 @@ class Browser extends Component {
     }
   }
 
+  /**
+   * Helper function to avoid errors from accessing non-existent properties
+   * Longer term, database defaults values should be established to avoid this
+   * @param {Object} obj the object to prune
+   * @returns {Object} an object whose null/undefined params are changed to ""
+   */
   fixNulls(obj) {
     for (const k in obj) {
       if (obj.hasOwnProperty(k) && (obj[k] === undefined || obj[k] === null)) {
@@ -155,6 +188,12 @@ class Browser extends Component {
     return obj;
   }
 
+  /**
+   * As the user beats new levels, they are written to the db, but no redux-level store
+   * is updated. This public-facing function is invoked by Nav.jsx when the Browser is opened,
+   * resulting in a short loading screen while the latest progress is retrieved.
+   * See Nav.jsx for more details.
+   */
   reloadProgress() {
     axios.get("/api/userprogress/mine").then(resp => {
       if (resp.status === 200) {
@@ -166,6 +205,10 @@ class Browser extends Component {
     });
   }
 
+  /**
+   * Similar to initNodeFromProps which expands the Blueprint Tree, this function selects
+   * the node that matches the LinkObj provided by Nav.
+   */
   selectNodeFromProps(node) {
     const {currentNode} = this.state;
     if (!currentNode) {
@@ -178,6 +221,10 @@ class Browser extends Component {
     this.setState({currentNode: node});
   }
 
+  /**
+   * Callback for clicking a node. Uses browserhistory to navigate the user to the new page
+   * @param {Object} node The blueprint node that was clicked
+   */
   handleNodeClick(node) {
     if (node.hasBeaten) {
       const {currentNode} = this.state;
@@ -236,6 +283,8 @@ Browser.contextTypes = {
   browserHistory: PropTypes.object
 };
 
+// withRef is a way to expose the functions of this component to its parent via getWrappedInstance.
+// see Nav.jsx for what we need this for
 Browser = connect(state => ({
   auth: state.auth
 }), null, null, {withRef: true})(Browser);

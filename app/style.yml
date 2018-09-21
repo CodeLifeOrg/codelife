@@ -105,6 +105,15 @@ islands:
   - dark
   - mountain
   - beach
+  - dinosaur
+  - volcano
+  - fruit
+  - movie
+  - music
+  - ruins
+  - soccer
+  - tropical
+  - underwater
 
 # individual island themes
 jungle-island-dark: "#144800"
@@ -158,3 +167,39 @@ mountain-island-light: "#f9f8b4"
 beach-island-dark: "#6f3100"
 beach-island-medium: "#A67B42"
 beach-island-light: "#ddf1eb"
+
+dinosaur-island-dark: "#17401b"
+dinosaur-island-medium: "#689443"
+dinosaur-island-light: "#c0da79"
+
+volcano-island-dark: "#3d002a"
+volcano-island-medium: "#972b31"
+volcano-island-light: "#dda2b4"
+
+fruit-island-dark: "#3d5810"
+fruit-island-medium: "#bcba2c"
+fruit-island-light: "#f6ef95"
+
+movie-island-dark: "#1f1d3b"
+movie-island-medium: "#6b518a"
+movie-island-light: "#3ebab8"
+
+music-island-dark: "#001f58"
+music-island-medium: "#0098b7"
+music-island-light: "#f1faf9"
+
+ruins-island-dark: "#6a4500"
+ruins-island-medium: "#cea521"
+ruins-island-light: "#ffe642"
+
+soccer-island-dark: "#0a2513"
+soccer-island-medium: "#3d6931"
+soccer-island-light: "#d7f0a4"
+
+tropical-island-dark: "#005a4a"
+tropical-island-medium: "#20ab89"
+tropical-island-light: "#d3c986"
+
+underwater-island-dark: "#013e48"
+underwater-island-medium: "#22cca7"
+underwater-island-light: "#6ddcc6"

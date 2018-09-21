@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
@@ -7,22 +8,27 @@ import Logo from "components/Logo.svg";
 import Search from "components/Search";
 import AuthForm from "components/AuthForm";
 import PropTypes from "prop-types";
-import {login, resetPassword} from "datawheel-canon/src/actions/auth";
+import {login, resetPassword} from "@datawheel/canon-core/src/actions/auth";
+
+import FacebookIcon from "./FacebookIcon.svg.jsx";
+import InstagramIcon from "./InstagramIcon.svg.jsx";
+import YoutubeIcon from "./YoutubeIcon.svg.jsx";
 
 import {
   RESET_SEND_FAILURE,
   RESET_SEND_SUCCESS,
   WRONG_PW,
   SIGNUP_EXISTS
-} from "datawheel-canon/src/consts";
+} from "@datawheel/canon-core/src/consts";
 
 import "./Nav.css";
 
 import {Popover, PopoverInteractionKind, Position, Dialog, Intent, Toaster} from "@blueprintjs/core";
 
 
-// Nav Component
-// Contains a list of links in Footer format, inserted at the bottom of each page
+/**
+ * Nav Component is the header of the page - containing login controls and the Island Browser
+ */
 
 class Nav extends Component {
 
@@ -35,6 +41,11 @@ class Nav extends Component {
     };
   }
 
+  /**
+   * When Nav Mounts, it is almost always because the page/app is being loaded from scratch, either because
+   * the user is visiting for the first time, OR a login has been attempted, and the result must be handled.
+   * As such, there is a fairly length decision tree here so that feedback can be shown.
+   */
   componentDidMount() {
     const {auth, t} = this.props;
     const {email, toast} = this.state;
@@ -74,7 +85,7 @@ class Nav extends Component {
       }
       else if (!auth.error) {
         if (auth.msg === "LOGIN_SUCCESS") {
-          toast.show({timeout, iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
+          // toast.show({timeout, iconName: "endorsed", intent: Intent.SUCCESS, message: t("Login.success")});
         }
         // TODO: on mount, its not known where we came from (i.e., signup or login) so generic "success" is shown
         // It would be nice to show a different message for a signup
@@ -94,12 +105,34 @@ class Nav extends Component {
     if (this.browser) this.browser.getWrappedInstance().getWrappedInstance().reloadProgress();
   }
 
+  /**
+   * When the user clicks an island/location in the embedded Browser component, they have chosen to navigate to a
+   * new page. This callback is needed so the Browser's wrapping component (this one) can hide the Browser.
+   */
   reportClick() {
     this.setState({showBrowser: false});
   }
 
   authForm(mode) {
     this.setState({formMode: mode, isLoginOpen: !this.state.isLoginOpen});
+  }
+
+  selectLang(lang, path) {
+    if (this.props.auth.user) {
+      axios.post("/api/profile/update", {lang}).then(resp => {
+        if (resp.status === 200) {
+          console.log("saved lang pref");
+          if (window) window.location = path;
+        }
+        else {
+          if (window) window.location = path;
+        }
+      });
+    }
+    else {
+      if (window) window.location = path;
+    }
+
   }
 
   render() {
@@ -110,9 +143,36 @@ class Nav extends Component {
 
     // language select links
     const languageLinks = [
-      {id: 1, title: "English", shortTitle: "En", link: `${protocol}//en.${hostSansSub}${currentPath}`},
-      {id: 2, title: "Portuguese", shortTitle: "Pt", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+      {id: 1, title: t("English"), shortTitle: "En", link: `${protocol}//en.${hostSansSub}${currentPath}`},
+      {id: 2, title: t("Portuguese"), shortTitle: "Pt", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
     ];
+
+
+    // social links
+    const socialLinks = [
+      {id: 1, title: "facebook", link: "https://www.facebook.com/CodeLifeBR/"},
+      {id: 2, title: "youtube", link: "https://www.youtube.com/channel/UCR6iTxyV9jdSy21eqS1Ovyg"},
+      {id: 3, title: "instagram", link: "https://www.instagram.com/codelifebr/"}
+    ];
+
+    // social links
+    const socialLinkItems = socialLinks.map(socialLink =>
+      <li className="nav-social-item" key={socialLink.id}>
+        <a
+          className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`}
+          href={socialLink.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex="-1"
+          aria-hidden="true"
+        >
+          <span className="u-visually-hidden">{t(socialLink.title)}</span>
+          { socialLink.title === "facebook" && <FacebookIcon /> }
+          { socialLink.title === "youtube" && <YoutubeIcon /> }
+          { socialLink.title === "instagram" && <InstagramIcon /> }
+        </a>
+      </li>
+    );
 
     return (
       <div className="nav" id="nav">
@@ -142,9 +202,15 @@ class Nav extends Component {
               popoverClassName="pt-popover-content-sizing browser-popover"
               position={Position.BOTTOM}
             >
-              <button className="link-toggle-button u-unbutton" onClick={this.toggleBrowser.bind(this)} aria-labelledby="map-nav-link">
+              <a
+                className="link-toggle-button u-unbutton"
+                onClick={this.toggleBrowser.bind(this)}
+                tabIndex="-1"
+                aria-hidden="true"
+                aria-labelledby="map-nav-link"
+              >
                 <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
-              </button>
+              </a>
               <div className="dropdown-list browser-list" id="browser">
                 <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
               </div>
@@ -174,9 +240,14 @@ class Nav extends Component {
               position={Position.BOTTOM}
             >
               {/* dropdown button */}
-              <button className="link-toggle-button u-unbutton" aria-labelledby="account-nav-link">
-                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
-              </button>
+              <a
+                className="link-toggle-button u-unbutton"
+                tabIndex="-1"
+                aria-hidden="true"
+                aria-labelledby="account-nav-link"
+              >
+                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down" />
+              </a>
 
               {/* dropdown links */}
               <div className="link-dropdown">
@@ -207,10 +278,26 @@ class Nav extends Component {
             <span className="link language-icon-container">
               <span className="link-icon pt-icon-standard pt-icon-globe" />
             </span>
-            <a className="link language-link" key={languageLinks[0].id} href={languageLinks[0].link}>
+            <a
+              className="link language-link"
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}
+              key={languageLinks[1].id}
+            >
+              {languageLinks[1].shortTitle}
+            </a>
+            <a
+              className="link language-link"
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}
+              key={languageLinks[0].id}
+            >
               {languageLinks[0].shortTitle}
             </a>
-            <a className="link language-link" key={languageLinks[1].id} href={languageLinks[1].link}>{languageLinks[1].shortTitle}</a>
+            {/* social links */}
+            <ul className="nav-social-list u-list-reset u-hide-below-lg">
+              { socialLinkItems }
+            </ul>
           </div>
           : <div className="link-list font-sm">
 
@@ -231,11 +318,29 @@ class Nav extends Component {
             </Link>
 
             {/* language select */}
-            <a className="link language-link" key={languageLinks[0].id} href={languageLinks[0].link}>
+            <span className="link language-icon-container">
               <span className="link-icon pt-icon-standard pt-icon-globe" />
+            </span>
+            <a
+              className="link language-link"
+              key={languageLinks[1].id}
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}
+            >
+              {languageLinks[1].title}
+            </a>
+            <a
+              className="link language-link"
+              key={languageLinks[0].id}
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}
+            >
               {languageLinks[0].title}
             </a>
-            <a className="link language-link" key={languageLinks[1].id} href={languageLinks[1].link}>{languageLinks[1].title}</a>
+            {/* social links */}
+            <ul className="nav-social-list u-list-reset u-hide-below-md">
+              { socialLinkItems }
+            </ul>
           </div> }
         <Dialog
           className="form-container"

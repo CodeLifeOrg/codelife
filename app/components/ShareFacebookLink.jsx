@@ -4,6 +4,12 @@ import LoadingSpinner from "components/LoadingSpinner";
 
 import FacebookIcon from "components/FacebookIcon.svg.jsx";
 
+/**
+ * Component for sharing facebook links. Due to the fact that xvfb screenshots require a few seconds to render, 
+ * this component receives a "screenshotReady" prop from the embedding component, which waits a few seconds 
+ * to ensure that Facebook's FIRST capture of the page has the finished screenshot
+ */
+
 class ShareFacebookLink extends Component {
 
   constructor(props) {
@@ -29,7 +35,7 @@ class ShareFacebookLink extends Component {
           <LoadingSpinner label={false} />
         </p>
         // facebook share link
-        : <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank">
+        : <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareLink}`} className="share-button social-button pt-button pt-intent-primary font-md" target="_blank" rel="noopener noreferrer">
           <FacebookIcon />
           <span className="social-button-text">{ buttonLabel }</span>
           <span className="u-visually-hidden">{ t(" on Facebook") }</span>

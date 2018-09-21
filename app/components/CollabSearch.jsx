@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Card, Icon} from "@blueprintjs/core";
 import {connect} from "react-redux";
 import "./CollabSearch.css";
+
+/**
+ * Popover window so that project owners can find and add new users to collaborate on a given project
+ */
 
 class CollabSearch extends Component {
 
@@ -20,6 +23,9 @@ class CollabSearch extends Component {
     };
   }
 
+  /**
+   * Don't start hitting the database until the query is more than 2 characters long
+   */
   handleChange(e) {
     const query = e.target.value;
     if (query.length > 2) {
@@ -51,6 +57,9 @@ class CollabSearch extends Component {
     });
   }
 
+  /**
+   * Given a clicked collaborator, if the constraints are met, post it to userprofiles_profiles (collab table)
+   */
   addCollaborator(searchResult) {
     const {currentProject} = this.props;
     const pid = currentProject.id;
@@ -70,6 +79,9 @@ class CollabSearch extends Component {
     }
   }
 
+  /**
+   * Given a uid and the pid of the current project, remove the matching row from userprofiles_profiles
+   */
   removeCollaborator(uid) {
     const {currentProject} = this.props;
     const pid = currentProject.id;
@@ -104,12 +116,14 @@ class CollabSearch extends Component {
         <option key={loc} value={loc}>{loc}</option>
       );
 
+    /*
     const schoolList = Array.from(new Set(usersWithoutCollabs
       .map(r => r.school && r.school.name ? r.school.name : null)))
       .filter(school => Boolean(school))
       .map(school =>
         <option key={school} value={school}>{school}</option>
       );
+    */
 
     if (filterLoc && filterLoc !== "default") {
       usersWithoutCollabs = usersWithoutCollabs.filter(u => u.geo && u.geo.name && u.geo.name === filterLoc);
@@ -212,7 +226,7 @@ class CollabSearch extends Component {
     }
 
     return (
-      <div className="collab-container">
+      <div className="collab-container" role="form">
 
         {/* heading */}
         <h2 className="collab-heading font-xl u-text-center">{t("Collab.Manage")}</h2>

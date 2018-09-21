@@ -2,6 +2,10 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import "./IslandLink.css";
 
+/**
+ * IslandLink is the zoomed-out picture of the island used in the overworld map, lesson plan, etc
+ */
+
 class IslandLink extends Component {
 
   render() {

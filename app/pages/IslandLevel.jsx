@@ -16,6 +16,11 @@ import "./IslandLevel.css";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
+/**
+ * Main Level-viewing component (e.g., Jungle Island). It shows a list of the levels available as well as the ending codeblock test.
+ * Codeblocks by other users are listed underneath the island
+ */
+
 class Level extends Component {
 
   constructor(props) {
@@ -40,12 +45,15 @@ class Level extends Component {
     };
   }
 
-  // TODO: Merge this with the one in CodeBlockList, they do the same thing.
+  /**
+   * On Mount, or Update (meaning the user switched islands) Load the necessary progress/codeblock data from the db.
+   */
   loadFromDB() {
     const {params} = this.props;
     const {lid} = params;
     const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
+    // This was written before realizing that the userprofile is passed in via props from canon - this could be refactored
     const pget = axios.get(`/api/profile/${this.props.auth.user.username}`);
 
     Promise.all([uget, cbget, pget]).then(resp => {
@@ -53,16 +61,17 @@ class Level extends Component {
       const allCodeBlocks = resp[1].data;
       const profile = resp[2].data;
 
+      // Islands and levels are retrieved from the redux store, which was populated in App.jsx's Mount
       const islands = this.props.islands.slice(0);
       const levels = this.props.levels.filter(l => l.lid === lid);
 
       const currentIsland = islands.find(i => i.id === lid);
-      // TODO: add an exception for level 10.
       const nextIsland = islands.find(i => i.ordering === currentIsland.ordering + 1);
       const prevIsland = islands.find(i => i.ordering === currentIsland.ordering - 1);
 
+      // If the user hasn't filled in their school, and they are on ANY island other than the first, prompt them to fill
+      // it in via Checkpoint.jsx.
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
-      // const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? true : false;
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -85,11 +94,18 @@ class Level extends Component {
     });
   }
 
+  /**
+   * The presence of `/show` in the URL is a permalink to open the codeblock. Was originally intended so that codeblockcards could directly link
+   * to a user's own codeblock and automatically open it, but this feature was postponed.
+   */
   maybeTriggerCodeblock() {
     const testOpen = location.pathname.includes("/show") && this.allLevelsBeaten();
     this.setState({testOpen});
   }
 
+  /**
+   * When the user changes pages, flush the state and reload from the database
+   */
   componentDidUpdate() {
     const {location} = this.props.router;
     const {currentIsland, loading} = this.state;
@@ -98,14 +114,24 @@ class Level extends Component {
     }
   }
 
+  /**
+   * The code to load from DB already exists in ComponentDidUpdate, this dedupes that logic by just manually calling update on mount.
+   */
   componentDidMount() {
     this.forceUpdate();
   }
 
+  /**
+   * A timeout is registered on Codeblock completion to process the screenshot, ensuring that it is complete before allowing fb sharing.
+   * Clear this timeout if the user leaves the page
+   */
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
 
+  /**
+   * Hide or Show the codeblock test popover. Adjust the URL accordingly
+   */
   toggleTest() {
     const {browserHistory} = this.context;
     const {pathname} = this.props.router.location;
@@ -123,25 +149,34 @@ class Level extends Component {
     }
   }
 
+  /**
+   * Callback for CodeBlockEditor on save. The CodeBlockEditor passes its codeblock back out to Level so that its
+   * Codeblock can be set.
+   */
   handleSave(newCodeBlock) {
-    // TODO: i think i hate this.  when CodeBlock saves, I need to change the state of the snippet
-    // so that subsequent opens will reflect the newly saved code.  In a perfect world, a CodeBlock save would
-    // reload the updated snippet freshly from the database, but I also want to minimize db hits.  revisit this.
     const {currentIsland} = this.state;
     if (!currentIsland.codeBlock) currentIsland.codeBlock = newCodeBlock;
     this.setState({currentIsland});
   }
 
+  /**
+   * Called when the user finishes an island for the first time. Calls a refresh on the data
+   * to unlock codeblocks, shows the victory message, and invites the user to the next island.
+   */
   onFirstCompletion() {
-    // TODO: i'm reloading everything here because after the first completion, we need to
-    // unlock all codeblocks AND show your brand-new written one at the top of the list.
-    // perhaps revisit if this is on the heavy DB-interaction side?
+    // Upon beating the level, the user needs all codeblocks to unlock, as well as add theirs
+    // to the top of the list. It's a little db-heavy to hit the db here, maybe revisit this.
     this.loadFromDB();
     const winMessage = this.state.currentIsland.victory;
     this.setState({winMessage, winOpen: true, canPostToFacebook: false}, this.toggleTest.bind(this));
+    // As documented in codeblocksroute, screenshots take a bit of time to be processed.
+    // This timeout ensures that the user doesn't share a picture before it's processed.
     this.timeout = setTimeout(() => this.setState({canPostToFacebook: true}), 6000);
   }
 
+  /**
+   * Upon Closing the winning pop-up, send the player to the next island.
+   */
   closeOverlay() {
     // TODO: take out island 4 catcher after august (completed)
     // TODO2: blocker added back in for november
@@ -149,7 +184,9 @@ class Level extends Component {
     // TODO4: DIDN'T update this blocker for January, because we don't have an island yet.  Update after new island is placed.
     // TODO5: Just updated this to the new space island now that they are added
     // 21a4 is space island.  If the next island is space island, DONT go to it
-    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
+    const latestIsland = this.props.islands.find(i => i.is_latest === true);
+    // if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.id !== "island-21a4") {
+    if (this.state.nextIsland && this.state.nextIsland.id && this.state.nextIsland.ordering <= latestIsland.ordering) {
       window.location = `/island/${this.state.nextIsland.id}`;
     }
     else {
@@ -157,10 +194,18 @@ class Level extends Component {
     }
   }
 
+  /**
+   * Levels and Islands are mixed together in a single array - so this can be used to test if
+   * a user has beaten a level (e.g. hello-world) or an entire island (e.g. island-1).
+   */
   hasUserCompleted(milestone) {
     return this.state.userProgress.find(up => up.level === milestone);
   }
 
+  /**
+   * The codeblocks underneath the island need to be informed via a callback when they are
+   * liked or unliked, as this affects the sorting.
+   */
   reportLike(codeBlock) {
     let likedCodeBlocks = this.state.likedCodeBlocks.slice(0);
     let unlikedCodeBlocks = this.state.unlikedCodeBlocks.slice(0);
@@ -178,6 +223,9 @@ class Level extends Component {
     this.setState({likedCodeBlocks, unlikedCodeBlocks});
   }
 
+  /**
+   * Used to determine if the final test should be shown.
+   */
   allLevelsBeaten() {
     const {levels} = this.state;
     if (levels && levels.length) {
@@ -192,6 +240,10 @@ class Level extends Component {
     }
   }
 
+  /**
+   * If a user has beaten all the levels on this island, but has NOT created a codeblock yet,
+   * they are in the state were the codeblock need be prompted
+   */
   promptFinalTest() {
     return this.allLevelsBeaten() && !this.state.currentIsland.codeBlock;
   }
@@ -204,6 +256,10 @@ class Level extends Component {
     this.setState({checkpointOpen: false});
   }
 
+  /**
+   * Checkpoint is a pop-up that appears after level 1, asking the user to share their
+   * school. This is the api callback to update their profile
+   */
   saveCheckpoint() {
     if (this.state.school && this.state.school.id) {
       axios.post("/api/profile/update", {sid: this.state.school.id}).then(resp => {
@@ -213,6 +269,10 @@ class Level extends Component {
     this.setState({checkpointOpen: false});
   }
 
+  /**
+   * If the user elects not to provide their school, write a hard-coded -1 to their sid.
+   * This saves the "prefer not to answer" choice and prevents future popups.
+   */
   skipCheckpoint() {
     axios.post("/api/profile/update", {sid: -1}).then(resp => {
       resp.status === 200 ? console.log("success") : console.log("error");
@@ -228,9 +288,13 @@ class Level extends Component {
 
   }
 
+  /**
+   * This was written early in the project, before the Component nesting of React was
+   * fully put to use. This method encapsulates the checkpoint popover - but this should
+   * obviously be moved to a component, not a method.
+   */
   buildCheckpointPopover() {
     const {t} = this.props;
-    const {theme} = this.state.currentIsland;
     return (
       <Dialog
         className="form-container checkpoint-form-container text-center"
@@ -275,6 +339,11 @@ class Level extends Component {
     );
   }
 
+  /**
+   * This was written early in the project, before the Component nesting of React was
+   * fully put to use. This method encapsulates the "You Win" popover - but this should
+   * obviously be moved to a component, not a method.
+   */
   buildWinPopover() {
 
     const {t} = this.props;
@@ -283,6 +352,7 @@ class Level extends Component {
     const {origin} = this.props.location;
     const {username} = this.props.auth.user;
     let snippetname = "";
+    // Slugs were not introduced until later in Codelife - if one doesn't exist, fall back to name
     if (currentIsland.codeBlock) {
       snippetname = currentIsland.codeBlock.slug ? currentIsland.codeBlock.slug : currentIsland.codeBlock.snippetname;
     }
@@ -319,6 +389,11 @@ class Level extends Component {
     );
   }
 
+  /**
+   * This was written early in the project, before the Component nesting of React was
+   * fully put to use. This method encapsulates the test popover - but this should
+   * obviously be moved to a component, not a method.
+   */
   buildTestPopover() {
     const {t} = this.props;
     const {currentIsland} = this.state;
@@ -328,11 +403,15 @@ class Level extends Component {
     if (!this.allLevelsBeaten()) {
       return (
         <div className="editor-popover">
-          <button className="code-block u-unbutton" onClick={this.toggleTest.bind(this)}>
-            <div className="side bottom"></div>
-            <div className="side top"></div>
-            <div className="side left"></div>
-            <div className="side front"></div>
+          <button
+            className="code-block u-unbutton"
+            onClick={this.toggleTest.bind(this)}
+          >
+            <span className="u-visually-hidden">{t("Lessonplan.Codeblock")}</span>
+            <div className="side bottom" />
+            <div className="side top" />
+            <div className="side left" />
+            <div className="side front" />
           </button>
         </div>
       );
@@ -348,11 +427,20 @@ class Level extends Component {
           content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
           portalClassName={ `codeblock-tooltip-portal ${ next ? "is-below" : "is-above" }` }
           tooltipClassName={ currentIsland.theme }>
-          <button className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` } onClick={this.toggleTest.bind(this)}>
-            <div className="side bottom"></div>
-            <div className="side top"></div>
-            <div className="side left"></div>
-            <div className="side front"><span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` }></span></div>
+
+          <button
+            className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` }
+            onClick={this.toggleTest.bind(this)}>
+            <span className="u-visually-hidden">
+              {t("Lessonplan.Codeblock")}
+            </span>
+            <div className="side bottom" />
+            <div className="side top" />
+            <div className="side left" />
+            <div className="side front" />
+            <div className="side front" >
+              <span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` } />
+            </div>
           </button>
         </Tooltip>
         <Dialog
@@ -375,7 +463,7 @@ class Level extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore, canPostToFacebook} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");
@@ -396,6 +484,9 @@ class Level extends Component {
       // If i'm past the first lesson and i'm not done but my previous one is, i'm the next lesson
       levelStatuses[l].isNext = l === 0 && !done || l > 0 && !done && (levelStatuses[l - 1].isDone || levelStatuses[l - 1].isSkipped);
     }
+
+    const latestIsland = this.props.islands.find(i => i.is_latest === true);
+    // console.log(latestIsland.ordering);
 
     const otherCodeBlockItemsBeforeFold = [];
     const otherCodeBlockItemsAfterFold = [];
@@ -485,8 +576,8 @@ class Level extends Component {
         { /* TODO3: incremented blocker for December Island */}
         { /* TODO4: incremented blocker for January Island */}
 
-        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) && <h2 className="u-visually-hidden">{`${t("Next island")}: `}</h2>}
-        { nextIsland && Number(nextIsland.ordering) < 8  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
+        { nextIsland && Number(nextIsland.ordering) <= latestIsland.ordering  && this.hasUserCompleted(currentIsland.id) && <h2 className="u-visually-hidden">{`${t("Next island")}: `}</h2>}
+        { nextIsland && Number(nextIsland.ordering) <= latestIsland.ordering  && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null}
         { /* nextIsland && this.hasUserCompleted(currentIsland.id) ? <IslandLink next={true} width={250} island={nextIsland} description={false} /> : null */ }
         { otherCodeBlocks.length
           ? <div className="student-codeblocks-container">

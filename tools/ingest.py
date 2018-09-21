@@ -1,3 +1,5 @@
+#DEPRECATED / OUTDATED ingestion script - predates CMS. Used to ingest from google doc to db.
+
 import pandas as pd
 from sqlalchemy import create_engine
 import os, math, json

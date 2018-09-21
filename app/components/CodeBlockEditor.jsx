@@ -13,6 +13,12 @@ import ShareFacebookLink from "components/ShareFacebookLink";
 import "./Studio.css";
 import "./CodeBlockEditor.css";
 
+/** 
+ * CodeBlockEditor is the popover that comes up for the final test of an island.
+ * It is mostly a wrapper around CodeEditor that provides the student with the test prompt,
+ * cheat sheet, and db routes to save their progress when they pass the test
+ */
+
 class CodeBlockEditor extends Component {
 
   constructor(props) {
@@ -36,6 +42,9 @@ class CodeBlockEditor extends Component {
     this.handleKey = this.handleKey.bind(this); // keep this here to scope shortcuts to this page
   }
 
+  /**
+   * On Mount, parse various props passed down and add them to state. 
+   */
   componentDidMount() {
     const {t} = this.props;
     const rulejson = JSON.parse(this.props.island.rulejson);
@@ -64,14 +73,26 @@ class CodeBlockEditor extends Component {
     clearTimeout(this.timeout);
   }
 
+  /**
+   * When a user passes a codeblock for the first time, the parent Island component
+   * must be informed so it can close the popover and show a the "next island" dialog.
+   * Pass this callback down to codeeditor to enable that
+   */
   onFirstCompletion(winMessage) {
     this.props.onFirstCompletion(winMessage);
   }
 
+  /**
+   * Callback passed to CodeEditor so that CodeEditor can report when the user is using
+   * a script tag (therefore show an execute button in here in CodeBlockEditor)
+   */
   setExecState(execState) {
     this.setState({execState});
   }
 
+  /**
+   * Write progress to db when codeblock is passed
+   */
   saveProgress(level) {
     // Status is completed because there is no way to "skip" a codeblock
     axios.post("/api/userprogress/save", {level, status: "completed"}).then(resp => {
@@ -79,26 +100,44 @@ class CodeBlockEditor extends Component {
     });
   }
 
-  onChangeText(theText) {
+  /**
+   * Callback passed down to the CodeEditor, allowing this parent component to respond
+   * to text changes if desired.
+   */
+  onChangeText() {
     // nothing yet
   }
 
+  /** 
+   * Set codeblock back to original test prompt state
+   */
   resetCodeBlock() {
     const {island} = this.props;
     let initialcontent = "";
     if (island && island.initialcontent) initialcontent = island.initialcontent;
+    // This is why CodeEditor needs withRef:true - There are times when the outer wrapping
+    // component must reach into the CodeEditor and set its state directly.
     this.editor.getWrappedInstance().getWrappedInstance().setEntireContents(initialcontent);
     this.setState({resetAlert: false});
   }
 
+  /**
+   * Show popup warning (Are you sure?)
+   */
   attemptReset() {
     this.setState({resetAlert: true});
   }
 
+  /**
+   * Show popup warning (Are you sure?)
+   */
   executeCode() {
     this.editor.getWrappedInstance().getWrappedInstance().executeCode();
   }
 
+  /**
+   * Change codeblock name in place. Note that this doesn't save it to the db yet
+   */
   changeCodeblockName(newName) {
     newName = newName.replace(/^\s+|\s+$/gm, "").replace(/[^a-zA-ZÀ-ž0-9-\ _]/g, "");
     const originalFilename = newName;
@@ -106,26 +145,21 @@ class CodeBlockEditor extends Component {
     this.setState({originalFilename, filename});
   }
 
+  /** 
+   * Intermediary function that blocks some editing functions until the save is complete
+   * This gets around a known bug where clicking save twice can write two copies to the db
+   */
   clickSave() {
     const saving = true;
     this.setState({saving}, this.verifyAndSaveCode.bind(this));
   }
 
-  shareCodeblock() {
-    const {t} = this.props;
-    const {username} = this.props.auth.user;
-    const {browserHistory} = this.context;
-    if (this.editor && !this.editor.getWrappedInstance().getWrappedInstance().changesMade()) {
-      // browserHistory.push(`/codeBlocks/${username}/${this.props.island.codeBlock.snippetname}`);
-    }
-    else {
-      const toast = Toaster.create({className: "shareCodeblockToast", position: Position.TOP_CENTER});
-      toast.show({message: t("Save your webpage before sharing!"), intent: Intent.WARNING});
-    }
-  }
-
+  /** 
+   * When the user clicks save & submit, make sure the internal CodeEditor has verified that
+   * their code is passing. If so, write the codeblock and progress to the db, and update the 
+   * in-state version to reflect the new code
+   */
   verifyAndSaveCode() {
-
     const {t} = this.props;
     const {id: uid} = this.props.auth.user;
     const studentcontent = this.editor.getWrappedInstance().getWrappedInstance().getEntireContents();
@@ -156,8 +190,6 @@ class CodeBlockEditor extends Component {
         toast.show({message: t("Saved!"), timeout: 1500, intent: Intent.SUCCESS});
         if (this.editor) this.editor.getWrappedInstance().getWrappedInstance().setChangeStatus(false);
 
-        // Uncomment this to test Win Dialog
-        // if (this.props.onFirstCompletion) this.props.onFirstCompletion();
         if (this.props.onFirstCompletion && !codeBlock) this.props.onFirstCompletion();
 
         if (codeBlock) {

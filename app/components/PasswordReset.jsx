@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {changePassword, resetPassword, validateReset} from "datawheel-canon/src/actions/auth";
+import {changePassword, resetPassword, validateReset} from "@datawheel/canon-core/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
 
@@ -11,7 +11,11 @@ import {
   RESET_SEND_SUCCESS,
   RESET_TOKEN_FAILURE,
   RESET_TOKEN_SUCCESS
-} from "datawheel-canon/src/consts";
+} from "@datawheel/canon-core/src/consts";
+
+/** 
+ * Wrapper Component for the reset password dispatch action of canon
+ */
 
 class PasswordReset extends Component {
 
@@ -27,6 +31,9 @@ class PasswordReset extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
+  /** 
+   * On Mount, access the URL information from router and grab the token if it is there.
+   */
   componentDidMount() {
     const {location} = this.props.router;
     const {token} = location ? location.query : this.props;
@@ -40,6 +47,9 @@ class PasswordReset extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
+  /**
+   * Password field change handler, ensure passwords match before submitting dispatch
+   */
   changePassword(e) {
     e.preventDefault();
     const {t, router} = this.props;
@@ -59,10 +69,13 @@ class PasswordReset extends Component {
     this.setState({submitted: true});
   }
 
+  /** 
+   * Listen for changes to this.props.auth, and show a Toast message that reflects its state
+   */
   componentDidUpdate() {
 
     const {auth, t, router} = this.props;
-    const {email, submitted, toast, token} = this.state;
+    const {submitted, toast, token} = this.state;
 
     const successMsg = t("Reset.actions.RESET_SEND_SUCCESS");
     const failMsg = t("Reset.actions.RESET_SEND_FAILURE");

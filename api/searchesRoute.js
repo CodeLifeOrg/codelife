@@ -1,17 +1,23 @@
 const sequelize = require("sequelize");
 const {isAuthenticated} = require("../tools/api.js");
 
-/*
-const q = `SELECT * FROM searches WHERE document @@ to_tsquery('${query}')`;
-db.query(q, {type: db.QueryTypes.SELECT}).then(u => res.json(u).end());
-where: { document: { $ts: sequelize.fn('to_tsquery', query) } }
-*/
+/**
+ * searchRoute handles searches in the bar at the top of the site. Though datawheel
+ * has used stemming and postgres search in the past, this is not relevant for usernames
+ * and project names, which are exact match only. As such, the queries here are accomplished
+ * using trigrams enabled on the columns searched. See ops.md for more info. 
+ */
 
 module.exports = function(app) {
 
   const {db} = app.settings;
 
-
+  /**
+   * Used by Projects to search users to collaborate with. The large sequelize associative
+   * include is necessary so the front-end can sort by school or location.
+   * @param req.query query string from user input
+   * @returns {Object[]} list of users that match the search input
+   */
   app.get("/api/searchusers", isAuthenticated, (req, res) => {
     const query = req.query.query;
     db.userprofiles.findAll({
@@ -41,8 +47,11 @@ module.exports = function(app) {
     });
   });
 
-
-
+  /**
+   * Used by the generalized search bar at the top of the page
+   * @param req.query query string from user input
+   * @returns {Object[]} list of users that match the search input
+   */
   app.get("/api/search", isAuthenticated, (req, res) => {
     const query = req.query.query;
     const searchid = req.query.searchid;

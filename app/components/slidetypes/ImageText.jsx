@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 
+/**
+ * ImageText is image-left, text-right, which is currently unused in the platform
+ */
+
 export default class ImageText extends Component {
 
   render() {

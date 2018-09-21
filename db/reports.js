@@ -1,3 +1,9 @@
+/**
+ * reports tracks flagging of inappropriate content. Similarly to threads, an entity_id/type pairing 
+ * is used to relate to multiple tables, requiring additional filtering and querying. For true SQL
+ * correctness, this could probably be split out into individual tables per entity. 
+ */
+
 module.exports = function(sequelize, db) {
 
   const r = sequelize.define("reports",
@@ -7,12 +13,19 @@ module.exports = function(sequelize, db) {
         primaryKey: true,
         autoIncrement: true
       },
+      // user id
       uid: db.TEXT,
+      // dropdown reason 
       reason: db.TEXT,
+      // user description of issue
       comment: db.TEXT,
+      // id of reported entity
       report_id: db.INTEGER,
+      // type of reported entity
       type: db.TEXT,
+      // reports get addressed by admins (new, approved, banned)
       status: db.TEXT,
+      // link to offending content (DEPRECATED / UNUSED)
       permalink: db.TEXT
     },
     {

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Link} from "react-router";
 import {translate} from "react-i18next";
 import axios from "axios";
 import CTA from "components/CTA";
@@ -13,6 +12,10 @@ import HomeHeaderLoggedIn from "./home/HomeHeaderLoggedIn";
 import HomeFeatures from "./home/HomeFeatures";
 import HomeCards from "./home/HomeCards";
 import HomeAbout from "./home/HomeAbout";
+
+/**
+ * Homepage component - mostly a wrapper for other smaller components (cards, features, etc)
+ */
 
 class Home extends Component {
 
@@ -27,6 +30,10 @@ class Home extends Component {
     };
   }
 
+  /** 
+   * On mount, fetch the users progress so that a "continue your adventure" placard can be shown.
+   * Whether the user is logged or not, fetch the featured cb/projects
+   */
   componentDidMount() {
     const {user} = this.props;
     if (user) {
@@ -47,7 +54,7 @@ class Home extends Component {
 
   render() {
 
-    const {islands, locale, t, user} = this.props;
+    const {islands, locale, user} = this.props;
     const {codeBlocks, current, dbLoaded, progress, projects} = this.state;
 
     let loggedOut = true;

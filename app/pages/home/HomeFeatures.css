@@ -6,6 +6,10 @@
 .features-section {
   margin-top: 5vw;
 
+  @add-mixin max-xs {
+    margin-top: -20vw;
+  }
+
   @add-mixin min-xl {
     margin-top: 7.5vw;
     margin-bottom: 5vw;
@@ -79,6 +83,10 @@
       &:first-of-type {
         top: -15%;
 
+        @media (min-width: 400px) and (max-width: 767px) {
+          top: -26vw;
+        }
+
         @add-mixin min-xl {
           top: -20%;
         }
@@ -87,7 +95,7 @@
       /* bottom cloud */
       &:last-of-type {
         /* flip cloud upside down */
-        transform: translateY(-5px) rotateZ(177deg);
+        transform: rotateZ(177deg);
         /* positioning */
         position: absolute;
         bottom: 0;
@@ -178,6 +186,9 @@
       vertical-align: middle;
     }
   }
+
+  /* apply extra white background on small screens */
+  @add-mixin cloud-safe-area;
 
   /* 3 col layout */
   @add-mixin min-sm {

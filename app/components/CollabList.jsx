@@ -1,11 +1,13 @@
-import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import {connect} from "react-redux";
-import {Link} from "react-router";
 
 import UserCard from "components/UserCard";
 import "./CollabList.css";
+
+/** 
+ * Provides a list of Collaborators for a project provided by props.
+ */
 
 class CollabList extends Component {
 
@@ -21,6 +23,8 @@ class CollabList extends Component {
     const {t, currentProject} = this.props;
     const collabs = currentProject.collaborators;
 
+    // UserCard requires a certain user format to display all the fields correctly. 
+    // Extract the project owner and collaborators from the project and prep them for use with UserCard.
     // project owner
     const collabOwner = {
       bio: currentProject.userprofile.bio,
@@ -70,34 +74,6 @@ class CollabList extends Component {
     );
   }
 }
-
-// <li className="collab-list-item current-collab-item card-container" key={r.id}>
-//   {/* remove collaborator button */}
-//   <Link to="" className="card-trigger u-absolute-expand u-margin-top-off u-margin-bottom-off">
-//     <span className="u-visually-hidden">{ t("View profile") }</span>
-//   </Link>
-//
-//   {/* card inner */}
-//   <span className="card collab-inner">
-//
-//     <span className="collab-list-avatar">
-//       {/* show user image if one is found */}
-//       { r.user.img
-//         ? <span className="collab-list-avatar-img" style={{backgroundImage: `url(/uploads/${r.user.img})`}} />
-//         : <span className="collab-list-avatar-icon pt-icon pt-icon-person" />
-//       }
-//       {/* action indicator */}
-//       <span className="action-indicator">
-//         <span className="action-indicator-icon pt-icon pt-icon-arrow-right" />
-//       </span>
-//     </span>
-//
-//     {/* name */}
-//     <span className="collab-list-caption">
-//       <h3 className="collab-list-heading u-margin-top-off u-margin-bottom-off font-sm">{r.user.username}</h3>
-//     </span>
-//   </span>
-// </li>
 
 
 CollabList = connect(state => ({

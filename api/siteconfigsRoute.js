@@ -2,6 +2,8 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+  // DEPRECATED - UNUSED
+
   // Public, as we need site-wide configs for the Homepage
   app.get("/api/siteconfigs", (req, res) => {
     db.siteconfigs.findAll().then(configs => {

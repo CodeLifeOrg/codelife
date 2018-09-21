@@ -1,9 +1,13 @@
 import axios from "axios";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Button, Classes, MenuItem} from "@blueprintjs/core";
+import {Button, MenuItem} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/labs";
 import SelectGeo from "components/SelectGeo";
+
+/** 
+ * Component for choosing a school from a db of school ids and geos - meant to be used in conjunction with SelectGeo
+ */
 
 class SelectSchool extends Component {
 
@@ -18,6 +22,9 @@ class SelectSchool extends Component {
     };
   }
 
+  /**
+   * On Mount, get the sid from props (originally retrieved from userprofile) and populate the dropdown accordingly
+   */
   componentDidMount() {
     const {sid} = this.props;
     if (sid) {
@@ -38,10 +45,14 @@ class SelectSchool extends Component {
     }
   }
 
+  // This was added to limit the school list to Minas Gerais - but not sure why there are two componentDidMount functions?? TODO: revisit this  
   componentDidMount() {
     this.updateSchoolList({id: "4mg000000"});
   }
 
+  /**
+   * Callback for dual dropdown - Given a selected Geo, hit the API to retrieve all the schools for that Geo and populate the dropdown.
+   */
   updateSchoolList(geo) {
     const {t} = this.props;
     const {id: gid} = geo;
@@ -88,7 +99,7 @@ class SelectSchool extends Component {
 
   render() {
     const {t} = this.props;
-    const {loading, error, mySchool, schools, filteredSchools, schoolQuery} = this.state;
+    const {loading, error, mySchool, schools, filteredSchools} = this.state;
 
     if (loading) return <div className="school-geosearch-container"></div>;
 

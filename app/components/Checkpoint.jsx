@@ -4,6 +4,12 @@ import {connect} from "react-redux";
 import SelectSchool from "components/SelectSchool";
 import "./Checkpoint.css";
 
+/** 
+ * Checkpoint is a one-time pop-up that asks the user to fill in his or her school/location
+ * Originally intended to be a more generic "Checkpoint" system that would support arbitrary 
+ * banners/messages, it is currently only used for gathering school info
+ */
+
 class Checkpoint extends Component {
 
   constructor(props) {
@@ -20,7 +26,6 @@ class Checkpoint extends Component {
 
   render() {
 
-    const {t} = this.props;
     const {sid} = this.state;
 
     return (

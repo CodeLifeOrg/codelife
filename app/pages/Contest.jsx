@@ -10,6 +10,11 @@ import axios from "axios";
 
 import "./Contest.css";
 
+/** 
+ * Contest Component handles the (currently postponed) contest, including all the steps and checks to ensure eligibility.
+ * Page is public-facing (doesn't require login) to gain attention - the first step is creating an account
+ */
+
 class Contest extends Component {
 
   constructor(props) {
@@ -27,15 +32,18 @@ class Contest extends Component {
     };
   }
 
+  /**
+   * On mount, load the user, their progress, and their projects. Use this data to populate state and fill in the 
+   * appropriate steps on the page
+   */
   componentDidMount() {
     if (this.props.user) {
       const islands = this.props.islands.map(i => Object.assign({}, i)).sort((a, b) => a.ordering - b.ordering);
       const levels = this.props.levels.map(l => Object.assign({}, l));
       let flatProgress = [];
+      const latestIslandIndex = this.props.islands.find(i => i.is_latest === true).ordering;
       for (const i of islands) {
-        // This filters out non-yet released islands
-        // TODO: Longer term solution for active/inactive islands
-        if (!["island-21a4", "island-bacb"].includes(i.id)) {
+        if (i.ordering <= latestIslandIndex) {
           const myLevels = levels.filter(l => l.lid === i.id).sort((a, b) => a.ordering - b.ordering);
           flatProgress = flatProgress.concat(myLevels, i);
         }
@@ -57,6 +65,10 @@ class Contest extends Component {
     }
   }
 
+  /**
+   * Signing up for the contest is a multi-step progress - use the state to determine where the user is
+   * so the boxes on the page can be checked accordingly.
+   */
   determineStep() {
     const hasAccount = Boolean(this.props.user);
     const {signedUp, beatenGame, hasProjects, hasSubmitted} = this.state;

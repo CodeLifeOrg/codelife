@@ -1,3 +1,10 @@
+/**
+ * threads are top-level text entires in a Discussion. Similar to likes and reports, they use
+ * a "subject_id/type" relation column which could potentially be improved with standalone relational
+ * tables. Currently the only type is "slide" but this could be changed to support discussions for
+ * projects, codeblocks, etc
+ */
+
 module.exports = function(sequelize, db) {
 
   const t = sequelize.define("threads",
@@ -10,9 +17,13 @@ module.exports = function(sequelize, db) {
       title: db.TEXT,
       content: db.TEXT,
       date: db.DATE,
+      // the type of entity this discussion refers to. only slide currently, but could be expanded
       subject_type: db.TEXT,
+      // the id of the entity this dicussion refers to.
       subject_id: db.TEXT,
+      // user id
       uid: db.STRING,
+      // threads can be banned by admins, store the status here
       status: db.TEXT
     },
     {

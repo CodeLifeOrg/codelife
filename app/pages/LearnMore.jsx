@@ -3,6 +3,10 @@ import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import "./LearnMore.css";
 
+/**
+ * Simple partners page to link to other online coding projects
+ */
+
 class LearnMore extends Component {
 
   constructor(props) {

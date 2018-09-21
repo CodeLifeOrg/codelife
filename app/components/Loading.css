@@ -6,6 +6,10 @@
   /* position children */
   text-align: center;
 
+  & .loading-title {
+    margin-top: 0;
+  }
+
   /* increase spinner thickness */
   & .pt-spinner-track,
   & .pt-spinner-head {
@@ -68,6 +72,10 @@ p > .loading {
   padding-top: 0; /* reset */
   margin-left: 0.5em;
   top: -1px;
+
+  & .loading-title {
+    margin-top: 0.5em;
+  }
 
   & .pt-spinner {
     width: 100%;

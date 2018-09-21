@@ -1,8 +1,52 @@
-#search-box {
-  display:inline-block;
+.glossary-insert {
+  display: flex;
+  align-items: center;
+
+  & .glossary-insert-search {
+    flex: 1 0 auto;
+    margin-right: 0.5em;
+
+    & input:focus {
+      background-color: var(--sky-light);
+    }
+  }
+
+  & .glossary-insert-search,
+  & .glossary-insert-button {
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
-#insert-word {
-  margin: var(--gutter-xs);
-  display:inline-block;
+.quill {
+  & .ql-toolbar.ql-snow,
+  & .ql-container.ql-snow {
+    background-color: var(--white);
+    border-color: var(--light-1);
+  }
+
+  & .ql-container.ql-snow {
+    &:focus-within {
+      background-color: var(--sky-light);
+    }
+
+    & pre.ql-syntax {
+      background-color: var(--dark-2);
+    }
+  }
+
+  & .ql-toolbar .ql-formats {
+    display: inline-block !important;
+  }
+
+  /* prevent text cursor from dissapearing
+     inside <code> elements (issue #489) */
+  & .ql-editor {
+    z-index: 1; /* keep <code> visible even when pushed back */
+
+    & code {
+      padding: 0; /* easier to tell when the cursor is on the edge */
+      z-index: -1; /* don't obsure the cursor */
+    }
+  }
 }

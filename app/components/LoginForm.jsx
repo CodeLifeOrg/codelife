@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {login, resetPassword} from "datawheel-canon/src/actions/auth";
+import {login, resetPassword} from "@datawheel/canon-core/src/actions/auth";
 import {translate} from "react-i18next";
 
 import TwitterIcon from "./TwitterIcon.svg.jsx";
@@ -8,6 +8,10 @@ import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
 
 import "./LoginForm.css";
+
+/**
+ * Works alongside SignUpForm to log users in. Essentially a wrapper for the canon "login" action 
+ */
 
 class LoginForm extends Component {
 
@@ -24,6 +28,9 @@ class LoginForm extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
+  /**
+   * The login dispatch is mapped to props and called here
+   */
   onSubmit(e) {
     e.preventDefault();
     const {redirect} = this.props;

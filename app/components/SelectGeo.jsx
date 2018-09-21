@@ -8,6 +8,10 @@ import "@blueprintjs/labs/dist/blueprint-labs.css";
 
 import "./SelectGeo.css";
 
+/** 
+ * Component for selecting a location from a database of geo codes in Brazil
+ */
+
 class SelectGeo extends Component {
 
   constructor(props) {
@@ -21,8 +25,12 @@ class SelectGeo extends Component {
     };
   }
 
+  /**
+   * On Mount, get the gid (embedded in props via userprofile) and populate the search bar accordingly
+   */
   componentDidMount() {
     const {gid} = this.props;
+    // the hard-coded "-1" is used to indicate that this user has overtly elected to opt-out of providing their location.
     if (gid && gid !== "-1") {
       const state = gid.substr(0, 3);
       axios.get(`/api/geos/?state=${state}`).then(geosResp => {
@@ -42,14 +50,22 @@ class SelectGeo extends Component {
     }
   }
 
+  /**
+   * Callback for the select box. Contains some code from what was going to be an "Unspecified" option, but was 
+   * changed to a higher up "Rather not say" option in EditProfile.jsx which cancels out the dialog entirely 
+   * and writes a hard-coded "-1" to the user's geo id. 
+   */
   changeState(e) {
     const {callback} = this.props;
     const state = e.target.value;
     if (state === "unspecified") {
-      /*this.setSelectedGeo({
+      
+      /*
+      this.setSelectedGeo({
         id: "unspecified",
         name: "Unspecified"
-      });*/
+      });
+      */
     }
     else {
       axios.get(`/api/geos/?state=${state}`).then(geosResp => {
@@ -116,7 +132,7 @@ class SelectGeo extends Component {
               id={`${context}-state-select`}
               value={state || ""}
               onChange={changeState}>
-              {/*<option value="unspecified">{t("Unspecified")}</option>*/}
+              {/* <option value="unspecified">{t("Unspecified")}</option> */}
               {STATES.map(s =>
                 <option key={s.id} value={s.id}>
                   {`${s.id.substr(1, 2).toUpperCase()} - ${s.name}`}

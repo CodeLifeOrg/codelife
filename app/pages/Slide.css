@@ -70,6 +70,23 @@
       position: absolute;
       top: 0;
       right: 0;
+      text-decoration: none;
+
+      /* icon positioning */
+      & .pt-icon {
+        margin-left: 0.25em;
+        transition: transform 0.2s ease-out;
+
+        @add-mixin max-sm {
+          @add-mixin font-lg;
+        }
+      }
+
+      /* interactions */
+      &:hover .pt-icon,
+      &:focus .pt-icon {
+        transform: scale(1.5);
+      }
     }
   }
   & .slide-content {
@@ -121,6 +138,8 @@
         max-height: 70vh; /* fallback */
         max-height: calc(100vh - 4em);
         overflow-y: auto;
+        /* enable inertia scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
         /* scale up font size */
         font-size: 13px;
         /* space out from editors */
@@ -141,6 +160,13 @@
       align-self: stretch; /* fill up the appropriate amount of vertical space */
       text-align: center; /* center align image within container */
       width: 100%;
+
+      /* center image within container */
+      @add-mixin max-sm {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
       @add-mixin min-sm {
         width: calc(100% - 300px); /* offset text */
@@ -163,36 +189,6 @@
     & .codeEditor {
       align-self: stretch;
       flex: 2;
-    }
-    & .validation {
-      position: absolute; /* take the validation buttons out of the flow */
-      bottom: -55px; /* fudge into place; offsets .slide-content margin and button height */
-      z-index: 1; /* prevent slide nav buttons from obscuring validation buttons */
-
-      /* treat as button group */
-      & .pt-button {
-        @add-mixin button-groupify;
-      }
-
-      /* make buttons take up 50% width on tiny screens */
-      @add-mixin max-sm {
-        width: 100%; /* necessary due to pos:ab */
-
-        /* two buttons */
-        & .pt-button {
-          width: 50%;
-
-          /* one button (both first and last) */
-          &:first-of-type:last-of-type {
-            width: 100%;
-          }
-        }
-
-        /* three buttons */
-        &.three-buttons .pt-button {
-          width: 33.333%;
-        }
-      }
     }
 
 
@@ -300,6 +296,62 @@
     }
   }
 
+  /* validation / next slide button */
+  & .centered-buttons {
+    position: absolute; /* take the validation buttons out of the flow */
+    z-index: 1; /* prevent slide nav buttons from obscuring validation buttons */
+
+    /* fudge validation buttons into place; offsets .slide-content margin and button height */
+    &.validation {
+      bottom: -60px;
+    }
+
+    &.return {
+
+      @add-mixin max-sm {
+        position: relative;
+        top: 10px;
+      }
+
+      @add-mixin min-sm {
+        @add-mixin absolute-horizontal-center;
+        bottom: 25px;
+      }
+    }
+
+    /* treat as button group */
+    & .pt-button {
+      @add-mixin button-groupify;
+    }
+
+    /* make buttons take up 50% width on tiny screens */
+    @add-mixin max-sm {
+      width: 100%; /* necessary due to pos:ab */
+
+      /* two buttons */
+      & .pt-button {
+        width: 50%;
+
+        /* one button (both first and last) */
+        &:first-of-type:last-of-type {
+          width: 100%;
+        }
+      }
+
+      /* three buttons */
+      &.three-buttons .pt-button {
+        width: 33.333%;
+      }
+    }
+  }
+
+  /* make space for validation buttons on mobile */
+  @add-mixin max-sm {
+    & .inputCode + .slide-footer .pt-button {
+      margin-top: var(--gutter-lg);
+    }
+  }
+
   /* footer */
   & .slide-footer {
     display: flex;
@@ -315,7 +367,6 @@
 
       & .pt-button {
         @add-mixin button-groupify;
-        margin-top: var(--gutter-lg);
         width: 50%;
       }
     }
@@ -362,6 +413,10 @@
     width: 100%;
   }
 
+  /* set code editor max height */
+  & .code-editor:not(.is-fullscreen) {
+    max-height: 75vh;
+  }
 
   /* renderCode template */
   & .renderCode {
@@ -369,7 +424,7 @@
     /* prevents code-editor from breaking layout on medium-sized screens */
     @add-mixin min-sm {
       & .code-editor {
-      width: calc(100% - 300px);
+        width: calc(100% - 300px);
       }
     }
   }

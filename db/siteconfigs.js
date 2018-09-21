@@ -1,3 +1,5 @@
+// UNUSED - Was going to store configs that eventually ended up in Environment variables
+
 module.exports = function(sequelize, db) {
 
   return sequelize.define("siteconfigs",

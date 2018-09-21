@@ -15,16 +15,19 @@
     /* fix cropped off icon */
     & .search-label-icon {
       padding-left: 1px;
+      font-size: 16px;
     }
   }
   /* search input field */
   & .search-input {
-    padding: 0.55em 1em 0.725em 3em;
+    padding: 0.4em 0.5em 0.5em 3em;
     /* theming */
     background-color: rgba(255,255,255,0.5);
     color: var(--sky-dark);
     border-radius: 2em;
     border: none;
+    /* prevent zooming on mobile */
+    font-size: 16px;
     /* transitions */
     transition: 0.2s background-color;
 

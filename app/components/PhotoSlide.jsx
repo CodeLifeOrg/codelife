@@ -1,6 +1,10 @@
 import React, {Component} from "react";
 import "./PhotoSlide.css";
 
+/**
+ * Slideshow of images for About page
+ */
+
 export default class About extends Component {
 
   render() {
@@ -12,7 +16,7 @@ export default class About extends Component {
       body = <div className="photo-group">
         <div style={{backgroundImage: `url('/photos/${ slug }/${ photos[0] }.jpg')`}} className="img half" />
         <div className="half">
-          { photos.slice(1).map(p => <img src={ `/photos/${ slug }/${ p }.jpg` } className="half" />) }
+          { photos.slice(1).map(p => <img key={p} alt="" src={ `/photos/${ slug }/${ p }.jpg` } className="half" />) }
         </div>
       </div>;
     }

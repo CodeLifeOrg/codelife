@@ -26,6 +26,11 @@ class CtxMenu extends Component {
     if (!node) return null;
 
     const menu = <Menu>
+      { node.itemType === "island" &&
+        <MenuItem 
+          iconName="take-action"
+          onClick={this.props.setLatest.bind(this, node)}
+          text="Make Latest" /> }
       <MenuItem
         iconName="arrow-up"
         onClick={this.props.moveItem.bind(this, node, "up")}

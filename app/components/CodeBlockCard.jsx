@@ -12,6 +12,12 @@ import ReportBox from "components/ReportBox";
 import LoadingSpinner from "components/LoadingSpinner";
 import "./CodeBlockCard.css";
 
+/**
+ * CodeBlockCards appear throughout the site as a way of previewing a student's codeblock
+ * It contains both the small clickable card with preview image AND the dialog box that pops
+ * up over the page and shows the full screen code editor.
+ */
+
 class CodeBlockCard extends Component {
 
   constructor(props) {
@@ -27,6 +33,11 @@ class CodeBlockCard extends Component {
     this.setState({open: !this.state.open});
   }
 
+  /**
+   * Write the current like status of this codeblock to the db.
+   * CodeBlockList must be informed when this happens so it can reorder the codeblocks
+   * (liked codeblocks come first) so props.reportLike on return.
+   */
   saveLikeStatus() {
     axios.post("/api/likes/save", {type: "codeblock", liked: this.state.codeBlock.liked, likeid: this.state.codeBlock.id}).then(resp => {
       if (resp.status === 200) {
@@ -39,15 +50,33 @@ class CodeBlockCard extends Component {
     });
   }
 
+  // Input handler for editing the name of the fork the user makes from this codeblock
   handleChange(e) {
     this.setState({forkName: e.target.value});
   }
 
+  /**
+   * Admin-only button callback that pings an API route to manually generate a screenshot
+   * for this codeblock (usually only happens when codeblock owner saves file)
+   */
+  generateScreenshot() {
+    axios.post("/api/codeBlocks/generateScreenshot", {id: this.props.codeBlock.id}).then(resp => {
+      resp.status === 200 ? console.log("success") : console.log("error");
+    });
+  }
+
+  /**
+   * When the forking sub-menu is opened, highlight and select the text for easy editing
+   */
   selectFork() {
     this.forkInput.focus();
     this.forkInput.select();
   }
 
+  /**
+   * Admin-only button callback that sets a codeblock as featured or not (featured codeblocks
+   * show up on the homepage)
+   */
   toggleFeature() {
     const {codeBlock} = this.state;
     codeBlock.featured = !codeBlock.featured;
@@ -58,8 +87,14 @@ class CodeBlockCard extends Component {
     this.forceUpdate();
   }
 
+  /**
+   * Codeblocks can be forked into projects, so students may remix another student's work.
+   * This function creates that new project and populates it with the codeblock data
+   */
   toggleFork() {
     const {t} = this.props;
+    // In Projects.jsx, pass down a prop that overtly blocks forking if the current
+    // project they have open is unsaved.
     if (this.props.blockFork) {
       const toast = Toaster.create({className: "shareToast", position: Position.TOP_CENTER});
       toast.show({message: t("Save your webpage before starting a new one!"), timeout: 1500, intent: Intent.WARNING});
@@ -75,9 +110,14 @@ class CodeBlockCard extends Component {
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
           this.setState({open: false});
+          // In Projects.jsx, pass down a prop callback that can be called when the new
+          // fork is done writing. Call the callback with the id of the new project and the
+          // updated project list
           if (this.props.handleFork) {
             this.props.handleFork(newid, projects);
           }
+          // If this codeblock isn't embedded in Projects.jsx, then nothing special need be done.
+          // Because the project is written to the db, just send the user to the page to edit it.
           else {
             browserHistory.push(`/projects/${this.props.user.username}/${currentProject.name}/edit`);
           }
@@ -89,6 +129,10 @@ class CodeBlockCard extends Component {
     }
   }
 
+  /**
+   * Switch that functions a like on and off. Note that this is front-end only
+   * and does not update the backend.
+   */
   toggleLike() {
     const {codeBlock} = this.state;
     if (codeBlock.liked) {
@@ -102,18 +146,27 @@ class CodeBlockCard extends Component {
     this.setState({codeBlock});
   }
 
+  /**
+   * Toggles the like visually (toggleLike) and saves it to the db (saveLikeStatus)
+   */
   directLike() {
     this.toggleLike.bind(this)();
     this.saveLikeStatus.bind(this)();
     this.forceUpdate();
   }
 
+  /**
+   * On mount, grab the codeblock from props and create a unique placeholder fork name via epoch time
+   */
   componentDidMount() {
     const {codeBlock} = this.props;
     const forkName = codeBlock.snippetname.concat(Math.floor(new Date().getTime() / 100000));
     this.setState({codeBlock, forkName});
   }
 
+  /**
+   * On Update, if new props have been loaded in, load the new codeblock into state and update fork title
+   */
   componentDidUpdate() {
     if (this.state.codeBlock && this.props.codeBlock.id !== this.state.codeBlock.id) {
       const {codeBlock} = this.props;
@@ -122,6 +175,10 @@ class CodeBlockCard extends Component {
     }
   }
 
+  /**
+   * This method is passed down as a callback to ReportBox. When reportBox signals a report,
+   * it calls this function, which updates the embedded codeblock itself and forces a refresh
+   */
   handleReport() {
     const {codeBlock} = this.state;
     codeBlock.reported = true;
@@ -133,7 +190,7 @@ class CodeBlockCard extends Component {
 
     if (!codeBlock) return <LoadingSpinner />;
 
-    const {t, userProgress, theme, icon, user} = this.props;
+    const {t, userProgress, theme, user} = this.props;
     const {id, lid, liked, reported, likes, snippetname, slug, studentcontent, username, featured} = codeBlock;
 
     const mine = this.props.user && codeBlock.uid === this.props.user.id;
@@ -147,7 +204,7 @@ class CodeBlockCard extends Component {
     // define thumbnail image as null
     let thumbnailImg = null;
 
-    // get corresponding thumbnail image
+    // These hard coded names are now deprecrated/unused
     if (username && snippetname) {
       if (username === "alice" && snippetname === "My Theme Park Island Snippet") {
         thumbnailImg = "concert-thumbnail@2x.jpg";
@@ -161,6 +218,7 @@ class CodeBlockCard extends Component {
     }
 
     thumbnailImg = true;
+    // add v?=epoch to ensure a reload and use of an updated non-cached version
     const thumbnailURL = `/cb_images/${codeBlock.user.username}/${id}.png?v=${new Date().getTime()}`;
 
     return (
@@ -176,7 +234,7 @@ class CodeBlockCard extends Component {
 
           {/* show thumbnail image if one is found */}
           { thumbnailImg
-            ? <div className="card-img" style={{backgroundImage: `url(${thumbnailURL})`}}>
+            ? <div className="card-img" style={{backgroundImage: `url("${thumbnailURL}")`}}>
               <span className="card-action-icon pt-icon pt-icon-fullscreen" />
             </div>
             : null }
@@ -191,7 +249,7 @@ class CodeBlockCard extends Component {
             { username
               ? <span className="card-author font-xs">
                 {t("Card.MadeBy")}&nbsp;
-                { this.props.user 
+                { this.props.user
                   ? <Link className="card-author-link link" to={`/profile/${username}`}>
                     { username ? displayname || username : t("anonymous user") }
                   </Link>
@@ -216,10 +274,13 @@ class CodeBlockCard extends Component {
                 className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
                 onClick={ this.directLike.bind(this) }
                 aria-labelledby={`codeblock-card-${id}`} />
-              <span className="card-likes-count">{ likes }</span>
-              <span className="u-visually-hidden">&nbsp;
-                { `${ likes } ${ likes === 1 ? t("Like") : t("Likes") }` }
+              <span className="card-likes-count">
+                { likes }
+                <span className="u-visually-hidden">&nbsp;
+                  { likes === 1 ? t("Like") : t("Likes") }
+                </span>
               </span>
+
             </p>
 
             {/* island icon */}
@@ -256,13 +317,13 @@ class CodeBlockCard extends Component {
             {/* created by */}
             <p className="card-dialog-footer-byline pt-dialog-footer-byline font-sm">
               {t("Created by")}&nbsp;
-              {this.props.user 
+              {this.props.user
                 ? <a href={userLink} className="card-dialog-link codeblock-dialog-link user-link">
                   { username ? displayname || username : t("anonymous user") }
                 </a>
                 : username ? displayname || username : t("anonymous user")
               }
-              <a href={ embedLink } target="_blank" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
+              <a href={ embedLink } target="_blank" rel="noopener noreferrer" className="card-dialog-link codeblock-dialog-link share-link font-xs">{ embedLink }</a>
             </p>
 
             {/* show actions if logged in */}
@@ -355,14 +416,26 @@ class CodeBlockCard extends Component {
                 }
 
 
-                {/* show feature button if user is admin */}
+                {/* show feature & screenshot buttons if user is admin */}
                 { user.role === 2 &&
-                  <button
-                    onClick={this.toggleFeature.bind(this)}
-                    className={`card-feature-button pt-button pt-intent-primary${ featured ? " is-featured" : "" }`}>
-                    { featured && <span className="pt-icon pt-icon-tick" /> }
-                    { featured ? t("Featured") : t("Feature") }
-                  </button>
+                  <div className="u-button-group">
+                    <button
+                      onClick={this.toggleFeature.bind(this)}
+                      className={`card-feature-button pt-button pt-intent-primary font-xs${ featured ? " is-featured" : "" }`}>
+                      { featured && <span className="pt-icon pt-icon-tick" /> }
+                      <span className="u-hide-below-md">
+                        { featured ? t("Featured") : t("Feature") }
+                      </span>
+                    </button>
+                    <button
+                      onClick={this.generateScreenshot.bind(this)}
+                      className="card-screenshot-button pt-button pt-intent-primary font-xs">
+                      <span className="pt-icon pt-icon-camera" />
+                      <span className="u-hide-below-md">
+                        {t("Screenshot")}
+                      </span>
+                    </button>
+                  </div>
                 }
               </div>
             }

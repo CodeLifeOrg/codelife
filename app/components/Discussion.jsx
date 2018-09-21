@@ -2,12 +2,17 @@ import axios from "axios";
 import {connect} from "react-redux";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
-import {Collapse, Button, Toaster, Position, Intent, Popover, PopoverInteractionKind, Tooltip} from "@blueprintjs/core";
+import {Button, Toaster, Position, Intent} from "@blueprintjs/core";
 import Thread from "components/Thread";
 import "./Discussion.css";
 import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
+
+/**
+ * Discussion Board wraps a list of threads (which in turn hosts a list of comments). Discussion boards
+ * currently only apply to slides, but they are designed to be able to apply to anything (projects, codeblocks, etc)
+ */
 
 class Discussion extends Component {
 
@@ -27,6 +32,9 @@ class Discussion extends Component {
     this.componentDidUpdate({});
   }
 
+  /**
+   * When the user changes slides, hit the API endpoind and fetch the new thread data
+   */
   componentDidUpdate(prevProps) {
     if (prevProps.subjectId !== this.props.subjectId) {
       const {subjectType, subjectId} = this.props;
@@ -39,7 +47,9 @@ class Discussion extends Component {
   }
 
 
-
+  /**
+   * Prepare payload and post a new thread to the db
+   */
   newThread() {
     const {t} = this.props;
     const threadPost = {
@@ -58,7 +68,9 @@ class Discussion extends Component {
     });
   }
 
-
+  /**
+   * On sort selection, sort the threads in state
+   */
   selectSort(method) {
     const {threads} = this.state;
     switch (method) {
@@ -88,19 +100,24 @@ class Discussion extends Component {
 
   render() {
 
-    const {t: translate} = this.props;
+    const {t} = this.props;
     const {threads, threadTitle, threadContent} = this.state;
 
-    if (!threads) return <LoadingSpinner />;
+    if (!threads) return <LoadingSpinner label={false} />;
+
+    const threadInvalid =
+      !threadTitle || !threadContent || threadContent === "<p><br></p>"
+        ? true
+        : false;
 
     return (
       <div className="discussion-container" id="Discussion">
         <div className="discussion-inner">
-          <h3 className="discussion-heading">{ translate("Discussion") }</h3>
-          <div className="sort-bar" id="sort-bar">
-            Sort By
+          <h2 className="discussion-heading">{ t("Discussion") }</h2>
+          <div className="sort-bar font-xs field-container" id="sort-bar">
             <div className="pt-select">
-              <select value={this.state.sortBy} onChange={e => this.selectSort.bind(this)(e.target.value)}>
+              <label className="sort-bar-label" htmlFor="discussion-sort-by">{t("Sort By")}:</label>
+              <select className="sort-bar-select" id="discussion-sort-by" value={this.state.sortBy} onChange={e => this.selectSort.bind(this)(e.target.value)}>
                 <option value="date-oldest">Date: Oldest</option>
                 <option value="date-newest">Date: Newest</option>
                 <option value="comments-most">Comments: Most</option>
@@ -110,23 +127,31 @@ class Discussion extends Component {
               </select>
             </div>
           </div>
+
+          <div className="new-thread u-margin-bottom-lg">
+            <span className="thread">
+              <h3 className="new-thread-title">{t("Post New Thread")}</h3>
+              <label>
+                <span className="u-visually-hidden">{ t("Discussion") } {t("Title")}</span>
+                <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={t("Title")} />
+              </label>
+              <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
+              <div className="post-button-container">
+                <Button
+                  className={`post-button pt-button pt-fill${ threadInvalid ? "" : " pt-intent-success" }`}
+                  onClick={this.newThread.bind(this)}
+                  disabled={threadInvalid}
+                >
+                  {t("Start New Thread")}
+                </Button>
+              </div>
+            </span>
+          </div>
+
           <div className="threads" id="threads">
             { threads.map(t => <Thread key={t.id} thread={t} />) }
           </div>
-          <div className="new-thread">
-            <div className="new-thread-title">{translate("Post New Thread")}</div>
-            <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={translate("Title")} />
-            <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
-            <div className="post-button-container">
-              <Button 
-                className="pt-intent-success post-button" 
-                onClick={this.newThread.bind(this)}
-                disabled={!threadTitle || !threadContent || threadContent === "<p><br></p>"}
-              >
-                {translate("Start New Thread")}
-              </Button>
-            </div>
-          </div>
+
         </div>
       </div>
     );

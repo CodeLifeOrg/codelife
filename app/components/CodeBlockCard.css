@@ -18,6 +18,31 @@
   background-size: cover;
 }
 
+/* button = star icon */
+.card-likes-button {
+  font-size: 0.875rem; /* 14px */
+  padding: 0.2em; /* increase clickability */
+  /* theming */
+  color: var(--gray);
+  /* position above cover button */
+  z-index: 2;
+  /* transitions */
+  transition: color 0.2s;
+
+  &:hover,
+  &:focus {
+    color: var(--caution);
+  }
+
+  /* make accessibility text visible on focus */
+  &:focus +.card-likes-count > .u-visually-hidden {
+    position: relative !important;
+    clip: auto;
+    height: auto;
+    width: auto;
+  }
+}
+
 
 /* inline card dialog */
 .card-container .pt-overlay-inline {
@@ -65,10 +90,10 @@
     }
     @add-mixin min-sm {
       & .user-link {
-        max-width: 20.5rem;
+        max-width: 13.5rem;
       }
       & .share-link {
-        max-width: 25rem;
+        max-width: 18rem;
       }
     }
 
@@ -99,6 +124,17 @@
         margin-right: 1rem;
       }
     }
+    & .pt-button {
+      height: 100%;
+
+      @add-mixin max-md {
+        min-width: 0;
+
+        & .pt-icon {
+          margin-right: 0;
+        }
+      }
+    }
   }
 
   /* space out icon and text */
@@ -109,15 +145,15 @@
   & .card-dialog-footer-action-text {
     line-height: 2.125rem;
   }
+}
 
-  /* flag button theme */
-  & .flag-button {
-    transition: color 0.2s;
+/* flag button theme */
+.flag-button {
+  transition: color 0.2s;
 
-    /* interactions & flagged state */
-    &.is-flagged, &:hover, &:focus {
-      color: var(--danger);
-    }
+  /* interactions & flagged state */
+  &.is-flagged, &:hover, &:focus {
+    color: var(--danger);
   }
 }
 

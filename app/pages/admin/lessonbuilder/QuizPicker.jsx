@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {Checkbox} from "@blueprintjs/core";
+import {Switch} from "@blueprintjs/core";
 
 import "./QuizPicker.css";
 
@@ -50,7 +50,7 @@ class QuizPicker extends Component {
     this.setState({quiz}, this.updateJSON.bind(this));
   }
 
-  handleCheckbox(e) {
+  handleSwitch(e) {
     const {quiz} = this.state;
     if (e.target.checked) {
       quiz.map(q => q.isCorrect = false);
@@ -114,20 +114,38 @@ class QuizPicker extends Component {
     if (quiz) {
       quizItems = quiz.map(q =>
         <div key={q.id} className="quiz-section">
-          <Checkbox className="pt-large" id={q.id} checked={q.isCorrect} onChange={this.handleCheckbox.bind(this)} />
-          <textarea className="pt-input en" id={q.id} rows="3" onChange={this.changeField.bind(this, "text")} type="text" placeholder="Answer" dir="auto" value={q.text} />
-          <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "pt_text")} type="text" placeholder="Answer" dir="auto" value={q.pt_text} />
-          <button className="pt-button pt-intent-danger pt-icon-delete" type="button" id={q.id} onClick={this.removeAnswer.bind(this)}></button>
+          <Switch className="pt-large u-margin-bottom-off" id={q.id} checked={q.isCorrect} onChange={this.handleSwitch.bind(this)} />
+          <div className="field-container u-margin-top-off">
+            <textarea className="pt-input en" id={q.id} rows="3" onChange={this.changeField.bind(this, "text")} type="text" placeholder="Answer" dir="auto" value={q.text} />
+          </div>
+          <div className="field-container u-margin-top-off">
+            <textarea className="pt-input" id={q.id} rows="3" onChange={this.changeField.bind(this, "pt_text")} type="text" placeholder="Answer" dir="auto" value={q.pt_text} />
+          </div>
+          <div className="quiz-actions u-text-center">
+            <button className="button inverted-button danger-button font-sm" id={q.id} onClick={this.removeAnswer.bind(this)}>
+              <span className="pt-icon pt-icon-trash" />
+              remove
+            </button>
+          </div>
         </div>
       );
     }
 
     return (
       <div id="quiz-picker">
-        <label className="pt-label">
-          {quizItems}
-          <button className="pt-button pt-icon-add pt-fill" type="button" onClick={this.addAnswer.bind(this)}>Add Another Answer</button>
-        </label>
+        <h3>Answers</h3>
+        <div className="quiz-section font-sm u-margin-bottom-off">
+          <p className="pt-switch">Correct</p>
+          <p className="field-container u-text-center">Answer (En)</p>
+          <p className="field-container u-text-center">Answer (Pt)</p>
+          <p className="quiz-actions u-text-center">Actions</p>
+        </div>
+        {quizItems}
+        <button className="button"
+          onClick={this.addAnswer.bind(this)}>
+          <span className="pt-icon pt-icon-add" />
+          add answer
+        </button>
       </div>
     );
   }

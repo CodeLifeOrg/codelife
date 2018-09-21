@@ -5,6 +5,12 @@ import {connect} from "react-redux";
 import {Button, RadioGroup, Radio, Toaster, Position, Intent} from "@blueprintjs/core";
 import "./ReportBox.css";
 
+/**
+ * ReportBox is a reusable component for reporting threads, comments, projects, and codeblocks for 
+ * inappropriate content. As with many data structures in codelife, it uses a SINGLE reports table, 
+ * with a "type" column that designates which table the report_id refers to.
+ */
+
 class ReportBox extends Component {
 
   constructor(props) {
@@ -79,7 +85,7 @@ class ReportBox extends Component {
   }
 
   submitReport() {
-    const {reason, comment, userProfile} = this.state;
+    const {reason, comment} = this.state;
     const {reportid, contentType, permalink} = this.props;
     const rpayload = {reason, comment, permalink, type: contentType, report_id: reportid};
     const rpost = axios.post("/api/reports/save", rpayload);
@@ -100,7 +106,7 @@ class ReportBox extends Component {
   render() {
 
     const {t} = this.props;
-    const {mounted, previousReport, comment, userProfile} = this.state;
+    const {previousReport, comment, userProfile} = this.state;
 
     const disabled = previousReport || !userProfile || userProfile.reports <= 0;
     const isAdmin = this.props.auth.user.role === 2;

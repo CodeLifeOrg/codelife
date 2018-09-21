@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {signup} from "datawheel-canon/src/actions/auth";
+import {signup} from "@datawheel/canon-core/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
 
@@ -9,6 +9,10 @@ import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
 
 import "./SignupForm.css";
+
+/** 
+ * Sister component to AuthForm, this component wraps the Canon "signup" action and does appropriate error checking
+ */
 
 class SignupForm extends Component {
 
@@ -30,10 +34,14 @@ class SignupForm extends Component {
     this.setState({[e.target.name]: val});
   }
 
+  /**
+   * When the user clicks submit, verify some info before calling datawheel-canon's `signup` action
+   */
   onSubmit(e) {
     e.preventDefault();
-    const {legal, redirect, t} = this.props;
-    const {agreedToTerms, email, password, passwordAgain, username} = this.state;
+    const {redirect, t} = this.props;
+    const {email, password, passwordAgain} = this.state;
+    let {username} = this.state;
 
     if (password !== passwordAgain) {
       this.setState({error: {iconName: "lock", message: t("SignUp.error.PasswordMatch")}});
@@ -46,14 +54,15 @@ class SignupForm extends Component {
     //   this.setState({error: {iconName: "saved", message: t("SignUp.error.TermsAgree")}});
     // }
     else {
+      // strip the username of any leading or trailing spaces
+      username = username.replace(/^\s+|\s+$/gm, "");
       this.props.signup({username, email, password, redirect});
       this.setState({submitted: true});
     }
   }
 
   componentDidUpdate() {
-    const {auth, t} = this.props;
-    const {error, submitted} = this.state;
+    const {error} = this.state;
 
     if (error) {
       this.showToast(error.message, error.iconName, error.intent);
@@ -68,8 +77,7 @@ class SignupForm extends Component {
   }
 
   render() {
-    const {auth, legal, social, t} = this.props;
-    const {agreedToTerms} = this.state;
+    const {auth, social, t} = this.props;
     const email = this.state.email === null ? auth.error && auth.error.email ? auth.error.email : "" : this.state.email;
 
     return (

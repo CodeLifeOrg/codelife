@@ -23,9 +23,19 @@
     border: 1px solid var(--black);
     background-color: var(--dark-3); /* no sneaky white pixels when zoomed, please */
 
-    /* prevent zoom on mobile */
+    /* hidden textarea that recieves all the text */
     & textarea {
+      /* prevent zoom on mobile */
       font-size: 16px;
+      /* prevent moving viewport window position upward when typing */
+      /* NOTE: !important necessary for overriding inline style */
+      /* NOTE again: setting width causes the contextual menu (copy/paste/etc) to appear on iOS?? */
+      position: absolute;
+      height: 100% !important;
+      top: 0 !important;
+      /* just in case, make sure the textarea can't be reached */
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* editor highlight line; used for both themes */

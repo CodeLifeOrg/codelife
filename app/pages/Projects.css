@@ -52,6 +52,14 @@
       line-height: 1;
     }
 
+    /* interactions */
+    &:focus {
+      background-color: color(var(--sky-light) a(0.1));
+
+      & .project-switcher-link-text {
+        text-decoration: underline;
+      }
+    }
   }
 
   /* new project button */
@@ -65,6 +73,11 @@
   }
 }
 
+
+/* codeblock browser state */
+.projects-cta[aria-hidden=true] {
+  @add-mixin visually-hidden;
+}
 
 /* codeblock browser layout */
 .codeblock-browser {

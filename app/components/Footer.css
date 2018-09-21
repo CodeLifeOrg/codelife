@@ -73,6 +73,11 @@
     @add-mixin nav-link;
     padding-top: 0.75em;
     padding-bottom: 0.75em;
+    /* override nav-link mixin */
+    color: var(--sky);
+    opacity: 0.75;
+    /* transitions */
+    transition: opacity 0.2s ease-out;
 
     @add-mixin min-xs {
       padding-top: 0.25em;
@@ -81,7 +86,9 @@
 
     /* interactions */
     &:hover, &:focus {
-      color: var(--light-2);
+      color: var(--sky);
+      opacity: 1;
+      text-decoration: underline;
     }
   }
 }

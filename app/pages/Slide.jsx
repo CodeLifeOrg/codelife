@@ -21,15 +21,15 @@ import CheatSheet from "components/slidetypes/CheatSheet";
 
 import "./Slide.css";
 
-// A component cannot be dynamically instantiated via a string unless references to the 
+// A component cannot be dynamically instantiated via a string unless references to the
 // classes are stored directly in a lookup object such as this one.
 const compLookup = {TextImage, ImageText, TextText, TextCode, InputCode, RenderCode, Quiz, CheatSheet};
 
 /**
- * The slide component is the wrapper for all the various slidetypes in Codelife. However, 
- * it interacts a great deal with the db and greater site, as reaching the last slide 
+ * The slide component is the wrapper for all the various slidetypes in Codelife. However,
+ * it interacts a great deal with the db and greater site, as reaching the last slide
  * updates user progress, and each slide has a Discussion board beneath it. It's important
- * to note that currently a Level must be beaten all at once - the "latestSlideCompleted" 
+ * to note that currently a Level must be beaten all at once - the "latestSlideCompleted"
  * variable in state is not persisted anywhere, and leaving the lesson does not restart the
  * user halfway through a level. Longer term, more granular tracking of user location would
  * be a nice enhancement.
@@ -121,6 +121,11 @@ class Slide extends Component {
         // ... unless they have beaten it in the past
         if (this.state.done) blocked = false;
         this.setState({currentSlide: cs, blocked, showDiscussion: false});
+
+        if (this.slideTitle) {
+          this.slideTitle.setAttribute("tabIndex", 0);
+          this.slideTitle.focus();
+        }
       }
     }
 
@@ -139,7 +144,7 @@ class Slide extends Component {
     }
   }
 
-  /** 
+  /**
    * On mount, hit the DB and add the keyboard listener
    */
   componentDidMount() {
@@ -153,7 +158,7 @@ class Slide extends Component {
   /**
    * Given the island / level / slide (lid, mlid, sid) from the URL params
    * Fetch the slides and userprogress from the db and start from the first slides
-   */ 
+   */
   hitDB() {
     const {lid, mlid} = this.props.params;
     let {sid} = this.props.params;
@@ -202,7 +207,7 @@ class Slide extends Component {
   }
 
   /**
-   * When the user goes to the next level, push the new URL and hard-reload. This should 
+   * When the user goes to the next level, push the new URL and hard-reload. This should
    * be refactored to a more React-y state reset.
    */
   advanceLevel(mlid) {
@@ -247,6 +252,13 @@ class Slide extends Component {
     }
   }
 
+  // prevent slide title from getting focus again after blur
+  removeTabindex() {
+    if (this.slideTitle) {
+      this.slideTitle.setAttribute("tabIndex", "-1");
+    }
+  }
+
   render() {
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
@@ -261,7 +273,7 @@ class Slide extends Component {
 
     let SlideComponent = null;
 
-    // config for confetti 
+    // config for confetti
     const config = {
       angle: 270,
       spread: 180,
@@ -277,8 +289,8 @@ class Slide extends Component {
     const sType = currentSlide.type;
 
     // As mentioned earlier, there is no way to dynamically instantiate a component via
-    // a string identifier. As such, we look up the reference in a lookup table and 
-    // instantiate it later 
+    // a string identifier. As such, we look up the reference in a lookup table and
+    // instantiate it later
     SlideComponent = compLookup[sType];
 
     return (
@@ -300,7 +312,7 @@ class Slide extends Component {
               <button className="button" onClick={this.toggleSkip.bind(this)}>{t("Show Me")}</button>
             </div>
           </Dialog>
-          <div className="slide-header" id="slide-head">
+          <div className="slide-header" id="slide-head" ref={top => this.slideTitle = top} onBlur={this.removeTabindex.bind(this)}>
             { currentSlide.title
               ? <h1 className="slide-title font-lg">{ currentSlide.title }
                 { this.props.auth.user.role > 0
@@ -320,14 +332,14 @@ class Slide extends Component {
             </Link>
           </div>
 
+          {/*
+          This may be confusing, it is the only place in codelife where the data is
+          DIRECTLY prop'd into the component as opposed to something like slideData=currentSlide.
+          This means the properties are available directly in this.props inside each slide.
+          */}
           <SlideComponent
             island={currentIsland.theme}
-            // If this slide component is InputCode or Quiz, hook up the callback 
-            // to unblock Slide.jsx when the user gets it right
             unblock={this.unblock.bind(this)}
-            // This may be confusing, it is the only place in codelife where the data is 
-            // DIRECTLY prop'd into the component as opposed to something like slideData=currentSlide.
-            // This means the properties are available directly in this.props inside each slide.
             {...currentSlide} />
 
           <div className="slide-footer">

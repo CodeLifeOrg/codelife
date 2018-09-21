@@ -12,7 +12,7 @@ import ReportBox from "components/ReportBox";
 import LoadingSpinner from "components/LoadingSpinner";
 import "./CodeBlockCard.css";
 
-/** 
+/**
  * CodeBlockCards appear throughout the site as a way of previewing a student's codeblock
  * It contains both the small clickable card with preview image AND the dialog box that pops
  * up over the page and shows the full screen code editor.
@@ -87,7 +87,7 @@ class CodeBlockCard extends Component {
     this.forceUpdate();
   }
 
-  /** 
+  /**
    * Codeblocks can be forked into projects, so students may remix another student's work.
    * This function creates that new project and populates it with the codeblock data
    */
@@ -110,8 +110,8 @@ class CodeBlockCard extends Component {
           const newid = resp.data.id;
           const currentProject = projects.find(p => p.id === newid);
           this.setState({open: false});
-          // In Projects.jsx, pass down a prop callback that can be called when the new 
-          // fork is done writing. Call the callback with the id of the new project and the 
+          // In Projects.jsx, pass down a prop callback that can be called when the new
+          // fork is done writing. Call the callback with the id of the new project and the
           // updated project list
           if (this.props.handleFork) {
             this.props.handleFork(newid, projects);
@@ -131,7 +131,7 @@ class CodeBlockCard extends Component {
 
   /**
    * Switch that functions a like on and off. Note that this is front-end only
-   * and does not update the backend. 
+   * and does not update the backend.
    */
   toggleLike() {
     const {codeBlock} = this.state;
@@ -274,10 +274,13 @@ class CodeBlockCard extends Component {
                 className={ `card-likes-button pt-icon-standard u-unbutton u-margin-top-off ${ liked ? "pt-icon-star" : "pt-icon-star-empty" } ${ likes ? "is-liked" : null }` }
                 onClick={ this.directLike.bind(this) }
                 aria-labelledby={`codeblock-card-${id}`} />
-              <span className="card-likes-count">{ likes }</span>
-              <span className="u-visually-hidden">&nbsp;
-                { likes === 1 ? t("Like") : t("Likes") }
+              <span className="card-likes-count">
+                { likes }
+                <span className="u-visually-hidden">&nbsp;
+                  { likes === 1 ? t("Like") : t("Likes") }
+                </span>
               </span>
+
             </p>
 
             {/* island icon */}

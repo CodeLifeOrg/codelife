@@ -8,7 +8,7 @@ import {Toaster, Position, Intent, Alert} from "@blueprintjs/core";
 
 /**
  * InputCode is a slide type that requires the student to complete a coding test
- * The CodeEditor component is embedded with a series of rules, and the slide will 
+ * The CodeEditor component is embedded with a series of rules, and the slide will
  * not unblock until the student submits a passing code section. It is mostly a wrapper
  * for CodeEditor, with some controls to execute controls or unblock a slide.
  */
@@ -38,7 +38,7 @@ class InputCode extends Component {
   }
 
   /**
-   * If the user changes slides, update the rules 
+   * If the user changes slides, update the rules
    */
   componentDidUpdate(prevProps) {
     if (prevProps.rulejson !== this.props.rulejson) {
@@ -57,9 +57,9 @@ class InputCode extends Component {
   }
 
   /**
-   * Attempt to submit the current code state on click. Requires reaching into the 
+   * Attempt to submit the current code state on click. Requires reaching into the
    * wrapped CodeEditor instance itself to call a public function, isPassing,
-   * which is managed by the CodeEditor. If the student passes, inform the parent 
+   * which is managed by the CodeEditor. If the student passes, inform the parent
    * Slide component that this slide is unblocked and the student can continue
    */
   submitAnswer() {
@@ -75,7 +75,7 @@ class InputCode extends Component {
   }
 
   /**
-   * Reset CodeEditor to original testing state, again by reaching into the CodeEditor 
+   * Reset CodeEditor to original testing state, again by reaching into the CodeEditor
    * instance itself and setting contents via a public method.
    */
   resetAnswer() {
@@ -102,7 +102,7 @@ class InputCode extends Component {
     const {titleText, rulejson, execState} = this.state;
 
     return (
-      <div id="slide-content" className="slide-content renderCode flex-column">
+      <div id="slide-content" className="slide-content inputCode renderCode flex-column">
         {/* Alert Window: Are you sure you want to reset the code state? */}
         <Alert
           isOpen={ this.state.resetAlert }

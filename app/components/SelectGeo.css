@@ -94,6 +94,8 @@
   /* NOTE: increasing this further will cause part of it to be hidden in some dialogs */
   max-height: 13.5rem;
   overflow-y: auto;
+  /* enable inertia scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
 
   /* so much border radius, so little time 😒 */
   &, & .pt-popover-content {

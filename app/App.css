@@ -84,7 +84,12 @@ td > a,
   transition: color 0.2s;
 
   /* interactions */
-  &:hover, &:focus {
+  /* increase visiblility when focusing via keyboard */
+  &:focus {
+    color: var(--sky-black);
+    text-decoration: underline;
+  }
+  &:hover {
     color: var(--sky);
   }
   &:active {
@@ -94,8 +99,7 @@ td > a,
   /* danger text */
   &.danger-text:hover,
   &.danger-text:focus {
-    color: var(--danger);
-    opacity: 0.8; /* approximate sky color value */
+    color: var(--danger-dark);
   }
 }
 
@@ -235,6 +239,15 @@ blueprint overrides
   background-color: rgba(245, 245, 255, 0.7);
 }*/
 
+.pt-overlay {
+  z-index: 100;
+
+  /* give rando div a z-index so the content isn't hidden on mobile (wtf blueprint) */
+  & div:not([class]) {
+    z-index: 1;
+  }
+}
+
 .pt-input {
   border-radius: var(--radius-sm);
 }
@@ -264,7 +277,8 @@ blueprint overrides
   } */
 
   /* override blueprint disabled style */
-  &:disabled {
+  &:disabled,
+  &.pt-disabled {
     color: var(--white) !important;
     background-color: var(--light-2) !important;
   }
@@ -556,8 +570,7 @@ label.pt-control  {
     color: var(--sky-dark);
 
     /* interactions */
-    /* NOTE: it's a div, so there's no :focus */
-    &:hover {
+    &:hover, &:focus {
       color: var(--sky);
     }
   }
@@ -598,6 +611,8 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     height: 100vh;
+    /* enable inertia scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -1130,13 +1145,24 @@ form field layout
     padding-top: 0.25em;
     padding-bottom: 0.375em;
     opacity: 0;
+
+    /* hover & focus states */
+    &:hover ~ .fake-file-select:after,
+    &:focus ~ .fake-file-select:after {
+      background-color: var(--sky-black);
+    }
+
+    /* focus state */
+    &:focus ~ .fake-file-select {
+      background-color: var(--sky-light);
+    }
   }
   /* make real field and fake field take up width of container */
   & .field-input {
     width: 100%;
 
     /* interactions */
-    &:hover, &:focus {
+    &:hover {
       & ~ .fake-file-select {
         background-color: var(--white);
         border-color: var(--sky-dark);
@@ -1197,6 +1223,10 @@ form field layout
       text-align: center;
       border-radius: 1.5em;
     }
+    @add-mixin min-md {
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
   }
 }
 
@@ -1226,6 +1256,11 @@ form field layout
   /* reset the font size after unsetting it so the popover isn't huge 😡 */
   &.font-md input {
     @add-mixin font-md;
+  }
+
+  /* icon color on :focus */
+  &:focus-within .pt-icon-calendar {
+    color: var(--sky-dark);
   }
 
   /* THE PICKER */
@@ -1368,6 +1403,11 @@ utility classes
 }
 .u-hide-above-sm {
   @add-mixin min-sm {
+    display: none !important;
+  }
+}
+.u-hide-above-md {
+  @add-mixin min-md {
     display: none !important;
   }
 }

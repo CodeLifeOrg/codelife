@@ -24,6 +24,10 @@
     background-color: var(--cyan); /* fallback */
     background-image: linear-gradient(to top, var(--cyan-light) 0, var(--cyan) 100%);
 
+    @add-mixin max-xs {
+      margin-top: -18vw;
+    }
+
     /* position cloud */
     & .cloud-diagonal-exponential {
       /* sizing */
@@ -34,6 +38,11 @@
       position: absolute;
       top: 0;
       right: 0;
+
+      @add-mixin max-xs {
+        left: -10vw;
+        right: auto;
+      }
     }
   }
 
@@ -46,6 +55,7 @@
   & .learn-caption {
     /* sizing */
     width: 22.5rem;
+    max-width: 100%;
     /* positioning */
     padding-top: 2.5rem;
   }
@@ -59,6 +69,20 @@
     & .learn-caption {
       margin-left: auto;
       margin-right: auto;
+    }
+  }
+
+  /* hack the computer screen into place on tiny screens */
+  @add-mixin max-xs {
+
+    & .learn-figure {
+      @add-mixin absolute-horizontal-center;
+      top: -200px;
+      min-width: 442px;
+      z-index: 100;
+    }
+    & .learn-caption {
+      margin-top: 100px;
     }
   }
 

@@ -7,7 +7,7 @@ import "./CTA.css";
 
 import {Dialog} from "@blueprintjs/core";
 
-/** 
+/**
  * Call To Action Component, encourage users to sign up after visiting SEO-enable page
  */
 
@@ -30,7 +30,7 @@ class CTA extends Component {
 
     return (
       <div className="cta u-text-center">
-        
+
         {/* avatar */}
         <img className="cta-avatar-img" alt=""
           src="/avatars/avatar-excited-transparent.png"
@@ -45,7 +45,7 @@ class CTA extends Component {
         </h2>
 
         {/* login | signup button */}
-        <button className="cta-button pt-button pt-intent-primary font-md u-margin-top-md" onClick={this.authForm.bind(this, "signup")}>
+        <button className="cta-button button font-md u-margin-top-md" onClick={this.authForm.bind(this, "signup")}>
           { t("Home.GetStarted") }
         </button>
 

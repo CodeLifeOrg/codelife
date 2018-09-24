@@ -102,6 +102,13 @@
   /* search bar placement */
   & > .search-container {
 
+    /* prevent funny line wrapping */
+    @add-mixin max-md {
+      & .search-input {
+        width: 12rem;
+      }
+    }
+
     /* positioned above the rest on small viewports */
     @add-mixin max-xs {
       position: absolute;
@@ -110,6 +117,7 @@
       right: var(--gutter-sm);
       width: calc(100% - var(--gutter));
 
+      /* stretch across the screen */
       & .search-input {
         width: 100%;
       }

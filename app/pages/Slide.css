@@ -196,6 +196,7 @@
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
+      max-width: 100%;
 
       /* center text */
       @add-mixin max-md {
@@ -207,7 +208,6 @@
 
       @add-mixin min-sm {
         width: 600px;
-        max-width: 100%;
       }
 
       /* adjust first line */

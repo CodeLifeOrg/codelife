@@ -115,7 +115,7 @@
       bottom: 7px;
       left: var(--gutter-sm);
       right: var(--gutter-sm);
-      width: calc(100% - var(--gutter));
+      width: calc(100% - var(--gutter-md));
 
       /* stretch across the screen */
       & .search-input {

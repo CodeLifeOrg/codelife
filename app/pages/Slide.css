@@ -34,6 +34,13 @@
     left: 0;
     right: 0;
 
+    /* make room for close button on small screens */
+    @add-mixin max-sm {
+      & .slide-title {
+        padding-right: 1.5em;
+      }
+    }
+
     & .slide-title-edit {
       top: -2px; /* fudge into place */
       margin-left: 0.125em;

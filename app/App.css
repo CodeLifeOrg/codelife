@@ -165,6 +165,13 @@ td > a,
     box-shadow: 0 2px 1em rgba(35, 50, 51, 0.15);
     z-index: 1;
   }
+
+  /* disabled state */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-disabled {
+    @add-mixin disable-field;
+    opacity: 0.3;
+  }
 }
 
 /* danger button */
@@ -353,8 +360,8 @@ blueprint overrides
 
 /* fix dialog container bug */
 .pt-dialog-container {
-  width: 100vw;
-  height: 100vh;
+  @add-mixin absolute-expand;
+  position: fixed !important;
 }
 
 .pt-dialog {
@@ -601,19 +608,33 @@ layout
 body {
   overflow-y: auto;
   overflow-x: hidden;
+
+  & #app {
+    overflow-x: hidden;
+  }
 }
+
 /* if vh units are supported, move overflow to app */
 @supports (height: 100vh) {
-  body {
-    overflow-y: hidden;
+  @add-mixin min-md {
+    body {
+      overflow-y: hidden;
+    }
+    #app {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100vh;
+      /* enable inertia scrolling on mobile */
+      -webkit-overflow-scrolling: touch;
+    }
   }
-  #app {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100vh;
-    /* enable inertia scrolling on mobile */
-    -webkit-overflow-scrolling: touch;
-  }
+}
+
+/* prevent double overflow scrolling when overlays are open */
+/* NOTE: .pt-overlay-open is automatically applied to the body element */
+.pt-overlay-open,
+.pt-overlay-open #app {
+  overflow-y: hidden !important;
 }
 
 
@@ -1398,6 +1419,11 @@ utility classes
 }
 .u-hide-below-xxs {
   @add-mixin max-xxs {
+    display: none !important;
+  }
+}
+.u-hide-above-xs {
+  @add-mixin min-xs {
     display: none !important;
   }
 }

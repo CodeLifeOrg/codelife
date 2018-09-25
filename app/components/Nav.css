@@ -102,14 +102,22 @@
   /* search bar placement */
   & > .search-container {
 
+    /* prevent funny line wrapping */
+    @add-mixin max-md {
+      & .search-input {
+        width: 12rem;
+      }
+    }
+
     /* positioned above the rest on small viewports */
     @add-mixin max-xs {
       position: absolute;
       bottom: 7px;
       left: var(--gutter-sm);
       right: var(--gutter-sm);
-      width: calc(100% - var(--gutter));
+      width: calc(100% - var(--gutter-md));
 
+      /* stretch across the screen */
       & .search-input {
         width: 100%;
       }
@@ -216,7 +224,7 @@
       & .limit-link-text-width {
         @add-mixin overflow-ellipsis;
         display: inline-block; /* honor `max-width` without breakding layout */
-        max-width: 9rem; /* limit width */
+        max-width: 12rem; /* limit width */
         vertical-align: bottom; /* preserve alignment  */
       }
 
@@ -367,7 +375,8 @@
   & .pt-overlay-content,
   & .account-popover,
   & .account-popover > .pt-popover-content {
-    max-width: 9.5rem;
+    max-width: 12rem;
+    width: max-content;
   }
 
   /* position container */

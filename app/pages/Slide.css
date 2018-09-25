@@ -34,6 +34,13 @@
     left: 0;
     right: 0;
 
+    /* make room for close button on small screens */
+    @add-mixin max-sm {
+      & .slide-title {
+        padding-right: 1.5em;
+      }
+    }
+
     & .slide-title-edit {
       top: -2px; /* fudge into place */
       margin-left: 0.125em;
@@ -196,6 +203,7 @@
     & .slide-quiz {
       font-size: 18px;
       line-height: 24px;
+      max-width: 100%;
 
       /* center text */
       @add-mixin max-md {
@@ -207,7 +215,6 @@
 
       @add-mixin min-sm {
         width: 600px;
-        max-width: 100%;
       }
 
       /* adjust first line */
@@ -347,6 +354,7 @@
 
   /* make space for validation buttons on mobile */
   @add-mixin max-sm {
+    & .renderCode + .slide-footer .pt-button,
     & .inputCode + .slide-footer .pt-button {
       margin-top: var(--gutter-lg);
     }

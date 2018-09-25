@@ -636,7 +636,7 @@ class CodeEditor extends Component {
 
     return (
       <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id={id || "codeEditor"}>
-        {!this.props.noZoom &&
+        {!this.props.noZoom && !readOnly &&
           <button
             className="code-editor-fullscreen-button pt-button pt-intent-primary"
             onClick={ this.fullscreenEditorToggle.bind(this) }

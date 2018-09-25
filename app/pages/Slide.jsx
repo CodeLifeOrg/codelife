@@ -122,6 +122,7 @@ class Slide extends Component {
         if (this.state.done) blocked = false;
         this.setState({currentSlide: cs, blocked, showDiscussion: false});
 
+        // focus the slide title
         if (this.slideTitle) {
           this.slideTitle.setAttribute("tabIndex", 0);
           this.slideTitle.focus();
@@ -204,17 +205,6 @@ class Slide extends Component {
     const {lid, mlid, sid} = this.props.params;
     const {browserHistory} = this.context;
     browserHistory.push(`/admin/lesson-builder/${lid}/${mlid}/${sid}`);
-  }
-
-  /**
-   * When the user goes to the next level, push the new URL and hard-reload. This should
-   * be refactored to a more React-y state reset.
-   */
-  advanceLevel(mlid) {
-    const {lid} = this.props.params;
-    const {browserHistory} = this.context;
-    browserHistory.push(`/island/${lid}/${mlid}`);
-    if (window) window.location.reload();
   }
 
   /**

@@ -27,6 +27,7 @@ then add the theme name to the @each loop below */
   .island-$(theme) {
     /* set background image paths */
     & .island-image,
+    & .mobile-island-image,
     & > .island-link-image,
     & .lessonplan-header-image {
       background-image: url("/islands/island-$(theme).png");
@@ -88,7 +89,9 @@ then add the theme name to the @each loop below */
     }
     & .button:not(.inverted-button):not(.danger-button),
     &.pt-button,
-    & .pt-button {
+    & .pt-button,
+    & .code-block.is-next,
+    & .code-block.is-done {
       background-color: var(--$(theme)-island-medium);
       border-color: var(--$(theme)-island-medium);
       /* interactions */

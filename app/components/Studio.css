@@ -191,11 +191,14 @@
       position: sticky;
       top: 0;
       z-index: 1;
-      /* adjust spacing */
-      margin-top: -0.75rem;
-      margin-bottom: -1rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      /* adjust spacing & hide project shadow */
+      margin:
+        -0.75rem
+        -0.5rem
+        -1.0rem
+        -0.5rem;
+      /* offset margin */
+      padding: 1rem 0.5rem;
       /* theming */
       background-color: var(--white);
     }

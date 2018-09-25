@@ -354,6 +354,7 @@
 
   /* make space for validation buttons on mobile */
   @add-mixin max-sm {
+    & .renderCode + .slide-footer .pt-button,
     & .inputCode + .slide-footer .pt-button {
       margin-top: var(--gutter-lg);
     }

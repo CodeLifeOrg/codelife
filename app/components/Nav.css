@@ -224,7 +224,7 @@
       & .limit-link-text-width {
         @add-mixin overflow-ellipsis;
         display: inline-block; /* honor `max-width` without breakding layout */
-        max-width: 9rem; /* limit width */
+        max-width: 12rem; /* limit width */
         vertical-align: bottom; /* preserve alignment  */
       }
 
@@ -375,7 +375,8 @@
   & .pt-overlay-content,
   & .account-popover,
   & .account-popover > .pt-popover-content {
-    max-width: 9.5rem;
+    max-width: 12rem;
+    width: max-content;
   }
 
   /* position container */

@@ -402,17 +402,17 @@ class Level extends Component {
 
     if (!this.allLevelsBeaten()) {
       return (
-        <div className="editor-popover">
-          <button
-            className="code-block u-unbutton"
-            onClick={this.toggleTest.bind(this)}
-          >
+        <div className="editor-popover is-locked">
+          <div className="code-block u-unbutton">
+            <div className="cube">
+              <div className="side bottom" />
+              <div className="side top" />
+              <div className="side left" />
+              <div className="side front" />
+            </div>
             <span className="u-visually-hidden">{t("Lessonplan.Codeblock")}</span>
-            <div className="side bottom" />
-            <div className="side top" />
-            <div className="side left" />
-            <div className="side front" />
-          </button>
+            <span className="pt-icon pt-icon-lock u-hide-above-xs" />
+          </div>
         </div>
       );
     }
@@ -426,21 +426,24 @@ class Level extends Component {
           position={ next ? Position.BOTTOM : Position.TOP }
           content={ next ? t("Earn your CodeBlock") : t("CodeBlock") }
           portalClassName={ `codeblock-tooltip-portal ${ next ? "is-below" : "is-above" }` }
-          tooltipClassName={ currentIsland.theme }>
+          tooltipClassName={ `stop-popover ${currentIsland.theme}` }>
 
           <button
             className={ `u-unbutton code-block ${ next ? "is-next" : "is-done" }` }
             onClick={this.toggleTest.bind(this)}>
+            <div className="cube">
+              <div className="side bottom" />
+              <div className="side top" />
+              <div className="side left" />
+              <div className="side front" />
+              <div className="side front" >
+                <span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` } />
+              </div>
+            </div>
             <span className="u-visually-hidden">
               {t("Lessonplan.Codeblock")}
             </span>
-            <div className="side bottom" />
-            <div className="side top" />
-            <div className="side left" />
-            <div className="side front" />
-            <div className="side front" >
-              <span className={ `pt-icon-standard pt-icon-${ next ? "help" : "code-block" }` } />
-            </div>
+            <span className={`pt-icon pt-icon-${ next ? "circle-arrow-right" : "tick-circle" } u-hide-above-xs`} />
           </button>
         </Tooltip>
         <Dialog
@@ -509,8 +512,9 @@ class Level extends Component {
         >
           <Link className="stop is-done" to={`/island/${lid}/${level.id}`}>
             {/* descriptive text for screen readers */}
-            <span className="u-visually-hidden">
+            <span className="u-visually-hidden button">
               { `${ t("Level")} ${level.ordering + 1}: ${level.name}` }
+              <span className="pt-icon pt-icon-tick-circle" />
             </span>
           </Link>
           {level.name}
@@ -527,7 +531,7 @@ class Level extends Component {
         >
           <Link className="stop is-done is-incomplete" to={`/island/${lid}/${level.id}`}>
             {/* descriptive text for screen readers */}
-            <span className="u-visually-hidden">
+            <span className="u-visually-hidden button">
               { `${ t("Level")} ${level.ordering + 1}: ${level.name} (${ t("incomplete") })` }
             </span>
           </Link>
@@ -539,19 +543,25 @@ class Level extends Component {
           isOpen={!checkpointOpen}
           position={ Position.BOTTOM }
           content={ level.name }
-          tooltipClassName={ currentIsland.theme }
+          tooltipClassName={ `stop-popover ${currentIsland.theme}` }
           openOnTargetFocus={false}
           enforceFocus = {false}
         >
           <Link className="stop is-next" to={`/island/${lid}/${level.id}`}>
             {/* descriptive text for screen readers */}
-            <span className="u-visually-hidden">
-              { `${ t("Level")} ${level.ordering + 1}: ${level.name} })` }
+            <span className="u-visually-hidden button">
+              { `${ t("Level")} ${level.ordering + 1}: ${level.name}` }
+              <span className="pt-icon pt-icon-circle-arrow-right" />
             </span>
           </Link>
         </Tooltip>;
       }
-      return <div key={level.id} className="stop" />;
+      return <div key={level.id} className="stop is-locked" >
+        <span className="u-visually-hidden button">
+          { `${ t("Level")} ${level.ordering + 1}: ${level.name}` }
+          <span className="pt-icon pt-icon-lock" />
+        </span>
+      </div>;
     });
 
     return (
@@ -564,6 +574,7 @@ class Level extends Component {
             { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }
             { currentIsland.name }
           </h1>
+          <div className="mobile-island-image u-hide-above-xs" />
           <div id="path" className="island-path path">
             { levelItems }
             { this.buildTestPopover() }
@@ -589,7 +600,7 @@ class Level extends Component {
                   popoverClassName="pt-popover-content-sizing user-popover"
                   position={Position.TOP}
                 >
-                  <span className="pt-icon pt-icon-lock"></span>
+                  <span className="pt-icon pt-icon-lock" />
                   <div>
                     { t("Earn your Codeblock for this Island to unlock the ability to view the source code of other codeblocks!") }
                   </div>

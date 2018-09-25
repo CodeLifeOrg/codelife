@@ -360,8 +360,8 @@ blueprint overrides
 
 /* fix dialog container bug */
 .pt-dialog-container {
-  width: 100vw;
-  height: 100vh;
+  @add-mixin absolute-expand;
+  position: fixed !important;
 }
 
 .pt-dialog {
@@ -608,18 +608,25 @@ layout
 body {
   overflow-y: auto;
   overflow-x: hidden;
+
+  & #app {
+    overflow-x: hidden;
+  }
 }
+
 /* if vh units are supported, move overflow to app */
 @supports (height: 100vh) {
-  body {
-    overflow-y: hidden;
-  }
-  #app {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100vh;
-    /* enable inertia scrolling on mobile */
-    -webkit-overflow-scrolling: touch;
+  @add-mixin min-md {
+    body {
+      overflow-y: hidden;
+    }
+    #app {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100vh;
+      /* enable inertia scrolling on mobile */
+      -webkit-overflow-scrolling: touch;
+    }
   }
 }
 
@@ -627,7 +634,7 @@ body {
 /* NOTE: .pt-overlay-open is automatically applied to the body element */
 .pt-overlay-open,
 .pt-overlay-open #app {
-  overflow-y: hidden;
+  overflow-y: hidden !important;
 }
 
 

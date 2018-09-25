@@ -9,7 +9,7 @@ MAIN LAYOUT
   margin-top: var(--gutter-md);
   margin-bottom: var(--gutter-lg);
   text-align: center;
-  z-index: 1; /* keep in front of clouds */
+  z-index: 21; /* keep in front of clouds & nav */
 
   /* limit width on big screens */
   @add-mixin min-md {

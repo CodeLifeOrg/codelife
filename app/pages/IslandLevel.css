@@ -9,6 +9,7 @@ MAIN LAYOUT
   margin-top: var(--gutter-md);
   margin-bottom: var(--gutter-lg);
   text-align: center;
+  z-index: 1; /* keep in front of clouds */
 
   /* limit width on big screens */
   @add-mixin min-md {
@@ -694,9 +695,12 @@ CONVERT PATH TO BUTTONS
         padding-right: 1.75em;
         border-radius: 1.5em;
         color: var(--white);
+        /* create a new stacking context; make cube honor z-index on mobile */
+        transform: scale(1);
 
         & .cube {
           animation: none;
+          z-index: 1;
         }
 
         /* reset positioning for solid codeblock */

@@ -5,7 +5,7 @@
   /* sizing */
   padding: 2.5rem var(--gutter-lg) 2rem var(--gutter-lg);
   width: 47.5rem; /* 760px */
-  max-width: calc(100% - var(--gutter-lg));
+  max-width: calc(100% - var(--gutter-xs));
   /* positioning */
   margin-left: auto;
   margin-right: auto;

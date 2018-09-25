@@ -1401,6 +1401,11 @@ utility classes
     display: none !important;
   }
 }
+.u-hide-above-xs {
+  @add-mixin min-xs {
+    display: none !important;
+  }
+}
 .u-hide-above-sm {
   @add-mixin min-sm {
     display: none !important;

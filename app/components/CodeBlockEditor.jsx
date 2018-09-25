@@ -13,7 +13,7 @@ import ShareFacebookLink from "components/ShareFacebookLink";
 import "./Studio.css";
 import "./CodeBlockEditor.css";
 
-/** 
+/**
  * CodeBlockEditor is the popover that comes up for the final test of an island.
  * It is mostly a wrapper around CodeEditor that provides the student with the test prompt,
  * cheat sheet, and db routes to save their progress when they pass the test
@@ -43,7 +43,7 @@ class CodeBlockEditor extends Component {
   }
 
   /**
-   * On Mount, parse various props passed down and add them to state. 
+   * On Mount, parse various props passed down and add them to state.
    */
   componentDidMount() {
     const {t} = this.props;
@@ -108,7 +108,7 @@ class CodeBlockEditor extends Component {
     // nothing yet
   }
 
-  /** 
+  /**
    * Set codeblock back to original test prompt state
    */
   resetCodeBlock() {
@@ -145,7 +145,7 @@ class CodeBlockEditor extends Component {
     this.setState({originalFilename, filename});
   }
 
-  /** 
+  /**
    * Intermediary function that blocks some editing functions until the save is complete
    * This gets around a known bug where clicking save twice can write two copies to the db
    */
@@ -154,9 +154,9 @@ class CodeBlockEditor extends Component {
     this.setState({saving}, this.verifyAndSaveCode.bind(this));
   }
 
-  /** 
+  /**
    * When the user clicks save & submit, make sure the internal CodeEditor has verified that
-   * their code is passing. If so, write the codeblock and progress to the db, and update the 
+   * their code is passing. If so, write the codeblock and progress to the db, and update the
    * in-state version to reflect the new code
    */
   verifyAndSaveCode() {
@@ -385,6 +385,27 @@ class CodeBlockEditor extends Component {
                 initialValue={initialContent} />
               : <div className="code-editor" /> // placeholder container
             }
+          </div>
+
+          {/*
+          duplicate, slide-flavored controls, so mobile users don't get confused
+          when they can't scroll down and submit
+          */}
+          <div className="studio-footer u-hide-above-sm">
+            <div className="u-button-group">
+              <button
+                className={ `button font-xs ${!execState && " is-disabled"}` }
+                onClick={this.executeCode.bind(this)}
+                tabIndex="-1">
+                <span className="studio-action-button-icon pt-icon pt-icon-refresh" />
+                <span className="studio-action-button-text u-hide-below-xxs">{ t("CodeBlockEditor.Execute") }</span>
+              </button>
+
+              <button disabled={saving} className="button font-xs" onClick={this.clickSave.bind(this)} key="save" tabIndex="-1">
+                <span className="studio-action-button-icon pt-icon pt-icon-floppy-disk" />
+                <span className="studio-action-button-text u-hide-below-xxs">{ t("Save & Submit") }</span>
+              </button>
+            </div>
           </div>
         </div>
 

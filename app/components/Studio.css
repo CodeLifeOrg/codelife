@@ -204,3 +204,19 @@
     }
   }
 }
+
+/* duplicate, slide-flavored controls, so mobile users don't get confused
+when they can't scroll down and submit */
+.studio-footer {
+  background: color(var(--white) a(0.9));
+  width: 100%;
+  padding: var(--gutter-md);
+
+  & .u-button-group {
+    display: flex;
+
+    & .button {
+      flex: 1 0 50%;
+    }
+  }
+}

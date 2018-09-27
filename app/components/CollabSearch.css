@@ -10,13 +10,13 @@ layout
   min-height: calc(100vh - 2rem);
 
   @add-mixin min-sm {
-    min-height: 42rem;
+    height: 42rem;
     max-height: calc(100vh - 8rem);
   }
 
   /* pin the sidebar to the left */
   /* TODO: cross browser testing */
-  @media (min-width: 992px) and (min-height: 768px) {
+  @media (min-width: 1200px) and (min-height: 768px) {
     height: 42.5rem;
 
     /* fudge container alignment */

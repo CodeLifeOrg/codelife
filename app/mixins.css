@@ -368,7 +368,7 @@
   width: calc(100% - var(--gutter-md));
   /* make it work on shorter screens */
   max-height: 100vh;
-  max-height: calc(100vh - 110px); /* make scrolling the less painless */
+  max-height: calc(100vh - 110px); /* make scrolling less painless */
   overflow-y: auto;
   /* enable inertia scrolling on mobile */
   -webkit-overflow-scrolling: touch;

@@ -27,38 +27,64 @@ MAIN LAYOUT
     margin-top: var(--gutter-md);
     margin-bottom: var(--gutter-md);
 
-    /* center em, but only on tiny viewports */
-    @add-mixin max-xs {
-      width: 100%;
-    }
-
-    /* tweakpoint to stagger them slightly on tiny viewports */
-    @media (min-width: 300px) and (max-width: 479px) {
-      &.is-prev {
-        left: -10%;
-      }
-      &.is-next {
-        right: -10%;
-      }
-      /* pull up the second one */
-      & + .is-next {
-        margin-top: -50px;
-      }
-    }
-
     /* room for two */
-    @add-mixin min-xs {
+    @add-mixin max-sm {
       max-width: 50%; /* make sure there is indeed room for two */
       /* reset margin */
-      margin-top: 0;
-      margin-bottom: 0;
+      margin-top: -2rem;
+      margin-bottom: -2rem;
+      /* scale down islands */
+      transform: scale(0.75);
+
+      /* scale down island text */
+      & .island-link-popover {
+        transform: scale(0.75);
+      }
+
+      &.is-next,
+      &.is-prev {
+        /* next/prev indicator base */
+        &:after {
+          display: block;
+          /* typography */
+          @add-mixin font-xxl;
+          font-weight: 900;
+          /* positioning */
+          position: absolute;
+          bottom: 2.25em;
+          /* theming */
+          color: var(--sky-light);
+          text-shadow: 0 1px 1em var(--sky-black);
+          /* transitions */
+          transition: color 0.2s ease-out;
+        }
+        &:hover, &:focus {
+          &:after {
+            color: var(--white);
+          }
+        }
+      }
 
       /* float them to the corresponding side */
       &.is-prev {
         float: left;
+
+        /* visual prev indicator */
+        &:after {
+          content: '〈';
+          /* positioning */
+          left: -1em;
+        }
       }
       &.is-next {
         float: right;
+
+        /* visual next indicator */
+        &:after {
+          content: '〉';
+          /* positioning */
+          right: -1em;
+        }
       }
     }
 

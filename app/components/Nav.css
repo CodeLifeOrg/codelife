@@ -13,6 +13,11 @@
   /* sizing */
   height: var(--nav-height);
 
+  /* keep search results in front */
+  &:focus-within {
+    z-index: 22;
+  }
+
   /* make room for search bar */
   @add-mixin max-xs {
     /* allow content & padding to dictate height */

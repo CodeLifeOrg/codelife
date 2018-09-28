@@ -27,6 +27,10 @@
 }
 
 /* loading a page */
+#Canon:empty {
+  background-color: var(--sky); /* cover up black body bg when empty */
+}
+#Canon > .container > .loading,
 #app > .container > .loading {
   /* sizing */
   width: 100%;

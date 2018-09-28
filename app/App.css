@@ -373,6 +373,11 @@ blueprint overrides
   &.is-fullscreen {
     width: calc(100% - var(--gutter-lg));
     height: calc(100vh - var(--gutter-lg));
+
+    @add-mixin max-sm {
+      width: calc(100% - var(--gutter-sm));
+      height: calc(100vh - var(--gutter-sm));
+    }
   }
 
   /* center align alert contents */
@@ -632,9 +637,25 @@ body {
 
 /* prevent double overflow scrolling when overlays are open */
 /* NOTE: .pt-overlay-open is automatically applied to the body element */
-.pt-overlay-open,
-.pt-overlay-open #app {
+body.pt-overlay-open,
+body.pt-overlay-open #app {
   overflow-y: hidden !important;
+
+  & .pt-overlay,
+  & .pt-overlay-backdrop {
+    overflow: hidden !important;
+  }
+
+  & .pt-dialog {
+    overflow-y: auto;
+  }
+}
+
+/* inline dialog fixes */
+.pt-overlay-inline {
+  & .pt-dialog {
+    overflow-y: auto;
+  }
 }
 
 
@@ -959,6 +980,12 @@ form field layout
   & .file-select-container .field-input {
     @add-mixin text-input-padding;
     @add-mixin text-input-theme;
+  }
+
+  /* min font size for mobile */
+  &.font-sm > input:not([type=submit]):not([type=file]),
+  &.font-sm > textarea {
+    font-size: 16px;
   }
 
   /* textarea min/max height */

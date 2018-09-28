@@ -10,7 +10,7 @@ import InstagramIcon from "./InstagramIcon.svg.jsx";
 import "./LoginForm.css";
 
 /**
- * Works alongside SignUpForm to log users in. Essentially a wrapper for the canon "login" action 
+ * Works alongside SignUpForm to log users in. Essentially a wrapper for the canon "login" action
  */
 
 class LoginForm extends Component {
@@ -81,13 +81,13 @@ class LoginForm extends Component {
           </div>
 
           {/* stay logged in */}
-          <div className="field-container switch-field-container font-sm">
+          {/* <div className="field-container switch-field-container font-sm">
             <label className="pt-control pt-switch">
               <input type="checkbox" />
               <span className="pt-control-indicator" />
               { t("LogIn.StayLoggedIn") }
             </label>
-          </div>
+          </div> */}
 
           {/* submit */}
           <div className="field-container">

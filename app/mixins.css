@@ -365,7 +365,10 @@
   /* sizing */
   width: 100%;
   max-width: 52rem;
-  max-height: 100vh; /* make it work on shorter screens */
+  width: calc(100% - var(--gutter-md));
+  /* make it work on shorter screens */
+  max-height: 100vh;
+  max-height: calc(100vh - 110px); /* make scrolling less painless */
   overflow-y: auto;
   /* enable inertia scrolling on mobile */
   -webkit-overflow-scrolling: touch;
@@ -414,6 +417,35 @@
     /* account for icon sizing */
     & .social-svg {
       margin-left: -0.25em;
+    }
+  }
+
+  /* collapse social login buttons */
+  @media (max-width: 767px) and (max-height: 767px) {
+    & .social-button-list {
+      display: flex;
+      justify-content: space-between;
+
+      /* horizontal layout */
+      & .field-container {
+        flex: 1 0 auto;
+        margin-top: 0;
+
+        /* add space between buttons */
+        &:nth-of-type(2) {
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
+      }
+
+      /* hide text */
+      & .social-button-text {
+        @add-mixin visually-hidden;
+      }
+      /* reset margin because no text */
+      & .social-svg {
+        margin-left: 0;
+      }
     }
   }
 }

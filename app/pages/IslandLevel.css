@@ -658,7 +658,7 @@ CONVERT PATH TO BUTTONS
       /* sizing & positioning */
       display: block;
       width: 100%;
-      height: 3rem; /* override above */
+      height: auto; /* override above */
       transform: none; /* override above */
       /* theming */
       border-radius: 2em; /* fully rounded */
@@ -678,7 +678,8 @@ CONVERT PATH TO BUTTONS
         @add-mixin reset-visually-hidden;
         display: flex;
         align-items: center;
-        line-height: 2rem;
+        line-height: 1.125;
+        min-height: 3rem;
       }
 
       /* reset positioning on hover */

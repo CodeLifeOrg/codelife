@@ -75,7 +75,15 @@ The production build of codelife.com always points to the `master` branch. To de
 
 ## Additional Technical Information
 
-### The `canon` Framework
+### About the choice of `canon` as a Framework
+
+The `canon` project is an open-source framework developed and maintained in-house at Datawheel. It was created to assist in the rapid scaffolding of React websites. Its design is intended to handle commonly repeated configuration steps (such as ES6 Babel Transpiling) and to standardize reusable features (such as user management, social logins, and API requests).
+
+The `canon` framework was chosen for Codelife due to its ease of setup, simple feature set, and its familiarity and expertise among the development team. As feature requests and site-specific improvements were added to Codelife during its development, this could be accomplished quickly and easily.  
+
+Datawheel has launched almost ten sites into Production using `canon`, and its continued development, maintenance, and improvement remain a top priority for the team. As longtime supporters of open-source software (including maintaining the popular [d3plus](http://d3plus.org/) library), Datawheel remains open to collaboration and improvement of the `canon` library over time.
+
+### More information about `canon`
 
 A great deal of Codelife's functionality and structure, including its user management, API configuration, page routing, and social media integration are all handled through Datawheel framework known as `canon`. It is highly recommended that you familiarize yourself with the `canon` documentation, as it provides reasoning behind much of the file structure of codelife. These sections of the README are of particular importance:
 

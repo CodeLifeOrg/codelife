@@ -610,9 +610,11 @@ layout
 ----------------------------------- */
 
 /* fix overflow */
+html,
 body {
-  overflow-y: auto;
   overflow-x: hidden;
+}
+body {
   background-color: var(--black); /* next best thing to sticky footer */
 }
 

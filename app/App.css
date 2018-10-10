@@ -616,8 +616,9 @@ html,
 body {
   overflow-x: hidden;
 }
+/* behind the bottom toolbar in iOS safari */
 body {
-  background-color: var(--black); /* next best thing to sticky footer */
+  background-color: var(--sky-light);
 }
 
 /* prevent double overflow scrolling when overlays are open */

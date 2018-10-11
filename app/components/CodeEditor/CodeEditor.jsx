@@ -705,7 +705,7 @@ class CodeEditor extends Component {
             : null }
           <iframe className="panel-content font-xs iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
           { showConsole
-            ? <div className={ `drawer font-xs ${openConsole ? "open" : ""}` }>
+            ? <div className={ `drawer console-drawer font-xs ${openConsole ? "open" : ""}` }>
               <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count font-xs">{ embeddedConsole.length }</span> : null }</div>
               <div className="contents">{consoleText}</div>
             </div>

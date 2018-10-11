@@ -246,13 +246,15 @@ blueprint overrides
   background-color: rgba(245, 245, 255, 0.7);
 }*/
 
+/* overlay in front of nav */
+.pt-portal,
 .pt-overlay {
   z-index: 100;
+}
 
-  /* give rando div a z-index so the content isn't hidden on mobile (wtf blueprint) */
-  & div:not([class]) {
-    z-index: 1;
-  }
+/* give rando div a z-index so the content isn't hidden on mobile (wtf blueprint) */
+.pt-overlay div:not([class]){
+  z-index: 1;
 }
 
 .pt-input {
@@ -610,10 +612,13 @@ layout
 ----------------------------------- */
 
 /* fix overflow */
+html,
 body {
-  overflow-y: auto;
   overflow-x: hidden;
-  background-color: var(--black); /* next best thing to sticky footer */
+}
+/* behind the bottom toolbar in iOS safari */
+body {
+  background-color: var(--sky-light);
 }
 
 /* prevent double overflow scrolling when overlays are open */

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {changePassword, resetPassword, validateReset} from "datawheel-canon/src/actions/auth";
+import {changePassword, resetPassword, validateReset} from "@datawheel/canon-core/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
 
@@ -11,7 +11,7 @@ import {
   RESET_SEND_SUCCESS,
   RESET_TOKEN_FAILURE,
   RESET_TOKEN_SUCCESS
-} from "datawheel-canon/src/consts";
+} from "@datawheel/canon-core/src/consts";
 
 /** 
  * Wrapper Component for the reset password dispatch action of canon

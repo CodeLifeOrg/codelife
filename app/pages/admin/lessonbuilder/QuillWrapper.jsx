@@ -63,6 +63,12 @@ class QuillWrapper extends Component {
           [{list: "ordered"}, {list: "bullet"}],
           ["clean"]
         ],
+        // prevent keyboard trap
+        keyboard: {
+          bindings: {
+            tab: false
+          }
+        },
         clipboard: {
           matchVisual: false
         }

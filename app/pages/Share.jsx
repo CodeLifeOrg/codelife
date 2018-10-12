@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {fetchData} from "datawheel-canon";
+import {fetchData} from "@datawheel/canon-core";
 import axios from "axios";
 import ReportBox from "components/ReportBox";
 import CodeEditor from "components/CodeEditor/CodeEditor";

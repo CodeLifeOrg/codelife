@@ -84,7 +84,12 @@ td > a,
   transition: color 0.2s;
 
   /* interactions */
-  &:hover, &:focus {
+  /* increase visiblility when focusing via keyboard */
+  &:focus {
+    color: var(--sky-black);
+    text-decoration: underline;
+  }
+  &:hover {
     color: var(--sky);
   }
   &:active {
@@ -94,8 +99,7 @@ td > a,
   /* danger text */
   &.danger-text:hover,
   &.danger-text:focus {
-    color: var(--danger);
-    opacity: 0.8; /* approximate sky color value */
+    color: var(--danger-dark);
   }
 }
 
@@ -160,6 +164,13 @@ td > a,
     color: var(--white);
     box-shadow: 0 2px 1em rgba(35, 50, 51, 0.15);
     z-index: 1;
+  }
+
+  /* disabled state */
+  /* NOTE: remember to also set `tabIndex="-1"` */
+  &.is-disabled {
+    @add-mixin disable-field;
+    opacity: 0.3;
   }
 }
 
@@ -235,6 +246,17 @@ blueprint overrides
   background-color: rgba(245, 245, 255, 0.7);
 }*/
 
+/* overlay in front of nav */
+.pt-portal,
+.pt-overlay {
+  z-index: 100;
+}
+
+/* give rando div a z-index so the content isn't hidden on mobile (wtf blueprint) */
+.pt-overlay div:not([class]){
+  z-index: 1;
+}
+
 .pt-input {
   border-radius: var(--radius-sm);
 }
@@ -264,7 +286,8 @@ blueprint overrides
   } */
 
   /* override blueprint disabled style */
-  &:disabled {
+  &:disabled,
+  &.pt-disabled {
     color: var(--white) !important;
     background-color: var(--light-2) !important;
   }
@@ -339,8 +362,8 @@ blueprint overrides
 
 /* fix dialog container bug */
 .pt-dialog-container {
-  width: 100vw;
-  height: 100vh;
+  @add-mixin absolute-expand;
+  position: fixed !important;
 }
 
 .pt-dialog {
@@ -352,6 +375,11 @@ blueprint overrides
   &.is-fullscreen {
     width: calc(100% - var(--gutter-lg));
     height: calc(100vh - var(--gutter-lg));
+
+    @add-mixin max-sm {
+      width: calc(100% - var(--gutter-sm));
+      height: calc(100vh - var(--gutter-sm));
+    }
   }
 
   /* center align alert contents */
@@ -556,8 +584,7 @@ label.pt-control  {
     color: var(--sky-dark);
 
     /* interactions */
-    /* NOTE: it's a div, so there's no :focus */
-    &:hover {
+    &:hover, &:focus {
       color: var(--sky);
     }
   }
@@ -585,19 +612,35 @@ layout
 ----------------------------------- */
 
 /* fix overflow */
+html,
 body {
-  overflow-y: auto;
   overflow-x: hidden;
 }
-/* if vh units are supported, move overflow to app */
-@supports (height: 100vh) {
-  body {
-    overflow-y: hidden;
+/* behind the bottom toolbar in iOS safari */
+body {
+  background-color: var(--sky-light);
+}
+
+/* prevent double overflow scrolling when overlays are open */
+/* NOTE: .pt-overlay-open is automatically applied to the body element */
+body.pt-overlay-open,
+body.pt-overlay-open #app {
+  overflow-y: hidden !important;
+
+  & .pt-overlay,
+  & .pt-overlay-backdrop {
+    overflow: hidden !important;
   }
-  #app {
+
+  & .pt-dialog {
     overflow-y: auto;
-    overflow-x: hidden;
-    height: 100vh;
+  }
+}
+
+/* inline dialog fixes */
+.pt-overlay-inline {
+  & .pt-dialog {
+    overflow-y: auto;
   }
 }
 
@@ -925,6 +968,12 @@ form field layout
     @add-mixin text-input-theme;
   }
 
+  /* min font size for mobile */
+  &.font-sm > input:not([type=submit]):not([type=file]),
+  &.font-sm > textarea {
+    font-size: 16px;
+  }
+
   /* textarea min/max height */
   & > textarea {
     min-height: 11rem;
@@ -1130,13 +1179,24 @@ form field layout
     padding-top: 0.25em;
     padding-bottom: 0.375em;
     opacity: 0;
+
+    /* hover & focus states */
+    &:hover ~ .fake-file-select:after,
+    &:focus ~ .fake-file-select:after {
+      background-color: var(--sky-black);
+    }
+
+    /* focus state */
+    &:focus ~ .fake-file-select {
+      background-color: var(--sky-light);
+    }
   }
   /* make real field and fake field take up width of container */
   & .field-input {
     width: 100%;
 
     /* interactions */
-    &:hover, &:focus {
+    &:hover {
       & ~ .fake-file-select {
         background-color: var(--white);
         border-color: var(--sky-dark);
@@ -1197,6 +1257,10 @@ form field layout
       text-align: center;
       border-radius: 1.5em;
     }
+    @add-mixin min-md {
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
   }
 }
 
@@ -1226,6 +1290,11 @@ form field layout
   /* reset the font size after unsetting it so the popover isn't huge 😡 */
   &.font-md input {
     @add-mixin font-md;
+  }
+
+  /* icon color on :focus */
+  &:focus-within .pt-icon-calendar {
+    color: var(--sky-dark);
   }
 
   /* THE PICKER */
@@ -1366,8 +1435,18 @@ utility classes
     display: none !important;
   }
 }
+.u-hide-above-xs {
+  @add-mixin min-xs {
+    display: none !important;
+  }
+}
 .u-hide-above-sm {
   @add-mixin min-sm {
+    display: none !important;
+  }
+}
+.u-hide-above-md {
+  @add-mixin min-md {
     display: none !important;
   }
 }

@@ -54,7 +54,7 @@ class Leaderboard extends Component {
     });
   }
 
-  /** 
+  /**
    * On selection of a sorting property, sort the users accordingly
    */
   handleHeaderClick(sortProp) {
@@ -117,6 +117,9 @@ class Leaderboard extends Component {
           <Link to={`/profile/${u.username}`}>{u.username}</Link>
         </td>
         <td className="statistics-table-cell progress">
+          <span className="u-visually-hidden">
+            { Math.round(u.progressPercent) }%
+          </span>
           <Popover interactionKind={PopoverInteractionKind.HOVER}>
             <div className={`pt-progress-bar pt-no-stripes ${intent}`}>
               <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>

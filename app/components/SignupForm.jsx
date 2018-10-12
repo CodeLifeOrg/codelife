@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {signup} from "datawheel-canon/src/actions/auth";
+import {signup} from "@datawheel/canon-core/src/actions/auth";
 import {translate} from "react-i18next";
 import {Intent, Toaster} from "@blueprintjs/core";
 

@@ -5,6 +5,7 @@
   background-color: var(--white);
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 2px 2em rgba(8, 26, 24, 0.1);
+  padding-bottom: 0; /* override blueprint */
 }
 
 /* layout */
@@ -157,6 +158,7 @@
 
   /* stacked layout on non-tiny screens */
   @add-mixin min-xxs {
+
     /* extend button clickability */
     & .studio-action-button {
       padding-top: 0.375em;
@@ -176,6 +178,46 @@
       font-size: 1.1666em;
       margin-right: 0.5em;
       vertical-align: middle;
+    }
+  }
+
+  /* sticky actions on big screens */
+  @add-mixin min-sm {
+    /* prevent actions from hiding title */
+    & .studio-subtitle {
+      z-index: 2;
+    }
+    & .studio-action-list {
+      /* positioning */
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      /* adjust spacing & hide project shadow */
+      margin:
+        -0.75rem
+        -0.5rem
+        -1.0rem
+        -0.5rem;
+      /* offset margin */
+      padding: 1rem 0.5rem;
+      /* theming */
+      background-color: var(--white);
+    }
+  }
+}
+
+/* duplicate, slide-flavored controls, so mobile users don't get confused
+when they can't scroll down and submit */
+.studio-footer {
+  background: color(var(--white) a(0.9));
+  width: 100%;
+  padding: var(--gutter-md);
+
+  & .u-button-group {
+    display: flex;
+
+    & .button {
+      flex: 1 0 50%;
     }
   }
 }

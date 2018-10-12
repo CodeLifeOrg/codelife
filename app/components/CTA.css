@@ -4,12 +4,17 @@
 .cta {
   /* sizing */
   padding: 2.5rem var(--gutter-lg) 2rem var(--gutter-lg);
-  max-width: 47.5rem; /* 760px */
+  width: 47.5rem; /* 760px */
+  max-width: calc(100% - var(--gutter-xs));
   /* positioning */
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10rem;
+  margin-top: 12rem;
 
+  /* decrease padding on small screens */
+  @add-mixin max-xs { padding: 1rem; }
+
+  /* scale up margin */
   @add-mixin min-xs { margin-top: 15rem; }
   @add-mixin min-sm { margin-top: 18rem; }
   @add-mixin min-lg { margin-top: calc(15% + 10vh); }

@@ -111,7 +111,7 @@ class Statistics extends Component {
               <div className="pt-progress-meter" style={{width: `${u.progressPercent}%`}}></div>
             </div>
             { latestLevel
-              ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } />{latestLevel.name}</div>
+              ? <div>Latest Achievement:<br/><img style={{width: "20px"}} src={ `/islands/${latestTheme}-small.png` } alt="" />{latestLevel.name}</div>
               : <div>No Progress Yet</div>
             }
           </Popover>

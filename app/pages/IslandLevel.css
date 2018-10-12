@@ -9,6 +9,7 @@ MAIN LAYOUT
   margin-top: var(--gutter-md);
   margin-bottom: var(--gutter-lg);
   text-align: center;
+  z-index: 21; /* keep in front of clouds & nav */
 
   /* limit width on big screens */
   @add-mixin min-md {
@@ -26,38 +27,64 @@ MAIN LAYOUT
     margin-top: var(--gutter-md);
     margin-bottom: var(--gutter-md);
 
-    /* center em, but only on tiny viewports */
-    @add-mixin max-xs {
-      width: 100%;
-    }
-
-    /* tweakpoint to stagger them slightly on tiny viewports */
-    @media (min-width: 300px) and (max-width: 479px) {
-      &.is-prev {
-        left: -10%;
-      }
-      &.is-next {
-        right: -10%;
-      }
-      /* pull up the second one */
-      & + .is-next {
-        margin-top: -50px;
-      }
-    }
-
     /* room for two */
-    @add-mixin min-xs {
+    @add-mixin max-sm {
       max-width: 50%; /* make sure there is indeed room for two */
       /* reset margin */
-      margin-top: 0;
-      margin-bottom: 0;
+      margin-top: -2rem;
+      margin-bottom: -2rem;
+      /* scale down islands */
+      transform: scale(0.75);
+
+      /* scale down island text */
+      & .island-link-popover {
+        transform: scale(0.75);
+      }
+
+      &.is-next,
+      &.is-prev {
+        /* next/prev indicator base */
+        &:after {
+          display: block;
+          /* typography */
+          @add-mixin font-xxl;
+          font-weight: 900;
+          /* positioning */
+          position: absolute;
+          bottom: 2.25em;
+          /* theming */
+          color: var(--sky-light);
+          text-shadow: 0 1px 1em var(--sky-black);
+          /* transitions */
+          transition: color 0.2s ease-out;
+        }
+        &:hover, &:focus {
+          &:after {
+            color: var(--white);
+          }
+        }
+      }
 
       /* float them to the corresponding side */
       &.is-prev {
         float: left;
+
+        /* visual prev indicator */
+        &:after {
+          content: '〈';
+          /* positioning */
+          left: -1em;
+        }
       }
       &.is-next {
         float: right;
+
+        /* visual next indicator */
+        &:after {
+          content: '〉';
+          /* positioning */
+          right: -1em;
+        }
       }
     }
 
@@ -96,7 +123,7 @@ STUDENT CODEBLOCKS
   @add-mixin slide-theme; /* transparent white bg, rounded corners */
   /* sizing */
   width: 100%;
-  max-width: 100%; /* don't bleed off tiny screens */
+  max-width: calc(100% - var(--gutter-lg));
   /* positioning */
   display: inline-block; /* honor text-align:center from .island */
   margin-top: var(--gutter-md);
@@ -115,6 +142,7 @@ STUDENT CODEBLOCKS
   /* no border radius on smaller viewports */
   @add-mixin max-md {
     border-radius: 0;
+    max-width: 100%;
   }
 
   /* sizing and positioning on larger viewports */
@@ -174,20 +202,13 @@ MAIN ISLAND
 /* main island image */
 .island-image {
   /* sizing */
-  width: 160%;
+  width: 100%;
   height: 475px;
   /* positioning */
-  left: -30%;
   /* theming */
-  background-position: center bottom;
+  background-position: center top;
   background-repeat: no-repeat;
   background-size: contain;
-
-  /* tweak the background position on very small screens */
-  @media (max-width: 396px) {
-    /* fudged so that the horizon stays in more or less the same place */
-    background-position: center 56%;
-  }
 
   /* progressively scale down the background image */
   @add-mixin min-xs {
@@ -210,6 +231,7 @@ MAIN ISLAND
   max-width: calc(62.5% - var(--gutter-md));
   /* positioning */
   top: 2.5em;
+  z-index: 1; /* position in front of mobile island image */
   /* theming */
   background-color: var(--dark-3);
   border-radius: var(--radius-lg);
@@ -269,18 +291,17 @@ Main island path
     content: "";
     /* sizing */
     width: 90%; /* fudged */
-    height: var(--radius-sm);
+    height: var(--radius-md);
     /* positioning */
     position: absolute;
-    top: 9px; /* fudged */
+    top: 10px; /* fudged */
     left: 5%;
     /* theming */
     transform: rotateX(50deg);
     transform-style: preserve-3d;
 
     @add-mixin min-xs {
-      height: var(--radius-md);
-      top: 13px; /* fudged */
+      top: 14px;
     }
 
     /* static width on larger viewports */
@@ -298,8 +319,10 @@ Main island path
   & .stop {
     /* sizing */
     display: inline-block;
-    width: var(--path-xxs);
-    height: var(--path-xxs);
+    width: var(--path-xs);
+    height: var(--path-xs);
+    /* positioning */
+    top: -4px;
     /* theming */
     background-color: var(--dark-3);
     border-style: solid;
@@ -313,9 +336,8 @@ Main island path
 
     /* adjust dot size */
     @add-mixin min-xs {
-      width: var(--path-xs);
-      height: var(--path-xs);
       border-width: 4px;
+      top: 0;
     }
     @add-mixin min-sm {
       width: var(--path-sm);
@@ -331,24 +353,29 @@ Main island path
   & .code-block {
     /* sizing */
     display: inline-block;
-    width: var(--path-xxs);
-    height: var(--path-xxs);
-    /* theming */
-    transform: rotateX(-33deg)translateZ(-28px)translateX(2px);
-    transform-style: preserve-3d;
-    /* transitions */
-    transition: margin 0.2s;
 
-    /* adjust cube size */
+    /* override island theming on big screens — used for mobile only */
     @add-mixin min-xs {
+      background: none !important;
+    }
+
+    & .cube {
       width: var(--path-xs);
       height: var(--path-xs);
-      top: -8px; /* fudged */
-    }
-    @add-mixin min-sm {
-      width: var(--path-sm);
-      height: var(--path-sm);
-      top: -16px; /* still fudged */
+      /* positioning */
+      top: 4px;
+      /* theming */
+      transform: rotateX(-33deg) translateZ(-28px) translateX(2px);
+      transform-style: preserve-3d;
+      /* transitions */
+      transition: margin 0.2s;
+
+      /* adjust cube size & position */
+      @add-mixin min-sm {
+        width: var(--path-sm);
+        height: var(--path-sm);
+        top: 0;
+      }
     }
 
     /* -------------------------------
@@ -360,18 +387,14 @@ Main island path
       /* positioning */
       position: absolute;
       /* sizing */
-      height: var(--path-xxs);
-      width: var(--path-xxs);
+      width: var(--path-xs);
+      height: var(--path-xs);
       /* theming */
       background-color: var(--black);
       border: 2px solid rgba(0, 0, 0, 0.25);
       box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.25);
 
       /* adjust side size */
-      @add-mixin min-xs {
-        width: var(--path-xs);
-        height: var(--path-xs);
-      }
       @add-mixin min-sm {
         width: var(--path-sm);
         height: var(--path-sm);
@@ -381,7 +404,8 @@ Main island path
       & .pt-icon-standard {
         font-size: var(--gutter-xs);
         line-height: calc(var(--path-xxs) - 4px);
-        top: -3px;
+        top: -5px;
+        transform: translateZ(var(--side-translate-xs));
 
         /* adjust side size */
         @add-mixin min-xs {
@@ -392,25 +416,15 @@ Main island path
         @add-mixin min-sm {
           font-size: var(--path-xxs);
           line-height: calc(var(--path-sm) - 4px);
-        }
-
-        /* adjust icon size */
-        @add-mixin min-xs {
-          transform: translateZ(var(--side-translate-xs));
-        }
-        @add-mixin min-sm {
           transform: translateZ(var(--side-translate-sm));
         }
       }
 
       /* front side positioning */
       &.front {
-        transform: translateZ(var(--side-translate-xxs));
+        transform: translateZ(var(--side-translate-xs));
 
         /* adjust side positioning */
-        @add-mixin min-xs {
-          transform: translateZ(var(--side-translate-xs));
-        }
         @add-mixin min-sm {
           transform: translateZ(var(--side-translate-sm));
         }
@@ -418,46 +432,42 @@ Main island path
 
       /* left side positioning */
       &.left {
-        border-bottom-width: var(--gutter-xxs);
         border-left-width: var(--gutter-xxs);
-        transform: rotateY(270deg)translateX(var(--side-translate-xxs-negative));
+        /* NOTE: 270.001deg is a hack to get the render the front face instead of the back face */
+        /* See issue #500 */
+        transform:
+          rotateY(270.001deg)
+          translateX(var(--side-translate-xs-negative));
         transform-origin: center left;
 
         /* adjust side positioning */
-        @add-mixin min-xs {
-        transform: rotateY(270deg)translateX(var(--side-translate-xs-negative));
-        }
         @add-mixin min-sm {
-        transform: rotateY(270deg)translateX(var(--side-translate-sm-negative));
+          transform:
+            rotateY(270.001deg)
+            translateX(var(--side-translate-sm-negative));
         }
       }
 
       /* top side positioning */
       &.top {
-        transform: rotateX(-270deg)translateY(var(--side-translate-xxs-negative));
+        transform: rotateX(-270deg) translateY(var(--side-translate-xs-negative));
         transform-origin: top center;
 
         /* adjust side positioning */
-        @add-mixin min-xs {
-          transform: rotateX(-270deg)translateY(var(--side-translate-xs-negative));
-        }
         @add-mixin min-sm {
-          transform: rotateX(-270deg)translateY(var(--side-translate-sm-negative));
+          transform: rotateX(-270deg) translateY(var(--side-translate-sm-negative));
         }
       }
 
       /* bottom side positioning */
       &.bottom {
         box-shadow: 0 2px var(--gutter-sm) rgba(0, 0, 0, 0.75);
-        transform: rotateX(90deg)translateY(var(--side-translate-xxs));
+        transform: rotateX(90deg) translateY(var(--side-translate-xs));
         transform-origin: bottom center;
 
         /* adjust side positioning */
-        @add-mixin min-xs {
-          transform: rotateX(90deg)translateY(var(--side-translate-xs));
-        }
         @add-mixin min-sm {
-          transform: rotateX(90deg)translateY(var(--side-translate-sm));
+          transform: rotateX(90deg) translateY(var(--side-translate-sm));
         }
       }
     }
@@ -501,7 +511,7 @@ STATES & INTERACTIONS
 .code-block {
 
   /* next up */
-  &.is-next {
+  &.is-next .cube {
     animation: blockBounce 2s infinite;
 
     /* make each side glow */
@@ -524,11 +534,7 @@ STATES & INTERACTIONS
 /* reposition codeblock tooltip */
 .codeblock-tooltip-portal.is-below {
   position: relative;
-  top: 15px;
-
-  /* account for scaled up path & codeblock */
-  @add-mixin min-xs { top: 20px; }
-  @add-mixin min-sm { top: 30px; }
+  top: 0.5rem;
 }
 
 /* -------------------------------
@@ -553,6 +559,204 @@ SHARE / NEXT ISLAND DIALOG
 
       & + .share-button {
         margin-left: 2rem;
+      }
+    }
+  }
+}
+
+
+/* -------------------------------
+CONVERT PATH TO BUTTONS
+------------------------------- */
+@add-mixin max-xs {
+
+  /* hide popovers & tooltips */
+  .stop-popover {
+    display: none !important;
+  }
+
+  /* hide the container background image */
+  .island-image {
+    background-image: none !important;
+    height: auto;
+  }
+  /* use mobile background image instead */
+  .mobile-island-image {
+    /* sizing */
+    width: 20rem;
+    padding-top: 15rem;
+    /* positioning */
+    @add-mixin absolute-horizontal-center;
+    top: 0;
+    z-index: 0;
+    /* theming */
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  /* adjust title */
+  .island .island-title {
+    max-width: calc(100% - var(--gutter-md));
+    top: 8rem;
+  }
+
+  /* style stops as buttons */
+  .island .island-path {
+    /* reset above */
+    display: block;
+    width: 100%;
+    padding-left: var(--gutter-sm);
+    padding-right: var(--gutter-sm);
+    position: relative;
+    left: 0;
+    margin-top: 12rem;
+    perspective: none;
+    /* button text */
+    text-align: left;
+
+    /* hide path line */
+    &:before {
+      display: none;
+    }
+
+    /* adjust icon positioning */
+    & .pt-icon {
+      margin-right: -0.25em;
+      margin-left: auto;
+    }
+
+    & .pt-icon-lock {
+      opacity: 0.75;
+    }
+
+    /* space out buttons */
+    & * + * {
+      margin-top: 0.5rem;
+    }
+
+    /* make popover spans behave like divs */
+    & .pt-popover-target {
+      display: block;
+    }
+
+    & .is-next .button {
+      box-shadow:
+         6px  4px 0.5em color(var(--white) a(0.333)),
+        -6px -4px 0.5em color(var(--white) a(0.333)),
+        -6px  4px 0.5em color(var(--white) a(0.333)),
+         6px -4px 0.5em color(var(--white) a(0.333));
+    }
+
+    & .pt-icon-circle-arrow-right {
+      animation: arrowBounce 2.25s infinite;
+      left: -5px;
+    }
+
+    /* transform stops into buttons */
+    & .stop,
+    & .editor-popover {
+      /* sizing & positioning */
+      display: block;
+      width: 100%;
+      height: auto; /* override above */
+      transform: none; /* override above */
+      /* theming */
+      border-radius: 2em; /* fully rounded */
+      background: none !important;
+      box-shadow: none !important;
+      border: none;
+      animation: none;
+      top: 0;
+
+      &:hover, &:focus {
+        top: 0;
+        margin-top: 0;
+        text-decoration: none;
+      }
+
+      & .u-visually-hidden {
+        @add-mixin reset-visually-hidden;
+        display: flex;
+        align-items: center;
+        line-height: 1.125;
+        min-height: 3rem;
+      }
+
+      /* reset positioning on hover */
+      &.is-next:hover,
+      &.is-next:focus {
+        margin-bottom: 0;
+      }
+
+      &.is-locked {
+        pointer-events: none;
+        cursor: pointer;
+
+        /* push icons right */
+        & .button,
+        & .code-block {
+          background-color: var(--dark-1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          &:hover {
+            box-shadow: none;
+          }
+        }
+      }
+    }
+
+    /* make codeblock cube into a button 😬 */
+    & .editor-popover {
+
+      & .code-block {
+        overflow: visible;
+        display: flex;
+        width: 100%;
+        height: 3em;
+        align-items: center;
+        justify-content: flex-start;
+        line-height: 1.75em;
+        padding-left: 1.75em;
+        padding-right: 1.75em;
+        border-radius: 1.5em;
+        color: var(--white);
+        /* create a new stacking context; make cube honor z-index on mobile */
+        transform: scale(1);
+
+        & .cube {
+          animation: none;
+          z-index: 1;
+        }
+
+        /* reset positioning for solid codeblock */
+        &.is-next,
+        &.is-done {
+          &:hover, &:focus {
+            margin-top: 8px;
+          }
+        }
+
+        & .cube {
+          transform: rotateX(-33deg) rotateY(20deg) translateY(-15px) translateX(20px);
+          left: -2rem;
+
+          /* fudge bottom into place */
+          & .bottom {
+            top: 8px;
+          }
+        }
+
+        & .u-visually-hidden {
+          width: auto;
+          margin-right: auto;
+          margin-top: 0;
+        }
+
+        & .pt-icon {
+          margin-top: 0;
+        }
       }
     }
   }
@@ -609,24 +813,12 @@ ANIMATIONS
   }
 }
 
-
-/* NOTE: as far as I can tell, the following is unused */
-/*
-.stop-popover {
-  text-align: center;
-  & .gems {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.25px;
-    line-height: 13px;
-    margin-top: 6px;
-    text-transform: uppercase;
-    & img {
-      margin-right: var(--gutter-xxs);
-      vertical-align: top;
-      width: var(--gutter-sm);
-    }
+/* bounce the arrow horizontally */
+@keyframes arrowBounce {
+  0%, 40%, 50%, 65%, 100% {
+    transform: translateX(5px);
+  }
+  45%, 55% {
+    transform: none;
   }
 }
-*/

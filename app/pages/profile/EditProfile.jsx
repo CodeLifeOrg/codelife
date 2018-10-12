@@ -25,7 +25,8 @@ class EditProfile extends Component {
       profileUser: null,
       optOut: false,
       optOutLocation: false,
-      img: null
+      img: null,
+      dobPopoverOpen: false
     };
   }
 
@@ -169,6 +170,15 @@ class EditProfile extends Component {
     this.setState({img: file});
   }
 
+  // manual handling of DOB popover via container for accessibility
+  // if the DOB field is clicked, open popover
+  enableDobPopover() {
+    this.setState({dobPopoverOpen: true});
+  }
+  // once we've moved onto a different field, close popover
+  disableDobPopover() {
+    this.setState({dobPopoverOpen: false});
+  }
 
   /**
    * 3 render states:
@@ -181,7 +191,7 @@ class EditProfile extends Component {
    */
   render() {
     const {t, user: loggedInUser} = this.props;
-    const {error, loading, profileUser, optOut, optOutLocation} = this.state;
+    const {dobPopoverOpen, error, loading, profileUser, optOut, optOutLocation} = this.state;
     const onSimpleUpdate = this.onSimpleUpdate.bind(this);
     const onCpfUpdate = this.onCpfUpdate.bind(this);
     const saveUserInfo = this.saveUserInfo.bind(this);
@@ -189,9 +199,14 @@ class EditProfile extends Component {
     const setGid = this.setGid.bind(this);
     const setSid = this.setSid.bind(this);
     const setBday = this.setBday.bind(this);
-    const popoverProps = {
+    const dobPopoverProps = {
       popoverClassName: "calendar-popover pt-minimal",
-      inline: true
+      inline: true,
+      isOpen: dobPopoverOpen
+    };
+    // pass ID to input so the DOB label can reference it
+    const dobInputProps = {
+      id: "profile-dob"
     };
 
     if (loading) return <LoadingSpinner />;
@@ -264,14 +279,19 @@ class EditProfile extends Component {
             </div>
 
             {/* Date of birth */}
-            <div className={dobClasses}>
+            <div
+              className={dobClasses}
+              onClick={this.enableDobPopover.bind(this)}
+              onBlur={this.disableDobPopover.bind(this)}
+            >
               <label className="font-sm" htmlFor="profile-dob">{ t("DOB") }</label>
               <DateInput
-                popoverProps={popoverProps}
+                popoverProps={dobPopoverProps}
+                inputProps={dobInputProps}
                 className="field-input font-sm"
-                id="profile-dob"
                 name="dob"
                 onChange={setBday}
+                openOnFocus={false}
                 value={dob ? moment(dob, "YYYY-MM-DD").format("MM/DD/YYYY") : null}
                 format="DD/MM/YYYY"
                 locale="pt-br"

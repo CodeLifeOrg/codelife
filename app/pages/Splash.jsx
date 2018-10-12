@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {translate} from "react-i18next";
-import {AnchorLink, Login, SignUp} from "datawheel-canon";
+import {AnchorLink, Login, SignUp} from "@datawheel/canon-core";
 import Clouds from "components/Clouds";
 
 import "./Splash.css";
@@ -36,8 +36,8 @@ class Splash extends Component {
         <Clouds />
         <div className="panel">
           <div id="entry">
-            <img className="island" src="/islands/splash.png" />
-            <img className="logo" src="/logo/logo.png" />
+            <img className="island" src="/islands/splash.png" alt="" />
+            <img className="logo" src="/logo/logo.png" alt="" />
             <div id="beta">Beta</div>
             <p id="beta-text">
               {t("Platform currently in development")}.<br />

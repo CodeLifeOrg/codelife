@@ -636,11 +636,13 @@ class CodeEditor extends Component {
 
     return (
       <div className={!fullscreenEditor ? "code-editor" : "code-editor is-fullscreen"} id={id || "codeEditor"}>
-        {!this.props.noZoom &&
+        {!this.props.noZoom && !readOnly &&
           <button
             className="code-editor-fullscreen-button pt-button pt-intent-primary"
             onClick={ this.fullscreenEditorToggle.bind(this) }
             aria-labelledby="fullscreen-icon-label" >
+
+            <span className="code-editor-fullscreen-text u-hide-above-md font-sm">{ t("Fullscreen recommended") } </span>
 
             {/* hidden label text for accessibility */}
             <span className="u-visually-hidden" id="fullscreen-icon-label">{ t("Toggle fullscreen mode") }</span>
@@ -652,8 +654,9 @@ class CodeEditor extends Component {
           </button>
         }
         {
-          this.props.showEditor
-            ? <div className={ `code ${readOnly ? "is-read-only" : ""}` }>
+          this.props.showEditor &&
+            <label className={ `code ${readOnly ? "is-read-only" : ""}` }>
+              <span className="u-visually-hidden">{t("Code Editor")}</span>
               { tabs
                 ? <div className="panel-title font-sm">
                   <span className="favicon pt-icon-standard pt-icon-code"></span>
@@ -689,21 +692,20 @@ class CodeEditor extends Component {
                   <DrawerValidation rules={ baseRules.concat(rulejson) } errors={ ruleErrors } />
                 </div>
                 : null }
-            </div>
-            : null
+            </label>
         }
         <div className="render">
           { tabs
             ? <div className="panel-title font-sm">
               { island
-                ? <img className="favicon" src={ `/islands/${island}-small.png` } />
+                ? <img className="favicon" src={ `/islands/${island}-small.png` } alt="" />
                 : <span className="favicon pt-icon-standard pt-icon-globe"></span> }
               { titleText }
             </div>
             : null }
           <iframe className="panel-content font-xs iframe" id="iframe" ref="rc" src={`${sandbox.root}/${sandbox.page}`} />
           { showConsole
-            ? <div className={ `drawer font-xs ${openConsole ? "open" : ""}` }>
+            ? <div className={ `drawer console-drawer font-xs ${openConsole ? "open" : ""}` }>
               <div className="title" onClick={ this.toggleDrawer.bind(this, "openConsole") }><span className="pt-icon-standard pt-icon-application"></span>{ t("JavaScript Console") }{ embeddedConsole.length ? <span className="console-count font-xs">{ embeddedConsole.length }</span> : null }</div>
               <div className="contents">{consoleText}</div>
             </div>

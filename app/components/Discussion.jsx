@@ -9,8 +9,8 @@ import QuillWrapper from "pages/admin/lessonbuilder/QuillWrapper";
 
 import LoadingSpinner from "components/LoadingSpinner";
 
-/** 
- * Discussion Board wraps a list of threads (which in turn hosts a list of comments). Discussion boards 
+/**
+ * Discussion Board wraps a list of threads (which in turn hosts a list of comments). Discussion boards
  * currently only apply to slides, but they are designed to be able to apply to anything (projects, codeblocks, etc)
  */
 
@@ -34,7 +34,7 @@ class Discussion extends Component {
 
   /**
    * When the user changes slides, hit the API endpoind and fetch the new thread data
-   */ 
+   */
   componentDidUpdate(prevProps) {
     if (prevProps.subjectId !== this.props.subjectId) {
       const {subjectType, subjectId} = this.props;
@@ -49,7 +49,7 @@ class Discussion extends Component {
 
   /**
    * Prepare payload and post a new thread to the db
-   */ 
+   */
   newThread() {
     const {t} = this.props;
     const threadPost = {
@@ -70,7 +70,7 @@ class Discussion extends Component {
 
   /**
    * On sort selection, sort the threads in state
-   */ 
+   */
   selectSort(method) {
     const {threads} = this.state;
     switch (method) {
@@ -105,6 +105,11 @@ class Discussion extends Component {
 
     if (!threads) return <LoadingSpinner label={false} />;
 
+    const threadInvalid =
+      !threadTitle || !threadContent || threadContent === "<p><br></p>"
+        ? true
+        : false;
+
     return (
       <div className="discussion-container" id="Discussion">
         <div className="discussion-inner">
@@ -126,13 +131,16 @@ class Discussion extends Component {
           <div className="new-thread u-margin-bottom-lg">
             <span className="thread">
               <h3 className="new-thread-title">{t("Post New Thread")}</h3>
-              <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={t("Title")} />
+              <label>
+                <span className="u-visually-hidden">{ t("Discussion") } {t("Title")}</span>
+                <input className="pt-input" value={threadTitle} onChange={e => this.setState({threadTitle: e.target.value})} placeholder={t("Title")} />
+              </label>
               <QuillWrapper value={threadContent} onChange={tx => this.setState({threadContent: tx})} hideGlossary={true}/>
               <div className="post-button-container">
                 <Button
-                  className="post-button pt-intent-success pt-fill"
+                  className={`post-button pt-button pt-fill${ threadInvalid ? "" : " pt-intent-success" }`}
                   onClick={this.newThread.bind(this)}
-                  disabled={!threadTitle || !threadContent || threadContent === "<p><br></p>"}
+                  disabled={threadInvalid}
                 >
                   {t("Start New Thread")}
                 </Button>

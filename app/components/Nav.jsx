@@ -8,7 +8,7 @@ import Logo from "components/Logo.svg";
 import Search from "components/Search";
 import AuthForm from "components/AuthForm";
 import PropTypes from "prop-types";
-import {login, resetPassword} from "datawheel-canon/src/actions/auth";
+import {login, resetPassword} from "@datawheel/canon-core/src/actions/auth";
 
 import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
@@ -19,7 +19,7 @@ import {
   RESET_SEND_SUCCESS,
   WRONG_PW,
   SIGNUP_EXISTS
-} from "datawheel-canon/src/consts";
+} from "@datawheel/canon-core/src/consts";
 
 import "./Nav.css";
 
@@ -158,7 +158,14 @@ class Nav extends Component {
     // social links
     const socialLinkItems = socialLinks.map(socialLink =>
       <li className="nav-social-item" key={socialLink.id}>
-        <a className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`} href={socialLink.link} target="_blank" rel="noopener noreferrer">
+        <a
+          className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`}
+          href={socialLink.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex="-1"
+          aria-hidden="true"
+        >
           <span className="u-visually-hidden">{t(socialLink.title)}</span>
           { socialLink.title === "facebook" && <FacebookIcon /> }
           { socialLink.title === "youtube" && <YoutubeIcon /> }
@@ -195,9 +202,15 @@ class Nav extends Component {
               popoverClassName="pt-popover-content-sizing browser-popover"
               position={Position.BOTTOM}
             >
-              <button className="link-toggle-button u-unbutton" onClick={this.toggleBrowser.bind(this)} aria-labelledby="map-nav-link">
+              <a
+                className="link-toggle-button u-unbutton"
+                onClick={this.toggleBrowser.bind(this)}
+                tabIndex="-1"
+                aria-hidden="true"
+                aria-labelledby="map-nav-link"
+              >
                 <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
-              </button>
+              </a>
               <div className="dropdown-list browser-list" id="browser">
                 <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
               </div>
@@ -227,9 +240,14 @@ class Nav extends Component {
               position={Position.BOTTOM}
             >
               {/* dropdown button */}
-              <button className="link-toggle-button u-unbutton" aria-labelledby="account-nav-link">
-                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
-              </button>
+              <a
+                className="link-toggle-button u-unbutton"
+                tabIndex="-1"
+                aria-hidden="true"
+                aria-labelledby="account-nav-link"
+              >
+                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down" />
+              </a>
 
               {/* dropdown links */}
               <div className="link-dropdown">
@@ -260,8 +278,20 @@ class Nav extends Component {
             <span className="link language-icon-container">
               <span className="link-icon pt-icon-standard pt-icon-globe" />
             </span>
-            <a className="link language-link" onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)} key={languageLinks[1].id}>{languageLinks[1].shortTitle}</a>
-            <a className="link language-link" onClick={this.selectLang.bind(this, "en", languageLinks[0].link)} key={languageLinks[0].id}>
+            <a
+              className="link language-link"
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}
+              key={languageLinks[1].id}
+            >
+              {languageLinks[1].shortTitle}
+            </a>
+            <a
+              className="link language-link"
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}
+              key={languageLinks[0].id}
+            >
               {languageLinks[0].shortTitle}
             </a>
             {/* social links */}
@@ -288,9 +318,23 @@ class Nav extends Component {
             </Link>
 
             {/* language select */}
-            <a className="link language-link" key={languageLinks[1].id} onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}>{languageLinks[1].title}</a>
-            <a className="link language-link" key={languageLinks[0].id} onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}>
+            <span className="link language-icon-container">
               <span className="link-icon pt-icon-standard pt-icon-globe" />
+            </span>
+            <a
+              className="link language-link"
+              key={languageLinks[1].id}
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "pt", languageLinks[1].link)}
+            >
+              {languageLinks[1].title}
+            </a>
+            <a
+              className="link language-link"
+              key={languageLinks[0].id}
+              tabIndex="0"
+              onClick={this.selectLang.bind(this, "en", languageLinks[0].link)}
+            >
               {languageLinks[0].title}
             </a>
             {/* social links */}

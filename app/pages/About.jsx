@@ -17,7 +17,7 @@ const schools = [
   {name: "CELSO MACHADO", location: "Belo Horizonte, MG", slug: "celso-machado", photos: ["1"]}
 ];
 
-/** 
+/**
  * About page - contains translated about text and a simple photoslide component from Datawheel's first visit to Minas
  */
 
@@ -40,18 +40,23 @@ class About extends Component {
 
     const showStudents = false;
 
+    // grab en/pt subdomain from url
+    const locale = window.location.host.split(".")[0];
+
     return (
       <div id="about-container">
 
         <h1>{ t("About") }</h1>
 
-        
         <p>{ t("aboutP1") }</p>
         <p>{ t("aboutP2") }</p>
         <p>{ t("aboutP3") }</p>
         <p>{ t("aboutP4") }</p>
         <p>{ t("aboutP5") }</p>
-        <p>{ t("aboutP6") }</p>
+        {/* additional pt content */}
+        {locale === "pt" &&
+          <p>{ t("aboutP6") }</p>
+        }
 
         { showStudents ? <Tabs2 className="about-photos" onChange={this.handleTabChange.bind(this)} selectedTabId={activeTabId}>
           { schools.map((s, i) => <Tab2 key={i} id={ s.slug } title={ i + 1 } panel={ <PhotoSlide {...s} /> } />) }

@@ -89,6 +89,8 @@
       & .lessonbuilder-tree {
         max-height: calc(100vh - 125px);
         overflow-y: auto;
+        /* enable inertia scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
       }
 
       /* offset fixed action bar */
@@ -96,6 +98,8 @@
         min-height: 0;
         height: calc(100vh - 120px - var(--nav-height));
         overflow-y: auto;
+        /* enable inertia scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
       }
     }
 

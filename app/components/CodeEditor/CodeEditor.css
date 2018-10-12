@@ -23,6 +23,21 @@
     border: 1px solid var(--black);
     background-color: var(--dark-3); /* no sneaky white pixels when zoomed, please */
 
+    /* hidden textarea that recieves all the text */
+    & textarea {
+      /* prevent zoom on mobile */
+      font-size: 16px;
+      /* prevent moving viewport window position upward when typing */
+      /* NOTE: !important necessary for overriding inline style */
+      /* NOTE again: setting width causes the contextual menu (copy/paste/etc) to appear on iOS?? */
+      position: absolute;
+      height: 100% !important;
+      top: 0 !important;
+      /* just in case, make sure the textarea can't be reached */
+      z-index: -1;
+      pointer-events: none;
+    }
+
     /* editor highlight line; used for both themes */
     & .ace_marker-layer > .ace_active-line {
       background-color: var(--gray);
@@ -46,6 +61,8 @@
       overflow-y: auto;
       padding: var(--gutter-xs) var(--gutter-sm);
       white-space: pre-wrap;
+      /* enable inertia scrolling on mobile */
+      -webkit-overflow-scrolling: touch;
     }
     & .codeBlockTooltip {
       left: 50%;
@@ -72,6 +89,17 @@
   border-right: 1px solid var(--light-1); */
   overflow: hidden;
   width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+
+  @add-mixin max-md {
+    left: 50%;
+    width: 50%;
+  }
+
   & .title {
     background-color: var(--light-1);
     height: var(--gutter-md);
@@ -129,7 +157,9 @@
     background-color: var(--white);
     height: 0;
     overflow-y: scroll;
-    transition: height 0.35s;
+    /* enable inertia scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
+
     & .log {
       border-bottom: 1px solid var(--light-1);
       font-family: monospace;
@@ -181,8 +211,32 @@
     }
   }
   &.open {
+    box-shadow: 0 0 1rem color(var(--black) a(0.5));
+    height: 50%;
+
     & .contents {
-      height: 190px;
+      height: 100%;
+    }
+
+    /* open state on mobile */
+    @add-mixin max-md {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%; /* reset above */
+      resize: both;
+
+      & .title {
+        line-height: 20px;
+        height: 29.5px;
+        padding: 5px;
+      }
+
+      & .contents {
+        height: 100%;
+        transition: none;
+      }
     }
   }
 }
@@ -208,6 +262,7 @@
   min-width: 0; /* fixes overflow bug on smaller screens */
   border: 1px solid var(--light-2);
   background-color: var(--light-1); /* no sneaky white pixels when zoomed, please */
+
   & .panel-title {
     align-self: flex-start;
     background-color: var(--light-1);
@@ -259,6 +314,8 @@
   /* stacked layout */
   & .code {
     border-radius: var(--radius-md) var(--radius-md) 0 0;
+
+
   }
   & .render {
     border-radius: 0 0 var(--radius-md) var(--radius-md);
@@ -289,19 +346,36 @@
 /* fullscreen toggle */
 .code-editor-fullscreen-button {
   /* sizing */
-  width: 2.5rem; /* 40px */
+  width: auto;
   height: 2.5rem; /* 40px */
   padding: 0; /* override button default */
   /* positioning */
   position: absolute; /* take out of the flow */
   top: -0.375em;
   right: 1em;
-  z-index: 1; /* position above code editor */
+  z-index: 2; /* position above code editor & code highlight */
   /* theming */
   text-align: center;
   /* transitions */
   &.pt-button { /* increase specificity */
     transition: box-shadow 0.2s;
+  }
+
+  /* hide the hint on big screens */
+  @add-mixin min-md {
+    width: 2.5rem;
+  }
+
+  & .code-editor-fullscreen-text {
+    line-height: 2.5rem;
+    top: -1px;
+    padding-left: 1rem;
+  }
+
+  & .code-editor-fullscreen-text,
+  & .code-editor-fullscreen-icon {
+    display: inline-block;
+    vertical-align: middle;
   }
 
   /* icon sizing */
@@ -312,6 +386,11 @@
     top: -1px; /* baseline adjustment */
     /* transitons */
     transition: transform 0.2s ease-out;
+
+    @add-mixin max-md {
+      padding-left: 0.5rem;
+      padding-right: 1rem;
+    }
   }
 
   /* interactions */
@@ -321,8 +400,10 @@
       box-shadow: 0 2px 1em rgba(8, 26, 24, 0.2) !important; /* override override, feels bad man */
 
       /* yo dawg I heard you like transforms */
+      @add-mixin min-md {
       & .code-editor-fullscreen-icon {
         transform: scale(1.15);
+      }
       }
     }
   }
@@ -346,6 +427,12 @@
   /* position above navbar */
   z-index: 20;
 
+  /* kill border radius */
+  & .code,
+  & .render {
+    border-radius: 0;
+  }
+
   /* fullscreen editor layout dictated by device orientation */
   @media (orientation: landscape) {
     flex-direction: row;
@@ -354,12 +441,16 @@
     flex-direction: column;
   }
 
-  /* opposite button icon scaling */
-  & .code-editor-fullscreen-button .code-editor-fullscreen-icon,
-  & .code-editor-fullscreen-button:active .code-editor-fullscreen-icon {
-    transform: scale(1.15);
-  }
-  & .code-editor-fullscreen-button:hover .code-editor-fullscreen-icon {
-    transform: none;
+  & .code-editor-fullscreen-button {
+    width: 2.5rem;
+    top: 0.5rem;
+
+    & .code-editor-fullscreen-text {
+      display: none;
+    }
+    & .code-editor-fullscreen-icon {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }

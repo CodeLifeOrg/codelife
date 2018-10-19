@@ -495,7 +495,7 @@ class Level extends Component {
     const otherCodeBlockItemsAfterFold = [];
     let top = 3;
     for (const cb of otherCodeBlocks) {
-      const cbc = <CodeBlockCard theme={currentIsland.theme} icon={currentIsland.icon} codeBlock={cb} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
+      const cbc = <CodeBlockCard key={cb.id} theme={currentIsland.theme} icon={currentIsland.icon} codeBlock={cb} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherCodeBlockItemsBeforeFold.push(cbc) : otherCodeBlockItemsAfterFold.push(cbc);
       top--;
     }

@@ -342,16 +342,26 @@ class Slide extends Component {
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
                 : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
               : nextLevel
+                ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+                : <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+              /*
+              : nextLevel
                 ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
                 : <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+                */
             }
           </div>
-          { !nextSlug && nextLevel &&
+          {
+
+            /*
+           !nextSlug && nextLevel &&
             <div className="centered-buttons return">
               <Link className="pt-button pt-intent-primary" to={`/island/${lid}`}>
                 {`${t("Return to")} ${currentIsland.name}`}
               </Link>
             </div>
+            */
+
           }
         </div>
         {/* discussion */}

@@ -67,14 +67,14 @@
 
     /* make code editor take up 100% height */
     & > div {
-      height: calc(100vh - 110px);
+      height: calc(100vh - 90px);
     }
 
     /* sidebar left layout */
     @add-mixin min-sm {
       width: calc(100% - 16rem);
       /* add padding */
-      padding: var(--gutter-md);
+      padding: var(--gutter-sm);
     }
   }
 }

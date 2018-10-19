@@ -9,10 +9,9 @@
   border-radius: 0; /* reset border radius */
   margin: 0; /* reset margin */
 
-  /* tweak close button placement */
+  /* hide blueprint close button */
   & .pt-dialog-close-button {
-    top: -0.25em;
-    padding: 0;
+    display: none;
   }
 }
 
@@ -74,61 +73,22 @@
 }
 
 
+/* return link */
+.codeblock-return-link {
+  font-weight: 700;
+  text-decoration: none;
+  top: -1.75em;
 
-
-/* .codeblock-container {
-  align-self: stretch;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-
-  & .codeblock-body {
-    align-items: center;
-    align-self: stretch;
-    display: flex;
-    flex: 1;
-    min-height: 0;
-    padding: var(--gutter-xs) 0;
-
-    & .codeblock-text {
-      align-self: stretch;
-      flex: none;
-      font-size: 16px;
-      line-height: var(--gutter-md);
-      margin-top: var(--gutter-xs);
-      max-width: 300px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-
-      & .pt-progress-bar {
-        height: var(--gutter-xs);
-        margin: 0 var(--gutter-xxs) var(--gutter-xs);
-        text-align: left;
-        width: calc(100% - var(--gutter-xs));
-      }
-    }
-
-    @add-mixin max-sm {
-      flex-direction: column;
-      flex-wrap: nowrap;
-      & .codeblock-text {
-        max-width: auto;
-      }
-    }
+  /* icon positioning */
+  & .pt-icon {
+    font-size: 1.25em;
+    margin-right: 0.25em;
+    transition: transform 0.2s ease-out;
   }
 
-  & .codeblock-footer {
-    text-align: center;
-    & .pt-button {
-      margin: 0 var(--gutter-xxs) var(--gutter-xs);
-    }
-    & .pt-callout {
-      display: inline-block;
-    }
+  /* interactions */
+  &:hover .pt-icon,
+  &:focus .pt-icon {
+    transform: translateX(-2px);
   }
 }
-
-.pt-dialog.codeblock .pt-dialog-body {
-  display: flex;
-  min-height: 0;
-} */

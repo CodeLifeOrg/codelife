@@ -38,9 +38,11 @@ class Level extends Component {
       testOpen: false,
       school: null,
       checkpointOpen: false,
+      checkpointEmailOpen: false,
       winOpen: false,
       canPostToFacebook: true,
       winMessage: "",
+      email: "",
       showMore: false
     };
   }
@@ -49,7 +51,7 @@ class Level extends Component {
    * On Mount, or Update (meaning the user switched islands) Load the necessary progress/codeblock data from the db.
    */
   loadFromDB() {
-    const {params} = this.props;
+    const {params, auth} = this.props;
     const {lid} = params;
     const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
@@ -72,6 +74,9 @@ class Level extends Component {
       // If the user hasn't filled in their school, and they are on ANY island other than the first, prompt them to fill
       // it in via Checkpoint.jsx.
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
+
+      // If the user is a social user and has beaten level one and hasn't provided an email, prompt them
+      const checkpointEmailOpen = ((auth.user.twitter || auth.user.instagram || auth.user.facebook) && !profile.email && profile.email !== "decline");
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -288,6 +293,59 @@ class Level extends Component {
 
   }
 
+  skipCheckpointEmail() {
+    console.log("skip");
+  }
+
+  saveCheckpointEmail() {
+    console.log("save");
+  }
+
+  /**
+   * This was written early in the project, before the Component nesting of React was
+   * fully put to use. This method encapsulates the checkpoint popover - but this should
+   * obviously be moved to a component, not a method.
+   */
+  buildCheckpointEmailPopover() {
+    const {t} = this.props;
+    return (
+      <Dialog
+        className="form-container checkpoint-form-container text-center"
+        isOpen={this.state.checkpointEmailOpen}
+        onClose={() => this.setState({checkpointEmailOpen: false})}
+        title={ t("Enter your Email") }
+        iconName=""
+      >
+
+        {/* heading */}
+        <h2 className="checkpoint-heading u-text-center font-xl">{ t("Please Enter your Email Address") }</h2>
+
+        {/* email field */}
+        <input type="text" className="pt-input" onChange={e => this.setState({email: e.target.value})}/>
+
+        {/* no thanks */}
+        <div className="field-container">
+          <button
+            className="pt-button font-md"
+            onClick={this.skipCheckpointEmail.bind(this)}>
+            {t("I'd rather not say")}
+          </button>
+        </div>
+
+        {/* save changes button */}
+        <div className="field-container">
+          <button
+            className="pt-button pt-intent-primary font-md"
+            disabled={!this.state.email}
+            onClick={this.saveCheckpointEmail.bind(this)} >
+            {t("Submit")}
+          </button>
+        </div>
+      </Dialog>
+    );
+  }
+
+
   /**
    * This was written early in the project, before the Component nesting of React was
    * fully put to use. This method encapsulates the checkpoint popover - but this should
@@ -469,6 +527,8 @@ class Level extends Component {
     const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
     const {browserHistory} = this.context;
 
+
+
     if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <LoadingSpinner />;
 
@@ -569,6 +629,7 @@ class Level extends Component {
 
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
+        { this.buildCheckpointEmailPopover() }
         <div className="island-image image">
           <h1 className="island-title font-xl" id="title">
             { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }

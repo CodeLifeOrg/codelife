@@ -72,7 +72,8 @@ then add the theme name to the @each loop below */
     & .lessonplan-toc-link,
     & .codeblock-dialog-link,
     & .fork-button,
-    & .item-editor-inner a {
+    & .item-editor-inner a,
+    & .codeblock-return-link {
       color: var(--$(theme)-island-medium);
       /* interactions */
       &:hover, &:focus {

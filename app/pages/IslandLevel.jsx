@@ -457,6 +457,8 @@ class Level extends Component {
             title={ title }
             handleSave={ this.handleSave.bind(this) }
             onFirstCompletion={ this.onFirstCompletion.bind(this) }
+            closeTest={testOpen => this.setState({testOpen})}
+            pathname={this.props.router.location}
           />
         </Dialog>
       </div>

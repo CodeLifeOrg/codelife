@@ -75,9 +75,11 @@ class Level extends Component {
       // it in via Checkpoint.jsx.
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
 
-      // If the user is a social user and has beaten level one and hasn't provided an email, prompt them
-      const checkpointEmailOpen = ((auth.user.twitter || auth.user.instagram || auth.user.facebook) && !profile.email && profile.email !== "decline");
-
+      const hasBeatenLevelOne = userProgress.map(up => up.level).includes("hello-world");
+      const isSocial = auth.user.twitter || auth.user.instagram || auth.user.facebook;
+      // If the user is a social user, has beaten level one , hasn't provided an email, and hasn't declined in the past, prompt them
+      const checkpointEmailOpen = hasBeatenLevelOne && isSocial && !profile.email && profile.email !== "decline";
+      
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
       const unlikedCodeBlocks = [];
@@ -95,7 +97,7 @@ class Level extends Component {
         }
       }
 
-      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false}, this.maybeTriggerCodeblock.bind(this));
+      this.setState({levels, checkpointOpen, checkpointEmailOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false}, this.maybeTriggerCodeblock.bind(this));
     });
   }
 
@@ -294,11 +296,17 @@ class Level extends Component {
   }
 
   skipCheckpointEmail() {
-    console.log("skip");
+    const payload = {email: "decline"};
+    axios.post("/api/user/email", payload).then(() => {
+      this.setState({checkpointEmailOpen: false});
+    });
   }
 
   saveCheckpointEmail() {
-    console.log("save");
+    const payload = {email: this.state.email};
+    axios.post("/api/user/email", payload).then(() => {
+      this.setState({checkpointEmailOpen: false});
+    });
   }
 
   /**
@@ -524,10 +532,8 @@ class Level extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, checkpointEmailOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
     const {browserHistory} = this.context;
-
-
 
     if (!auth.user) browserHistory.push("/");
     if (!currentIsland || !levels || !userProgress) return <LoadingSpinner />;

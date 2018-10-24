@@ -79,7 +79,7 @@ class Level extends Component {
       const isSocial = auth.user.twitter || auth.user.instagram || auth.user.facebook;
       // If the user is a social user, has beaten level one , hasn't provided an email, and hasn't declined in the past, prompt them
       const checkpointEmailOpen = hasBeatenLevelOne && isSocial && !profile.email && profile.email !== "decline";
-      
+
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
       const unlikedCodeBlocks = [];
@@ -321,32 +321,36 @@ class Level extends Component {
    */
   buildCheckpointEmailPopover() {
     const {t} = this.props;
+    const {checkpointEmailOpen} = this.state;
+    // const checkpointEmailOpen = true; // debugging
     return (
       <Dialog
         className="form-container checkpoint-form-container text-center"
-        isOpen={this.state.checkpointEmailOpen}
+        isOpen={checkpointEmailOpen}
         onClose={() => this.setState({checkpointEmailOpen: false})}
         title={ t("Enter your Email") }
         iconName=""
       >
 
         {/* heading */}
-        <h2 className="checkpoint-heading u-text-center font-xl">{ t("Please Enter your Email Address") }</h2>
+        <h2 className="checkpoint-heading u-text-center font-lg">{ t("Please enter your email address") }</h2>
 
-        {/* email field */}
-        <input type="text" className="pt-input" onChange={e => this.setState({email: e.target.value})}/>
 
-        {/* no thanks */}
         <div className="field-container">
-          <button
-            className="pt-button font-md"
-            onClick={this.skipCheckpointEmail.bind(this)}>
-            {t("I'd rather not say")}
-          </button>
-        </div>
+          {/* email field */}
+          <label htmlFor="checkpoint-email-input">{t("LogIn.Email")}</label>
+          <input id="checkpoint-email-input" className="field-input font-md" type="email" onChange={e => this.setState({email: e.target.value})}/>
 
-        {/* save changes button */}
-        <div className="field-container">
+          {/* no thanks */}
+          <div className="checkbox-container">
+            <label className="pt-control pt-checkbox font-xs u-margin-bottom-off">
+              <input type="checkbox" onClick={this.skipCheckpointEmail.bind(this)} />
+              <span className="pt-control-indicator" />
+              {t("I'd rather not say")}
+            </label>
+          </div>
+
+          {/* save changes button */}
           <button
             className="pt-button pt-intent-primary font-md"
             disabled={!this.state.email}

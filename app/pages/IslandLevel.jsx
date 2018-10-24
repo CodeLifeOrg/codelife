@@ -296,10 +296,15 @@ class Level extends Component {
   }
 
   skipCheckpointEmail() {
-    const payload = {email: "decline"};
-    axios.post("/api/user/email", payload).then(() => {
+    if (!this.props.auth.user.email) {
+      const payload = {email: "decline"};
+      axios.post("/api/user/email", payload).then(() => {
+        this.setState({checkpointEmailOpen: false});
+      });
+    }
+    else {
       this.setState({checkpointEmailOpen: false});
-    });
+    }
   }
 
   saveCheckpointEmail() {

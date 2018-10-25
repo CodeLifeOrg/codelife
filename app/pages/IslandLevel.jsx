@@ -80,7 +80,7 @@ class Level extends Component {
       const emailBlank = !profile.email;
       const declined = profile.email === "decline";
       // If the user is a social user, has beaten level one , hasn't provided an email, and hasn't declined in the past, prompt them
-      const checkpointEmailOpen = hasBeatenLevelOne && isSocial && emailBlank && !declined
+      const checkpointEmailOpen = hasBeatenLevelOne && isSocial && emailBlank && !declined;
       // const checkpointEmailOpen = true; // debug
 
       const myCodeBlocks = [];

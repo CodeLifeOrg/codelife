@@ -77,8 +77,11 @@ class Level extends Component {
 
       const hasBeatenLevelOne = userProgress.map(up => up.level).includes("hello-world");
       const isSocial = auth.user.twitter || auth.user.instagram || auth.user.facebook;
+      const emailBlank = !profile.email;
+      const declined = profile.email === "decline";
       // If the user is a social user, has beaten level one , hasn't provided an email, and hasn't declined in the past, prompt them
-      const checkpointEmailOpen = hasBeatenLevelOne && isSocial && !profile.email && profile.email !== "decline";
+      const checkpointEmailOpen = hasBeatenLevelOne && isSocial && emailBlank && !declined
+      // const checkpointEmailOpen = true; // debug
 
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
@@ -541,7 +544,7 @@ class Level extends Component {
   render() {
 
     const {auth, t} = this.props;
-    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, checkpointEmailOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
+    const {levels, currentIsland, nextIsland, prevIsland, checkpointOpen, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, showMore} = this.state;
     const {browserHistory} = this.context;
 
     if (!auth.user) browserHistory.push("/");

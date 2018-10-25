@@ -331,17 +331,17 @@ class Level extends Component {
         className="form-container checkpoint-form-container text-center"
         isOpen={checkpointEmailOpen}
         onClose={() => this.setState({checkpointEmailOpen: false})}
-        title={ t("Enter your Email") }
+        title={ t("Want to stay up to date with the latest CodeLife news?") }
         iconName=""
       >
 
         {/* heading */}
-        <h2 className="checkpoint-heading u-text-center font-lg">{ t("Please enter your email address") }</h2>
-
+        <h2 className="checkpoint-heading u-text-center font-lg">{ t("Want to stay up to date with the latest CodeLife news?") }</h2>
+        
 
         <div className="field-container">
           {/* email field */}
-          <label htmlFor="checkpoint-email-input">{t("LogIn.Email")}</label>
+          <label htmlFor="checkpoint-email-input">{t("Subscribe with email")}</label>
           <input id="checkpoint-email-input" className="field-input font-md" type="email" onChange={e => this.setState({email: e.target.value})}/>
 
           {/* no thanks */}
@@ -353,6 +353,7 @@ class Level extends Component {
             </label>
           </div>
 
+
           {/* save changes button */}
           <button
             className="pt-button pt-intent-primary font-md"
@@ -360,6 +361,7 @@ class Level extends Component {
             onClick={this.saveCheckpointEmail.bind(this)} >
             {t("Submit")}
           </button>
+          <h5 style={{marginTop: "10px"}} className="checkpoint-heading u-text-center font-sm">{ t("No spam! Don't worry we won't share your email and you can opt-out at any time") }</h5>
         </div>
       </Dialog>
     );

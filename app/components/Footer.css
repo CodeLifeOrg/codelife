@@ -235,15 +235,29 @@
 
   /* credits */
   & .footer-credits {
+    /* keep logos reasonably sized and centered if need on small screens */
+    max-width: 24rem;
+    margin-left: auto;
+    margin-right: auto;
 
-    /* make partner links subtle */
+    /* line up partner logos */
     & .footer-credits-link {
-      display: block;
+      display: inline-block;
+      width: 30%;
+      vertical-align: middle;
       margin-top: 0.25em;
-      color: var(--light-3);
+      opacity: 0.75;
+      /* transitions */
+      transition: opacity 0.2s ease-out;
 
+      /* space out horizontally */
+      &:not(:last-of-type) {
+        margin-right: 4.999%;
+      }
+
+      /* interactions */
       &:hover, &:focus {
-        color: var(--light-2);
+        opacity: 1;
       }
     }
   }

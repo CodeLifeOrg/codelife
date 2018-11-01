@@ -177,16 +177,18 @@ class Footer extends Component {
 
             {/* additional links */}
             <div className="footer-credits">
-              <a target="_blank" className="footer-credits-link font-xs" rel="noopener noreferrer" href="http://www.fapemig.br/">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</a>
-              <a target="_blank" className="footer-credits-link font-xs" rel="noopener noreferrer" href="http://mg.gov.br">Governo do Estado de Minas Gerais</a>
+              {/* <p className="font-xs">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</p> */}
+              <p className="font-xs">Governo do Estado de Minas Gerais</p>
+              <a className="footer-credits-link" href="http://www.fapemig.br/" target="_blank" rel="noopener noreferrer">
+                <img className="footer-credits-logo" src="/footer/logo-fapemig.svg" alt="Fundação de Amparo à Pesquisa de Minas Gerais" />
+              </a>
+              {/* <a className="footer-credits-link" href="http://mg.gov.br" target="_blank" rel="noopener noreferrer">
+                <img className="footer-credits-logo" src="/footer/logo-mg.svg" alt="Estado de Minas Gerais" />
+              </a> */}
+              <a className="footer-credits-link" href="https://www.linkedin.com/company/innpact-ventures" target="_blank" rel="noopener noreferrer">
+                <img className="footer-credits-logo" src="/footer/logo-innpact.svg" alt="Innpact Ventures" />
+              </a>
             </div>
-
-            {/* governmentLogos
-              ? <a target="_blank" rel="noopener noreferrer" href="http://www.fapemig.br/"><img className="logo" src="/footer/logo-fapemig.svg" /></a>
-              : null }
-            { governmentLogos
-              ? <a target="_blank" rel="noopener noreferrer" href="http://mg.gov.br"><img className="logo" src="/footer/logo-mg.svg" /></a>
-              : null */}
           </div>
         </div>
       </footer>

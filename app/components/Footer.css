@@ -236,7 +236,8 @@
   /* credits */
   & .footer-credits {
     /* keep logos reasonably sized and centered if need on small screens */
-    max-width: 24rem;
+    width: 24rem;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
 

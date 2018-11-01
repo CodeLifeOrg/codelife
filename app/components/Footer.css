@@ -256,6 +256,11 @@
         margin-right: 4.999%;
       }
 
+      /* make innpact logo smaller */
+      &:last-of-type {
+        width: 26%;
+      }
+
       /* interactions */
       &:hover, &:focus {
         opacity: 1;

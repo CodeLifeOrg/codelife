@@ -8,6 +8,7 @@ static/uploads/*
 static/pj_images/*
 static/cb_images/*
 /index.js
+/env
 .env
 .envrc
 .DS_Store

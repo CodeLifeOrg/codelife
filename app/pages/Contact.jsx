@@ -11,7 +11,7 @@ class Contact extends Component {
 
   render() {
     const {t} = this.props;
-    const email = "contato@codelife.com";
+    const email = "codelife@codelife.com";
 
     return (
       <div className="content u-vertical-align-children">

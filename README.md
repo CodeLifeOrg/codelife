@@ -18,7 +18,7 @@ A React application based on `canon` that provides a framework for teaching high
 
 Codelife runs on a Postgres Database, already set up and running at codelife.com, so additional setup/configuration steps should not be required. Connecting to the database for development is accomplished by setting `canon` environment variables (below). This should be all you need to get started.
 
-Should it be necessary to recreate the database from scratch, its configuration is represented via the Sequelize models contained in the [db](/db) folder. A schema dump is also made available here.
+Should it be necessary to recreate the database from scratch, its configuration is represented via the Sequelize models contained in the [db](/db) folder. A [schema dump](https://storage.googleapis.com/codelife/db-schema/codelife_schema.sql) is also made available.
 
 ### Local Development Setup
 

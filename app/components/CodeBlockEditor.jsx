@@ -1,5 +1,6 @@
 import axios from "axios";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import React, {Component} from "react";
 import {translate} from "react-i18next";
 import PropTypes from "prop-types";
@@ -236,6 +237,16 @@ class CodeBlockEditor extends Component {
     }
   }
 
+  // close the codeblock dialog, from inside the codeblock editor
+  closeCodeblock() {
+    // callback function to set the state of testOpen to false
+    this.props.closeTest(false);
+    // remove `/show` from the URL
+    const pathname = this.props.pathname.pathname;
+    const url = pathname.replace("/show", "");
+    this.context.browserHistory.push(url);
+  }
+
   render() {
     const {t, island, readOnly} = this.props;
     const {activeTabId, execState, initialContent, rulejson, filename, originalFilename, saving, canPostToFacebook} = this.state;
@@ -291,6 +302,16 @@ class CodeBlockEditor extends Component {
                   confirmOnEnterKey={true}
                 />
               </h2>
+
+              <Link
+                className="codeblock-return-link font-xs"
+                to=""
+                tabIndex="1"
+                onClick={this.closeCodeblock.bind(this)}
+              >
+                <span className="pt-icon pt-icon-arrow-left" />
+                { t("Return to") } { island.name }
+              </Link>
 
               {/* actions title */}
               <h3 className="studio-subtitle font-xs u-margin-bottom-off">{t("Actions")}</h3>

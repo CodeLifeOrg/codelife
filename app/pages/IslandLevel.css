@@ -28,7 +28,7 @@ MAIN LAYOUT
     margin-bottom: var(--gutter-md);
 
     /* room for two */
-    @add-mixin max-sm {
+    @add-mixin max-lg {
       max-width: 50%; /* make sure there is indeed room for two */
       /* reset margin */
       margin-top: -2rem;
@@ -86,16 +86,6 @@ MAIN LAYOUT
           right: -1em;
         }
       }
-    }
-
-    /* gradually move up around the island on medium screens */
-    @add-mixin min-sm {
-      margin-top: -2%;
-      margin-bottom: -1%;
-    }
-
-    @add-mixin min-md {
-      margin-top: -4%;
     }
 
     /* switch to absolute positioning on large viewports */

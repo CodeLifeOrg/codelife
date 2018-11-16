@@ -62,8 +62,8 @@ class Share extends Component {
     // what gets retrieved - so the needs get BOTH a project and codeblock by the id provided.
     // Then check the URL pathname to understand which type this page is trying to load, and
     // grab and show that one (the other get ends up being unused)
+    if (!codeblockContent && !projectContent) return <div style={{height: "100vh", backgroundColor: "#74c3b7"}}><Error /></div>;
     const content = contentType === "codeblock" ? codeblockContent[0] : projectContent[0];
-
     if (!content) return <div style={{height: "100vh", backgroundColor: "#74c3b7"}}><Error /></div>;
 
     const {id} = content;

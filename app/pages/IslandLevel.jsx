@@ -38,9 +38,11 @@ class Level extends Component {
       testOpen: false,
       school: null,
       checkpointOpen: false,
+      checkpointEmailOpen: false,
       winOpen: false,
       canPostToFacebook: true,
       winMessage: "",
+      email: "",
       showMore: false
     };
   }
@@ -49,7 +51,7 @@ class Level extends Component {
    * On Mount, or Update (meaning the user switched islands) Load the necessary progress/codeblock data from the db.
    */
   loadFromDB() {
-    const {params} = this.props;
+    const {params, auth} = this.props;
     const {lid} = params;
     const uget = axios.get("/api/userprogress/mine");
     const cbget = axios.get(`/api/codeBlocks/all?lid=${lid}`);
@@ -73,6 +75,14 @@ class Level extends Component {
       // it in via Checkpoint.jsx.
       const checkpointOpen = profile.sid || currentIsland.id === "island-1" ? false : true;
 
+      const hasBeatenLevelOne = userProgress.map(up => up.level).includes("hello-world");
+      const isSocial = auth.user.twitter || auth.user.instagram || auth.user.facebook;
+      const emailBlank = !profile.email;
+      const declined = profile.email === "decline";
+      // If the user is a social user, has beaten level one , hasn't provided an email, and hasn't declined in the past, prompt them
+      const checkpointEmailOpen = hasBeatenLevelOne && isSocial && emailBlank && !declined;
+      // const checkpointEmailOpen = true; // debug
+
       const myCodeBlocks = [];
       const likedCodeBlocks = [];
       const unlikedCodeBlocks = [];
@@ -90,7 +100,7 @@ class Level extends Component {
         }
       }
 
-      this.setState({levels, checkpointOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false}, this.maybeTriggerCodeblock.bind(this));
+      this.setState({levels, checkpointOpen, checkpointEmailOpen, currentIsland, nextIsland, prevIsland, userProgress, myCodeBlocks, likedCodeBlocks, unlikedCodeBlocks, loading: false}, this.maybeTriggerCodeblock.bind(this));
     });
   }
 
@@ -288,6 +298,76 @@ class Level extends Component {
 
   }
 
+  skipCheckpointEmail() {
+    if (!this.props.auth.user.email) {
+      const payload = {email: "decline"};
+      axios.post("/api/user/email", payload).then(() => {
+        this.setState({checkpointEmailOpen: false});
+      });
+    }
+    else {
+      this.setState({checkpointEmailOpen: false});
+    }
+  }
+
+  saveCheckpointEmail() {
+    const payload = {email: this.state.email};
+    axios.post("/api/user/email", payload).then(() => {
+      this.setState({checkpointEmailOpen: false});
+    });
+  }
+
+  /**
+   * This was written early in the project, before the Component nesting of React was
+   * fully put to use. This method encapsulates the checkpoint popover - but this should
+   * obviously be moved to a component, not a method.
+   */
+  buildCheckpointEmailPopover() {
+    const {t} = this.props;
+    const {checkpointEmailOpen} = this.state;
+    // const checkpointEmailOpen = true; // debugging
+    return (
+      <Dialog
+        className="form-container checkpoint-form-container text-center"
+        isOpen={checkpointEmailOpen}
+        onClose={() => this.setState({checkpointEmailOpen: false})}
+        title={ t("Want to stay up to date with the latest CodeLife news?") }
+        iconName=""
+      >
+
+        {/* heading */}
+        <h2 className="checkpoint-heading u-text-center font-lg">{ t("Want to stay up to date with the latest CodeLife news?") }</h2>
+        
+
+        <div className="field-container">
+          {/* email field */}
+          <label htmlFor="checkpoint-email-input">{t("Subscribe with email")}</label>
+          <input id="checkpoint-email-input" className="field-input font-md" type="email" onChange={e => this.setState({email: e.target.value})}/>
+
+          {/* no thanks */}
+          <div className="checkbox-container">
+            <label className="pt-control pt-checkbox font-xs u-margin-bottom-off">
+              <input type="checkbox" onClick={this.skipCheckpointEmail.bind(this)} />
+              <span className="pt-control-indicator" />
+              {t("I'd rather not say")}
+            </label>
+          </div>
+
+
+          {/* save changes button */}
+          <button
+            className="pt-button pt-intent-primary font-md"
+            disabled={!this.state.email}
+            onClick={this.saveCheckpointEmail.bind(this)} >
+            {t("Submit")}
+          </button>
+          <h5 style={{marginTop: "10px"}} className="checkpoint-heading u-text-center font-sm">{ t("No spam! Don't worry we won't share your email and you can opt-out at any time") }</h5>
+        </div>
+      </Dialog>
+    );
+  }
+
+
   /**
    * This was written early in the project, before the Component nesting of React was
    * fully put to use. This method encapsulates the checkpoint popover - but this should
@@ -457,6 +537,8 @@ class Level extends Component {
             title={ title }
             handleSave={ this.handleSave.bind(this) }
             onFirstCompletion={ this.onFirstCompletion.bind(this) }
+            closeTest={testOpen => this.setState({testOpen})}
+            pathname={this.props.router.location}
           />
         </Dialog>
       </div>
@@ -495,7 +577,7 @@ class Level extends Component {
     const otherCodeBlockItemsAfterFold = [];
     let top = 3;
     for (const cb of otherCodeBlocks) {
-      const cbc = <CodeBlockCard theme={currentIsland.theme} icon={currentIsland.icon} codeBlock={cb} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
+      const cbc = <CodeBlockCard key={cb.id} theme={currentIsland.theme} icon={currentIsland.icon} codeBlock={cb} userProgress={userProgress} reportLike={this.reportLike.bind(this)}/>;
       top > 0 ? otherCodeBlockItemsBeforeFold.push(cbc) : otherCodeBlockItemsAfterFold.push(cbc);
       top--;
     }
@@ -569,6 +651,7 @@ class Level extends Component {
 
         { this.buildWinPopover() }
         { this.buildCheckpointPopover() }
+        { this.buildCheckpointEmailPopover() }
         <div className="island-image image">
           <h1 className="island-title font-xl" id="title">
             { currentIsland.icon ? <span className={ `pt-icon-large ${currentIsland.icon}` } /> : null }

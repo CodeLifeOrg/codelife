@@ -10,5 +10,7 @@ static/cb_images/*
 /index.js
 /env
 .env
+/venv
+.env
 .envrc
 .DS_Store

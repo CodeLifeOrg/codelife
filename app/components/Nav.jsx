@@ -138,7 +138,7 @@ class Nav extends Component {
     window.location.href = "/auth/logout";
     setTimeout(() => {
       window.location.href = "/";
-    }, 1000);
+    }, 100);
   }
 
   reportClick() {

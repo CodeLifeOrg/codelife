@@ -137,7 +137,7 @@ class Statistics extends Component {
     return (
       <div id="statistics" className="statistics">
 
-        <h1 className="u-text-center u-margin-bottom-off">{t("Statistics")}<a title="Mais estatísticas" href="http://dashboard.codelife.com/" target="_blank"> +</a></h1>
+        <h1 className="u-text-center u-margin-bottom-off">{t("Statistics")}</h1>
 
         <div className="admin-sub-tabs-container">
           <Tabs2 className="admin-sub-tabs"
@@ -148,6 +148,8 @@ class Statistics extends Component {
             <Tab2 id="last-3" className="admin-sub-tab" title={t("Last 3 Days")} />
             <Tab2 id="last-7" className="admin-sub-tab" title={t("Last 7 Days")} />
             <Tab2 id="last-999999" className="admin-sub-tab" title={t("Forever")} />
+            <Tab2 className="admin-sub-tab"><a title="Estatísticas avançadas" href="http://dashboard.codelife.com/" target="_blank"> +MAIS</a></Tab2>
+
           </Tabs2>
         </div>
 

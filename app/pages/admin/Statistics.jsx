@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
 import {Link} from "react-router";
-import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2} from "@blueprintjs/core";
+import {NonIdealState, Popover, PopoverInteractionKind, Tab2, Tabs2, Button} from "@blueprintjs/core";
 import {merge} from "d3plus-common";
 import {Treemap} from "d3plus-react";
 import {nest} from "d3-collection";
@@ -138,7 +138,7 @@ class Statistics extends Component {
       <div id="statistics" className="statistics">
 
         <h1 className="u-text-center u-margin-bottom-off">{t("Statistics")}</h1>
-
+      
         <div className="admin-sub-tabs-container">
           <Tabs2 className="admin-sub-tabs"
             onChange={this.handleTabChange.bind(this)}
@@ -148,8 +148,7 @@ class Statistics extends Component {
             <Tab2 id="last-3" className="admin-sub-tab" title={t("Last 3 Days")} />
             <Tab2 id="last-7" className="admin-sub-tab" title={t("Last 7 Days")} />
             <Tab2 id="last-999999" className="admin-sub-tab" title={t("Forever")} />
-            <Tab2 className="admin-sub-tab"><a title="Estatísticas avançadas" href="http://dashboard.codelife.com/" target="_blank"> +MAIS</a></Tab2>
-
+            <Tab2 className="admin-sub-tab"><a className="color-link-dashboard" target="_blank" title="Estatísticas avançadas" href="http://dashboard.codelife.com/">+Mais</a></Tab2>
           </Tabs2>
         </div>
 

@@ -2,7 +2,6 @@
 
 /* statistics page */
 .statistics {
-
   /* admin only */
   & .totals {
     margin: var(--gutter-sm) 0 var(--gutter-lg) 0;
@@ -39,7 +38,6 @@
     }
   }
 }
-
 
 /* the table */
 .statistics-table-container {
@@ -118,4 +116,14 @@
   @add-mixin min-md {
     table-layout: fixed;
   }
+}
+
+/* link de redirect para new panel of statistics */
+.color-link-dashboard {
+  color: #0f807e;
+}
+
+.color-link-dashboard:hover {
+  color: #3bd9cc;
+  text-decoration: none;
 }

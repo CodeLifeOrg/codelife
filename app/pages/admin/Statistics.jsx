@@ -137,7 +137,7 @@ class Statistics extends Component {
     return (
       <div id="statistics" className="statistics">
 
-        <h1 className="u-text-center u-margin-bottom-off">{t("Statistics")}</h1>
+        <h1 className="u-text-center u-margin-bottom-off">{t("Statistics")}<a title="Mais estatísticas" href="http://dashboard.codelife.com/" target="_blank"> +</a></h1>
 
         <div className="admin-sub-tabs-container">
           <Tabs2 className="admin-sub-tabs"

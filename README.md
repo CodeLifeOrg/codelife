@@ -107,7 +107,11 @@ The landing page makes use of [loop-protect](https://github.com/jsbin/loop-prote
 
 ### XVFB
 
-Codelife makes use of the `electron-screenshot-service` module, which requires that `xvfb` be installed on the ubuntu server. 
+Codelife makes use of the `electron-screenshot-service` module, which requires that `xvfb` along with a few helper packages be installed system wide on the ubuntu server.
+
+```
+sudo apt-get install -y xorg libgtk2.0-0 libgconf-2-4 libasound2 libxtst6 libxss1 libnss3 xvfb
+```
 
 ### Search Trigrams
 

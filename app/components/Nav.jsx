@@ -134,7 +134,8 @@ class Nav extends Component {
    * new page. This callback is needed so the Browser's wrapping component (this one) can hide the Browser.
    */
 
-  reportTime() {
+  /* logout function */
+  handleLogout() {
     window.location.href = "/auth/logout";
     setTimeout(() => {
       window.location.href = "/";
@@ -359,7 +360,7 @@ class Nav extends Component {
                 {/* log out */}
                 <a
                   className="link font-sm pt-popover-dismiss"
-                  onClick={() => this.reportTime()}
+                  onClick={() => this.handleLogout()}
                 >
                   <span className="link-icon pt-icon-standard pt-icon-log-out" />
                   {t("Log out")}

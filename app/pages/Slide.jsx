@@ -364,7 +364,7 @@ class Slide extends Component {
           <div className="slide-footer">
             { prevSlug
               ? <Link onClick={this.handlePreviousStep} className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
-              : <div classame="pt-button pt-disabled">{t("Previous")}</div>
+              : <div className="pt-button pt-disabled">{t("Previous")}</div>
             }
             { nextSlug
               ? this.state.blocked

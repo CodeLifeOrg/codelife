@@ -1,5 +1,5 @@
 @import '../mixins.css';
-
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
 /* debugging */
 /*
 .slide-outer   { border: var(--gutter-xxs) solid blue; }
@@ -517,12 +517,33 @@
   }
 }
 
-
-
 /* slide completion */
 .confetti {
   position: absolute;
   margin: 0 auto;
   top: 0;
   z-index: 1000;
+}
+
+.bar-center{
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+/* filler to progress bar */
+.progress-bar {
+  background-color: #ccc;
+  position: relative;
+  height: 15px;
+  width: 2100px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+}
+
+.filler {
+  background: #0F807E;
+  height: 100%;
+  border-radius: inherit;
+  transition: width .2s ease-in;
 }

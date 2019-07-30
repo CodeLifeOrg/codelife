@@ -52,14 +52,34 @@ class Slide extends Component {
       latestSlideCompleted: 0,
       islandComplete: false,
       mounted: false,
-      done: false
+      done: false,
+      percentage: 0
     };
+    this.handleNextStep = this.handleNextStep.bind(this);
+    this.handlePreviousStep = this.handlePreviousStep.bind(this);
+  }
+
+  /**
+   * functions to add and subtract the progress bar
+   */
+  handlePreviousStep() {
+    const {percentage, slides} = this.state;
+    const result = 100 / (slides.length - 1);
+    const finalResult = percentage - result; 
+    this.setState({percentage: finalResult});
+  }
+  handleNextStep() {
+    const {percentage, slides} = this.state;
+    const result = 100 / (slides.length - 1);
+    const finalResult = percentage + result;
+    this.setState({percentage: finalResult});
   }
 
   /**
    * InputCode and Quiz slides are "blockers" in that they do not allow progress until a correct
    * answer is provided. This function is called when the user beats a slide.
    */
+  
   unblock() {
     const {slides, currentSlide, latestSlideCompleted} = this.state;
     const i = slides.indexOf(currentSlide);
@@ -87,6 +107,7 @@ class Slide extends Component {
    * may have beaten this lesson (db write), reached a blocking slide, or be changing levels entirely
    */
   componentDidUpdate() {
+    
     // The level id (mlid) and slide id (sid) come in via URL params
     const {mlid, sid} = this.props.params;
     const {user} = this.props.auth;
@@ -150,9 +171,7 @@ class Slide extends Component {
    */
   componentDidMount() {
     this.setState({mounted: true});
-
     this.hitDB.bind(this)();
-
     document.addEventListener("keypress", this.handleKey.bind(this));
   }
 
@@ -250,6 +269,14 @@ class Slide extends Component {
   }
 
   render() {
+
+    /* filler to progress bar */
+    const ProgressBar = props => 
+      <div className="progress-bar">
+        <Filler percentage={props.percentage} />
+      </div>;
+    const Filler = props => <div className="filler" style={{width: `${props.percentage}%`}} />;
+
     const {auth, t} = this.props;
     const {lid, mlid} = this.props.params;
     const {currentSlide, slides, levels, currentLevel, currentIsland, showDiscussion} = this.state;
@@ -313,7 +340,6 @@ class Slide extends Component {
                   : null }
               </h1>
               : null }
-
             <Link className="return-link" to={`/island/${lid}`}>
               <span className="font-sm u-hide-below-sm">
                 { t("Return to") } { currentIsland.name }
@@ -321,7 +347,10 @@ class Slide extends Component {
               <span className="pt-icon pt-icon-cross" />
             </Link>
           </div>
-
+          {/* component progress bar */}
+          <div className="bar-center">
+            <ProgressBar percentage={this.state.percentage} />
+          </div>
           {/*
           This may be confusing, it is the only place in codelife where the data is
           DIRECTLY prop'd into the component as opposed to something like slideData=currentSlide.
@@ -331,19 +360,20 @@ class Slide extends Component {
             island={currentIsland.theme}
             unblock={this.unblock.bind(this)}
             {...currentSlide} />
-
+         
           <div className="slide-footer">
             { prevSlug
-              ? <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
+              ? <Link onClick={this.handlePreviousStep} className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${prevSlug}`}>{t("Previous")}</Link>
               : <div className="pt-button pt-disabled">{t("Previous")}</div>
             }
             { nextSlug
               ? this.state.blocked
                 ? <div className="pt-button pt-disabled">{t("Next")}</div>
-                : <Link className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
+                : <Link onClick={this.handleNextStep} className="pt-button pt-intent-primary" to={`/island/${lid}/${mlid}/${nextSlug}`}>{t("Next")}</Link>
               : nextLevel
                 ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
                 : <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}`}>{`${t("Return to")} ${currentIsland.name}!`}</Link>
+
               /*
               : nextLevel
                 ? <Link className="pt-button pt-intent-primary editor-link" to={`/island/${lid}/${nextLevel.id}`}>{t("Next Level")}</Link>
@@ -361,7 +391,6 @@ class Slide extends Component {
               </Link>
             </div>
             */
-
           }
         </div>
         {/* discussion */}

@@ -23,15 +23,20 @@ import {
 
 import "./Nav.css";
 
-import {Popover, PopoverInteractionKind, Position, Dialog, Intent, Toaster} from "@blueprintjs/core";
-
+import {
+  Popover,
+  PopoverInteractionKind,
+  Position,
+  Dialog,
+  Intent,
+  Toaster
+} from "@blueprintjs/core";
 
 /**
  * Nav Component is the header of the page - containing login controls and the Island Browser
  */
 
 class Nav extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +58,6 @@ class Nav extends Component {
     const timeout = 2500;
 
     if (!auth.loading) {
-
       if (auth.error) {
         this.setState({isLoginOpen: true});
       }
@@ -74,14 +78,29 @@ class Nav extends Component {
         });
       }
       else if (auth.msg === RESET_SEND_SUCCESS) {
-        toast.show({timeout, iconName: "inbox", intent: Intent.SUCCESS, message: t("Reset.actions.RESET_SEND_SUCCESS", {email})});
+        toast.show({
+          timeout,
+          iconName: "inbox",
+          intent: Intent.SUCCESS,
+          message: t("Reset.actions.RESET_SEND_SUCCESS", {email})
+        });
       }
       else if (auth.error === RESET_SEND_FAILURE) {
-        toast.show({timeout, iconName: "error", intent: Intent.DANGER, message: t("Reset.actions.RESET_SEND_FAILURE")});
+        toast.show({
+          timeout,
+          iconName: "error",
+          intent: Intent.DANGER,
+          message: t("Reset.actions.RESET_SEND_FAILURE")
+        });
       }
       else if (auth.error === SIGNUP_EXISTS) {
         this.setState({formMode: "signup"});
-        toast.show({timeout, iconName: "blocked-person", intent: Intent.WARNING, message: t("SignUp.error.Exists")});
+        toast.show({
+          timeout,
+          iconName: "blocked-person",
+          intent: Intent.WARNING,
+          message: t("SignUp.error.Exists")
+        });
       }
       else if (!auth.error) {
         if (auth.msg === "LOGIN_SUCCESS") {
@@ -102,13 +121,27 @@ class Nav extends Component {
   */
   toggleBrowser() {
     this.setState({showBrowser: !this.state.showBrowser});
-    if (this.browser) this.browser.getWrappedInstance().getWrappedInstance().reloadProgress();
+    if (this.browser) {
+      this.browser
+        .getWrappedInstance()
+        .getWrappedInstance()
+        .reloadProgress();
+    }
   }
 
   /**
    * When the user clicks an island/location in the embedded Browser component, they have chosen to navigate to a
    * new page. This callback is needed so the Browser's wrapping component (this one) can hide the Browser.
    */
+
+  /* logout function */
+  handleLogout() {
+    window.location.href = "/auth/logout";
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 100);
+  }
+
   reportClick() {
     this.setState({showBrowser: false});
   }
@@ -132,34 +165,66 @@ class Nav extends Component {
     else {
       if (window) window.location = path;
     }
-
   }
 
   render() {
-    const {auth, currentPath, isHome, linkObj, serverLocation, t} = this.props;
+    const {
+      auth,
+      currentPath,
+      isHome,
+      linkObj,
+      serverLocation,
+      t
+    } = this.props;
     const {isLoginOpen} = this.state;
     const {protocol, host} = serverLocation;
-    const hostSansSub = host.replace("pt.", "").replace("en.", "").replace("www.", "");
+    const hostSansSub = host
+      .replace("pt.", "")
+      .replace("en.", "")
+      .replace("www.", "");
 
     // language select links
     const languageLinks = [
-      {id: 1, title: t("English"), shortTitle: "En", link: `${protocol}//en.${hostSansSub}${currentPath}`},
-      {id: 2, title: t("Portuguese"), shortTitle: "Pt", link: `${protocol}//pt.${hostSansSub}${currentPath}`}
+      {
+        id: 1,
+        title: t("English"),
+        shortTitle: "En",
+        link: `${protocol}//en.${hostSansSub}${currentPath}`
+      },
+      {
+        id: 2,
+        title: t("Portuguese"),
+        shortTitle: "Pt",
+        link: `${protocol}//pt.${hostSansSub}${currentPath}`
+      }
     ];
-
 
     // social links
     const socialLinks = [
-      {id: 1, title: "facebook", link: "https://www.facebook.com/CodeLifeBR/"},
-      {id: 2, title: "youtube", link: "https://www.youtube.com/channel/UCR6iTxyV9jdSy21eqS1Ovyg"},
-      {id: 3, title: "instagram", link: "https://www.instagram.com/codelifebr/"}
+      {
+        id: 1,
+        title: "facebook",
+        link: "https://www.facebook.com/CodeLifeBR/"
+      },
+      {
+        id: 2,
+        title: "youtube",
+        link: "https://www.youtube.com/channel/UCR6iTxyV9jdSy21eqS1Ovyg"
+      },
+      {
+        id: 3,
+        title: "instagram",
+        link: "https://www.instagram.com/codelifebr/"
+      }
     ];
 
     // social links
-    const socialLinkItems = socialLinks.map(socialLink =>
+    const socialLinkItems = socialLinks.map(socialLink => 
       <li className="nav-social-item" key={socialLink.id}>
         <a
-          className={`nav-social-link font-sm ${socialLink.title}-nav-social-link`}
+          className={`nav-social-link font-sm ${
+            socialLink.title
+          }-nav-social-link`}
           href={socialLink.link}
           target="_blank"
           rel="noopener noreferrer"
@@ -167,19 +232,21 @@ class Nav extends Component {
           aria-hidden="true"
         >
           <span className="u-visually-hidden">{t(socialLink.title)}</span>
-          { socialLink.title === "facebook" && <FacebookIcon /> }
-          { socialLink.title === "youtube" && <YoutubeIcon /> }
-          { socialLink.title === "instagram" && <InstagramIcon /> }
+          {socialLink.title === "facebook" && <FacebookIcon />}
+          {socialLink.title === "youtube" && <YoutubeIcon />}
+          {socialLink.title === "instagram" && <InstagramIcon />}
         </a>
       </li>
     );
 
     return (
       <div className="nav" id="nav">
-
         {/* logo */}
         <div className="logo">
-          <Link className={isHome ? "logo-link is-active" : "logo-link"} to={"/"}>
+          <Link
+            className={isHome ? "logo-link is-active" : "logo-link"}
+            to={"/"}
+          >
             {/* <span className="logo-tag font-xs">Beta</span> */}
             <span className="logo-text">
               <Logo />
@@ -188,13 +255,13 @@ class Nav extends Component {
         </div>
 
         {/* site-wide search */}
-        { auth.user ? <Search linkObj={linkObj} scope="sitewide" /> : null }
+        {auth.user ? <Search linkObj={linkObj} scope="sitewide" /> : null}
 
-        { auth.user
+        {auth.user 
           ? <div className="link-list font-sm">
             <Link className="link with-toggle" to="/island" id="map-nav-link">
               <span className="link-icon pt-icon-standard pt-icon-map" />
-              <span className="link-text u-hide-below-sm">{ t("Map") }</span>
+              <span className="link-text u-hide-below-sm">{t("Map")}</span>
             </Link>
             <Popover
               interactionKind={PopoverInteractionKind.CLICK}
@@ -209,25 +276,38 @@ class Nav extends Component {
                 aria-hidden="true"
                 aria-labelledby="map-nav-link"
               >
-                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down"></span>
+                <span className="toggle-icon pt-icon-standard pt-icon-chevron-down" />
               </a>
               <div className="dropdown-list browser-list" id="browser">
-                <Browser ref={b => this.browser = b} linkObj={linkObj} reportClick={this.reportClick.bind(this)}/>
+                <Browser
+                  ref={b => this.browser = b}
+                  linkObj={linkObj}
+                  reportClick={this.reportClick.bind(this)}
+                />
               </div>
             </Popover>
 
             {/* my projects */}
-            <Link className="link projects-link" to={`/projects/${auth.user.username}`}>
+            <Link
+              className="link projects-link"
+              to={`/projects/${auth.user.username}`}
+            >
               <span className="link-icon pt-icon-standard pt-icon-applications" />
-              <span className="link-text u-hide-below-sm">{ t("My projects") }</span>
+              <span className="link-text u-hide-below-sm">
+                {t("My projects")}
+              </span>
             </Link>
 
             {/* account */}
-            <Link className="link with-toggle" to={ `/profile/${ auth.user.username }` } id="account-nav-link">
+            <Link
+              className="link with-toggle"
+              to={`/profile/${auth.user.username}`}
+              id="account-nav-link"
+            >
               <span className="link-icon pt-icon-standard pt-icon-user" />
               <span className="link-text u-hide-below-sm">
                 <span className="limit-link-text-width">
-                  { auth.user.username }
+                  {auth.user.username}
                 </span>
               </span>
             </Link>
@@ -252,24 +332,38 @@ class Nav extends Component {
               {/* dropdown links */}
               <div className="link-dropdown">
                 {/* my profile */}
-                <Link className="link font-sm pt-popover-dismiss" to={ `/profile/${ auth.user.username }` } autoFocus>
+                <Link
+                  className="link font-sm pt-popover-dismiss"
+                  to={`/profile/${auth.user.username}`}
+                  autoFocus
+                >
                   <span className="link-icon pt-icon-standard pt-icon-id-number" />
-                  { t("My profile") }
+                  {t("My profile")}
                 </Link>
                 {/* my projects */}
-                <Link className="link font-sm pt-popover-dismiss" to={`/projects/${auth.user.username}`}>
+                <Link
+                  className="link font-sm pt-popover-dismiss"
+                  to={`/projects/${auth.user.username}`}
+                >
                   <span className="link-icon pt-icon-standard pt-icon-applications" />
-                  <span className="link-text u-hide-below-sm">{ t("My projects") }</span>
+                  <span className="link-text u-hide-below-sm">
+                    {t("My projects")}
+                  </span>
                 </Link>
                 {/* admin link */}
-                { auth.user.role > 0 ? <Link className="link font-sm pt-popover-dismiss" to="/admin">
-                  <span className="link-icon pt-icon-standard pt-icon-series-configuration" />
-                  { t("Admin") }
-                </Link> : null }
+                {auth.user.role > 0 
+                  ? <Link className="link font-sm pt-popover-dismiss" to="/admin">
+                    <span className="link-icon pt-icon-standard pt-icon-series-configuration" />
+                    {t("Admin")}
+                  </Link>
+                  : null}
                 {/* log out */}
-                <a className="link font-sm pt-popover-dismiss" href="/auth/logout">
+                <a
+                  className="link font-sm pt-popover-dismiss"
+                  onClick={() => this.handleLogout()}
+                >
                   <span className="link-icon pt-icon-standard pt-icon-log-out" />
-                  { t("Log out") }
+                  {t("Log out")}
                 </a>
               </div>
             </Popover>
@@ -296,25 +390,34 @@ class Nav extends Component {
             </a>
             {/* social links */}
             <ul className="nav-social-list u-list-reset u-hide-below-lg">
-              { socialLinkItems }
+              {socialLinkItems}
             </ul>
           </div>
-          : <div className="link-list font-sm">
-
+          :           <div className="link-list font-sm">
             {/* login | signup */}
-            <button className="link login-link u-unbutton" onClick={this.authForm.bind(this, "login")}>
+            <button
+              className="link login-link u-unbutton"
+              onClick={this.authForm.bind(this, "login")}
+            >
               <span className="link-icon pt-icon-standard pt-icon-log-in" />
-              <span className="link-text u-hide-below-sm">{ t("LogIn.Log_in") }</span>
+              <span className="link-text u-hide-below-sm">
+                {t("LogIn.Log_in")}
+              </span>
             </button>
-            <button className="link signup-link u-unbutton" onClick={this.authForm.bind(this, "signup")}>
+            <button
+              className="link signup-link u-unbutton"
+              onClick={this.authForm.bind(this, "signup")}
+            >
               <span className="link-icon pt-icon-standard pt-icon-new-person" />
-              <span className="link-text u-hide-below-sm">{ t("SignUp.Sign Up") }</span>
+              <span className="link-text u-hide-below-sm">
+                {t("SignUp.Sign Up")}
+              </span>
             </button>
 
             {/* about */}
             <Link className="link" to="/about">
               <span className="link-icon pt-icon-standard pt-icon-help" />
-              <span className="link-text u-hide-below-sm">{ t("About") }</span>
+              <span className="link-text u-hide-below-sm">{t("About")}</span>
             </Link>
 
             {/* language select */}
@@ -339,9 +442,10 @@ class Nav extends Component {
             </a>
             {/* social links */}
             <ul className="nav-social-list u-list-reset u-hide-below-md">
-              { socialLinkItems }
+              {socialLinkItems}
             </ul>
-          </div> }
+          </div>
+        }
         <Dialog
           className="form-container"
           iconName="inbox"
@@ -380,6 +484,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-Nav = connect(mapStateToProps, mapDispatchToProps)(Nav);
+Nav = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Nav);
 Nav = translate()(Nav);
 export default Nav;

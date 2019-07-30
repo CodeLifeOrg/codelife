@@ -17,3 +17,4 @@ static/cb_images/*
 /idea
 /idea/*
 .vscode
+yarn.lock

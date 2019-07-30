@@ -12,3 +12,4 @@ static/cb_images/*
 .env
 .envrc
 .DS_Store
+.idea/

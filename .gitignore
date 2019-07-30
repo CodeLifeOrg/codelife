@@ -13,3 +13,4 @@ static/cb_images/*
 .envrc
 .DS_Store
 .idea/
+.idea/*

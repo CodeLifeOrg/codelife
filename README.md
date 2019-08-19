@@ -151,11 +151,11 @@ Thanks for being interested on making this package better. We encourage everyone
 
 ### Contribution Guidelines
 
-Take a moment to read about our [Contribution Guidelines](https://github.com/CodeLifeOrg/codelife/edit/master/CONTRIBUTING.md) so you can understand how to submit an issue, commit and create pull requests.
+Take a moment to read about our [Contribution Guidelines](https://github.com/CodeLifeOrg/codelife/blob/master/CONTRIBUTING.md) so you can understand how to submit an issue, commit and create pull requests.
 
 ### Code of Conduct
 
-We expect you to follow our [Code of Conduct](https://github.com/CodeLifeOrg/codelife/edit/master/CODE_OF_CONDUCT.md). You can read it to understand what kind of behaviour will and will not be tolerated.
+We expect you to follow our [Code of Conduct](https://github.com/CodeLifeOrg/codelife/blob/master/CODE_OF_CONDUCT.md). You can read it to understand what kind of behaviour will and will not be tolerated.
 
 
 ## License

@@ -145,6 +145,19 @@ CREATE INDEX projects_on_name_idx ON projects USING GIN(name gin_trgm_ops);
 
 See also the list of [contributors](https://github.com/datawheel/codelife/graphs/contributors) who participated in this project.
 
+## Contributing
+
+Thanks for being interested on making this package better. We encourage everyone to help improving this project with some new features, bug fixes and performance issues. Please take a little bit of your time to read our guides, so this process can be faster and easier.
+
+### Contribution Guidelines
+
+Take a moment to read about our [Contribution Guidelines](https://github.com/CodeLifeOrg/codelife/edit/master/CONTRIBUTING.md) so you can understand how to submit an issue, commit and create pull requests.
+
+### Code of Conduct
+
+We expect you to follow our [Code of Conduct](https://github.com/CodeLifeOrg/codelife/edit/master/CODE_OF_CONDUCT.md). You can read it to understand what kind of behaviour will and will not be tolerated.
+
+
 ## License
 
 This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details

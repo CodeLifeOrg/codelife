@@ -134,7 +134,7 @@ To ensure that a commit is valid, easy to read, and changelog-ready, we have a h
 
 - The header (first line) is the only mandatory part of the commit message;
 - The body and footer are both optional but its use is highly encouraged;
-- The header should contains:
+- The header should contain:
   - A type:
     - Must be lowercase;
     - Must be one of:
@@ -175,7 +175,7 @@ The first line of a commit message serves as a summary.  When displayed
 on the web, it's often styled as a heading, and in emails, it's
 typically used as the subject. As such, you should specify a "type" and
 a "subject". The type must be lowercase and one of: chore, ci, docs,
-feat, fix, test. For the subject you'll need capitalize it and
+feat, fix, test. For the subject you'll need to capitalize it and
 omit any trailing punctuation. Aim for about 50 characters, give or
 take, otherwise it may be painfully truncated in some contexts. Write
 it, along with the rest of your message, in the present tense and

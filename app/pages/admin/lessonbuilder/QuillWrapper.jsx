@@ -59,7 +59,7 @@ class QuillWrapper extends Component {
       require("react-quill/dist/quill.snow.css");
       const modules = {
         toolbar: [
-          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link"],
+          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link", "image"],
           [{list: "ordered"}, {list: "bullet"}],
           ["clean"]
         ],

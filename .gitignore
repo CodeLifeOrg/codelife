@@ -14,3 +14,11 @@ static/cb_images/*
 .env
 .envrc
 .DS_Store
+.idea/
+.idea/*
+/idea
+/idea/*
+.vscode
+yarn.lock
+package-lock.json
+yarn-error.log

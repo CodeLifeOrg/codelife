@@ -226,8 +226,8 @@ class Footer extends Component {
 
               <div className="footer-logo-img">
                 <CompetIcon />
-              </div>
                 <span className="font-sm"> COMPET - Pet da Engenharia de Computação do Cefet - MG</span>
+              </div>
             </a>
             {/* additional links */}
             <div className="footer-credits">

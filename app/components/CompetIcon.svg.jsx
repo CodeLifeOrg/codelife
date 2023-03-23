@@ -2,22 +2,22 @@ import * as React from "react";
 const SVGComponent = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={300}
-    height=""
-    viewBox="0 0 640 480"
+    width={800}
+    height={800}
+    viewBox="0 0 800 800"
     xmlSpace="preserve"
     {...props}
   >
     <path
       style={{
-        stroke: "#069869",
+        stroke: "#398956",
         strokeWidth: 2,
         strokeDasharray: "none",
         strokeLinecap: "butt",
         strokeDashoffset: 0,
         strokeLinejoin: "miter",
         strokeMiterlimit: 4,
-        fill: "#069869",
+        fill: "#398956",
         fillRule: "nonzero",
         opacity: 1,
       }}
@@ -27,14 +27,14 @@ const SVGComponent = (props) => (
     />
     <path
       style={{
-        stroke: "#000",
+        stroke: "#fff",
         strokeWidth: 2,
         strokeDasharray: "none",
         strokeLinecap: "butt",
         strokeDashoffset: 0,
         strokeLinejoin: "miter",
         strokeMiterlimit: 4,
-        fill: "#000",
+        fill: "#fff",
         fillRule: "nonzero",
         opacity: 1,
       }}
@@ -45,7 +45,7 @@ const SVGComponent = (props) => (
     />
     <path
       style={{
-        stroke: "#000",
+        stroke: "#fff",
         strokeWidth: 7,
         strokeDasharray: "none",
         strokeLinecap: "butt",

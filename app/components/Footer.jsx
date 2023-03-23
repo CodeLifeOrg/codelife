@@ -224,8 +224,12 @@ class Footer extends Component {
               rel="noopener noreferrer"
               href="https://compet.vercel.app">
               <span className="footer-logo-text font-sm">{t("Built by ")}</span>
-              <CompetIcon />
-              <span> COMPET - Pet da Engenharia de Computação do Cefet - MG</span>            </a>
+
+              <div>
+                <CompetIcon />
+                <span> COMPET - Pet da Engenharia de Computação do Cefet - MG</span>
+              </div>
+            </a>
             {/* additional links */}
             <div className="footer-credits">
               {/* <p className="font-xs">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</p> */}

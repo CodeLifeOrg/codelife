@@ -224,10 +224,10 @@ class Footer extends Component {
               rel="noopener noreferrer"
               href="https://compet.vercel.app">
 
-              <div style={{width:"128px"}}>
+              <div className="footer-logo-img">
                 <CompetIcon />
-                <span> COMPET - Pet da Engenharia de Computação do Cefet - MG</span>
               </div>
+                <span> COMPET - Pet da Engenharia de Computação do Cefet - MG</span>
             </a>
             {/* additional links */}
             <div className="footer-credits">

@@ -27,7 +27,7 @@ const SVGComponent = (props) => (
     />
     <path
       style={{
-        stroke: "#069869",
+        stroke: "#000",
         strokeWidth: 2,
         strokeDasharray: "none",
         strokeLinecap: "butt",

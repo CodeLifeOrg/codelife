@@ -1,66 +1,11 @@
 import * as React from "react";
 const SVGComponent = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={800}
-    height={800}
-    viewBox="0 0 800 800"
-    xmlSpace="preserve"
-    {...props}
-  >
-    <path
-      style={{
-        stroke: "#398956",
-        strokeWidth: 2,
-        strokeDasharray: "none",
-        strokeLinecap: "butt",
-        strokeDashoffset: 0,
-        strokeLinejoin: "miter",
-        strokeMiterlimit: 4,
-        fill: "#398956",
-        fillRule: "nonzero",
-        opacity: 1,
-      }}
-      transform="translate(1 1)"
-      d="m312.4 268.6-18.5-75 66.5 40.5-23 6 17.5 24-10.5 10.5-20-26.5-12 20.5"
-      strokeLinecap="round"
-    />
-    <path
-      style={{
-        stroke: "#fff",
-        strokeWidth: 2,
-        strokeDasharray: "none",
-        strokeLinecap: "butt",
-        strokeDashoffset: 0,
-        strokeLinejoin: "miter",
-        strokeMiterlimit: 4,
-        fill: "#fff",
-        fillRule: "nonzero",
-        opacity: 1,
-      }}
-      vectorEffect="non-scaling-stroke"
-      transform="translate(1 1)"
-      d="m341.9 185.1-11-3.5-11-2-13.5 1-9 3.5-15 11.5-9.5 12-6.5 18.5 1 17 3 12.5 6.5 10 5.5 5-5.5-5 16 15.5 15.5 6 12 .5 15-1 7.5-1.5-.5 28-5.5 24-33.5.5-2.5-13.5-3-9-10.5-7-9.5-1.5-15.5 9.5-5.5 2-21-20.5 1.5-7 9-12 2-3-7.5-19-17-5-7-2-2.5-14.5 2-19 24-4.5 7.5-17.5-1-5-10.5-14.5v-6l20.5-19 7-1 16 13.5 10-6 9.5-4.5 3.5-18.5 5-3.5h25l7.5 4.5 1.5 51"
-      strokeLinecap="round"
-    />
-    <path
-      style={{
-        stroke: "#fff",
-        strokeWidth: 7,
-        strokeDasharray: "none",
-        strokeLinecap: "butt",
-        strokeDashoffset: 0,
-        strokeLinejoin: "miter",
-        strokeMiterlimit: 4,
-        fill: "none",
-        fillRule: "nonzero",
-        opacity: 1,
-      }}
-      vectorEffect="non-scaling-stroke"
-      transform="matrix(1.07 0 0 1.02 -27.315 -4.212)"
-      d="m341.9 157.6 4.5-1.5 15.5 7 20.5-13 22 21.5-.5 3.5-9 10.5-1.5 13 8.5 16.5 19 2.5 4.5 6.5v25l-5 3.5-17.5 2.5-8.5 16.5 3 10.5 9 12.5-2 5-20.5 20.5h-7l-7.5-8-9.5-2.5-17 4.5"
-      strokeLinecap="round"
-    />
+  <svg width="218" height="211" viewBox="0 0 218 211" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M99.4 140.6L80.9 65.6L147.4 106.1L124.4 112.1L141.9 136.1L131.4 146.6L111.4 120.1L99.4 140.6Z" fill="#398956" stroke="#398956" stroke-width="2" stroke-linecap="round" />
+    <path d="M128.9 57.1L117.9 53.6L106.9 51.6L93.4 52.6L84.4 56.1L69.4 67.6L59.9 79.6L53.4 98.1L54.4 115.1L57.4 127.6C61.7333 134.267 63.9 137.6 63.9 137.6C67.5667 140.933 69.4 142.6 69.4 142.6L63.9 137.6L79.9 153.1L95.4 159.1L107.4 159.6L122.4 158.6L129.9 157.1L129.4 185.1L123.9 209.1L90.4 209.6L87.9 196.1L84.9 187.1L74.4 180.1L64.9 178.6L49.4 188.1L43.9 190.1L22.9 169.6L24.4 162.6L33.4 150.6L35.4 147.6L27.9 128.6L10.9 123.6L3.89999 121.6L1.39999 107.1L3.39999 88.1L27.4 83.6L34.9 66.1L33.9 61.1L23.4 46.6V40.6L43.9 21.6L50.9 20.6L66.9 34.1L76.9 28.1L86.4 23.6L89.9 5.10001L94.9 1.60001H119.9L127.4 6.10001L128.9 57.1Z" fill="white" />
+    <path d="M63.9 137.6C63.9 137.6 61.7333 134.267 57.4 127.6L54.4 115.1L53.4 98.1L59.9 79.6L69.4 67.6L84.4 56.1L93.4 52.6L106.9 51.6L117.9 53.6L128.9 57.1L127.4 6.10001L119.9 1.60001H94.9L89.9 5.10001L86.4 23.6L76.9 28.1L66.9 34.1L50.9 20.6L43.9 21.6L23.4 40.6V46.6L33.9 61.1L34.9 66.1L27.4 83.6L3.39999 88.1L1.39999 107.1L3.89999 121.6L10.9 123.6L27.9 128.6L35.4 147.6L33.4 150.6L24.4 162.6L22.9 169.6L43.9 190.1L49.4 188.1L64.9 178.6L74.4 180.1L84.9 187.1L87.9 196.1L90.4 209.6L123.9 209.1L129.4 185.1L129.9 157.1L122.4 158.6L107.4 159.6L95.4 159.1L79.9 153.1L63.9 137.6ZM63.9 137.6C67.5667 140.933 69.4 142.6 69.4 142.6L63.9 137.6Z" stroke="white" stroke-width="2" stroke-linecap="round" />
+    <path d="M124.517 27.54L129.332 26.01L145.917 33.15L167.852 19.89L191.392 41.82L190.857 45.39L181.227 56.1L179.622 69.36L188.717 86.19L209.047 88.74L213.862 95.37V120.87L208.512 124.44L189.787 126.99L180.692 143.82L183.902 154.53L193.532 167.28L191.392 172.38L169.457 193.29H161.967L153.942 185.13L143.777 182.58L125.587 187.17" stroke="white" stroke-width="7.31291" stroke-linecap="round" />
   </svg>
+
 );
 export default SVGComponent;

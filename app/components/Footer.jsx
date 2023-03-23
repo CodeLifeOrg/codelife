@@ -1,7 +1,7 @@
-import React, {Component} from "react";
-import {translate} from "react-i18next";
-import {Link} from "react-router";
-import {connect} from "react-redux";
+import React, { Component } from "react";
+import { translate } from "react-i18next";
+import { Link } from "react-router";
+import { connect } from "react-redux";
 import "./Footer.css";
 
 import FacebookIcon from "./FacebookIcon.svg.jsx";
@@ -19,8 +19,8 @@ class Footer extends Component {
   }
 
   render() {
-    const {className, currentPath, t, user, serverLocation} = this.props;
-    const {protocol, host} = serverLocation;
+    const { className, currentPath, t, user, serverLocation } = this.props;
+    const { protocol, host } = serverLocation;
     const hostSansSub = host
       .replace("pt.", "")
       .replace("en.", "")
@@ -28,10 +28,10 @@ class Footer extends Component {
 
     // about link array
     const aboutLinks = [
-      {id: 1, title: t("About"), link: "/about"},
-      {id: 2, title: t("Privacy Policy"), link: "/privacy"},
-      {id: 3, title: t("Partners"), link: "/learnmore"},
-      {id: 4, title: t("Contact"), link: "/contact"}
+      { id: 1, title: t("About"), link: "/about" },
+      { id: 2, title: t("Privacy Policy"), link: "/privacy" },
+      { id: 3, title: t("Partners"), link: "/learnmore" },
+      { id: 4, title: t("Contact"), link: "/contact" },
     ];
 
     /*
@@ -42,23 +42,23 @@ class Footer extends Component {
 
     // explore link array (to be added as necessary)
     const exploreLinks = [
-      {id: 1, title: t("Lesson plan"), link: "/lessonplan"},
-      {id: 2, title: t("Glossary"), link: "/glossary"}
+      { id: 1, title: t("Lesson plan"), link: "/lessonplan" },
+      { id: 2, title: t("Glossary"), link: "/glossary" }
     ];
     const leaderboardLink = [
-      {id: 3, title: t("Leaderboard"), link: "/leaderboard"}
+      { id: 3, title: t("Leaderboard"), link: "/leaderboard" }
     ];
 
     // account link array — must be logged in
     const username = user ? user.username : "";
 
     const accountLinks = [
-      {id: 1, title: t("My profile"), link: `/profile/${username}`},
-      {id: 2, title: t("My projects"), link: `/projects/${username}`},
-      {id: 3, title: t("Log out"), link: "/auth/logout"}
+      { id: 1, title: t("My profile"), link: `/profile/${username}` },
+      { id: 2, title: t("My projects"), link: `/projects/${username}` },
+      { id: 3, title: t("Log out"), link: "/auth/logout" }
     ];
 
-    const adminLink = [{id: 4, title: t("Admin"), link: "/admin"}];
+    const adminLink = [{ id: 4, title: t("Admin"), link: "/admin" }];
 
     // if logged in, add additional links to footer
     if (user) {
@@ -102,22 +102,18 @@ class Footer extends Component {
         title: "instagram",
         link: "https://www.instagram.com/codelifebr/"
       },
-	{
-	id:4,
-	title:"Compet",
-	link: "https://compet.vercel.app"
-	},
+
     ];
 
     // loop through arrays and create corresponding list items
-    const aboutLinkItems = aboutLinks.map(aboutLink => 
+    const aboutLinkItems = aboutLinks.map(aboutLink =>
       <li className="footer-item" key={aboutLink.id}>
         <Link className="footer-link font-sm" to={aboutLink.link}>
           {t(aboutLink.title)}
         </Link>
       </li>
     );
-    const exploreLinkItems = exploreLinks.map(exploreLink => 
+    const exploreLinkItems = exploreLinks.map(exploreLink =>
       <li className="footer-item" key={exploreLink.id}>
         <Link className="footer-link font-sm" to={exploreLink.link}>
           {t(exploreLink.title)}
@@ -125,23 +121,23 @@ class Footer extends Component {
       </li>
     );
     // logout must be a standard link, not a Link component
-    const accountLinkItems = accountLinks.map(accountLink => 
+    const accountLinkItems = accountLinks.map(accountLink =>
       <li className="footer-item" key={accountLink.id}>
-        {accountLink.link === "/auth/logout" 
+        {accountLink.link === "/auth/logout"
           ? <a
             className="footer-link font-sm"
             onClick={() => this.handleLogout()}
           >
             {t(accountLink.title)}
           </a>
-          :           <Link className="footer-link font-sm" to={accountLink.link}>
+          : <Link className="footer-link font-sm" to={accountLink.link}>
             {t(accountLink.title)}
           </Link>
         }
       </li>
     );
     // locale subdomain links must be standard links, not Link components
-    const languageLinkItems = languageLinks.map(languageLink => 
+    const languageLinkItems = languageLinks.map(languageLink =>
       <li className="footer-item" key={languageLink.id}>
         <a className="footer-link font-sm" href={languageLink.link}>
           {t(languageLink.title)}
@@ -149,19 +145,17 @@ class Footer extends Component {
       </li>
     );
     // social links
-    const socialLinkItems = socialLinks.map(socialLink => 
+    const socialLinkItems = socialLinks.map(socialLink =>
       <li className="footer-social-item" key={socialLink.id}>
         <a
-          className={`footer-social-link font-sm ${
-            socialLink.title
-          }-footer-social-link`}
+          className={`footer-social-link font-sm ${socialLink.title
+            }-footer-social-link`}
           href={socialLink.link}
         >
           <span className="u-visually-hidden">{t(socialLink.title)}</span>
           {socialLink.title === "facebook" && <FacebookIcon />}
           {socialLink.title === "youtube" && <YoutubeIcon />}
           {socialLink.title === "instagram" && <InstagramIcon />}
-	  {socialLink.title === "Compet" && <CompetIcon />}
         </a>
       </li>
     );
@@ -190,7 +184,7 @@ class Footer extends Component {
             </div>
 
             {/* account links */}
-            {user 
+            {user
               ? <div className="footer-list-container">
                 <h3 className="footer-heading">{t("Account")}</h3>
                 <ul className="footer-list">{accountLinkItems}</ul>
@@ -224,7 +218,14 @@ class Footer extends Component {
                 alt="Datawheel"
               />
             </a>
-
+            <a
+              className="footer-credits"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://compet.vercel.app">
+              <span className="footer-logo-text font-sm">{t("Built by ")}</span>
+              <span><CompetIcon/> COMPET - Pet da Engenharia de Computação do Cefet - MG</span>
+            </a>
             {/* additional links */}
             <div className="footer-credits">
               {/* <p className="font-xs">Fundação de Amparo à Pesquisa do Estado de Minas Gerais</p> */}

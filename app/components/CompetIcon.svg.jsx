@@ -3,9 +3,9 @@ const SVGComponent = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
-    width={640}
-    height={480}
-    viewBox="0 0 640 480"
+    width={32}
+    height={24}
+    viewBox="0 0 32 24"
     xmlSpace="preserve"
     {...props}
   >

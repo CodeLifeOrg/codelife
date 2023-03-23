@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import "./QuillWrapper.css";
 
 class QuillWrapper extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +59,7 @@ class QuillWrapper extends Component {
       require("react-quill/dist/quill.snow.css");
       const modules = {
         toolbar: [
-          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link", "image", "video"],
+          ["bold", "italic", "underline", "code", "blockquote", "code-block", "link", "image"],
           [{list: "ordered"}, {list: "bullet"}],
           ["clean"]
         ],
@@ -72,56 +73,48 @@ class QuillWrapper extends Component {
           matchVisual: false
         }
       };
-      return (
-        <div>
-          <Quill
-            theme="snow"
-            modules={modules}
-            onChangeSelection={range => range ? this.setState({ currentRange: range }) : null}
-            ref={c => this.quillRef = c}
-            {...this.props}
-          />
-          {this.props.hideGlossary ? null : 
-            <div className="glossary-insert">
-              <Suggest
-                className="glossary-insert-search"
-                id="search-box"
-                inputProps={{
-                  placeholder: "search glossary words…"
-                }}
-                inputValueRenderer={word => word.word}
-                items={this.state.words}
-                itemRenderer={this.renderWord.bind(this)}
-                itemPredicate={this.filterWords.bind(this)}
-                noResults={<MenuItem disabled={true} text="No results." />}
-                onItemSelect={word => this.setState({ currentWord: word })}
-              />
-              <button
-                className="button inverted-button glossary-insert-button font-sm"
-                onClick={this.handleGlossaryClick.bind(this)}
-              >
-                <span className="pt-icon pt-icon-circle-arrow-up" />
-                <span className="button-text">
-                  insert<span className="u-hide-below-sm"> word</span>
-                </span>
-              </button>
-            </div>
-          }
-        </div>
-      );
+      return <div>
+        <Quill
+          theme="snow"
+          modules={modules}
+          onChangeSelection={range => range ? this.setState({currentRange: range}) : null}
+          ref={c => this.quillRef = c}
+          {...this.props}
+        />
+        { this.props.hideGlossary
+          ? null
+          : <div className="glossary-insert">
+            <Suggest
+              className="glossary-insert-search"
+              id="search-box"
+              inputProps={{
+                placeholder: "search glossary words…"
+              }}
+              inputValueRenderer={word => word.word}
+              items={this.state.words}
+              itemRenderer={this.renderWord.bind(this)}
+              itemPredicate={this.filterWords.bind(this)}
+              noResults={<MenuItem disabled={true} text="No results." />}
+              onItemSelect={word => this.setState({currentWord: word})}
+            />
+            <button
+              className="button inverted-button glossary-insert-button font-sm"
+              onClick={this.handleGlossaryClick.bind(this)} >
+              <span className="pt-icon pt-icon-circle-arrow-up" />
+              <span className="button-text">insert<span className="u-hide-below-sm"> word</span></span>
+            </button>
+          </div>
+        }
+      </div>;
     }
     return null;
   }
 }
 
+
 const mapStateToProps = state => ({
   glossary: state.glossary
 });
 
-QuillWrapper = connect(
-  mapStateToProps,
-  null,
-  null,
-  {withRef: true}
-)(QuillWrapper);
+QuillWrapper = connect(mapStateToProps, null, null, {withRef: true})(QuillWrapper);
 export default QuillWrapper;

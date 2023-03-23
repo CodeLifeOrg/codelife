@@ -7,7 +7,7 @@ import "./Footer.css";
 import FacebookIcon from "./FacebookIcon.svg.jsx";
 import InstagramIcon from "./InstagramIcon.svg.jsx";
 import YoutubeIcon from "./YoutubeIcon.svg.jsx";
-import CompetIcon from "./CompetIcon.svg.jsx";
+
 class Footer extends Component {
 
   /* logout function */
@@ -101,12 +101,7 @@ class Footer extends Component {
         id: 3,
         title: "instagram",
         link: "https://www.instagram.com/codelifebr/"
-      },
-	{
-	id:4,
-	title:"Compet",
-	link: "https://compet.vercel.app"
-	},
+      }
     ];
 
     // loop through arrays and create corresponding list items
@@ -161,7 +156,6 @@ class Footer extends Component {
           {socialLink.title === "facebook" && <FacebookIcon />}
           {socialLink.title === "youtube" && <YoutubeIcon />}
           {socialLink.title === "instagram" && <InstagramIcon />}
-	  {socialLink.title === "Compet" && <CompetIcon />}
         </a>
       </li>
     );

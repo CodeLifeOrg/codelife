@@ -225,10 +225,10 @@ class Footer extends Component {
               href="https://compet.vercel.app">
 
               <div className="footer-logo-img">
-                <div class="compet-logo">
-                  <span class="compet-text"> &amp; </span>
+                <div className="compet-logo">
+                  <span className="compet-text"> &amp; </span>
                   <CompetIcon />
-                  <span class="compet-text">Compet Cefet-MG</span></div>
+                  <span className="compet-text">Compet Cefet-MG</span></div>
               </div>
             </a>
             {/* additional links */}

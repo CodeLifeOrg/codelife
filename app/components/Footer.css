@@ -1,5 +1,11 @@
 @import "../mixins.css";
-
+.compet-logo{
+  display: flex;
+  align-items: center;
+}
+.compet-text{
+  padding:0 .8em;
+}
 /* repeating image */
 .footer:before {
   content: '';
